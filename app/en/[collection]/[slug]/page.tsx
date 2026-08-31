@@ -107,7 +107,10 @@ function ExperienceDetail({ exp }: { exp: Experience }) {
 
           <section className="master-block">
             <h2>Your master</h2>
-            <p className="master-title">{exp.master.title}</p>
+            <div className="bubble tail-bottom master-bubble">
+              <p>&ldquo;{exp.master.quote}&rdquo;</p>
+            </div>
+            <p className="master-title">— {exp.master.title}</p>
             <p>{exp.master.bio}</p>
           </section>
 

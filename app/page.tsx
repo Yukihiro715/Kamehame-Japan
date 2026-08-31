@@ -39,12 +39,15 @@ export default function Home() {
             <a className="text-link" href="#approach">Why we are different</a>
           </div>
         </div>
-        <div className="hero-note"><span>01</span><p>Not a demonstration.<br />A seat at the master&apos;s table.</p></div>
+        <div className="hero-note bubble tail-left">
+          <p>&ldquo;Not a demonstration —<br />this seat is yours.&rdquo;</p>
+          <small>— your master</small>
+        </div>
       </section>
 
       <section className="trust-strip" id="approach" aria-label="Why choose us">
         <div className="trust-intro">
-          <p className="eyebrow dark"><span /> 亀は万年 · The KAMEHAME standard</p>
+          <p className="eyebrow dark"><span /> The KAMEHAME standard</p>
           <h2>Every detail,<br />considered.</h2>
         </div>
         <div className="trust-grid">
@@ -55,7 +58,10 @@ export default function Home() {
         <div className="trust-seal"><ShieldCheck size={18} /> Small groups · Local experts · Thoughtful access</div>
         <figure className="craft-band">
           <img src="/images/craft-hands.jpg" alt="Tea ceremony host in kimono placing a tea bowl on tatami before seated guests" loading="lazy" />
-          <figcaption><span>亀は万年</span>The crane lives a thousand years, the turtle ten thousand — our name comes from that old saying. Mastery keeps the turtle&apos;s clock, and you sit beside it, a few guests at a time.</figcaption>
+          <figcaption className="bubble tail-right craft-bubble">
+            <p>&ldquo;Watch my hands — every movement has a meaning.&rdquo;</p>
+            <small>— a Kyoto tea master</small>
+          </figcaption>
         </figure>
       </section>
 
@@ -69,12 +75,14 @@ export default function Home() {
           <Link className="city-card tokyo" href="/en/tokyo/" aria-label="Tokyo experiences">
             <img className="city-photo" src="/images/city-tokyo.jpg" alt="Five-storied pagoda of Senso-ji temple illuminated at night, Asakusa, Tokyo" loading="lazy" />
             <span className="city-index">01 / 東京</span>
+            <span className="sfx" aria-hidden="true">ドドンッ</span>
             <div><p>Modern rhythm.<br />Enduring craft.</p><h3>Tokyo</h3><small className="city-place">Sensō-ji · Asakusa</small></div>
             <span className="circle-arrow"><ArrowDownRight /></span>
           </Link>
           <Link className="city-card kyoto" href="/en/kyoto/" aria-label="Kyoto experiences">
             <img className="city-photo" src="/images/city-kyoto.jpg" alt="Lantern-lined Yasaka-dori street at dawn with the Yasaka pagoda, Higashiyama, Kyoto" loading="lazy" />
             <span className="city-index">02 / 京都</span>
+            <span className="sfx quiet" aria-hidden="true">しん…</span>
             <div><p>Quiet rituals.<br />Living heritage.</p><h3>Kyoto</h3><small className="city-place">Yasaka-dōri · Higashiyama</small></div>
             <span className="circle-arrow"><ArrowDownRight /></span>
           </Link>
