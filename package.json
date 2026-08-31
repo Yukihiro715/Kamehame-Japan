@@ -1,5 +1,5 @@
 {
-  "name": "omotenashi-japan",
+  "name": "kamehame-japan",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -60,5 +60,5 @@
     "wrangler": "4.92.0"
   },
   "type": "module",
-  "displayName": "OMOTENASHI JAPAN"
+  "displayName": "KAMEHAME JAPAN"
 }

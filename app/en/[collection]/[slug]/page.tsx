@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const item = exp ?? tour;
   if (!item) return {};
   return {
-    title: `${item.title} | OMOTENASHI JAPAN`,
+    title: `${item.title} | KAMEHAME JAPAN`,
     description: exp ? exp.tagline : tour!.description,
   };
 }

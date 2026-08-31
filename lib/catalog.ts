@@ -56,9 +56,8 @@ export interface Tour {
   description: string;
 }
 
-// Used for absolute URLs in structured data. Replace once the production
-// domain is confirmed (currently the preview URL from the handoff).
-export const SITE_ORIGIN = "https://omotenashi-japan.yukihiro-ito.chatgpt.site";
+// Used for absolute URLs in structured data.
+export const SITE_ORIGIN = "https://kamehame-japan.com";
 
 export const CANCELLATION = "Free cancellation up to 7 days before the experience. Full refund if the session is cancelled by the venue.";
 

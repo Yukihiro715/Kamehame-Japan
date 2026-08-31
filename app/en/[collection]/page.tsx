@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = getCollection(collection);
   if (!data) return {};
   return {
-    title: `${data.h1} | OMOTENASHI JAPAN`,
+    title: `${data.h1} | KAMEHAME JAPAN`,
     description: data.lead,
   };
 }

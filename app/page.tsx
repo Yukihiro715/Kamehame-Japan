@@ -44,7 +44,7 @@ export default function Home() {
 
       <section className="trust-strip" id="approach" aria-label="Why choose us">
         <div className="trust-intro">
-          <p className="eyebrow dark"><span /> The OMOTENASHI standard</p>
+          <p className="eyebrow dark"><span /> 亀は万年 · The KAMEHAME standard</p>
           <h2>Every detail,<br />considered.</h2>
         </div>
         <div className="trust-grid">
@@ -55,7 +55,7 @@ export default function Home() {
         <div className="trust-seal"><ShieldCheck size={18} /> Small groups · Local experts · Thoughtful access</div>
         <figure className="craft-band">
           <img src="/images/craft-hands.jpg" alt="Tea ceremony host in kimono placing a tea bowl on tatami before seated guests" loading="lazy" />
-          <figcaption><span>おもてなし</span>In the master&apos;s hands — every gesture refined over decades, shared with a few guests at a time.</figcaption>
+          <figcaption><span>亀は万年</span>The crane lives a thousand years, the turtle ten thousand — our name comes from that old saying. Mastery keeps the turtle&apos;s clock, and you sit beside it, a few guests at a time.</figcaption>
         </figure>
       </section>
 

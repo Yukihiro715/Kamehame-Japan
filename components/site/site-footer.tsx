@@ -12,7 +12,7 @@ export function SiteFooter() {
         <Link href="/en/tours/">Tours</Link>
         <Link href="/#approach">About</Link>
       </div>
-      <div className="footer-meta"><p>Operated by Prosent Inc. with our tour operations partner.</p><p>© 2026 OMOTENASHI JAPAN</p></div>
+      <div className="footer-meta"><p>Operated by Prosent Inc. with our tour operations partner.</p><p>© 2026 KAMEHAME JAPAN</p></div>
       <Link className="partner-link" href="/partners/">体験パートナー募集 →</Link>
       <details className="photo-credits">
         <summary>Photo credits</summary>

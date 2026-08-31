@@ -155,7 +155,7 @@ export function getCollection(slug: string): Collection | undefined {
         ...categories.map((c) => ({ label: c.title, href: `/en/${c.slug}/` })),
       ],
       about: {
-        heading: "About OMOTENASHI JAPAN experiences",
+        heading: "About KAMEHAME JAPAN experiences",
         body: "We work directly with a small number of masters in Tokyo and Kyoto and keep every group small enough to sit at their side. Booking is online with payment in yen; venue details follow your confirmation. If you are choosing a first experience, start with your city and let curiosity do the rest.",
       },
       faq: [

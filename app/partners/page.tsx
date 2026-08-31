@@ -4,8 +4,8 @@ import { ArrowDownRight } from "lucide-react";
 import { Brand } from "@/components/site/brand";
 
 export const metadata: Metadata = {
-  title: "体験パートナー募集 | OMOTENASHI JAPAN",
-  description: "訪日外国人向け高付加価値体験サービス OMOTENASHI JAPAN の受け入れパートナー(職人・師匠・施設)を募集しています。集客・多言語対応・決済・当日の通訳はすべて運営が担います。",
+  title: "体験パートナー募集 | KAMEHAME JAPAN",
+  description: "訪日外国人向け高付加価値体験サービス KAMEHAME JAPAN の受け入れパートナー(職人・師匠・施設)を募集しています。集客・多言語対応・決済・当日の通訳はすべて運営が担います。",
 };
 
 const targets = ["寿司", "相撲部屋", "茶道", "着付け", "芸妓・舞妓", "刀鍛冶", "ネイル", "その他の伝統工芸・食"];
@@ -42,7 +42,7 @@ export default function PartnersPage() {
       <section className="partner-hero">
         <img src="/images/craft-hands.jpg" alt="茶碗を差し出す茶道の点前" />
         <div className="partner-hero-copy">
-          <p className="eyebrow"><span /> OMOTENASHI JAPAN パートナー募集</p>
+          <p className="eyebrow"><span /> KAMEHAME JAPAN パートナー募集</p>
           <h1>あなたの技を、<br />世界の旅行者へ。</h1>
           <p className="partner-lede">集客・多言語対応・決済・当日の通訳は、すべて私たちが担います。<br />受け入れていただくのは、いつも通りの仕事だけです。</p>
           <a className="partner-cta" href="#partner-contact">掲載について相談する <ArrowDownRight size={16} /></a>
@@ -137,7 +137,7 @@ export default function PartnersPage() {
       <footer className="partner-footer">
         <Brand />
         <p>運営:株式会社プロセント(マーケティング・サイト運営・予約決済)/ ガイドツアー提携会社(ガイド手配・ツアー運営)</p>
-        <p>© 2026 OMOTENASHI JAPAN · <Link href="/">英語サイトトップへ</Link></p>
+        <p>© 2026 KAMEHAME JAPAN · <Link href="/">英語サイトトップへ</Link></p>
       </footer>
     </main>
   );
