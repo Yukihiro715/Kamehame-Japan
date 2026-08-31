@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OMOTENASHI JAPAN（仮称）ワイヤーフレーム v2</title>
+<style>
+  :root{
+    --ink:#1d1f22; --mute:#6b7075; --line:#c9ccd1; --fill:#eef0f2; --fill2:#e1e4e8;
+    --paper:#ffffff; --bg:#f6f7f8; --note:#fff7e0; --note-line:#e5c96b; --mark:#c8362f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;font-size:14px;line-height:1.7}
+  a{color:inherit}
+  .doc{max-width:1160px;margin:0 auto;padding:32px 24px 80px}
+  .doc-head{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:24px}
+  .doc-head h1{font-size:22px;margin:0 0 4px}
+  .doc-head p{margin:0;color:var(--mute)}
+  .toc{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0 32px;font-size:13px}
+  .toc a{text-decoration:none;border:1px solid var(--line);background:#fff;padding:6px 12px;border-radius:3px}
+  .legend{display:flex;gap:20px;font-size:12px;color:var(--mute);margin-bottom:32px;flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:18px;height:12px;border:1px solid var(--line);display:inline-block}
+  .sw.img{background:repeating-linear-gradient(135deg,#d9dce0 0 3px,#eef0f2 3px 8px)}
+  .sw.btn{background:var(--ink)}
+  .sw.ext{background:#dce8f5;border-color:#7fa6d1}
+
+  section.page{margin-bottom:64px}
+  .page-title{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+  .page-title h2{font-size:18px;margin:0}
+  .page-title .url{font-family:Menlo,Consolas,monospace;font-size:12px;color:var(--mute)}
+  .page-title .meta{font-size:12px;color:var(--mute);margin-left:auto}
+  .wrap{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+  @media (max-width:900px){.wrap{grid-template-columns:1fr}}
+
+  /* wireframe canvas */
+  .wf{background:var(--paper);border:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .wf .blk{border:1px solid var(--line);background:var(--fill);padding:10px 12px;position:relative;min-height:40px}
+  .wf .blk+.blk{border-top:0}
+  .wf .blk.white{background:#fff}
+  .wf .blk.ext{background:#dce8f5;border-color:#7fa6d1}
+  .wf .img{background:repeating-linear-gradient(135deg,#d9dce0 0 3px,#eef0f2 3px 8px);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:11px}
+  .wf .btn{display:inline-block;background:var(--ink);color:#fff;padding:6px 14px;font-size:12px;border-radius:2px}
+  .wf .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--ink)}
+  .wf .h{font-weight:700;font-size:13px;margin:0 0 4px}
+  .wf .t{font-size:12px;color:var(--mute);margin:0}
+  .wf .row{display:grid;gap:8px}
+  .wf .c2{grid-template-columns:1fr 1fr}.wf .c3{grid-template-columns:1fr 1fr 1fr}.wf .c4{grid-template-columns:repeat(4,1fr)}
+  .wf .card{border:1px solid var(--line);background:#fff;padding:0 0 8px;font-size:11px}
+  .wf .card .img{height:70px;border:0;border-bottom:1px solid var(--line)}
+  .wf .card p{margin:6px 8px 0}
+  .wf .nav{display:flex;gap:14px;font-size:11px;align-items:center}
+  .wf .nav .sp{margin-left:auto}
+  .wf .tag{display:inline-block;border:1px solid var(--line);background:#fff;padding:1px 8px;font-size:10px;margin:2px 2px 0 0}
+  .wf .line{height:8px;background:var(--fill2);margin:4px 0;border-radius:2px}
+  .wf .line.s{width:60%}.wf .line.xs{width:35%}
+  .mk{position:absolute;top:-9px;right:-9px;width:20px;height:20px;border-radius:50%;background:var(--mark);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:2}
+  .mk.in{position:static;display:inline-flex;vertical-align:middle;margin-right:6px;width:18px;height:18px;font-size:10px}
+
+  /* notes */
+  .notes{background:var(--note);border:1px solid var(--note-line);padding:14px 16px;font-size:12.5px;position:sticky;top:16px}
+  .notes h3{font-size:13px;margin:0 0 8px}
+  .notes ol{margin:0;padding-left:0;list-style:none}
+  .notes li{margin:0 0 10px;padding-left:26px;position:relative}
+  .notes li b{color:var(--ink)}
+  .notes .sp{margin-top:14px;padding-top:10px;border-top:1px dashed var(--note-line)}
+  .notes .sp h4{font-size:12px;margin:0 0 4px}
+  .notes .sp p{margin:0}
+
+  /* SP thumbnail */
+  .sp-wf{width:160px;border:1px solid var(--line);background:#fff;padding:6px;font-size:9px;margin-top:8px}
+  .sp-wf .blk{padding:4px 6px;min-height:22px}
+  .sp-wf .img{height:50px}
+
+  table.spec{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
+  table.spec th,table.spec td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  table.spec th{background:var(--fill);width:180px;font-weight:600}
+  .end-note{border:1px solid var(--line);background:#fff;padding:16px 20px;font-size:13px}
+  .end-note h2{font-size:16px;margin:0 0 8px}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<div class="doc-head">
+  <h1>OMOTENASHI JAPAN（仮称）　営業用サイト ワイヤーフレーム v2</h1>
+  <p>訪日体験ツアー事業　4テンプレート（トップ／一覧／体験詳細／パートナー募集）　2026-08-31　Prosent</p>
+</div>
+
+<div class="toc">
+  <a href="#p1">1. トップ</a><a href="#p2">2. 一覧（都市別・カテゴリ別共通）</a><a href="#p3">3. 体験詳細</a><a href="#p4">4. パートナー募集（日本語）</a><a href="#p5">5. 共通仕様・確定事項</a>
+</div>
+
+<div class="legend">
+  <span><i class="sw img"></i>写真・動画</span>
+  <span><i class="sw btn"></i>主ボタン（CV）</span>
+  <span><i class="sw ext"></i>外部埋め込み（Bókun／Google）</span>
+  <span><i class="mk in">n</i>右欄の注記番号</span>
+</div>
+
+<!-- ================= 1. TOP ================= -->
+<section class="page" id="p1">
+  <div class="page-title"><h2>1. トップ</h2><span class="url">/en/</span><span class="meta">PC 1200px基準／SPは右欄参照</span></div>
+  <div class="wrap">
+    <div class="wf">
+      <div class="blk white">
+        <div class="nav"><b>OMOTENASHI JAPAN</b><span>Tokyo</span><span>Kyoto</span><span>Experiences ▾</span><span>Guided Tours</span><span>About</span><span class="sp">EN ▾</span><span>¥ JPY ▾</span></div>
+        <div class="mk">1</div>
+      </div>
+      <div class="blk img" style="height:220px;flex-direction:column;gap:8px">
+        <div style="font-size:20px;font-weight:700;color:var(--ink)">Learn from the masters. A guide by your side.</div>
+        <div>Private masterclasses in Tokyo and Kyoto with a certified interpreter guide.</div>
+        <div><span class="btn">Explore Tokyo</span> &nbsp; <span class="btn ghost">Explore Kyoto</span></div>
+        <div class="mk">2</div>
+      </div>
+      <div class="blk white">
+        <div class="row c3">
+          <div><p class="h">Guided in your language</p><p class="t">通訳ガイドが全体験に同行</p></div>
+          <div><p class="h">Private, with the masters themselves</p><p class="t">職人・師匠本人が教える少人数制</p></div>
+          <div><p class="h">Book instantly, pay in yen</p><p class="t">即時予約・JPY決済・7日前まで無料キャンセル</p></div>
+        </div>
+        <div class="mk">3</div>
+      </div>
+      <div class="blk">
+        <p class="h">Choose your city</p>
+        <div class="row c2">
+          <div class="img" style="height:110px">Tokyo　— 5 experiences</div>
+          <div class="img" style="height:110px">Kyoto　— 4 experiences</div>
+        </div>
+        <div class="mk">4</div>
+      </div>
+      <div class="blk white">
+        <p class="h">Explore by interest</p>
+        <div class="row c4">
+          <div class="card"><div class="img">Sushi</div><p>Food</p></div>
+          <div class="card"><div class="img">Sumo</div><p>Traditional</p></div>
+          <div class="card"><div class="img">Tea</div><p>Traditional</p></div>
+          <div class="card"><div class="img">Kimono</div><p>Traditional</p></div>
+        </div>
+        <div class="row c4" style="margin-top:8px">
+          <div class="card"><div class="img">Geisha</div><p>Traditional</p></div>
+          <div class="card"><div class="img">Katana</div><p>Traditional</p></div>
+          <div class="card"><div class="img">Anime nail</div><p>Pop culture</p></div>
+          <div class="card"><div class="img">Guided tours</div><p>Tours</p></div>
+        </div>
+        <div class="mk">5</div>
+      </div>
+      <div class="blk">
+        <p class="h">Featured experiences</p>
+        <div class="row c3">
+          <div class="card"><div class="img"></div><p><b>Edo-mae Sushi Masterclass</b></p><p>Tokyo · 2.5h · from ¥45,000</p></div>
+          <div class="card"><div class="img"></div><p><b>Sumo Morning Training</b></p><p>Tokyo · 2h · from ¥38,000</p></div>
+          <div class="card"><div class="img"></div><p><b>Private Dinner with Geisha</b></p><p>Kyoto · 2h · from ¥120,000</p></div>
+        </div>
+        <div class="mk">6</div>
+      </div>
+      <div class="blk white">
+        <div class="row c2">
+          <div class="img" style="height:120px">ガイドツアーのイメージ写真</div>
+          <div><p class="h">Private guided tours</p><p class="t">A full day in Tokyo or Kyoto with a licensed guide. Combine any masterclass with a city tour.</p><span class="btn ghost">See tours</span></div>
+        </div>
+        <div class="mk">7</div>
+      </div>
+      <div class="blk ext">
+        <p class="h">★★★★★ 4.9 · 128 reviews on Google</p>
+        <div class="row c3"><div class="card"><p>"…"</p><p>— Name, Country</p></div><div class="card"><p>"…"</p><p>— Name, Country</p></div><div class="card"><p>"…"</p><p>— Name, Country</p></div></div>
+        <div class="mk">8</div>
+      </div>
+      <div class="blk">
+        <p class="h">Travelling as a group, or want something custom?</p><p class="t">団体・カスタム相談の受け皿。フォームへ</p><span class="btn ghost">Contact us</span>
+        <div class="mk">9</div>
+      </div>
+      <div class="blk white">
+        <div class="nav"><span>Tokyo</span><span>Kyoto</span><span>Experiences</span><span>Tours</span><span>About</span><span>FAQ</span><span>Booking policy</span><span>Contact</span><span class="sp">パートナー募集（JP）</span></div>
+        <div class="mk">10</div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h3>注記</h3>
+      <ol>
+        <li><span class="mk in">1</span><b>ヘッダー</b>：言語（EN/FR/ES/繁中）と通貨（JPY基準＋USD/EUR参考表示）の切替。SPではハンバーガー＋言語のみ残す。</li>
+        <li><span class="mk in">2</span><b>ヒーロー</b>：「職人本人＋ガイド同行」を一文で。CTAは都市選択2つに絞り、検索窓は置かない（商品数が少ないため）。</li>
+        <li><span class="mk in">3</span><b>3つの価値</b>：A-3（ガイド標準）、B-9（JPY）、キャンセル条件をここで先に言い切る。</li>
+        <li><span class="mk in">4</span><b>都市入口</b>：件数を出す。初期は東京5・京都4想定。</li>
+        <li><span class="mk in">5</span><b>興味別入口</b>：C-10のカテゴリページへ。8枠固定でSEO主力ページに送る。</li>
+        <li><span class="mk in">6</span><b>注目体験</b>：高単価・写真映え順。価格は「from ¥」表記で統一。</li>
+        <li><span class="mk in">7</span><b>ガイドツアー</b>：提携会社の商品。Deeper JapanのBespoke相当の位置。</li>
+        <li><span class="mk in">8</span><b>レビュー</b>：Googleレビューをウィジェット埋め込み（自社DB不要）。</li>
+        <li><span class="mk in">9</span><b>問い合わせ</b>：即決済が主CVなので、ここは団体・カスタムのみの控えめな導線。</li>
+        <li><span class="mk in">10</span><b>フッター</b>：パートナー募集は日本語で、フッターからのみリンク。</li>
+      </ol>
+      <div class="sp">
+        <h4>SP</h4>
+        <p>ヒーロー→3つの価値→都市（縦2枚）→興味別（横スクロール）→注目体験（横スクロール）→ツアー→レビュー→フッター。ファーストビュー内に都市CTAが入る高さに調整。</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= 2. LIST ================= -->
+<section class="page" id="p2">
+  <div class="page-title"><h2>2. 一覧（都市別・カテゴリ別・ツアー共通テンプレート）</h2><span class="url">/en/tokyo/　/en/sushi/　/en/tours/</span><span class="meta">SEO主力ページ</span></div>
+  <div class="wrap">
+    <div class="wf">
+      <div class="blk white"><div class="nav"><b>OMOTENASHI JAPAN</b><span>…</span></div></div>
+      <div class="blk white"><p class="t">Home › Tokyo</p><div class="mk">1</div></div>
+      <div class="blk img" style="height:130px;flex-direction:column">
+        <div style="font-size:18px;font-weight:700;color:var(--ink)">Tokyo masterclasses</div>
+        <div style="max-width:520px;text-align:center">都市／カテゴリの説明文 120〜200語。検索意図に合わせたリード文（例：sushi making class tokyo）</div>
+        <div class="mk">2</div>
+      </div>
+      <div class="blk white">
+        <div class="nav" style="font-size:11px"><span>Category ▾</span><span>Price ▾</span><span>Duration ▾</span><span>Group / Private</span><span class="sp">Sort: Recommended ▾</span></div>
+        <div class="mk">3</div>
+      </div>
+      <div class="blk">
+        <div class="row c3">
+          <div class="card"><div class="img" style="height:90px"></div><p><span class="tag">Food</span><span class="tag">Private</span></p><p><b>Edo-mae Sushi Masterclass</b></p><p>Craft nigiri with a 3rd-generation chef</p><p>2.5h · from ¥45,000</p></div>
+          <div class="card"><div class="img" style="height:90px"></div><p><span class="tag">Traditional</span></p><p><b>Sumo Morning Training</b></p><p>Ringside at a real stable</p><p>2h · from ¥38,000</p></div>
+          <div class="card"><div class="img" style="height:90px"></div><p><span class="tag">Traditional</span></p><p><b>Kimono Dressing &amp; Photo Walk</b></p><p>Dressed by a professional stylist</p><p>3h · from ¥40,000</p></div>
+        </div>
+        <div class="row c3" style="margin-top:8px">
+          <div class="card"><div class="img" style="height:90px"></div><p><span class="tag">Traditional</span></p><p><b>Katana Forge Visit</b></p><p>Watch a swordsmith at work</p><p>3h · from ¥90,000</p></div>
+          <div class="card"><div class="img" style="height:90px"></div><p><span class="tag">Pop culture</span></p><p><b>Anime Nail Art Session</b></p><p>Your favourite character, on your nails</p><p>2h · from ¥18,000</p></div>
+          <div class="card"><div class="img" style="height:90px"></div><p><span class="tag">Tour</span></p><p><b>Tokyo Private Day Tour</b></p><p>8h with a licensed guide</p><p>from ¥60,000</p></div>
+        </div>
+        <div class="mk">4</div>
+      </div>
+      <div class="blk white">
+        <p class="h">About sushi masterclasses in Tokyo</p>
+        <div class="line"></div><div class="line"></div><div class="line s"></div>
+        <p class="h" style="margin-top:8px">FAQ（このカテゴリ固有の3〜5問）</p>
+        <div class="line xs"></div><div class="line xs"></div>
+        <div class="mk">5</div>
+      </div>
+      <div class="blk">
+        <p class="h">Also explore</p>
+        <div class="nav"><span class="tag">Kyoto</span><span class="tag">Tea</span><span class="tag">Geisha</span><span class="tag">Guided tours</span></div>
+        <div class="mk">6</div>
+      </div>
+      <div class="blk white"><div class="nav"><span>フッター</span></div></div>
+    </div>
+
+    <aside class="notes">
+      <h3>注記</h3>
+      <ol>
+        <li><span class="mk in">1</span><b>パンくず</b>：都市／カテゴリの構造化データ付き。</li>
+        <li><span class="mk in">2</span><b>リード文</b>：H1＋説明文。検索語を自然に含める。カテゴリページは「東京・京都の両方」を1ページに載せる（例 /en/sushi/ に東京と京都の寿司体験）。</li>
+        <li><span class="mk in">3</span><b>フィルタ</b>：初期は商品が少ないため簡素に。Bókunの商品タグと同期。</li>
+        <li><span class="mk in">4</span><b>カード</b>：写真／タグ／名称／一言／時間・価格。ツアーも同じカードで混在させ、ラベルで区別。</li>
+        <li><span class="mk in">5</span><b>SEOテキスト＋FAQ</b>：カード群の下に置き、FAQはFAQPage構造化データを出力。</li>
+        <li><span class="mk in">6</span><b>内部リンク</b>：都市⇄カテゴリ⇄ツアーを相互リンクし回遊させる。</li>
+      </ol>
+      <div class="sp">
+        <h4>SP</h4>
+        <p>フィルタはボトムシート化、カードは1列縦積み。価格は必ずファーストビューの1枚目に見える位置に。</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= 3. DETAIL ================= -->
+<section class="page" id="p3">
+  <div class="page-title"><h2>3. 体験詳細</h2><span class="url">/en/tokyo/sushi-masterclass/</span><span class="meta">CVページ　Deeper Japan商品ページをベースに再構成</span></div>
+  <div class="wrap">
+    <div class="wf">
+      <div class="blk white"><div class="nav"><b>OMOTENASHI JAPAN</b><span>…</span></div></div>
+      <div class="blk white"><p class="t">Home › Tokyo › Edo-mae Sushi Masterclass</p></div>
+      <div class="blk white">
+        <div class="row" style="grid-template-columns:2fr 1fr 1fr">
+          <div class="img" style="height:180px;grid-row:span 2">メイン写真</div>
+          <div class="img" style="height:86px"></div><div class="img" style="height:86px"></div>
+          <div class="img" style="height:86px"></div><div class="img" style="height:86px">+8 photos</div>
+        </div>
+        <div class="mk">1</div>
+      </div>
+      <div class="blk white">
+        <div class="row" style="grid-template-columns:1fr 300px;gap:16px">
+          <div>
+            <p style="font-size:18px;font-weight:700;margin:0">Edo-mae Sushi Masterclass</p>
+            <p class="t">Craft nigiri with a 3rd-generation chef at his own counter</p>
+            <div class="nav" style="margin-top:8px"><span class="tag">2.5 hours</span><span class="tag">Tokyo (Tsukiji area)</span><span class="tag">Interpreter guide included</span><span class="tag">Ages 8+</span><span class="tag">Private · up to 6</span></div>
+            <div style="margin-top:12px"><p class="h">What you'll do</p><div class="line"></div><div class="line"></div><div class="line s"></div></div>
+            <div style="margin-top:12px"><p class="h">Your master</p>
+              <div class="row" style="grid-template-columns:70px 1fr"><div class="img" style="height:70px">人物</div><div><div class="line"></div><div class="line"></div><div class="line xs"></div></div></div>
+              <div class="mk" style="top:auto;bottom:-8px;right:auto;left:-9px">3</div>
+            </div>
+            <div style="margin-top:12px"><p class="h">Itinerary</p><p class="t">10:00 Meet your guide at … → 10:15 … → 12:30 End</p></div>
+            <div style="margin-top:12px"><p class="h">Good to know</p><p class="t">参加条件／開催曜日／持ち物・服装／注意事項（Deeper Japanの What else you should know 相当）</p></div>
+            <div style="margin-top:12px"><p class="h">Meeting point &amp; access</p><div class="img" style="height:60px">地図（正確な住所は予約確定後に案内）</div><div class="mk" style="top:auto;bottom:-8px;right:auto;left:-9px">4</div></div>
+            <div style="margin-top:12px"><p class="h">The story of Edo-mae sushi</p><div class="line"></div><div class="line"></div><div class="line"></div><div class="line s"></div></div>
+            <div style="margin-top:12px"><p class="h">Cancellation</p><p class="t">Free cancellation up to 7 days before. Full refund if cancelled by the venue.</p></div>
+          </div>
+          <div>
+            <div class="blk ext" style="position:sticky;top:8px">
+              <p class="h">from ¥45,000 <span class="t">per person（≈ $300）</span></p>
+              <p class="t">Date ▾</p><p class="t">Guests ▾</p>
+              <span class="btn" style="display:block;text-align:center">Book now</span>
+              <p class="t" style="margin-top:6px">Instant confirmation · Pay in yen · Free cancellation (7 days)</p>
+              <div class="mk">2</div>
+            </div>
+            <div class="blk white" style="margin-top:8px"><p class="h" style="font-size:12px">Questions?</p><p class="t">WhatsApp / Email</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="blk ext"><p class="h">Reviews for this experience（Google）</p><div class="row c2"><div class="card"><p>"…"</p></div><div class="card"><p>"…"</p></div></div><div class="mk">5</div></div>
+      <div class="blk"><p class="h">Make it a full day</p><p class="t">この体験＋ガイドツアーの組み合わせ提案（ツアー詳細へ）</p><div class="mk">6</div></div>
+      <div class="blk white"><p class="h">More in Tokyo</p><div class="row c4"><div class="card"><div class="img"></div><p>Sumo</p></div><div class="card"><div class="img"></div><p>Kimono</p></div><div class="card"><div class="img"></div><p>Katana</p></div><div class="card"><div class="img"></div><p>Anime nail</p></div></div></div>
+      <div class="blk white"><div class="nav"><span>フッター</span></div></div>
+    </div>
+
+    <aside class="notes">
+      <h3>注記</h3>
+      <ol>
+        <li><span class="mk in">1</span><b>ギャラリー</b>：写真は提携先の掲載許諾が前提（A-4）。店名・看板が写らない構図で撮影。</li>
+        <li><span class="mk in">2</span><b>予約ボックス</b>：Bókunウィジェット埋め込み（B-5）。PCは追従、SPは画面下部に固定バー（価格＋Book now）。JPY基準・参考USD併記。日付選択→Bókunのカレンダーへ。</li>
+        <li><span class="mk in">3</span><b>職人紹介</b>：店名を出さず人物で語る（「築地で3代続く寿司職人」）。将来A-4解禁時に店名を追記できる構造に。</li>
+        <li><span class="mk in">4</span><b>集合場所</b>：エリアのみ表示、正確な住所は予約確定メールで案内（非公開方針と一致）。</li>
+        <li><span class="mk in">5</span><b>レビュー</b>：Googleレビューを体験名でフィルタ表示。件数が少ないうちは非表示にできるようフラグを持つ。</li>
+        <li><span class="mk in">6</span><b>クロスセル</b>：ガイドツアーとの組み合わせ提案。客単価を上げる主導線。</li>
+      </ol>
+      <div class="sp">
+        <h4>SP</h4>
+        <p>写真（横スクロール）→タイトル・価格→タグ→What you'll do→職人→…の順。「Book now」バーは常時固定。ページ下部の関連体験は横スクロール。</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= 4. PARTNER ================= -->
+<section class="page" id="p4">
+  <div class="page-title"><h2>4. パートナー募集（日本語・営業用）</h2><span class="url">/partners/</span><span class="meta">商談時に見せる／フッターからのみ導線</span></div>
+  <div class="wrap">
+    <div class="wf">
+      <div class="blk white"><div class="nav"><b>OMOTENASHI JAPAN</b><span class="sp">パートナー募集</span></div></div>
+      <div class="blk img" style="height:170px;flex-direction:column;gap:6px">
+        <div style="font-size:18px;font-weight:700;color:var(--ink)">あなたの技を、世界の旅行者へ。</div>
+        <div style="max-width:520px;text-align:center">集客・多言語対応・決済・当日の通訳はすべて私たちが担います。受け入れていただくのは、いつも通りの仕事だけです。</div>
+        <span class="btn">掲載について相談する</span>
+        <div class="mk">1</div>
+      </div>
+      <div class="blk white">
+        <p class="h">こんな方を探しています</p>
+        <div class="nav"><span class="tag">寿司</span><span class="tag">相撲部屋</span><span class="tag">茶道</span><span class="tag">着付け</span><span class="tag">芸妓・舞妓</span><span class="tag">刀鍛冶</span><span class="tag">ネイル</span><span class="tag">その他の伝統工芸・食</span></div>
+        <div class="mk">2</div>
+      </div>
+      <div class="blk">
+        <p class="h">集客の仕組み</p>
+        <div class="row c4">
+          <div class="card"><p><b>Web広告・SEO</b></p><p>4言語で海外から集客</p></div>
+          <div class="card"><p><b>予約・決済</b></p><p>サイト・OTAで事前決済</p></div>
+          <div class="card"><p><b>当日</b></p><p>通訳ガイドが同行・進行</p></div>
+          <div class="card"><p><b>お支払い</b></p><p>月末締めでお振込</p></div>
+        </div>
+        <div class="mk">3</div>
+      </div>
+      <div class="blk white">
+        <p class="h">受け入れ側のメリット</p>
+        <div class="row c3">
+          <div><p class="h" style="font-size:12px">集客・営業コストゼロ</p><p class="t">広告費・OTA手数料はこちらが負担</p></div>
+          <div><p class="h" style="font-size:12px">言葉の壁なし</p><p class="t">予約対応から当日まで通訳が入る</p></div>
+          <div><p class="h" style="font-size:12px">ノーショー・キャンセル保証</p><p class="t">事前決済制。直前キャンセルの補償条件を明記</p></div>
+        </div>
+        <div class="mk">4</div>
+      </div>
+      <div class="blk">
+        <p class="h">掲載条件・お願いしたいこと</p>
+        <p class="t">受け入れ人数・頻度の目安／単価の考え方（送客手数料 or 卸価格）／写真撮影への協力／店名非公開の選択可</p>
+        <div class="mk">5</div>
+      </div>
+      <div class="blk white">
+        <p class="h">実績・掲載例</p>
+        <div class="row c3"><div class="card"><div class="img"></div><p>掲載中の体験（匿名可）</p></div><div class="card"><div class="img"></div><p>ガイドツアー提携会社</p></div><div class="card"><p><b>運営会社</b></p><p>株式会社プロセント／オンライン診療 Mimipo の運営実績（月間○万人のWeb集客）</p></div></div>
+        <div class="mk">6</div>
+      </div>
+      <div class="blk"><p class="h">よくある質問</p><div class="line xs"></div><div class="line xs"></div><div class="line xs"></div><div class="line xs"></div><div class="mk">7</div></div>
+      <div class="blk white">
+        <p class="h">お問い合わせ</p>
+        <p class="t">店舗・工房名／業種／所在地／担当者名／連絡先／メッセージ</p>
+        <span class="btn">送信する</span>
+        <div class="mk">8</div>
+      </div>
+      <div class="blk white"><div class="nav"><span>フッター（日本語）</span></div></div>
+    </div>
+
+    <aside class="notes">
+      <h3>注記</h3>
+      <ol>
+        <li><span class="mk in">1</span><b>ヒーロー</b>：「いつも通りの仕事だけ」を約束の中心に。営業現場の口頭説明と同じ言葉にする。</li>
+        <li><span class="mk in">2</span><b>対象業種</b>：初期7カテゴリを明示しつつ「その他」を残し、間口を広げる。</li>
+        <li><span class="mk in">3</span><b>仕組み</b>：4ステップは実際の流れなので順番表現でよい。支払いサイトは契約条件に合わせて修正。</li>
+        <li><span class="mk in">4</span><b>メリット</b>：施設側の不安トップ3（集客・言葉・キャンセル）に対応。キャンセル補償条件は契約書と一致させる。</li>
+        <li><span class="mk in">5</span><b>掲載条件</b>：手数料率は載せず「考え方」のみ。数字は商談で。</li>
+        <li><span class="mk in">6</span><b>信頼</b>：初期は掲載体験がないため、運営会社の集客実績（Mimipo）とガイドツアー提携会社で補う。</li>
+        <li><span class="mk in">7</span><b>FAQ</b>：「英語ができなくても大丈夫か」「何人まで」「写真は必要か」「途中でやめられるか」など。</li>
+        <li><span class="mk in">8</span><b>フォーム</b>：営業側のSlack／Notionに通知（既存の問診フローと同じ仕組みを流用可）。</li>
+      </ol>
+      <div class="sp">
+        <h4>SP</h4>
+        <p>商談は対面・PCが主だが、施設側がSPで見返すことを想定し1列構成。ヒーローCTAとフォームを固定バーで再掲。</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= 5. SPEC ================= -->
+<section class="page" id="p5">
+  <div class="page-title"><h2>5. 共通仕様・確定事項</h2></div>
+  <table class="spec">
+    <tr><th>サービス名</th><td>OMOTENASHI JAPAN（仮称）。正式名称・ドメイン確定後に最終確定</td></tr>
+    <tr><th>運営体制</th><td>株式会社プロセント（マーケティング・サイト運営・予約決済）＋提携会社（ガイド手配・ガイドツアー運営）</td></tr>
+    <tr><th>デザイン方針</th><td>生成り・墨・朱を基調に、過度な和風装飾を避けた静かな高級感。職人・師匠本人と少人数体験を写真の主役にし、都市・カテゴリ・即時予約への短い導線を設計</td></tr>
+    <tr><th>対象都市・体験</th><td>東京・京都。寿司／相撲／抹茶／着付け／芸者／刀／アニメネイル＋提携会社のガイドツアー</td></tr>
+    <tr><th>価格帯</th><td>ガイド付き高単価（¥30,000〜¥120,000）を標準。アニメネイル等は性質上の中価格帯として例外扱い。価格は「from ¥」表記</td></tr>
+    <tr><th>言語</th><td>EN / FR / ES / ZH-TW。URLは /en/ /fr/ /es/ /zh-tw/ のサブディレクトリ＋hreflang。EN先行公開可。パートナーページ（/partners/）は日本語のみ</td></tr>
+    <tr><th>通貨</th><td>JPY決済。USD/EURは参考表示（Bókunの多通貨表示機能）</td></tr>
+    <tr><th>予約・決済</th><td>Bókun（第一候補）ウィジェット埋め込み。即決済。在庫はリクエスト制→確認後確定。Viator / GetYourGuide / Klook にチャネル連携で同時掲載</td></tr>
+    <tr><th>レビュー</th><td>Google ビジネスプロフィールを主軸。サイトにはウィジェット埋め込み。自社レビュー機能は作らない</td></tr>
+    <tr><th>提携先の表示</th><td>当面は店名・住所非公開。人物ベースで紹介。将来公開できるデータ構造にしておく</td></tr>
+    <tr><th>URL設計</th><td>/en/{city}/　/en/{category}/　/en/{city}/{experience}/　/en/tours/　/en/tours/{tour}/　/en/about/ /en/faq/ /en/booking-policy/ /en/contact/　/partners/</td></tr>
+    <tr><th>構造化データ</th><td>Product（価格・レビュー）、BreadcrumbList、FAQPage、Organization</td></tr>
+    <tr><th>CV計測</th><td>Bókun予約完了をGA4／広告のCVとして計測。パートナーフォーム送信は別イベント</td></tr>
+    <tr><th>ページ数（初期）</th><td>トップ1／都市2／カテゴリ8／体験詳細9／ツアー一覧1・詳細2／固定4／パートナー1 ＝ 28ページ × 4言語（パートナー除く）</td></tr>
+  </table>
+</section>
+
+<div class="end-note">
+  <h2>デザイン初稿反映済み・次の工程</h2>
+  <p>トップページのデザイン初稿を作成済み。次の確定事項：①正式なサービス名・ドメイン、②ガイドツアー提携会社の名称を出すか否か、③初期9体験の価格・所要時間・開催条件、④各提携先の撮影許諾と撮影計画、⑤Bókunの手数料率・支払条件。</p>
+</div>
+
+</div>
+</body>
+</html>
