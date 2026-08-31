@@ -17,6 +17,7 @@ CC BY / CC BY-SA images require this attribution to be retained wherever the ima
 | `public/images/city-tokyo.jpg` | [Tokio Tempel Senso-ji bei Nacht 1.jpg](https://commons.wikimedia.org/wiki/File:Tokio_Tempel_Senso-ji_bei_Nacht_1.jpg) | Zairon | CC BY-SA 4.0 |
 | `public/images/craft-hands.jpg` | [Japanese Tea Ceremony Serving Tea.jpg](https://commons.wikimedia.org/wiki/File:Japanese_Tea_Ceremony_Serving_Tea.jpg) | KuboBella | CC BY-SA 4.0 |
 | `public/images/exp-geisha.jpg` | [Maiko dance Tomitsuyu.jpg](https://commons.wikimedia.org/wiki/File:Maiko_dance_Tomitsuyu.jpg) | Japanexperterna.se | CC BY-SA 3.0 |
+| `public/images/exp-kimono.jpg` | [A Japanese woman wearing a Kimono and Japanese traditional garden.jpg](https://commons.wikimedia.org/wiki/File:A_Japanese_woman_wearing_a_Kimono_and_Japanese_traditional_garden.jpg) | H.Hmoderato | CC BY-SA 4.0 |
 | `public/images/exp-sumo.jpg` | [Sumo stable training, Tokyo 2014-08-19.jpg](https://commons.wikimedia.org/wiki/File:Sumo_stable_training,_Tokyo_2014-08-19.jpg) | tjabeljan | CC BY 2.0 |
 | `public/images/exp-sushi.jpg` | [Sushi Masa by Ki-setsu Interior Omakase Counter.jpg](https://commons.wikimedia.org/wiki/File:Sushi_Masa_by_Ki-setsu_Interior_Omakase_Counter.jpg) | Bobby.Creations | CC BY 4.0 |
 | `public/images/tour-journey.jpg` | [Torii path with lantern at Fushimi Inari Taisha Shrine, Kyoto, Japan.jpg](https://commons.wikimedia.org/wiki/File:Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg) | Basile Morin | CC BY-SA 4.0 |

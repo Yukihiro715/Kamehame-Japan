@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // URL design uses trailing slashes (/en/tokyo/, /partners/ …)
+  trailingSlash: true,
 };
 
 export default nextConfig;
