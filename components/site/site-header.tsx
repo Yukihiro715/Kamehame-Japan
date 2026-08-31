@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowDownRight, Globe2, Menu } from "lucide-react";
+import { ArrowDownRight, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Brand } from "@/components/site/brand";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
 
 const navigation = [
   ["Tokyo", "/en/tokyo/"],
@@ -22,7 +23,7 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
         {navigation.map(([label, href]) => <Link key={label} href={href}>{label}</Link>)}
       </nav>
       <div className="header-tools">
-        <button className="language-button" type="button" aria-label="Language: English"><Globe2 size={16} /> EN</button>
+        <LanguageSwitcher />
         <Button asChild className="header-cta"><Link href="/en/experiences/">Find an experience</Link></Button>
         <Sheet>
           <SheetTrigger asChild>
@@ -33,7 +34,7 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
             <nav aria-label="Mobile navigation">
               {navigation.map(([label, href]) => <Link key={label} href={href}>{label}<ArrowDownRight size={18} /></Link>)}
             </nav>
-            <p>English · Français · Español · 繁體中文</p>
+            <p>English — Français · Español · 繁體中文 coming soon</p>
           </SheetContent>
         </Sheet>
       </div>

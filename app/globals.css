@@ -33,6 +33,25 @@ button, a { -webkit-tap-highlight-color: transparent; }
 [data-slot="button"] { transition:box-shadow .25s,transform .25s; }
 [data-slot="button"]:hover { box-shadow:0 0 0 3px rgba(88,198,255,.4), 0 10px 28px rgba(238,124,24,.35); transform:translateY(-1px); }
 
+
+/* ---- language switcher ---- */
+.lang-switch { position:relative; }
+.lang-switch .flip { transform:rotate(180deg); }
+.flag { width:18px; height:13px; display:block; flex:none; border:1px solid rgba(23,26,33,.25); border-radius:1px; }
+.lang-menu { position:absolute; z-index:60; right:0; top:calc(100% + 12px); min-width:200px; background:var(--white); color:var(--ink); border:2px solid var(--ink); box-shadow:5px 5px 0 rgba(23,26,33,.85); padding:6px; }
+.lang-menu::before { content:""; position:absolute; top:-9px; right:22px; width:14px; height:14px; background:var(--white); border:2px solid var(--ink); border-bottom:none; border-right:none; transform:rotate(45deg); }
+.lang-item { display:flex; align-items:center; gap:10px; width:100%; padding:10px; background:none; border:0; font:12.5px Arial,Helvetica,sans-serif; color:var(--ink); cursor:pointer; text-align:left; }
+.lang-item:hover { background:var(--rice); }
+.lang-item[aria-disabled="true"] { color:var(--muted); cursor:default; }
+.lang-item[aria-disabled="true"]:hover { background:none; }
+.lang-check { color:var(--kame); margin-left:auto; }
+.soon { margin-left:auto; background:var(--kame); color:var(--ink); font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:2px 7px; transform:skewX(-10deg); }
+.lang-item .lang-check + .soon, .lang-check ~ .soon { margin-left:8px; }
+.footer-langs { grid-column:1/-1; display:flex; gap:10px; flex-wrap:wrap; }
+.footer-lang { display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,253,248,.3); padding:8px 13px; font-size:11px; letter-spacing:.08em; color:#b9b7ae; }
+.footer-lang.active { background:var(--white); border-color:var(--white); color:var(--ink); font-weight:700; }
+.footer-lang .soon { margin-left:4px; }
+
 /* ---- manga speech bubbles & panel frames ---- */
 .bubble { position:relative; background:var(--white); color:var(--ink); border:2px solid var(--ink); border-radius:16px; padding:16px 20px; box-shadow:5px 5px 0 rgba(23,26,33,.85); }
 .bubble p { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:16px; line-height:1.5; color:var(--ink); }
@@ -172,7 +191,7 @@ footer { padding:70px clamp(24px,7vw,120px) 40px; background:var(--ink); color:v
 .photo-credits p { max-width:840px; margin:12px 0 0; line-height:1.8; }
 .photo-credits a { text-decoration:underline; }
 @media(max-width:980px){.site-header{grid-template-columns:1fr auto}.desktop-nav,.header-cta{display:none}.menu-button{display:inline-flex}.hero{min-height:720px}.hero-copy{width:100%}.trust-strip,.section-heading,.review-layout{grid-template-columns:1fr;gap:50px}.trust-seal{grid-column:1;margin:0;justify-self:start}.category-grid{grid-template-columns:repeat(2,1fr)}.experience-grid{grid-template-columns:1fr}.experience-card{display:grid;grid-template-columns:.75fr 1fr}.tour-section{grid-template-columns:1fr}.tour-monogram{height:420px;font-size:280px}}
-@media(max-width:700px){.site-header{height:72px;padding-inline:18px}.brand-mark{width:32px;height:32px}.language-button{display:none}.hero{min-height:700px;padding:120px 22px 110px;align-items:flex-start;background-position:62% center}.hero h1{font-size:clamp(50px,15vw,69px)}.hero-lede{margin:26px 0;font-size:16px}.hero-actions{align-items:flex-start;flex-direction:column;gap:22px}.hero-note{left:22px;right:auto;bottom:30px;max-width:250px}.trust-strip{padding:76px 22px 70px}.trust-grid{grid-template-columns:1fr}.trust-grid article+article{padding-left:0;border-left:0}.city-section,.category-section,.experiences-section,.review-section{padding:76px 22px}.city-cards{grid-template-columns:1fr;margin-top:45px}.city-card{min-height:390px;padding:24px}.city-card h3{font-size:65px}.circle-arrow{right:22px;bottom:25px}.category-grid{grid-template-columns:1fr 1fr}.category-card{min-height:190px}.category-mark{font-size:50px}.category-card b{font-size:18px}.section-heading.horizontal{gap:30px}.underlined-link{justify-self:start}.experience-grid{margin-top:45px}.experience-card{display:block}.experience-art{height:280px}.tour-monogram{height:320px;font-size:210px}.tour-copy{padding:75px 22px}.tour-details{flex-wrap:wrap}.review-layout{gap:35px}.closing-section{padding:90px 22px}footer{grid-template-columns:1fr;gap:40px}.footer-links{justify-content:flex-start;flex-wrap:wrap}.footer-meta{grid-column:1;flex-direction:column;gap:6px}.partner-link{grid-column:1;justify-self:start}}
+@media(max-width:700px){.site-header{height:72px;padding-inline:18px}.brand-mark{width:32px;height:32px}.hero{min-height:700px;padding:120px 22px 110px;align-items:flex-start;background-position:62% center}.hero h1{font-size:clamp(50px,15vw,69px)}.hero-lede{margin:26px 0;font-size:16px}.hero-actions{align-items:flex-start;flex-direction:column;gap:22px}.hero-note{left:22px;right:auto;bottom:30px;max-width:250px}.trust-strip{padding:76px 22px 70px}.trust-grid{grid-template-columns:1fr}.trust-grid article+article{padding-left:0;border-left:0}.city-section,.category-section,.experiences-section,.review-section{padding:76px 22px}.city-cards{grid-template-columns:1fr;margin-top:45px}.city-card{min-height:390px;padding:24px}.city-card h3{font-size:65px}.circle-arrow{right:22px;bottom:25px}.category-grid{grid-template-columns:1fr 1fr}.category-card{min-height:190px}.category-mark{font-size:50px}.category-card b{font-size:18px}.section-heading.horizontal{gap:30px}.underlined-link{justify-self:start}.experience-grid{margin-top:45px}.experience-card{display:block}.experience-art{height:280px}.tour-monogram{height:320px;font-size:210px}.tour-copy{padding:75px 22px}.tour-details{flex-wrap:wrap}.review-layout{gap:35px}.closing-section{padding:90px 22px}footer{grid-template-columns:1fr;gap:40px}.footer-links{justify-content:flex-start;flex-wrap:wrap}.footer-meta{grid-column:1;flex-direction:column;gap:6px}.partner-link{grid-column:1;justify-self:start}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 /* ---------- subpages (listing / detail) ---------- */

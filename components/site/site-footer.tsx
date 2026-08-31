@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Brand } from "@/components/site/brand";
+import { FooterLanguages } from "@/components/site/language-switcher";
 
 export function SiteFooter() {
   return (
@@ -13,6 +14,7 @@ export function SiteFooter() {
         <Link href="/#approach">About</Link>
       </div>
       <div className="footer-meta"><p>Operated by Prosent Inc. with our tour operations partner.</p><p>© 2026 KAMEHAME JAPAN</p></div>
+      <FooterLanguages />
       <Link className="partner-link" href="/partners/">体験パートナー募集 →</Link>
       <details className="photo-credits">
         <summary>Photo credits</summary>
