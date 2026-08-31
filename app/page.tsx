@@ -13,15 +13,20 @@ const navigation = [
 ] as const;
 
 const categories = [
-  ["寿", "Sushi", "Food culture"], ["相", "Sumo", "Living tradition"], ["茶", "Tea ceremony", "Mindful ritual"],
-  ["着", "Kimono", "Craft & style"], ["芸", "Geisha", "Performing arts"], ["刀", "Swordsmith", "Heritage craft"],
-  ["爪", "Anime nail art", "Pop culture"], ["旅", "Private tours", "Made for you"],
+  { mark:"寿", title:"Sushi", type:"Food culture", img:"/images/cat-sushi.jpg", alt:"Sushi chef working behind an omakase counter" },
+  { mark:"相", title:"Sumo", type:"Living tradition", img:"/images/cat-sumo.jpg", alt:"Sumo wrestlers performing the ring-entering ceremony" },
+  { mark:"茶", title:"Tea ceremony", type:"Mindful ritual", img:"/images/cat-tea.jpg", alt:"Host preparing matcha during a Japanese tea ceremony" },
+  { mark:"着", title:"Kimono", type:"Craft & style", img:"/images/cat-kimono.jpg", alt:"Antique silk kimono with pheasant and peony motif" },
+  { mark:"芸", title:"Geisha", type:"Performing arts", img:"/images/cat-geisha.jpg", alt:"Maiko in full dress in a Kyoto teahouse district" },
+  { mark:"刀", title:"Swordsmith", type:"Heritage craft", img:"/images/cat-sword.jpg", alt:"Polished katana blade photographed on black" },
+  { mark:"爪", title:"Anime nail art", type:"Pop culture", img:"/images/cat-nail.jpg", alt:"Neon-lit street in Akihabara at night" },
+  { mark:"旅", title:"Private tours", type:"Made for you", img:"/images/cat-tours.jpg", alt:"Path through the Arashiyama bamboo grove" },
 ] as const;
 
 const experiences = [
-  { no:"01", city:"Tokyo", title:"Edo-mae Sushi Masterclass", line:"Shape, season and serve nigiri at a third-generation chef's own counter.", duration:"2.5 hours", price:"¥45,000", mark:"寿", tone:"cream" },
-  { no:"02", city:"Tokyo", title:"Inside Sumo Morning Practice", line:"Observe the discipline and rituals of a working sumo stable at close range.", duration:"2 hours", price:"¥38,000", mark:"相", tone:"red" },
-  { no:"03", city:"Kyoto", title:"Private Evening with Geiko", line:"Share conversation, dance and seasonal cuisine in an intimate Kyoto setting.", duration:"2 hours", price:"¥120,000", mark:"芸", tone:"dark" },
+  { no:"01", city:"Tokyo", title:"Edo-mae Sushi Masterclass", line:"Shape, season and serve nigiri at a third-generation chef's own counter.", duration:"2.5 hours", price:"¥45,000", mark:"寿", img:"/images/exp-sushi.jpg", alt:"Quiet hinoki-wood omakase sushi counter" },
+  { no:"02", city:"Tokyo", title:"Inside Sumo Morning Practice", line:"Observe the discipline and rituals of a working sumo stable at close range.", duration:"2 hours", price:"¥38,000", mark:"相", img:"/images/exp-sumo.jpg", alt:"Sumo wrestlers training in the ring of a Tokyo stable" },
+  { no:"03", city:"Kyoto", title:"Private Evening with Geiko", line:"Share conversation, dance and seasonal cuisine in an intimate Kyoto setting.", duration:"2 hours", price:"¥120,000", mark:"芸", img:"/images/exp-geisha.jpg", alt:"Maiko performing a traditional dance with a fan" },
 ] as const;
 
 function Brand() {
@@ -84,6 +89,10 @@ export default function Home() {
           <article><span>03</span><h3>Clear from the start</h3><p>Book online, pay securely in yen, and see the cancellation policy before you commit.</p></article>
         </div>
         <div className="trust-seal"><ShieldCheck size={18} /> Small groups · Local experts · Thoughtful access</div>
+        <figure className="craft-band">
+          <img src="/images/craft-hands.jpg" alt="Tea ceremony host in kimono placing a tea bowl on tatami before seated guests" loading="lazy" />
+          <figcaption><span>おもてなし</span>In the master&apos;s hands — every gesture refined over decades, shared with a few guests at a time.</figcaption>
+        </figure>
       </section>
 
       <section className="city-section" id="cities">
@@ -93,14 +102,16 @@ export default function Home() {
           <p>Begin with where you&apos;ll be, then discover the people and practices that give each place its character.</p>
         </div>
         <div className="city-cards">
-          <a className="city-card tokyo" href="#experiences">
+          <a className="city-card tokyo" href="#experiences" aria-label="Tokyo experiences">
+            <img className="city-photo" src="/images/city-tokyo.jpg" alt="Five-storied pagoda of Senso-ji temple illuminated at night, Asakusa, Tokyo" loading="lazy" />
             <span className="city-index">01 / 東京</span>
-            <div><p>Modern rhythm.<br />Enduring craft.</p><h3>Tokyo</h3></div>
+            <div><p>Modern rhythm.<br />Enduring craft.</p><h3>Tokyo</h3><small className="city-place">Sensō-ji · Asakusa</small></div>
             <span className="circle-arrow"><ArrowDownRight /></span>
           </a>
-          <a className="city-card kyoto" href="#experiences">
+          <a className="city-card kyoto" href="#experiences" aria-label="Kyoto experiences">
+            <img className="city-photo" src="/images/city-kyoto.jpg" alt="Lantern-lined Yasaka-dori street at dawn with the Yasaka pagoda, Higashiyama, Kyoto" loading="lazy" />
             <span className="city-index">02 / 京都</span>
-            <div><p>Quiet rituals.<br />Living heritage.</p><h3>Kyoto</h3></div>
+            <div><p>Quiet rituals.<br />Living heritage.</p><h3>Kyoto</h3><small className="city-place">Yasaka-dōri · Higashiyama</small></div>
             <span className="circle-arrow"><ArrowDownRight /></span>
           </a>
         </div>
@@ -110,11 +121,12 @@ export default function Home() {
         <div className="section-kicker"><span>Explore by interest</span><span>8 ways into Japan</span></div>
         <h2 id="category-heading">Follow your curiosity.</h2>
         <div className="category-grid">
-          {categories.map(([mark, title, type], index) => (
-            <a href="#experiences" className="category-card" key={title}>
+          {categories.map((cat, index) => (
+            <a href="#experiences" className="category-card" key={cat.title}>
+              <img className="category-photo" src={cat.img} alt={cat.alt} loading="lazy" />
               <span className="category-no">{String(index + 1).padStart(2, "0")}</span>
-              <span className="category-mark" aria-hidden="true">{mark}</span>
-              <span><b>{title}</b><small>{type}</small></span>
+              <span className="category-mark" aria-hidden="true">{cat.mark}</span>
+              <span className="category-label"><b>{cat.title}</b><small>{cat.type}</small></span>
               <ArrowDownRight size={18} />
             </a>
           ))}
@@ -129,7 +141,11 @@ export default function Home() {
         <div className="experience-grid">
           {experiences.map((item) => (
             <article className="experience-card" key={item.title}>
-              <div className={`experience-art ${item.tone}`}><span>{item.mark}</span><small>{item.no}</small></div>
+              <div className="experience-art">
+                <img src={item.img} alt={item.alt} loading="lazy" />
+                <span aria-hidden="true">{item.mark}</span>
+                <small>{item.no}</small>
+              </div>
               <div className="experience-copy">
                 <p className="experience-city"><MapPin size={14} /> {item.city} · Interpreter included</p>
                 <h3>{item.title}</h3>
@@ -142,7 +158,10 @@ export default function Home() {
       </section>
 
       <section className="tour-section" id="tours">
-        <div className="tour-monogram" aria-hidden="true">旅</div>
+        <div className="tour-monogram">
+          <img src="/images/tour-journey.jpg" alt="Vermilion torii gates and a stone lantern along a path at Fushimi Inari shrine" loading="lazy" />
+          <span aria-hidden="true">旅</span>
+        </div>
         <div className="tour-copy">
           <p className="eyebrow"><span /> Private guided days</p>
           <h2>Let the experience<br />become the journey.</h2>
@@ -174,6 +193,16 @@ export default function Home() {
         <div className="footer-links"><a href="#cities">Tokyo</a><a href="#cities">Kyoto</a><a href="#experiences">Experiences</a><a href="#tours">Tours</a><a href="#approach">About</a></div>
         <div className="footer-meta"><p>Operated by Prosent Inc. with our tour operations partner.</p><p>© 2026 OMOTENASHI JAPAN</p></div>
         <a className="partner-link" href="/partners/">体験パートナー募集 →</a>
+        <details className="photo-credits">
+          <summary>Photo credits</summary>
+          <p>
+            Photography via <a href="https://commons.wikimedia.org/" rel="noreferrer">Wikimedia Commons</a>, used under CC BY / CC BY-SA / CC0 / public-domain licenses:
+            Zairon (Sensō-ji) · Basile Morin (Yasaka-dōri, Fushimi Inari) · Bobby.Creations (omakase counter) · tjabeljan (sumo stable) ·
+            Japanexperterna.se (maiko dance) · Yanay Rosen (sushi chef) · Simon Q (dohyō-iri) · Ermell (tea ceremony) · KuboBella (serving tea) ·
+            Maiko &amp; Geiko (maiko) · Rama (katana) · ElHeineken (Akihabara) · Erol Ahmed (bamboo grove) · The Metropolitan Museum of Art (kimono).
+            Full attribution in IMAGE_CREDITS.md.
+          </p>
+        </details>
       </footer>
     </main>
   );
