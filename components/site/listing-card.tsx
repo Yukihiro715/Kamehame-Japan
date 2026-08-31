@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { Clock3 } from "lucide-react";
 import type { ListingItem } from "@/lib/collections";
+import { t, type Lang } from "@/lib/i18n";
 
-export function ListingCard({ item }: { item: ListingItem }) {
+export function ListingCard({ item, lang = "en" }: { item: ListingItem; lang?: Lang }) {
+  const T = t(lang);
   return (
     <Link className="listing-card" href={item.href}>
       <div className="listing-art">
         <img src={item.img} alt={item.alt} loading="lazy" />
       </div>
       <div className="listing-copy">
-        <p className="listing-tags">{item.tags.map((t) => <span key={t}>{t}</span>)}</p>
+        <p className="listing-tags">{item.tags.map((tag) => <span key={tag}>{tag}</span>)}</p>
         <h3>{item.title}</h3>
         <p className="listing-line">{item.line}</p>
         <div className="listing-meta">
           <span><Clock3 size={14} /> {item.meta}</span>
-          <span>from <b>{item.price}</b>{item.kind === "experience" ? " / person" : ""}</span>
+          <span>{T.from} <b>{item.price}</b>{item.kind === "experience" ? ` ${T.perPerson}` : ""}</span>
         </div>
       </div>
     </Link>

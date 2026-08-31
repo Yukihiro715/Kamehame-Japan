@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, Globe2 } from "lucide-react";
+import { LANGS, type Lang } from "@/lib/i18n";
 
 // Flag emoji don't render on Windows/Chrome, so flags are tiny inline SVGs.
 function FlagEN() {
@@ -44,14 +45,29 @@ function FlagTW() {
 
 export const LOCALES = [
   { code: "en", short: "EN", label: "English", Flag: FlagEN, available: true },
+  { code: "es", short: "ES", label: "Español", Flag: FlagES, available: true },
   { code: "fr", short: "FR", label: "Français", Flag: FlagFR, available: false },
-  { code: "es", short: "ES", label: "Español", Flag: FlagES, available: false },
   { code: "zh-tw", short: "繁中", label: "繁體中文", Flag: FlagTW, available: false },
 ] as const;
 
-// Header dropdown: globe icon + current language. Languages that are not
-// published yet are listed with a SOON tag instead of pretending to switch.
-export function LanguageSwitcher() {
+// Maps the current pathname to its equivalent in another published language.
+function pathFor(target: Lang): string {
+  let path = typeof window === "undefined" ? "/" : window.location.pathname;
+  for (const l of LANGS) {
+    if (path === `/${l}` || path === `/${l}/`) { path = "/"; break; }
+    if (path.startsWith(`/${l}/`)) { path = path.slice(l.length + 1); break; }
+  }
+  if (path.startsWith("/partners")) return path; // Japanese-only page
+  return path === "/" ? (target === "en" ? "/" : `/${target}/`) : `/${target}${path}`;
+}
+
+function switchTo(code: string) {
+  window.location.href = pathFor(code as Lang);
+}
+
+// Header dropdown: globe icon + current language. Unpublished languages are
+// listed with a SOON tag instead of pretending to switch.
+export function LanguageSwitcher({ lang = "en" }: { lang?: Lang }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -66,7 +82,7 @@ export function LanguageSwitcher() {
     return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc); };
   }, [open]);
 
-  const current = LOCALES[0];
+  const current = LOCALES.find((l) => l.code === lang) ?? LOCALES[0];
 
   return (
     <div className="lang-switch" ref={ref}>
@@ -90,7 +106,11 @@ export function LanguageSwitcher() {
               aria-selected={l.code === current.code}
               aria-disabled={!l.available}
               className={`lang-item ${l.code === current.code ? "active" : ""}`}
-              onClick={() => { if (l.available) setOpen(false); }}
+              onClick={() => {
+                if (!l.available) return;
+                setOpen(false);
+                if (l.code !== current.code) switchTo(l.code);
+              }}
             >
               <l.Flag />
               <span>{l.label}</span>
@@ -104,17 +124,29 @@ export function LanguageSwitcher() {
   );
 }
 
-// Footer row: flag + short code chips.
-export function FooterLanguages() {
+// Footer row: flag + short-code chips; published languages are links.
+export function FooterLanguages({ lang = "en" }: { lang?: Lang }) {
   return (
     <div className="footer-langs" aria-label="Site language">
-      {LOCALES.map((l) => (
-        <span key={l.code} className={`footer-lang ${l.available ? "active" : ""}`} aria-disabled={!l.available}>
-          <l.Flag />
-          {l.short}
-          {!l.available && <span className="soon">Soon</span>}
-        </span>
-      ))}
+      {LOCALES.map((l) => {
+        if (!l.available) {
+          return (
+            <span key={l.code} className="footer-lang" aria-disabled="true">
+              <l.Flag />{l.short}<span className="soon">Soon</span>
+            </span>
+          );
+        }
+        return (
+          <button
+            key={l.code}
+            type="button"
+            className={`footer-lang available ${l.code === lang ? "active" : ""}`}
+            onClick={() => { if (l.code !== lang) switchTo(l.code); }}
+          >
+            <l.Flag />{l.short}
+          </button>
+        );
+      })}
     </div>
   );
 }

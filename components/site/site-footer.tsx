@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { Brand } from "@/components/site/brand";
 import { FooterLanguages } from "@/components/site/language-switcher";
+import { langHome, t, type Lang } from "@/lib/i18n";
 
-export function SiteFooter() {
+export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
+  const T = t(lang);
   return (
     <footer>
-      <Brand />
+      <Brand lang={lang} />
       <div className="footer-links">
-        <Link href="/en/tokyo/">Tokyo</Link>
-        <Link href="/en/kyoto/">Kyoto</Link>
-        <Link href="/en/experiences/">Experiences</Link>
-        <Link href="/en/tours/">Tours</Link>
-        <Link href="/#approach">About</Link>
+        <Link href={`/${lang}/tokyo/`}>{T.navTokyo}</Link>
+        <Link href={`/${lang}/kyoto/`}>{T.navKyoto}</Link>
+        <Link href={`/${lang}/experiences/`}>{T.navExperiences}</Link>
+        <Link href={`/${lang}/tours/`}>{T.navTours}</Link>
+        <Link href={`${langHome(lang)}#approach`}>{T.footerAbout}</Link>
       </div>
-      <div className="footer-meta"><p>Operated by Prosent Inc. with our tour operations partner.</p><p>© 2026 KAMEHAME JAPAN</p></div>
-      <FooterLanguages />
+      <div className="footer-meta"><p>{T.footerOperated}</p><p>© 2026 KAMEHAME JAPAN</p></div>
+      <FooterLanguages lang={lang} />
       <Link className="partner-link" href="/partners/">体験パートナー募集 →</Link>
       <details className="photo-credits">
         <summary>Photo credits</summary>

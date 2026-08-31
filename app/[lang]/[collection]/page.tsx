@@ -7,27 +7,32 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { ListingCard } from "@/components/site/listing-card";
 import { collectionSlugs, getCollection } from "@/lib/collections";
+import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 
-interface Props { params: Promise<{ collection: string }> }
+interface Props { params: Promise<{ lang: string; collection: string }> }
 
 export function generateStaticParams() {
-  return collectionSlugs.map((collection) => ({ collection }));
+  return LANGS.flatMap((lang) => collectionSlugs.map((collection) => ({ lang, collection })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { collection } = await params;
-  const data = getCollection(collection);
+  const { lang, collection } = await params;
+  if (!isLang(lang)) return {};
+  const data = getCollection(collection, lang);
   if (!data) return {};
   return {
     title: `${data.h1} | KAMEHAME JAPAN`,
     description: data.lead,
+    alternates: { languages: { en: `/en/${collection}/`, es: `/es/${collection}/` } },
   };
 }
 
 export default async function CollectionPage({ params }: Props) {
-  const { collection } = await params;
-  const data = getCollection(collection);
+  const { lang, collection } = await params;
+  if (!isLang(lang)) notFound();
+  const data = getCollection(collection, lang);
   if (!data) notFound();
+  const T = t(lang);
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -39,15 +44,15 @@ export default async function CollectionPage({ params }: Props) {
   };
 
   return (
-    <main className="subpage">
-      <SiteHeader variant="solid" />
+    <main className="subpage" lang={lang}>
+      <SiteHeader variant="solid" lang={lang} />
 
-      <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: data.crumb }]} />
+      <Breadcrumbs trail={[{ label: T.home, href: langHome(lang) }, { label: data.crumb }]} />
 
       <section className="collection-hero">
         <img src={data.heroImg} alt={data.heroAlt} />
         <div className="collection-hero-copy">
-          <p className="eyebrow"><span /> Tokyo · Kyoto · With the masters</p>
+          <p className="eyebrow"><span /> {T.eyebrowHero}</p>
           <h1>{data.h1}</h1>
         </div>
       </section>
@@ -55,14 +60,14 @@ export default async function CollectionPage({ params }: Props) {
       <section className="collection-body">
         <p className="collection-lead">{data.lead}</p>
 
-        <div className="refine-row" aria-label="Refine">
-          <span className="refine-label">Refine</span>
+        <div className="refine-row" aria-label={T.refine}>
+          <span className="refine-label">{T.refine}</span>
           {data.refine.map((r) => <Link className="chip" key={r.href + r.label} href={r.href}>{r.label}</Link>)}
-          <span className="refine-sort">Sort: Recommended</span>
+          <span className="refine-sort">{T.sort}</span>
         </div>
 
         <div className="listing-grid">
-          {data.items.map((item) => <ListingCard key={item.href} item={item} />)}
+          {data.items.map((item) => <ListingCard key={item.href} item={item} lang={lang} />)}
         </div>
 
         <div className="collection-seo">
@@ -71,7 +76,7 @@ export default async function CollectionPage({ params }: Props) {
             <p>{data.about.body}</p>
           </div>
           <div className="collection-faq">
-            <h2>Frequently asked</h2>
+            <h2>{T.frequentlyAsked}</h2>
             {data.faq.map((f) => (
               <details key={f.q}>
                 <summary>{f.q}</summary>
@@ -82,7 +87,7 @@ export default async function CollectionPage({ params }: Props) {
         </div>
 
         <div className="also-explore">
-          <h2>Also explore</h2>
+          <h2>{T.alsoExplore}</h2>
           <div>
             {data.explore.map((r) => <Link className="chip" key={r.href + r.label} href={r.href}>{r.label} <ArrowRight size={13} /></Link>)}
           </div>
@@ -90,7 +95,7 @@ export default async function CollectionPage({ params }: Props) {
       </section>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      <SiteFooter />
+      <SiteFooter lang={lang} />
     </main>
   );
 }

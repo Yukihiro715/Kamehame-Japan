@@ -7,36 +7,41 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { BookingBox, MobileBookingBar } from "@/components/site/booking-box";
 import {
-  CANCELLATION, SITE_ORIGIN, cityBySlug,
-  experienceBySlug, experiencesInCity, tourBySlug, tours,
+  cancellationFor, catalogFor, cityBySlug, SITE_ORIGIN,
   type Experience, type Tour,
 } from "@/lib/catalog";
+import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 
-interface Props { params: Promise<{ collection: string; slug: string }> }
+interface Props { params: Promise<{ lang: string; collection: string; slug: string }> }
 
 export function generateStaticParams() {
-  return [
-    ...tours.map((t) => ({ collection: "tours", slug: t.slug })),
-    ...experiencesInCity("tokyo").map((e) => ({ collection: "tokyo", slug: e.slug })),
-    ...experiencesInCity("kyoto").map((e) => ({ collection: "kyoto", slug: e.slug })),
-  ];
+  return LANGS.flatMap((lang) => {
+    const { experiences, tours } = catalogFor(lang);
+    return [
+      ...tours.map((tr) => ({ lang, collection: "tours", slug: tr.slug })),
+      ...experiences.map((e) => ({ lang, collection: e.city, slug: e.slug })),
+    ];
+  });
 }
 
-function resolve(collection: string, slug: string): { exp?: Experience; tour?: Tour } {
-  if (collection === "tours") return { tour: tourBySlug(slug) };
-  const exp = experienceBySlug(slug);
+function resolve(lang: Lang, collection: string, slug: string): { exp?: Experience; tour?: Tour } {
+  const { experiences, tours } = catalogFor(lang);
+  if (collection === "tours") return { tour: tours.find((tr) => tr.slug === slug) };
+  const exp = experiences.find((e) => e.slug === slug);
   if (exp && exp.city === collection) return { exp };
   return {};
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { collection, slug } = await params;
-  const { exp, tour } = resolve(collection, slug);
+  const { lang, collection, slug } = await params;
+  if (!isLang(lang)) return {};
+  const { exp, tour } = resolve(lang, collection, slug);
   const item = exp ?? tour;
   if (!item) return {};
   return {
     title: `${item.title} | KAMEHAME JAPAN`,
     description: exp ? exp.tagline : tour!.description,
+    alternates: { languages: { en: `/en/${collection}/${slug}/`, es: `/es/${collection}/${slug}/` } },
   };
 }
 
@@ -58,26 +63,29 @@ function productJsonLd(title: string, description: string, img: string, url: str
 }
 
 export default async function DetailPage({ params }: Props) {
-  const { collection, slug } = await params;
-  const { exp, tour } = resolve(collection, slug);
+  const { lang, collection, slug } = await params;
+  if (!isLang(lang)) notFound();
+  const { exp, tour } = resolve(lang, collection, slug);
   if (!exp && !tour) notFound();
 
-  if (tour) return <TourDetail tour={tour} />;
-  return <ExperienceDetail exp={exp!} />;
+  if (tour) return <TourDetail tour={tour} lang={lang} />;
+  return <ExperienceDetail exp={exp!} lang={lang} />;
 }
 
-function ExperienceDetail({ exp }: { exp: Experience }) {
-  const city = cityBySlug(exp.city)!;
-  const url = `/en/${exp.city}/${exp.slug}/`;
-  const cityTour = tours.find((t) => t.city === exp.city);
-  const more = experiencesInCity(exp.city).filter((e) => e.slug !== exp.slug).slice(0, 4);
+function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
+  const T = t(lang);
+  const city = cityBySlug(exp.city, lang)!;
+  const { experiences, tours } = catalogFor(lang);
+  const url = `/${lang}/${exp.city}/${exp.slug}/`;
+  const cityTour = tours.find((tr) => tr.city === exp.city);
+  const more = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
   return (
-    <main className="subpage detail-page">
-      <SiteHeader variant="solid" />
+    <main className="subpage detail-page" lang={lang}>
+      <SiteHeader variant="solid" lang={lang} />
       <Breadcrumbs trail={[
-        { label: "Home", href: "/" },
-        { label: city.title, href: `/en/${city.slug}/` },
+        { label: T.home, href: langHome(lang) },
+        { label: city.title, href: `/${lang}/${city.slug}/` },
         { label: exp.title },
       ]} />
 
@@ -93,20 +101,20 @@ function ExperienceDetail({ exp }: { exp: Experience }) {
           <div className="detail-tags">
             <span><Clock3 size={13} /> {exp.duration}</span>
             <span><MapPin size={13} /> {exp.area}</span>
-            <span><Languages size={13} /> Interpreter guide included</span>
+            <span><Languages size={13} /> {T.interpreterGuide}</span>
             <span><Users size={13} /> {exp.group}</span>
             <span>{exp.ages}</span>
           </div>
 
           <section>
-            <h2>What you&apos;ll do</h2>
+            <h2>{T.whatYoullDo}</h2>
             <ul className="do-list">
               {exp.whatYoullDo.map((w, i) => <li key={i}><span>{String(i + 1).padStart(2, "0")}</span>{w}</li>)}
             </ul>
           </section>
 
           <section className="master-block">
-            <h2>Your master</h2>
+            <h2>{T.yourMaster}</h2>
             <div className="bubble tail-bottom master-bubble">
               <p>&ldquo;{exp.master.quote}&rdquo;</p>
             </div>
@@ -115,7 +123,7 @@ function ExperienceDetail({ exp }: { exp: Experience }) {
           </section>
 
           <section>
-            <h2>Itinerary</h2>
+            <h2>{T.itinerary}</h2>
             <ul className="itinerary">
               {exp.itinerary.map((step) => {
                 const [time, ...rest] = step.split(" — ");
@@ -125,16 +133,16 @@ function ExperienceDetail({ exp }: { exp: Experience }) {
           </section>
 
           <section>
-            <h2>Good to know</h2>
+            <h2>{T.goodToKnow}</h2>
             <ul className="know-list">
               {exp.goodToKnow.map((g) => <li key={g}>{g}</li>)}
             </ul>
           </section>
 
           <section>
-            <h2>Meeting point &amp; access</h2>
-            <p>You will meet your interpreter guide in the {exp.area} area. Out of respect for our partners&apos; working venues, the exact address and map are sent with your booking confirmation.</p>
-            <div className="map-placeholder"><MapPin size={16} /> {exp.area} — exact location shared after booking</div>
+            <h2>{T.meetingPoint}</h2>
+            <p>{T.meetingBody(exp.area)}</p>
+            <div className="map-placeholder"><MapPin size={16} /> {T.meetingChip(exp.area)}</div>
           </section>
 
           <section>
@@ -143,16 +151,16 @@ function ExperienceDetail({ exp }: { exp: Experience }) {
           </section>
 
           <section>
-            <h2>Cancellation</h2>
-            <p>{CANCELLATION}</p>
+            <h2>{T.cancellationH}</h2>
+            <p>{cancellationFor(lang)}</p>
           </section>
         </article>
 
         <aside className="detail-aside">
-          <BookingBox price={exp.price} unit="per person" experienceSlug={exp.slug} />
+          <BookingBox price={exp.price} unit={T.perPersonUnit} experienceSlug={exp.slug} lang={lang} />
           <div className="aside-help">
-            <b>Questions?</b>
-            <p>WhatsApp and email support details will appear here at launch.</p>
+            <b>{T.questions}</b>
+            <p>{T.questionsBody}</p>
           </div>
         </aside>
       </div>
@@ -160,50 +168,52 @@ function ExperienceDetail({ exp }: { exp: Experience }) {
       {cityTour && (
         <section className="crosssell">
           <div>
-            <p className="eyebrow"><span /> Make it a full day</p>
-            <h2>Pair it with a private {city.title} day tour.</h2>
-            <p>Put this experience at the heart of an eight-hour day with a licensed guide — transport, timing and the route around it all handled.</p>
-            <Link className="underlined-link" href={`/en/tours/${cityTour.slug}/`}>{cityTour.title} <ArrowRight /></Link>
+            <p className="eyebrow"><span /> {T.makeItFullDay}</p>
+            <h2>{T.pairWith(city.title)}</h2>
+            <p>{T.pairBody}</p>
+            <Link className="underlined-link" href={`/${lang}/tours/${cityTour.slug}/`}>{cityTour.title} <ArrowRight /></Link>
           </div>
           <img src={cityTour.img} alt={cityTour.alt} loading="lazy" />
         </section>
       )}
 
       <section className="more-in">
-        <h2>More in {city.title}</h2>
+        <h2>{T.moreIn(city.title)}</h2>
         <div className="more-grid">
           {more.map((e) => (
-            <Link key={e.slug} href={`/en/${e.city}/${e.slug}/`}>
+            <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
               <img src={e.img} alt={e.alt} loading="lazy" />
               <b>{e.title}</b>
-              <small>{e.duration} · from {e.price}</small>
+              <small>{e.duration} · {T.from} {e.price}</small>
             </Link>
           ))}
         </div>
       </section>
 
-      <div className="review-note"><ShieldCheck size={16} /> Verified Google guest reviews for this experience will be shown here after launch.</div>
+      <div className="review-note"><ShieldCheck size={16} /> {T.reviewNote}</div>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price)),
       }} />
-      <MobileBookingBar price={exp.price} />
-      <SiteFooter />
+      <MobileBookingBar price={exp.price} lang={lang} />
+      <SiteFooter lang={lang} />
     </main>
   );
 }
 
-function TourDetail({ tour }: { tour: Tour }) {
-  const city = cityBySlug(tour.city)!;
-  const url = `/en/tours/${tour.slug}/`;
-  const inCity = experiencesInCity(tour.city).slice(0, 4);
+function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
+  const T = t(lang);
+  const city = cityBySlug(tour.city, lang)!;
+  const { experiences } = catalogFor(lang);
+  const url = `/${lang}/tours/${tour.slug}/`;
+  const inCity = experiences.filter((e) => e.city === tour.city).slice(0, 4);
 
   return (
-    <main className="subpage detail-page">
-      <SiteHeader variant="solid" />
+    <main className="subpage detail-page" lang={lang}>
+      <SiteHeader variant="solid" lang={lang} />
       <Breadcrumbs trail={[
-        { label: "Home", href: "/" },
-        { label: "Guided tours", href: "/en/tours/" },
+        { label: T.home, href: langHome(lang) },
+        { label: T.breadcrumbTours, href: `/${lang}/tours/` },
         { label: tour.title },
       ]} />
 
@@ -218,46 +228,46 @@ function TourDetail({ tour }: { tour: Tour }) {
           <div className="detail-tags">
             <span><Clock3 size={13} /> {tour.duration}</span>
             <span><MapPin size={13} /> {city.title}</span>
-            <span><Languages size={13} /> Licensed guide</span>
+            <span><Languages size={13} /> {T.licensedGuide}</span>
             <span><Users size={13} /> {tour.group}</span>
           </div>
 
           <section>
-            <h2>Your day, your route</h2>
+            <h2>{T.yourDay}</h2>
             <p>{tour.description}</p>
           </section>
 
           <section>
-            <h2>Build it around a masterclass</h2>
-            <p>Any {city.title} experience below can anchor the day. Tell us which one when you enquire, and the route, meals and pace are planned around its schedule.</p>
+            <h2>{T.buildAround}</h2>
+            <p>{T.buildBody(city.title)}</p>
             <ul className="know-list">
-              {inCity.map((e) => <li key={e.slug}><Link href={`/en/${e.city}/${e.slug}/`}>{e.title}</Link> — {e.duration}, from {e.price}</li>)}
+              {inCity.map((e) => <li key={e.slug}><Link href={`/${lang}/${e.city}/${e.slug}/`}>{e.title}</Link> — {e.duration}, {T.from} {e.price}</li>)}
             </ul>
           </section>
 
           <section>
-            <h2>Cancellation</h2>
-            <p>{CANCELLATION}</p>
+            <h2>{T.cancellationH}</h2>
+            <p>{cancellationFor(lang)}</p>
           </section>
         </article>
 
         <aside className="detail-aside">
-          <BookingBox price={tour.price} unit="per group / day" experienceSlug={tour.slug} />
+          <BookingBox price={tour.price} unit={T.perGroup} experienceSlug={tour.slug} lang={lang} />
           <div className="aside-help">
-            <b>Questions?</b>
-            <p>WhatsApp and email support details will appear here at launch.</p>
+            <b>{T.questions}</b>
+            <p>{T.questionsBody}</p>
           </div>
         </aside>
       </div>
 
       <section className="more-in">
-        <h2>Experiences in {city.title}</h2>
+        <h2>{T.experiencesIn(city.title)}</h2>
         <div className="more-grid">
           {inCity.map((e) => (
-            <Link key={e.slug} href={`/en/${e.city}/${e.slug}/`}>
+            <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
               <img src={e.img} alt={e.alt} loading="lazy" />
               <b>{e.title}</b>
-              <small>{e.duration} · from {e.price}</small>
+              <small>{e.duration} · {T.from} {e.price}</small>
             </Link>
           ))}
         </div>
@@ -266,8 +276,8 @@ function TourDetail({ tour }: { tour: Tour }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
       }} />
-      <MobileBookingBar price={tour.price} />
-      <SiteFooter />
+      <MobileBookingBar price={tour.price} lang={lang} />
+      <SiteFooter lang={lang} />
     </main>
   );
 }

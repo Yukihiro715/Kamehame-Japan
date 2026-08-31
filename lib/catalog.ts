@@ -273,15 +273,25 @@ export const tours: Tour[] = [
   },
 ];
 
+// --- language-aware access -------------------------------------------------
+
+import { CANCELLATION_ES, categoriesEs, citiesEs, experiencesEs, toursEs } from "@/lib/catalog.es";
+import type { Lang } from "@/lib/i18n";
+
+export function catalogFor(lang: Lang) {
+  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: experiencesEs, tours: toursEs };
+  return { cities, categories, experiences, tours };
+}
+
+export const cancellationFor = (lang: Lang) => (lang === "es" ? CANCELLATION_ES : CANCELLATION);
+
 // --- lookups ---------------------------------------------------------------
 
-export const cityBySlug = (slug: string) => cities.find((c) => c.slug === slug);
-export const categoryBySlug = (slug: string) => categories.find((c) => c.slug === slug);
-export const experienceBySlug = (slug: string) => experiences.find((e) => e.slug === slug);
-export const tourBySlug = (slug: string) => tours.find((t) => t.slug === slug);
+export const cityBySlug = (slug: string, lang: Lang = "en") => catalogFor(lang).cities.find((c) => c.slug === slug);
+export const categoryBySlug = (slug: string, lang: Lang = "en") => catalogFor(lang).categories.find((c) => c.slug === slug);
+export const experienceBySlug = (slug: string, lang: Lang = "en") => catalogFor(lang).experiences.find((e) => e.slug === slug);
+export const tourBySlug = (slug: string, lang: Lang = "en") => catalogFor(lang).tours.find((t) => t.slug === slug);
 
-export const experiencesInCity = (city: CitySlug) => experiences.filter((e) => e.city === city);
-export const experiencesInCategory = (category: string) => experiences.filter((e) => e.category === category);
-export const toursInCity = (city: CitySlug) => tours.filter((t) => t.city === city);
-
-export const categoryTag = (slug: string) => categoryBySlug(slug)?.tag ?? "Experience";
+export const experiencesInCity = (city: CitySlug, lang: Lang = "en") => catalogFor(lang).experiences.filter((e) => e.city === city);
+export const experiencesInCategory = (category: string, lang: Lang = "en") => catalogFor(lang).experiences.filter((e) => e.category === category);
+export const toursInCity = (city: CitySlug, lang: Lang = "en") => catalogFor(lang).tours.filter((t) => t.city === city);
