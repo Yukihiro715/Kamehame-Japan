@@ -7,7 +7,9 @@ import { t, type Lang } from "@/lib/i18n";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
-export function EnquiryForm({ kind, lang, fallbackEmail }: { kind: EnquiryKind; lang: Lang; fallbackEmail: string }) {
+export function EnquiryForm({
+  kind, lang, fallbackEmail, experience,
+}: { kind: EnquiryKind; lang: Lang; fallbackEmail: string; experience?: { slug: string; title: string } }) {
   const T = t(lang);
   const F = T.form;
   const [status, setStatus] = useState<Status>("idle");
@@ -22,7 +24,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail }: { kind: EnquiryKind; 
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...data, kind, lang }),
+        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug }),
       });
       const json = (await res.json()) as { ok: boolean };
       setStatus(json.ok ? "sent" : "failed");
@@ -46,6 +48,12 @@ export function EnquiryForm({ kind, lang, fallbackEmail }: { kind: EnquiryKind; 
 
   return (
     <form className="enquiry-form" onSubmit={submit} noValidate={false}>
+      {experience && (
+        <p className="form-context">
+          <span>{F.about}</span>{" "}
+          <b>{experience.title}</b>
+        </p>
+      )}
       <div className="form-row two">
         <label>
           <span>{F.name}</span>

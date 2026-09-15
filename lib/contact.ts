@@ -23,6 +23,8 @@ export interface Enquiry {
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;
+  /** Catalog slug when the enquiry came from an experience page. */
+  experience?: string;
   /** Honeypot. Real people never fill it; bots usually do. */
   website?: string;
 }

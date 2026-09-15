@@ -44,7 +44,7 @@ export interface Experience {
   area: string;
   img: string;
   alt: string;
-  gallery: { img: string; alt: string }[];
+  gallery: { img: string; alt: string; caption?: string }[];
   /** Pricing unit: per person (default) or per group. */
   priceUnit?: "person" | "group";
   /** "request" when the venue confirms the date before the booking is final. */
@@ -60,7 +60,51 @@ export interface Experience {
   itinerary: string[];
   goodToKnow: string[];
   story: { heading: string; body: string };
+
+  // ---- Detail-page structure. Structural fields (numbers, media, flags) are
+  // authored once in the English catalog and merged into every locale by
+  // catalogFor(); locale files only carry text. ----------------------------
+
+  /** Smallest and largest party the venue takes. Drives the pricing table. */
+  partySize?: { min: number; max: number };
+  /** Party-size pricing. `tiers` are whole-group totals in yen; a per-person
+   *  figure is derived for display. Absent for per-person products, where the
+   *  table is derived from `price` × party. */
+  pricing?: {
+    tiers: { party: number; total: number }[];
+    /** Rate that applies inside `windows`; only the tiers actually confirmed. */
+    highSeason?: { tiers: { party: number; total: number }[]; windows: { from: string; to: string }[] };
+  };
+  /** Experience video. Absent until an asset exists; the whole video section,
+   *  the "Watch the experience" link and its anchor are omitted when absent. */
+  video?: {
+    kind: "youtube" | "vimeo" | "mp4";
+    /** YouTube/Vimeo id, or the mp4 URL. */
+    src: string;
+    poster: string;
+    aspect: "16/9" | "9/16" | "4/3" | "1/1";
+  };
+  /** Note shown beside the gallery, e.g. that the room or dishes vary by date. */
+  galleryNote?: string;
+  /** Three value cards. Falls back to the site-wide trio when absent. */
+  highlights?: { title: string; body: string; icon: "group" | "chat" | "interpreter" | "dance" | "meal" | "photo" }[];
+  /** Confirmed with the venue. Absent means "not confirmed" and nothing is
+   *  claimed — never "all inclusive" by default. */
+  included?: string[];
+  notIncluded?: string[];
+  /** Vertical timeline. Falls back to `itinerary` (time — text) when absent. */
+  schedule?: { time: string; title: string; body?: string; img?: string }[];
+  /** Time actually spent with the practitioner, when shorter than `duration`. */
+  interactionTime?: string;
+  /** What is known before booking vs. shared only in the confirmation. */
+  venue?: { known: string[]; afterBooking: string[]; img?: string; alt?: string };
+  /** Product-specific questions, confirmed with the venue. Site-level
+   *  questions (interpreter, dietary, booking flow) are appended by the page. */
+  faq?: { q: string; a: string }[];
 }
+
+/** Fields that are authored once (English) and shared by every locale. */
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit";
 
 export interface Tour {
   slug: string;
@@ -121,6 +165,7 @@ export const categories: Category[] = [
 export const experiences: Experience[] = [
   {
     slug: "sushi-masterclass", city: "tokyo", category: "sushi",
+    partySize: { min: 1, max: 6 },
     title: "Edo-mae Sushi Masterclass",
     tagline: "Craft nigiri with a third-generation chef at his own counter",
     duration: "2.5 hours", price: "¥45,000", group: "Private · up to 6", ages: "Ages 8+", area: "Tokyo (Tsukiji area)",
@@ -139,6 +184,7 @@ export const experiences: Experience[] = [
   },
   {
     slug: "sumo-morning-practice", city: "tokyo", category: "sumo",
+    partySize: { min: 1, max: 8 },
     title: "Inside Sumo Morning Practice",
     tagline: "Ringside at a working stable as the day's training unfolds",
     duration: "2 hours", price: "¥38,000", group: "Small group · up to 8", ages: "Ages 10+", area: "Tokyo (Ryogoku area)",
@@ -157,6 +203,7 @@ export const experiences: Experience[] = [
   },
   {
     slug: "kimono-photo-walk", city: "tokyo", category: "kimono",
+    partySize: { min: 1, max: 4 },
     title: "Kimono Dressing & Garden Photo Walk",
     tagline: "Dressed by a professional stylist, then a stroll through a classic garden",
     duration: "3 hours", price: "¥40,000", group: "Private · up to 4", ages: "All ages", area: "Tokyo (traditional garden district)",
@@ -175,6 +222,7 @@ export const experiences: Experience[] = [
   },
   {
     slug: "katana-forge-visit", city: "tokyo", category: "swordsmith",
+    partySize: { min: 1, max: 4 },
     title: "Katana: Visit a Swordsmith's Forge",
     tagline: "Watch a licensed swordsmith fold steel the traditional way",
     duration: "3 hours", price: "¥90,000", group: "Private · up to 4", ages: "Ages 12+", area: "Greater Tokyo (workshop district)",
@@ -193,6 +241,7 @@ export const experiences: Experience[] = [
   },
   {
     slug: "anime-nail-art-session", city: "tokyo", category: "anime-nail-art",
+    partySize: { min: 1, max: 2 },
     title: "Anime Nail Art Session",
     tagline: "Your favourite character, painted by a Tokyo nail artist",
     duration: "2 hours", price: "¥18,000", group: "Private · up to 2", ages: "All ages", area: "Tokyo (Akihabara / Harajuku area)",
@@ -211,8 +260,14 @@ export const experiences: Experience[] = [
   },
   {
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
-    title: "Maiko & Geiko Ozashiki Banquet",
-    tagline: "A private banquet room in Kyoto — dining, dance and parlour games with geiko and maiko",
+    partySize: { min: 2, max: 40 },
+    pricing: {
+      tiers: [{ party: 2, total: 139600 }, { party: 3, total: 157500 }, { party: 4, total: 166000 }, { party: 5, total: 190000 }],
+      highSeason: { tiers: [{ party: 2, total: 159600 }], windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }] },
+    },
+    interactionTime: "2 hours",
+    title: "Private Geisha Dining in Kyoto",
+    tagline: "Share a meal, enjoy a traditional dance, and join the conversation with an interpreter.",
     duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/exp-geisha.jpg", alt: "Maiko performing a traditional dance with a fan",
     gallery: [{ img: "/images/cat-geisha.jpg", alt: "Maiko in full dress in a Kyoto teahouse district" }],
@@ -234,9 +289,48 @@ export const experiences: Experience[] = [
       "Want a livelier room? An additional geiko or maiko can be arranged for ¥60,500.",
     ],
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
+    galleryNote: "The room and the dishes shown are examples; both vary by date and season.",
+    highlights: [
+      { icon: "group", title: "The room is yours", body: "A private banquet room for your party only — never shared with other guests." },
+      { icon: "chat", title: "Conversation, not just a show", body: "Geiko and maiko join your table to talk, then dance an arm's length away, then play ozashiki games with you." },
+      { icon: "interpreter", title: "Ask anything", body: "An interpreter guide carries the conversation both ways, so your questions reach the room and the answers reach you." },
+    ],
+    included: [
+      "A private banquet room for your party",
+      "Seasonal Kyoto cuisine",
+      "A geiko or maiko hosting your table: conversation, one dance performance and ozashiki games",
+      "Commemorative photographs with your hosts",
+      "An interpreter guide with you throughout",
+    ],
+    notIncluded: [
+      "An additional geiko or maiko, ¥60,500",
+      "Parties of six or more are quoted individually",
+    ],
+    schedule: [
+      { time: "10 min before", title: "Arrive with your guide", body: "The address is in your confirmation. Your guide meets you nearby and walks you in." },
+      { time: "0:00", title: "Your private room", body: "You are seated; the banquet begins." },
+      { time: "0:30", title: "Geiko and maiko join you", body: "Conversation over dinner, with your interpreter carrying both sides." },
+      { time: "1:15", title: "Dance and ozashiki games", body: "A dance performed close enough to hear the fabric move, then simple, competitive parlour games." },
+      { time: "1:50", title: "Photographs", body: "Commemorative photos with your hosts." },
+      { time: "2:00", title: "End of the evening" },
+    ],
+    venue: {
+      known: ["Gion / Higashiyama district, Kyoto", "A private banquet house; the room is yours for the evening", "Meet on site — no transfers are arranged"],
+      afterBooking: ["The house's name and street address", "A map and walking directions from the nearest station", "Your guide's contact for the evening"],
+      img: "/images/city-kyoto.jpg", alt: "Lantern-lined lane in Higashiyama, Kyoto",
+    },
+    faq: [
+      { q: "Will it be a geiko or a maiko?", a: "One geiko or maiko is arranged for your date. Which one depends on who is available that evening; if you have a preference, tell us when you request the date and we will pass it on, though it cannot be guaranteed." },
+      { q: "Can we add a second performer?", a: "Yes — an additional geiko or maiko can be arranged for ¥60,500, which makes for a livelier room. Ask when you request your date." },
+      { q: "Can we take photographs?", a: "Yes. Time is set aside for commemorative photographs with your hosts at the end of the evening. Your guide will tell you if there is a moment during the dance to keep cameras down." },
+      { q: "Can dietary needs and allergies be catered for?", a: "Yes. Tell us when you request your date — allergies, vegetarian, vegan, halal — and the kitchen's answer comes back with the confirmation, before you pay." },
+      { q: "Can children join?", a: "Yes. Children under 2 join free without a meal, ages 3–11 are half the adult rate, and 12 and over pay the adult rate with the full course. Seating is on tatami; tell us if anyone needs a chair." },
+      { q: "How far ahead must we book?", a: "At least three days before, by 5pm Japan time. Spring and autumn fill first — for those, request your date as soon as your flights are confirmed." },
+    ],
   },
   {
     slug: "tea-ceremony-with-master", city: "kyoto", category: "tea-ceremony",
+    partySize: { min: 1, max: 6 },
     title: "Tea Ceremony with a Tea Master",
     tagline: "A quiet hour of temae in a Kyoto tearoom, whisked bowl by bowl",
     duration: "1.5 hours", price: "¥30,000", group: "Private · up to 6", ages: "All ages", area: "Kyoto (temple district)",
@@ -255,6 +349,7 @@ export const experiences: Experience[] = [
   },
   {
     slug: "kimono-higashiyama-walk", city: "kyoto", category: "kimono",
+    partySize: { min: 1, max: 4 },
     title: "Kimono & Higashiyama Lantern Walk",
     tagline: "Dressed in silk, then through Kyoto's most storied lanes at golden hour",
     duration: "3 hours", price: "¥40,000", group: "Private · up to 4", ages: "All ages", area: "Kyoto (Higashiyama area)",
@@ -273,6 +368,7 @@ export const experiences: Experience[] = [
   },
   {
     slug: "kyoto-sushi-class", city: "kyoto", category: "sushi",
+    partySize: { min: 1, max: 6 },
     title: "Kyoto-style Sushi & Obanzai Class",
     tagline: "Pressed saba-zushi and Kyoto home cooking with a veteran chef",
     duration: "2.5 hours", price: "¥35,000", group: "Private · up to 6", ages: "Ages 8+", area: "Kyoto (city centre)",
@@ -318,12 +414,25 @@ import { CANCELLATION_FR, categoriesFr, citiesFr, experiencesFr, toursFr } from 
 import { CANCELLATION_ZH, categoriesZh, citiesZh, experiencesZh, toursZh } from "@/lib/catalog.zh-tw";
 import type { Lang } from "@/lib/i18n";
 
+/** Locale files carry text only; numbers, media and flags come from the
+ *  English entry with the same slug so they cannot drift between languages. */
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit"];
+function withStructure(localized: Experience[]): Experience[] {
+  return localized.map((e) => {
+    const base = experiences.find((x) => x.slug === e.slug);
+    if (!base) return e;
+    const merged: Experience = { ...e };
+    for (const k of STRUCTURAL) if (base[k] !== undefined) (merged as unknown as Record<string, unknown>)[k] = base[k];
+    return merged;
+  });
+}
+
 export function catalogFor(lang: Lang) {
   const published = <T,>(list: T[]) => (TOURS_PUBLISHED ? list : []);
-  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: experiencesEs, tours: published(toursEs) };
-  if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: experiencesJa, tours: published(toursJa) };
-  if (lang === "fr") return { cities: citiesFr, categories: categoriesFr, experiences: experiencesFr, tours: published(toursFr) };
-  if (lang === "zh-tw") return { cities: citiesZh, categories: categoriesZh, experiences: experiencesZh, tours: published(toursZh) };
+  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: withStructure(experiencesEs), tours: published(toursEs) };
+  if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: withStructure(experiencesJa), tours: published(toursJa) };
+  if (lang === "fr") return { cities: citiesFr, categories: categoriesFr, experiences: withStructure(experiencesFr), tours: published(toursFr) };
+  if (lang === "zh-tw") return { cities: citiesZh, categories: categoriesZh, experiences: withStructure(experiencesZh), tours: published(toursZh) };
   return { cities, categories, experiences, tours: published(tours) };
 }
 

@@ -1,18 +1,25 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, Users } from "lucide-react";
+import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
-import { BookingBox, MobileBookingBar } from "@/components/site/booking-box";
+import { BookingBox } from "@/components/site/booking-box";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { Gallery } from "@/components/site/gallery";
+import { VideoFacade } from "@/components/site/video-facade";
+import { StickyRequestBar } from "@/components/site/sticky-request-bar";
+import { ReviewList } from "@/components/site/review-list";
+import { CONTACT_EMAIL } from "@/lib/contact";
+import { pricingFor, yen } from "@/lib/pricing";
 import {
   cancellationFor, catalogFor, cityBySlug, isLive, SITE_ORIGIN,
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { aggregateFor, REVIEWS_PUBLISHED } from "@/lib/reviews";
-import { RatingSummary, ReviewSection } from "@/components/site/reviews";
+import { aggregateFor, REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
+import { RatingSummary } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -101,17 +108,45 @@ export default async function DetailPage({ params }: Props) {
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }
 
+const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles };
+
 function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
+  const D = T.detail;
   const city = cityBySlug(exp.city, lang)!;
-  const { experiences, tours } = catalogFor(lang);
+  const { experiences } = catalogFor(lang);
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
-  const cityTour = tours.find((tr) => tr.city === exp.city);
-  const more = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
+  const live = isLive(exp);
   const reading = articlesForExperience(exp.slug, lang);
 
+  const photos = [{ img: exp.img, alt: exp.alt }, ...exp.gallery];
+  const reviews = reviewsFor(exp.slug);
+  const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
+  const video = exp.video;
+  const pricing = pricingFor(exp, lang);
+  const perGroup = pricing.unit === "group";
+  const first = pricing.rows[0];
+  const headlinePrice = perGroup ? yen(first.total) : exp.price;
+  const headlineCondition = perGroup ? `${T.perGroupUnit} · ${D.stickyGroupOf(first.party)}` : T.perPersonUnit;
+
+  const highlights = (exp.highlights ?? D.defaultHighlights.map((h, i) => ({ ...h, icon: (["group", "spark", "interpreter"] as const)[i] })));
+  const schedule: { time: string; title: string; body?: string; img?: string }[] =
+    exp.schedule ?? exp.itinerary.map((step) => {
+      const [time, ...rest] = step.split(" — ");
+      return { time, title: rest.join(" — ") };
+    });
+  const faq = [...(exp.faq ?? []), ...D.siteFaq];
+  const cancellation = exp.cancellation ?? cancellationFor(lang);
+  const ctaLabel = live ? D.requestAvailability : T.comingSoonCta;
+  const conditions = [
+    { Icon: Clock3, text: exp.duration },
+    { Icon: Users, text: exp.group },
+    { Icon: Languages, text: T.interpreterGuide },
+    { Icon: MapPin, text: T.meetOnSite },
+  ];
+
   return (
-    <main className="subpage detail-page" lang={lang}>
+    <main className="subpage detail-page xp" lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
       <Breadcrumbs trail={[
         { label: T.home, href: langHome(lang) },
@@ -119,129 +154,216 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         { label: exp.title },
       ]} />
 
-      <section className={`detail-gallery ${exp.gallery.length === 0 ? "single" : ""}`}>
-        <img className="gallery-main" src={exp.img} alt={exp.alt} />
-        {exp.gallery.map((g) => <img key={g.img} src={g.img} alt={g.alt} loading="lazy" />)}
+      {/* ① First view */}
+      <section className="xp-hero">
+        <div className="xp-hero-photo">
+          <img src={exp.img} alt={exp.alt} />
+          {!live && <span className="soon-badge">{T.comingSoon}</span>}
+        </div>
+        <div className="xp-hero-copy">
+          {!live && <p className="soon-flag">{T.comingSoon}</p>}
+          <h1>{exp.title}</h1>
+          <p className="xp-lede">{exp.tagline}</p>
+          <ul className="xp-conditions">
+            {conditions.map(({ Icon, text }) => <li key={text}><Icon size={14} /> {text}</li>)}
+          </ul>
+          <div className="xp-price">
+            <b>{headlinePrice}</b>
+            <span>{headlineCondition}</span>
+            {(perGroup || pricing.highSeason) && <small>{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}</small>}
+          </div>
+          <div className="xp-hero-actions">
+            <a className="booking-cta as-link" id="hero-cta" href="#request">{ctaLabel}</a>
+            {video && <a className="xp-watch" href="#video">{D.watch} <ArrowRight size={14} /></a>}
+          </div>
+        </div>
       </section>
 
-      <div className="detail-layout">
-        <article className="detail-main">
-          {!isLive(exp) && <p className="soon-flag">{T.comingSoon}</p>}
-          <h1>{exp.title}</h1>
-          <RatingSummary experience={exp.slug} lang={lang} href="#reviews" size={16} />
-          <p className="detail-tagline">{exp.tagline}</p>
-          <div className="detail-tags">
-            <span><Clock3 size={13} /> {exp.duration}</span>
-            <span><MapPin size={13} /> {exp.area}</span>
-            <span><Languages size={13} /> {T.interpreterGuide}</span>
-            <span><MapPin size={13} /> {T.meetOnSite}</span>
-            <span><Users size={13} /> {exp.group}</span>
-            <span>{exp.ages}</span>
-          </div>
+      {/* ② Review summary — only with real reviews */}
+      {hasReviews && (
+        <section className="xp-review-summary">
+          <RatingSummary experience={exp.slug} lang={lang} size={18} />
+          <a href="#reviews" className="underlined-link">{D.reviewsSummaryLink} <ArrowRight /></a>
+        </section>
+      )}
 
-          <section>
-            <h2>{T.whatYoullDo}</h2>
-            <ul className="do-list">
-              {exp.whatYoullDo.map((w, i) => <li key={i}><span>{String(i + 1).padStart(2, "0")}</span>{w}</li>)}
-            </ul>
-          </section>
+      {/* ③ Video — only when an asset exists */}
+      {video && (
+        <section className="xp-section xp-video" id="video">
+          <h2>{D.seeExperience}</h2>
+          <VideoFacade video={video} title={exp.title} />
+        </section>
+      )}
 
-          <section className="master-block">
-            <h2>{T.yourMaster}</h2>
-            <div className="bubble tail-bottom master-bubble">
-              <p>&ldquo;{exp.master.quote}&rdquo;</p>
-            </div>
-            <p className="master-title">— {exp.master.title}</p>
-            <p>{exp.master.bio}</p>
-          </section>
+      {/* ④ Photos */}
+      <section className="xp-section xp-photos">
+        <h2>{D.gallery}</h2>
+        <Gallery photos={photos} lang={lang} note={exp.galleryNote} />
+      </section>
 
-          <section>
-            <h2>{T.itinerary}</h2>
-            <ul className="itinerary">
-              {exp.itinerary.map((step) => {
-                const [time, ...rest] = step.split(" — ");
-                return <li key={step}><b>{time}</b><span>{rest.join(" — ")}</span></li>;
-              })}
-            </ul>
-          </section>
-
-          <section>
-            <h2>{T.goodToKnow}</h2>
-            <ul className="know-list">
-              {exp.goodToKnow.map((g) => <li key={g}>{g}</li>)}
-            </ul>
-          </section>
-
-          <section>
-            <h2>{T.meetingPoint}</h2>
-            <p>{T.meetingBody(exp.area)}</p>
-            <div className="map-placeholder"><MapPin size={16} /> {T.meetingChip(exp.area)}</div>
-          </section>
-
-          <section>
-            <h2>{exp.story.heading}</h2>
-            <p>{exp.story.body}</p>
-          </section>
-
-          <section>
-            <h2>{T.cancellationH}</h2>
-            <p>{exp.cancellation ?? cancellationFor(lang)}</p>
-          </section>
-
-          {reading.length > 0 && (
-            <section>
-              <h2>{T.articleOnThis}</h2>
-              <div className="article-links">
-                {reading.map((a) => (
-                  <Link key={a.slug} href={`/${lang}/journal/${a.slug}/`}>
-                    <img src={a.img} alt={a.alt} loading="lazy" />
-                    <span>
-                      <b>{a.copy[lang]!.title}</b>
-                      <small>{articleDate(a.date, lang)} · {T.readMinutes(a.minutes)}</small>
-                    </span>
-                  </Link>
-                ))}
+      {/* ⑤ Highlights */}
+      <section className="xp-section">
+        <h2>{D.highlightsH}</h2>
+        <div className="xp-highlights">
+          {highlights.map((h) => {
+            const Icon = HIGHLIGHT_ICONS[h.icon as keyof typeof HIGHLIGHT_ICONS] ?? Sparkles;
+            return (
+              <div className="xp-highlight" key={h.title}>
+                <Icon size={20} />
+                <b>{h.title}</b>
+                <p>{h.body}</p>
               </div>
-            </section>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ⑥ Pricing */}
+      <section className="xp-section" id="pricing">
+        <h2>{D.pricingH}</h2>
+        <table className="xp-pricing">
+          <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
+          <tbody>
+            {pricing.rows.map((r) => (
+              <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="xp-pricing-note">{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}{pricing.moreOnRequest && ` ${D.largerParties}`}</p>
+        {pricing.highSeason && (
+          <div className="xp-high-season">
+            <b>{D.highSeasonH}</b>
+            <table className="xp-pricing compact">
+              <tbody>
+                {pricing.highSeason.rows.map((r) => (
+                  <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="xp-pricing-note">{D.highSeasonNote(pricing.highSeason.window)}</p>
+          </div>
+        )}
+        {(exp.included || exp.notIncluded) && (
+          <div className="xp-included">
+            {exp.included && (
+              <div>
+                <h3>{D.includedH}</h3>
+                <ul className="check-list">{exp.included.map((i) => <li key={i}><span className="tick">✓</span><span>{i}</span></li>)}</ul>
+              </div>
+            )}
+            {exp.notIncluded && (
+              <div>
+                <h3>{D.notIncludedH}</h3>
+                <ul className="check-list muted">{exp.notIncluded.map((i) => <li key={i}><span className="tick">—</span><span>{i}</span></li>)}</ul>
+              </div>
+            )}
+            <p className="xp-included-note">{D.includedNote}</p>
+          </div>
+        )}
+        {!exp.included && <p className="xp-included-note">{T.interpreterGuide}. {D.includedNote}</p>}
+        <a className="booking-cta as-link inline" href="#request">{ctaLabel}</a>
+      </section>
+
+      {/* ⑦ Schedule and venue */}
+      <section className="xp-section">
+        <h2>{D.scheduleH}</h2>
+        {exp.interactionTime && exp.interactionTime !== exp.duration && (
+          <p className="xp-note">{D.interactionNote(exp.duration, exp.interactionTime)}</p>
+        )}
+        <ol className="xp-timeline">
+          {schedule.map((st) => (
+            <li key={st.time + st.title}>
+              <span className="xp-time">{st.time}</span>
+              <div>
+                <b>{st.title}</b>
+                {st.body && <p>{st.body}</p>}
+                {st.img && <img src={st.img} alt="" loading="lazy" />}
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <h2 className="xp-sub">{D.venueH}</h2>
+        <div className="xp-venue">
+          {(exp.venue?.img ?? photos[1]?.img) && (
+            <figure>
+              <img src={exp.venue?.img ?? photos[1].img} alt={exp.venue?.alt ?? photos[1]?.alt ?? ""} loading="lazy" />
+              <figcaption>{D.venueExampleNote}</figcaption>
+            </figure>
           )}
-
-          <ReviewSection experience={exp.slug} lang={lang} />
-        </article>
-
-        <aside className="detail-aside">
-          {isLive(exp) ? (
-            <BookingBox price={exp.price} unit={exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit} experienceSlug={exp.slug} lang={lang} bookingType={exp.bookingType} fine={exp.cancellation ? T.bookingFineTerms : undefined} />
-          ) : (
-            <div className="booking-box soon-box" id="booking">
-              <p className="booking-price">{T.from} <b>{exp.price}</b> <span>{exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit}</span></p>
-              <span className="soon-badge static">{T.comingSoon}</span>
-              <p className="soon-body">{T.comingSoonBody}</p>
-              <Link className="booking-cta as-link" href={`/${lang}/contact/#enquiry`}>{T.comingSoonCta}</Link>
+          <div className="xp-venue-cols">
+            <div>
+              <h3>{D.venueKnownH}</h3>
+              <ul className="know-list">
+                {(exp.venue?.known ?? [exp.area, T.meetOnSite]).map((k) => <li key={k}>{k}</li>)}
+              </ul>
             </div>
-          )}
-          <div className="aside-help">
-            <b>{T.questions}</b>
-            <p>{T.questionsBody}</p>
+            <div>
+              <h3>{D.venueAfterH}</h3>
+              <ul className="know-list">
+                {(exp.venue?.afterBooking ?? [T.meetingChip(exp.area)]).map((k) => <li key={k}>{k}</li>)}
+              </ul>
+            </div>
           </div>
-        </aside>
-      </div>
+        </div>
+      </section>
 
-      {cityTour && (
-        <section className="crosssell">
-          <div>
-            <p className="eyebrow"><span /> {T.makeItFullDay}</p>
-            <h2>{T.pairWith(city.title)}</h2>
-            <p>{T.pairBody}</p>
-            <Link className="underlined-link" href={`/${lang}/tours/${cityTour.slug}/`}>{cityTour.title} <ArrowRight /></Link>
+      {/* ⑧ Reviews — only with real reviews */}
+      {hasReviews && (
+        <section className="xp-section" id="reviews">
+          <h2>{T.reviewsH}</h2>
+          <RatingSummary experience={exp.slug} lang={lang} size={16} />
+          <ReviewList reviews={reviews} lang={lang} />
+        </section>
+      )}
+
+      {/* ⑨ FAQ */}
+      <section className="xp-section">
+        <h2>{D.faqH}</h2>
+        <div className="faq-list">
+          {faq.map((f) => (
+            <details key={f.q}><summary>{f.q}</summary><p>{f.a}</p></details>
+          ))}
+        </div>
+      </section>
+
+      {/* ⑩ Flow, cancellation, request */}
+      <section className="xp-section xp-request" id="request">
+        <h2>{D.flowH}</h2>
+        <ol className="xp-flow">
+          {D.flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
+        </ol>
+        <h3 className="xp-cancel-h">{D.cancellationH}</h3>
+        <p className="xp-cancel">{cancellation}</p>
+
+        <h2 className="xp-sub">{live ? D.requestH : T.comingSoonCta}</h2>
+        <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>
+        <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />
+        {/* Bókun mount for the day online booking connects; nothing renders until then. */}
+        <div id="bokun-widget-mount" data-experience={exp.slug} data-booking-type={exp.bookingType ?? "instant"} hidden />
+      </section>
+
+      {reading.length > 0 && (
+        <section className="xp-section xp-reading">
+          <h2>{T.articleOnThis}</h2>
+          <div className="article-links">
+            {reading.map((a) => (
+              <Link key={a.slug} href={`/${lang}/journal/${a.slug}/`}>
+                <img src={a.img} alt={a.alt} loading="lazy" />
+                <span>
+                  <b>{a.copy[lang]!.title}</b>
+                  <small>{articleDate(a.date, lang)} · {T.readMinutes(a.minutes)}</small>
+                </span>
+              </Link>
+            ))}
           </div>
-          <img src={cityTour.img} alt={cityTour.alt} loading="lazy" />
         </section>
       )}
 
       <section className="more-in">
         <h2>{T.moreIn(city.title)}</h2>
         <div className="more-grid">
-          {more.map((e) => (
+          {experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4).map((e) => (
             <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
               <img src={e.img} alt={e.alt} loading="lazy" />
               <b>{e.title}</b>
@@ -254,7 +376,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
       }} />
-      {isLive(exp) && <MobileBookingBar price={exp.price} lang={lang} bookingType={exp.bookingType} />}
+      <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={ctaLabel} />
       <SiteFooter lang={lang} />
     </main>
   );
@@ -335,7 +457,6 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
       }} />
-      <MobileBookingBar price={tour.price} lang={lang} bookingType={tour.bookingType} />
       <SiteFooter lang={lang} />
     </main>
   );

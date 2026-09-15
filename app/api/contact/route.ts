@@ -22,7 +22,7 @@ async function bindings() {
 // The From address must be on our own zone.
 const FROM = "enquiries@kamehame-japan.com";
 
-const MAX = { name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000 };
+const MAX = { name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80 };
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.replace(/[\r\n]+/g, " ").trim().slice(0, max) : "";
@@ -43,6 +43,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     dates: clean(body.dates, MAX.dates) || undefined,
     party: clean(body.party, MAX.party) || undefined,
     lang: clean(body.lang, 5) || "en",
+    experience: clean(body.experience, MAX.experience) || undefined,
     website: clean(body.website, 200) || undefined,
   };
 }
@@ -52,9 +53,10 @@ function parse(body: Record<string, unknown>): Enquiry | null {
 function raw(e: Enquiry, to: string): string {
   const subject = e.kind === "trade"
     ? `[Trade] ${e.company ?? e.name} — ${e.country ?? ""}`.trim()
-    : `[Enquiry] ${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
+    : `[Request] ${e.experience ? `${e.experience} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
   const lines = [
     `Kind:     ${e.kind}`,
+    e.experience && `Experience: ${e.experience}`,
     `Name:     ${e.name}`,
     `Email:    ${e.email}`,
     e.company && `Company:  ${e.company}`,

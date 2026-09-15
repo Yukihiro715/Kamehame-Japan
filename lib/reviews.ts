@@ -34,6 +34,10 @@ export interface Review {
   date: string;
   /** Where it came from, so we can show "verified" only where it is true. */
   source: "google" | "bokun" | "direct";
+  /** Who came: shown as a small tag beside the initials. */
+  party?: "couple" | "family" | "friends" | "solo" | "business";
+  /** Provenance note, e.g. that the guest attended as a monitor. */
+  note?: string;
 }
 
 const SAMPLE_REVIEWS: Review[] = [
