@@ -638,7 +638,12 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 .xp-conditions li { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); background:var(--white); padding:7px 12px; font-size:12px; letter-spacing:.02em; }
 .xp-conditions svg { color:var(--kame); flex:none; }
 .xp-price { margin:0 0 22px; padding-top:18px; border-top:2px solid var(--ink); display:grid; gap:5px; }
-.xp-price b { font-family:var(--font-display); font-weight:400; font-size:34px; letter-spacing:.02em; line-height:1; }
+.xp-price b { font-family:var(--font-display); font-weight:400; font-size:34px; letter-spacing:.02em; line-height:1.1; }
+.xp-price-aff { font-family:var(--font-sans); font-size:15px; letter-spacing:0; color:#4a463e; }
+.xp-price-incl { margin:6px 0 2px; font-size:13.5px; line-height:1.6; font-weight:600; }
+.xp-no-payment { margin:12px 0 0; font-size:12.5px; color:var(--muted); }
+.form-after { margin:-4px 0 0; font-size:12.5px; line-height:1.7; color:#4a463e; }
+.form-after .form-privacy { display:block; margin-top:2px; }
 .xp-price span { font-size:13px; }
 .xp-price small { font-size:11.5px; color:var(--muted); line-height:1.6; }
 .xp-hero-actions { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }

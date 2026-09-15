@@ -135,12 +135,12 @@ export const experiencesJa: Experience[] = [
     title: "舞妓・芸妓とのお座敷",
     tagline: "京都の貸切のお座敷で、料理と舞と、お座敷遊びを",
     duration: "2時間", price: "¥139,600", priceUnit: "group", group: "貸切・2〜40名", ages: "年齢制限なし", area: "京都(祇園・東山周辺)",
-    img: "/images/geiko-maiko-smile.jpg", alt: "京都・祇園の貸切座敷で微笑む舞妓",
+    img: "/images/geiko-conversation.jpg", alt: "京都の貸切座敷で、舞妓と食事をしながら笑い合う参加者",
     gallery: [
       { img: "/images/geiko-maiko-seated.jpg", alt: "舞妓さんがお席に加わります", caption: "舞妓さんがお席に加わります" },
       { img: "/images/geiko-dance.jpg", alt: "金屏風の前での舞", caption: "金屏風の前での舞" },
       { img: "/images/geiko-dinner-course.jpg", alt: "和食のコース(内容は季節により変わります)", caption: "和食のコース(内容は季節により変わります)" },
-      { img: "/images/geiko-conversation.jpg", alt: "お食事をしながらの歓談。通訳が双方の言葉を橋渡しします", caption: "お食事をしながらの歓談。通訳が双方の言葉を橋渡しします" },
+      { img: "/images/geiko-maiko-smile.jpg", alt: "貸切のお座敷の舞妓", caption: "貸切のお座敷の舞妓" },
       { img: "/images/geiko-pouring.jpg", alt: "お酌をしてもらいながら、何でも聞いてみてください", caption: "お酌をしてもらいながら、何でも聞いてみてください" },
       { img: "/images/geiko-game-table.jpg", alt: "お席でのお座敷遊び", caption: "お席でのお座敷遊び" },
       { img: "/images/geiko-game-toratora.jpg", alt: "全身で行うじゃんけん「とらとら」", caption: "全身で行うじゃんけん「とらとら」" },
@@ -168,6 +168,7 @@ export const experiencesJa: Experience[] = [
     story: { heading: "花街という世界", body: "京都の花街は、三百年にわたって紹介と信用で動いてきました。芸妓は雇われて演じる人ではなく、茶屋と馴染み客との関係の上に一夜が成り立つ芸の人です。その部屋に座り、しかも会話がご自身の言葉で流れる。京都が開く扉の中で、これがもっとも稀なものです。" },
     availabilityNote: "年末年始はお休みです。",
     interactionTime: "約1時間45分",
+    includedShort: "貸切のお座敷 · 食事と飲み放題 · 英語通訳",
     galleryNote: "写真のお部屋・お料理は一例です。日程や季節により異なります。",
     highlights: [
       { icon: "group", title: "お座敷は貸切", body: "他のお客様と相席にならない、お客様だけのお座敷です。" },
@@ -212,7 +213,6 @@ export const experiencesJa: Experience[] = [
       { q: "食事制限やアレルギーに対応できますか?", a: "はい。空き確認の際に、アレルギー・ベジタリアン・ヴィーガン・ハラールなどをお知らせください。お支払い前に、確定通知とあわせて厨房からの回答をお伝えします。" },
       { q: "子どもも参加できますか?", a: "はい。2歳以下はお食事なしで無料、3〜11歳は大人の半額、12歳以上はコース付きで大人と同額です。畳席です。椅子が必要な方がいればお知らせください。" },
       { q: "いつまでに予約が必要ですか?", a: "遅くとも3日前の17時(日本時間)まで。2週間前なら余裕があります。春(3〜4月)と秋(10〜11月)は早く埋まります。ご指定の日に芸妓・舞妓を手配できなかった場合は全額返金します。" },
-      { q: "英語以外の通訳は頼めますか?", a: "含まれる通訳ガイドは英語です。他の言語をご希望の場合は空き確認の際にお知らせください。その言語の通訳を別途お見積りします。" },
     ],
   },
   {

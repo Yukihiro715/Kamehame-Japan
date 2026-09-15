@@ -177,14 +177,30 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             </p>
           )}
           <div className="xp-price">
-            <b>{headlinePrice}</b>
-            <span>{headlineCondition}</span>
-            {(perGroup || pricing.highSeason) && <small>{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}</small>}
+            {perGroup ? (
+              <>
+                <b><span className="xp-price-aff">{D.priceHeadline(first.party)[0]}</span>{headlinePrice}<span className="xp-price-aff">{D.priceHeadline(first.party)[1]}</span></b>
+                <span>{D.priceTotalNote}</span>
+              </>
+            ) : (
+              <>
+                <b>{headlinePrice}</b>
+                <span>{headlineCondition}</span>
+              </>
+            )}
+            {exp.includedShort && (
+              <p className="xp-price-incl">
+                {exp.includedShort}
+                {exp.taxIncluded && <><br />{D.taxIncluded}</>}
+              </p>
+            )}
+            <small>{pricing.highSeason || pricing.moreOnRequest ? D.ratesVary : perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}</small>
           </div>
           <div className="xp-hero-actions">
             <a className="booking-cta as-link" id="hero-cta" href="#request">{ctaLabel}</a>
             {video && <a className="xp-watch" href="#video">{D.watch} <ArrowRight size={14} /></a>}
           </div>
+          {live && <p className="xp-no-payment">{D.noPayment}</p>}
         </div>
       </section>
 

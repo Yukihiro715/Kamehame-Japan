@@ -64,7 +64,7 @@ const strings = {
     detail: {
       requestAvailability: "Request availability",
       photosCount: (n: number) => `${n} photos`,
-      availCutoffH: "Booking cutoff", availDays: "Days", scheduleSample: (t: string) => `Times shown for a ${t} start; the flow is the same for any start time.`, allPhotosH: (n: number) => `All photos (${n})`, back: "Back", highSeasonOpen: "Show high-season prices", highSeasonClose: "Hide", availH: "When it runs", availDaily: "Every day", availStart: "Start times", availCutoff: (d: number, t: string) => `Book by ${t} Japan time, ${d} days before`, mapNote: "Approximate area only — the exact address comes with your confirmation.", morePhotos: (n: number) => `+${n} more photos`,
+      availCutoffH: "Booking cutoff", availDays: "Days", scheduleSample: (t: string) => `Times shown for a ${t} start; the flow is the same for any start time.`, allPhotosH: (n: number) => `All photos (${n})`, back: "Back", highSeasonOpen: "Show high-season prices", highSeasonClose: "Hide", priceHeadline: (n: number) => ["From ", ` for ${n} guests`] as const, priceTotalNote: "Total for your private group", taxIncluded: "Tax and service included", ratesVary: "Rates vary by season and group size.", noPayment: "No payment when you enquire.", availH: "When it runs", availDaily: "Every day", availStart: "Start times", availCutoff: (d: number, t: string) => `Book by ${t} Japan time, ${d} days before`, mapNote: "Approximate area only — the exact address comes with your confirmation.", morePhotos: (n: number) => `+${n} more photos`,
       watch: "Watch the experience",
       seeExperience: "See the experience",
       gallery: "Photos", viewAllPhotos: "View all photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Close",
@@ -87,7 +87,7 @@ const strings = {
       reviewsMore: "Show more reviews", reviewParty: { couple: "Couple", family: "Family", friends: "Friends", solo: "Solo", business: "Business" } as Record<string, string>,
       faqH: "Questions people ask before booking",
       siteFaq: [
-        { q: "Which language does the interpreter speak?", a: "English. Tell us if your party needs another language and we will say honestly whether we can arrange it for your date." },
+        { q: "Which language does the interpreter speak?", a: "English is included. For Spanish, French, Chinese or another language, say so when you request your date and we will quote an interpreter in that language, or say honestly if we cannot arrange one." },
         { q: "How does a request turn into a booking?", a: "Send your preferred date and party size. We confirm availability with the venue and reply within 24 hours. Nothing is charged until you have seen the confirmed conditions and chosen to pay." },
         { q: "Is transport included?", a: "No. Every experience is meet-on-site: you make your own way there and we send directions and the nearest station with your confirmation." },
       ],
@@ -109,6 +109,7 @@ const strings = {
     comingSoonCta: "Tell me when it opens",
     // enquiry form
     form: {
+      sendRequest: "Send availability request", sendRequestNote: "Sending this enquiry does not confirm a booking. We will contact you with the next steps.",
       altStartTime: "Start time (alternative)", startTime: "Preferred start time", noPreference: "No preference",
       preferredDate: "Preferred date", altDate: "Alternative date (optional)", partyN: "Number of guests", messageXp: "Anything we should check with the venue? (optional)", messageXpHint: "Dietary needs, mobility, a birthday, a preferred start time…",
       name: "Your name", email: "Email address", company: "Company", country: "Country",
@@ -222,7 +223,7 @@ const strings = {
     detail: {
       requestAvailability: "Consultar disponibilidad",
       photosCount: (n: number) => `${n} fotos`,
-      availCutoffH: "Plazo de reserva", availDays: "Días", scheduleSample: (t: string) => `Horarios para un inicio a las ${t}; el desarrollo es el mismo a cualquier hora.`, allPhotosH: (n: number) => `Todas las fotos (${n})`, back: "Volver", highSeasonOpen: "Ver precios de temporada alta", highSeasonClose: "Ocultar", availH: "Cuándo se realiza", availDaily: "Todos los días", availStart: "Horas de inicio", availCutoff: (d: number, t: string) => `Reserve antes de las ${t} (hora de Japón), ${d} días antes`, mapNote: "Solo la zona aproximada: la dirección exacta llega con la confirmación.", morePhotos: (n: number) => `+${n} fotos más`,
+      availCutoffH: "Plazo de reserva", availDays: "Días", scheduleSample: (t: string) => `Horarios para un inicio a las ${t}; el desarrollo es el mismo a cualquier hora.`, allPhotosH: (n: number) => `Todas las fotos (${n})`, back: "Volver", highSeasonOpen: "Ver precios de temporada alta", highSeasonClose: "Ocultar", priceHeadline: (n: number) => ["Desde ", ` para ${n} personas`] as const, priceTotalNote: "Total para su grupo privado", taxIncluded: "Impuestos y servicio incluidos", ratesVary: "Las tarifas varían según la temporada y el tamaño del grupo.", noPayment: "No se paga nada al consultar.", availH: "Cuándo se realiza", availDaily: "Todos los días", availStart: "Horas de inicio", availCutoff: (d: number, t: string) => `Reserve antes de las ${t} (hora de Japón), ${d} días antes`, mapNote: "Solo la zona aproximada: la dirección exacta llega con la confirmación.", morePhotos: (n: number) => `+${n} fotos más`,
       watch: "Ver la experiencia",
       seeExperience: "Mira la experiencia",
       gallery: "Fotos", viewAllPhotos: "Ver todas las fotos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Cerrar",
@@ -245,7 +246,7 @@ const strings = {
       reviewsMore: "Ver más opiniones", reviewParty: { couple: "Pareja", family: "Familia", friends: "Amigos", solo: "Solo", business: "Trabajo" } as Record<string, string>,
       faqH: "Lo que preguntan antes de reservar",
       siteFaq: [
-        { q: "¿Qué idioma habla el intérprete?", a: "Inglés. Dinos si tu grupo necesita otro idioma y te diremos con franqueza si podemos organizarlo para tu fecha." },
+        { q: "¿Qué idioma habla el intérprete?", a: "El inglés está incluido. Para español, francés, chino u otro idioma, indíquelo al solicitar la fecha: le presupuestaremos un intérprete en ese idioma o le diremos con franqueza si no podemos organizarlo." },
         { q: "¿Cómo pasa una solicitud a ser reserva?", a: "Envía tu fecha preferida y el número de personas. Confirmamos la disponibilidad con el local y respondemos en 24 horas. No se cobra nada hasta que ves las condiciones confirmadas y decides pagar." },
         { q: "¿Incluye transporte?", a: "No. Todas las experiencias son con punto de encuentro en el lugar: llegas por tu cuenta y te enviamos las indicaciones y la estación más cercana con la confirmación." },
       ],
@@ -265,6 +266,7 @@ const strings = {
     comingSoonBody: "Estamos cerrando esta experiencia con el local. Déjanos tu correo y te avisaremos el día que se abra.",
     comingSoonCta: "Avisadme cuando se abra",
     form: {
+      sendRequest: "Enviar solicitud de disponibilidad", sendRequestNote: "Enviar esta consulta no confirma una reserva. Le contactaremos con los siguientes pasos.",
       altStartTime: "Hora de inicio (alternativa)", startTime: "Hora de inicio preferida", noPreference: "Sin preferencia",
       preferredDate: "Fecha preferida", altDate: "Fecha alternativa (opcional)", partyN: "Número de personas", messageXp: "¿Algo que consultar con el lugar? (opcional)", messageXpHint: "Alergias, movilidad, un cumpleaños, hora de inicio preferida…",
       name: "Tu nombre", email: "Correo electrónico", company: "Empresa", country: "País",
@@ -376,7 +378,7 @@ const strings = {
     detail: {
       requestAvailability: "空き状況を問い合わせる",
       photosCount: (n: number) => `写真${n}枚`,
-      availCutoffH: "予約締切", availDays: "開催曜日", scheduleSample: (t: string) => `${t}開始の場合の例です。他の開始時刻でも流れは同じです。`, allPhotosH: (n: number) => `写真(${n}枚)`, back: "戻る", highSeasonOpen: "繁忙期の料金を見る", highSeasonClose: "閉じる", availH: "開催日・開始時刻", availDaily: "毎日開催", availStart: "開始時刻", availCutoff: (d: number, t: string) => `${d}日前の${t}(日本時間)まで`, mapNote: "おおよそのエリアです。正確な住所は予約確定後にお伝えします。", morePhotos: (n: number) => `他${n}枚を見る`,
+      availCutoffH: "予約締切", availDays: "開催曜日", scheduleSample: (t: string) => `${t}開始の場合の例です。他の開始時刻でも流れは同じです。`, allPhotosH: (n: number) => `写真(${n}枚)`, back: "戻る", highSeasonOpen: "繁忙期の料金を見る", highSeasonClose: "閉じる", priceHeadline: (n: number) => ["", `〜(${n}名の場合)`] as const, priceTotalNote: "貸切グループの総額", taxIncluded: "消費税・サービス料込み", ratesVary: "料金は時期と人数により変わります。", noPayment: "お問い合わせの時点でお支払いは発生しません。", availH: "開催日・開始時刻", availDaily: "毎日開催", availStart: "開始時刻", availCutoff: (d: number, t: string) => `${d}日前の${t}(日本時間)まで`, mapNote: "おおよそのエリアです。正確な住所は予約確定後にお伝えします。", morePhotos: (n: number) => `他${n}枚を見る`,
       watch: "体験の動画を見る",
       seeExperience: "体験の様子",
       gallery: "写真", viewAllPhotos: "すべての写真を見る", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "閉じる",
@@ -399,7 +401,7 @@ const strings = {
       reviewsMore: "もっと見る", reviewParty: { couple: "カップル", family: "家族", friends: "友人", solo: "おひとり", business: "仕事" } as Record<string, string>,
       faqH: "予約前によくある質問",
       siteFaq: [
-        { q: "通訳の対応言語は?", a: "英語です。他の言語が必要な場合はお知らせください。その日程で手配できるかどうかを正直にお答えします。" },
+        { q: "通訳の対応言語は?", a: "英語の通訳が含まれます。スペイン語・フランス語・中国語など他の言語をご希望の場合は、空き確認の際にお知らせください。その言語の通訳を別途お見積りするか、手配できない場合は正直にお伝えします。" },
         { q: "リクエストはどのように予約になりますか?", a: "希望日と人数をお送りください。受け入れ先に空きを確認し、24時間以内にご返信します。確定した条件をご覧いただき、お支払いを選ぶまで課金はありません。" },
         { q: "移動は含まれますか?", a: "含まれません。すべて現地集合です。確定のご連絡とあわせて、道順と最寄駅をお送りします。" },
       ],
@@ -419,6 +421,7 @@ const strings = {
     comingSoonBody: "受け入れ先と最終調整中です。メールアドレスをお知らせいただければ、公開日にご連絡します。",
     comingSoonCta: "公開時に知らせてほしい",
     form: {
+      sendRequest: "空き状況を問い合わせる", sendRequestNote: "送信しても予約は確定しません。次のご案内をこちらからご連絡します。",
       altStartTime: "開始時刻(第2希望)", startTime: "希望の開始時刻", noPreference: "指定なし",
       preferredDate: "第1希望日", altDate: "第2希望日(任意)", partyN: "ご人数", messageXp: "受け入れ先に確認しておくこと(任意)", messageXpHint: "食事制限、移動のご事情、お祝い、希望の開始時刻など",
       name: "お名前", email: "メールアドレス", company: "会社名", country: "国",
@@ -529,7 +532,7 @@ const strings = {
     detail: {
       requestAvailability: "Demander les disponibilités",
       photosCount: (n: number) => `${n} photos`,
-      availCutoffH: "Date limite de réservation", availDays: "Jours", scheduleSample: (t: string) => `Horaires pour un début à ${t} ; le déroulé est le même à toute heure.`, allPhotosH: (n: number) => `Toutes les photos (${n})`, back: "Retour", highSeasonOpen: "Voir les tarifs haute saison", highSeasonClose: "Masquer", availH: "Quand a-t-elle lieu", availDaily: "Tous les jours", availStart: "Heures de début", availCutoff: (d: number, t: string) => `Réservez avant ${t} heure du Japon, ${d} jours à l'avance`, mapNote: "Zone approximative seulement : l'adresse exacte vous parvient avec la confirmation.", morePhotos: (n: number) => `+${n} photos`,
+      availCutoffH: "Date limite de réservation", availDays: "Jours", scheduleSample: (t: string) => `Horaires pour un début à ${t} ; le déroulé est le même à toute heure.`, allPhotosH: (n: number) => `Toutes les photos (${n})`, back: "Retour", highSeasonOpen: "Voir les tarifs haute saison", highSeasonClose: "Masquer", priceHeadline: (n: number) => ["À partir de ", ` pour ${n} personnes`] as const, priceTotalNote: "Total pour votre groupe privé", taxIncluded: "Taxes et service compris", ratesVary: "Les tarifs varient selon la saison et la taille du groupe.", noPayment: "Aucun paiement lors de la demande.", availH: "Quand a-t-elle lieu", availDaily: "Tous les jours", availStart: "Heures de début", availCutoff: (d: number, t: string) => `Réservez avant ${t} heure du Japon, ${d} jours à l'avance`, mapNote: "Zone approximative seulement : l'adresse exacte vous parvient avec la confirmation.", morePhotos: (n: number) => `+${n} photos`,
       watch: "Voir l'expérience en vidéo",
       seeExperience: "Voir l'expérience",
       gallery: "Photos", viewAllPhotos: "Voir toutes les photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Fermer",
@@ -552,7 +555,7 @@ const strings = {
       reviewsMore: "Voir plus d'avis", reviewParty: { couple: "Couple", family: "Famille", friends: "Amis", solo: "Seul(e)", business: "Professionnel" } as Record<string, string>,
       faqH: "Les questions posées avant de réserver",
       siteFaq: [
-        { q: "Quelle langue parle l'interprète ?", a: "L'anglais. Dites-nous si votre groupe a besoin d'une autre langue et nous vous dirons honnêtement si nous pouvons l'organiser pour votre date." },
+        { q: "Quelle langue parle l'interprète ?", a: "L'anglais est compris. Pour l'espagnol, le français, le chinois ou une autre langue, précisez-le lors de votre demande de date : nous vous proposerons un devis pour un interprète dans cette langue, ou vous dirons honnêtement si nous ne pouvons pas l'organiser." },
         { q: "Comment une demande devient-elle une réservation ?", a: "Envoyez votre date souhaitée et le nombre de personnes. Nous confirmons la disponibilité auprès du lieu et répondons sous 24 heures. Rien n'est débité avant que vous ayez vu les conditions confirmées et choisi de payer." },
         { q: "Le transport est-il inclus ?", a: "Non. Chaque expérience se fait avec rendez-vous sur place : vous vous y rendez par vos propres moyens et nous envoyons l'itinéraire et la gare la plus proche avec la confirmation." },
       ],
@@ -572,6 +575,7 @@ const strings = {
     comingSoonBody: "Nous finalisons cette expérience avec le lieu. Laissez votre adresse e-mail et nous vous préviendrons le jour de l'ouverture.",
     comingSoonCta: "Prévenez-moi à l'ouverture",
     form: {
+      sendRequest: "Envoyer la demande de disponibilité", sendRequestNote: "L'envoi de cette demande ne confirme pas une réservation. Nous vous contacterons pour la suite.",
       altStartTime: "Heure de début (autre date)", startTime: "Heure de début souhaitée", noPreference: "Sans préférence",
       preferredDate: "Date souhaitée", altDate: "Autre date possible (facultatif)", partyN: "Nombre de personnes", messageXp: "Quelque chose à vérifier auprès du lieu ? (facultatif)", messageXpHint: "Régimes, mobilité, anniversaire, heure de début souhaitée…",
       name: "Votre nom", email: "Adresse e-mail", company: "Société", country: "Pays",
@@ -684,7 +688,7 @@ const strings = {
     detail: {
       requestAvailability: "詢問空檔",
       photosCount: (n: number) => `${n} 張照片`,
-      availCutoffH: "預約截止", availDays: "舉辦日", scheduleSample: (t: string) => `以 ${t} 開始為例；其他開始時間流程相同。`, allPhotosH: (n: number) => `所有照片（${n}）`, back: "返回", highSeasonOpen: "查看旺季價格", highSeasonClose: "收起", availH: "舉辦日與開始時間", availDaily: "每天舉辦", availStart: "開始時間", availCutoff: (d: number, t: string) => `請於 ${d} 天前、日本時間 ${t} 前預約`, mapNote: "僅為大致區域，正確地址將隨確認通知一併告知。", morePhotos: (n: number) => `再看 ${n} 張`,
+      availCutoffH: "預約截止", availDays: "舉辦日", scheduleSample: (t: string) => `以 ${t} 開始為例；其他開始時間流程相同。`, allPhotosH: (n: number) => `所有照片（${n}）`, back: "返回", highSeasonOpen: "查看旺季價格", highSeasonClose: "收起", priceHeadline: (n: number) => [`${n} 位 `, " 起"] as const, priceTotalNote: "您的私人團體總價", taxIncluded: "含稅與服務費", ratesVary: "價格依季節與人數而異。", noPayment: "詢問時無需付款。", availH: "舉辦日與開始時間", availDaily: "每天舉辦", availStart: "開始時間", availCutoff: (d: number, t: string) => `請於 ${d} 天前、日本時間 ${t} 前預約`, mapNote: "僅為大致區域，正確地址將隨確認通知一併告知。", morePhotos: (n: number) => `再看 ${n} 張`,
       watch: "觀看體驗影片",
       seeExperience: "看看體驗",
       gallery: "照片", viewAllPhotos: "查看所有照片", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "關閉",
@@ -707,7 +711,7 @@ const strings = {
       reviewsMore: "顯示更多評論", reviewParty: { couple: "情侶", family: "家庭", friends: "朋友", solo: "獨自", business: "商務" } as Record<string, string>,
       faqH: "預約前常見問題",
       siteFaq: [
-        { q: "口譯使用什麼語言？", a: "英語。若您的團體需要其他語言，請告訴我們，我們會誠實回覆該日期是否能安排。" },
+        { q: "口譯使用什麼語言？", a: "包含英語口譯。若需中文、法文、西班牙文或其他語言，請在詢問日期時告知，我們會另行報價該語言的口譯，若無法安排也會誠實告知。" },
         { q: "申請如何變成預約？", a: "送出希望日期與人數。我們向場地確認空檔，並於 24 小時內回覆。在您看到確認條件並選擇付款之前，不會收取任何費用。" },
         { q: "包含交通嗎？", a: "不包含。所有體驗都是現場集合：您自行前往，我們會隨確認信寄出路線與最近車站。" },
       ],
@@ -727,6 +731,7 @@ const strings = {
     comingSoonBody: "我們正與場地敲定這項體驗。留下您的電子郵件，開放當天我們會通知您。",
     comingSoonCta: "開放時通知我",
     form: {
+      sendRequest: "送出空檔詢問", sendRequestNote: "送出詢問並不代表預約成立，我們會與您聯繫後續步驟。",
       altStartTime: "開始時間（備選）", startTime: "希望的開始時間", noPreference: "不指定",
       preferredDate: "首選日期", altDate: "備選日期（可不填）", partyN: "人數", messageXp: "需要向店家確認的事項（可不填）", messageXpHint: "飲食限制、行動需求、慶祝活動、希望的開始時間等",
       name: "您的姓名", email: "電子郵件", company: "公司名稱", country: "國家／地區",

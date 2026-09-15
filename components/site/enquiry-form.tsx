@@ -174,10 +174,11 @@ export function EnquiryForm({
 
       <div className="enquiry-actions">
         <button type="submit" className="contact-cta" disabled={status === "sending"}>
-          {status === "sending" ? F.sending : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : experience ? F.sendRequest : F.send} <ArrowRight size={15} />
         </button>
-        <span className="form-privacy">{F.privacy}</span>
+        {!experience && <span className="form-privacy">{F.privacy}</span>}
       </div>
+      {experience && <p className="form-after">{F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
 
       {status === "failed" && (
         <p className="form-error" role="alert">

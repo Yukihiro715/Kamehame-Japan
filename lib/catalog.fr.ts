@@ -130,12 +130,12 @@ export const experiencesFr: Experience[] = [
     title: "Banquet ozashiki avec maiko et geiko",
     tagline: "Un salon de banquet privé à Kyoto — dîner, danse et jeux de salon avec geiko et maiko",
     duration: "2 h", price: "¥139,600", priceUnit: "group", group: "Privé · 2 à 40 convives", ages: "Tous âges", area: "Kyoto (Gion / Higashiyama)",
-    img: "/images/geiko-maiko-smile.jpg", alt: "Une maiko souriante dans une salle privée en tatami à Gion, Kyoto",
+    img: "/images/geiko-conversation.jpg", alt: "Des convives riant avec une maiko autour du dîner dans une salle privée de Kyoto",
     gallery: [
       { img: "/images/geiko-maiko-seated.jpg", alt: "Une maiko s'installe à votre table", caption: "Une maiko s'installe à votre table" },
       { img: "/images/geiko-dance.jpg", alt: "Une danse devant le paravent doré", caption: "Une danse devant le paravent doré" },
       { img: "/images/geiko-dinner-course.jpg", alt: "Le dîner japonais en plusieurs services (le menu change avec la saison)", caption: "Le dîner japonais en plusieurs services (le menu change avec la saison)" },
-      { img: "/images/geiko-conversation.jpg", alt: "La conversation autour du dîner, l'interprète assurant les deux sens", caption: "La conversation autour du dîner, l'interprète assurant les deux sens" },
+      { img: "/images/geiko-maiko-smile.jpg", alt: "Une maiko dans la salle privée", caption: "Une maiko dans la salle privée" },
       { img: "/images/geiko-pouring.jpg", alt: "Votre hôtesse vous sert ; posez-lui toutes vos questions", caption: "Votre hôtesse vous sert ; posez-lui toutes vos questions" },
       { img: "/images/geiko-game-table.jpg", alt: "Les jeux d'ozashiki à table", caption: "Les jeux d'ozashiki à table" },
       { img: "/images/geiko-game-toratora.jpg", alt: "Tora-tora, un pierre-feuille-ciseaux joué de tout le corps", caption: "Tora-tora, un pierre-feuille-ciseaux joué de tout le corps" },
@@ -163,6 +163,7 @@ export const experiencesFr: Experience[] = [
     story: { heading: "Le monde du karyukai", body: "Le « monde des fleurs et des saules » de Kyoto repose depuis trois siècles sur la recommandation et la confiance. Une geiko n'est pas une artiste à louer mais une artiste dont les soirées se prolongent par les relations entre maisons de thé et clients fidèles. Être assis dans cette pièce, avec une conversation qui coule dans votre propre langue, est l'accès le plus rare que Kyoto puisse offrir." },
     availabilityNote: "Fermé pendant les fêtes du Nouvel An.",
     interactionTime: "environ 1 h 45",
+    includedShort: "Salle privée · Repas et boissons · Interprète anglophone",
     galleryNote: "La salle et les plats photographiés sont donnés à titre d'exemple ; ils varient selon la date et la saison.",
     highlights: [
       { icon: "group", title: "La salle est à vous", body: "Un salon de banquet privé réservé à votre groupe, jamais partagé avec d'autres convives." },
@@ -205,9 +206,8 @@ export const experiencesFr: Experience[] = [
       { q: "Les boissons sont-elles comprises ? Y a-t-il un code vestimentaire ?", a: "Les boissons sont à volonté (bière, saké, shochu, vin, highballs, boissons sans alcool) et comprises, de même que taxes et service. Il n'y a pas de code vestimentaire." },
       { q: "Notre hôtesse mange-t-elle et boit-elle avec nous ?", a: "Généralement non. Beaucoup de maiko ont moins de vingt ans et, par tradition, geiko et maiko ne mangent pas à table : elles servent, conversent, dansent et jouent. N'insistez pas pour leur offrir à manger ou à boire ; c'est la seule règle d'étiquette que votre guide mentionnera." },
       { q: "Les régimes et allergies sont-ils pris en compte ?", a: "Oui. Précisez-les lors de votre demande (allergies, végétarien, végan, halal) : la réponse de la cuisine vous parvient avec la confirmation, avant tout paiement." },
-      { q: "Les enfants sont-ils les bienvenus ?", a: "Oui. Les moins de 2 ans participent gratuitement sans repas, les 3–11 ans paient la moitié du tarif adulte, et à partir de 12 ans le tarif adulte avec le menu complet. On s'assied sur tatami ; dites-nous si quelqu'un a besoin d'une chaise." },
+      { q: "Les enfants sont-ils les bienvenus ?", a: "Oui. Les enfants de 2 ans et moins participent gratuitement sans repas, les 3–11 ans paient la moitié du tarif adulte, et à partir de 12 ans le tarif adulte avec le menu complet. On s'assied sur tatami ; dites-nous si quelqu'un a besoin d'une chaise." },
       { q: "Combien de temps à l'avance faut-il réserver ?", a: "Au plus tard trois jours avant, avant 17 h heure du Japon ; deux semaines à l'avance est confortable, et le printemps et l'automne (mars–avril, octobre–novembre) se remplissent en premier. Si aucune geiko ni maiko ne peut être assurée pour votre date, vous êtes intégralement remboursé." },
-      { q: "L'interprète peut-il parler français, espagnol ou chinois ?", a: "Le guide-interprète compris parle anglais. Pour une autre langue, dites-le lors de votre demande de date et nous vous proposerons un devis pour un interprète dans cette langue." },
     ],
   },
   {

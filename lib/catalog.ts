@@ -89,6 +89,11 @@ export interface Experience {
   /** Operating pattern from the partner sheet: which days it runs, the start
    *  times offered, and the booking cutoff (days before, Japan-time clock). */
   availability?: { daily: boolean; startTimes: string[]; cutoffDays: number; cutoffTime: string };
+  /** One line for the price block: what the headline price buys, e.g.
+   *  "Private room · Meal and drinks · English interpreter". Localised. */
+  includedShort?: string;
+  /** True when tax and service charge are inside the headline price. */
+  taxIncluded?: boolean;
   /** Localised line for closures (e.g. "Closed over the New Year holidays"). */
   availabilityNote?: string;
   /** Approximate pin for the map when the exact address is only shared after
@@ -112,7 +117,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map" | "taxIncluded";
 
 export interface Tour {
   slug: string;
@@ -278,6 +283,7 @@ export const experiences: Experience[] = [
       tiers: [{ party: 2, total: 139600 }, { party: 3, total: 157500 }, { party: 4, total: 166000 }, { party: 5, total: 190000 }],
       highSeason: { tiers: [{ party: 2, total: 159600 }, { party: 3, total: 187500 }, { party: 4, total: 206000 }, { party: 5, total: 240000 }], windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }] },
     },
+    taxIncluded: true,
     interactionTime: "about 1 hour 45 minutes",
     availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 3, cutoffTime: "17:00" },
     availabilityNote: "Closed over the New Year holidays.",
@@ -285,12 +291,12 @@ export const experiences: Experience[] = [
     title: "Private Geisha Dining in Kyoto",
     tagline: "Share a meal, enjoy a traditional dance, and join the conversation with an interpreter.",
     duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
-    img: "/images/geiko-maiko-smile.jpg", alt: "A maiko smiling in a private tatami room in Gion, Kyoto",
+    img: "/images/geiko-conversation.jpg", alt: "Guests laughing with a maiko over dinner in a private Kyoto room",
     gallery: [
       { img: "/images/geiko-maiko-seated.jpg", alt: "A maiko settles in beside your table", caption: "A maiko settles in beside your table" },
       { img: "/images/geiko-dance.jpg", alt: "A dance performed before the gold screen", caption: "A dance performed before the gold screen" },
       { img: "/images/geiko-dinner-course.jpg", alt: "The multi-course Japanese dinner (the menu changes with the season)", caption: "The multi-course Japanese dinner (the menu changes with the season)" },
-      { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },
+      { img: "/images/geiko-maiko-smile.jpg", alt: "A maiko in the private room", caption: "A maiko in the private room" },
       { img: "/images/geiko-pouring.jpg", alt: "Your host pours; ask her anything", caption: "Your host pours; ask her anything" },
       { img: "/images/geiko-game-table.jpg", alt: "Ozashiki parlour games at the table", caption: "Ozashiki parlour games at the table" },
       { img: "/images/geiko-game-toratora.jpg", alt: "Tora-tora, rock-paper-scissors played with the whole body", caption: "Tora-tora, rock-paper-scissors played with the whole body" },
@@ -311,11 +317,12 @@ export const experiences: Experience[] = [
       "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — book at least 3 days ahead (5pm Japan time cutoff).",
       "Pricing is per group, everything included: ¥139,600 for 2 guests, ¥157,500 for 3, ¥166,000 for 4, ¥190,000 for 5; larger parties (up to 40) on request.",
       "High-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30 (from ¥159,600 for 2 guests).",
-      "Children: under 2 join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
+      "Children: 2 and under join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
       "Allergies and dietary restrictions are catered for — tell us when you book.",
       "Want a livelier room? An additional geiko or maiko can be arranged for ¥60,500.",
     ],
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
+    includedShort: "Private room · Meal and drinks · English interpreter",
     galleryNote: "The room and the dishes shown are examples; both vary by date and season.",
     highlights: [
       { icon: "group", title: "The room is yours", body: "A private banquet room for your party only — never shared with other guests." },
@@ -358,9 +365,8 @@ export const experiences: Experience[] = [
       { q: "Are drinks included? Is there a dress code?", a: "Drinks are free-flow — beer, sake, shochu, wine, highballs, soft drinks — and included, as are tax and service charge. There is no dress code." },
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },
       { q: "Can dietary needs and allergies be catered for?", a: "Yes. Tell us when you request your date — allergies, vegetarian, vegan, halal — and the kitchen's answer comes back with the confirmation, before you pay." },
-      { q: "Can children join?", a: "Yes. Children under 2 join free without a meal, ages 3–11 are half the adult rate, and 12 and over pay the adult rate with the full course. Seating is on tatami; tell us if anyone needs a chair." },
+      { q: "Can children join?", a: "Yes. Children aged 2 and under join free without a meal, ages 3–11 are half the adult rate, and 12 and over pay the adult rate with the full course. Seating is on tatami; tell us if anyone needs a chair." },
       { q: "How far ahead must we book?", a: "By 17:00 Japan time three days before at the latest; two weeks ahead is comfortable, and spring and autumn (March–April, October–November) fill first. If no geiko or maiko can be secured for your date, you receive a full refund." },
-      { q: "Can the interpreter speak Spanish, French or Chinese?", a: "The included interpreter guide speaks English. For another language, say so when you request your date and we will quote an interpreter in that language." },
     ],
   },
   {
@@ -454,7 +460,7 @@ import type { Lang } from "@/lib/i18n";
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map", "taxIncluded"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);

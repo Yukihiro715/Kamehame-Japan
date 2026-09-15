@@ -130,12 +130,12 @@ export const experiencesZh: Experience[] = [
     title: "舞妓與藝妓的座敷宴",
     tagline: "京都的私人宴席——與藝妓、舞妓共享料理、舞蹈與座敷遊戲",
     duration: "2 小時", price: "¥139,600", priceUnit: "group", group: "包場 · 2 至 40 位", ages: "全年齡", area: "京都（祇園／東山一帶）",
-    img: "/images/geiko-maiko-smile.jpg", alt: "在京都祇園私人榻榻米包廂中微笑的舞妓",
+    img: "/images/geiko-conversation.jpg", alt: "在京都私人包廂中與舞妓共進晚餐、開懷大笑的賓客",
     gallery: [
       { img: "/images/geiko-maiko-seated.jpg", alt: "舞妓入席相陪", caption: "舞妓入席相陪" },
       { img: "/images/geiko-dance.jpg", alt: "金屏風前的舞蹈", caption: "金屏風前的舞蹈" },
       { img: "/images/geiko-dinner-course.jpg", alt: "多道式日本料理晚餐（菜色隨季節變動）", caption: "多道式日本料理晚餐（菜色隨季節變動）" },
-      { img: "/images/geiko-conversation.jpg", alt: "邊用餐邊交談，口譯負責雙向傳譯", caption: "邊用餐邊交談，口譯負責雙向傳譯" },
+      { img: "/images/geiko-maiko-smile.jpg", alt: "私人包廂中的舞妓", caption: "私人包廂中的舞妓" },
       { img: "/images/geiko-pouring.jpg", alt: "由舞妓為您斟酒，想問什麼都可以", caption: "由舞妓為您斟酒，想問什麼都可以" },
       { img: "/images/geiko-game-table.jpg", alt: "席間的座敷遊戲", caption: "席間的座敷遊戲" },
       { img: "/images/geiko-game-toratora.jpg", alt: "「虎虎」——用全身來玩的猜拳", caption: "「虎虎」——用全身來玩的猜拳" },
@@ -163,6 +163,7 @@ export const experiencesZh: Experience[] = [
     story: { heading: "花柳界的世界", body: "京都的「花柳界」三百年來靠引薦與信任運作。藝妓不是可以雇用的表演者，而是靠茶屋與熟客之間的關係延續夜晚的藝術家。坐在那間房裡，對話還能以您自己的語言流動，是京都所能給予最難得的一種進入。" },
     availabilityNote: "新年假期期間休息。",
     interactionTime: "約1小時45分",
+    includedShort: "私人包廂 · 餐點與飲料 · 英語口譯",
     galleryNote: "照片中的包廂與料理僅為示例,實際依日期與季節而異。",
     highlights: [
       { icon: "group", title: "包廂專屬於您", body: "只屬於您一行人的私人宴席包廂,絕不與其他客人併桌。" },
@@ -207,7 +208,6 @@ export const experiencesZh: Experience[] = [
       { q: "能配合飲食限制與過敏嗎？", a: "可以。請在詢問日期時告知過敏、素食、純素、清真等需求，廚房的答覆會連同確認通知一併送達，在您付款之前。" },
       { q: "小孩可以參加嗎？", a: "可以。2歲以下免費且不含餐，3至11歲為成人價的一半，12歲以上為成人價並含全套料理。席位為榻榻米，若有人需要椅子請告知。" },
       { q: "需要提前多久預約？", a: "最晚三天前、日本時間17:00前；提前兩週較為從容，春季（3–4月）與秋季（10–11月）最先額滿。若無法為您的日期安排到藝妓或舞妓，將全額退款。" },
-      { q: "口譯可以說中文、法文或西班牙文嗎？", a: "包含的口譯導遊使用英語。若需其他語言，請在詢問日期時告知，我們會另行報價該語言的口譯。" },
     ],
   },
   {
