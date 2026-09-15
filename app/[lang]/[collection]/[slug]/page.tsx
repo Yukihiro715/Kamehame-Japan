@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, Clock3, Languages, MapPin, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -10,6 +10,9 @@ import {
   cancellationFor, catalogFor, cityBySlug, SITE_ORIGIN,
   type Experience, type Tour,
 } from "@/lib/catalog";
+import { articleDate, articlesForExperience } from "@/lib/articles";
+import { aggregateFor, REVIEWS_PUBLISHED } from "@/lib/reviews";
+import { RatingSummary, ReviewSection } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -54,7 +57,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
 }
 
-function productJsonLd(title: string, description: string, img: string, url: string, price: string) {
+function productJsonLd(
+  title: string, description: string, img: string, url: string, price: string,
+  slug?: string,
+) {
+  // An aggregateRating is only emitted once REVIEWS_PUBLISHED is true and real
+  // reviews exist. Declaring a rating we invented would breach Google's
+  // structured-data policy and risk a manual action against the domain.
+  const agg = slug && REVIEWS_PUBLISHED ? aggregateFor(slug) : null;
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -68,6 +79,15 @@ function productJsonLd(title: string, description: string, img: string, url: str
       price: price.replace(/[^\d]/g, ""),
       availability: "https://schema.org/PreOrder",
     },
+    ...(agg && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: agg.average,
+        reviewCount: agg.count,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
   };
 }
 
@@ -88,6 +108,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const cityTour = tours.find((tr) => tr.city === exp.city);
   const more = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
+  const reading = articlesForExperience(exp.slug, lang);
 
   return (
     <main className="subpage detail-page" lang={lang}>
@@ -106,6 +127,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       <div className="detail-layout">
         <article className="detail-main">
           <h1>{exp.title}</h1>
+          <RatingSummary experience={exp.slug} lang={lang} href="#reviews" size={16} />
           <p className="detail-tagline">{exp.tagline}</p>
           <div className="detail-tags">
             <span><Clock3 size={13} /> {exp.duration}</span>
@@ -164,6 +186,25 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <h2>{T.cancellationH}</h2>
             <p>{exp.cancellation ?? cancellationFor(lang)}</p>
           </section>
+
+          {reading.length > 0 && (
+            <section>
+              <h2>{T.articleOnThis}</h2>
+              <div className="article-links">
+                {reading.map((a) => (
+                  <Link key={a.slug} href={`/${lang}/journal/${a.slug}/`}>
+                    <img src={a.img} alt={a.alt} loading="lazy" />
+                    <span>
+                      <b>{a.copy[lang]!.title}</b>
+                      <small>{articleDate(a.date, lang)} · {T.readMinutes(a.minutes)}</small>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <ReviewSection experience={exp.slug} lang={lang} />
         </article>
 
         <aside className="detail-aside">
@@ -200,10 +241,8 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         </div>
       </section>
 
-      <div className="review-note"><ShieldCheck size={16} /> {T.reviewNote}</div>
-
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price)),
+        __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
       }} />
       <MobileBookingBar price={exp.price} lang={lang} bookingType={exp.bookingType} />
       <SiteFooter lang={lang} />

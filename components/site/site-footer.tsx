@@ -6,7 +6,7 @@ import { langHome, t, type Lang } from "@/lib/i18n";
 export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
   const T = t(lang);
   return (
-    <footer>
+    <footer className="site-footer-block">
       <Brand lang={lang} />
       <div className="footer-links">
         <Link href={`/${lang}/tokyo/`}>{T.navTokyo}</Link>
@@ -14,6 +14,9 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
         <Link href={`/${lang}/experiences/`}>{T.navExperiences}</Link>
         <Link href={`/${lang}/about/`}>{T.footerAbout}</Link>
         <Link href={`/${lang}/faq/`}>{T.navFaq}</Link>
+        <Link href={`/${lang}/journal/`}>{T.journalH}</Link>
+        <Link href={`/${lang}/contact/`}>{T.contactH}</Link>
+        <Link href={`/${lang}/trade/`}>{T.contactTradeCta}</Link>
       </div>
       <div className="footer-meta"><p>{T.footerOperated}</p><p>© 2026 KAMEHAME JAPAN</p></div>
       <FooterLanguages lang={lang} />

@@ -5,6 +5,7 @@ import { ArrowDownRight, ArrowRight, Clock3, MapPin, ShieldCheck } from "lucide-
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { articleDate, latestArticles } from "@/lib/articles";
 import { catalogFor, TOURS_PUBLISHED } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 
@@ -131,6 +132,7 @@ export function HomePage({ lang }: { lang: Lang }) {
   const p = (path: string) => `/${lang}${path}`;
   const featured = FEATURED.map((slug) => experiences.find((e) => e.slug === slug)!);
   const [bubbleL1, bubbleL2] = C.heroBubble.split("\n");
+  const journal = latestArticles(lang, 3);
 
   return (
     <main id="top" lang={lang}>
@@ -261,6 +263,30 @@ export function HomePage({ lang }: { lang: Lang }) {
           <Button asChild variant="outline"><Link href={p("/tours/")}>{C.tourCta} <ArrowRight /></Link></Button>
         </div>
       </section>
+      )}
+
+      {journal.length > 0 && (
+        <section className="journal-section">
+          <div className="section-heading horizontal">
+            <div>
+              <p className="eyebrow"><span /> {T.journalHomeEyebrow}</p>
+              <h2>{T.journalHomeTitle}</h2>
+            </div>
+            <Link className="underlined-link" href={p("/journal/")}>{T.journalAll} <ArrowRight /></Link>
+          </div>
+          <div className="journal-grid home">
+            {journal.map((a) => (
+              <Link className="journal-card" key={a.slug} href={p(`/journal/${a.slug}/`)}>
+                <img src={a.img} alt={a.alt} loading="lazy" />
+                <div>
+                  <p className="journal-meta">{articleDate(a.date, lang)} · {T.readMinutes(a.minutes)}</p>
+                  <h3>{a.copy[lang]!.title}</h3>
+                  <p>{a.copy[lang]!.standfirst}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
       )}
 
       <section className="review-section">

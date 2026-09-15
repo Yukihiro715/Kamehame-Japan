@@ -73,12 +73,29 @@ for (const slug of toursPublished ? tours : []) {
   }
 }
 
-for (const page of ["about", "faq"]) {
+for (const page of ["about", "faq", "journal", "contact", "trade"]) {
   for (const lang of LANGS) {
     add(`/${lang}/${page}/`, {
       priority: "0.5",
       changefreq: "monthly",
       alternates: Object.fromEntries(LANGS.map((l) => [l, `/${l}/${page}/`])),
+    });
+  }
+}
+
+// Articles render only in the locales they have been written for.
+const articles = read("lib/articles.ts");
+for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {
+  const slug = m[1];
+  // Which locales carry copy for this article
+  const block = articles.slice(articles.indexOf(`slug: "${slug}"`));
+  const end = block.indexOf("\n  },\n");
+  const langs = LANGS.filter((l) => new RegExp(`\\n\\s{6}${l}:\\s*\\{`).test(block.slice(0, end)));
+  for (const lang of langs) {
+    add(`/${lang}/journal/${slug}/`, {
+      priority: "0.6",
+      changefreq: "monthly",
+      alternates: Object.fromEntries(langs.map((l) => [l, `/${l}/journal/${slug}/`])),
     });
   }
 }
