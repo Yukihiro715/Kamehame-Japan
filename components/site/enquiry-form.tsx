@@ -24,6 +24,9 @@ export function EnquiryForm({
   const F = T.form;
   const [status, setStatus] = useState<Status>("idle");
   const trade = kind === "trade";
+  const times = experience?.startTimes && experience.startTimes.length > 0 ? experience.startTimes : undefined;
+  // Pre-select the typical dinner slot so the example reads 18:00, not the last slot.
+  const sampleTime = times?.includes("18:00") ? "18:00" : times?.[0];
   // Earliest selectable date, in the visitor's own time zone — computed after
   // mount so the server and the browser never disagree about "today".
   const [minDate, setMinDate] = useState<string>();
@@ -39,9 +42,10 @@ export function EnquiryForm({
     // The experience form asks for concrete dates and a head count; fold them
     // into the same two fields the generic form and the mailbox already use.
     if (experience) {
-      data.dates = [data.date, data.time && `${data.time}`, data.altDate && `/ ${data.altDate}`].filter(Boolean).join(" ");
+      const slot = (d?: string, t?: string) => d ? [d, t].filter(Boolean).join(" ") : "";
+      data.dates = [slot(data.date, data.time), slot(data.altDate, data.altTime)].filter(Boolean).join(" / ");
       data.party = data.guests;
-      delete data.date; delete data.altDate; delete data.guests; delete data.time;
+      delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
     }
     setStatus("sending");
     try {
@@ -101,33 +105,46 @@ export function EnquiryForm({
           </label>
         </div>
       ) : experience ? (
-        <div className="form-row three">
-          <label>
-            <span>{F.preferredDate}</span>
-            <input name="date" type="date" required min={minDate} />
-          </label>
-          <label>
-            <span>{F.altDate}</span>
-            <input name="altDate" type="date" min={minDate} />
-          </label>
-          <label>
-            <span>{F.partyN}</span>
-            <input
-              name="guests" type="number" inputMode="numeric" required
-              min={experience.partySize?.min ?? 1} max={experience.partySize?.max ?? 40}
-              defaultValue={experience.partySize?.min ?? 2}
-            />
-          </label>
-          {experience.startTimes && experience.startTimes.length > 0 && (
+        <>
+          <div className="form-row two">
             <label>
-              <span>{F.startTime}</span>
-              <select name="time" defaultValue="">
-                <option value="">{F.noPreference}</option>
-                {experience.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
+              <span>{F.preferredDate}</span>
+              <input name="date" type="date" required min={minDate} />
             </label>
-          )}
-        </div>
+            {times ? (
+              <label>
+                <span>{F.startTime}</span>
+                <select name="time" required defaultValue={sampleTime}>
+                  {times.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </label>
+            ) : <span />}
+          </div>
+          <div className="form-row two">
+            <label>
+              <span>{F.altDate}</span>
+              <input name="altDate" type="date" min={minDate} />
+            </label>
+            {times ? (
+              <label>
+                <span>{F.altStartTime}</span>
+                <select name="altTime" defaultValue={sampleTime}>
+                  {times.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </label>
+            ) : <span />}
+          </div>
+          <div className="form-row two">
+            <label>
+              <span>{F.partyN}</span>
+              <input
+                name="guests" type="number" inputMode="numeric" required
+                min={experience.partySize?.min ?? 1} max={experience.partySize?.max ?? 40}
+                defaultValue={experience.partySize?.min ?? 2}
+              />
+            </label>
+          </div>
+        </>
       ) : (
         <div className="form-row two">
           <label>

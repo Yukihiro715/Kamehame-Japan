@@ -64,7 +64,7 @@ const strings = {
     detail: {
       requestAvailability: "Request availability",
       photosCount: (n: number) => `${n} photos`,
-      availCutoffH: "Booking cutoff", availDays: "Days", availH: "When it runs", availDaily: "Every day", availStart: "Start times", availCutoff: (d: number, t: string) => `Book by ${t} Japan time, ${d} days before`, mapNote: "Approximate area only — the exact address comes with your confirmation.", morePhotos: (n: number) => `+${n} more photos`,
+      availCutoffH: "Booking cutoff", availDays: "Days", scheduleSample: (t: string) => `Times shown for a ${t} start; the flow is the same for any start time.`, availH: "When it runs", availDaily: "Every day", availStart: "Start times", availCutoff: (d: number, t: string) => `Book by ${t} Japan time, ${d} days before`, mapNote: "Approximate area only — the exact address comes with your confirmation.", morePhotos: (n: number) => `+${n} more photos`,
       watch: "Watch the experience",
       seeExperience: "See the experience",
       gallery: "Photos", viewAllPhotos: "View all photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Close",
@@ -109,7 +109,7 @@ const strings = {
     comingSoonCta: "Tell me when it opens",
     // enquiry form
     form: {
-      startTime: "Preferred start time", noPreference: "No preference",
+      altStartTime: "Start time (alternative)", startTime: "Preferred start time", noPreference: "No preference",
       preferredDate: "Preferred date", altDate: "Alternative date (optional)", partyN: "Number of guests", messageXp: "Anything we should check with the venue? (optional)", messageXpHint: "Dietary needs, mobility, a birthday, a preferred start time…",
       name: "Your name", email: "Email address", company: "Company", country: "Country",
       dates: "Dates in Japan", datesHint: "e.g. 12–20 April 2027", party: "Party size", partyHint: "e.g. 2 adults, 1 child (9)",
@@ -222,7 +222,7 @@ const strings = {
     detail: {
       requestAvailability: "Consultar disponibilidad",
       photosCount: (n: number) => `${n} fotos`,
-      availCutoffH: "Plazo de reserva", availDays: "Días", availH: "Cuándo se realiza", availDaily: "Todos los días", availStart: "Horas de inicio", availCutoff: (d: number, t: string) => `Reserve antes de las ${t} (hora de Japón), ${d} días antes`, mapNote: "Solo la zona aproximada: la dirección exacta llega con la confirmación.", morePhotos: (n: number) => `+${n} fotos más`,
+      availCutoffH: "Plazo de reserva", availDays: "Días", scheduleSample: (t: string) => `Horarios para un inicio a las ${t}; el desarrollo es el mismo a cualquier hora.`, availH: "Cuándo se realiza", availDaily: "Todos los días", availStart: "Horas de inicio", availCutoff: (d: number, t: string) => `Reserve antes de las ${t} (hora de Japón), ${d} días antes`, mapNote: "Solo la zona aproximada: la dirección exacta llega con la confirmación.", morePhotos: (n: number) => `+${n} fotos más`,
       watch: "Ver la experiencia",
       seeExperience: "Mira la experiencia",
       gallery: "Fotos", viewAllPhotos: "Ver todas las fotos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Cerrar",
@@ -265,7 +265,7 @@ const strings = {
     comingSoonBody: "Estamos cerrando esta experiencia con el local. Déjanos tu correo y te avisaremos el día que se abra.",
     comingSoonCta: "Avisadme cuando se abra",
     form: {
-      startTime: "Hora de inicio preferida", noPreference: "Sin preferencia",
+      altStartTime: "Hora de inicio (alternativa)", startTime: "Hora de inicio preferida", noPreference: "Sin preferencia",
       preferredDate: "Fecha preferida", altDate: "Fecha alternativa (opcional)", partyN: "Número de personas", messageXp: "¿Algo que consultar con el lugar? (opcional)", messageXpHint: "Alergias, movilidad, un cumpleaños, hora de inicio preferida…",
       name: "Tu nombre", email: "Correo electrónico", company: "Empresa", country: "País",
       dates: "Fechas en Japón", datesHint: "p. ej. 12–20 de abril de 2027", party: "Número de personas", partyHint: "p. ej. 2 adultos, 1 niño (9)",
@@ -376,7 +376,7 @@ const strings = {
     detail: {
       requestAvailability: "空き状況を問い合わせる",
       photosCount: (n: number) => `写真${n}枚`,
-      availCutoffH: "予約締切", availDays: "開催曜日", availH: "開催日・開始時刻", availDaily: "毎日開催", availStart: "開始時刻", availCutoff: (d: number, t: string) => `${d}日前の${t}(日本時間)まで`, mapNote: "おおよそのエリアです。正確な住所は予約確定後にお伝えします。", morePhotos: (n: number) => `他${n}枚を見る`,
+      availCutoffH: "予約締切", availDays: "開催曜日", scheduleSample: (t: string) => `${t}開始の場合の例です。他の開始時刻でも流れは同じです。`, availH: "開催日・開始時刻", availDaily: "毎日開催", availStart: "開始時刻", availCutoff: (d: number, t: string) => `${d}日前の${t}(日本時間)まで`, mapNote: "おおよそのエリアです。正確な住所は予約確定後にお伝えします。", morePhotos: (n: number) => `他${n}枚を見る`,
       watch: "体験の動画を見る",
       seeExperience: "体験の様子",
       gallery: "写真", viewAllPhotos: "すべての写真を見る", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "閉じる",
@@ -419,7 +419,7 @@ const strings = {
     comingSoonBody: "受け入れ先と最終調整中です。メールアドレスをお知らせいただければ、公開日にご連絡します。",
     comingSoonCta: "公開時に知らせてほしい",
     form: {
-      startTime: "希望の開始時刻", noPreference: "指定なし",
+      altStartTime: "開始時刻(第2希望)", startTime: "希望の開始時刻", noPreference: "指定なし",
       preferredDate: "第1希望日", altDate: "第2希望日(任意)", partyN: "ご人数", messageXp: "受け入れ先に確認しておくこと(任意)", messageXpHint: "食事制限、移動のご事情、お祝い、希望の開始時刻など",
       name: "お名前", email: "メールアドレス", company: "会社名", country: "国",
       dates: "日本での滞在日程", datesHint: "例:2027年4月12日〜20日", party: "ご人数", partyHint: "例:大人2名、子ども1名(9歳)",
@@ -529,7 +529,7 @@ const strings = {
     detail: {
       requestAvailability: "Demander les disponibilités",
       photosCount: (n: number) => `${n} photos`,
-      availCutoffH: "Date limite de réservation", availDays: "Jours", availH: "Quand a-t-elle lieu", availDaily: "Tous les jours", availStart: "Heures de début", availCutoff: (d: number, t: string) => `Réservez avant ${t} heure du Japon, ${d} jours à l'avance`, mapNote: "Zone approximative seulement : l'adresse exacte vous parvient avec la confirmation.", morePhotos: (n: number) => `+${n} photos`,
+      availCutoffH: "Date limite de réservation", availDays: "Jours", scheduleSample: (t: string) => `Horaires pour un début à ${t} ; le déroulé est le même à toute heure.`, availH: "Quand a-t-elle lieu", availDaily: "Tous les jours", availStart: "Heures de début", availCutoff: (d: number, t: string) => `Réservez avant ${t} heure du Japon, ${d} jours à l'avance`, mapNote: "Zone approximative seulement : l'adresse exacte vous parvient avec la confirmation.", morePhotos: (n: number) => `+${n} photos`,
       watch: "Voir l'expérience en vidéo",
       seeExperience: "Voir l'expérience",
       gallery: "Photos", viewAllPhotos: "Voir toutes les photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Fermer",
@@ -572,7 +572,7 @@ const strings = {
     comingSoonBody: "Nous finalisons cette expérience avec le lieu. Laissez votre adresse e-mail et nous vous préviendrons le jour de l'ouverture.",
     comingSoonCta: "Prévenez-moi à l'ouverture",
     form: {
-      startTime: "Heure de début souhaitée", noPreference: "Sans préférence",
+      altStartTime: "Heure de début (autre date)", startTime: "Heure de début souhaitée", noPreference: "Sans préférence",
       preferredDate: "Date souhaitée", altDate: "Autre date possible (facultatif)", partyN: "Nombre de personnes", messageXp: "Quelque chose à vérifier auprès du lieu ? (facultatif)", messageXpHint: "Régimes, mobilité, anniversaire, heure de début souhaitée…",
       name: "Votre nom", email: "Adresse e-mail", company: "Société", country: "Pays",
       dates: "Dates au Japon", datesHint: "ex. 12–20 avril 2027", party: "Nombre de personnes", partyHint: "ex. 2 adultes, 1 enfant (9 ans)",
@@ -684,7 +684,7 @@ const strings = {
     detail: {
       requestAvailability: "詢問空檔",
       photosCount: (n: number) => `${n} 張照片`,
-      availCutoffH: "預約截止", availDays: "舉辦日", availH: "舉辦日與開始時間", availDaily: "每天舉辦", availStart: "開始時間", availCutoff: (d: number, t: string) => `請於 ${d} 天前、日本時間 ${t} 前預約`, mapNote: "僅為大致區域，正確地址將隨確認通知一併告知。", morePhotos: (n: number) => `再看 ${n} 張`,
+      availCutoffH: "預約截止", availDays: "舉辦日", scheduleSample: (t: string) => `以 ${t} 開始為例；其他開始時間流程相同。`, availH: "舉辦日與開始時間", availDaily: "每天舉辦", availStart: "開始時間", availCutoff: (d: number, t: string) => `請於 ${d} 天前、日本時間 ${t} 前預約`, mapNote: "僅為大致區域，正確地址將隨確認通知一併告知。", morePhotos: (n: number) => `再看 ${n} 張`,
       watch: "觀看體驗影片",
       seeExperience: "看看體驗",
       gallery: "照片", viewAllPhotos: "查看所有照片", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "關閉",
@@ -727,7 +727,7 @@ const strings = {
     comingSoonBody: "我們正與場地敲定這項體驗。留下您的電子郵件，開放當天我們會通知您。",
     comingSoonCta: "開放時通知我",
     form: {
-      startTime: "希望的開始時間", noPreference: "不指定",
+      altStartTime: "開始時間（備選）", startTime: "希望的開始時間", noPreference: "不指定",
       preferredDate: "首選日期", altDate: "備選日期（可不填）", partyN: "人數", messageXp: "需要向店家確認的事項（可不填）", messageXpHint: "飲食限制、行動需求、慶祝活動、希望的開始時間等",
       name: "您的姓名", email: "電子郵件", company: "公司名稱", country: "國家／地區",
       dates: "在日本的日期", datesHint: "例：2027 年 4 月 12–20 日", party: "人數", partyHint: "例：2 位成人、1 位兒童（9 歲）",

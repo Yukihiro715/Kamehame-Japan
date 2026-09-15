@@ -289,6 +289,9 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         {exp.interactionTime && exp.interactionTime !== exp.duration && (
           <p className="xp-note">{D.interactionNote(exp.duration, exp.interactionTime)}</p>
         )}
+        {exp.schedule && avail && (
+          <p className="xp-note xp-note-sample">{D.scheduleSample(avail.startTimes.includes("18:00") ? "18:00" : avail.startTimes[0])}</p>
+        )}
         <ol className="xp-timeline">
           {schedule.map((st) => (
             <li key={st.time + st.title}>
