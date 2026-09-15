@@ -27,6 +27,13 @@ export function Gallery({ photos, lang, note }: { photos: Photo[]; lang: Lang; n
     return () => el.removeEventListener("scroll", onScroll);
   }, [photos.length]);
 
+  // The first-view carousel asks for the lightbox through a window event.
+  useEffect(() => {
+    const onOpen = (e: Event) => setOpen(Math.max(0, Math.min(photos.length - 1, (e as CustomEvent<number>).detail ?? 0)));
+    window.addEventListener("kh:lightbox", onOpen);
+    return () => window.removeEventListener("kh:lightbox", onOpen);
+  }, [photos.length]);
+
   useEffect(() => {
     if (open === null) return;
     const onKey = (e: KeyboardEvent) => {

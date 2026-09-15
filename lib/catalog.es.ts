@@ -151,6 +151,7 @@ export const experiencesEs: Experience[] = [
       "¿Quieres una sala más animada? Se puede añadir una geiko o maiko adicional por ¥60.500.",
     ],
     story: { heading: "El mundo del karyukai", body: "El «mundo de la flor y el sauce» de Kioto funciona desde hace tres siglos a base de presentación y confianza. Una geiko no es una artista de alquiler, sino una maestra cuyas veladas se conceden a través de relaciones entre casas de té y mecenas. Sentarte en esa sala, con la conversación fluyendo en tu idioma, es el acceso más raro que ofrece Kioto." },
+    availabilityNote: "Cerrado durante las fiestas de Año Nuevo.",
     galleryNote: "La sala y los platos de las fotos son ejemplos; ambos varían según la fecha y la temporada.",
     highlights: [
       { icon: "group", title: "La sala es suya", body: "Un salón de banquete privado solo para su grupo: nunca se comparte con otros huéspedes." },

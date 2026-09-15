@@ -13,6 +13,8 @@ export interface EnquiryExperience {
   partySize?: { min: number; max: number };
   /** Days of notice the venue needs; the date picker starts after them. */
   leadDays?: number;
+  /** Start times the venue offers; shown as a select when present. */
+  startTimes?: string[];
 }
 
 export function EnquiryForm({
@@ -37,9 +39,9 @@ export function EnquiryForm({
     // The experience form asks for concrete dates and a head count; fold them
     // into the same two fields the generic form and the mailbox already use.
     if (experience) {
-      data.dates = data.altDate ? `${data.date} / ${data.altDate}` : data.date;
+      data.dates = [data.date, data.time && `${data.time}`, data.altDate && `/ ${data.altDate}`].filter(Boolean).join(" ");
       data.party = data.guests;
-      delete data.date; delete data.altDate; delete data.guests;
+      delete data.date; delete data.altDate; delete data.guests; delete data.time;
     }
     setStatus("sending");
     try {
@@ -116,6 +118,15 @@ export function EnquiryForm({
               defaultValue={experience.partySize?.min ?? 2}
             />
           </label>
+          {experience.startTimes && experience.startTimes.length > 0 && (
+            <label>
+              <span>{F.startTime}</span>
+              <select name="time" defaultValue="">
+                <option value="">{F.noPreference}</option>
+                {experience.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </label>
+          )}
         </div>
       ) : (
         <div className="form-row two">

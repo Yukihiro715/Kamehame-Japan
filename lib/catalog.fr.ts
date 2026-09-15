@@ -150,6 +150,7 @@ export const experiencesFr: Experience[] = [
       "Envie d'une salle plus animée ? Une geiko ou maiko supplémentaire peut être engagée pour ¥60,500.",
     ],
     story: { heading: "Le monde du karyukai", body: "Le « monde des fleurs et des saules » de Kyoto repose depuis trois siècles sur la recommandation et la confiance. Une geiko n'est pas une artiste à louer mais une artiste dont les soirées se prolongent par les relations entre maisons de thé et clients fidèles. Être assis dans cette pièce, avec une conversation qui coule dans votre propre langue, est l'accès le plus rare que Kyoto puisse offrir." },
+    availabilityNote: "Fermé pendant les fêtes du Nouvel An.",
     galleryNote: "La salle et les plats photographiés sont donnés à titre d'exemple ; ils varient selon la date et la saison.",
     highlights: [
       { icon: "group", title: "La salle est à vous", body: "Un salon de banquet privé réservé à votre groupe, jamais partagé avec d'autres convives." },

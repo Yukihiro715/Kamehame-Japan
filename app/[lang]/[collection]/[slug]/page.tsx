@@ -1,13 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, Images } from "lucide-react";
+import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { BookingBox } from "@/components/site/booking-box";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { Gallery } from "@/components/site/gallery";
+import { HeroCarousel } from "@/components/site/hero-carousel";
 import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { ReviewList } from "@/components/site/review-list";
@@ -138,6 +139,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const faq = [...(exp.faq ?? []), ...D.siteFaq];
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const ctaLabel = live ? D.requestAvailability : T.comingSoonCta;
+  const avail = exp.availability;
   const conditions = [
     { Icon: Clock3, text: exp.duration },
     { Icon: Users, text: exp.group },
@@ -157,11 +159,9 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       {/* ① First view */}
       <section className="xp-hero">
         <div className="xp-hero-photo">
-          <a className="xp-hero-link" href="#photos" aria-label={D.gallery}><img src={exp.img} alt={exp.alt} /></a>
-          {!live && <span className="soon-badge">{T.comingSoon}</span>}
-          {photos.length > 1 && (
-            <a className="photo-count" href="#photos"><Images size={14} /> {D.photosCount(photos.length)}</a>
-          )}
+          <HeroCarousel photos={photos} lang={lang}>
+            {!live && <span className="soon-badge">{T.comingSoon}</span>}
+          </HeroCarousel>
         </div>
         <div className="xp-hero-copy">
           {!live && <p className="soon-flag">{T.comingSoon}</p>}
@@ -170,6 +170,12 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           <ul className="xp-conditions">
             {conditions.map(({ Icon, text }) => <li key={text}><Icon size={14} /> {text}</li>)}
           </ul>
+          {avail && (
+            <p className="xp-avail">
+              <CalendarDays size={14} />
+              <span>{avail.daily ? D.availDaily : ""} · {D.availStart} {avail.startTimes[0]}–{avail.startTimes[avail.startTimes.length - 1]} · {D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span>
+            </p>
+          )}
           <div className="xp-price">
             <b>{headlinePrice}</b>
             <span>{headlineCondition}</span>
@@ -269,7 +275,17 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
       {/* ⑦ Schedule and venue */}
       <section className="xp-section">
-        <h2>{D.scheduleH}</h2>
+        {avail && (
+          <div className="xp-avail-box">
+            <h2>{D.availH}</h2>
+            <dl>
+              <div><dt>{D.availDays}</dt><dd>{avail.daily ? D.availDaily : "—"}{exp.availabilityNote && ` · ${exp.availabilityNote}`}</dd></div>
+              <div><dt>{D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>
+              <div><dt>{D.availCutoffH}</dt><dd>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</dd></div>
+            </dl>
+          </div>
+        )}
+        <h2 className={avail ? "xp-sub" : undefined}>{D.scheduleH}</h2>
         {exp.interactionTime && exp.interactionTime !== exp.duration && (
           <p className="xp-note">{D.interactionNote(exp.duration, exp.interactionTime)}</p>
         )}
@@ -288,10 +304,13 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
         <h2 className="xp-sub">{D.venueH}</h2>
         <div className="xp-venue">
-          {(exp.venue?.img ?? photos[1]?.img) && (
-            <figure>
-              <img src={exp.venue?.img ?? photos[1].img} alt={exp.venue?.alt ?? photos[1]?.alt ?? ""} loading="lazy" />
-              <figcaption>{D.venueExampleNote}</figcaption>
+          {exp.map && (
+            <figure className="xp-map">
+              <iframe
+                src={`https://maps.google.com/maps?q=${exp.map.lat},${exp.map.lng}&z=${exp.map.zoom ?? 15}&hl=${lang === "zh-tw" ? "zh-TW" : lang}&output=embed`}
+                title={D.venueH} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen
+              />
+              <figcaption><MapPin size={13} /> {D.mapNote}</figcaption>
             </figure>
           )}
           <div className="xp-venue-cols">
@@ -308,6 +327,12 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </ul>
             </div>
           </div>
+          {(exp.venue?.img ?? photos[1]?.img) && (
+            <figure className="xp-venue-photo">
+              <img src={exp.venue?.img ?? photos[1].img} alt={exp.venue?.alt ?? photos[1]?.alt ?? ""} loading="lazy" />
+              <figcaption>{D.venueExampleNote}</figcaption>
+            </figure>
+          )}
         </div>
       </section>
 
@@ -343,7 +368,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>
         <EnquiryForm
           kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL}
-          experience={{ slug: exp.slug, title: exp.title, partySize: exp.partySize, leadDays: 3 }}
+          experience={{ slug: exp.slug, title: exp.title, partySize: exp.partySize, leadDays: avail?.cutoffDays ?? 3, startTimes: avail?.startTimes }}
         />
         {/* Bókun mount for the day online booking connects; nothing renders until then. */}
         <div id="bokun-widget-mount" data-experience={exp.slug} data-booking-type={exp.bookingType ?? "instant"} hidden />

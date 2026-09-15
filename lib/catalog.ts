@@ -86,6 +86,14 @@ export interface Experience {
   };
   /** Note shown beside the gallery, e.g. that the room or dishes vary by date. */
   galleryNote?: string;
+  /** Operating pattern from the partner sheet: which days it runs, the start
+   *  times offered, and the booking cutoff (days before, Japan-time clock). */
+  availability?: { daily: boolean; startTimes: string[]; cutoffDays: number; cutoffTime: string };
+  /** Localised line for closures (e.g. "Closed over the New Year holidays"). */
+  availabilityNote?: string;
+  /** Approximate pin for the map when the exact address is only shared after
+   *  booking: a public landmark in the same district, never the venue itself. */
+  map?: { lat: number; lng: number; zoom?: number };
   /** Three value cards. Falls back to the site-wide trio when absent. */
   highlights?: { title: string; body: string; icon: "group" | "chat" | "interpreter" | "dance" | "meal" | "photo" }[];
   /** Confirmed with the venue. Absent means "not confirmed" and nothing is
@@ -104,7 +112,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map";
 
 export interface Tour {
   slug: string;
@@ -166,6 +174,7 @@ export const experiences: Experience[] = [
   {
     slug: "sushi-masterclass", city: "tokyo", category: "sushi",
     partySize: { min: 1, max: 6 },
+    map: { lat: 35.6654, lng: 139.7707, zoom: 14 },
     title: "Edo-mae Sushi Masterclass",
     tagline: "Craft nigiri with a third-generation chef at his own counter",
     duration: "2.5 hours", price: "¥45,000", group: "Private · up to 6", ages: "Ages 8+", area: "Tokyo (Tsukiji area)",
@@ -185,6 +194,7 @@ export const experiences: Experience[] = [
   {
     slug: "sumo-morning-practice", city: "tokyo", category: "sumo",
     partySize: { min: 1, max: 8 },
+    map: { lat: 35.6967, lng: 139.7933, zoom: 14 },
     title: "Inside Sumo Morning Practice",
     tagline: "Ringside at a working stable as the day's training unfolds",
     duration: "2 hours", price: "¥38,000", group: "Small group · up to 8", ages: "Ages 10+", area: "Tokyo (Ryogoku area)",
@@ -204,6 +214,7 @@ export const experiences: Experience[] = [
   {
     slug: "kimono-photo-walk", city: "tokyo", category: "kimono",
     partySize: { min: 1, max: 4 },
+    map: { lat: 35.7147, lng: 139.7966, zoom: 14 },
     title: "Kimono Dressing & Garden Photo Walk",
     tagline: "Dressed by a professional stylist, then a stroll through a classic garden",
     duration: "3 hours", price: "¥40,000", group: "Private · up to 4", ages: "All ages", area: "Tokyo (traditional garden district)",
@@ -223,6 +234,7 @@ export const experiences: Experience[] = [
   {
     slug: "katana-forge-visit", city: "tokyo", category: "swordsmith",
     partySize: { min: 1, max: 4 },
+    map: { lat: 35.6895, lng: 139.6917, zoom: 14 },
     title: "Katana: Visit a Swordsmith's Forge",
     tagline: "Watch a licensed swordsmith fold steel the traditional way",
     duration: "3 hours", price: "¥90,000", group: "Private · up to 4", ages: "Ages 12+", area: "Greater Tokyo (workshop district)",
@@ -242,6 +254,7 @@ export const experiences: Experience[] = [
   {
     slug: "anime-nail-art-session", city: "tokyo", category: "anime-nail-art",
     partySize: { min: 1, max: 2 },
+    map: { lat: 35.6702, lng: 139.7027, zoom: 14 },
     title: "Anime Nail Art Session",
     tagline: "Your favourite character, painted by a Tokyo nail artist",
     duration: "2 hours", price: "¥18,000", group: "Private · up to 2", ages: "All ages", area: "Tokyo (Akihabara / Harajuku area)",
@@ -266,6 +279,9 @@ export const experiences: Experience[] = [
       highSeason: { tiers: [{ party: 2, total: 159600 }], windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }] },
     },
     interactionTime: "2 hours",
+    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 3, cutoffTime: "17:00" },
+    availabilityNote: "Closed over the New Year holidays.",
+    map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
     tagline: "Share a meal, enjoy a traditional dance, and join the conversation with an interpreter.",
     duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
@@ -331,6 +347,7 @@ export const experiences: Experience[] = [
   {
     slug: "tea-ceremony-with-master", city: "kyoto", category: "tea-ceremony",
     partySize: { min: 1, max: 6 },
+    map: { lat: 35.0116, lng: 135.7681, zoom: 14 },
     title: "Tea Ceremony with a Tea Master",
     tagline: "A quiet hour of temae in a Kyoto tearoom, whisked bowl by bowl",
     duration: "1.5 hours", price: "¥30,000", group: "Private · up to 6", ages: "All ages", area: "Kyoto (temple district)",
@@ -350,6 +367,7 @@ export const experiences: Experience[] = [
   {
     slug: "kimono-higashiyama-walk", city: "kyoto", category: "kimono",
     partySize: { min: 1, max: 4 },
+    map: { lat: 34.9985, lng: 135.781, zoom: 14 },
     title: "Kimono & Higashiyama Lantern Walk",
     tagline: "Dressed in silk, then through Kyoto's most storied lanes at golden hour",
     duration: "3 hours", price: "¥40,000", group: "Private · up to 4", ages: "All ages", area: "Kyoto (Higashiyama area)",
@@ -369,6 +387,7 @@ export const experiences: Experience[] = [
   {
     slug: "kyoto-sushi-class", city: "kyoto", category: "sushi",
     partySize: { min: 1, max: 6 },
+    map: { lat: 35.0047, lng: 135.763, zoom: 14 },
     title: "Kyoto-style Sushi & Obanzai Class",
     tagline: "Pressed saba-zushi and Kyoto home cooking with a veteran chef",
     duration: "2.5 hours", price: "¥35,000", group: "Private · up to 6", ages: "Ages 8+", area: "Kyoto (city centre)",
@@ -416,7 +435,7 @@ import type { Lang } from "@/lib/i18n";
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);
