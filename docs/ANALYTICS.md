@@ -4,7 +4,8 @@
 GA4も広告タグもGTMの中で設定するので、**タグを増やすたびにサイトを更新する必要はありません**。
 
 - 設置場所: `app/layout.tsx`(全ページの `<head>` 直下 + `<body>` 直後のnoscript)
-- コンテナID: `lib/analytics.ts` の `GTM_ID`
+- コンテナID: `lib/analytics.ts` の `GTM_ID` = `GTM-57CCF3MQ`
+- GA4測定ID: `G-5PQXBXVZWE`(サイトには書かれていません。GTMの中だけで使います)
 
 ## サイトから送っているイベント
 
@@ -30,12 +31,12 @@ GA4も広告タグもGTMの中で設定するので、**タグを増やすたび
 
 1. https://tagmanager.google.com/ → コンテナ `GTM-57CCF3MQ`
 2. 左「タグ」→ 新規 → タグの種類 **Google タグ**
-   - タグID: さっきの `G-XXXXXXX`
+   - タグID: `G-5PQXBXVZWE`
    - トリガー: **Initialization - All Pages**
    - 名前「GA4 - 基本」→ 保存
 3. もう1つタグを作る(問い合わせの計測):
    - タグの種類 **GA4 イベント**
-   - 設定タグ: 上で作った「GA4 - 基本」
+   - 測定ID: `G-5PQXBXVZWE`(「このコンテナで Google タグが見つかりました」と出ればOK)
    - イベント名: `generate_lead`
    - イベントパラメータ:
      | パラメータ名 | 値 |
@@ -43,8 +44,14 @@ GA4も広告タグもGTMの中で設定するので、**タグを増やすたび
      | `experience` | `{{DLV - experience}}` |
      | `enquiry_kind` | `{{DLV - enquiry_kind}}` |
      | `language` | `{{DLV - language}}` |
-   - トリガー: 新規 → **カスタムイベント** → イベント名 `enquiry_sent` → 名前「問い合わせ送信」
+   - トリガー: 新規 → 画面中央をクリック → 右の一覧の一番下 **「その他」→「カスタム イベント」**
+     → イベント名 `enquiry_sent`(正規表現のチェックは**外したまま**)
+     → 「このトリガーの発生場所」は **すべてのカスタム イベント**
+     → トリガー名「enquiry_sent」→ 保存
    - 名前「GA4 - 問い合わせ送信」→ 保存
+
+   > 変数(手順4)を作る前にタグを保存すると `{{DLV - experience}}` が赤く出ますが、
+   > 変数を作れば消えます。順番はどちらが先でも構いません。
 4. 変数(上の `{{DLV - ...}}`)を作る:
    左「変数」→ ユーザー定義変数 → 新規 → **データレイヤーの変数**
    - 変数名 `DLV - experience` / データレイヤーの変数名 `experience`
