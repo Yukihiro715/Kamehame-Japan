@@ -47,8 +47,8 @@
 
 ```bash
 # 初回のみ
-git clone https://github.com/Yukihiro715/Omotenashi-Japan.git
-cd Omotenashi-Japan
+git clone https://github.com/Yukihiro715/Kamehame-Japan.git
+cd Kamehame-Japan
 git checkout <リリースするブランチ>   # 例: main にマージ済みなら main
 npm ci
 
