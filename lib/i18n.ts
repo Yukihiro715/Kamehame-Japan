@@ -17,7 +17,7 @@ const strings = {
     // header / footer
     navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Experiences", navTours: "Private tours", navApproach: "Our approach",
     findExperience: "Find an experience",
-    footerAbout: "About", footerOperated: "Operated by Prosent Inc. with our tour operations partner.",
+    footerAbout: "About", navFaq: "FAQ", footerOperated: "Operated by Prosent Inc. with our tour operations partner.",
     langNote: "English · Español — Français · 繁體中文 coming soon",
     home: "Home",
     // cards
@@ -65,7 +65,7 @@ const strings = {
   es: {
     navTokyo: "Tokio", navKyoto: "Kioto", navExperiences: "Experiencias", navTours: "Tours privados", navApproach: "Nuestra filosofía",
     findExperience: "Buscar experiencia",
-    footerAbout: "Nosotros", footerOperated: "Operado por Prosent Inc. junto con nuestro socio operador de tours.",
+    footerAbout: "Nosotros", navFaq: "Preguntas frecuentes", footerOperated: "Operado por Prosent Inc. junto con nuestro socio operador de tours.",
     langNote: "English · Español — Français · 繁體中文 próximamente",
     home: "Inicio",
     from: "desde", perPerson: "/ persona", perGroupShort: "/ grupo", perGroup: "por grupo / día", perPersonUnit: "por persona", perGroupUnit: "por grupo",

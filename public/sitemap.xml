@@ -322,6 +322,38 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/"/>
   </url>
   <url>
+    <loc>https://kamehame-japan.com/en/about/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/about/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/faq/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/faq/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
+  </url>
+  <url>
     <loc>https://kamehame-japan.com/partners/</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>

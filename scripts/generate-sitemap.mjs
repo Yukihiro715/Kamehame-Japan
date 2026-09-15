@@ -68,6 +68,16 @@ for (const slug of toursPublished ? tours : []) {
   }
 }
 
+for (const page of ["about", "faq"]) {
+  for (const lang of LANGS) {
+    add(`/${lang}/${page}/`, {
+      priority: "0.5",
+      changefreq: "monthly",
+      alternates: Object.fromEntries(LANGS.map((l) => [l, `/${l}/${page}/`])),
+    });
+  }
+}
+
 add("/partners/", { priority: "0.4", changefreq: "monthly" });
 
 const today = new Date().toISOString().slice(0, 10);

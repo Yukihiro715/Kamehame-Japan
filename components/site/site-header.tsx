@@ -16,7 +16,7 @@ export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "ov
     [T.navKyoto, `/${lang}/kyoto/`],
     [T.navExperiences, `/${lang}/experiences/`],
     ...(TOURS_PUBLISHED ? [[T.navTours, `/${lang}/tours/`] as [string, string]] : []),
-    [T.navApproach, `${langHome(lang)}#approach`],
+    [T.navApproach, `/${lang}/about/`],
   ];
   return (
     <header className={`site-header ${variant === "solid" ? "solid" : ""}`}>
