@@ -276,7 +276,7 @@ export const experiences: Experience[] = [
     partySize: { min: 2, max: 40 },
     pricing: {
       tiers: [{ party: 2, total: 139600 }, { party: 3, total: 157500 }, { party: 4, total: 166000 }, { party: 5, total: 190000 }],
-      highSeason: { tiers: [{ party: 2, total: 159600 }], windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }] },
+      highSeason: { tiers: [{ party: 2, total: 159600 }, { party: 3, total: 187500 }, { party: 4, total: 206000 }, { party: 5, total: 240000 }], windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }] },
     },
     interactionTime: "about 1 hour 45 minutes",
     availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 3, cutoffTime: "17:00" },

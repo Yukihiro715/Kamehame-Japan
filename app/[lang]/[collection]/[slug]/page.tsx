@@ -240,9 +240,13 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         </table>
         <p className="xp-pricing-note">{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}{pricing.moreOnRequest && ` ${D.largerParties}`}</p>
         {pricing.highSeason && (
-          <div className="xp-high-season">
-            <b>{D.highSeasonH}</b>
+          <details className="xp-high-season">
+            <summary>
+              <span><b>{D.highSeasonH}</b> · {pricing.highSeason.window}</span>
+              <span className="xp-toggle"><em>{D.highSeasonOpen}</em><em>{D.highSeasonClose}</em></span>
+            </summary>
             <table className="xp-pricing compact">
+              <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
               <tbody>
                 {pricing.highSeason.rows.map((r) => (
                   <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
@@ -250,7 +254,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </tbody>
             </table>
             <p className="xp-pricing-note">{D.highSeasonNote(pricing.highSeason.window)}</p>
-          </div>
+          </details>
         )}
         {(exp.included || exp.notIncluded) && (
           <div className="xp-included">

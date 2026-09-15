@@ -7,8 +7,10 @@ import type { Photo } from "@/components/site/gallery";
 
 /** First-view photos: a swipeable, snap-scrolling track that advances on its
  *  own every few seconds (pausing while it is hovered, touched, off screen,
- *  or when the visitor prefers reduced motion). From the third photo on, an
- *  "N more photos" card sits over the picture and opens the gallery lightbox. */
+ *  or when the visitor prefers reduced motion). Photos load two slides ahead
+ *  of the one in view — native lazy-loading inside a horizontal track is
+ *  unreliable on iOS Safari and left slides black. Tapping any slide or the
+ *  photo-count button opens the all-photos sheet in the gallery component. */
 export function HeroCarousel({ photos, lang, children }: { photos: Photo[]; lang: Lang; children?: React.ReactNode }) {
   const D = t(lang).detail;
   const track = useRef<HTMLDivElement>(null);
@@ -49,7 +51,9 @@ export function HeroCarousel({ photos, lang, children }: { photos: Photo[]; lang
     return () => { window.clearInterval(id); io.disconnect(); };
   }, [many, paused, photos.length]);
 
-  const openAll = (i: number) => window.dispatchEvent(new CustomEvent("kh:lightbox", { detail: i }));
+  const openAll = () => window.dispatchEvent(new CustomEvent("kh:photos"));
+  // Slides up to two ahead of the current one carry a src; the rest wait.
+  const loadUpTo = Math.max(1, index + 2);
 
   return (
     <div
@@ -60,14 +64,9 @@ export function HeroCarousel({ photos, lang, children }: { photos: Photo[]; lang
       <div className="hero-track" ref={track}>
         {photos.map((p, i) => (
           <figure key={p.img + i} className="hero-slide">
-            <button type="button" onClick={() => openAll(i)} aria-label={D.viewAllPhotos}>
-              <img src={p.img} alt={p.alt} loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : undefined} />
+            <button type="button" onClick={openAll} aria-label={D.viewAllPhotos}>
+              <img src={i <= loadUpTo ? p.img : undefined} alt={p.alt} fetchPriority={i === 0 ? "high" : undefined} />
             </button>
-            {i === 2 && photos.length > 3 && (
-              <button type="button" className="hero-more" onClick={() => openAll(i)}>
-                <Images size={16} /> {D.morePhotos(photos.length - i)}
-              </button>
-            )}
           </figure>
         ))}
       </div>
@@ -81,7 +80,7 @@ export function HeroCarousel({ photos, lang, children }: { photos: Photo[]; lang
               <button key={i} type="button" role="tab" aria-selected={i === index} aria-label={`${i + 1} / ${photos.length}`} onClick={() => go(i)} />
             ))}
           </div>
-          <button type="button" className="photo-count" onClick={() => openAll(index)}>
+          <button type="button" className="photo-count" onClick={openAll}>
             <Images size={14} /> {D.photosCount(photos.length)}
           </button>
         </>

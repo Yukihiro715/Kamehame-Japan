@@ -64,7 +64,7 @@ const strings = {
     detail: {
       requestAvailability: "Request availability",
       photosCount: (n: number) => `${n} photos`,
-      availCutoffH: "Booking cutoff", availDays: "Days", scheduleSample: (t: string) => `Times shown for a ${t} start; the flow is the same for any start time.`, availH: "When it runs", availDaily: "Every day", availStart: "Start times", availCutoff: (d: number, t: string) => `Book by ${t} Japan time, ${d} days before`, mapNote: "Approximate area only — the exact address comes with your confirmation.", morePhotos: (n: number) => `+${n} more photos`,
+      availCutoffH: "Booking cutoff", availDays: "Days", scheduleSample: (t: string) => `Times shown for a ${t} start; the flow is the same for any start time.`, allPhotosH: (n: number) => `All photos (${n})`, back: "Back", highSeasonOpen: "Show high-season prices", highSeasonClose: "Hide", availH: "When it runs", availDaily: "Every day", availStart: "Start times", availCutoff: (d: number, t: string) => `Book by ${t} Japan time, ${d} days before`, mapNote: "Approximate area only — the exact address comes with your confirmation.", morePhotos: (n: number) => `+${n} more photos`,
       watch: "Watch the experience",
       seeExperience: "See the experience",
       gallery: "Photos", viewAllPhotos: "View all photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Close",
@@ -222,7 +222,7 @@ const strings = {
     detail: {
       requestAvailability: "Consultar disponibilidad",
       photosCount: (n: number) => `${n} fotos`,
-      availCutoffH: "Plazo de reserva", availDays: "Días", scheduleSample: (t: string) => `Horarios para un inicio a las ${t}; el desarrollo es el mismo a cualquier hora.`, availH: "Cuándo se realiza", availDaily: "Todos los días", availStart: "Horas de inicio", availCutoff: (d: number, t: string) => `Reserve antes de las ${t} (hora de Japón), ${d} días antes`, mapNote: "Solo la zona aproximada: la dirección exacta llega con la confirmación.", morePhotos: (n: number) => `+${n} fotos más`,
+      availCutoffH: "Plazo de reserva", availDays: "Días", scheduleSample: (t: string) => `Horarios para un inicio a las ${t}; el desarrollo es el mismo a cualquier hora.`, allPhotosH: (n: number) => `Todas las fotos (${n})`, back: "Volver", highSeasonOpen: "Ver precios de temporada alta", highSeasonClose: "Ocultar", availH: "Cuándo se realiza", availDaily: "Todos los días", availStart: "Horas de inicio", availCutoff: (d: number, t: string) => `Reserve antes de las ${t} (hora de Japón), ${d} días antes`, mapNote: "Solo la zona aproximada: la dirección exacta llega con la confirmación.", morePhotos: (n: number) => `+${n} fotos más`,
       watch: "Ver la experiencia",
       seeExperience: "Mira la experiencia",
       gallery: "Fotos", viewAllPhotos: "Ver todas las fotos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Cerrar",
@@ -376,7 +376,7 @@ const strings = {
     detail: {
       requestAvailability: "空き状況を問い合わせる",
       photosCount: (n: number) => `写真${n}枚`,
-      availCutoffH: "予約締切", availDays: "開催曜日", scheduleSample: (t: string) => `${t}開始の場合の例です。他の開始時刻でも流れは同じです。`, availH: "開催日・開始時刻", availDaily: "毎日開催", availStart: "開始時刻", availCutoff: (d: number, t: string) => `${d}日前の${t}(日本時間)まで`, mapNote: "おおよそのエリアです。正確な住所は予約確定後にお伝えします。", morePhotos: (n: number) => `他${n}枚を見る`,
+      availCutoffH: "予約締切", availDays: "開催曜日", scheduleSample: (t: string) => `${t}開始の場合の例です。他の開始時刻でも流れは同じです。`, allPhotosH: (n: number) => `写真(${n}枚)`, back: "戻る", highSeasonOpen: "繁忙期の料金を見る", highSeasonClose: "閉じる", availH: "開催日・開始時刻", availDaily: "毎日開催", availStart: "開始時刻", availCutoff: (d: number, t: string) => `${d}日前の${t}(日本時間)まで`, mapNote: "おおよそのエリアです。正確な住所は予約確定後にお伝えします。", morePhotos: (n: number) => `他${n}枚を見る`,
       watch: "体験の動画を見る",
       seeExperience: "体験の様子",
       gallery: "写真", viewAllPhotos: "すべての写真を見る", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "閉じる",
@@ -529,7 +529,7 @@ const strings = {
     detail: {
       requestAvailability: "Demander les disponibilités",
       photosCount: (n: number) => `${n} photos`,
-      availCutoffH: "Date limite de réservation", availDays: "Jours", scheduleSample: (t: string) => `Horaires pour un début à ${t} ; le déroulé est le même à toute heure.`, availH: "Quand a-t-elle lieu", availDaily: "Tous les jours", availStart: "Heures de début", availCutoff: (d: number, t: string) => `Réservez avant ${t} heure du Japon, ${d} jours à l'avance`, mapNote: "Zone approximative seulement : l'adresse exacte vous parvient avec la confirmation.", morePhotos: (n: number) => `+${n} photos`,
+      availCutoffH: "Date limite de réservation", availDays: "Jours", scheduleSample: (t: string) => `Horaires pour un début à ${t} ; le déroulé est le même à toute heure.`, allPhotosH: (n: number) => `Toutes les photos (${n})`, back: "Retour", highSeasonOpen: "Voir les tarifs haute saison", highSeasonClose: "Masquer", availH: "Quand a-t-elle lieu", availDaily: "Tous les jours", availStart: "Heures de début", availCutoff: (d: number, t: string) => `Réservez avant ${t} heure du Japon, ${d} jours à l'avance`, mapNote: "Zone approximative seulement : l'adresse exacte vous parvient avec la confirmation.", morePhotos: (n: number) => `+${n} photos`,
       watch: "Voir l'expérience en vidéo",
       seeExperience: "Voir l'expérience",
       gallery: "Photos", viewAllPhotos: "Voir toutes les photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Fermer",
@@ -684,7 +684,7 @@ const strings = {
     detail: {
       requestAvailability: "詢問空檔",
       photosCount: (n: number) => `${n} 張照片`,
-      availCutoffH: "預約截止", availDays: "舉辦日", scheduleSample: (t: string) => `以 ${t} 開始為例；其他開始時間流程相同。`, availH: "舉辦日與開始時間", availDaily: "每天舉辦", availStart: "開始時間", availCutoff: (d: number, t: string) => `請於 ${d} 天前、日本時間 ${t} 前預約`, mapNote: "僅為大致區域，正確地址將隨確認通知一併告知。", morePhotos: (n: number) => `再看 ${n} 張`,
+      availCutoffH: "預約截止", availDays: "舉辦日", scheduleSample: (t: string) => `以 ${t} 開始為例；其他開始時間流程相同。`, allPhotosH: (n: number) => `所有照片（${n}）`, back: "返回", highSeasonOpen: "查看旺季價格", highSeasonClose: "收起", availH: "舉辦日與開始時間", availDaily: "每天舉辦", availStart: "開始時間", availCutoff: (d: number, t: string) => `請於 ${d} 天前、日本時間 ${t} 前預約`, mapNote: "僅為大致區域，正確地址將隨確認通知一併告知。", morePhotos: (n: number) => `再看 ${n} 張`,
       watch: "觀看體驗影片",
       seeExperience: "看看體驗",
       gallery: "照片", viewAllPhotos: "查看所有照片", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "關閉",
