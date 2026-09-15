@@ -304,15 +304,18 @@ export const tours: Tour[] = [
 // --- language-aware access -------------------------------------------------
 
 import { CANCELLATION_ES, categoriesEs, citiesEs, experiencesEs, toursEs } from "@/lib/catalog.es";
+import { CANCELLATION_JA, categoriesJa, citiesJa, experiencesJa, toursJa } from "@/lib/catalog.ja";
 import type { Lang } from "@/lib/i18n";
 
 export function catalogFor(lang: Lang) {
   const published = <T,>(list: T[]) => (TOURS_PUBLISHED ? list : []);
   if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: experiencesEs, tours: published(toursEs) };
+  if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: experiencesJa, tours: published(toursJa) };
   return { cities, categories, experiences, tours: published(tours) };
 }
 
-export const cancellationFor = (lang: Lang) => (lang === "es" ? CANCELLATION_ES : CANCELLATION);
+export const cancellationFor = (lang: Lang) =>
+  lang === "es" ? CANCELLATION_ES : lang === "ja" ? CANCELLATION_JA : CANCELLATION;
 
 // --- lookups ---------------------------------------------------------------
 

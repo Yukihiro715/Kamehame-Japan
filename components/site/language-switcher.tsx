@@ -43,9 +43,19 @@ function FlagTW() {
   );
 }
 
+function FlagJA() {
+  return (
+    <svg className="flag" viewBox="0 0 18 13" aria-hidden="true">
+      <rect width="18" height="13" fill="#fff" />
+      <circle cx="9" cy="6.5" r="3.6" fill="#BC002D" />
+    </svg>
+  );
+}
+
 export const LOCALES = [
   { code: "en", short: "EN", label: "English", Flag: FlagEN, available: true },
   { code: "es", short: "ES", label: "Español", Flag: FlagES, available: true },
+  { code: "ja", short: "日本語", label: "日本語", Flag: FlagJA, available: true },
   { code: "fr", short: "FR", label: "Français", Flag: FlagFR, available: false },
   { code: "zh-tw", short: "繁中", label: "繁體中文", Flag: FlagTW, available: false },
 ] as const;

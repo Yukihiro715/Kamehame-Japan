@@ -2,9 +2,9 @@
 // 1) a catalog translation file (see catalog.es.ts), 2) an entry in LANGS,
 // 3) strings below — the [lang] routes pick everything up automatically.
 
-export type Lang = "en" | "es";
+export type Lang = "en" | "es" | "ja";
 
-export const LANGS: Lang[] = ["en", "es"];
+export const LANGS: Lang[] = ["en", "es", "ja"];
 
 export const isLang = (v: string): v is Lang => (LANGS as string[]).includes(v);
 
@@ -18,7 +18,7 @@ const strings = {
     navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Experiences", navTours: "Private tours", navApproach: "Our approach",
     findExperience: "Find an experience",
     footerAbout: "About", navFaq: "FAQ", footerOperated: "Operated by Prosent Inc. with our tour operations partner.",
-    langNote: "English · Español — Français · 繁體中文 coming soon",
+    langNote: "English · Español · 日本語 — Français · 繁體中文 coming soon",
     home: "Home",
     // cards
     from: "from", perPerson: "/ person", perGroupShort: "/ group", perGroup: "per group / day", perPersonUnit: "per person", perGroupUnit: "per group",
@@ -66,7 +66,7 @@ const strings = {
     navTokyo: "Tokio", navKyoto: "Kioto", navExperiences: "Experiencias", navTours: "Tours privados", navApproach: "Nuestra filosofía",
     findExperience: "Buscar experiencia",
     footerAbout: "Nosotros", navFaq: "Preguntas frecuentes", footerOperated: "Operado por Prosent Inc. junto con nuestro socio operador de tours.",
-    langNote: "English · Español — Français · 繁體中文 próximamente",
+    langNote: "English · Español · 日本語 — Français · 繁體中文 próximamente",
     home: "Inicio",
     from: "desde", perPerson: "/ persona", perGroupShort: "/ grupo", perGroup: "por grupo / día", perPersonUnit: "por persona", perGroupUnit: "por grupo",
     interpreterIncluded: "Intérprete incluido",
@@ -103,6 +103,48 @@ const strings = {
     questions: "¿Dudas?", questionsBody: "Los datos de contacto por WhatsApp y email aparecerán aquí en el lanzamiento.",
     breadcrumbTours: "Tours guiados",
     eyebrowHero: "Tokio · Kioto · Con los maestros",
+  },
+  ja: {
+    navTokyo: "東京", navKyoto: "京都", navExperiences: "体験一覧", navTours: "プライベートツアー", navApproach: "私たちの考え方",
+    findExperience: "体験を探す",
+    footerAbout: "私たちについて", navFaq: "よくあるご質問", footerOperated: "運営:Prosent Inc.／旅行手配:株式会社 ELNX TRAVEL",
+    langNote: "English · Español · 日本語 — Français · 繁體中文 近日公開",
+    home: "ホーム",
+    from: "", perPerson: "／1名", perGroupShort: "／1組", perGroup: "1組・1日あたり", perPersonUnit: "1名あたり", perGroupUnit: "1組あたり",
+    interpreterIncluded: "通訳ガイド同行",
+    refine: "絞り込む", sort: "並び順:おすすめ",
+    alsoExplore: "こちらもご覧ください", frequentlyAsked: "よくあるご質問",
+    guidedTours: "ガイド付きツアー", allExperiences: "すべての体験",
+    whatYoullDo: "体験の内容", yourMaster: "お迎えする師", itinerary: "当日の流れ",
+    goodToKnow: "事前にお知らせしたいこと", meetingPoint: "集合場所とアクセス", cancellationH: "キャンセルについて",
+    meetingBody: (area: string) => `${area}で通訳ガイドと合流していただきます。受け入れ先への配慮から、正確な住所と地図はご予約確定時にお送りします。`,
+    meetingChip: (area: string) => `${area} — 正確な場所は予約確定後にお伝えします`,
+    meetOnSite: "現地集合・現地解散(送迎はありません)",
+    interpreterGuide: "通訳ガイド同行", licensedGuide: "全国通訳案内士",
+    makeItFullDay: "一日かけて楽しむ",
+    pairWith: (city: string) => `${city}のプライベート1日ツアーと組み合わせる`,
+    pairBody: "この体験を軸に、8時間を全国通訳案内士とともに。移動も時間割もルートもすべてお任せいただけます。",
+    moreIn: (city: string) => `${city}の他の体験`,
+    experiencesIn: (city: string) => `${city}の体験`,
+    reviewNote: "この体験に対するGoogleの認証済みレビューは、販売開始後にこちらへ掲載します。",
+    yourDay: "一日の組み立て", buildAround: "マスタークラスを軸に組み立てる",
+    buildBody: (city: string) => `以下の${city}の体験は、いずれも一日の軸になります。お問い合わせの際にご希望をお知らせいただければ、その時間割に合わせてルート・食事・ペースを組み立てます。`,
+    bookingUnitNote: "日本円でのお支払い(USD/EURは目安表示)",
+    bookingSoonTitle: "オンライン予約は近日開始します。", bookingSoonBody: "日程と人数の選択(Bókun)がこちらに表示されます。",
+    bookNow: "予約する", bookingFine: "即時確定 · 日本円決済 · 7日前まで無料キャンセル", bookingFineTerms: "即時確定 · 日本円決済 · キャンセル規定は下記をご確認ください",
+    // リクエスト予約:受け入れ先と日程を確認してから確定します
+    requestBook: "この日程で申し込む",
+    requestBadge: "リクエスト予約",
+    requestStepsTitle: "ご予約の流れ",
+    bookingFineRequest: "受け入れ先と日程を確認してから確定します · 日本円決済",
+    requestSteps: [
+      "ご希望の日程と人数をお送りください。",
+      "受け入れ先に空き状況を確認し、24時間以内にご返信します。",
+      "確定後、お支払いに進んでいただき、会場の詳細をお伝えします。",
+    ],
+    questions: "ご不明な点は", questionsBody: "WhatsApp・メールでのお問い合わせ先は、販売開始時にこちらへ掲載します。",
+    breadcrumbTours: "ガイド付きツアー",
+    eyebrowHero: "東京 · 京都 · 師のもとで",
   },
 } as const;
 

@@ -19,6 +19,10 @@ const META: Record<Lang, { title: string; description: string }> = {
     title: "KAMEHAME JAPAN | Experiencias culturales auténticas",
     description: "Experiencias culturales privadas en Tokio y Kioto, dirigidas por maestros japoneses con un guía intérprete a tu lado.",
   },
+  ja: {
+    title: "KAMEHAME JAPAN | 訪日外国人向けの文化体験",
+    description: "東京と京都の職人・師のもとで行う少人数の文化体験を、通訳ガイド同行で海外のお客様にご提供しています。",
+  },
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -27,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const meta = META[lang];
   return withAlternates(
     socialMeta({ lang, ...meta, path: lang === "en" ? "/" : `/${lang}/` }),
-    { en: "/", es: "/es/" },
+    { en: "/", es: "/es/", ja: "/ja/" },
   );
 }
 

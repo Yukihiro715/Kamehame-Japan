@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ORIGIN = "https://kamehame-japan.com";
-const LANGS = ["en", "es"];
+const LANGS = ["en", "es", "ja"];
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // Read the catalog without a TS toolchain: the slugs are plain string literals.
@@ -38,8 +38,13 @@ const entries = [];
 const add = (path, { priority = "0.7", changefreq = "weekly", alternates = null } = {}) =>
   entries.push({ path, priority, changefreq, alternates });
 
-add("/", { priority: "1.0", changefreq: "daily", alternates: { en: "/", es: "/es/" } });
-add("/es/", { priority: "1.0", changefreq: "daily", alternates: { en: "/", es: "/es/" } });
+// English lives at the root; every other locale sits under its prefix.
+const homePath = (lang) => (lang === "en" ? "/" : `/${lang}/`);
+const homeAlternates = Object.fromEntries(LANGS.map((l) => [l, homePath(l)]));
+
+for (const lang of LANGS) {
+  add(homePath(lang), { priority: "1.0", changefreq: "daily", alternates: homeAlternates });
+}
 
 for (const c of collections) {
   for (const lang of LANGS) {
