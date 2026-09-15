@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { BookingBox, MobileBookingBar } from "@/components/site/booking-box";
 import {
-  cancellationFor, catalogFor, cityBySlug, SITE_ORIGIN,
+  cancellationFor, catalogFor, cityBySlug, isLive, SITE_ORIGIN,
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
@@ -126,6 +126,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
       <div className="detail-layout">
         <article className="detail-main">
+          {!isLive(exp) && <p className="soon-flag">{T.comingSoon}</p>}
           <h1>{exp.title}</h1>
           <RatingSummary experience={exp.slug} lang={lang} href="#reviews" size={16} />
           <p className="detail-tagline">{exp.tagline}</p>
@@ -208,7 +209,16 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         </article>
 
         <aside className="detail-aside">
-          <BookingBox price={exp.price} unit={exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit} experienceSlug={exp.slug} lang={lang} bookingType={exp.bookingType} fine={exp.cancellation ? T.bookingFineTerms : undefined} />
+          {isLive(exp) ? (
+            <BookingBox price={exp.price} unit={exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit} experienceSlug={exp.slug} lang={lang} bookingType={exp.bookingType} fine={exp.cancellation ? T.bookingFineTerms : undefined} />
+          ) : (
+            <div className="booking-box soon-box" id="booking">
+              <p className="booking-price">{T.from} <b>{exp.price}</b> <span>{exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit}</span></p>
+              <span className="soon-badge static">{T.comingSoon}</span>
+              <p className="soon-body">{T.comingSoonBody}</p>
+              <Link className="booking-cta as-link" href={`/${lang}/contact/#enquiry`}>{T.comingSoonCta}</Link>
+            </div>
+          )}
           <div className="aside-help">
             <b>{T.questions}</b>
             <p>{T.questionsBody}</p>
@@ -244,7 +254,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
       }} />
-      <MobileBookingBar price={exp.price} lang={lang} bookingType={exp.bookingType} />
+      {isLive(exp) && <MobileBookingBar price={exp.price} lang={lang} bookingType={exp.bookingType} />}
       <SiteFooter lang={lang} />
     </main>
   );

@@ -9,6 +9,11 @@ export type CitySlug = "tokyo" | "kyoto";
  *  calendar; request products are held until the venue confirms the date. */
 export type BookingType = "instant" | "request";
 
+/** Whether an experience is backed by a signed partner ("live") or is still a
+ *  placeholder awaiting one ("soon"). Undefined counts as "soon". */
+export type ExperienceStatus = "live" | "soon";
+export const isLive = (e: { status?: ExperienceStatus }) => e.status === "live";
+
 export interface Category {
   slug: string;
   title: string;
@@ -44,6 +49,10 @@ export interface Experience {
   priceUnit?: "person" | "group";
   /** "request" when the venue confirms the date before the booking is final. */
   bookingType?: BookingType;
+  /** "soon" until a venue has actually signed for this experience. Placeholder
+   *  listings stay visible so the range is clear, but they are labelled and
+   *  cannot be booked. Only set "live" once the partner's terms are loaded. */
+  status?: ExperienceStatus;
   /** Overrides the site-wide cancellation policy when the venue's terms differ. */
   cancellation?: string;
   whatYoullDo: string[];
@@ -201,7 +210,7 @@ export const experiences: Experience[] = [
     story: { heading: "Fan art you can wear", body: "Nail art grew up alongside Japan's character culture, and in Tokyo the two merged into a genre of its own: micro-illustration, painted on a moving canvas smaller than a stamp. The best artists are booked out weeks ahead by locals. This session opens one of those chairs to you." },
   },
   {
-    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request",
+    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "Maiko & Geiko Ozashiki Banquet",
     tagline: "A private banquet room in Kyoto — dining, dance and parlour games with geiko and maiko",
     duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",

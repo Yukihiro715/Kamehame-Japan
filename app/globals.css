@@ -569,3 +569,44 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
   .article-cta-arrow { display:none; }
   .article-cta-copy { padding:14px 14px 14px 0; }
 }
+
+/* --- Enquiry form -------------------------------------------------------- */
+.enquiry-form { display:grid; gap:16px; margin-top:8px; }
+.form-row { display:grid; gap:6px; }
+.form-row.two { grid-template-columns:1fr 1fr; gap:14px; }
+.form-row label, label.form-row { display:grid; gap:6px; }
+.enquiry-form span { font-size:12px; letter-spacing:.04em; color:var(--muted); }
+.enquiry-form input, .enquiry-form textarea { width:100%; box-sizing:border-box; border:2px solid var(--ink); background:var(--white);
+  padding:12px 14px; font:inherit; font-size:14px; color:var(--ink); border-radius:0; }
+.enquiry-form input:focus, .enquiry-form textarea:focus { outline:none; border-color:var(--kame); box-shadow:4px 4px 0 var(--kame); }
+.enquiry-form textarea { resize:vertical; min-height:150px; line-height:1.7; }
+.enquiry-form ::placeholder { color:#a8a49b; }
+.form-hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.enquiry-actions { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:4px; }
+.contact-cta[disabled] { opacity:.6; cursor:wait; }
+button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--font-display); }
+.form-privacy { font-size:11.5px; color:var(--muted); }
+.form-error { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0; padding:12px 14px; border:2px solid var(--kame); background:#fff4e8; font-size:13px; }
+.form-error a { font-weight:600; color:var(--ink); }
+.form-done { display:flex; gap:14px; align-items:flex-start; border:2px solid var(--ink); background:var(--white); padding:22px; box-shadow:6px 6px 0 var(--kame); }
+.form-done svg { color:var(--kame); flex:none; margin-top:2px; }
+.form-done b { display:block; margin-bottom:6px; font-family:var(--font-display); font-size:16px; letter-spacing:.04em; text-transform:uppercase; }
+.form-done p { margin:0; font-size:13.5px; line-height:1.8; color:#4a463e; }
+.trade-cta-block h2 { margin:0 0 14px; font-family:var(--font-display); font-weight:400; font-size:21px; letter-spacing:.04em; text-transform:uppercase; }
+[lang="ja"] .form-done b, [lang="ja"] .trade-cta-block h2 { text-transform:none; font-weight:700; }
+@media(max-width:620px){ .form-row.two { grid-template-columns:1fr; } }
+
+/* --- Coming soon (placeholder experiences) ------------------------------- */
+.soon-badge { position:absolute; top:12px; left:12px; z-index:2; padding:5px 11px; background:var(--ink); color:var(--white);
+  font-family:var(--font-display); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; transform:skewX(-10deg); }
+.soon-badge.static { position:static; display:inline-block; margin:2px 0 12px; }
+.listing-art, .experience-art { position:relative; }
+.listing-card.is-soon .listing-art img { filter:saturate(.7); }
+.soon-flag { margin:0 0 8px; font-family:var(--font-display); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--kame); }
+.soon-box .soon-body { margin:0 0 16px; font-size:12.5px; line-height:1.7; color:var(--muted); }
+.booking-cta.as-link { display:flex; align-items:center; justify-content:center; text-decoration:none; opacity:1; cursor:pointer; background:var(--ink); color:var(--white); }
+.booking-cta.as-link:hover { background:var(--kame); color:var(--ink); }
+[lang="ja"] .soon-badge, [lang="ja"] .soon-flag { text-transform:none; letter-spacing:.08em; }
+.experience-art .soon-badge { position:absolute; top:14px; left:14px; right:auto; bottom:auto; width:auto; height:auto;
+  font-size:10.5px; line-height:1; letter-spacing:.14em; padding:5px 11px; opacity:1; color:var(--white); background:var(--ink);
+  text-shadow:none; font-family:var(--font-display); transform:skewX(-10deg); }

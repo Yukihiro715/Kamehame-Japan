@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
-import { mailto, TRADE_EMAIL } from "@/lib/contact";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { TRADE_EMAIL } from "@/lib/contact";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -28,11 +29,6 @@ export default async function TradePage({ params }: Props) {
   const { lang } = await params;
   if (!isLang(lang)) notFound();
   const T = t(lang);
-
-  const enquiry = mailto(TRADE_EMAIL, "Trade enquiry — KAMEHAME JAPAN", [
-    ...T.tradeAsk.map((line) => `- ${line}: `),
-    "",
-  ]);
 
   return (
     <main className="subpage detail-page" lang={lang}>
@@ -65,9 +61,9 @@ export default async function TradePage({ params }: Props) {
             </ul>
           </section>
 
-          <section className="trade-cta-block">
-            <a className="contact-cta" href={enquiry}>{T.tradeCta} <ArrowRight size={15} /></a>
-            <span className="contact-address">{TRADE_EMAIL}</span>
+          <section className="trade-cta-block" id="enquiry">
+            <h2>{T.tradeCta}</h2>
+            <EnquiryForm kind="trade" lang={lang} fallbackEmail={TRADE_EMAIL} />
             <p>{T.tradeNote}</p>
           </section>
         </article>

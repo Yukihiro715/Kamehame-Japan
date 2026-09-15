@@ -60,6 +60,21 @@ const strings = {
     // reviews
     // journal
     // contact
+    // placeholder experiences
+    comingSoon: "Coming soon",
+    comingSoonBody: "We are finalising this experience with the venue. Leave your email and we will tell you the day it opens.",
+    comingSoonCta: "Tell me when it opens",
+    // enquiry form
+    form: {
+      name: "Your name", email: "Email address", company: "Company", country: "Country",
+      dates: "Dates in Japan", datesHint: "e.g. 12–20 April 2027", party: "Party size", partyHint: "e.g. 2 adults, 1 child (9)",
+      message: "What are you drawn to?", messageHint: "The experiences that interest you, and anything we should check with the venue — dietary needs, mobility, a birthday.",
+      messageTrade: "Tell us about your clients", messageTradeHint: "The kind of client you place, typical party size, the cities and months you work with, and whether you need net rates, allocation, or both.",
+      send: "Send", sending: "Sending…",
+      sentTitle: "Received — thank you.", sentBody: "A person will reply within 24 hours, Japan time. If you do not hear from us, check your spam folder first, then write to us directly.",
+      failed: "That did not go through. Please email us directly at",
+      privacy: "We use what you send only to answer you.",
+    },
     // trade (travel agencies, DMCs, tour operators)
     tradeH: "For travel agencies and tour operators",
     tradeLead: "We supply small-group and private cultural experiences in Tokyo and Kyoto to agencies placing clients in Japan.",
@@ -158,6 +173,19 @@ const strings = {
       "Confirmamos la disponibilidad con la casa y te respondemos en 24 horas.",
       "Una vez confirmada, completas el pago y recibes los datos del local.",
     ],
+    comingSoon: "Próximamente",
+    comingSoonBody: "Estamos cerrando esta experiencia con el local. Déjanos tu correo y te avisaremos el día que se abra.",
+    comingSoonCta: "Avisadme cuando se abra",
+    form: {
+      name: "Tu nombre", email: "Correo electrónico", company: "Empresa", country: "País",
+      dates: "Fechas en Japón", datesHint: "p. ej. 12–20 de abril de 2027", party: "Número de personas", partyHint: "p. ej. 2 adultos, 1 niño (9)",
+      message: "¿Qué te interesa?", messageHint: "Las experiencias que te atraen y cualquier cosa que debamos consultar con el local: dietas, movilidad, un cumpleaños.",
+      messageTrade: "Háblanos de tus clientes", messageTradeHint: "El tipo de cliente que envías, el tamaño habitual del grupo, las ciudades y meses con los que trabajas, y si necesitas tarifas netas, cupos o ambas cosas.",
+      send: "Enviar", sending: "Enviando…",
+      sentTitle: "Recibido. Gracias.", sentBody: "Una persona te responderá en 24 horas, hora de Japón. Si no recibes nada, revisa primero la carpeta de spam y luego escríbenos directamente.",
+      failed: "No se ha podido enviar. Escríbenos directamente a",
+      privacy: "Usamos lo que envías solo para responderte.",
+    },
     tradeH: "Para agencias y turoperadores",
     tradeLead: "Suministramos experiencias culturales privadas y de grupo reducido en Tokio y Kioto a agencias que envían clientes a Japón.",
     tradeWhatH: "Qué ofrecemos",
@@ -254,6 +282,19 @@ const strings = {
       "受け入れ先に空き状況を確認し、24時間以内にご返信します。",
       "確定後、お支払いに進んでいただき、会場の詳細をお伝えします。",
     ],
+    comingSoon: "近日公開",
+    comingSoonBody: "受け入れ先と最終調整中です。メールアドレスをお知らせいただければ、公開日にご連絡します。",
+    comingSoonCta: "公開時に知らせてほしい",
+    form: {
+      name: "お名前", email: "メールアドレス", company: "会社名", country: "国",
+      dates: "日本での滞在日程", datesHint: "例:2027年4月12日〜20日", party: "ご人数", partyHint: "例:大人2名、子ども1名(9歳)",
+      message: "ご関心のある体験", messageHint: "気になっている体験と、受け入れ先に確認しておくべきこと(食事制限、移動のご事情、お祝いなど)をお書きください。",
+      messageTrade: "お客様についてお聞かせください", messageTradeHint: "送客されるお客様の層、一般的なグループ人数、対象の都市と時期、ネットレート・在庫枠のどちらが必要かをお書きください。",
+      send: "送信する", sending: "送信中…",
+      sentTitle: "受け付けました。ありがとうございます。", sentBody: "担当者が日本時間24時間以内にご返信します。届かない場合は迷惑メールフォルダをご確認のうえ、直接メールをお送りください。",
+      failed: "送信できませんでした。お手数ですが、こちらへ直接メールをお送りください:",
+      privacy: "お送りいただいた内容は、ご返信のためにのみ使用します。",
+    },
     tradeH: "旅行会社・ツアーオペレーター様へ",
     tradeLead: "日本へお客様を送客される旅行会社様に向けて、東京・京都の少人数／貸切の文化体験をご提供しています。",
     tradeWhatH: "ご提供する内容",

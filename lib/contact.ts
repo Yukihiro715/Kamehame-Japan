@@ -1,17 +1,28 @@
 // Contact routes.
 //
-// There is no form backend yet, so every route here is an email address on our
-// own domain. That is deliberate: a form that silently drops enquiries is worse
-// than a mailto link that works. Set these up as forwarding addresses first
-// (Cloudflare Email Routing is free and forwards to any inbox); swap in a real
-// form once there is somewhere for submissions to land.
+// Enquiries go through the /api/contact route handler, which delivers them
+// with the Worker's send_email binding. The addresses below are what a
+// visitor sees; delivery goes to the CONTACT_TO secret (see
+// app/api/contact/route.ts). Mailto links were tried first and abandoned:
+// on a machine with no mail client they do nothing at all.
 
 export const CONTACT_EMAIL = "hello@kamehame-japan.com";
 export const TRADE_EMAIL = "trade@kamehame-japan.com";
 export const PARTNER_EMAIL = "partners@kamehame-japan.com";
 
-/** Prefilled mailto, so an enquiry arrives with the details we need. */
-export function mailto(address: string, subject: string, lines: string[]) {
-  const body = lines.join("\n");
-  return `mailto:${address}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+export type EnquiryKind = "guest" | "trade";
+
+export interface Enquiry {
+  kind: EnquiryKind;
+  name: string;
+  email: string;
+  company?: string;
+  country?: string;
+  dates?: string;
+  party?: string;
+  message: string;
+  /** Page language, so the confirmation can be answered in it. */
+  lang: string;
+  /** Honeypot. Real people never fill it; bots usually do. */
+  website?: string;
 }

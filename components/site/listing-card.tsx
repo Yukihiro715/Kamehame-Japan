@@ -7,9 +7,10 @@ import { t, type Lang } from "@/lib/i18n";
 export function ListingCard({ item, lang = "en" }: { item: ListingItem; lang?: Lang }) {
   const T = t(lang);
   return (
-    <Link className="listing-card" href={item.href}>
+    <Link className={`listing-card ${item.kind === "experience" && !item.live ? "is-soon" : ""}`} href={item.href}>
       <div className="listing-art">
         <img src={item.img} alt={item.alt} loading="lazy" />
+        {item.kind === "experience" && !item.live && <span className="soon-badge">{T.comingSoon}</span>}
       </div>
       <div className="listing-copy">
         <p className="listing-tags">{item.tags.map((tag) => <span key={tag}>{tag}</span>)}</p>

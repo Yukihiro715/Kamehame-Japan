@@ -14,6 +14,9 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
+  // Contact-form delivery. No destination is pinned here: the route sends to
+  // the CONTACT_TO secret, which must be a verified Email Routing address.
+  send_email: [{ name: "EMAIL" }],
   d1_databases: d1
     ? [
         {

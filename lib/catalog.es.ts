@@ -127,7 +127,7 @@ export const experiencesEs: Experience[] = [
     story: { heading: "Fan art que puedes llevar puesto", body: "El nail art creció junto a la cultura de personajes de Japón, y en Tokio ambos se fundieron en un género propio: microilustración pintada sobre un lienzo móvil más pequeño que un sello. Las mejores artistas tienen lista de espera de semanas entre el público local. Esta sesión te abre una de esas sillas." },
   },
   {
-    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request",
+    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "Banquete ozashiki con maiko y geiko",
     tagline: "Un salón privado en Kioto: cena, danza y juegos de sobremesa con geiko y maiko",
     duration: "2 horas", price: "¥139.600", priceUnit: "group", group: "Privado · 2–40 personas", ages: "Todas las edades", area: "Kioto (zona de Gion / Higashiyama)",

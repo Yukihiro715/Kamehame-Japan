@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { articleDate, latestArticles } from "@/lib/articles";
-import { catalogFor, TOURS_PUBLISHED } from "@/lib/catalog";
+import { catalogFor, isLive, TOURS_PUBLISHED } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 
 const FEATURED = ["sushi-masterclass", "sumo-morning-practice", "evening-with-geiko"];
@@ -235,6 +235,7 @@ export function HomePage({ lang }: { lang: Lang }) {
             <Link className="experience-card" href={p(`/${item.city}/${item.slug}/`)} key={item.slug}>
               <div className="experience-art">
                 <img src={item.img} alt={item.alt} loading="lazy" />
+                {!isLive(item) && <span className="soon-badge">{T.comingSoon}</span>}
                 <span aria-hidden="true">{MARKS[item.slug]}</span>
                 <small>{String(i + 1).padStart(2, "0")}</small>
               </div>

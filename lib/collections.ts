@@ -3,7 +3,7 @@
 
 import {
   cancellationFor, catalogFor, cityBySlug,
-  TOURS_PUBLISHED, type Experience, type Tour,
+  isLive, TOURS_PUBLISHED, type Experience, type Tour,
 } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 
@@ -11,6 +11,8 @@ export interface ListingItem {
   kind: "experience" | "tour";
   /** Catalog slug, so a card can look up its own rating. */
   slug: string;
+  /** False for placeholder experiences that no venue has signed for yet. */
+  live: boolean;
   unit: "person" | "group";
   href: string;
   img: string;
@@ -199,13 +201,13 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
   const catBySlug = (c: string) => categories.find((x) => x.slug === c);
 
   const expItem = (e: Experience): ListingItem => ({
-    kind: "experience", slug: e.slug, unit: e.priceUnit ?? "person", href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
+    kind: "experience", slug: e.slug, live: isLive(e), unit: e.priceUnit ?? "person", href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
     tags: [catBySlug(e.category)?.tag ?? "", e.group.startsWith("Priva") || e.group.startsWith("Private") ? S.privateTag : S.smallGroupTag].filter(Boolean),
     title: e.title, line: e.tagline,
     meta: `${cityTitle(e.city)} · ${e.duration}`, price: e.price,
   });
   const tourItem = (tr: Tour): ListingItem => ({
-    kind: "tour", slug: tr.slug, unit: "group", href: p(`/tours/${tr.slug}/`), img: tr.img, alt: tr.alt,
+    kind: "tour", slug: tr.slug, live: false, unit: "group", href: p(`/tours/${tr.slug}/`), img: tr.img, alt: tr.alt,
     tags: [S.tourTag, S.privateTag],
     title: tr.title, line: tr.tagline,
     meta: `${cityTitle(tr.city)} · ${tr.duration}`, price: tr.price,

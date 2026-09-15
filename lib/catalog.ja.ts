@@ -131,7 +131,7 @@ export const experiencesJa: Experience[] = [
     story: { heading: "身につけるファンアート", body: "ネイルアートは日本のキャラクター文化と並んで育ち、東京で両者が混ざって独自のジャンルになりました。切手より小さく、しかも動くキャンバスに描く細密画です。人気の作家は地元客で何週間も先まで埋まっています。この時間は、その席をひとつ開けるものです。" },
   },
   {
-    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request",
+    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "舞妓・芸妓とのお座敷",
     tagline: "京都の貸切のお座敷で、料理と舞と、お座敷遊びを",
     duration: "2時間", price: "¥139,600", priceUnit: "group", group: "貸切・2〜40名", ages: "年齢制限なし", area: "京都(祇園・東山周辺)",

@@ -5,7 +5,8 @@ import { ArrowRight, Briefcase, Mail, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
-import { CONTACT_EMAIL, mailto } from "@/lib/contact";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -52,11 +53,6 @@ export default async function ContactPage({ params }: Props) {
   if (!isLang(lang)) notFound();
   const T = t(lang);
 
-  const guestMail = mailto(CONTACT_EMAIL, "Booking enquiry — KAMEHAME JAPAN", [
-    ...CHECKLIST[lang].map((line) => `- ${line}: `),
-    "",
-  ]);
-
   return (
     <main className="subpage detail-page" lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
@@ -72,7 +68,7 @@ export default async function ContactPage({ params }: Props) {
               <Mail size={18} />
               <h2>{T.contactGuestH}</h2>
               <p>{T.contactGuestBody}</p>
-              <a className="contact-cta" href={guestMail}>{T.contactGuestCta} <ArrowRight size={15} /></a>
+              <a className="contact-cta" href="#enquiry">{T.contactGuestCta} <ArrowRight size={15} /></a>
               <span className="contact-address">{CONTACT_EMAIL}</span>
             </div>
 
@@ -90,6 +86,11 @@ export default async function ContactPage({ params }: Props) {
               <Link className="underlined-link" href="/partners/">{T.contactPartnerCta} <ArrowRight /></Link>
             </div>
           </div>
+
+          <section id="enquiry">
+            <h2>{T.contactGuestH}</h2>
+            <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} />
+          </section>
 
           <section>
             <h2>{T.contactIncludeH}</h2>
