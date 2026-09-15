@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HomePage } from "@/components/site/home-page";
-import { isLang, LANGS } from "@/lib/i18n";
+import { isLang, LANGS, type Lang } from "@/lib/i18n";
+import { socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string }> }
 
@@ -9,7 +10,7 @@ export function generateStaticParams() {
   return LANGS.map((lang) => ({ lang }));
 }
 
-const META: Record<string, Metadata> = {
+const META: Record<Lang, { title: string; description: string }> = {
   en: {
     title: "KAMEHAME JAPAN | Authentic cultural experiences",
     description: "Private cultural experiences in Tokyo and Kyoto, led by Japanese masters with an interpreter guide by your side.",
@@ -22,9 +23,12 @@ const META: Record<string, Metadata> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
+  if (!isLang(lang)) return {};
   const meta = META[lang];
-  if (!meta) return {};
-  return { ...meta, alternates: { languages: { en: "/", es: "/es/" } } };
+  return withAlternates(
+    socialMeta({ lang, ...meta, path: lang === "en" ? "/" : `/${lang}/` }),
+    { en: "/", es: "/es/" },
+  );
 }
 
 export default async function LangHome({ params }: Props) {

@@ -11,6 +11,7 @@ import {
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
+import { socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string; collection: string; slug: string }> }
 
@@ -38,11 +39,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { exp, tour } = resolve(lang, collection, slug);
   const item = exp ?? tour;
   if (!item) return {};
-  return {
-    title: `${item.title} | KAMEHAME JAPAN`,
-    description: exp ? exp.tagline : tour!.description,
-    alternates: { languages: { en: `/en/${collection}/${slug}/`, es: `/es/${collection}/${slug}/` } },
-  };
+  return withAlternates(
+    socialMeta({
+      lang,
+      title: `${item.title} | KAMEHAME JAPAN`,
+      description: exp ? exp.tagline : tour!.description,
+      path: `/${lang}/${collection}/${slug}/`,
+      // Purpose-built 1200x630 card; the catalog photo itself is often portrait
+      // and would be cropped badly by social scrapers (scripts/generate-og-cards.py).
+      image: `/og/${slug}.jpg`,
+      type: "article",
+    }),
+    { en: `/en/${collection}/${slug}/`, es: `/es/${collection}/${slug}/` },
+  );
 }
 
 function productJsonLd(title: string, description: string, img: string, url: string, price: string) {

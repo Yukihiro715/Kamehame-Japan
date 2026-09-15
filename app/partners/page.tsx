@@ -2,10 +2,26 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowDownRight } from "lucide-react";
 import { Brand } from "@/components/site/brand";
+import { absolute, SITE_NAME } from "@/lib/seo";
+
+const TITLE = "体験パートナー募集 | KAMEHAME JAPAN";
+const DESCRIPTION =
+  "訪日外国人向け高付加価値体験サービス KAMEHAME JAPAN の受け入れパートナー(職人・師匠・施設)を募集しています。集客・多言語対応・決済・当日の通訳はすべて運営が担います。";
 
 export const metadata: Metadata = {
-  title: "体験パートナー募集 | KAMEHAME JAPAN",
-  description: "訪日外国人向け高付加価値体験サービス KAMEHAME JAPAN の受け入れパートナー(職人・師匠・施設)を募集しています。集客・多言語対応・決済・当日の通訳はすべて運営が担います。",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: absolute("/partners/") },
+  openGraph: {
+    type: "website",
+    url: absolute("/partners/"),
+    siteName: SITE_NAME,
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "ja_JP",
+    images: [{ url: absolute("/og-partners.jpg"), width: 1200, height: 630, alt: "体験パートナー募集 — KAMEHAME JAPAN" }],
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: [absolute("/og-partners.jpg")] },
 };
 
 const targets = ["寿司", "相撲部屋", "茶道", "着付け", "芸妓・舞妓", "刀鍛冶", "ネイル", "その他の伝統工芸・食"];

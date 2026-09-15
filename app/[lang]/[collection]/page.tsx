@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { ListingCard } from "@/components/site/listing-card";
 import { collectionSlugs, getCollection } from "@/lib/collections";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
+import { socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string; collection: string }> }
 
@@ -20,11 +21,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLang(lang)) return {};
   const data = getCollection(collection, lang);
   if (!data) return {};
-  return {
-    title: `${data.h1} | KAMEHAME JAPAN`,
-    description: data.lead,
-    alternates: { languages: { en: `/en/${collection}/`, es: `/es/${collection}/` } },
-  };
+  return withAlternates(
+    socialMeta({
+      lang,
+      title: `${data.h1} | KAMEHAME JAPAN`,
+      description: data.lead,
+      path: `/${lang}/${collection}/`,
+      image: data.heroImg,
+    }),
+    { en: `/en/${collection}/`, es: `/es/${collection}/` },
+  );
 }
 
 export default async function CollectionPage({ params }: Props) {
