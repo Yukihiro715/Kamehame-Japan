@@ -36,6 +36,10 @@ export interface Experience {
   img: string;
   alt: string;
   gallery: { img: string; alt: string }[];
+  /** Pricing unit: per person (default) or per group. */
+  priceUnit?: "person" | "group";
+  /** Overrides the site-wide cancellation policy when the venue's terms differ. */
+  cancellation?: string;
   whatYoullDo: string[];
   master: { title: string; bio: string; quote: string };
   itinerary: string[];
@@ -182,20 +186,28 @@ export const experiences: Experience[] = [
   },
   {
     slug: "evening-with-geiko", city: "kyoto", category: "geisha",
-    title: "Private Evening with a Geiko",
-    tagline: "Conversation, dance and seasonal cuisine in an intimate Kyoto setting",
-    duration: "2 hours", price: "¥120,000", group: "Private · up to 6", ages: "Ages 12+", area: "Kyoto (Gion / Miyagawa-cho area)",
+    title: "Maiko & Geiko Ozashiki Banquet",
+    tagline: "A private banquet room in Kyoto — dining, dance and parlour games with geiko and maiko",
+    duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/exp-geisha.jpg", alt: "Maiko performing a traditional dance with a fan",
     gallery: [{ img: "/images/cat-geisha.jpg", alt: "Maiko in full dress in a Kyoto teahouse district" }],
+    cancellation: "Cancellation fees apply once your booking is confirmed: 50% up to 4 days before, 75% 3–2 days before, 100% from the day before (Japan time; no-shows 100%). Date changes follow the same scale, and reducing your party applies the fee to the seats released. If a geiko or maiko cannot be secured for your date, you receive a full refund.",
     whatYoullDo: [
-      "Be welcomed into a private tatami room in one of Kyoto's teahouse districts.",
-      "Share seasonal Kyoto cuisine as a geiko and maiko join your table.",
-      "Watch a dance performed an arm's length away, to live shamisen.",
-      "Talk freely — about her training, her day, her world — through your interpreter.",
+      "Settle into your own private banquet room — never shared with other guests.",
+      "Dine on seasonal Kyoto cuisine as geiko and maiko join your table for conversation.",
+      "Watch a dance performed an arm's length away, then try ozashiki parlour games together.",
+      "Finish with commemorative photos with your hosts.",
     ],
-    master: { quote: "For one evening, this room is yours. Come, let us talk.", title: "A geiko of Kyoto's teahouse districts", bio: "She entered the karyukai as a teenager and has spent her career mastering dance, music and the art of conversation. Evenings like this are normally reserved for introduced guests; our partnership opens the room to you. The teahouse is named once your booking is confirmed." },
-    itinerary: ["18:00 — Meet your interpreter guide in central Kyoto", "18:15 — Arrival and welcome at the private room", "18:30 — Dinner begins; the geiko and maiko join", "19:15 — Dance performance and ozashiki games", "20:00 — Farewells and end of the evening"],
-    goodToKnow: ["Dietary requirements are accommodated with advance notice.", "Seating is on tatami with backrests; low-table chairs are available.", "Photography is welcome at set moments the geiko will offer.", "This is a private engagement — the room is yours for the evening."],
+    master: { quote: "For one evening, this room is yours. Come, let us talk.", title: "Geiko and maiko of Kyoto's hanamachi", bio: "Your evening is hosted by working geiko or maiko of Kyoto's flower-and-willow world, arranged especially for your date. The venue is a private banquet house in the Gion / Higashiyama district; its name and address are shared once your booking is confirmed." },
+    itinerary: ["10 min before — Arrive at the venue with your guide (address in your confirmation)", "0:00 — Welcome to your private room; the banquet begins", "0:30 — Geiko and maiko join your table; conversation over dinner", "1:15 — Dance performance and ozashiki parlour games", "1:50 — Commemorative photos", "2:00 — End of the evening"],
+    goodToKnow: [
+      "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — book at least 3 days ahead (5pm Japan time cutoff).",
+      "Pricing is per group, everything included: ¥139,600 for 2 guests, ¥157,500 for 3, ¥166,000 for 4, ¥190,000 for 5; larger parties (up to 40) on request.",
+      "High-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30 (from ¥159,600 for 2 guests).",
+      "Children: under 2 join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
+      "Allergies and dietary restrictions are catered for — tell us when you book.",
+      "Want a livelier room? An additional geiko or maiko can be arranged for ¥60,500.",
+    ],
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
   },
   {

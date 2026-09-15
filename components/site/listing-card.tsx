@@ -16,7 +16,7 @@ export function ListingCard({ item, lang = "en" }: { item: ListingItem; lang?: L
         <p className="listing-line">{item.line}</p>
         <div className="listing-meta">
           <span><Clock3 size={14} /> {item.meta}</span>
-          <span>{T.from} <b>{item.price}</b>{item.kind === "experience" ? ` ${T.perPerson}` : ""}</span>
+          <span>{T.from} <b>{item.price}</b>{item.kind === "experience" ? ` ${item.unit === "group" ? T.perGroupShort : T.perPerson}` : ""}</span>
         </div>
       </div>
     </Link>

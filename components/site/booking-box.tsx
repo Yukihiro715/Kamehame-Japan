@@ -4,7 +4,7 @@ import { t, type Lang } from "@/lib/i18n";
 // Reserved mount for the Bókun booking widget. Once the Bókun account and
 // product IDs are confirmed, the widget script replaces the contents of
 // #bokun-widget-mount (see CLAUDE_HANDOFF.md — widget spec pending).
-export function BookingBox({ price, unit, experienceSlug, lang = "en" }: { price: string; unit: string; experienceSlug: string; lang?: Lang }) {
+export function BookingBox({ price, unit, experienceSlug, lang = "en", fine }: { price: string; unit: string; experienceSlug: string; lang?: Lang; fine?: string }) {
   const T = t(lang);
   return (
     <div className="booking-box" id="booking">
@@ -14,7 +14,7 @@ export function BookingBox({ price, unit, experienceSlug, lang = "en" }: { price
         <p><b>{T.bookingSoonTitle}</b><br />{T.bookingSoonBody}</p>
       </div>
       <button type="button" className="booking-cta" disabled aria-disabled="true">{T.bookNow}</button>
-      <p className="booking-fine"><ShieldCheck size={13} /> {T.bookingFine}</p>
+      <p className="booking-fine"><ShieldCheck size={13} /> {fine ?? T.bookingFine}</p>
     </div>
   );
 }

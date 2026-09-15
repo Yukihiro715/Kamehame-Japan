@@ -21,7 +21,7 @@ const strings = {
     langNote: "English · Español — Français · 繁體中文 coming soon",
     home: "Home",
     // cards
-    from: "from", perPerson: "/ person", perGroup: "per group / day", perPersonUnit: "per person",
+    from: "from", perPerson: "/ person", perGroupShort: "/ group", perGroup: "per group / day", perPersonUnit: "per person", perGroupUnit: "per group",
     interpreterIncluded: "Interpreter included",
     refine: "Refine", sort: "Sort: Recommended",
     alsoExplore: "Also explore", frequentlyAsked: "Frequently asked",
@@ -43,7 +43,7 @@ const strings = {
     // booking box
     bookingUnitNote: "pay in JPY (USD/EUR shown at checkout)",
     bookingSoonTitle: "Online booking opens soon.", bookingSoonBody: "Date and guest selection (Bókun) will appear here.",
-    bookNow: "Book now", bookingFine: "Instant confirmation · Pay in yen · Free cancellation (7 days)",
+    bookNow: "Book now", bookingFine: "Instant confirmation · Pay in yen · Free cancellation (7 days)", bookingFineTerms: "Instant confirmation · Pay in yen · See cancellation terms below",
     questions: "Questions?", questionsBody: "WhatsApp and email support details will appear here at launch.",
     // misc
     breadcrumbTours: "Guided tours",
@@ -55,7 +55,7 @@ const strings = {
     footerAbout: "Nosotros", footerOperated: "Operado por Prosent Inc. junto con nuestro socio operador de tours.",
     langNote: "English · Español — Français · 繁體中文 próximamente",
     home: "Inicio",
-    from: "desde", perPerson: "/ persona", perGroup: "por grupo / día", perPersonUnit: "por persona",
+    from: "desde", perPerson: "/ persona", perGroupShort: "/ grupo", perGroup: "por grupo / día", perPersonUnit: "por persona", perGroupUnit: "por grupo",
     interpreterIncluded: "Intérprete incluido",
     refine: "Filtrar", sort: "Orden: Recomendado",
     alsoExplore: "Explora también", frequentlyAsked: "Preguntas frecuentes",
@@ -75,7 +75,7 @@ const strings = {
     buildBody: (city: string) => `Cualquiera de las experiencias de ${city} puede ser el corazón del día. Dinos cuál al hacer tu consulta y planificamos la ruta, las comidas y el ritmo según su horario.`,
     bookingUnitNote: "pago en JPY (USD/EUR como referencia)",
     bookingSoonTitle: "La reserva online llega muy pronto.", bookingSoonBody: "El calendario de fechas y personas (Bókun) aparecerá aquí.",
-    bookNow: "Reservar", bookingFine: "Confirmación inmediata · Pago en yenes · Cancelación gratuita (7 días)",
+    bookNow: "Reservar", bookingFine: "Confirmación inmediata · Pago en yenes · Cancelación gratuita (7 días)", bookingFineTerms: "Confirmación inmediata · Pago en yenes · Ver condiciones de cancelación abajo",
     questions: "¿Dudas?", questionsBody: "Los datos de contacto por WhatsApp y email aparecerán aquí en el lanzamiento.",
     breadcrumbTours: "Tours guiados",
     eyebrowHero: "Tokio · Kioto · Con los maestros",

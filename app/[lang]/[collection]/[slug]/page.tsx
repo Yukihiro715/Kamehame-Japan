@@ -152,12 +152,12 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
           <section>
             <h2>{T.cancellationH}</h2>
-            <p>{cancellationFor(lang)}</p>
+            <p>{exp.cancellation ?? cancellationFor(lang)}</p>
           </section>
         </article>
 
         <aside className="detail-aside">
-          <BookingBox price={exp.price} unit={T.perPersonUnit} experienceSlug={exp.slug} lang={lang} />
+          <BookingBox price={exp.price} unit={exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit} experienceSlug={exp.slug} lang={lang} fine={exp.cancellation ? T.bookingFineTerms : undefined} />
           <div className="aside-help">
             <b>{T.questions}</b>
             <p>{T.questionsBody}</p>

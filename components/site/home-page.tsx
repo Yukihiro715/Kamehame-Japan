@@ -202,7 +202,7 @@ export function HomePage({ lang }: { lang: Lang }) {
                 <p className="experience-city"><MapPin size={14} /> {cities.find((c) => c.slug === item.city)?.title} · {T.interpreterIncluded}</p>
                 <h3>{item.title}</h3>
                 <p>{item.tagline}</p>
-                <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span>{T.from} <b>{item.price}</b> {T.perPerson}</span></div>
+                <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span>{T.from} <b>{item.price}</b> {item.priceUnit === "group" ? T.perGroupShort : T.perPerson}</span></div>
               </div>
             </Link>
           ))}
