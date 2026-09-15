@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ORIGIN = "https://kamehame-japan.com";
-const LANGS = ["en", "es", "ja"];
+const LANGS = ["en", "es", "ja", "fr", "zh-tw"];
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // Read the catalog without a TS toolchain: the slugs are plain string literals.
@@ -90,7 +90,7 @@ for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {
   // Which locales carry copy for this article
   const block = articles.slice(articles.indexOf(`slug: "${slug}"`));
   const end = block.indexOf("\n  },\n");
-  const langs = LANGS.filter((l) => new RegExp(`\\n\\s{6}${l}:\\s*\\{`).test(block.slice(0, end)));
+  const langs = LANGS.filter((l) => new RegExp(`\\n\\s{6}"?${l}"?:\\s*\\{`).test(block.slice(0, end)));
   for (const lang of langs) {
     add(`/${lang}/journal/${slug}/`, {
       priority: "0.6",

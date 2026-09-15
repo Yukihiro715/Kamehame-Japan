@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: copy.metaDescription,
       path: `/${lang}/faq/`,
     }),
-    { en: "/en/faq/", es: "/es/faq/", ja: "/ja/faq/" },
+    Object.fromEntries(LANGS.map((l) => [l, `/${l}/faq/`])),
   );
 }
 

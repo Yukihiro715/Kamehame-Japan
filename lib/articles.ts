@@ -347,7 +347,6 @@ export function articlesForCollection(
     .slice(0, limit);
 }
 
+const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
 export const articleDate = (iso: string, lang: Lang) =>
-  new Date(iso).toLocaleDateString(lang === "ja" ? "ja-JP" : lang === "es" ? "es-ES" : "en-GB", {
-    year: "numeric", month: "long", day: "numeric",
-  });
+  new Date(iso).toLocaleDateString(DATE_LOCALE[lang], { year: "numeric", month: "long", day: "numeric" });

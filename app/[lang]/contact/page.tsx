@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const T = t(lang);
   return withAlternates(
     socialMeta({ lang, title: `${T.contactH} | KAMEHAME JAPAN`, description: T.contactLead, path: `/${lang}/contact/` }),
-    { en: "/en/contact/", es: "/es/contact/", ja: "/ja/contact/" },
+    Object.fromEntries(LANGS.map((l) => [l, `/${l}/contact/`])),
   );
 }
 
@@ -45,6 +45,18 @@ const CHECKLIST: Record<Lang, string[]> = {
     "ご人数(お子様がいらっしゃる場合は年齢)",
     "ご関心のある体験",
     "食事制限、移動のご事情など、受け入れ先に確認すべきこと",
+  ],
+  fr: [
+    "Vos dates au Japon, et dans quelle ville",
+    "Combien vous êtes, et l'âge des enfants le cas échéant",
+    "L'expérience ou les expériences qui vous attirent",
+    "Régime alimentaire, mobilité, ou tout ce que nous devrions vérifier auprès du lieu",
+  ],
+  "zh-tw": [
+    "您在日本的日期與所在城市",
+    "人數，以及兒童的年齡（如有）",
+    "您感興趣的體驗",
+    "飲食限制、行動需求，或其他需要我們向場地確認的事項",
   ],
 };
 

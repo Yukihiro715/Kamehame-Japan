@@ -185,6 +185,58 @@ const ABOUT: Record<Lang, AboutCopy> = {
       cta: "すべての体験を見る",
     },
   },
+  fr: {
+    title: "Notre approche",
+    metaDescription: "Pourquoi KAMEHAME JAPAN ne propose que de petites expériences culturelles privées avec des maîtres en activité à Tokyo et Kyoto — et ce qu'un guide-interprète change à ce que vous ramenez.",
+    lead: "La plupart des expériences culturelles vendues aux visiteurs au Japon sont conçues pour le volume. Les nôtres sont construites autour de la personne qui les enseigne.",
+    sections: [
+      { heading: "Pourquoi nous avons commencé", body: [
+        "Le Japon est généreux avec ses surfaces et prudent avec ses intérieurs. Vous pouvez vous tenir devant une écurie de sumo à six heures du matin, ou passer devant une maison de thé de Gion chaque soir pendant une semaine, sans jamais franchir le seuil. Non par manque d'amabilité — parce qu'il n'y a pas d'entrée évidente.",
+        "L'entrée a toujours été l'introduction. Un nom, transmis par quelqu'un de confiance à quelqu'un d'autre. C'est ainsi que fonctionne le karyukai depuis trois siècles, et la plupart des métiers d'art encore aujourd'hui. Notre travail consiste à prendre le temps de construire ces introductions, puis à les tenir ouvertes pour ceux qui ont trois jours à Tokyo et aucun moyen de savoir à quelle porte frapper.",
+      ]},
+      { heading: "Petit, volontairement", body: [
+        "Chaque expérience que nous vendons est privée ou presque. Ce n'est pas une fioriture de luxe — c'est la condition qui rend le reste possible. Un maître qui enseigne à deux personnes peut répondre à la question que vous avez vraiment. Un maître qui en enseigne vingt donne un spectacle.",
+        "Cela signifie aussi que nous vendons moins de séances que nous le pourrions. Un comptoir de sushi a un chef et un nombre fini de soirées. Nous préférons vous montrer une date réellement disponible qu'un calendrier toujours vert.",
+      ]},
+      { heading: "L'interprète est l'expérience", body: [
+        "Un guide-interprète accompagne chaque réservation, et nous le considérons comme le produit, pas comme une option. Regarder quelqu'un façonner du riz en silence est agréable. Demander pourquoi le riz est à température du corps, entendre la réponse, puis poser la question suivante — voilà ce que vous raconterez encore un an plus tard.",
+        "Nos guides sont briefés sur le métier, pas seulement sur la langue. Ils savent quand traduire et quand s'effacer.",
+      ]},
+    ],
+    promises: [
+      { heading: "De vrais praticiens", body: "Tous ceux que vous rencontrez vivent de leur métier. Pas d'acteurs, pas de lieux de démonstration bâtis pour les groupes." },
+      { heading: "Une disponibilité honnête", body: "Si une date n'est pas libre, nous le disons. Certaines de nos expériences sont confirmées avec la maison avant que votre réservation soit définitive, et nous l'annonçons d'emblée." },
+      { heading: "Des prix qui tiennent", body: "Le prix affiché inclut le guide-interprète et la séance elle-même. Ce qui n'est pas inclus est écrit sur la page, pas découvert le jour même." },
+      { heading: "La discrétion pour nos partenaires", body: "Certaines maisons demandent que leur nom et leur adresse restent privés jusqu'à confirmation. Nous le respectons — c'est souvent la raison pour laquelle elles acceptent de recevoir." },
+    ],
+    closing: { heading: "Commencez par un après-midi", body: "Inutile de bâtir tout un voyage autour. Une séance, deux heures, et le reste de votre itinéraire ne bouge pas.", cta: "Voir toutes les expériences" },
+  },
+  "zh-tw": {
+    title: "我們的理念",
+    metaDescription: "為什麼 KAMEHAME JAPAN 只安排東京與京都現役職人的小型私人文化體驗——以及口譯導遊如何改變您帶回家的東西。",
+    lead: "賣給日本旅客的文化體驗，多數是為了消化人數而設計。我們的體驗則是圍繞著教的人來設計。",
+    sections: [
+      { heading: "我們為何開始", body: [
+        "日本對表面慷慨，對內裡謹慎。您可以清晨六點站在相撲部屋門口，或連著一週每晚經過祇園的茶屋，卻始終跨不過門檻。不是因為誰不友善——而是沒有明顯的入口。",
+        "入口從來都是引薦：一個名字，從受信任的人傳給另一個人。花柳界三百年來如此運作，大多數工藝傳統至今亦然。我們做的，是花時間建立這些引薦，然後為那些在東京只有三天、不知道該敲哪扇門的人，把門留著。",
+      ]},
+      { heading: "刻意做小", body: [
+        "我們賣的每一項體驗都是私人或接近私人的。這不是奢華的點綴——而是讓其餘一切成立的條件。教兩個人的師傅能回答您真正想問的問題；教二十個人的師傅是在演出。",
+        "這也表示我們賣的場次比能賣的少。一個壽司吧檯只有一位職人和有限的夜晚。我們寧願給您一個真正有空的日期，也不要一本永遠都是綠色的行事曆。",
+      ]},
+      { heading: "口譯就是體驗本身", body: [
+        "每筆預約都有口譯導遊，我們把它當成產品，而非加購。靜靜看人捏飯很愉快；問為什麼飯要維持體溫、聽到答案、再追問下去——那才是一年後您還會跟人說的事。",
+        "我們的導遊事先了解那門技藝，不只是語言。他們知道何時該翻譯，何時該退開。",
+      ]},
+    ],
+    promises: [
+      { heading: "真正的執業者", body: "您見到的每個人都以這門技藝為生。沒有演員，沒有為團客搭建的示範場地。" },
+      { heading: "誠實的空檔", body: "日期沒空，我們就說沒空。部分體驗會先與場地確認再成立預約，我們一開始就會說明。" },
+      { heading: "不會膨脹的價格", body: "您看到的價格包含口譯導遊與體驗本身。不含的項目寫在頁面上，不會在當天才發現。" },
+      { heading: "為合作夥伴保密", body: "有些場地希望在預約確認前不公開名稱與地址。我們尊重——這往往正是他們願意接待的原因。" },
+    ],
+    closing: { heading: "從一個下午開始", body: "不必為此重排整趟旅程。一場體驗、兩小時，其餘行程維持原樣。", cta: "查看所有體驗" },
+  },
 };
 
 const FAQ: Record<Lang, FaqCopy> = {
@@ -478,6 +530,70 @@ const FAQ: Record<Lang, FaqCopy> = {
       body: "日本にいらっしゃる日程とご関心をお知らせいただければ、その午後を使う価値があるかどうかを正直にお答えします。",
       cta: "体験を見る",
     },
+  },
+  fr: {
+    title: "Questions fréquentes",
+    metaDescription: "Réservation, langue, horaires, tenue, régimes et annulation — les questions que se posent les voyageurs avant de réserver une expérience culturelle à Tokyo ou Kyoto.",
+    lead: "Si votre question n'est pas ici, écrivez-nous. Une personne répond, généralement le jour même.",
+    groups: [
+      { heading: "Réservation", items: [
+        { q: "Combien de temps à l'avance réserver ?", a: "Deux à quatre semaines conviennent pour la plupart des expériences. Le banquet avec maiko et geiko à Kyoto exige au moins trois jours et se remplit vite au printemps et en automne. Si vos dates sont proches, demandez quand même — des annulations arrivent." },
+        { q: "Que signifie « sur demande » sur certaines expériences ?", a: "Que la maison confirme votre date avant que la réservation soit définitive. Vous envoyez votre date et le nombre de personnes, nous vérifions auprès d'elle, et vous avez une réponse sous 24 heures. Rien n'est engagé tant que nous n'avons pas confirmé, et nous vous dirons tout de suite si la date ne peut pas être tenue." },
+        { q: "Puis-je réserver pour une personne ?", a: "Certaines expériences ont un minimum de deux personnes parce que la séance est tarifée par groupe. Le minimum est indiqué sur chaque page, à la taille du groupe." },
+        { q: "Organisez-vous le transport ou une prise en charge à l'hôtel ?", a: "Non. Chaque expérience se fait avec rendez-vous sur place : vous vous y rendez par vos propres moyens et repartez à la fin. Nous envoyons des indications claires, la gare la plus proche et le temps de marche une fois votre réservation confirmée." },
+      ]},
+      { heading: "Le jour même", items: [
+        { q: "Quelqu'un parlera-t-il ma langue ?", a: "Oui. Un guide-interprète est inclus dans chaque réservation et reste avec vous du début à la fin. Le maître enseigne généralement en japonais ; votre guide porte la conversation dans les deux sens, y compris vos questions." },
+        { q: "Où exactement nous retrouvons-nous ?", a: "Le point de rendez-vous est confirmé par e-mail une fois la réservation définitive. Certains lieux partenaires demandent que leur nom et leur adresse restent privés jusque-là ; la page de l'expérience indique donc le quartier et la gare la plus proche plutôt que l'adresse." },
+        { q: "Comment m'habiller ?", a: "Des vêtements confortables dans lesquels vous pouvez bouger. Plusieurs lieux sont des pièces en tatami où vous retirerez vos chaussures : des chaussettes sans trou sont une vraie gentillesse envers vous-même. Toute consigne plus précise figure sur la page de l'expérience." },
+        { q: "Puis-je prendre des photos ?", a: "Presque toujours, et la plupart des séances prévoient un moment pour cela. Quelques lieux limitent les photos pendant certaines parties ; votre guide vous le dira." },
+      ]},
+      { heading: "Qui peut participer", items: [
+        { q: "Les enfants sont-ils les bienvenus ?", a: "Cela dépend de l'expérience — la tranche d'âge est indiquée sur chaque page. Lorsqu'ils peuvent participer, leur tarif est souvent réduit." },
+        { q: "J'ai des tatouages. Est-ce un problème ?", a: "Pour nos expériences, en général non. Si un lieu demande de les couvrir, c'est indiqué sur sa page. Les règles japonaises sur les tatouages concernent surtout les bains et les piscines, que nous ne réservons pas." },
+        { q: "Pouvez-vous tenir compte de régimes alimentaires ?", a: "Là où un repas est servi, oui, avec préavis. Dites-le-nous à la réservation — allergies, végétarien, végétalien, halal — et nous confirmerons ce que la cuisine peut faire avant que vous payiez." },
+        { q: "Et l'accessibilité ?", a: "Plusieurs lieux sont des bâtiments anciens avec des marches et sans ascenseur. Dites-nous ce dont vous avez besoin et nous vérifierons auprès du lieu précis plutôt que de deviner ; si ce n'est pas possible, nous le dirons." },
+      ]},
+      { heading: "Paiement et modifications", items: [
+        { q: "Dans quelle devise est-ce que je paie ?", a: "Les prix sont fixés et débités en yens japonais. Votre banque convertit à son propre taux, le montant dans votre devise peut donc différer légèrement d'une estimation affichée." },
+        { q: "Qu'est-ce qui est inclus dans le prix ?", a: "La séance elle-même et votre guide-interprète. Tout ce qui n'est pas inclus — un souvenir que vous gardez, un artiste supplémentaire, l'expédition d'une pièce — est listé sur la page avant de réserver." },
+        { q: "Puis-je annuler ou changer de date ?", a: "Les conditions d'annulation figurent sur chaque page, car elles varient selon le lieu. Certaines sont gratuites jusqu'à sept jours avant ; d'autres facturent à partir de quatre jours. Lisez les conditions de la page que vous réservez." },
+        { q: "Et si le lieu annule ?", a: "Vous êtes intégralement remboursé. Lorsque nous pouvons d'abord proposer une autre date, nous le faisons." },
+      ]},
+    ],
+    closing: { heading: "Encore hésitant ?", body: "Dites-nous vos dates au Japon et ce qui vous intéresse, et nous vous dirons honnêtement ce qui vaut votre après-midi.", cta: "Parcourir les expériences" },
+  },
+  "zh-tw": {
+    title: "常見問題",
+    metaDescription: "預約、語言、時間、穿著、飲食與取消——旅客在預約東京或京都的文化體驗前常問的問題。",
+    lead: "如果這裡沒有您的問題，請來信。由專人回覆，通常當天就會回。",
+    groups: [
+      { heading: "預約", items: [
+        { q: "應該提前多久預約？", a: "大多數體驗提前兩到四週即可。京都的舞妓與藝妓座敷宴至少需提前三天，春秋兩季很快額滿。若日期很近，也請詢問——總會有人取消。" },
+        { q: "部分體驗標示「需確認」是什麼意思？", a: "表示場地會先確認您的日期，預約才成立。您送出希望的日期與人數，我們向場地確認，並在 24 小時內回覆。在我們確認之前一切都未定，若日期無法保留，我們會立刻告知。" },
+        { q: "可以一個人預約嗎？", a: "部分體驗因為以組計價，最少需兩人。最少人數標示在各體驗頁面的團體人數欄。" },
+        { q: "有安排交通或飯店接送嗎？", a: "沒有。所有體驗都是現場集合：您自行前往，結束後自行離開。預約確認後我們會寄出清楚的路線、最近車站與步行時間。" },
+      ]},
+      { heading: "當天", items: [
+        { q: "會有人說我的語言嗎？", a: "會。每筆預約都含口譯導遊，全程陪同。師傅通常以日語教學；導遊負責雙向溝通，包括您的提問。" },
+        { q: "確切集合地點在哪裡？", a: "預約成立後以電子郵件確認。部分合作場地希望在此之前不公開名稱與地址，因此體驗頁面標示的是區域與最近車站，而非街道地址。" },
+        { q: "該怎麼穿？", a: "方便活動的舒適衣物。有幾個場地是榻榻米房間，需要脫鞋，所以襪子沒有破洞真的是善待自己。若有更具體的要求，會標示在體驗頁面。" },
+        { q: "可以拍照嗎？", a: "幾乎都可以，多數體驗還會安排拍照時間。少數場地在部分環節限制拍照；導遊會告訴您何時。" },
+      ]},
+      { heading: "誰能參加", items: [
+        { q: "歡迎兒童嗎？", a: "視體驗而定——年齡範圍標示在各頁面。可參加的體驗，兒童價格通常較低。" },
+        { q: "我有刺青，會有問題嗎？", a: "就我們的體驗而言，通常不會。若特定場地要求遮蓋，會標示在該體驗頁面。日本關於刺青的規定主要涉及澡堂與泳池，而我們不安排這些。" },
+        { q: "能配合飲食需求嗎？", a: "有供餐的體驗可以，需事先告知。預約時請說明——過敏、素食、純素、清真——我們會在您付款前確認廚房能做到什麼。" },
+        { q: "無障礙方面呢？", a: "有幾個場地是有階梯、無電梯的老建築。告訴我們您的需求，我們會向該場地確認而非猜測；若不可行，我們會如實告知。" },
+      ]},
+      { heading: "付款與更改", items: [
+        { q: "以什麼貨幣付款？", a: "價格以日圓訂定並收取。您的發卡機構會以自己的匯率換算，因此您的貨幣金額可能與頁面上的估算略有出入。" },
+        { q: "價格包含什麼？", a: "體驗本身與您的口譯導遊。不包含的項目——可帶走的作品、額外表演者、將作品寄回家——都在預約前列於體驗頁面。" },
+        { q: "可以取消或更改日期嗎？", a: "取消條款因場地而異，因此印在每個體驗頁面上。有些七天前免費，有些從四天前開始收費。請閱讀您預約頁面上的條款。" },
+        { q: "如果場地方取消呢？", a: "您將獲得全額退款。若能先提供替代日期，我們會先提供。" },
+      ]},
+    ],
+    closing: { heading: "還在考慮？", body: "告訴我們您在日本的日期與感興趣的事，我們會誠實地說什麼值得您的下午。", cta: "瀏覽體驗" },
   },
 };
 

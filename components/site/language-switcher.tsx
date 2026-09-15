@@ -56,8 +56,8 @@ export const LOCALES = [
   { code: "en", short: "EN", label: "English", Flag: FlagEN, available: true },
   { code: "es", short: "ES", label: "Español", Flag: FlagES, available: true },
   { code: "ja", short: "日本語", label: "日本語", Flag: FlagJA, available: true },
-  { code: "fr", short: "FR", label: "Français", Flag: FlagFR, available: false },
-  { code: "zh-tw", short: "繁中", label: "繁體中文", Flag: FlagTW, available: false },
+  { code: "fr", short: "FR", label: "Français", Flag: FlagFR, available: true },
+  { code: "zh-tw", short: "繁中", label: "繁體中文", Flag: FlagTW, available: true },
 ] as const;
 
 // Maps the current pathname to its equivalent in another published language.

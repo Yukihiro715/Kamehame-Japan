@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       path: `/${lang}/${collection}/`,
       image: data.heroImg,
     }),
-    { en: `/en/${collection}/`, es: `/es/${collection}/`, ja: `/ja/${collection}/` },
+    Object.fromEntries(LANGS.map((l) => [l, `/${l}/${collection}/`])),
   );
 }
 

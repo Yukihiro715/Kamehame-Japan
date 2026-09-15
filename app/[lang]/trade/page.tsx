@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const T = t(lang);
   return withAlternates(
     socialMeta({ lang, title: `${T.tradeH} | KAMEHAME JAPAN`, description: T.tradeLead, path: `/${lang}/trade/` }),
-    { en: "/en/trade/", es: "/es/trade/", ja: "/ja/trade/" },
+    Object.fromEntries(LANGS.map((l) => [l, `/${l}/trade/`])),
   );
 }
 

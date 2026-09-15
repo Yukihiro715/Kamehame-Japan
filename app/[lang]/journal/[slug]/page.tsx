@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       image: article.img,
       type: "article",
     }),
-    { en: `/en/journal/${slug}/`, es: `/es/journal/${slug}/`, ja: `/ja/journal/${slug}/` },
+    Object.fromEntries(LANGS.filter((l) => article.copy[l]).map((l) => [l, `/${l}/journal/${slug}/`])),
   );
 }
 

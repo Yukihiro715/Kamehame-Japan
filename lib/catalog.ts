@@ -314,17 +314,23 @@ export const tours: Tour[] = [
 
 import { CANCELLATION_ES, categoriesEs, citiesEs, experiencesEs, toursEs } from "@/lib/catalog.es";
 import { CANCELLATION_JA, categoriesJa, citiesJa, experiencesJa, toursJa } from "@/lib/catalog.ja";
+import { CANCELLATION_FR, categoriesFr, citiesFr, experiencesFr, toursFr } from "@/lib/catalog.fr";
+import { CANCELLATION_ZH, categoriesZh, citiesZh, experiencesZh, toursZh } from "@/lib/catalog.zh-tw";
 import type { Lang } from "@/lib/i18n";
 
 export function catalogFor(lang: Lang) {
   const published = <T,>(list: T[]) => (TOURS_PUBLISHED ? list : []);
   if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: experiencesEs, tours: published(toursEs) };
   if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: experiencesJa, tours: published(toursJa) };
+  if (lang === "fr") return { cities: citiesFr, categories: categoriesFr, experiences: experiencesFr, tours: published(toursFr) };
+  if (lang === "zh-tw") return { cities: citiesZh, categories: categoriesZh, experiences: experiencesZh, tours: published(toursZh) };
   return { cities, categories, experiences, tours: published(tours) };
 }
 
-export const cancellationFor = (lang: Lang) =>
-  lang === "es" ? CANCELLATION_ES : lang === "ja" ? CANCELLATION_JA : CANCELLATION;
+const CANCELLATIONS: Record<Lang, string> = {
+  en: CANCELLATION, es: CANCELLATION_ES, ja: CANCELLATION_JA, fr: CANCELLATION_FR, "zh-tw": CANCELLATION_ZH,
+};
+export const cancellationFor = (lang: Lang) => CANCELLATIONS[lang];
 
 // --- lookups ---------------------------------------------------------------
 

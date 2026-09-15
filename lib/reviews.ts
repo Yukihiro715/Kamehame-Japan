@@ -117,7 +117,6 @@ export const featuredReviews = (limit = 3): Review[] =>
   REVIEWS_PUBLISHED ? [...SAMPLE_REVIEWS].sort((a, b) => b.rating - a.rating).slice(0, limit) : [];
 
 /** Locale-aware date for display beneath a review. */
+const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
 export const reviewDate = (iso: string, lang: Lang) =>
-  new Date(iso).toLocaleDateString(lang === "ja" ? "ja-JP" : lang === "es" ? "es-ES" : "en-GB", {
-    year: "numeric", month: "long",
-  });
+  new Date(iso).toLocaleDateString(DATE_LOCALE[lang], { year: "numeric", month: "long" });

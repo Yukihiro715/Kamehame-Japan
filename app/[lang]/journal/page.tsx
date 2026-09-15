@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: T.journalLead,
       path: `/${lang}/journal/`,
     }),
-    { en: "/en/journal/", es: "/es/journal/", ja: "/ja/journal/" },
+    Object.fromEntries(LANGS.map((l) => [l, `/${l}/journal/`])),
   );
 }
 

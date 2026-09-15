@@ -10,7 +10,7 @@ export const metadata: Metadata = withAlternates(
       "Private cultural experiences in Tokyo and Kyoto, led by Japanese masters with an interpreter guide by your side.",
     path: "/",
   }),
-  { en: "/", es: "/es/", ja: "/ja/" },
+  { en: "/", es: "/es/", ja: "/ja/", fr: "/fr/", "zh-tw": "/zh-tw/" },
 );
 
 export default function Home() {

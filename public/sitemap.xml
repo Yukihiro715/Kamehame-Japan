@@ -9,6 +9,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/</loc>
@@ -18,6 +20,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/</loc>
@@ -27,6 +31,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/</loc>
@@ -36,6 +64,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tokyo/</loc>
@@ -45,6 +75,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tokyo/</loc>
@@ -54,6 +86,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kyoto/</loc>
@@ -63,6 +119,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/kyoto/</loc>
@@ -72,6 +130,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/kyoto/</loc>
@@ -81,6 +141,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kyoto/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kyoto/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/sushi/</loc>
@@ -90,6 +174,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sushi/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sushi/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sushi/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/sushi/</loc>
@@ -99,6 +185,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sushi/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sushi/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sushi/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/sushi/</loc>
@@ -108,6 +196,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sushi/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sushi/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sushi/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/sushi/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sushi/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/sushi/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sushi/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sushi/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/sumo/</loc>
@@ -117,6 +229,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sumo/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sumo/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sumo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/sumo/</loc>
@@ -126,6 +240,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sumo/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sumo/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sumo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/sumo/</loc>
@@ -135,6 +251,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sumo/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sumo/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sumo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/sumo/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sumo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/sumo/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sumo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sumo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tea-ceremony/</loc>
@@ -144,6 +284,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tea-ceremony/</loc>
@@ -153,6 +295,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tea-ceremony/</loc>
@@ -162,6 +306,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tea-ceremony/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tea-ceremony/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kimono/</loc>
@@ -171,6 +339,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kimono/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kimono/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kimono/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/kimono/</loc>
@@ -180,6 +350,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kimono/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kimono/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kimono/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/kimono/</loc>
@@ -189,6 +361,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kimono/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kimono/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kimono/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kimono/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kimono/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kimono/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kimono/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kimono/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/geisha/</loc>
@@ -198,6 +394,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/geisha/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/geisha/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/geisha/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/geisha/</loc>
@@ -207,6 +405,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/geisha/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/geisha/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/geisha/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/geisha/</loc>
@@ -216,6 +416,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/geisha/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/geisha/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/geisha/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/geisha/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/geisha/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/geisha/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/geisha/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/geisha/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/swordsmith/</loc>
@@ -225,6 +449,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/swordsmith/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/swordsmith/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/swordsmith/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/swordsmith/</loc>
@@ -234,6 +460,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/swordsmith/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/swordsmith/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/swordsmith/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/swordsmith/</loc>
@@ -243,6 +471,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/swordsmith/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/swordsmith/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/swordsmith/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/swordsmith/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/swordsmith/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/swordsmith/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/swordsmith/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/swordsmith/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/anime-nail-art/</loc>
@@ -252,6 +504,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/anime-nail-art/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/anime-nail-art/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/anime-nail-art/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/anime-nail-art/</loc>
@@ -261,6 +515,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/anime-nail-art/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/anime-nail-art/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/anime-nail-art/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/anime-nail-art/</loc>
@@ -270,6 +526,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/anime-nail-art/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/anime-nail-art/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/anime-nail-art/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/anime-nail-art/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/anime-nail-art/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/anime-nail-art/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/anime-nail-art/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/anime-nail-art/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/experiences/</loc>
@@ -279,6 +559,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/experiences/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/experiences/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/experiences/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/experiences/</loc>
@@ -288,6 +570,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/experiences/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/experiences/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/experiences/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/experiences/</loc>
@@ -297,6 +581,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/experiences/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/experiences/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/experiences/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/experiences/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/experiences/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/experiences/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/experiences/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/experiences/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/sushi-masterclass/</loc>
@@ -306,6 +614,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sushi-masterclass/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sushi-masterclass/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sushi-masterclass/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tokyo/sushi-masterclass/</loc>
@@ -315,6 +625,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sushi-masterclass/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sushi-masterclass/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sushi-masterclass/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tokyo/sushi-masterclass/</loc>
@@ -324,6 +636,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sushi-masterclass/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sushi-masterclass/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sushi-masterclass/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/sushi-masterclass/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sushi-masterclass/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/sushi-masterclass/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sushi-masterclass/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sushi-masterclass/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/sumo-morning-practice/</loc>
@@ -333,6 +669,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sumo-morning-practice/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sumo-morning-practice/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sumo-morning-practice/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tokyo/sumo-morning-practice/</loc>
@@ -342,6 +680,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sumo-morning-practice/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sumo-morning-practice/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sumo-morning-practice/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tokyo/sumo-morning-practice/</loc>
@@ -351,6 +691,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sumo-morning-practice/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sumo-morning-practice/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sumo-morning-practice/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/sumo-morning-practice/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sumo-morning-practice/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/sumo-morning-practice/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/sumo-morning-practice/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/sumo-morning-practice/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/kimono-photo-walk/</loc>
@@ -360,6 +724,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kimono-photo-walk/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kimono-photo-walk/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kimono-photo-walk/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tokyo/kimono-photo-walk/</loc>
@@ -369,6 +735,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kimono-photo-walk/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kimono-photo-walk/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kimono-photo-walk/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tokyo/kimono-photo-walk/</loc>
@@ -378,6 +746,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kimono-photo-walk/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kimono-photo-walk/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kimono-photo-walk/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/kimono-photo-walk/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kimono-photo-walk/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/kimono-photo-walk/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kimono-photo-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kimono-photo-walk/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/katana-forge-visit/</loc>
@@ -387,6 +779,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/katana-forge-visit/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/katana-forge-visit/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/katana-forge-visit/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tokyo/katana-forge-visit/</loc>
@@ -396,6 +790,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/katana-forge-visit/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/katana-forge-visit/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/katana-forge-visit/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tokyo/katana-forge-visit/</loc>
@@ -405,6 +801,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/katana-forge-visit/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/katana-forge-visit/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/katana-forge-visit/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/katana-forge-visit/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/katana-forge-visit/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/katana-forge-visit/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/katana-forge-visit/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/katana-forge-visit/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/anime-nail-art-session/</loc>
@@ -414,6 +834,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/anime-nail-art-session/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/anime-nail-art-session/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/anime-nail-art-session/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/tokyo/anime-nail-art-session/</loc>
@@ -423,6 +845,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/anime-nail-art-session/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/anime-nail-art-session/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/anime-nail-art-session/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/tokyo/anime-nail-art-session/</loc>
@@ -432,6 +856,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/anime-nail-art-session/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/anime-nail-art-session/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/anime-nail-art-session/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/anime-nail-art-session/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/anime-nail-art-session/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/anime-nail-art-session/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/anime-nail-art-session/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/anime-nail-art-session/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kyoto/evening-with-geiko/</loc>
@@ -441,6 +889,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/evening-with-geiko/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/evening-with-geiko/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/evening-with-geiko/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/kyoto/evening-with-geiko/</loc>
@@ -450,6 +900,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/evening-with-geiko/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/evening-with-geiko/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/evening-with-geiko/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/kyoto/evening-with-geiko/</loc>
@@ -459,6 +911,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/evening-with-geiko/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/evening-with-geiko/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/evening-with-geiko/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kyoto/evening-with-geiko/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/evening-with-geiko/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kyoto/evening-with-geiko/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/evening-with-geiko/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/evening-with-geiko/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kyoto/tea-ceremony-with-master/</loc>
@@ -468,6 +944,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/tea-ceremony-with-master/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/tea-ceremony-with-master/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/tea-ceremony-with-master/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/kyoto/tea-ceremony-with-master/</loc>
@@ -477,6 +955,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/tea-ceremony-with-master/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/tea-ceremony-with-master/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/tea-ceremony-with-master/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/kyoto/tea-ceremony-with-master/</loc>
@@ -486,6 +966,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/tea-ceremony-with-master/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/tea-ceremony-with-master/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/tea-ceremony-with-master/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kyoto/tea-ceremony-with-master/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/tea-ceremony-with-master/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kyoto/tea-ceremony-with-master/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/tea-ceremony-with-master/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/tea-ceremony-with-master/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kyoto/kimono-higashiyama-walk/</loc>
@@ -495,6 +999,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kimono-higashiyama-walk/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kimono-higashiyama-walk/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kimono-higashiyama-walk/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/kyoto/kimono-higashiyama-walk/</loc>
@@ -504,6 +1010,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kimono-higashiyama-walk/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kimono-higashiyama-walk/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kimono-higashiyama-walk/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/kyoto/kimono-higashiyama-walk/</loc>
@@ -513,6 +1021,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kimono-higashiyama-walk/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kimono-higashiyama-walk/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kimono-higashiyama-walk/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kyoto/kimono-higashiyama-walk/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kimono-higashiyama-walk/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kyoto/kimono-higashiyama-walk/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kimono-higashiyama-walk/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kimono-higashiyama-walk/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kyoto/kyoto-sushi-class/</loc>
@@ -522,6 +1054,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-sushi-class/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-sushi-class/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/</loc>
@@ -531,6 +1065,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-sushi-class/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-sushi-class/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/kyoto/kyoto-sushi-class/</loc>
@@ -540,6 +1076,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-sushi-class/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-sushi-class/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kyoto/kyoto-sushi-class/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-sushi-class/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kyoto/kyoto-sushi-class/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-sushi-class/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-sushi-class/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/about/</loc>
@@ -549,6 +1109,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/about/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/about/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/about/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/about/</loc>
@@ -558,6 +1120,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/about/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/about/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/about/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/about/</loc>
@@ -567,6 +1131,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/about/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/about/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/about/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/about/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/about/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/about/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/about/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/about/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/about/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/about/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/about/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/about/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/about/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/faq/</loc>
@@ -576,6 +1164,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/faq/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/faq/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/faq/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/faq/</loc>
@@ -585,6 +1175,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/faq/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/faq/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/faq/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/faq/</loc>
@@ -594,6 +1186,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/faq/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/faq/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/faq/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/faq/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/faq/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/faq/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/faq/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/faq/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/faq/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/faq/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/faq/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/faq/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/faq/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/</loc>
@@ -603,6 +1219,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/journal/</loc>
@@ -612,6 +1230,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/journal/</loc>
@@ -621,6 +1241,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/contact/</loc>
@@ -630,6 +1274,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/contact/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/contact/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/contact/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/contact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/contact/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/contact/</loc>
@@ -639,6 +1285,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/contact/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/contact/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/contact/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/contact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/contact/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/contact/</loc>
@@ -648,6 +1296,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/contact/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/contact/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/contact/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/contact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/contact/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/contact/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/contact/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/contact/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/contact/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/contact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/contact/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/contact/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/contact/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/contact/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/contact/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/contact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/contact/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/trade/</loc>
@@ -657,6 +1329,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/trade/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/trade/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/trade/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/trade/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/trade/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/trade/</loc>
@@ -666,6 +1340,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/trade/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/trade/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/trade/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/trade/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/trade/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/trade/</loc>
@@ -675,6 +1351,30 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/trade/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/trade/"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/trade/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/trade/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/trade/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/trade/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/trade/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/trade/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/trade/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/trade/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/trade/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/trade/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/trade/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/trade/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/trade/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/trade/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/trade/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/booking-a-maiko-evening/</loc>

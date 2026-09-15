@@ -11,11 +11,13 @@ import type { Lang } from "@/lib/i18n";
 export const SITE_NAME = "KAMEHAME JAPAN";
 
 /** Locale codes as Open Graph expects them. */
-const OG_LOCALE: Record<Lang, string> = { en: "en_US", es: "es_ES", ja: "ja_JP" };
+const OG_LOCALE: Record<Lang, string> = { en: "en_US", es: "es_ES", ja: "ja_JP", fr: "fr_FR", "zh-tw": "zh_TW" };
 
 /** Falls back to the branded share card when a page has no image of its own. */
-const defaultImage = (lang: Lang) =>
-  lang === "es" ? "/og-default-es.jpg" : lang === "ja" ? "/og-default-ja.jpg" : "/og-default.jpg";
+const OG_DEFAULT: Record<Lang, string> = {
+  en: "/og-default.jpg", es: "/og-default-es.jpg", ja: "/og-default-ja.jpg", fr: "/og-default-fr.jpg", "zh-tw": "/og-default-zh-tw.jpg",
+};
+const defaultImage = (lang: Lang) => OG_DEFAULT[lang];
 
 export const absolute = (path: string) => `${SITE_ORIGIN}${path}`;
 
