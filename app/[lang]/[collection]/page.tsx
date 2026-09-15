@@ -6,6 +6,8 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { ListingCard } from "@/components/site/listing-card";
+import { articleDate, articlesForCollection } from "@/lib/articles";
+import { catalogFor } from "@/lib/catalog";
 import { collectionSlugs, getCollection } from "@/lib/collections";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
@@ -39,6 +41,10 @@ export default async function CollectionPage({ params }: Props) {
   const data = getCollection(collection, lang);
   if (!data) notFound();
   const T = t(lang);
+
+  // Articles attached to any experience in this city or category.
+  const { experiences } = catalogFor(lang);
+  const reading = articlesForCollection(collection, lang, (slug) => experiences.find((e) => e.slug === slug));
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -75,6 +81,27 @@ export default async function CollectionPage({ params }: Props) {
         <div className="listing-grid">
           {data.items.map((item) => <ListingCard key={item.href} item={item} lang={lang} />)}
         </div>
+
+        {reading.length > 0 && (
+          <section className="collection-journal">
+            <div className="section-heading horizontal">
+              <h2>{T.journalForCollection}</h2>
+              <Link className="underlined-link" href={`/${lang}/journal/`}>{T.journalAll} <ArrowRight /></Link>
+            </div>
+            <div className="journal-grid">
+              {reading.map((a) => (
+                <Link className="journal-card" key={a.slug} href={`/${lang}/journal/${a.slug}/`}>
+                  <img src={a.img} alt={a.alt} loading="lazy" />
+                  <div>
+                    <p className="journal-meta">{articleDate(a.date, lang)} · {T.readMinutes(a.minutes)}</p>
+                    <h3>{a.copy[lang]!.title}</h3>
+                    <p>{a.copy[lang]!.standfirst}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         <div className="collection-seo">
           <div>

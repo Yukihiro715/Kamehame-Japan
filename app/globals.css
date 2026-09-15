@@ -610,3 +610,6 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 .experience-art .soon-badge { position:absolute; top:14px; left:14px; right:auto; bottom:auto; width:auto; height:auto;
   font-size:10.5px; line-height:1; letter-spacing:.14em; padding:5px 11px; opacity:1; color:var(--white); background:var(--ink);
   text-shadow:none; font-family:var(--font-display); transform:skewX(-10deg); }
+.collection-journal { margin:64px 0 8px; padding-top:40px; border-top:2px solid var(--ink); }
+.collection-journal .section-heading h2 { font-size:clamp(24px,2.6vw,34px); }
+.collection-journal .journal-grid { margin-top:22px; }
