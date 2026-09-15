@@ -78,7 +78,21 @@ npm run deploy
 - [ ] スマートフォンで表示崩れがない(予約バーの固定表示含む)
 - [ ] https でアクセスでき、鍵マークが出る
 
-## 7. 以後の更新フロー
+## 7. 以後の更新フロー(自動デプロイ)
+
+GitHub Actions による自動デプロイを設定済み(`.github/workflows/deploy.yml`)。
+**main ブランチにコードが入ると、自動でビルドして Cloudflare Workers に公開される。**
+
+初回セットアップ(1回だけ):
+1. Cloudflare ダッシュボード右上のプロフィール →「マイ プロフィール」→「APIトークン」
+2. 「トークンを作成する」→ テンプレート「**Cloudflare Workers を編集する**」を使用 → アカウントを選択 → 続行 → トークンを作成 → 表示された文字列をコピー(この画面でしか見られない)
+3. GitHub のリポジトリページ → **Settings → Secrets and variables → Actions → New repository secret**
+4. Name: `CLOUDFLARE_API_TOKEN` / Secret: コピーしたトークン → Add secret
+
+以後の更新は main へのプッシュだけで公開まで自動。手動で動かしたいときは
+GitHub の Actions タブ →「Deploy to Cloudflare Workers」→ Run workflow。
+
+## 8. 手動デプロイ(予備)
 
 ```bash
 git pull
@@ -86,7 +100,7 @@ npm ci        # package.json が変わったときのみ
 npm run deploy
 ```
 
-## 8. 未接続のまま公開している項目(順次対応)
+## 9. 未接続のまま公開している項目(順次対応)
 
 - Bókun 予約ウィジェット(予約ボックスは「開設準備中」表示)
 - パートナーフォームの送信先(現在は準備中表記)
