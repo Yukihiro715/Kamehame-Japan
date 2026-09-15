@@ -1432,6 +1432,116 @@
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/privacy/"/>
   </url>
   <url>
+    <loc>https://kamehame-japan.com/en/legal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/legal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/legal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/legal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/legal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/legal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/legal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/legal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/legal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/legal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/legal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/legal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/legal/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/legal/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/legal/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/terms/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/terms/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/terms/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/terms/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/terms/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/terms/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/terms/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/terms/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/terms/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/terms/"/>
+  </url>
+  <url>
     <loc>https://kamehame-japan.com/en/journal/booking-a-maiko-evening/</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>

@@ -19,6 +19,8 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
         <Link href={`/${lang}/contact/`}>{T.contactH}</Link>
         <Link href={`/${lang}/trade/`}>{T.contactTradeCta}</Link>
         <Link href={`/${lang}/privacy/`}>{T.footerPrivacy}</Link>
+        <Link href={`/${lang}/legal/`}>{T.footerLegal}</Link>
+        <Link href={`/${lang}/terms/`}>{T.footerTerms}</Link>
         <ConsentSettingsLink lang={lang} />
       </div>
       <div className="footer-meta"><p>{T.footerOperated}</p><p>© 2026 KAMEHAME JAPAN</p></div>

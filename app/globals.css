@@ -945,3 +945,11 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .cookie-table tr:last-child td { border-bottom:0; }
 .cookie-table code { font-size:12.5px; white-space:nowrap; }
 :is([lang="ja"], [lang="zh-tw"]) .cookie-table th { text-transform:none; letter-spacing:.04em; }
+
+/* --- Legal notice table --------------------------------------------------- */
+.legal-table { margin:0; border:2px solid var(--ink); background:var(--white); }
+.legal-table > div { display:grid; grid-template-columns:200px 1fr; gap:16px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.legal-table > div:last-child { border-bottom:0; }
+.legal-table dt { font-size:12px; letter-spacing:.04em; color:var(--muted); padding-top:3px; }
+.legal-table dd { margin:0; font-size:14px; line-height:1.8; color:#4a463e; }
+@media(max-width:620px){ .legal-table > div { grid-template-columns:1fr; gap:4px; padding:12px 14px; } }

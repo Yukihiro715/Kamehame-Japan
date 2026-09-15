@@ -73,7 +73,7 @@ for (const slug of toursPublished ? tours : []) {
   }
 }
 
-for (const page of ["about", "faq", "journal", "contact", "trade", "privacy"]) {
+for (const page of ["about", "faq", "journal", "contact", "trade", "privacy", "legal", "terms"]) {
   for (const lang of LANGS) {
     add(`/${lang}/${page}/`, {
       priority: "0.5",

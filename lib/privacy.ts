@@ -31,7 +31,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Who is responsible",
         body: [
-          "KAMEHAME JAPAN is operated by Prosent Inc., Kachidoki 1-3-1, 43F, Chuo-ku, Tokyo, Japan, which decides how the information described here is used. Write to hello@kamehame-japan.com with any question about this page or about your own data.",
+          "KAMEHAME JAPAN is operated by Prosent Inc., Kachidoki 1-3-1, 43F, Chuo-ku, Tokyo 104-0054, Japan, which decides how the information described here is used. Write to hello@kamehame-japan.com with any question about this page or about your own data.",
         ],
       },
       {
@@ -97,7 +97,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "運営者",
         body: [
-          "KAMEHAME JAPANは、Prosent Inc.(東京都中央区勝どき1-3-1 43F)が運営し、ここに記載する情報の取り扱いを決定しています。本ページやお客様ご自身の情報についてのご質問は hello@kamehame-japan.com までご連絡ください。",
+          "KAMEHAME JAPANは、Prosent Inc.(〒104-0054 東京都中央区勝どき1-3-1 43F)が運営し、ここに記載する情報の取り扱いを決定しています。本ページやお客様ご自身の情報についてのご質問は hello@kamehame-japan.com までご連絡ください。",
         ],
       },
       {
@@ -163,7 +163,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Quién es responsable",
         body: [
-          "KAMEHAME JAPAN es operado por Prosent Inc., Kachidoki 1-3-1, 43F, Chuo-ku, Tokio, Japón, que decide cómo se utiliza la información descrita aquí. Escriba a hello@kamehame-japan.com con cualquier duda sobre esta página o sobre sus datos.",
+          "KAMEHAME JAPAN es operado por Prosent Inc., Kachidoki 1-3-1, 43F, Chuo-ku, Tokio 104-0054, Japón, que decide cómo se utiliza la información descrita aquí. Escriba a hello@kamehame-japan.com con cualquier duda sobre esta página o sobre sus datos.",
         ],
       },
       {
@@ -229,7 +229,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Qui est responsable",
         body: [
-          "KAMEHAME JAPAN est exploité par Prosent Inc., Kachidoki 1-3-1, 43F, Chuo-ku, Tokyo, Japon, qui décide de l'usage des informations décrites ici. Écrivez à hello@kamehame-japan.com pour toute question sur cette page ou sur vos propres données.",
+          "KAMEHAME JAPAN est exploité par Prosent Inc., Kachidoki 1-3-1, 43F, Chuo-ku, Tokyo 104-0054, Japon, qui décide de l'usage des informations décrites ici. Écrivez à hello@kamehame-japan.com pour toute question sur cette page ou sur vos propres données.",
         ],
       },
       {
@@ -295,7 +295,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "營運者",
         body: [
-          "KAMEHAME JAPAN 由 Prosent Inc.（日本東京都中央區勝どき 1-3-1 43F）營運，並決定本頁所述資料的使用方式。對本頁或您個人資料有任何疑問，請來信 hello@kamehame-japan.com。",
+          "KAMEHAME JAPAN 由 Prosent Inc.（〒104-0054 日本東京都中央區勝どき 1-3-1 43F）營運，並決定本頁所述資料的使用方式。對本頁或您個人資料有任何疑問，請來信 hello@kamehame-japan.com。",
         ],
       },
       {
