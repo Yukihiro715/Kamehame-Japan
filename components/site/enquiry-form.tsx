@@ -7,12 +7,19 @@ import { t, type Lang } from "@/lib/i18n";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
+const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
+const fmtDate = (iso: string, lang: Lang) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString(DATE_LOCALE[lang], { month: "short", day: "numeric", timeZone: "UTC" });
+
 export interface EnquiryExperience {
   slug: string;
   title: string;
   partySize?: { min: number; max: number };
   /** Days of notice the venue needs; the date picker starts after them. */
   leadDays?: number;
+  /** Clock time (Japan) by which a request must be in, e.g. "17:00". After
+   *  it, the earliest selectable date moves one day later. */
+  cutoffTime?: string;
   /** Start times the venue offers; shown as a select when present. */
   startTimes?: string[];
 }
@@ -27,13 +34,19 @@ export function EnquiryForm({
   const times = experience?.startTimes && experience.startTimes.length > 0 ? experience.startTimes : undefined;
   // Pre-select the typical dinner slot so the example reads 18:00, not the last slot.
   const sampleTime = times?.includes("18:00") ? "18:00" : times?.[0];
-  // Earliest selectable date, in the visitor's own time zone — computed after
-  // mount so the server and the browser never disagree about "today".
+  // Earliest selectable date — computed after mount so the server and the
+  // browser never disagree about "today".
   const [minDate, setMinDate] = useState<string>();
   useEffect(() => {
-    const d = new Date(); d.setDate(d.getDate() + (experience?.leadDays ?? 3));
-    setMinDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
-  }, [experience?.leadDays]);
+    // "3 days before, by 17:00 Japan time": count from today in Japan, and
+    // once the cutoff hour has passed there, today no longer counts.
+    const lead = experience?.leadDays ?? 3;
+    const [ch, cm] = (experience?.cutoffTime ?? "17:00").split(":").map(Number);
+    const jst = new Date(Date.now() + 9 * 3600 * 1000);
+    const past = jst.getUTCHours() * 60 + jst.getUTCMinutes() >= ch * 60 + cm;
+    jst.setUTCDate(jst.getUTCDate() + lead + (past ? 1 : 0));
+    setMinDate(jst.toISOString().slice(0, 10));
+  }, [experience?.leadDays, experience?.cutoffTime]);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -110,6 +123,7 @@ export function EnquiryForm({
             <label>
               <span>{F.preferredDate}</span>
               <input name="date" type="date" required min={minDate} />
+              {minDate && <small className="form-hint">{F.earliestDate(fmtDate(minDate, lang), experience.leadDays ?? 3, experience.cutoffTime ?? "17:00")}</small>}
             </label>
             {times ? (
               <label>

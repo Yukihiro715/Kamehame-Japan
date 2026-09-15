@@ -131,8 +131,9 @@ export const experiencesEs: Experience[] = [
     title: "Banquete ozashiki con maiko y geiko",
     tagline: "Un salón privado en Kioto: cena, danza y juegos de sobremesa con geiko y maiko",
     duration: "2 horas", price: "¥139.600", priceUnit: "group", group: "Privado · 2–40 personas", ages: "Todas las edades", area: "Kioto (zona de Gion / Higashiyama)",
-    img: "/images/geiko-conversation.jpg", alt: "Huéspedes riendo con una maiko durante la cena en una sala privada de Kioto",
+    img: "/images/geiko-photo-together.jpg", alt: "Dos huéspedes y una maiko sonríen para una foto de recuerdo en una sala privada de Kioto",
     gallery: [
+      { img: "/images/geiko-conversation.jpg", alt: "Conversación durante la cena, con el intérprete en ambos sentidos", caption: "Conversación durante la cena, con el intérprete en ambos sentidos" },
       { img: "/images/geiko-maiko-seated.jpg", alt: "Una maiko se sienta junto a su mesa", caption: "Una maiko se sienta junto a su mesa" },
       { img: "/images/geiko-dance.jpg", alt: "Una danza ante el biombo dorado", caption: "Una danza ante el biombo dorado" },
       { img: "/images/geiko-dinner-course.jpg", alt: "La cena japonesa de varios platos (el menú cambia con la temporada)", caption: "La cena japonesa de varios platos (el menú cambia con la temporada)" },
@@ -142,7 +143,6 @@ export const experiencesEs: Experience[] = [
       { img: "/images/geiko-game-toratora.jpg", alt: "Tora-tora, un piedra-papel-tijera que se juega con todo el cuerpo", caption: "Tora-tora, un piedra-papel-tijera que se juega con todo el cuerpo" },
       { img: "/images/geiko-room-upstairs.jpg", alt: "Una sala del piso superior al estilo de las casas de té de Gion", caption: "Una sala del piso superior al estilo de las casas de té de Gion" },
       { img: "/images/geiko-room-garden.jpg", alt: "Una sala de la planta baja con vistas al jardín interior", caption: "Una sala de la planta baja con vistas al jardín interior" },
-      { img: "/images/geiko-photo-together.jpg", alt: "Fotografías de recuerdo para terminar", caption: "Fotografías de recuerdo para terminar" },
     ],
     cancellation: "Una vez confirmada la reserva se aplican gastos de cancelación: 50% hasta 4 días antes, 75% entre 3 y 2 días antes, 100% desde la víspera (hora de Japón; no presentarse, 100%). Los cambios de fecha siguen la misma escala y reducir el grupo aplica la tarifa a las plazas liberadas. Si no se puede asegurar una geiko o maiko para tu fecha, se reembolsa el importe completo.",
     whatYoullDo: [

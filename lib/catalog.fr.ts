@@ -130,8 +130,9 @@ export const experiencesFr: Experience[] = [
     title: "Banquet ozashiki avec maiko et geiko",
     tagline: "Un salon de banquet privé à Kyoto — dîner, danse et jeux de salon avec geiko et maiko",
     duration: "2 h", price: "¥139,600", priceUnit: "group", group: "Privé · 2 à 40 convives", ages: "Tous âges", area: "Kyoto (Gion / Higashiyama)",
-    img: "/images/geiko-conversation.jpg", alt: "Des convives riant avec une maiko autour du dîner dans une salle privée de Kyoto",
+    img: "/images/geiko-photo-together.jpg", alt: "Deux convives et une maiko sourient pour une photo souvenir dans une salle privée de Kyoto",
     gallery: [
+      { img: "/images/geiko-conversation.jpg", alt: "La conversation autour du dîner, l'interprète assurant les deux sens", caption: "La conversation autour du dîner, l'interprète assurant les deux sens" },
       { img: "/images/geiko-maiko-seated.jpg", alt: "Une maiko s'installe à votre table", caption: "Une maiko s'installe à votre table" },
       { img: "/images/geiko-dance.jpg", alt: "Une danse devant le paravent doré", caption: "Une danse devant le paravent doré" },
       { img: "/images/geiko-dinner-course.jpg", alt: "Le dîner japonais en plusieurs services (le menu change avec la saison)", caption: "Le dîner japonais en plusieurs services (le menu change avec la saison)" },
@@ -141,7 +142,6 @@ export const experiencesFr: Experience[] = [
       { img: "/images/geiko-game-toratora.jpg", alt: "Tora-tora, un pierre-feuille-ciseaux joué de tout le corps", caption: "Tora-tora, un pierre-feuille-ciseaux joué de tout le corps" },
       { img: "/images/geiko-room-upstairs.jpg", alt: "Une salle à l'étage, construite comme une maison de thé de Gion", caption: "Une salle à l'étage, construite comme une maison de thé de Gion" },
       { img: "/images/geiko-room-garden.jpg", alt: "Une salle au rez-de-chaussée donnant sur le jardin intérieur", caption: "Une salle au rez-de-chaussée donnant sur le jardin intérieur" },
-      { img: "/images/geiko-photo-together.jpg", alt: "Les photos souvenir pour finir", caption: "Les photos souvenir pour finir" },
     ],
     cancellation: "Des frais d'annulation s'appliquent dès que votre réservation est confirmée : 50 % jusqu'à 4 jours avant, 75 % de 3 à 2 jours avant, 100 % à partir de la veille (heure du Japon ; non-présentation 100 %). Les changements de date suivent le même barème, et la réduction du nombre de convives applique les frais aux places libérées. Si aucune geiko ou maiko ne peut être réservée pour votre date, vous êtes intégralement remboursé.",
     whatYoullDo: [

@@ -135,8 +135,9 @@ export const experiencesJa: Experience[] = [
     title: "舞妓・芸妓とのお座敷",
     tagline: "京都の貸切のお座敷で、料理と舞と、お座敷遊びを",
     duration: "2時間", price: "¥139,600", priceUnit: "group", group: "貸切・2〜40名", ages: "年齢制限なし", area: "京都(祇園・東山周辺)",
-    img: "/images/geiko-conversation.jpg", alt: "京都の貸切座敷で、舞妓と食事をしながら笑い合う参加者",
+    img: "/images/geiko-photo-together.jpg", alt: "京都の貸切座敷で、舞妓と一緒に記念撮影する参加者",
     gallery: [
+      { img: "/images/geiko-conversation.jpg", alt: "お食事をしながらの歓談。通訳が双方の言葉を橋渡しします", caption: "お食事をしながらの歓談。通訳が双方の言葉を橋渡しします" },
       { img: "/images/geiko-maiko-seated.jpg", alt: "舞妓さんがお席に加わります", caption: "舞妓さんがお席に加わります" },
       { img: "/images/geiko-dance.jpg", alt: "金屏風の前での舞", caption: "金屏風の前での舞" },
       { img: "/images/geiko-dinner-course.jpg", alt: "和食のコース(内容は季節により変わります)", caption: "和食のコース(内容は季節により変わります)" },
@@ -146,7 +147,6 @@ export const experiencesJa: Experience[] = [
       { img: "/images/geiko-game-toratora.jpg", alt: "全身で行うじゃんけん「とらとら」", caption: "全身で行うじゃんけん「とらとら」" },
       { img: "/images/geiko-room-upstairs.jpg", alt: "お茶屋造りの2階のお座敷", caption: "お茶屋造りの2階のお座敷" },
       { img: "/images/geiko-room-garden.jpg", alt: "中庭を望む1階のお席", caption: "中庭を望む1階のお席" },
-      { img: "/images/geiko-photo-together.jpg", alt: "最後に記念撮影", caption: "最後に記念撮影" },
     ],
     cancellation: "ご予約確定後のお取消しには取消料を申し受けます。4日前まで50%、3〜2日前75%、前日以降100%(日本時間。無連絡不参加は100%)。日程変更も同じ基準です。人数を減らされる場合は、減った席数に対して同率を申し受けます。なお、ご指定の日に芸妓・舞妓を手配できなかった場合は全額を返金いたします。",
     whatYoullDo: [

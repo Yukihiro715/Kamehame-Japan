@@ -580,7 +580,7 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
 .form-row.three { grid-template-columns:1fr 1fr 1fr; gap:14px; }
 .enquiry-form input[type="date"] { min-height:48px; -webkit-appearance:none; appearance:none; }
 .enquiry-form input[type="number"] { min-height:48px; }
-.form-row label, label.form-row { display:grid; gap:6px; }
+.form-row label, label.form-row { display:grid; gap:6px; align-content:start; }
 .enquiry-form span { font-size:12px; letter-spacing:.04em; color:var(--muted); }
 .enquiry-form input, .enquiry-form textarea { width:100%; box-sizing:border-box; border:2px solid var(--ink); background:var(--white);
   padding:12px 14px; font:inherit; font-size:14px; color:var(--ink); border-radius:0; }
@@ -642,6 +642,7 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 .xp-price-aff { font-family:var(--font-sans); font-size:15px; letter-spacing:0; color:#4a463e; }
 .xp-price-incl { margin:6px 0 2px; font-size:13.5px; line-height:1.6; font-weight:600; }
 .xp-no-payment { margin:12px 0 0; font-size:12.5px; color:var(--muted); }
+.form-hint { display:block; margin-top:-2px; font-size:11.5px; line-height:1.5; color:var(--muted); letter-spacing:0; }
 .form-after { margin:-4px 0 0; font-size:12.5px; line-height:1.7; color:#4a463e; }
 .form-after .form-privacy { display:block; margin-top:2px; }
 .xp-price span { font-size:13px; }

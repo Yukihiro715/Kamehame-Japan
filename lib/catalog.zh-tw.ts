@@ -130,8 +130,9 @@ export const experiencesZh: Experience[] = [
     title: "舞妓與藝妓的座敷宴",
     tagline: "京都的私人宴席——與藝妓、舞妓共享料理、舞蹈與座敷遊戲",
     duration: "2 小時", price: "¥139,600", priceUnit: "group", group: "包場 · 2 至 40 位", ages: "全年齡", area: "京都（祇園／東山一帶）",
-    img: "/images/geiko-conversation.jpg", alt: "在京都私人包廂中與舞妓共進晚餐、開懷大笑的賓客",
+    img: "/images/geiko-photo-together.jpg", alt: "在京都私人包廂中與舞妓合影留念的兩位賓客",
     gallery: [
+      { img: "/images/geiko-conversation.jpg", alt: "邊用餐邊交談，口譯負責雙向傳譯", caption: "邊用餐邊交談，口譯負責雙向傳譯" },
       { img: "/images/geiko-maiko-seated.jpg", alt: "舞妓入席相陪", caption: "舞妓入席相陪" },
       { img: "/images/geiko-dance.jpg", alt: "金屏風前的舞蹈", caption: "金屏風前的舞蹈" },
       { img: "/images/geiko-dinner-course.jpg", alt: "多道式日本料理晚餐（菜色隨季節變動）", caption: "多道式日本料理晚餐（菜色隨季節變動）" },
@@ -141,7 +142,6 @@ export const experiencesZh: Experience[] = [
       { img: "/images/geiko-game-toratora.jpg", alt: "「虎虎」——用全身來玩的猜拳", caption: "「虎虎」——用全身來玩的猜拳" },
       { img: "/images/geiko-room-upstairs.jpg", alt: "仿祇園茶屋建造的二樓包廂", caption: "仿祇園茶屋建造的二樓包廂" },
       { img: "/images/geiko-room-garden.jpg", alt: "可眺望中庭的一樓席位", caption: "可眺望中庭的一樓席位" },
-      { img: "/images/geiko-photo-together.jpg", alt: "最後的紀念合影", caption: "最後的紀念合影" },
     ],
     cancellation: "預約確認後取消將收取費用：4 天前 50%，3 至 2 天前 75%，前一天起 100%（日本時間；未到場 100%）。更改日期適用相同標準；減少人數則依釋出的座位收取。若無法為您的日期安排藝妓或舞妓，全額退款。",
     whatYoullDo: [

@@ -391,7 +391,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>
         <EnquiryForm
           kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL}
-          experience={{ slug: exp.slug, title: exp.title, partySize: exp.partySize, leadDays: avail?.cutoffDays ?? 3, startTimes: avail?.startTimes }}
+          experience={{ slug: exp.slug, title: exp.title, partySize: exp.partySize, leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime, startTimes: avail?.startTimes }}
         />
         {/* Bókun mount for the day online booking connects; nothing renders until then. */}
         <div id="bokun-widget-mount" data-experience={exp.slug} data-booking-type={exp.bookingType ?? "instant"} hidden />

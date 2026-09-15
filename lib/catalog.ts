@@ -291,8 +291,9 @@ export const experiences: Experience[] = [
     title: "Private Geisha Dining in Kyoto",
     tagline: "Share a meal, enjoy a traditional dance, and join the conversation with an interpreter.",
     duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
-    img: "/images/geiko-conversation.jpg", alt: "Guests laughing with a maiko over dinner in a private Kyoto room",
+    img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
+      { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },
       { img: "/images/geiko-maiko-seated.jpg", alt: "A maiko settles in beside your table", caption: "A maiko settles in beside your table" },
       { img: "/images/geiko-dance.jpg", alt: "A dance performed before the gold screen", caption: "A dance performed before the gold screen" },
       { img: "/images/geiko-dinner-course.jpg", alt: "The multi-course Japanese dinner (the menu changes with the season)", caption: "The multi-course Japanese dinner (the menu changes with the season)" },
@@ -302,7 +303,6 @@ export const experiences: Experience[] = [
       { img: "/images/geiko-game-toratora.jpg", alt: "Tora-tora, rock-paper-scissors played with the whole body", caption: "Tora-tora, rock-paper-scissors played with the whole body" },
       { img: "/images/geiko-room-upstairs.jpg", alt: "An upstairs room built in the style of a Gion teahouse", caption: "An upstairs room built in the style of a Gion teahouse" },
       { img: "/images/geiko-room-garden.jpg", alt: "A ground-floor room looking onto the inner garden", caption: "A ground-floor room looking onto the inner garden" },
-      { img: "/images/geiko-photo-together.jpg", alt: "Commemorative photographs to finish", caption: "Commemorative photographs to finish" },
     ],
     cancellation: "Cancellation fees apply once your booking is confirmed: 50% up to 4 days before, 75% 3–2 days before, 100% from the day before (Japan time; no-shows 100%). Date changes follow the same scale, and reducing your party applies the fee to the seats released. If a geiko or maiko cannot be secured for your date, you receive a full refund.",
     whatYoullDo: [
