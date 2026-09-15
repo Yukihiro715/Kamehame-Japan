@@ -38,8 +38,8 @@ const ARTICLES: Article[] = [
     date: "2026-08-20",
     minutes: 6,
     experiences: ["evening-with-geiko"],
-    img: "/images/exp-geisha.jpg",
-    alt: "Maiko performing a traditional dance with a fan",
+    img: "/images/geiko-conversation.jpg",
+    alt: "Guests laughing with a maiko over dinner in a private Kyoto room",
     copy: {
       en: {
         title: "How a maiko evening in Kyoto is actually arranged",

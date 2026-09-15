@@ -28,7 +28,7 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
           Zairon (Sensō-ji) · Basile Morin (Yasaka-dōri, Fushimi Inari) · Bobby.Creations (omakase counter) · tjabeljan (sumo stable) ·
           Japanexperterna.se (maiko dance) · Yanay Rosen (sushi chef) · Simon Q (dohyō-iri) · Ermell (tea ceremony) · KuboBella (serving tea) ·
           Maiko &amp; Geiko (maiko) · Rama (katana) · ElHeineken (Akihabara) · Erol Ahmed (bamboo grove) · H.Hmoderato (kimono garden) ·
-          The Metropolitan Museum of Art (kimono). Full attribution in IMAGE_CREDITS.md.
+          The Metropolitan Museum of Art (kimono). Geiko-evening photographs courtesy of the host venue. Full attribution in IMAGE_CREDITS.md.
         </p>
       </details>
     </footer>

@@ -23,3 +23,9 @@ CC BY / CC BY-SA images require this attribution to be retained wherever the ima
 | `public/images/tour-journey.jpg` | [Torii path with lantern at Fushimi Inari Taisha Shrine, Kyoto, Japan.jpg](https://commons.wikimedia.org/wiki/File:Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg) | Basile Morin | CC BY-SA 4.0 |
 
 The hero image `public/omotenashi-hero.png` was supplied with the original project handoff.
+
+## Partner-supplied photographs
+
+`public/images/geiko-*.jpg` (11 files) were supplied by the host of the Kyoto geiko evening from its own
+public website and social media, with permission to use them on kamehame-japan.com for this listing.
+They are not under a Creative Commons license and must not be reused elsewhere without the host's consent.
