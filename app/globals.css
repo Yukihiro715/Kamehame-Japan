@@ -281,6 +281,14 @@ footer { padding:70px clamp(24px,7vw,120px) 40px; background:var(--ink); color:v
 .bokun-mount b { color:var(--ink); }
 .booking-cta { width:100%; height:52px; background:var(--kame); color:var(--ink); border:0; font-family:var(--font-display); font-size:15px; letter-spacing:.1em; text-transform:uppercase; cursor:not-allowed; opacity:.55; }
 .booking-fine { display:flex; align-items:center; gap:7px; margin:12px 0 0; color:var(--muted); font-size:10.5px; line-height:1.5; }
+/* Request-based products: the house confirms the date before booking is final. */
+.request-badge { display:inline-block; margin-top:10px; padding:3px 10px; background:var(--blue); color:var(--white); font-family:var(--font-display); font-size:10px; font-style:normal; letter-spacing:.14em; text-transform:uppercase; transform:skewX(-10deg); }
+.request-steps { margin-top:16px; border-top:1px solid var(--border); padding-top:14px; }
+.request-steps b { display:block; margin-bottom:10px; font-family:var(--font-display); font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+.request-steps ol { margin:0; padding:0; list-style:none; counter-reset:req; }
+.request-steps li { position:relative; counter-increment:req; padding:0 0 10px 30px; color:var(--muted); font-size:11.5px; line-height:1.65; }
+.request-steps li:last-child { padding-bottom:0; }
+.request-steps li::before { content:counter(req); position:absolute; left:0; top:0; width:19px; height:19px; display:grid; place-items:center; background:var(--ink); color:var(--white); font-family:var(--font-display); font-size:10px; }
 .aside-help { border:1px solid var(--border); background:var(--white); padding:16px 20px; font-size:12px; }
 .aside-help b { font-family:Georgia,serif; font-size:14px; font-weight:400; }
 .aside-help p { margin:6px 0 0; color:var(--muted); line-height:1.6; }

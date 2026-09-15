@@ -44,6 +44,16 @@ const strings = {
     bookingUnitNote: "pay in JPY (USD/EUR shown at checkout)",
     bookingSoonTitle: "Online booking opens soon.", bookingSoonBody: "Date and guest selection (Bókun) will appear here.",
     bookNow: "Book now", bookingFine: "Instant confirmation · Pay in yen · Free cancellation (7 days)", bookingFineTerms: "Instant confirmation · Pay in yen · See cancellation terms below",
+    // request-based products: the venue confirms the date before the booking is final
+    requestBook: "Request this date",
+    requestBadge: "On request",
+    bookingFineRequest: "Your date is confirmed with the house before anything is final · Pay in yen",
+    requestStepsTitle: "How booking works",
+    requestSteps: [
+      "Send your preferred date and party size.",
+      "We confirm availability with the house and reply within 24 hours.",
+      "Once confirmed, you complete payment and receive the venue details.",
+    ],
     questions: "Questions?", questionsBody: "WhatsApp and email support details will appear here at launch.",
     // misc
     breadcrumbTours: "Guided tours",
@@ -76,6 +86,16 @@ const strings = {
     bookingUnitNote: "pago en JPY (USD/EUR como referencia)",
     bookingSoonTitle: "La reserva online llega muy pronto.", bookingSoonBody: "El calendario de fechas y personas (Bókun) aparecerá aquí.",
     bookNow: "Reservar", bookingFine: "Confirmación inmediata · Pago en yenes · Cancelación gratuita (7 días)", bookingFineTerms: "Confirmación inmediata · Pago en yenes · Ver condiciones de cancelación abajo",
+    // productos bajo petición: la casa confirma la fecha antes de cerrar la reserva
+    requestBook: "Solicitar esta fecha",
+    requestBadge: "Bajo petición",
+    requestStepsTitle: "Cómo funciona la reserva",
+    bookingFineRequest: "Confirmamos tu fecha con la casa antes de cerrar nada · Pago en yenes",
+    requestSteps: [
+      "Envíanos tu fecha preferida y el número de personas.",
+      "Confirmamos la disponibilidad con la casa y te respondemos en 24 horas.",
+      "Una vez confirmada, completas el pago y recibes los datos del local.",
+    ],
     questions: "¿Dudas?", questionsBody: "Los datos de contacto por WhatsApp y email aparecerán aquí en el lanzamiento.",
     breadcrumbTours: "Tours guiados",
     eyebrowHero: "Tokio · Kioto · Con los maestros",

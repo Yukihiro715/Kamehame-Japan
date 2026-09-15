@@ -127,7 +127,7 @@ export const experiencesEs: Experience[] = [
     story: { heading: "Fan art que puedes llevar puesto", body: "El nail art creció junto a la cultura de personajes de Japón, y en Tokio ambos se fundieron en un género propio: microilustración pintada sobre un lienzo móvil más pequeño que un sello. Las mejores artistas tienen lista de espera de semanas entre el público local. Esta sesión te abre una de esas sillas." },
   },
   {
-    slug: "evening-with-geiko", city: "kyoto", category: "geisha",
+    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request",
     title: "Banquete ozashiki con maiko y geiko",
     tagline: "Un salón privado en Kioto: cena, danza y juegos de sobremesa con geiko y maiko",
     duration: "2 horas", price: "¥139.600", priceUnit: "group", group: "Privado · 2–40 personas", ages: "Todas las edades", area: "Kioto (zona de Gion / Higashiyama)",
@@ -210,7 +210,7 @@ export const experiencesEs: Experience[] = [
 
 export const toursEs: Tour[] = [
   {
-    slug: "tokyo-private-day-tour", city: "tokyo",
+    slug: "tokyo-private-day-tour", city: "tokyo", bookingType: "request",
     title: "Tour privado de un día por Tokio",
     tagline: "Ocho horas con un guía titulado, a la medida de tus intereses",
     duration: "8 horas", price: "¥60.000", group: "Grupo privado",
@@ -218,7 +218,7 @@ export const toursEs: Tour[] = [
     description: "Un día completo en Tokio con un guía privado titulado, planificado alrededor de lo que te importa — gastronomía, artesanía, arquitectura, cultura pop — y capaz de integrar cualquiera de nuestras clases magistrales de Tokio en la ruta. Transporte, horarios y reservas quedan resueltos; tú solo sal del hotel.",
   },
   {
-    slug: "kyoto-private-day-tour", city: "kyoto",
+    slug: "kyoto-private-day-tour", city: "kyoto", bookingType: "request",
     title: "Tour privado de un día por Kioto",
     tagline: "Templos, té y callejones con un guía que conoce las horas tranquilas",
     duration: "8 horas", price: "¥60.000", group: "Grupo privado",

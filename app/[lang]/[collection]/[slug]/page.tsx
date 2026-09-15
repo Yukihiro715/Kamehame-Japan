@@ -157,7 +157,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         </article>
 
         <aside className="detail-aside">
-          <BookingBox price={exp.price} unit={exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit} experienceSlug={exp.slug} lang={lang} fine={exp.cancellation ? T.bookingFineTerms : undefined} />
+          <BookingBox price={exp.price} unit={exp.priceUnit === "group" ? T.perGroupUnit : T.perPersonUnit} experienceSlug={exp.slug} lang={lang} bookingType={exp.bookingType} fine={exp.cancellation ? T.bookingFineTerms : undefined} />
           <div className="aside-help">
             <b>{T.questions}</b>
             <p>{T.questionsBody}</p>
@@ -195,7 +195,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price)),
       }} />
-      <MobileBookingBar price={exp.price} lang={lang} />
+      <MobileBookingBar price={exp.price} lang={lang} bookingType={exp.bookingType} />
       <SiteFooter lang={lang} />
     </main>
   );
@@ -252,7 +252,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
         </article>
 
         <aside className="detail-aside">
-          <BookingBox price={tour.price} unit={T.perGroup} experienceSlug={tour.slug} lang={lang} />
+          <BookingBox price={tour.price} unit={T.perGroup} experienceSlug={tour.slug} lang={lang} bookingType={tour.bookingType} />
           <div className="aside-help">
             <b>{T.questions}</b>
             <p>{T.questionsBody}</p>
@@ -276,7 +276,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
       }} />
-      <MobileBookingBar price={tour.price} lang={lang} />
+      <MobileBookingBar price={tour.price} lang={lang} bookingType={tour.bookingType} />
       <SiteFooter lang={lang} />
     </main>
   );

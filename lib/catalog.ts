@@ -5,6 +5,10 @@
 
 export type CitySlug = "tokyo" | "kyoto";
 
+/** How a booking is confirmed. Instant products are bookable straight from the
+ *  calendar; request products are held until the venue confirms the date. */
+export type BookingType = "instant" | "request";
+
 export interface Category {
   slug: string;
   title: string;
@@ -38,6 +42,8 @@ export interface Experience {
   gallery: { img: string; alt: string }[];
   /** Pricing unit: per person (default) or per group. */
   priceUnit?: "person" | "group";
+  /** "request" when the venue confirms the date before the booking is final. */
+  bookingType?: BookingType;
   /** Overrides the site-wide cancellation policy when the venue's terms differ. */
   cancellation?: string;
   whatYoullDo: string[];
@@ -50,6 +56,8 @@ export interface Experience {
 export interface Tour {
   slug: string;
   city: CitySlug;
+  /** "request" when the date is confirmed with the operator before booking is final. */
+  bookingType?: BookingType;
   title: string;
   tagline: string;
   duration: string;
@@ -185,7 +193,7 @@ export const experiences: Experience[] = [
     story: { heading: "Fan art you can wear", body: "Nail art grew up alongside Japan's character culture, and in Tokyo the two merged into a genre of its own: micro-illustration, painted on a moving canvas smaller than a stamp. The best artists are booked out weeks ahead by locals. This session opens one of those chairs to you." },
   },
   {
-    slug: "evening-with-geiko", city: "kyoto", category: "geisha",
+    slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request",
     title: "Maiko & Geiko Ozashiki Banquet",
     tagline: "A private banquet room in Kyoto — dining, dance and parlour games with geiko and maiko",
     duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
@@ -268,7 +276,7 @@ export const experiences: Experience[] = [
 
 export const tours: Tour[] = [
   {
-    slug: "tokyo-private-day-tour", city: "tokyo",
+    slug: "tokyo-private-day-tour", city: "tokyo", bookingType: "request",
     title: "Tokyo Private Day Tour",
     tagline: "Eight hours with a licensed guide, shaped around your interests",
     duration: "8 hours", price: "¥60,000", group: "Private group",
@@ -276,7 +284,7 @@ export const tours: Tour[] = [
     description: "A full day in Tokyo with a private licensed guide, planned around what you care about — food, craft, architecture, pop culture — and able to fold any of our Tokyo masterclasses into the route. Travel, timing and reservations are handled for you; you just walk out of the hotel lobby.",
   },
   {
-    slug: "kyoto-private-day-tour", city: "kyoto",
+    slug: "kyoto-private-day-tour", city: "kyoto", bookingType: "request",
     title: "Kyoto Private Day Tour",
     tagline: "Temples, tea and backstreets with a licensed guide who knows the quiet hours",
     duration: "8 hours", price: "¥60,000", group: "Private group",
