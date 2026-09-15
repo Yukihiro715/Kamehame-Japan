@@ -63,6 +63,7 @@ const strings = {
     // experience detail template
     detail: {
       requestAvailability: "Request availability",
+      photosCount: (n: number) => `${n} photos`,
       watch: "Watch the experience",
       seeExperience: "See the experience",
       gallery: "Photos", viewAllPhotos: "View all photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Close",
@@ -107,6 +108,7 @@ const strings = {
     comingSoonCta: "Tell me when it opens",
     // enquiry form
     form: {
+      preferredDate: "Preferred date", altDate: "Alternative date (optional)", partyN: "Number of guests", messageXp: "Anything we should check with the venue? (optional)", messageXpHint: "Dietary needs, mobility, a birthday, a preferred start time…",
       name: "Your name", email: "Email address", company: "Company", country: "Country",
       dates: "Dates in Japan", datesHint: "e.g. 12–20 April 2027", party: "Party size", partyHint: "e.g. 2 adults, 1 child (9)",
       message: "What are you drawn to?", messageHint: "The experiences that interest you, and anything we should check with the venue — dietary needs, mobility, a birthday.",
@@ -217,6 +219,7 @@ const strings = {
     ],
     detail: {
       requestAvailability: "Consultar disponibilidad",
+      photosCount: (n: number) => `${n} fotos`,
       watch: "Ver la experiencia",
       seeExperience: "Mira la experiencia",
       gallery: "Fotos", viewAllPhotos: "Ver todas las fotos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Cerrar",
@@ -259,6 +262,7 @@ const strings = {
     comingSoonBody: "Estamos cerrando esta experiencia con el local. Déjanos tu correo y te avisaremos el día que se abra.",
     comingSoonCta: "Avisadme cuando se abra",
     form: {
+      preferredDate: "Fecha preferida", altDate: "Fecha alternativa (opcional)", partyN: "Número de personas", messageXp: "¿Algo que consultar con el lugar? (opcional)", messageXpHint: "Alergias, movilidad, un cumpleaños, hora de inicio preferida…",
       name: "Tu nombre", email: "Correo electrónico", company: "Empresa", country: "País",
       dates: "Fechas en Japón", datesHint: "p. ej. 12–20 de abril de 2027", party: "Número de personas", partyHint: "p. ej. 2 adultos, 1 niño (9)",
       message: "¿Qué te interesa?", messageHint: "Las experiencias que te atraen y cualquier cosa que debamos consultar con el local: dietas, movilidad, un cumpleaños.",
@@ -367,6 +371,7 @@ const strings = {
     ],
     detail: {
       requestAvailability: "空き状況を問い合わせる",
+      photosCount: (n: number) => `写真${n}枚`,
       watch: "体験の動画を見る",
       seeExperience: "体験の様子",
       gallery: "写真", viewAllPhotos: "すべての写真を見る", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "閉じる",
@@ -409,6 +414,7 @@ const strings = {
     comingSoonBody: "受け入れ先と最終調整中です。メールアドレスをお知らせいただければ、公開日にご連絡します。",
     comingSoonCta: "公開時に知らせてほしい",
     form: {
+      preferredDate: "第1希望日", altDate: "第2希望日(任意)", partyN: "ご人数", messageXp: "受け入れ先に確認しておくこと(任意)", messageXpHint: "食事制限、移動のご事情、お祝い、希望の開始時刻など",
       name: "お名前", email: "メールアドレス", company: "会社名", country: "国",
       dates: "日本での滞在日程", datesHint: "例:2027年4月12日〜20日", party: "ご人数", partyHint: "例:大人2名、子ども1名(9歳)",
       message: "ご関心のある体験", messageHint: "気になっている体験と、受け入れ先に確認しておくべきこと(食事制限、移動のご事情、お祝いなど)をお書きください。",
@@ -516,6 +522,7 @@ const strings = {
     ],
     detail: {
       requestAvailability: "Demander les disponibilités",
+      photosCount: (n: number) => `${n} photos`,
       watch: "Voir l'expérience en vidéo",
       seeExperience: "Voir l'expérience",
       gallery: "Photos", viewAllPhotos: "Voir toutes les photos", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "Fermer",
@@ -558,6 +565,7 @@ const strings = {
     comingSoonBody: "Nous finalisons cette expérience avec le lieu. Laissez votre adresse e-mail et nous vous préviendrons le jour de l'ouverture.",
     comingSoonCta: "Prévenez-moi à l'ouverture",
     form: {
+      preferredDate: "Date souhaitée", altDate: "Autre date possible (facultatif)", partyN: "Nombre de personnes", messageXp: "Quelque chose à vérifier auprès du lieu ? (facultatif)", messageXpHint: "Régimes, mobilité, anniversaire, heure de début souhaitée…",
       name: "Votre nom", email: "Adresse e-mail", company: "Société", country: "Pays",
       dates: "Dates au Japon", datesHint: "ex. 12–20 avril 2027", party: "Nombre de personnes", partyHint: "ex. 2 adultes, 1 enfant (9 ans)",
       message: "Qu'est-ce qui vous attire ?", messageHint: "Les expériences qui vous intéressent, et tout ce que nous devrions vérifier auprès du lieu — régime, mobilité, un anniversaire.",
@@ -667,6 +675,7 @@ const strings = {
     ],
     detail: {
       requestAvailability: "詢問空檔",
+      photosCount: (n: number) => `${n} 張照片`,
       watch: "觀看體驗影片",
       seeExperience: "看看體驗",
       gallery: "照片", viewAllPhotos: "查看所有照片", photoOf: (i: number, n: number) => `${i} / ${n}`, close: "關閉",
@@ -709,6 +718,7 @@ const strings = {
     comingSoonBody: "我們正與場地敲定這項體驗。留下您的電子郵件，開放當天我們會通知您。",
     comingSoonCta: "開放時通知我",
     form: {
+      preferredDate: "首選日期", altDate: "備選日期（可不填）", partyN: "人數", messageXp: "需要向店家確認的事項（可不填）", messageXpHint: "飲食限制、行動需求、慶祝活動、希望的開始時間等",
       name: "您的姓名", email: "電子郵件", company: "公司名稱", country: "國家／地區",
       dates: "在日本的日期", datesHint: "例：2027 年 4 月 12–20 日", party: "人數", partyHint: "例：2 位成人、1 位兒童（9 歲）",
       message: "您對什麼感興趣？", messageHint: "您感興趣的體驗，以及需要我們向場地確認的事項——飲食限制、行動需求、生日慶祝。",

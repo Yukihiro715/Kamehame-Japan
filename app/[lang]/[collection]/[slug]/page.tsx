@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music } from "lucide-react";
+import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, Images } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -157,8 +157,11 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       {/* ① First view */}
       <section className="xp-hero">
         <div className="xp-hero-photo">
-          <img src={exp.img} alt={exp.alt} />
+          <a className="xp-hero-link" href="#photos" aria-label={D.gallery}><img src={exp.img} alt={exp.alt} /></a>
           {!live && <span className="soon-badge">{T.comingSoon}</span>}
+          {photos.length > 1 && (
+            <a className="photo-count" href="#photos"><Images size={14} /> {D.photosCount(photos.length)}</a>
+          )}
         </div>
         <div className="xp-hero-copy">
           {!live && <p className="soon-flag">{T.comingSoon}</p>}
@@ -338,7 +341,10 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
         <h2 className="xp-sub">{live ? D.requestH : T.comingSoonCta}</h2>
         <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>
-        <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />
+        <EnquiryForm
+          kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL}
+          experience={{ slug: exp.slug, title: exp.title, partySize: exp.partySize, leadDays: 3 }}
+        />
         {/* Bókun mount for the day online booking connects; nothing renders until then. */}
         <div id="bokun-widget-mount" data-experience={exp.slug} data-booking-type={exp.bookingType ?? "instant"} hidden />
       </section>
