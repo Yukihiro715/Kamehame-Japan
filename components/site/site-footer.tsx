@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Brand } from "@/components/site/brand";
 import { FooterLanguages } from "@/components/site/language-switcher";
+import { ConsentBanner, ConsentSettingsLink } from "@/components/site/consent-banner";
 import { langHome, t, type Lang } from "@/lib/i18n";
 
 export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
@@ -17,6 +18,8 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
         <Link href={`/${lang}/journal/`}>{T.journalH}</Link>
         <Link href={`/${lang}/contact/`}>{T.contactH}</Link>
         <Link href={`/${lang}/trade/`}>{T.contactTradeCta}</Link>
+        <Link href={`/${lang}/privacy/`}>{T.footerPrivacy}</Link>
+        <ConsentSettingsLink lang={lang} />
       </div>
       <div className="footer-meta"><p>{T.footerOperated}</p><p>© 2026 KAMEHAME JAPAN</p></div>
       <FooterLanguages lang={lang} />
@@ -31,6 +34,7 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
           The Metropolitan Museum of Art (kimono). Geiko-evening photographs courtesy of the host venue. Full attribution in IMAGE_CREDITS.md.
         </p>
       </details>
+      <ConsentBanner lang={lang} />
     </footer>
   );
 }

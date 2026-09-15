@@ -123,4 +123,4 @@ export const featuredReviews = (limit = 3): Review[] =>
 /** Locale-aware date for display beneath a review. */
 const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
 export const reviewDate = (iso: string, lang: Lang) =>
-  new Date(iso).toLocaleDateString(DATE_LOCALE[lang], { year: "numeric", month: "long" });
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString(DATE_LOCALE[lang], { year: "numeric", month: "long", timeZone: "UTC" });

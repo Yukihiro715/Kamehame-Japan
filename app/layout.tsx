@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
 import { GTM_ID } from "@/lib/analytics";
+import { consentDefaultScript } from "@/lib/consent";
 import { socialMeta } from "@/lib/seo";
 import "./globals.css";
 
@@ -26,6 +27,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <head>
+        {/* Consent Mode v2 defaults. This has to run before the container,
+            or tags would load with storage already allowed. */}
+        <script dangerouslySetInnerHTML={{ __html: consentDefaultScript }} />
         {/* Google Tag Manager — GA4, Ads conversions and Search Console
             verification are all configured inside the container. */}
         <script dangerouslySetInnerHTML={{ __html: gtmSnippet }} />

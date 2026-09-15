@@ -17,7 +17,7 @@ const strings = {
     // header / footer
     navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Experiences", navTours: "Private tours", navApproach: "Our approach",
     findExperience: "Find an experience",
-    footerAbout: "About", navFaq: "FAQ", footerOperated: "Operated by Prosent Inc. with our tour operations partner.",
+    footerPrivacy: "Privacy & cookies", footerAbout: "About", navFaq: "FAQ", footerOperated: "Operated by Prosent Inc. with our tour operations partner.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
     home: "Home",
     // cards
@@ -108,6 +108,11 @@ const strings = {
     comingSoonBody: "We are finalising this experience with the venue. Leave your email and we will tell you the day it opens.",
     comingSoonCta: "Tell me when it opens",
     // enquiry form
+    consent: {
+      title: "Cookies on this site",
+      body: "We use cookies to see how the site is used and to measure our advertising. Nothing is stored until you choose. Necessary cookies are always on.",
+      accept: "Accept", reject: "Reject", settings: "Cookie settings", more: "Privacy & cookies",
+    },
     form: {
       pickDate: "Select a date", clear: "Clear", earliestShort: (d: string) => `Earliest: ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Earliest date: ${d} — requests close at ${t} Japan time, ${n} days before.`,
@@ -187,7 +192,7 @@ const strings = {
   es: {
     navTokyo: "Tokio", navKyoto: "Kioto", navExperiences: "Experiencias", navTours: "Tours privados", navApproach: "Nuestra filosofía",
     findExperience: "Buscar experiencia",
-    footerAbout: "Nosotros", navFaq: "Preguntas frecuentes", footerOperated: "Operado por Prosent Inc. junto con nuestro socio operador de tours.",
+    footerPrivacy: "Privacidad y cookies", footerAbout: "Nosotros", navFaq: "Preguntas frecuentes", footerOperated: "Operado por Prosent Inc. junto con nuestro socio operador de tours.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
     home: "Inicio",
     from: "desde", perPerson: "/ persona", perGroupShort: "/ grupo", perGroup: "por grupo / día", perPersonUnit: "por persona", perGroupUnit: "por grupo",
@@ -267,6 +272,11 @@ const strings = {
     comingSoon: "Próximamente",
     comingSoonBody: "Estamos cerrando esta experiencia con el local. Déjanos tu correo y te avisaremos el día que se abra.",
     comingSoonCta: "Avisadme cuando se abra",
+    consent: {
+      title: "Cookies en este sitio",
+      body: "Usamos cookies para ver cómo se utiliza el sitio y medir nuestra publicidad. No se guarda nada hasta que usted elija. Las cookies necesarias están siempre activas.",
+      accept: "Aceptar", reject: "Rechazar", settings: "Configuración de cookies", more: "Privacidad y cookies",
+    },
     form: {
       pickDate: "Elija una fecha", clear: "Borrar", earliestShort: (d: string) => `Más próxima: ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Fecha más próxima: ${d} — las solicitudes cierran a las ${t} (hora de Japón), ${n} días antes.`,
@@ -344,7 +354,7 @@ const strings = {
   ja: {
     navTokyo: "東京", navKyoto: "京都", navExperiences: "体験一覧", navTours: "プライベートツアー", navApproach: "私たちの考え方",
     findExperience: "体験を探す",
-    footerAbout: "私たちについて", navFaq: "よくあるご質問", footerOperated: "運営:Prosent Inc.／旅行手配:株式会社 ELNX TRAVEL",
+    footerPrivacy: "プライバシーとCookie", footerAbout: "私たちについて", navFaq: "よくあるご質問", footerOperated: "運営:Prosent Inc.／旅行手配:株式会社 ELNX TRAVEL",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
     home: "ホーム",
     from: "", perPerson: "／1名", perGroupShort: "／1組", perGroup: "1組・1日あたり", perPersonUnit: "1名あたり", perGroupUnit: "1組あたり",
@@ -424,6 +434,11 @@ const strings = {
     comingSoon: "近日公開",
     comingSoonBody: "受け入れ先と最終調整中です。メールアドレスをお知らせいただければ、公開日にご連絡します。",
     comingSoonCta: "公開時に知らせてほしい",
+    consent: {
+      title: "Cookieの使用について",
+      body: "サイトの利用状況の把握と広告の効果測定にCookieを使用します。お選びいただくまで何も保存しません。必要なCookieは常に有効です。",
+      accept: "同意する", reject: "同意しない", settings: "Cookie設定", more: "プライバシーとCookie",
+    },
     form: {
       pickDate: "日付を選択", clear: "クリア", earliestShort: (d: string) => `最短:${d}`,
       earliestDate: (d: string, n: number, t: string) => `最短で${d}から(${n}日前の${t}・日本時間で締切)`,
@@ -501,7 +516,7 @@ const strings = {
   fr: {
     navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Expériences", navTours: "Journées privées", navApproach: "Notre approche",
     findExperience: "Trouver une expérience",
-    footerAbout: "À propos", navFaq: "Questions fréquentes", footerOperated: "Exploité par Prosent Inc. avec notre partenaire d'organisation de voyages.",
+    footerPrivacy: "Confidentialité et cookies", footerAbout: "À propos", navFaq: "Questions fréquentes", footerOperated: "Exploité par Prosent Inc. avec notre partenaire d'organisation de voyages.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
     home: "Accueil",
     from: "dès", perPerson: "/ pers.", perGroupShort: "/ groupe", perGroup: "par groupe / jour", perPersonUnit: "par personne", perGroupUnit: "par groupe",
@@ -580,6 +595,11 @@ const strings = {
     comingSoon: "Bientôt disponible",
     comingSoonBody: "Nous finalisons cette expérience avec le lieu. Laissez votre adresse e-mail et nous vous préviendrons le jour de l'ouverture.",
     comingSoonCta: "Prévenez-moi à l'ouverture",
+    consent: {
+      title: "Cookies sur ce site",
+      body: "Nous utilisons des cookies pour comprendre l'usage du site et mesurer notre publicité. Rien n'est enregistré avant votre choix. Les cookies nécessaires restent actifs.",
+      accept: "Accepter", reject: "Refuser", settings: "Paramètres des cookies", more: "Confidentialité et cookies",
+    },
     form: {
       pickDate: "Choisir une date", clear: "Effacer", earliestShort: (d: string) => `Au plus tôt : ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Date la plus proche : ${d} — les demandes ferment à ${t} heure du Japon, ${n} jours avant.`,
@@ -657,7 +677,7 @@ const strings = {
   "zh-tw": {
     navTokyo: "東京", navKyoto: "京都", navExperiences: "體驗", navTours: "私人一日遊", navApproach: "我們的理念",
     findExperience: "尋找體驗",
-    footerAbout: "關於我們", navFaq: "常見問題", footerOperated: "由 Prosent Inc. 與旅遊安排合作夥伴共同營運。",
+    footerPrivacy: "隱私權與 Cookie", footerAbout: "關於我們", navFaq: "常見問題", footerOperated: "由 Prosent Inc. 與旅遊安排合作夥伴共同營運。",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
     home: "首頁",
     // No "from" prefix: in Chinese the qualifier follows the price ("¥45,000 起"),
@@ -738,6 +758,11 @@ const strings = {
     comingSoon: "即將推出",
     comingSoonBody: "我們正與場地敲定這項體驗。留下您的電子郵件，開放當天我們會通知您。",
     comingSoonCta: "開放時通知我",
+    consent: {
+      title: "本網站的 Cookie",
+      body: "我們使用 Cookie 了解網站使用情形並衡量廣告成效。在您選擇之前不會儲存任何資料。必要的 Cookie 一律啟用。",
+      accept: "同意", reject: "拒絕", settings: "Cookie 設定", more: "隱私權與 Cookie",
+    },
     form: {
       pickDate: "選擇日期", clear: "清除", earliestShort: (d: string) => `最早：${d}`,
       earliestDate: (d: string, n: number, t: string) => `最早可選 ${d}（${n} 天前、日本時間 ${t} 截止）`,
