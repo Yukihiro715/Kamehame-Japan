@@ -31,6 +31,9 @@ const strings = {
     goodToKnow: "Good to know", meetingPoint: "Meeting point & access", cancellationH: "Cancellation",
     meetingBody: (area: string) => `You will meet your interpreter guide in the ${area} area. Out of respect for our partners' working venues, the exact address and map are sent with your booking confirmation.`,
     meetingChip: (area: string) => `${area} — exact location shared after booking`,
+    // Stated on every experience: we arrange no transport, which is what keeps
+    // these products outside 旅行業 while only a 手配業 registration is held.
+    meetOnSite: "Meet on site · no transfers",
     interpreterGuide: "Interpreter guide included", licensedGuide: "Licensed guide",
     makeItFullDay: "Make it a full day",
     pairWith: (city: string) => `Pair it with a private ${city} day tour.`,
@@ -74,6 +77,7 @@ const strings = {
     goodToKnow: "Conviene saber", meetingPoint: "Punto de encuentro y acceso", cancellationH: "Cancelación",
     meetingBody: (area: string) => `Te reunirás con tu guía intérprete en la zona de ${area}. Por respeto a los locales de nuestros socios, la dirección exacta y el mapa se envían con la confirmación de tu reserva.`,
     meetingChip: (area: string) => `${area} — ubicación exacta tras la reserva`,
+    meetOnSite: "Punto de encuentro en el lugar · sin traslados",
     interpreterGuide: "Guía intérprete incluido", licensedGuide: "Guía titulado",
     makeItFullDay: "Conviértelo en un día completo",
     pairWith: (city: string) => `Combínalo con un tour privado de un día por ${city}.`,

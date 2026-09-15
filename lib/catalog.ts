@@ -71,6 +71,14 @@ export interface Tour {
 // Used for absolute URLs in structured data.
 export const SITE_ORIGIN = "https://kamehame-japan.com";
 
+/** Guided tours arrange transport between sites, which makes them 旅行業
+ *  (travel agency business) rather than a standalone experience. Our operating
+ *  partner holds a 旅行サービス手配業 registration, which is business-to-business
+ *  only, so tours stay unpublished until a 旅行業 registration is in place.
+ *  The tour data below is kept intact: flip this flag to restore them
+ *  everywhere — listings, detail pages, navigation, sitemap and cross-sell. */
+export const TOURS_PUBLISHED = false;
+
 export const CANCELLATION = "Free cancellation up to 7 days before the experience. Full refund if the session is cancelled by the venue.";
 
 export const cities: City[] = [
@@ -299,8 +307,9 @@ import { CANCELLATION_ES, categoriesEs, citiesEs, experiencesEs, toursEs } from 
 import type { Lang } from "@/lib/i18n";
 
 export function catalogFor(lang: Lang) {
-  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: experiencesEs, tours: toursEs };
-  return { cities, categories, experiences, tours };
+  const published = <T,>(list: T[]) => (TOURS_PUBLISHED ? list : []);
+  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: experiencesEs, tours: published(toursEs) };
+  return { cities, categories, experiences, tours: published(tours) };
 }
 
 export const cancellationFor = (lang: Lang) => (lang === "es" ? CANCELLATION_ES : CANCELLATION);

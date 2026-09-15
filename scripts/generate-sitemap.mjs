@@ -23,7 +23,15 @@ const experiences = [...catalog.matchAll(/slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo
   .map((m) => ({ slug: m[1], city: m[2] }));
 const tours = slugs(/slug:\s*"([a-z-]+-private-day-tour)",\s*city:/g);
 
-const collections = [...new Set([...cities, ...categories, "tours", "experiences"])];
+// Tours are withheld until the operating partner holds a 旅行業 registration
+// (lib/catalog.ts TOURS_PUBLISHED). Keep the sitemap in step with the site.
+const toursPublished = /export const TOURS_PUBLISHED = true/.test(catalog);
+
+const collections = [...new Set([
+  ...cities, ...categories,
+  ...(toursPublished ? ["tours"] : []),
+  "experiences",
+])];
 
 /** Every indexable path, with the hreflang siblings search engines expect. */
 const entries = [];
@@ -51,7 +59,7 @@ for (const { slug, city } of experiences) {
   }
 }
 
-for (const slug of tours) {
+for (const slug of toursPublished ? tours : []) {
   for (const lang of LANGS) {
     add(`/${lang}/tours/${slug}/`, {
       priority: "0.9",
@@ -95,4 +103,7 @@ Sitemap: ${ORIGIN}/sitemap.xml
 `,
 );
 
-console.log(`sitemap.xml: ${entries.length} URLs (${experiences.length} experiences, ${tours.length} tours, ${collections.length} collections)`);
+console.log(
+  `sitemap.xml: ${entries.length} URLs (${experiences.length} experiences, ` +
+  `${toursPublished ? tours.length : 0} tours, ${collections.length} collections)`,
+);

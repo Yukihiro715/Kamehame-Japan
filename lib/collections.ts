@@ -3,7 +3,7 @@
 
 import {
   cancellationFor, catalogFor, cityBySlug,
-  type Experience, type Tour,
+  TOURS_PUBLISHED, type Experience, type Tour,
 } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 
@@ -194,7 +194,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       explore: [
         { label: other.title, href: p(`/${other.slug}/`) },
         ...catLinks.slice(0, 3),
-        { label: S.guidedTours, href: p("/tours/") },
+        ...(TOURS_PUBLISHED ? [{ label: S.guidedTours, href: p("/tours/") }] : []),
       ],
     };
   }
@@ -213,11 +213,11 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       refine: cityLinks,
       about: { heading: S.catAboutH(cat.title), body: S.catAbout },
       faq: [{ q: S.catFaqQ, a: S.catFaqA }, FAQ_GUIDE, FAQ_BOOK],
-      explore: [...cityLinks, ...others, { label: S.guidedTours, href: p("/tours/") }],
+      explore: [...cityLinks, ...others, ...(TOURS_PUBLISHED ? [{ label: S.guidedTours, href: p("/tours/") }] : [])],
     };
   }
 
-  if (slug === "tours") {
+  if (slug === "tours" && TOURS_PUBLISHED) {
     return {
       slug, crumb: S.toursCrumb, h1: S.toursH1,
       heroImg: "/images/cat-tours.jpg", heroAlt: S.toursHeroAlt,
@@ -247,7 +247,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       faq: [{ q: S.allFaqQ, a: S.allFaqA }, FAQ_GUIDE, FAQ_CANCEL],
       explore: [
         ...cities.map((c) => ({ label: c.title, href: p(`/${c.slug}/`) })),
-        { label: S.guidedTours, href: p("/tours/") },
+        ...(TOURS_PUBLISHED ? [{ label: S.guidedTours, href: p("/tours/") }] : []),
       ],
     };
   }
@@ -258,6 +258,6 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
 export const collectionSlugs = [
   "tokyo", "kyoto",
   "sushi", "sumo", "tea-ceremony", "kimono", "geisha", "swordsmith", "anime-nail-art",
-  "tours",
+  ...(TOURS_PUBLISHED ? ["tours"] : []),
   "experiences",
 ];

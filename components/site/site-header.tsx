@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Brand } from "@/components/site/brand";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
+import { TOURS_PUBLISHED } from "@/lib/catalog";
 import { langHome, t, type Lang } from "@/lib/i18n";
 
 export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "overlay" | "solid"; lang?: Lang }) {
@@ -14,7 +15,7 @@ export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "ov
     [T.navTokyo, `/${lang}/tokyo/`],
     [T.navKyoto, `/${lang}/kyoto/`],
     [T.navExperiences, `/${lang}/experiences/`],
-    [T.navTours, `/${lang}/tours/`],
+    ...(TOURS_PUBLISHED ? [[T.navTours, `/${lang}/tours/`] as [string, string]] : []),
     [T.navApproach, `${langHome(lang)}#approach`],
   ];
   return (

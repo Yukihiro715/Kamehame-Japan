@@ -5,7 +5,7 @@ import { ArrowDownRight, ArrowRight, Clock3, MapPin, ShieldCheck } from "lucide-
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { catalogFor } from "@/lib/catalog";
+import { catalogFor, TOURS_PUBLISHED } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 
 const FEATURED = ["sushi-masterclass", "sumo-morning-practice", "evening-with-geiko"];
@@ -175,13 +175,15 @@ export function HomePage({ lang }: { lang: Lang }) {
               <ArrowDownRight size={18} />
             </Link>
           ))}
-          <Link href={p("/tours/")} className="category-card" key="tours">
-            <img className="category-photo" src="/images/cat-tours.jpg" alt={C.toursCard.title} loading="lazy" />
-            <span className="category-no">08</span>
-            <span className="category-mark" aria-hidden="true">旅</span>
-            <span className="category-label"><b>{C.toursCard.title}</b><small>{C.toursCard.type}</small></span>
-            <ArrowDownRight size={18} />
-          </Link>
+          {TOURS_PUBLISHED && (
+            <Link href={p("/tours/")} className="category-card" key="tours">
+              <img className="category-photo" src="/images/cat-tours.jpg" alt={C.toursCard.title} loading="lazy" />
+              <span className="category-no">08</span>
+              <span className="category-mark" aria-hidden="true">旅</span>
+              <span className="category-label"><b>{C.toursCard.title}</b><small>{C.toursCard.type}</small></span>
+              <ArrowDownRight size={18} />
+            </Link>
+          )}
         </div>
       </section>
 
@@ -209,6 +211,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
+      {TOURS_PUBLISHED && (
       <section className="tour-section" id="tours">
         <div className="tour-monogram">
           <img src="/images/tour-journey.jpg" alt={C.tourAlt} loading="lazy" />
@@ -222,6 +225,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           <Button asChild variant="outline"><Link href={p("/tours/")}>{C.tourCta} <ArrowRight /></Link></Button>
         </div>
       </section>
+      )}
 
       <section className="review-section">
         <p className="eyebrow dark"><span /> {C.reviewEyebrow}</p>

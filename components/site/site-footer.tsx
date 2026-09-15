@@ -12,7 +12,6 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
         <Link href={`/${lang}/tokyo/`}>{T.navTokyo}</Link>
         <Link href={`/${lang}/kyoto/`}>{T.navKyoto}</Link>
         <Link href={`/${lang}/experiences/`}>{T.navExperiences}</Link>
-        <Link href={`/${lang}/tours/`}>{T.navTours}</Link>
         <Link href={`${langHome(lang)}#approach`}>{T.footerAbout}</Link>
       </div>
       <div className="footer-meta"><p>{T.footerOperated}</p><p>© 2026 KAMEHAME JAPAN</p></div>

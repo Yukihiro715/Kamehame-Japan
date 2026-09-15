@@ -111,6 +111,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <span><Clock3 size={13} /> {exp.duration}</span>
             <span><MapPin size={13} /> {exp.area}</span>
             <span><Languages size={13} /> {T.interpreterGuide}</span>
+            <span><MapPin size={13} /> {T.meetOnSite}</span>
             <span><Users size={13} /> {exp.group}</span>
             <span>{exp.ages}</span>
           </div>
