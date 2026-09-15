@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
+import { track } from "@/lib/analytics";
 import { DatePicker } from "@/components/site/date-picker";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -79,7 +80,17 @@ export function EnquiryForm({
       });
       const json = (await res.json()) as { ok: boolean };
       setStatus(json.ok ? "sent" : "failed");
-      if (json.ok) form.reset();
+      if (json.ok) {
+        // GTM turns this into the GA4 / Ads conversion; no tag IDs live here.
+        track("enquiry_sent", {
+          enquiry_kind: kind,
+          experience: experience?.slug,
+          experience_title: experience?.title,
+          language: lang,
+          party_size: Number(data.party) || undefined,
+        });
+        form.reset();
+      }
     } catch {
       setStatus("failed");
     }
