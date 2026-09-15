@@ -185,7 +185,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .closing-section h2 { margin:0 auto 40px; font-size:clamp(56px,8vw,112px); line-height:.92; }
 .closing-section [data-slot="button"] { height:56px; padding-inline:28px; }
 .site-footer-block { padding:70px clamp(24px,7vw,120px) 40px; background:var(--ink); color:var(--white); display:grid; grid-template-columns:1fr 1fr; gap:70px; }
-.footer-links { display:flex; justify-content:flex-end; gap:25px; align-self:center; font-size:12px; }
+.footer-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:14px 22px; align-self:center; font-size:12px; }
+.footer-links a { white-space:nowrap; }
 .footer-meta { grid-column:1/-1; display:flex; justify-content:space-between; padding-top:25px; border-top:1px solid rgba(255,255,255,.15); color:#8d8b82; font-size:10px; }
 .partner-link { grid-column:1/-1; justify-self:end; color:#aaa89e; font-size:11px; }
 .photo-credits { grid-column:1/-1; color:#8d8b82; font-size:10px; }
@@ -499,8 +500,8 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
 /* --- Journal ------------------------------------------------------------- */
 .prose-layout.wide { max-width:1080px; }
 .journal-section { padding:90px clamp(24px,7vw,120px); background:var(--rice); }
-.journal-grid { display:grid; gap:24px; margin-top:34px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
-.journal-grid.home { grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
+.journal-grid { display:grid; gap:24px; margin-top:34px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+.journal-grid.home { grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
 .journal-card { display:block; background:var(--white); border:2px solid var(--ink); box-shadow:6px 6px 0 rgba(23,26,33,.85); text-decoration:none; color:inherit; transition:transform .15s ease, box-shadow .15s ease; }
 .journal-card:hover { transform:translate(-2px,-2px); box-shadow:8px 8px 0 rgba(23,26,33,.85); }
 .journal-card img { width:100%; height:190px; object-fit:cover; display:block; border-bottom:2px solid var(--ink); }
@@ -545,3 +546,26 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
 .trade-cta-block p { margin-top:16px; font-size:12.5px; color:var(--muted); line-height:1.8; }
 [lang="ja"] .contact-route h2 { text-transform:none; font-weight:700; }
 @media(min-width:760px){ .contact-routes { grid-template-columns:1fr 1fr; } .contact-route.primary { grid-column:1 / -1; } }
+
+/* Booking call to action at the foot of an article. The experience grid was
+   built for four cards in a row; one or two items needed their own shape. */
+.article-cta { display:grid; gap:14px; }
+.article-cta-card { display:grid; grid-template-columns:132px 1fr auto; align-items:center; gap:18px;
+  border:2px solid var(--ink); background:var(--white); box-shadow:5px 5px 0 rgba(23,26,33,.85);
+  text-decoration:none; color:inherit; transition:transform .15s ease, box-shadow .15s ease; }
+.article-cta-card:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--kame); }
+.article-cta-card img { width:132px; height:118px; object-fit:cover; display:block; border-right:2px solid var(--ink); }
+.article-cta-copy { display:block; padding:16px 0; min-width:0; }
+.article-cta-copy b { display:block; font-family:var(--font-display); font-weight:400; font-size:18px;
+  letter-spacing:.02em; text-transform:uppercase; line-height:1.2; margin-bottom:6px; }
+.article-cta-copy small { display:block; color:var(--muted); font-size:11.5px; margin-bottom:6px; }
+.article-cta-copy em { font-style:normal; font-size:13px; font-weight:600; }
+.article-cta-arrow { margin-right:20px; color:var(--kame); flex:none; }
+.journal-back { margin-top:46px; padding-top:22px; border-top:1px solid var(--border); }
+[lang="ja"] .article-cta-copy b { text-transform:none; font-weight:700; font-size:16px; }
+@media(max-width:620px){
+  .article-cta-card { grid-template-columns:96px 1fr; }
+  .article-cta-card img { width:96px; height:96px; }
+  .article-cta-arrow { display:none; }
+  .article-cta-copy { padding:14px 14px 14px 0; }
+}

@@ -90,12 +90,16 @@ export default async function ArticlePage({ params }: Props) {
           {related.length > 0 && (
             <section className="prose-closing">
               <h2>{T.articleRelatedH}</h2>
-              <div className="more-grid">
+              <div className="article-cta">
                 {related.map((e) => (
-                  <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
+                  <Link className="article-cta-card" key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
                     <img src={e.img} alt={e.alt} loading="lazy" />
-                    <b>{e.title}</b>
-                    <small>{e.duration} · {T.from} {e.price}</small>
+                    <span className="article-cta-copy">
+                      <b>{e.title}</b>
+                      <small>{e.duration} · {e.area}</small>
+                      <em>{T.from} {e.price}</em>
+                    </span>
+                    <ArrowRight className="article-cta-arrow" size={20} />
                   </Link>
                 ))}
               </div>
