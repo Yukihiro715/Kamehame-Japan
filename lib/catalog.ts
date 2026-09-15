@@ -88,7 +88,7 @@ export interface Experience {
   galleryNote?: string;
   /** Operating pattern from the partner sheet: which days it runs, the start
    *  times offered, and the booking cutoff (days before, Japan-time clock). */
-  availability?: { daily: boolean; startTimes: string[]; cutoffDays: number; cutoffTime: string };
+  availability?: { daily: boolean; startTimes: string[]; cutoffDays: number; cutoffTime: string; closed?: { from: string; to: string }[] };
   /** One line for the price block: what the headline price buys, e.g.
    *  "Private room · Meal and drinks · English interpreter". Localised. */
   includedShort?: string;
@@ -285,7 +285,7 @@ export const experiences: Experience[] = [
     },
     taxIncluded: true,
     interactionTime: "about 1 hour 45 minutes",
-    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 3, cutoffTime: "17:00" },
+    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 3, cutoffTime: "17:00", closed: [{ from: "12-29", to: "01-03" }] },
     availabilityNote: "Closed over the New Year holidays.",
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",

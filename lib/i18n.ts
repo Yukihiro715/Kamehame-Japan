@@ -109,6 +109,7 @@ const strings = {
     comingSoonCta: "Tell me when it opens",
     // enquiry form
     form: {
+      pickDate: "Select a date", clear: "Clear", earliestShort: (d: string) => `Earliest: ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Earliest date: ${d} — requests close at ${t} Japan time, ${n} days before.`,
       sendRequest: "Send availability request", sendRequestNote: "Sending this enquiry does not confirm a booking. We will contact you with the next steps.",
       altStartTime: "Start time (alternative)", startTime: "Preferred start time", noPreference: "No preference",
@@ -267,6 +268,7 @@ const strings = {
     comingSoonBody: "Estamos cerrando esta experiencia con el local. Déjanos tu correo y te avisaremos el día que se abra.",
     comingSoonCta: "Avisadme cuando se abra",
     form: {
+      pickDate: "Elija una fecha", clear: "Borrar", earliestShort: (d: string) => `Más próxima: ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Fecha más próxima: ${d} — las solicitudes cierran a las ${t} (hora de Japón), ${n} días antes.`,
       sendRequest: "Enviar solicitud de disponibilidad", sendRequestNote: "Enviar esta consulta no confirma una reserva. Le contactaremos con los siguientes pasos.",
       altStartTime: "Hora de inicio (alternativa)", startTime: "Hora de inicio preferida", noPreference: "Sin preferencia",
@@ -423,6 +425,7 @@ const strings = {
     comingSoonBody: "受け入れ先と最終調整中です。メールアドレスをお知らせいただければ、公開日にご連絡します。",
     comingSoonCta: "公開時に知らせてほしい",
     form: {
+      pickDate: "日付を選択", clear: "クリア", earliestShort: (d: string) => `最短:${d}`,
       earliestDate: (d: string, n: number, t: string) => `最短で${d}から(${n}日前の${t}・日本時間で締切)`,
       sendRequest: "空き状況を問い合わせる", sendRequestNote: "送信しても予約は確定しません。次のご案内をこちらからご連絡します。",
       altStartTime: "開始時刻(第2希望)", startTime: "希望の開始時刻", noPreference: "指定なし",
@@ -578,6 +581,7 @@ const strings = {
     comingSoonBody: "Nous finalisons cette expérience avec le lieu. Laissez votre adresse e-mail et nous vous préviendrons le jour de l'ouverture.",
     comingSoonCta: "Prévenez-moi à l'ouverture",
     form: {
+      pickDate: "Choisir une date", clear: "Effacer", earliestShort: (d: string) => `Au plus tôt : ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Date la plus proche : ${d} — les demandes ferment à ${t} heure du Japon, ${n} jours avant.`,
       sendRequest: "Envoyer la demande de disponibilité", sendRequestNote: "L'envoi de cette demande ne confirme pas une réservation. Nous vous contacterons pour la suite.",
       altStartTime: "Heure de début (autre date)", startTime: "Heure de début souhaitée", noPreference: "Sans préférence",
@@ -735,6 +739,7 @@ const strings = {
     comingSoonBody: "我們正與場地敲定這項體驗。留下您的電子郵件，開放當天我們會通知您。",
     comingSoonCta: "開放時通知我",
     form: {
+      pickDate: "選擇日期", clear: "清除", earliestShort: (d: string) => `最早：${d}`,
       earliestDate: (d: string, n: number, t: string) => `最早可選 ${d}（${n} 天前、日本時間 ${t} 截止）`,
       sendRequest: "送出空檔詢問", sendRequestNote: "送出詢問並不代表預約成立，我們會與您聯繫後續步驟。",
       altStartTime: "開始時間（備選）", startTime: "希望的開始時間", noPreference: "不指定",

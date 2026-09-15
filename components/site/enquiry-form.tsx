@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
+import { DatePicker } from "@/components/site/date-picker";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
@@ -22,6 +23,15 @@ export interface EnquiryExperience {
   cutoffTime?: string;
   /** Start times the venue offers; shown as a select when present. */
   startTimes?: string[];
+  /** Month-day windows the venue is closed, e.g. New Year; not selectable. */
+  closed?: { from: string; to: string }[];
+}
+
+/** True when the month-day of `iso` falls inside a closed window (windows may wrap the year end). */
+function isClosed(iso: string, windows?: { from: string; to: string }[]) {
+  if (!windows?.length) return false;
+  const md = iso.slice(5);
+  return windows.some((w) => (w.from <= w.to ? md >= w.from && md <= w.to : md >= w.from || md <= w.to));
 }
 
 export function EnquiryForm({
@@ -122,7 +132,7 @@ export function EnquiryForm({
           <div className="form-row two">
             <label>
               <span>{F.preferredDate}</span>
-              <input name="date" type="date" required min={minDate} />
+              <DatePicker name="date" lang={lang} min={minDate} required closed={(d) => isClosed(d, experience.closed)} />
               {minDate && <small className="form-hint">{F.earliestDate(fmtDate(minDate, lang), experience.leadDays ?? 3, experience.cutoffTime ?? "17:00")}</small>}
             </label>
             {times ? (
@@ -137,7 +147,7 @@ export function EnquiryForm({
           <div className="form-row two">
             <label>
               <span>{F.altDate}</span>
-              <input name="altDate" type="date" min={minDate} />
+              <DatePicker name="altDate" lang={lang} min={minDate} closed={(d) => isClosed(d, experience.closed)} />
             </label>
             {times ? (
               <label>

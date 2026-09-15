@@ -885,7 +885,7 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .enquiry-form select { width:100%; box-sizing:border-box; min-height:48px; border:2px solid var(--ink); background:var(--white); padding:12px 14px; font:inherit; font-size:14px; color:var(--ink); border-radius:0; }
 .enquiry-form select:focus { outline:none; border-color:var(--kame); box-shadow:4px 4px 0 var(--kame); }
 .xp-note-sample { margin-top:-10px; font-size:12.5px; color:var(--muted); }
-@media(max-width:620px){ .form-row.two:has(input[type="date"]) { grid-template-columns:1.2fr 1fr; } }
+@media(max-width:620px){ .form-row.two:has(.dp) { grid-template-columns:1.2fr 1fr; } }
 
 /* --- All-photos sheet (full-screen grid) --------------------------------- */
 .photo-sheet { position:fixed; inset:0; z-index:90; background:var(--paper); overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:env(safe-area-inset-bottom,0px); }
@@ -896,3 +896,24 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .photo-sheet-grid button { display:block; padding:0; border:0; background:var(--rice); cursor:zoom-in; aspect-ratio:1; overflow:hidden; }
 .photo-sheet-grid img { width:100%; height:100%; object-fit:cover; display:block; }
 @media(min-width:761px){ .photo-sheet-grid { grid-template-columns:repeat(4,1fr); gap:10px; padding:24px; } }
+
+/* --- Calendar picker (dates before the cutoff and closed days cannot be chosen) --- */
+.dp { position:relative; }
+.dp input { caret-color:transparent; cursor:pointer; }
+.dp input:not(:placeholder-shown) { color:transparent; }
+.dp-display { position:absolute; left:16px; top:0; height:48px; display:flex; align-items:center; font-size:14px; color:var(--ink); pointer-events:none; }
+.dp-pop { position:absolute; left:0; top:calc(100% + 6px); z-index:30; width:min(320px, calc(100vw - 44px)); background:var(--white); border:2px solid var(--ink); box-shadow:6px 6px 0 rgba(23,26,33,.85); padding:12px; }
+.dp-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.dp-head b { font-size:14px; }
+.dp-head button { width:34px; height:34px; display:grid; place-items:center; background:none; border:1px solid var(--border); color:var(--ink); cursor:pointer; }
+.dp-head button:disabled { opacity:.3; cursor:default; }
+.dp-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.dp-wd { text-align:center; font-size:10.5px; letter-spacing:.04em; color:var(--muted); padding:4px 0; }
+.dp-day { height:38px; background:none; border:0; font:inherit; font-size:14px; color:var(--ink); cursor:pointer; font-variant-numeric:tabular-nums; }
+.dp-day:hover { background:var(--rice); }
+.dp-day.sel { background:var(--kame); font-weight:700; }
+.dp-day:disabled { color:#c4c0b5; text-decoration:line-through; cursor:not-allowed; background:none; }
+.dp-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:8px; padding-top:8px; border-top:1px solid var(--border); font-size:11.5px; color:var(--muted); }
+.dp-clear { background:none; border:0; font:inherit; font-size:12px; font-weight:700; color:var(--ink); text-decoration:underline; cursor:pointer; padding:4px 0; }
+.form-row.two:has(.dp) > label:first-child { position:relative; z-index:1; }
+.form-row.two:has(.dp.open) > label:first-child { z-index:31; }
