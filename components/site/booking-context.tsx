@@ -27,6 +27,8 @@ export interface BookingState {
   altDate: string; altTime: string;
   guests: string;
   addOns: string[];
+  /** Interpreter guide language: "en" | "es" | "fr" | "none". Included in the price. */
+  interpreter: string;
 }
 
 interface Booking extends BookingState {
@@ -52,7 +54,7 @@ export function isClosed(iso: string, windows?: { from: string; to: string }[]) 
   return windows.some((w) => (w.from <= w.to ? md >= w.from && md <= w.to : md >= w.from || md <= w.to));
 }
 
-export function BookingProvider({ experience, pricing, children }: { experience: BookingExperience; pricing?: PricingView; children: ReactNode }) {
+export function BookingProvider({ experience, pricing, lang, children }: { experience: BookingExperience; pricing?: PricingView; lang?: string; children: ReactNode }) {
   const times = experience.startTimes;
   // Pre-select the typical dinner slot so the example reads 18:00, not the last slot.
   const defaultTime = times?.includes("18:00") ? "18:00" : times?.[0] ?? "";
@@ -60,6 +62,7 @@ export function BookingProvider({ experience, pricing, children }: { experience:
     plan: pricing?.plans?.find((p) => p.recommended)?.id ?? pricing?.plans?.[0]?.id ?? "",
     date: "", time: defaultTime, altDate: "", altTime: defaultTime,
     guests: String(experience.minGuests), addOns: [],
+    interpreter: lang === "es" || lang === "fr" ? lang : "en",
   });
 
   // Earliest selectable date — computed after mount so the server and the

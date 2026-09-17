@@ -47,6 +47,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       const plan = plans.find((p) => p.id === b.plan);
       if (plan) data.plan = `${plan.label} — ${plan.name}`;
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
+      data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
       if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${b.estimate.peak ? "peak season" : "regular season"}, ${b.guestsNumber} guests)`;
       delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
     }
@@ -146,6 +147,14 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
                 <option value={`${x.listedMax + 1}+`}>{F.guestsMore(x.listedMax + 1)}</option>
               </select>
             </label>
+            <label>
+              <span>{F.interpreter}</span>
+              <select name="interpreter-choice" value={b.interpreter} onChange={(e) => b.set({ interpreter: e.target.value })}>
+                {Object.entries(F.interpreterOpts).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              </select>
+            </label>
+          </div>
+          <div className="form-row two">
             {addOns.length > 0 && (
               <fieldset className="form-addons">
                 <legend>{F.addOns}</legend>

@@ -37,7 +37,7 @@ WHAT'S INCLUDED
 - The multi-course Japanese dinner (seasonal menu)
 - Free-flow drinks, including alcohol
 - One geiko or maiko: conversation, one dance, ozashiki games
-- An English-speaking interpreter guide throughout
+- An interpreter guide throughout — English, Spanish or French (as chosen in the request)
 - Commemorative photographs
 
 NOT INCLUDED
@@ -73,7 +73,7 @@ hello@kamehame-japan.com
 **日本語対訳(担当者用)**
 > {name} 様 / ご希望の {date} {time}、{n}名様で受け入れ先の空きが取れました。
 > プランと料金:{プラン名}、{n}名で合計 ¥{total}({通常期/繁忙期}料金。税・サービス料込。当日の追加なし)
-> 含まれるもの:貸切座敷/和食コース/飲み放題(アルコール含む)/芸妓または舞妓1名(歓談・舞・お座敷遊び)/英語通訳ガイド/記念撮影
+> 含まれるもの:貸切座敷/和食コース/飲み放題(アルコール含む)/芸妓または舞妓1名(歓談・舞・お座敷遊び)/通訳ガイド(英・西・仏から選択)/記念撮影
 > 含まれないもの:芸舞妓・地方の追加(各¥60,500)
 > 集合:祇園・東山エリア、祇園四条駅から徒歩約10分。店名・住所・地図・ガイド連絡先は確定通知でお伝えします
 > キャンセル:入金後に正式手配 → 以降は受け入れ先の規定(4日前まで50%、3〜2日前75%、前日以降・無連絡100%)。芸舞妓が手配できなかった場合は全額返金
@@ -190,7 +190,6 @@ See you tomorrow evening.
   - 商品「Private Geisha Evening」に価格6本(Select / Signature / Private Reserve × 通常期 / 繁忙期)。検索キー例: `geiko_select_regular` `geiko_select_peak` `geiko_signature_regular` … `geiko_reserve_peak`
   - 商品「Additional guest」に価格2本(通常期 ¥39,800 / 繁忙期 ¥49,800)
   - 支払いリンクは「プラン×時期」の6本。各リンクに同じ時期の「Additional guest」を2品目として追加し、**数量を変更可能(0〜3)**にしておくと、3〜5名でもリンク1本で足ります(お客様に「Additional guest の数量を N にしてください」と案内、またはこちらで数量を指定した個別リンクを都度発行)
-  - Premium Sake Upgrade は料金確定後に商品として追加し、任意の品目としてリンクに含める
   - 6名以上は都度見積もり → その金額で個別リンクを発行
 - 条件案内(A)には該当する1本だけを貼る。入金は Stripe の通知メールの**氏名・メールアドレス**で問い合わせと突き合わせる(本文で「同じ氏名・メールで決済」を依頼済み)。
 

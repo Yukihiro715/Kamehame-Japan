@@ -313,7 +313,7 @@ export const experiences: Experience[] = [
     availabilityNote: "Closed over the New Year holidays.",
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
-    tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an English-speaking interpreter throughout.",
+    tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an interpreter guide throughout, in English, Spanish or French.",
     duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · up to 5 guests (6+ on request)", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
@@ -346,13 +346,12 @@ export const experiences: Experience[] = [
       "Want live music or a fuller room? Choose Signature (a jikata playing shamisen live) or Private Reserve (two geiko or maiko plus the jikata).",
     ],
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
-    includedShort: "Private room · Meal and drinks · English interpreter",
+    includedShort: "Private room · Meal and drinks · Interpreter guide (EN / ES / FR)",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "One geiko or maiko", blurb: "The essential private geisha dining experience." },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko or maiko + live shamisen", blurb: "One geiko or maiko, joined by a jikata playing shamisen live." },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Two performers + live shamisen", blurb: "Two geiko or maiko, joined by a jikata for live shamisen. The fullest version of the evening." },
     },
-    addOns: [{ id: "sake", name: "Premium Sake Upgrade", description: "Elevate your evening with a curated selection of premium Japanese sake." }],
     galleryNote: "The room and the dishes shown are examples; both vary by date and season.",
     highlights: [
       { icon: "group", title: "The room is yours", body: "A private banquet room for your party only — never shared with other guests." },
@@ -365,12 +364,11 @@ export const experiences: Experience[] = [
       "Free-flow drinks throughout — beer, sake, shochu, wine, highballs, umeshu and soft drinks",
       "Your geiko or maiko hosting your table: conversation, one dance, and the parlour games Konpira Funefune and Tora-tora (performers by plan)",
       "Photographs and video whenever you like, the dance included, plus commemorative photos with your host",
-      "An English-speaking interpreter guide with you from arrival to farewell",
+      "An interpreter guide — English, Spanish or French, your choice — with you from arrival to farewell",
       "Tax and service charge — nothing is added on the day",
     ],
     notIncluded: [
-      "Premium sake — available as an optional upgrade, priced with your quote",
-      "Interpreters in languages other than English: quoted on request",
+      "Interpreters in languages other than English, Spanish or French: ask when you request your date",
       "Parties of six or more: contact us for private group pricing",
     ],
     schedule: [

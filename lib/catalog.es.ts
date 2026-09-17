@@ -129,7 +129,7 @@ export const experiencesEs: Experience[] = [
   {
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "Banquete ozashiki con maiko y geiko",
-    tagline: "Dos horas privadas en Kioto con una geiko o maiko. Compartid una cena japonesa de temporada, conversad en la mesa, ved una danza tradicional y jugad a los juegos ozashiki — con intérprete de inglés durante toda la velada.",
+    tagline: "Dos horas privadas en Kioto con una geiko o maiko. Compartid una cena japonesa de temporada, conversad en la mesa, ved una danza tradicional y jugad a los juegos ozashiki — con un guía intérprete durante toda la velada, en español, inglés o francés.",
     duration: "2 horas", price: "¥219.800", priceUnit: "group", group: "Privado · hasta 5 personas (6 o más, a consultar)", ages: "Todas las edades", area: "Kioto (zona de Gion / Higashiyama)",
     img: "/images/geiko-photo-together.jpg", alt: "Dos huéspedes y una maiko sonríen para una foto de recuerdo en una sala privada de Kioto",
     gallery: [
@@ -164,13 +164,12 @@ export const experiencesEs: Experience[] = [
     story: { heading: "El mundo del karyukai", body: "El «mundo de la flor y el sauce» de Kioto funciona desde hace tres siglos a base de presentación y confianza. Una geiko no es una artista de alquiler, sino una maestra cuyas veladas se conceden a través de relaciones entre casas de té y mecenas. Sentarte en esa sala, con la conversación fluyendo en tu idioma, es el acceso más raro que ofrece Kioto." },
     availabilityNote: "Cerrado durante las fiestas de Año Nuevo.",
     interactionTime: "unas 1 h 45 min",
-    includedShort: "Sala privada · Comida y bebida · Intérprete de inglés",
+    includedShort: "Sala privada · Comida y bebida · Guía intérprete (ES / EN / FR)",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "Una geiko o maiko", blurb: "La velada privada esencial con una geisha." },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko o maiko + shamisen en directo", blurb: "Una geiko o maiko, acompañada por una jikata que toca el shamisen en directo." },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Dos artistas + shamisen en directo", blurb: "Dos geiko o maiko y una jikata con shamisen en directo. La versión más completa de la velada." },
     },
-    addOns: [{ id: "sake", name: "Mejora con sake premium", description: "Eleva tu velada con una selección de sakes japoneses premium." }],
     galleryNote: "La sala y los platos de las fotos son ejemplos; ambos varían según la fecha y la temporada.",
     highlights: [
       { icon: "group", title: "La sala es suya", body: "Un salón de banquete privado solo para su grupo: nunca se comparte con otros huéspedes." },
@@ -183,12 +182,11 @@ export const experiencesEs: Experience[] = [
       "Bebida libre durante toda la velada: cerveza, sake, shochu, vino, highballs, umeshu y refrescos",
       "Tu geiko o maiko como anfitriona: conversación, una danza y los juegos de salón Konpira Funefune y Tora-tora (artistas según el plan)",
       "Fotos y vídeo cuando quiera, danza incluida, más fotos de recuerdo con su anfitriona",
-      "Un guía intérprete de habla inglesa desde la llegada hasta la despedida",
+      "Un guía intérprete — en español, inglés o francés, a tu elección — desde la llegada hasta la despedida",
       "Impuestos y servicio: no se añade nada el día del evento",
     ],
     notIncluded: [
-      "Sake premium: mejora opcional, con precio en tu presupuesto",
-      "Intérpretes en idiomas distintos del inglés: presupuesto a petición",
+      "Intérpretes en idiomas distintos del español, inglés o francés: consúltanos al solicitar la fecha",
       "Los grupos de seis o más se presupuestan individualmente",
     ],
     schedule: [

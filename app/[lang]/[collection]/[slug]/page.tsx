@@ -169,7 +169,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         { label: exp.title },
       ]} />
 
-      <BookingProvider experience={booking} pricing={live ? pricing : undefined}>
+      <BookingProvider experience={booking} pricing={live ? pricing : undefined} lang={lang}>
         {/* ① Title block */}
         <header className="xp-head">
           {!live && <p className="soon-flag">{T.comingSoon}</p>}

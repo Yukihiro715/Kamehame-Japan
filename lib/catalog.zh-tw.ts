@@ -128,7 +128,7 @@ export const experiencesZh: Experience[] = [
   {
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "舞妓與藝妓的座敷宴",
-    tagline: "在京都與藝妓或舞妓共度兩小時的私人時光。共享當季日本料理、隔桌交談、欣賞傳統舞蹈、一起玩座敷遊戲——全程有英語口譯陪同。",
+    tagline: "在京都與藝妓或舞妓共度兩小時的私人時光。共享當季日本料理、隔桌交談、欣賞傳統舞蹈、一起玩座敷遊戲——全程有口譯導遊陪同（英語、西班牙語或法語）。",
     duration: "2 小時", price: "¥219,800", priceUnit: "group", group: "包場 · 最多 5 位（6 位以上請洽詢）", ages: "全年齡", area: "京都（祇園／東山一帶）",
     img: "/images/geiko-photo-together.jpg", alt: "在京都私人包廂中與舞妓合影留念的兩位賓客",
     gallery: [
@@ -163,13 +163,12 @@ export const experiencesZh: Experience[] = [
     story: { heading: "花柳界的世界", body: "京都的「花柳界」三百年來靠引薦與信任運作。藝妓不是可以雇用的表演者，而是靠茶屋與熟客之間的關係延續夜晚的藝術家。坐在那間房裡，對話還能以您自己的語言流動，是京都所能給予最難得的一種進入。" },
     availabilityNote: "新年假期期間休息。",
     interactionTime: "約1小時45分",
-    includedShort: "私人包廂 · 餐點與飲料 · 英語口譯",
+    includedShort: "私人包廂 · 餐點與飲料 · 口譯導遊（英／西／法）",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "一位藝妓或舞妓", blurb: "最基本的私人藝妓晚宴體驗。" },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "藝妓或舞妓 + 現場三味線", blurb: "一位藝妓或舞妓，加上地方（三味線）現場演奏。" },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "兩位表演者 + 現場三味線", blurb: "兩位藝妓或舞妓，加上地方現場三味線演奏。最完整的一晚。" },
     },
-    addOns: [{ id: "sake", name: "頂級日本酒升級", description: "以精選的頂級日本酒，讓這一晚更加難忘。" }],
     galleryNote: "照片中的包廂與料理僅為示例,實際依日期與季節而異。",
     highlights: [
       { icon: "group", title: "包廂專屬於您", body: "只屬於您一行人的私人宴席包廂,絕不與其他客人併桌。" },
@@ -182,12 +181,11 @@ export const experiencesZh: Experience[] = [
       "全程飲料無限暢飲：啤酒、日本酒、燒酎、葡萄酒、Highball、梅酒與無酒精飲料",
       "藝妓或舞妓入席相陪：交談、一曲舞蹈，以及座敷遊戲「金毘羅船船」與「虎虎」（表演者人數依方案）",
       "隨時可拍照錄影（包含舞蹈），並與舞妓合影留念",
-      "英語口譯導遊自抵達至結束全程陪同",
+      "口譯導遊（英語、西班牙語或法語，任選）自抵達至結束全程陪同",
       "含稅與服務費，當天不另收任何費用",
     ],
     notIncluded: [
-      "頂級日本酒：可選升級，價格於報價時確認",
-      "英語以外的口譯：另行報價",
+      "英語、西班牙語、法語以外的口譯：請於詢問日期時告知",
       "六人以上的團體另行報價",
     ],
     schedule: [

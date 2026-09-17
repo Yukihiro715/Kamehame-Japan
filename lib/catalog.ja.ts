@@ -133,7 +133,7 @@ export const experiencesJa: Experience[] = [
   {
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "舞妓・芸妓とのお座敷",
-    tagline: "京都で、芸妓または舞妓と過ごす貸切の2時間。季節の和食を囲み、語らい、舞を間近で観て、お座敷遊びに加わる——英語通訳が最初から最後まで同席します。",
+    tagline: "京都で、芸妓または舞妓と過ごす貸切の2時間。季節の和食を囲み、語らい、舞を間近で観て、お座敷遊びに加わる——通訳ガイド(英語・スペイン語・フランス語)が最初から最後まで同席します。",
     duration: "2時間", price: "¥219,800", priceUnit: "group", group: "貸切・5名まで(6名以上は要相談)", ages: "年齢制限なし", area: "京都(祇園・東山周辺)",
     img: "/images/geiko-photo-together.jpg", alt: "京都の貸切座敷で、舞妓と一緒に記念撮影する参加者",
     gallery: [
@@ -168,13 +168,12 @@ export const experiencesJa: Experience[] = [
     story: { heading: "花街という世界", body: "京都の花街は、三百年にわたって紹介と信用で動いてきました。芸妓は雇われて演じる人ではなく、茶屋と馴染み客との関係の上に一夜が成り立つ芸の人です。その部屋に座り、しかも会話がご自身の言葉で流れる。京都が開く扉の中で、これがもっとも稀なものです。" },
     availabilityNote: "年末年始はお休みです。",
     interactionTime: "約1時間45分",
-    includedShort: "貸切のお座敷 · 食事と飲み放題 · 英語通訳",
+    includedShort: "貸切のお座敷 · 食事と飲み放題 · 通訳ガイド(英・西・仏)",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "芸妓または舞妓 1名", blurb: "ベーシックな完全貸切のお座敷体験。" },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "芸妓または舞妓 1名 + 地方(生三味線)", blurb: "地方さんの生三味線を加えた上位プラン。" },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "芸妓・舞妓 2名 + 地方(生三味線)", blurb: "芸妓・舞妓2名と地方さんの生演奏。もっとも贅沢な構成です。" },
     },
-    addOns: [{ id: "sake", name: "プレミアム日本酒アップグレード", description: "厳選したプレミアム日本酒で、夜をいっそう特別に。" }],
     galleryNote: "写真のお部屋・お料理は一例です。日程や季節により異なります。",
     highlights: [
       { icon: "group", title: "お座敷は貸切", body: "他のお客様と相席にならない、お客様だけのお座敷です。" },
@@ -187,12 +186,11 @@ export const experiencesJa: Experience[] = [
       "飲み放題(ビール・日本酒・焼酎・ワイン・ハイボール・梅酒・ソフトドリンク)",
       "芸妓または舞妓のお相手:歓談、舞1曲、お座敷遊び(金毘羅船々・とらとら)。出演者の人数はプランによります",
       "写真・動画はいつでも撮影可(舞の最中も)。最後に記念撮影",
-      "英語の通訳ガイドが到着からお開きまで同席",
+      "通訳ガイド(英語・スペイン語・フランス語から選択)が到着からお開きまで同席",
       "消費税・サービス料込み。当日の追加料金はありません",
     ],
     notIncluded: [
-      "プレミアム日本酒:任意のアップグレード。料金はお見積もりの際にご案内",
-      "英語以外の通訳:別途お見積り",
+      "英語・スペイン語・フランス語以外の通訳:空き確認の際にご相談ください",
       "6名以上のお席は個別にお見積り",
     ],
     schedule: [
