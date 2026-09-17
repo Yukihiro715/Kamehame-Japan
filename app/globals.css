@@ -80,7 +80,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .mobile-menu nav { display:grid; margin-top:56px; border-top:1px solid var(--border); }
 .mobile-menu nav a { display:flex; justify-content:space-between; padding:19px 0; border-bottom:1px solid var(--border); font-family:var(--font-display); font-size:21px; letter-spacing:.04em; text-transform:uppercase; }
 .mobile-menu>p { margin-top:30px; color:var(--muted); font-size:12px; }
-.hero { min-height:790px; position:relative; overflow:hidden; display:flex; align-items:center; padding:135px clamp(24px,7vw,120px) 80px; color:var(--white); background:linear-gradient(90deg,rgba(10,12,9,.94) 0%,rgba(10,12,9,.76) 45%,rgba(10,12,9,.16) 80%),url('/omotenashi-hero.png') center/cover no-repeat; }
+.hero { min-height:790px; position:relative; overflow:hidden; display:flex; align-items:center; padding:135px clamp(24px,7vw,120px) 80px; color:var(--white); background:linear-gradient(90deg,rgba(10,12,9,.94) 0%,rgba(10,12,9,.76) 45%,rgba(10,12,9,.16) 80%),url('/images/geiko-conversation.jpg') 60% center/cover no-repeat; }
 .hero::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.48)); pointer-events:none; }
 .hero-grain { position:absolute; inset:0; opacity:.08; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E"); }
 .hero::after { content:""; position:absolute; inset:-20%; z-index:1; pointer-events:none; background:repeating-conic-gradient(from 0deg at 72% 38%, rgba(255,255,255,.055) 0 1.1deg, transparent 1.1deg 6.5deg); }
@@ -901,7 +901,7 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .dp { position:relative; }
 .dp input { caret-color:transparent; cursor:pointer; }
 .dp input:not(:placeholder-shown) { color:transparent; }
-.dp-display { position:absolute; left:16px; top:0; height:48px; display:flex; align-items:center; font-size:14px; color:var(--ink); pointer-events:none; }
+.dp-display { position:absolute; left:16px; top:0; bottom:0; display:flex; align-items:center; font-size:14px; color:var(--ink); pointer-events:none; }
 .dp-pop { position:absolute; left:0; top:calc(100% + 6px); z-index:30; width:min(320px, calc(100vw - 44px)); background:var(--white); border:2px solid var(--ink); box-shadow:6px 6px 0 rgba(23,26,33,.85); padding:12px; }
 .dp-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
 .dp-head b { font-size:14px; }
@@ -953,3 +953,51 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .legal-table dt { font-size:12px; letter-spacing:.04em; color:var(--muted); padding-top:3px; }
 .legal-table dd { margin:0; font-size:14px; line-height:1.8; color:#4a463e; }
 @media(max-width:620px){ .legal-table > div { grid-template-columns:1fr; gap:4px; padding:12px 14px; } }
+
+/* --- Form fields outside a <label> (the calendar), and the email suggestions --- */
+.form-row .field { display:grid; gap:6px; align-content:start; }
+.enquiry-form .field > label { font-size:12px; letter-spacing:.04em; color:var(--muted); cursor:pointer; }
+.email-field { position:relative; }
+.email-suggest { position:absolute; left:0; right:0; top:100%; z-index:25; margin:4px 0 0; padding:4px 0; list-style:none; background:var(--white); border:2px solid var(--ink); box-shadow:4px 4px 0 rgba(23,26,33,.85); }
+.email-suggest button { display:block; width:100%; padding:10px 14px; background:none; border:0; text-align:left; font:inherit; font-size:14px; color:var(--ink); cursor:pointer; overflow-wrap:anywhere; }
+.email-suggest button:hover, .email-suggest button.active { background:var(--rice); }
+
+/* iOS Safari zooms the page into any focused control smaller than 16px and
+   leaves it zoomed afterwards; keep form controls at 16px on touch screens. */
+@media (max-width:760px), (pointer:coarse) {
+  .enquiry-form input, .enquiry-form textarea, .enquiry-form select, .dp-display, .email-suggest button,
+  .partner-form input, .partner-form textarea { font-size:16px; }
+}
+
+/* --- Home: the one-experience card (shown while a single experience is bookable) --- */
+.feature-card { display:grid; grid-template-columns:1.1fr 1fr; margin-top:64px; background:#1e2029; border:2px solid rgba(255,253,248,.9); box-shadow:8px 8px 0 rgba(88,198,255,.55); color:var(--white); text-decoration:none; transition:transform .25s,box-shadow .25s; }
+.feature-card:hover { transform:translate(-2px,-2px); box-shadow:11px 11px 0 var(--kame-soft); }
+.feature-art { position:relative; min-height:480px; overflow:hidden; background:#1b1c18; }
+.feature-art img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+.feature-card:hover .feature-art img { transform:scale(1.03); }
+.feature-art::before { content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(0,0,0,.18),transparent 40%,rgba(0,0,0,.35)); pointer-events:none; }
+.feature-art::after { content:""; position:absolute; inset:14px; z-index:2; border:1px solid rgba(255,255,255,.28); pointer-events:none; }
+.feature-art>span { position:absolute; z-index:3; right:28px; top:24px; font-family:Georgia,serif; font-size:40px; color:var(--white); opacity:.9; text-shadow:0 3px 14px rgba(0,0,0,.55); }
+.feature-art>small { position:absolute; z-index:3; left:30px; bottom:27px; padding:5px 10px; background:var(--kame); color:var(--ink); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; transform:skewX(-10deg); }
+.feature-copy { display:flex; flex-direction:column; padding:46px 48px 44px; }
+.feature-copy h3 { margin:18px 0 14px; font-family:var(--font-display); font-weight:400; font-size:clamp(28px,3vw,42px); letter-spacing:.03em; text-transform:uppercase; line-height:1.06; }
+.feature-copy>p { margin:0; max-width:52ch; color:#c8c5ba; font-size:15px; line-height:1.75; }
+.feature-facts { display:flex; flex-wrap:wrap; gap:10px 22px; margin:26px 0 0; padding:0; list-style:none; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:#e8e4d8; }
+.feature-facts li { display:flex; align-items:center; gap:7px; }
+.feature-price { margin-top:auto; padding-top:26px; border-top:1px solid rgba(255,255,255,.16); }
+.feature-price b { display:block; font-family:var(--font-display); font-weight:400; font-size:32px; letter-spacing:.02em; line-height:1.15; }
+.feature-price b small { font-family:Arial,Helvetica,sans-serif; font-size:13px; letter-spacing:.04em; color:#c8c5ba; }
+.feature-price p { margin:8px 0 0; color:#aaa89e; font-size:12.5px; line-height:1.6; }
+.feature-cta { display:inline-flex; align-items:center; gap:10px; align-self:flex-start; margin-top:26px; padding:15px 22px; background:var(--kame); color:var(--ink); font-family:var(--font-display); font-size:13px; letter-spacing:.14em; text-transform:uppercase; }
+.feature-cta svg { transition:transform .2s; }
+.feature-card:hover .feature-cta svg { transform:translateX(3px); }
+:is([lang="ja"], [lang="zh-tw"]) .feature-copy h3 { font-size:clamp(22px,2.4vw,30px); line-height:1.35; }
+:is([lang="ja"], [lang="zh-tw"]) .feature-cta, :is([lang="ja"], [lang="zh-tw"]) .feature-art>small { letter-spacing:.06em; }
+@media(max-width:980px){ .feature-card { grid-template-columns:1fr; margin-top:48px; } .feature-art { min-height:360px; } .feature-copy { padding:30px 26px 30px; } .feature-price b { font-size:28px; } }
+@media(max-width:700px){ .feature-art { min-height:300px; } .feature-copy { padding:26px 20px 26px; } .feature-facts { gap:8px 16px; } }
+
+/* --- Not found --- */
+.not-found-body { max-width:720px; margin:0 auto; padding:120px clamp(24px,7vw,120px) 140px; }
+.not-found-body h1 { margin:0 0 18px; font-family:var(--font-display); font-weight:400; font-size:clamp(34px,4.6vw,62px); letter-spacing:.02em; text-transform:uppercase; line-height:1.02; }
+.not-found-body>p { margin:0 0 30px; color:var(--muted); font-size:16px; line-height:1.85; }
+.not-found-links { display:flex; flex-wrap:wrap; gap:10px; }

@@ -119,6 +119,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const live = isLive(exp);
   const reading = articlesForExperience(exp.slug, lang);
+  const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
   const photos = [{ img: exp.img, alt: exp.alt }, ...exp.gallery];
   const reviews = reviewsFor(exp.slug);
@@ -414,18 +415,20 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         </section>
       )}
 
-      <section className="more-in">
-        <h2>{T.moreIn(city.title)}</h2>
-        <div className="more-grid">
-          {experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4).map((e) => (
-            <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
-              <img src={e.img} alt={e.alt} loading="lazy" />
-              <b>{e.title}</b>
-              <small>{e.duration} · {T.from} {e.price}</small>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {moreInCity.length > 0 && (
+        <section className="more-in">
+          <h2>{T.moreIn(city.title)}</h2>
+          <div className="more-grid">
+            {moreInCity.map((e) => (
+              <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
+                <img src={e.img} alt={e.alt} loading="lazy" />
+                <b>{e.title}</b>
+                <small>{e.duration} · {T.from} {e.price}</small>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),

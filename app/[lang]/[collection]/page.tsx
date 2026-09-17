@@ -43,7 +43,7 @@ export default async function CollectionPage({ params }: Props) {
   const T = t(lang);
 
   // Articles attached to any experience in this city or category.
-  const { experiences } = catalogFor(lang);
+  const { experiences, cities } = catalogFor(lang);
   const reading = articlesForCollection(collection, lang, (slug) => experiences.find((e) => e.slug === slug));
 
   const faqJsonLd = {
@@ -64,7 +64,7 @@ export default async function CollectionPage({ params }: Props) {
       <section className="collection-hero">
         <img src={data.heroImg} alt={data.heroAlt} />
         <div className="collection-hero-copy">
-          <p className="eyebrow"><span /> {T.eyebrowHero}</p>
+          <p className="eyebrow"><span /> {T.eyebrowHero(cities.map((c) => c.title))}</p>
           <h1>{data.h1}</h1>
         </div>
       </section>

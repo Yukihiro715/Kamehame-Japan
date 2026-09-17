@@ -2,16 +2,17 @@ import Link from "next/link";
 import { Brand } from "@/components/site/brand";
 import { FooterLanguages } from "@/components/site/language-switcher";
 import { ConsentBanner, ConsentSettingsLink } from "@/components/site/consent-banner";
-import { langHome, t, type Lang } from "@/lib/i18n";
+import { catalogFor } from "@/lib/catalog";
+import { t, type Lang } from "@/lib/i18n";
 
 export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
   const T = t(lang);
+  const { cities } = catalogFor(lang);
   return (
     <footer className="site-footer-block">
       <Brand lang={lang} />
       <div className="footer-links">
-        <Link href={`/${lang}/tokyo/`}>{T.navTokyo}</Link>
-        <Link href={`/${lang}/kyoto/`}>{T.navKyoto}</Link>
+        {cities.map((c) => <Link key={c.slug} href={`/${lang}/${c.slug}/`}>{c.title}</Link>)}
         <Link href={`/${lang}/experiences/`}>{T.navExperiences}</Link>
         <Link href={`/${lang}/about/`}>{T.footerAbout}</Link>
         <Link href={`/${lang}/faq/`}>{T.navFaq}</Link>

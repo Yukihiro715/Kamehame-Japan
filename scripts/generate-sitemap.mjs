@@ -17,15 +17,23 @@ const read = (f) => readFileSync(join(root, f), "utf8");
 const catalog = read("lib/catalog.ts");
 const slugs = (re) => [...catalog.matchAll(re)].map((m) => m[1]);
 
-const cities = slugs(/slug:\s*"(tokyo|kyoto)",\s*title:/g);
-const categories = slugs(/\{\s*slug:\s*"([a-z-]+)",\s*title:[^}]*?tag:/g);
-const experiences = [...catalog.matchAll(/slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto)",\s*category:/g)]
-  .map((m) => ({ slug: m[1], city: m[2] }));
+const allCities = slugs(/slug:\s*"(tokyo|kyoto)",\s*title:/g);
+const allCategories = slugs(/\{\s*slug:\s*"([a-z-]+)",\s*title:[^}]*?tag:/g);
+const allExperiences = [...catalog.matchAll(/slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto)",\s*category:\s*"([a-z-]+)"([^\n]*)/g)]
+  .map((m) => ({ slug: m[1], city: m[2], category: m[3], live: /status:\s*"live"/.test(m[4]) }));
 const tours = slugs(/slug:\s*"([a-z-]+-private-day-tour)",\s*city:/g);
 
 // Tours are withheld until the operating partner holds a 旅行業 registration
 // (lib/catalog.ts TOURS_PUBLISHED). Keep the sitemap in step with the site.
 const toursPublished = /export const TOURS_PUBLISHED = true/.test(catalog);
+
+// Placeholder experiences (no signed partner) are withheld with them the
+// cities and categories that only they populate (lib/catalog.ts
+// PLACEHOLDERS_PUBLISHED) — the same filter catalogFor() applies.
+const placeholdersPublished = /export const PLACEHOLDERS_PUBLISHED = true/.test(catalog);
+const experiences = placeholdersPublished ? allExperiences : allExperiences.filter((e) => e.live);
+const cities = allCities.filter((c) => placeholdersPublished || experiences.some((e) => e.city === c));
+const categories = allCategories.filter((c) => placeholdersPublished || experiences.some((e) => e.category === c));
 
 const collections = [...new Set([
   ...cities, ...categories,
@@ -83,13 +91,18 @@ for (const page of ["about", "faq", "journal", "contact", "trade", "privacy", "l
   }
 }
 
-// Articles render only in the locales they have been written for.
+// Articles render only in the locales they have been written for, and only
+// while one of the experiences they are tagged with is on the site
+// (lib/articles.ts articlesFor).
 const articles = read("lib/articles.ts");
+const listed = new Set(experiences.map((e) => e.slug));
 for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {
   const slug = m[1];
-  // Which locales carry copy for this article
   const block = articles.slice(articles.indexOf(`slug: "${slug}"`));
   const end = block.indexOf("\n  },\n");
+  const tags = [...(block.slice(0, end).match(/experiences:\s*\[([^\]]*)\]/)?.[1] ?? "").matchAll(/"([a-z0-9-]+)"/g)].map((t) => t[1]);
+  if (!tags.some((t) => listed.has(t))) continue;
+  // Which locales carry copy for this article
   const langs = LANGS.filter((l) => new RegExp(`\\n\\s{6}"?${l}"?:\\s*\\{`).test(block.slice(0, end)));
   for (const lang of langs) {
     add(`/${lang}/journal/${slug}/`, {

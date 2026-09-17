@@ -14,6 +14,14 @@ export type BookingType = "instant" | "request";
 export type ExperienceStatus = "live" | "soon";
 export const isLive = (e: { status?: ExperienceStatus }) => e.status === "live";
 
+/** Whether placeholder ("soon") experiences appear on the site at all. While
+ *  false, catalogFor() returns only signed experiences, and only the cities
+ *  and categories that still have one — so nothing is listed that cannot be
+ *  booked. The placeholder entries stay in the data for when a partner signs:
+ *  set their status to "live" (or flip this on to show the planned range with
+ *  "Coming soon" labels). The sitemap generator reads this flag too. */
+export const PLACEHOLDERS_PUBLISHED = false;
+
 export interface Category {
   slug: string;
   title: string;
@@ -471,13 +479,27 @@ function withStructure(localized: Experience[]): Experience[] {
   });
 }
 
-export function catalogFor(lang: Lang) {
+function fullCatalog(lang: Lang) {
   const published = <T,>(list: T[]) => (TOURS_PUBLISHED ? list : []);
   if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: withStructure(experiencesEs), tours: published(toursEs) };
   if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: withStructure(experiencesJa), tours: published(toursJa) };
   if (lang === "fr") return { cities: citiesFr, categories: categoriesFr, experiences: withStructure(experiencesFr), tours: published(toursFr) };
   if (lang === "zh-tw") return { cities: citiesZh, categories: categoriesZh, experiences: withStructure(experiencesZh), tours: published(toursZh) };
   return { cities, categories, experiences, tours: published(tours) };
+}
+
+/** The catalog as the site shows it. With PLACEHOLDERS_PUBLISHED off this is
+ *  the signed experiences only, plus the cities and categories they belong to. */
+export function catalogFor(lang: Lang) {
+  const full = fullCatalog(lang);
+  if (PLACEHOLDERS_PUBLISHED) return full;
+  const experiences = full.experiences.filter(isLive);
+  return {
+    ...full,
+    experiences,
+    cities: full.cities.filter((c) => experiences.some((e) => e.city === c.slug)),
+    categories: full.categories.filter((c) => experiences.some((e) => e.category === c.slug)),
+  };
 }
 
 const CANCELLATIONS: Record<Lang, string> = {

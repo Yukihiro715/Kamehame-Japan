@@ -6,8 +6,12 @@ import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/analytics";
 import { DatePicker } from "@/components/site/date-picker";
+import { EmailInput } from "@/components/site/email-input";
 
 type Status = "idle" | "sending" | "sent" | "failed";
+
+/** Largest head count offered as its own option; beyond it the list ends in "N or more". */
+const GUEST_LIST_MAX = 12;
 
 const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
 const fmtDate = (iso: string, lang: Lang) =>
@@ -45,6 +49,12 @@ export function EnquiryForm({
   const times = experience?.startTimes && experience.startTimes.length > 0 ? experience.startTimes : undefined;
   // Pre-select the typical dinner slot so the example reads 18:00, not the last slot.
   const sampleTime = times?.includes("18:00") ? "18:00" : times?.[0];
+  // Head count as a list: every size up to GUEST_LIST_MAX, then one "or more"
+  // entry for the venue's larger parties, which are quoted individually anyway.
+  const size = experience?.partySize ?? { min: 1, max: GUEST_LIST_MAX };
+  const guestCap = Math.min(size.max, GUEST_LIST_MAX);
+  const guestOptions = Array.from({ length: Math.max(0, guestCap - size.min + 1) }, (_, i) => size.min + i);
+  const guestMore = size.max > guestCap ? guestCap + 1 : undefined;
   // Earliest selectable date — computed after mount so the server and the
   // browser never disagree about "today".
   const [minDate, setMinDate] = useState<string>();
@@ -123,7 +133,7 @@ export function EnquiryForm({
         </label>
         <label>
           <span>{F.email}</span>
-          <input name="email" type="email" required autoComplete="email" maxLength={200} />
+          <EmailInput lang={lang} required />
         </label>
       </div>
 
@@ -141,11 +151,11 @@ export function EnquiryForm({
       ) : experience ? (
         <>
           <div className="form-row two">
-            <label>
-              <span>{F.preferredDate}</span>
-              <DatePicker name="date" lang={lang} min={minDate} required closed={(d) => isClosed(d, experience.closed)} />
+            <div className="field">
+              <label htmlFor="enq-date">{F.preferredDate}</label>
+              <DatePicker id="enq-date" name="date" lang={lang} min={minDate} required closed={(d) => isClosed(d, experience.closed)} />
               {minDate && <small className="form-hint">{F.earliestDate(fmtDate(minDate, lang), experience.leadDays ?? 3, experience.cutoffTime ?? "17:00")}</small>}
-            </label>
+            </div>
             {times ? (
               <label>
                 <span>{F.startTime}</span>
@@ -156,10 +166,10 @@ export function EnquiryForm({
             ) : <span />}
           </div>
           <div className="form-row two">
-            <label>
-              <span>{F.altDate}</span>
-              <DatePicker name="altDate" lang={lang} min={minDate} closed={(d) => isClosed(d, experience.closed)} />
-            </label>
+            <div className="field">
+              <label htmlFor="enq-alt-date">{F.altDate}</label>
+              <DatePicker id="enq-alt-date" name="altDate" lang={lang} min={minDate} closed={(d) => isClosed(d, experience.closed)} />
+            </div>
             {times ? (
               <label>
                 <span>{F.altStartTime}</span>
@@ -172,11 +182,10 @@ export function EnquiryForm({
           <div className="form-row two">
             <label>
               <span>{F.partyN}</span>
-              <input
-                name="guests" type="number" inputMode="numeric" required
-                min={experience.partySize?.min ?? 1} max={experience.partySize?.max ?? 40}
-                defaultValue={experience.partySize?.min ?? 2}
-              />
+              <select name="guests" required defaultValue={String(guestOptions[0])}>
+                {guestOptions.map((n) => <option key={n} value={n}>{F.guests(n)}</option>)}
+                {guestMore && <option value={`${guestMore}+`}>{F.guestsMore(guestMore)}</option>}
+              </select>
             </label>
           </div>
         </>

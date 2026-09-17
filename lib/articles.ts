@@ -7,6 +7,7 @@
 // Every article is optional. With the list empty, the home page and experience
 // pages simply omit their article sections — nothing renders half-built.
 
+import { catalogFor } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 
 export interface Article {
@@ -15,7 +16,10 @@ export interface Article {
   date: string;
   /** Reading time in minutes, written by hand — we do not estimate it. */
   minutes: number;
-  /** Catalog slugs this article belongs with, for the related-reading block. */
+  /** Catalog slugs this article belongs with, for the related-reading block.
+   *  An article is published only while at least one of them is on the site
+   *  (lib/catalog.ts PLACEHOLDERS_PUBLISHED), so a piece written around an
+   *  experience we no longer list disappears with it. */
   experiences: string[];
   /** Hero image, site-root-relative. */
   img: string;
@@ -270,7 +274,10 @@ const ARTICLES: Article[] = [
     slug: "what-a-private-experience-costs",
     date: "2026-08-28",
     minutes: 5,
-    experiences: ["sushi-masterclass", "katana-forge-visit", "evening-with-geiko", "anime-nail-art-session"],
+    // Written around the placeholder catalog (a ¥45,000 sushi session for two,
+    // "two to six" guests). Re-tag with "evening-with-geiko" once the copy is
+    // rewritten around the geiko evening's own numbers.
+    experiences: ["sushi-masterclass", "katana-forge-visit", "anime-nail-art-session"],
     img: "/images/exp-kimono.jpg",
     alt: "Woman in a red kimono beside a koi pond in a Japanese garden",
     copy: {
@@ -316,8 +323,12 @@ const ARTICLES: Article[] = [
   },
 ];
 
-export const articlesFor = (lang: Lang): Article[] =>
-  ARTICLES.filter((a) => a.copy[lang]).sort((a, b) => b.date.localeCompare(a.date));
+export const articlesFor = (lang: Lang): Article[] => {
+  const listed = new Set(catalogFor(lang).experiences.map((e) => e.slug));
+  return ARTICLES
+    .filter((a) => a.copy[lang] && a.experiences.some((slug) => listed.has(slug)))
+    .sort((a, b) => b.date.localeCompare(a.date));
+};
 
 export const articleBySlug = (slug: string, lang: Lang): Article | undefined =>
   articlesFor(lang).find((a) => a.slug === slug);

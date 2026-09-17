@@ -9,10 +9,14 @@ import { t, type Lang } from "@/lib/i18n";
  *  The native <input type="date"> on iOS shows every day regardless of `min`
  *  and only complains after the fact, which is what this replaces. The
  *  chosen date sits in a real text input (name, required) so the form's
- *  own validation and FormData still work; typing is suppressed. */
+ *  own validation and FormData still work; typing is suppressed.
+ *
+ *  Keep it out of a wrapping <label>: iOS Safari forwards a tap on a button
+ *  inside a label to the label's input as a second click, which re-opened
+ *  the calendar right after a day was picked. Label it with `htmlFor`. */
 export function DatePicker({
-  name, lang, min, required, closed, defaultOpenMonth,
-}: { name: string; lang: Lang; min?: string; required?: boolean; closed?: (iso: string) => boolean; defaultOpenMonth?: string }) {
+  id, name, lang, min, required, closed, defaultOpenMonth,
+}: { id?: string; name: string; lang: Lang; min?: string; required?: boolean; closed?: (iso: string) => boolean; defaultOpenMonth?: string }) {
   const F = t(lang).form;
   const locale = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" }[lang];
   const mondayFirst = lang === "es" || lang === "fr";
@@ -20,16 +24,19 @@ export function DatePicker({
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState(() => (defaultOpenMonth ?? min ?? new Date().toISOString().slice(0, 10)).slice(0, 7));
   const root = useRef<HTMLDivElement>(null);
+  const input = useRef<HTMLInputElement>(null);
 
   // Once the earliest date is known, open the calendar on that month.
   useEffect(() => { if (min && !value) setMonth(min.slice(0, 7)); }, [min, value]);
 
   useEffect(() => {
     if (!open) return;
-    const onDoc = (e: MouseEvent) => { if (root.current && !root.current.contains(e.target as Node)) setOpen(false); };
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
-    document.addEventListener("mousedown", onDoc); document.addEventListener("keydown", onKey);
-    return () => { document.removeEventListener("mousedown", onDoc); document.removeEventListener("keydown", onKey); };
+    // pointerdown rather than mousedown: iOS only synthesises mouse events for
+    // elements it considers clickable, so a tap on plain page text never closed it.
+    const onDoc = (e: PointerEvent) => { if (root.current && !root.current.contains(e.target as Node)) setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); input.current?.blur(); } };
+    document.addEventListener("pointerdown", onDoc); document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("pointerdown", onDoc); document.removeEventListener("keydown", onKey); };
   }, [open]);
 
   const fmtLong = useMemo(() => new Intl.DateTimeFormat(locale, { year: "numeric", month: "long", day: "numeric", weekday: "short", timeZone: "UTC" }), [locale]);
@@ -50,18 +57,29 @@ export function DatePicker({
   const shift = (n: number) => { const d = new Date(Date.UTC(y, m - 1 + n, 1)); setMonth(d.toISOString().slice(0, 7)); };
   const canGoBack = !min || month > min.slice(0, 7);
 
+  // Picking a day (or clearing) closes the calendar and drops focus, so the
+  // next tap on the field is a fresh open rather than a no-op on a focused input.
+  const choose = (d: string) => { setValue(d); setOpen(false); input.current?.blur(); };
+
   return (
     <div className={`dp ${open ? "open" : ""}`} ref={root}>
       <input
+        ref={input} id={id}
         name={name} type="text" required={required} value={value} inputMode="none" autoComplete="off"
         placeholder={F.pickDate} aria-haspopup="dialog" aria-expanded={open}
         onFocus={() => setOpen(true)} onClick={() => setOpen(true)}
-        onKeyDown={(e) => { if (e.key === "Backspace" || e.key === "Delete") setValue(""); else if (e.key !== "Tab" && e.key !== "Escape") e.preventDefault(); }}
+        onKeyDown={(e) => {
+          if (e.key === "Backspace" || e.key === "Delete") setValue("");
+          else if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") { e.preventDefault(); setOpen(true); }
+          else if (e.key !== "Tab" && e.key !== "Escape") e.preventDefault();
+        }}
         onChange={() => { /* value is set from the calendar only */ }}
       />
       {value && <span className="dp-display" aria-hidden="true">{fmtLong.format(new Date(`${value}T00:00:00Z`))}</span>}
       {open && (
-        <div className="dp-pop" role="dialog" aria-label={F.pickDate}>
+        // preventDefault on the popover's clicks stops any surrounding label
+        // from treating them as clicks on the input.
+        <div className="dp-pop" role="dialog" aria-label={F.pickDate} onClick={(e) => e.preventDefault()}>
           <div className="dp-head">
             <button type="button" aria-label="Previous month" disabled={!canGoBack} onClick={() => shift(-1)}><ChevronLeft size={18} /></button>
             <b>{fmtMonth.format(first)}</b>
@@ -76,14 +94,14 @@ export function DatePicker({
                 <button
                   type="button" key={d} disabled={off} aria-disabled={off}
                   className={`dp-day ${value === d ? "sel" : ""}`}
-                  onClick={() => { setValue(d); setOpen(false); }}
+                  onClick={() => choose(d)}
                 >{i + 1}</button>
               );
             })}
           </div>
           <div className="dp-foot">
             {min && <small>{F.earliestShort(fmtLong.format(new Date(`${min}T00:00:00Z`)))}</small>}
-            <button type="button" className="dp-clear" onClick={() => { setValue(""); setOpen(false); }}>{F.clear}</button>
+            <button type="button" className="dp-clear" onClick={() => choose("")}>{F.clear}</button>
           </div>
         </div>
       )}

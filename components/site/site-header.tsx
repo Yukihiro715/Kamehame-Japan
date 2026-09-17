@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Brand } from "@/components/site/brand";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
-import { TOURS_PUBLISHED } from "@/lib/catalog";
-import { langHome, t, type Lang } from "@/lib/i18n";
+import { catalogFor, TOURS_PUBLISHED } from "@/lib/catalog";
+import { t, type Lang } from "@/lib/i18n";
 
 export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "overlay" | "solid"; lang?: Lang }) {
   const T = t(lang);
+  // Cities appear once they have something bookable in them.
+  const { cities } = catalogFor(lang);
   const navigation: [string, string][] = [
-    [T.navTokyo, `/${lang}/tokyo/`],
-    [T.navKyoto, `/${lang}/kyoto/`],
+    ...cities.map((c) => [c.title, `/${lang}/${c.slug}/`] as [string, string]),
     [T.navExperiences, `/${lang}/experiences/`],
     ...(TOURS_PUBLISHED ? [[T.navTours, `/${lang}/tours/`] as [string, string]] : []),
     [T.navApproach, `/${lang}/about/`],
