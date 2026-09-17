@@ -210,6 +210,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
                 {exp.taxIncluded && <li><ShieldCheck size={15} /><span>{D.taxIncluded}</span></li>}
                 {avail && <li><Clock3 size={15} /><span>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
+                {plans.length > 0 && <li><Users size={15} /><span>{D.performerNote}</span></li>}
               </ul>
             </section>
 
@@ -314,17 +315,13 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             </section>
 
             {/* ⑪ Reviews — real ones when they exist; until then, how they are collected */}
-            <section className="xp-section" id="reviews">
-              <h2>{hasReviews ? T.reviewsH : D.reviewsSoonH}</h2>
-              {hasReviews ? (
-                <>
-                  <ReviewSummaryPanel experience={exp.slug} lang={lang} />
-                  <ReviewList reviews={reviews} lang={lang} />
-                </>
-              ) : (
-                <p className="review-soon"><ShieldCheck size={16} /> <span>{D.reviewsSoon}</span></p>
-              )}
-            </section>
+            {hasReviews && (
+              <section className="xp-section" id="reviews">
+                <h2>{T.reviewsH}</h2>
+                <ReviewSummaryPanel experience={exp.slug} lang={lang} />
+                <ReviewList reviews={reviews} lang={lang} />
+              </section>
+            )}
 
             {/* ⑦ Video — only when an asset exists */}
             {video && (

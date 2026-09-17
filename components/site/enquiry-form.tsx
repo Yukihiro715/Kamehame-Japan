@@ -169,7 +169,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
           </div>
           <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{D.estimateH} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span><b>{yen(b.estimate.total)}</b><small>{D.estimateNote}</small></>
+              <><span>{D.estimateH} · {plans.find((p) => p.id === b.plan)?.label} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span><b>{yen(b.estimate.total)}</b><small>{D.priceTotalNote}. {D.estimateNote}</small></>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.sixPlus(x.listedMax + 1) : D.quoteIndividually}</small></>
             )}

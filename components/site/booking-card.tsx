@@ -29,8 +29,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
     <div className="bk-card" id="booking">
       <div className="bk-price">
         <small>{D.fromPrice}</small>
-        <b>{plan ? yen(plan.regular) : headline}</b>
-        <small>{pricing?.extraGuest ? D.upToGuests(pricing.extraGuest.included) : D.priceTotalNote}{plan ? ` · ${plan.label}` : ""}</small>
+        <b>{plans.length ? yen(Math.min(...plans.map((p) => p.regular))) : headline}</b>
+        <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : D.priceTotalNote}</small>
         <RatingSummary experience={x.slug} lang={lang} href="#reviews" size={13} />
       </div>
 
@@ -73,9 +73,9 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       <div className="bk-est" aria-live="polite">
         {b.estimate ? (
           <>
-            <span>{D.estimateH} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span>
+            <span>{D.estimateH} · {plan?.label} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span>
             <b>{yen(b.estimate.total)}</b>
-            <small>{b.date ? D.estimateNote : D.pickDateForSeason}</small>
+            <small>{D.priceTotalNote}. {b.date ? D.estimateNote : D.pickDateForSeason}</small>
           </>
         ) : (
           <>
