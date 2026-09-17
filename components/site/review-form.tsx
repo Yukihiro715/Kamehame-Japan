@@ -4,7 +4,6 @@ import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail, Star } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/analytics";
-import { EmailInput } from "@/components/site/email-input";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 const MAX_PHOTOS = 3;
@@ -102,46 +101,15 @@ export function ReviewForm({ lang, experiences, fallbackEmail }: { lang: Lang; e
       </div>
 
       <label className="form-row">
-        <span>{R.title}</span>
-        <input name="title" type="text" maxLength={90} />
-      </label>
-      <label className="form-row">
         <span>{R.body}</span>
         <textarea name="body" required rows={6} maxLength={2000} placeholder={R.bodyHint} />
       </label>
-
-      <div className="form-row two">
-        <label>
-          <span>{R.name}</span>
-          <input name="name" type="text" required autoComplete="given-name" maxLength={40} />
-        </label>
-        <label>
-          <span>{R.country}</span>
-          <input name="country" type="text" required autoComplete="country-name" placeholder={R.countryHint} maxLength={60} />
-        </label>
-      </div>
-      <div className="form-row two">
-        <label>
-          <span>{R.email}</span>
-          <EmailInput lang={lang} required />
-        </label>
-        <label>
-          <span>{R.party}</span>
-          <select name="party" defaultValue="couple">
-            {Object.entries(R.partyOpts).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-          </select>
-        </label>
-      </div>
-      <div className="form-row two">
-        <label>
-          <span>{R.date}</span>
-          <input name="date" type="date" />
-        </label>
-        <label>
-          <span>{R.ref}</span>
-          <input name="ref" type="text" value={ref} onChange={(e) => setRef(e.target.value)} maxLength={40} />
-        </label>
-      </div>
+      <label className="form-row">
+        <span>{R.name}</span>
+        <input name="name" type="text" required autoComplete="given-name" maxLength={40} />
+      </label>
+      {/* Booking reference and experience come from the link in the thank-you email. */}
+      <input type="hidden" name="ref" value={ref} />
 
       <label className="form-row">
         <span>{R.photos}</span>

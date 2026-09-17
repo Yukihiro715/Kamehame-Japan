@@ -30,8 +30,8 @@ function parse(b: Record<string, unknown>): ReviewSubmission | null {
   const rating = Number(b.rating);
   const body = typeof b.body === "string" ? b.body.trim().slice(0, MAX.body) : "";
   const name = clean(b.name, MAX.name); const email = clean(b.email, MAX.email); const country = clean(b.country, MAX.country);
-  if (!(rating >= 1 && rating <= 5) || !body || !name || !email || !country) return null;
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
+  if (!(rating >= 1 && rating <= 5) || !body || !name) return null;
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
   const photosIn = Array.isArray(b.photos) ? (b.photos as unknown[]).slice(0, MAX_PHOTOS) : [];
   const photos = photosIn.flatMap((p) => {
     if (!p || typeof p !== "object") return [];
@@ -52,8 +52,8 @@ function text(r: ReviewSubmission): string {
     `Rating:     ${r.rating} / 5`,
     r.title && `Title:      ${r.title}`,
     `Name:       ${r.name}`,
-    `Country:    ${r.country}`,
-    `Email:      ${r.email}`,
+    r.country && `Country:    ${r.country}`,
+    r.email && `Email:      ${r.email}`,
     r.party && `Party:      ${r.party}`,
     r.date && `Date:       ${r.date}`,
     r.ref && `Booking:    ${r.ref}`,
@@ -80,14 +80,14 @@ export async function POST(request: Request): Promise<Response> {
     console.error("review: CONTACT_TO secret, or both RESEND_API_KEY and the send_email binding, missing");
     return Response.json({ ok: false, error: "unconfigured", fallback: CONTACT_EMAIL }, { status: 503 });
   }
-  const subject = `[Review] ${r.experience} — ${r.rating}★ — ${r.name}, ${r.country}`;
+  const subject = `[Review] ${r.experience} — ${r.rating}★ — ${r.name}${r.ref ? ` — ${r.ref}` : ""}`;
 
   if (key) {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: `KAMEHAME JAPAN Site <${FROM}>`, to: [to], reply_to: r.email, subject, text: text(r),
+        from: `KAMEHAME JAPAN Site <${FROM}>`, to: [to], ...(r.email ? { reply_to: r.email } : {}), subject, text: text(r),
         attachments: r.photos.map((p, i) => ({ filename: `${i + 1}-${p.name}`, content: p.data, content_type: p.type })),
         tags: [{ name: "kind", value: "review" }],
       }),
@@ -102,7 +102,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     const raw = [
       `Message-ID: <${crypto.randomUUID()}@kamehame-japan.com>`, `Date: ${new Date().toUTCString()}`,
-      `From: KAMEHAME JAPAN <${FROM}>`, `To: ${to}`, `Reply-To: ${r.email}`,
+      `From: KAMEHAME JAPAN <${FROM}>`, `To: ${to}`, ...(r.email ? [`Reply-To: ${r.email}`] : []),
       `Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,
       `MIME-Version: 1.0`, `Content-Type: text/plain; charset=UTF-8`, `Content-Transfer-Encoding: 8bit`, "",
       ...text(r).split("\n"),
