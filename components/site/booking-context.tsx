@@ -14,9 +14,13 @@ export interface BookingExperience {
   startTimes?: string[];
   closed?: { from: string; to: string }[];
   minGuests: number;
-  /** Largest head count offered as its own option; beyond it, "N or more" (quoted). */
+  /** Largest head count the price covers; above it the group is quoted individually. */
   listedMax: number;
+  /** Ceiling of the head-count control (default 15). */
+  maxGuests?: number;
 }
+
+export const DEFAULT_MAX_GUESTS = 15;
 
 /** Everything the visitor chooses about a request — plan, dates, head count,
  *  extras — lives here so the booking card beside the page and the request
@@ -41,7 +45,7 @@ interface Booking extends BookingState {
   /** Estimate for the current choice, or null when it must be quoted. */
   estimate: Quote | null;
   guestsNumber: number;
-  /** True when the head count is beyond the listed range ("N or more"). */
+  /** True when the head count is above what the price covers (quoted individually). */
   largeParty: boolean;
 }
 
@@ -80,8 +84,8 @@ export function BookingProvider({ experience, pricing, lang, children }: { exper
   }, [experience.leadDays, experience.cutoffTime]);
 
   const value = useMemo<Booking>(() => {
-    const largeParty = state.guests.endsWith("+");
-    const guestsNumber = largeParty ? experience.listedMax + 1 : Number(state.guests) || experience.minGuests;
+    const guestsNumber = Number(state.guests) || experience.minGuests;
+    const largeParty = guestsNumber > experience.listedMax;
     return {
       ...state,
       set: (patch) => setState((s) => ({ ...s, ...patch })),

@@ -165,7 +165,7 @@ export const experiencesFr: Experience[] = [
     interactionTime: "environ 1 h 45",
     includedShort: "Salle privée · Repas et boissons · Guide-interprète (FR / EN / ES)",
     planText: {
-      select: { label: "Select", name: "Private Geisha Evening", performers: "Une geiko ou maiko", blurb: "La soirée privée essentielle avec une geisha." },
+      select: { label: "Select", name: "Private Geisha Evening", performers: "Une geiko ou maiko", blurb: "La soirée essentielle ; la danse est accompagnée d'une musique enregistrée." },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko ou maiko + shamisen en direct", blurb: "Une geiko ou maiko, rejointe par une jikata au shamisen, en direct." },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Deux artistes + shamisen en direct", blurb: "Deux geiko ou maiko et une jikata au shamisen. La version la plus complète de la soirée." },
     },

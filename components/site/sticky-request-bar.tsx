@@ -29,7 +29,7 @@ export function StickyRequestBar({
 
   const plan = b?.pricing?.plans?.find((p) => p.id === b.plan);
   const shownPrice = b && plan ? yen(b.estimate?.total ?? plan.regular) : price;
-  const shownCondition = b && plan && D ? `${plan.label} · ${D.estimateFor(b.guestsNumber)}${b.largeParty ? "+" : ""}` : condition;
+  const shownCondition = b && plan && D ? `${plan.label} · ${D.estimateFor(b.guestsNumber)}` : condition;
 
   const show = heroGone && !targetVisible;
   return (

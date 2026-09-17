@@ -8,7 +8,8 @@ import { track } from "@/lib/analytics";
 import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
-import { isClosed, useBooking } from "@/components/site/booking-context";
+import { DEFAULT_MAX_GUESTS, isClosed, useBooking } from "@/components/site/booking-context";
+import { GuestStepper } from "@/components/site/guest-stepper";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
@@ -32,7 +33,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
   const x = b?.experience;
   const plans = b?.pricing?.plans ?? [];
   const addOns = b?.pricing?.addOns ?? [];
-  const guestOptions = x ? Array.from({ length: x.listedMax - x.minGuests + 1 }, (_, i) => x.minGuests + i) : [];
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -140,13 +140,10 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
             ) : <span />}
           </div>
           <div className="form-row two">
-            <label>
-              <span>{F.partyN}</span>
-              <select name="guests" required value={b.guests} onChange={(e) => b.set({ guests: e.target.value })}>
-                {guestOptions.map((n) => <option key={n} value={n}>{F.guests(n)}</option>)}
-                <option value={`${x.listedMax + 1}+`}>{F.guestsMore(x.listedMax + 1)}</option>
-              </select>
-            </label>
+            <div className="field">
+              <label htmlFor="enq-guests">{F.partyN}</label>
+              <GuestStepper id="enq-guests" value={b.guests} min={x.minGuests} max={x.maxGuests ?? DEFAULT_MAX_GUESTS} onChange={(g) => b.set({ guests: g })} label={F.guests} decLabel={F.fewerGuests} incLabel={F.moreGuests} />
+            </div>
             <label>
               <span>{F.interpreter}</span>
               <select name="interpreter-choice" value={b.interpreter} onChange={(e) => b.set({ interpreter: e.target.value })}>
@@ -169,9 +166,9 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
           </div>
           <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{D.estimateH} · {plans.find((p) => p.id === b.plan)?.label} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span><b>{yen(b.estimate.total)}</b><small>{D.priceTotalNote}. {D.estimateNote}</small></>
+              <><span>{D.estimateH} · {plans.find((p) => p.id === b.plan)?.label} · {D.estimateFor(b.guestsNumber)}{b.date && ` · ${b.estimate.peak ? D.seasonPeak : D.seasonRegular}`}</span><b>{yen(b.estimate.total)}</b><small>{D.priceTotalNote}. {b.date ? D.estimateNote : D.pickDateForSeason}</small></>
             ) : (
-              <><span>{D.estimateH}</span><small>{b.largeParty ? D.sixPlus(x.listedMax + 1) : D.quoteIndividually}</small></>
+              <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}
           </div>
         </>

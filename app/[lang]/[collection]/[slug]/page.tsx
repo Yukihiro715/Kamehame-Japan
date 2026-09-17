@@ -9,7 +9,6 @@ import { BookingBox } from "@/components/site/booking-box";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider } from "@/components/site/booking-context";
 import { BookingCard } from "@/components/site/booking-card";
-import { PlanCards } from "@/components/site/plan-cards";
 import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { VideoFacade } from "@/components/site/video-facade";
@@ -218,7 +217,16 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             {plans.length > 0 && eg && (
               <section className="xp-section" id="pricing">
                 <h2>{D.plansH}</h2>
-                <PlanCards lang={lang} />
+                <p className="plan-compare-lead">{D.plansLead}</p>
+                <ul className="plan-compare">
+                  {plans.map((p) => (
+                    <li key={p.id} className={p.recommended ? "rec" : ""}>
+                      <span className="plan-compare-label">{p.label}{p.recommended && <em>{D.recommended}</em>}</span>
+                      <span className="plan-compare-what"><b>{p.performers}</b><small>{p.blurb}</small></span>
+                      <span className="plan-compare-price">{D.fromPrice && <small>{D.fromPrice}</small>}{yen(p.regular)}</span>
+                    </li>
+                  ))}
+                </ul>
                 <div className="plan-notes">
                   <p>{D.extraGuestNote(yen(eg.regular), yen(eg.peak), eg.upTo)}{pricing.highSeason ? ` · ${D.highSeasonH}: ${pricing.highSeason.window}` : ""}</p>
                   {pricing.moreOnRequest && <p>{D.sixPlus(eg.upTo + 1)}</p>}
@@ -357,8 +365,8 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             {/* ⑨ When it runs */}
             {avail && (
               <section className="xp-section">
+                <h2>{D.availH}</h2>
                 <div className="xp-avail-box">
-                  <h2>{D.availH}</h2>
                   <dl>
                     <div><dt>{D.availDays}</dt><dd>{avail.daily ? D.availDaily : "—"}{exp.availabilityNote && ` · ${exp.availabilityNote}`}</dd></div>
                     <div><dt>{D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>

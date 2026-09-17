@@ -348,7 +348,7 @@ export const experiences: Experience[] = [
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
     includedShort: "Private room · Meal and drinks · Interpreter guide (EN / ES / FR)",
     planText: {
-      select: { label: "Select", name: "Private Geisha Evening", performers: "One geiko or maiko", blurb: "The essential private geisha dining experience." },
+      select: { label: "Select", name: "Private Geisha Evening", performers: "One geiko or maiko", blurb: "The essential evening; the dance is performed to recorded music." },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko or maiko + live shamisen", blurb: "One geiko or maiko, joined by a jikata playing shamisen live." },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Two performers + live shamisen", blurb: "Two geiko or maiko, joined by a jikata for live shamisen. The fullest version of the evening." },
     },

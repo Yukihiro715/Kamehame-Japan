@@ -170,7 +170,7 @@ export const experiencesJa: Experience[] = [
     interactionTime: "約1時間45分",
     includedShort: "貸切のお座敷 · 食事と飲み放題 · 通訳ガイド(英・西・仏)",
     planText: {
-      select: { label: "Select", name: "Private Geisha Evening", performers: "芸妓または舞妓 1名", blurb: "ベーシックな完全貸切のお座敷体験。" },
+      select: { label: "Select", name: "Private Geisha Evening", performers: "芸妓または舞妓 1名", blurb: "ベーシックな貸切お座敷。舞の伴奏は録音音源です。" },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "芸妓または舞妓 1名 + 地方(生三味線)", blurb: "地方さんの生三味線を加えた上位プラン。" },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "芸妓・舞妓 2名 + 地方(生三味線)", blurb: "芸妓・舞妓2名と地方さんの生演奏。もっとも贅沢な構成です。" },
     },

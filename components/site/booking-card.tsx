@@ -2,7 +2,8 @@
 
 import { ArrowRight, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-react";
 import { DatePicker } from "@/components/site/date-picker";
-import { isClosed, useBooking } from "@/components/site/booking-context";
+import { DEFAULT_MAX_GUESTS, isClosed, useBooking } from "@/components/site/booking-context";
+import { GuestStepper } from "@/components/site/guest-stepper";
 import { yen } from "@/lib/pricing";
 import { RatingSummary } from "@/components/site/reviews";
 import { t, type Lang } from "@/lib/i18n";
@@ -18,7 +19,6 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   const { pricing, experience: x } = b;
   const plans = pricing?.plans ?? [];
   const plan = plans.find((p) => p.id === b.plan);
-  const guestOptions = Array.from({ length: x.listedMax - x.minGuests + 1 }, (_, i) => x.minGuests + i);
   const jump = () => {
     const el = document.querySelector("#request");
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -61,26 +61,23 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
             </select>
           </label>
         )}
-        <label>
-          <span>{F.partyN}</span>
-          <select value={b.guests} onChange={(e) => b.set({ guests: e.target.value })}>
-            {guestOptions.map((n) => <option key={n} value={n}>{F.guests(n)}</option>)}
-            <option value={`${x.listedMax + 1}+`}>{F.guestsMore(x.listedMax + 1)}</option>
-          </select>
-        </label>
+        <div className="field">
+          <label htmlFor="bk-guests">{F.partyN}</label>
+          <GuestStepper id="bk-guests" value={b.guests} min={x.minGuests} max={x.maxGuests ?? DEFAULT_MAX_GUESTS} onChange={(g) => b.set({ guests: g })} label={F.guests} decLabel={F.fewerGuests} incLabel={F.moreGuests} />
+        </div>
       </div>
 
       <div className="bk-est" aria-live="polite">
         {b.estimate ? (
           <>
-            <span>{D.estimateH} · {plan?.label} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span>
+            <span>{D.estimateH} · {plan?.label} · {D.estimateFor(b.guestsNumber)}{b.date && ` · ${b.estimate.peak ? D.seasonPeak : D.seasonRegular}`}</span>
             <b>{yen(b.estimate.total)}</b>
             <small>{D.priceTotalNote}. {b.date ? D.estimateNote : D.pickDateForSeason}</small>
           </>
         ) : (
           <>
             <span>{D.estimateH}</span>
-            <small>{b.largeParty ? D.sixPlus(x.listedMax + 1) : D.quoteIndividually}</small>
+            <small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small>
           </>
         )}
       </div>

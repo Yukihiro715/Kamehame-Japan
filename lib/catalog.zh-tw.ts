@@ -165,7 +165,7 @@ export const experiencesZh: Experience[] = [
     interactionTime: "約1小時45分",
     includedShort: "私人包廂 · 餐點與飲料 · 口譯導遊（英／西／法）",
     planText: {
-      select: { label: "Select", name: "Private Geisha Evening", performers: "一位藝妓或舞妓", blurb: "最基本的私人藝妓晚宴體驗。" },
+      select: { label: "Select", name: "Private Geisha Evening", performers: "一位藝妓或舞妓", blurb: "最基本的私人晚宴；舞蹈以錄音伴奏。" },
       signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "藝妓或舞妓 + 現場三味線", blurb: "一位藝妓或舞妓，加上地方（三味線）現場演奏。" },
       reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "兩位表演者 + 現場三味線", blurb: "兩位藝妓或舞妓，加上地方現場三味線演奏。最完整的一晚。" },
     },
