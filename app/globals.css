@@ -1274,3 +1274,4 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .bk-price .rating-summary { margin:6px 0 0; font-size:12px; }
 .feature-copy .rating-summary { margin:0 0 10px; font-size:12px; color:#c8c5ba; }
 .feature-copy .rating-summary b { color:var(--white); }
+.bk-price .rating-summary b { font-family:Arial,Helvetica,sans-serif; font-size:13px; letter-spacing:0; line-height:1.2; }
