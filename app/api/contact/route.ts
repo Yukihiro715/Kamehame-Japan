@@ -1,4 +1,7 @@
 import { CONTACT_EMAIL, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
+import { acknowledgement } from "@/lib/mail-copy";
+import { catalogFor } from "@/lib/catalog";
+import { isLang } from "@/lib/i18n";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -16,11 +19,73 @@ async function bindings() {
   }
 }
 
-// Delivery target. A Worker secret named CONTACT_TO holds the inbox that
-// receives enquiries; it must be a destination address verified in Cloudflare
-// Email Routing, which is the only place send_email is allowed to deliver.
-// The From address must be on our own zone.
+// Delivery. Two routes, tried in this order:
+//   1. Resend, when the RESEND_API_KEY secret exists — sends the internal
+//      notification to CONTACT_TO and an acknowledgement to the visitor.
+//   2. The Cloudflare send_email binding — internal notification only, and
+//      only to a destination verified in Email Routing. Kept as the fallback
+//      so a Resend outage or an unverified domain never loses an enquiry.
+// The From addresses must be on our own domain.
 const FROM = "enquiries@kamehame-japan.com";
+const REPLY = "hello@kamehame-japan.com";
+
+function subjectFor(e: Enquiry): string {
+  return e.kind === "trade"
+    ? `[Trade] ${e.company ?? e.name} — ${e.country ?? ""}`.trim()
+    : `[Request] ${e.experience ? `${e.experience} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
+}
+
+function bodyFor(e: Enquiry): string {
+  return [
+    `Kind:     ${e.kind}`,
+    e.experience && `Experience: ${e.experience}`,
+    `Name:     ${e.name}`,
+    `Email:    ${e.email}`,
+    e.company && `Company:  ${e.company}`,
+    e.country && `Country:  ${e.country}`,
+    e.dates && `Dates:    ${e.dates}`,
+    e.party && `Party:    ${e.party}`,
+    `Language: ${e.lang}`,
+    "",
+    e.message,
+  ].filter((l): l is string => typeof l === "string").join("\n");
+}
+
+/** The experience's title in the visitor's language, for the acknowledgement. */
+function titleFor(e: Enquiry): string | undefined {
+  if (!e.experience || !isLang(e.lang)) return undefined;
+  return catalogFor(e.lang).experiences.find((x) => x.slug === e.experience)?.title;
+}
+
+/** Both messages in one batch call. Resend rejects the whole batch if the
+ *  domain is not verified, which the caller treats as "try the fallback". */
+async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void> {
+  const ack = acknowledgement(e, titleFor(e));
+  const safeName = e.name.replace(/[<>"\r\n]/g, "");
+  const res = await fetch("https://api.resend.com/emails/batch", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify([
+      {
+        from: `KAMEHAME JAPAN Site <${FROM}>`,
+        to: [to],
+        reply_to: `${safeName} <${e.email}>`,
+        subject: subjectFor(e),
+        text: bodyFor(e),
+        tags: [{ name: "kind", value: e.kind }],
+      },
+      {
+        from: `KAMEHAME JAPAN <${REPLY}>`,
+        to: [e.email],
+        reply_to: REPLY,
+        subject: ack.subject,
+        text: ack.text,
+        tags: [{ name: "kind", value: "ack" }],
+      },
+    ]),
+  });
+  if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
+}
 
 const MAX = { name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80 };
 
@@ -51,22 +116,8 @@ function parse(body: Record<string, unknown>): Enquiry | null {
 /** Plain-text email. Headers are folded onto one line each; the body is
  *  whatever the visitor wrote, quoted as-is. */
 function raw(e: Enquiry, to: string): string {
-  const subject = e.kind === "trade"
-    ? `[Trade] ${e.company ?? e.name} — ${e.country ?? ""}`.trim()
-    : `[Request] ${e.experience ? `${e.experience} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
-  const lines = [
-    `Kind:     ${e.kind}`,
-    e.experience && `Experience: ${e.experience}`,
-    `Name:     ${e.name}`,
-    `Email:    ${e.email}`,
-    e.company && `Company:  ${e.company}`,
-    e.country && `Country:  ${e.country}`,
-    e.dates && `Dates:    ${e.dates}`,
-    e.party && `Party:    ${e.party}`,
-    `Language: ${e.lang}`,
-    "",
-    e.message,
-  ].filter((l): l is string => typeof l === "string");
+  const subject = subjectFor(e);
+  const lines = bodyFor(e).split("\n");
   // RFC 5322: CRLF line endings, blank line between headers and body.
   // Cloudflare rejects a message without Message-ID and Date outright.
   return [
@@ -101,19 +152,30 @@ export async function POST(request: Request): Promise<Response> {
   const fallback = enquiry.kind === "trade" ? TRADE_EMAIL : CONTACT_EMAIL;
   const cf = await bindings();
   const to = cf?.env.CONTACT_TO;
+  const resendKey = cf?.env.RESEND_API_KEY;
 
-  if (!cf || !cf.env.EMAIL || !to) {
+  if (!cf || !to || (!resendKey && !cf.env.EMAIL)) {
     // Not configured yet. Say so plainly rather than pretending; the page
     // then shows the address so the visitor can still reach us.
-    console.error("contact: send_email binding or CONTACT_TO secret missing");
+    console.error("contact: CONTACT_TO secret, or both RESEND_API_KEY and the send_email binding, missing");
     return Response.json({ ok: false, error: "unconfigured", fallback }, { status: 503 });
   }
 
-  try {
-    await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to)));
-  } catch (err) {
-    console.error("contact: send failed", err);
-    return Response.json({ ok: false, error: "send_failed", fallback }, { status: 502 });
+  if (resendKey) {
+    try {
+      await sendViaResend(resendKey, to, enquiry);
+      return Response.json({ ok: true });
+    } catch (err) {
+      console.error("contact: resend failed, trying send_email", err);
+    }
   }
-  return Response.json({ ok: true });
+  if (cf.env.EMAIL) {
+    try {
+      await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to)));
+      return Response.json({ ok: true });
+    } catch (err) {
+      console.error("contact: send_email failed", err);
+    }
+  }
+  return Response.json({ ok: false, error: "send_failed", fallback }, { status: 502 });
 }

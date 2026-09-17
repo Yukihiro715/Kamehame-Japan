@@ -102,11 +102,21 @@ npm run deploy
 
 ## 9. 未接続のまま公開している項目(順次対応)
 
-- Bókun 予約ウィジェット(予約ボックスは「開設準備中」表示)
-- パートナーフォームの送信先(現在は準備中表記)
-- GA4 / 広告CV計測タグ
-- OGP画像・robots.txt・sitemap.xml
-- FR / ES / 繁体字中国語ページ
+- Bókun 予約ウィジェット(OTA出品時に導入)
+- Meta広告のピクセル(GTM経由・同意モード連携)
+
+## 10. フォームのメール配送
+
+Worker のシークレット(Workers & Pages → kamehame-japan → 設定 → Runtime variables):
+
+| 名前 | 内容 |
+| --- | --- |
+| `CONTACT_TO` | 問い合わせの通知先(例: `hello@kamehame-japan.com`) |
+| `RESEND_API_KEY` | Resend の API キー。あると Resend 経由で送り、**お客様への自動返信**も出す |
+
+配送は Resend → 失敗時は Cloudflare Email Routing の send_email の順。
+Google Workspace を使うと MX が Google になり Email Routing は使えなくなるので、Resend が本線。
+Resend 側では `kamehame-japan.com` をドメイン登録し(東京リージョン)、表示される DNS を Cloudflare に入れて Verify する。
 
 ## 費用の目安
 

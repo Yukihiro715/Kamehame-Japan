@@ -12,6 +12,9 @@ declare module "cloudflare:workers" {
     /** Where contact-form submissions are delivered. A Worker *secret*, not a
      *  var: secrets survive `wrangler deploy`, dashboard vars do not. */
     CONTACT_TO?: string;
+    /** Resend API key. When present, enquiries go out through Resend (which
+     *  can also write to the visitor); otherwise through the send_email binding. */
+    RESEND_API_KEY?: string;
     DB?: unknown;
   };
 }
