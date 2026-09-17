@@ -56,6 +56,7 @@ Date changes follow the same scale. If the host cannot provide a geiko or maiko 
 TO CONFIRM
 Please pay by {deadline, e.g. Friday 26 September, 17:00 Japan time} through this secure link:
 {Stripe payment link}
+Please use the same name and email address as in your request, so we can match your payment straight away.
 (Bank transfer is also possible — reply and we will send the details.)
 
 As soon as the payment is in, we arrange your evening with the house and send you the confirmation with the address, map and your guide's contact — within one business day.
@@ -75,7 +76,7 @@ hello@kamehame-japan.com
 > 含まれないもの:芸舞妓・地方の追加(各¥60,500)
 > 集合:祇園・東山エリア、祇園四条駅から徒歩約10分。店名・住所・地図・ガイド連絡先は確定通知でお伝えします
 > キャンセル:入金後に正式手配 → 以降は受け入れ先の規定(4日前まで50%、3〜2日前75%、前日以降・無連絡100%)。芸舞妓が手配できなかった場合は全額返金
-> 確定するには:{期限}までに決済リンクからお支払いください(銀行振込も可)
+> 確定するには:{期限}までに決済リンクからお支払いください(銀行振込も可)。お問い合わせ時と同じ氏名・メールアドレスで決済してください
 > 入金確認後1営業日以内に、住所・地図・ガイド連絡先を記載した確定通知を送ります
 > アレルギー・椅子の要否・お祝いなど、伝えておくことがあれば返信してください
 
@@ -184,6 +185,16 @@ See you tomorrow evening.
 
 - **返信は必ず hello@kamehame-japan.com から**(Google グループの「グループとして送信」または担当者の送信元に hello@ を追加)。お客様は自動返信の返信先が hello@ なので、スレッドが1本になります。
 - 条件案内(A)を送ったら、**受け入れ先には「仮押さえ」の連絡**をしておく(正式手配は入金後。芸舞妓の手配開始=キャンセル料発生なので、入金前に正式手配しない)。
-- Stripe の支払いリンクは**予約ごとに作る**(商品名に「{体験名} {日付} {人数}名」を入れると、入金通知だけで誰の分か分かります)。
+- Stripe の支払いリンクは**人数×季節ごとに固定の8本**(下表)。条件案内(A)には該当する1本だけを貼る。入金は Stripe の通知メールの**氏名・メールアドレス**で問い合わせと突き合わせる(本文で「同じ氏名・メールで決済」を依頼済み)。
+- 繁忙期は 3/15〜5/31 と 10/1〜11/30(体験日で判定)。6名以上は受け入れ先に見積もりを取ってから、Stripe で都度リンクを作る。
+
+| 人数 | 通常 | 繁忙期 |
+| --- | --- | --- |
+| 2名 | ¥139,600 · https://buy.stripe.com/6oU5kD4jL8Z55eD6IW3Je00 | ¥159,600 · https://buy.stripe.com/28EeVd9E57V1cH5gjw3Je01 |
+| 3名 | ¥157,500 · https://buy.stripe.com/cNi28reYpejp0Yn7N03Je02 | ¥187,500 · https://buy.stripe.com/28E8wP03v5MT36vc3g3Je04 |
+| 4名 | ¥166,000 · https://buy.stripe.com/5kQeVd17z6QX22rd7k3Je05 | ¥206,000 · https://buy.stripe.com/00w00jbMd6QX8qPffs3Je06 |
+| 5名 | ¥190,000 · https://buy.stripe.com/dRm5kDdUl4IPayX4AO3Je07 | ¥240,000 · https://buy.stripe.com/cNibJ1aI98Z5ayXc3g3Je08 |
+
+  (リンクの並びは作成順=2名通常→2名繁忙→3名通常…の前提。貼る前に Stripe 管理画面の「支払いリンク」で金額を一度照合すること)
 - 入金確認 → 受け入れ先に正式手配 → 確定通知(C)は**同日中**に。この間が空くとお客様が不安になります。
 - 体験当日の翌日に、お礼+レビュー依頼のメールを送る(文面は `docs/CONTENT.md` の口コミ収集フロー参照。Bókun導入後は自動化)。
