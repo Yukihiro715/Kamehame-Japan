@@ -190,11 +190,11 @@ See you tomorrow evening.
 
 | 人数 | 通常 | 繁忙期 |
 | --- | --- | --- |
-| 2名 | ¥139,600 · https://buy.stripe.com/6oU5kD4jL8Z55eD6IW3Je00 | ¥159,600 · https://buy.stripe.com/28EeVd9E57V1cH5gjw3Je01 |
+| 2名 | ¥139,600 · https://buy.stripe.com/6oU5kD4jL8Z55eD6IW3Je00 | ¥159,600 · https://buy.stripe.com/cNibJ1aI98Z5ayXc3g3Je08 |
 | 3名 | ¥157,500 · https://buy.stripe.com/cNi28reYpejp0Yn7N03Je02 | ¥187,500 · https://buy.stripe.com/28E8wP03v5MT36vc3g3Je04 |
-| 4名 | ¥166,000 · https://buy.stripe.com/5kQeVd17z6QX22rd7k3Je05 | ¥206,000 · https://buy.stripe.com/00w00jbMd6QX8qPffs3Je06 |
-| 5名 | ¥190,000 · https://buy.stripe.com/dRm5kDdUl4IPayX4AO3Je07 | ¥240,000 · https://buy.stripe.com/cNibJ1aI98Z5ayXc3g3Je08 |
+| 4名 | ¥166,000 · https://buy.stripe.com/5kQeVd17z6QX22rd7k3Je05 | ¥206,000 · https://buy.stripe.com/dRm5kDdUl4IPayX4AO3Je07 |
+| 5名 | ¥190,000 · https://buy.stripe.com/28EeVd9E57V1cH5gjw3Je01 | ¥240,000 · https://buy.stripe.com/00w00jbMd6QX8qPffs3Je06 |
 
-  (リンクの並びは作成順=2名通常→2名繁忙→3名通常…の前提。貼る前に Stripe 管理画面の「支払いリンク」で金額を一度照合すること)
+  (2026-09-17 に Stripe 管理画面の金額と照合済み。Stripe 側で無効になっている ¥157,500 のリンクが1本あるが、使わない)
 - 入金確認 → 受け入れ先に正式手配 → 確定通知(C)は**同日中**に。この間が空くとお客様が不安になります。
 - 体験当日の翌日に、お礼+レビュー依頼のメールを送る(文面は `docs/CONTENT.md` の口コミ収集フロー参照。Bókun導入後は自動化)。
