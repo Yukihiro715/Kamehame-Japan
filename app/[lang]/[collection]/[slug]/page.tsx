@@ -174,6 +174,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         <header className="xp-head">
           {!live && <p className="soon-flag">{T.comingSoon}</p>}
           <h1>{exp.title}</h1>
+          {hasReviews && <p className="xp-head-rating"><RatingSummary experience={exp.slug} lang={lang} href="#reviews" size={15} /></p>}
           <ul className="xp-conditions">
             {conditions.map(({ Icon, text }) => <li key={text}><Icon size={14} /> {text}</li>)}
           </ul>
@@ -312,6 +313,19 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </div>
             </section>
 
+            {/* ⑪ Reviews — real ones when they exist; until then, how they are collected */}
+            <section className="xp-section" id="reviews">
+              <h2>{hasReviews ? T.reviewsH : D.reviewsSoonH}</h2>
+              {hasReviews ? (
+                <>
+                  <ReviewSummaryPanel experience={exp.slug} lang={lang} />
+                  <ReviewList reviews={reviews} lang={lang} />
+                </>
+              ) : (
+                <p className="review-soon"><ShieldCheck size={16} /> <span>{D.reviewsSoon}</span></p>
+              )}
+            </section>
+
             {/* ⑦ Video — only when an asset exists */}
             {video && (
               <section className="xp-section xp-video" id="video">
@@ -391,19 +405,6 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                   </figure>
                 )}
               </div>
-            </section>
-
-            {/* ⑪ Reviews — real ones when they exist; until then, how they are collected */}
-            <section className="xp-section" id="reviews">
-              <h2>{hasReviews ? T.reviewsH : D.reviewsSoonH}</h2>
-              {hasReviews ? (
-                <>
-                  <ReviewSummaryPanel experience={exp.slug} lang={lang} />
-                  <ReviewList reviews={reviews} lang={lang} />
-                </>
-              ) : (
-                <p className="review-soon"><ShieldCheck size={16} /> <span>{D.reviewsSoon}</span></p>
-              )}
             </section>
 
             {/* ⑫ FAQ */}

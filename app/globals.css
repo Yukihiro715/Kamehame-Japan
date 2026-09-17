@@ -1266,3 +1266,11 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .form-consent { align-items:flex-start; }
 .form-consent span { font-size:13px; line-height:1.6; color:#3d3a34; letter-spacing:0; }
 .review-form input[type="file"] { padding:10px 12px; font-size:13px; }
+
+/* --- Rating where the decision is made: under the title, in the booking card, on the home card --- */
+.xp-head-rating { margin:-4px 0 14px; }
+.xp-head-rating .rating-summary { margin:0; font-size:13.5px; }
+.xp-head-rating .rating-summary b { font-size:14.5px; }
+.bk-price .rating-summary { margin:6px 0 0; font-size:12px; }
+.feature-copy .rating-summary { margin:0 0 10px; font-size:12px; color:#c8c5ba; }
+.feature-copy .rating-summary b { color:var(--white); }

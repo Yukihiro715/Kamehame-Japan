@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-rea
 import { DatePicker } from "@/components/site/date-picker";
 import { isClosed, useBooking } from "@/components/site/booking-context";
 import { yen } from "@/lib/pricing";
+import { RatingSummary } from "@/components/site/reviews";
 import { t, type Lang } from "@/lib/i18n";
 
 /** The booking box beside the page (below the photos on phones): plan, date,
@@ -30,6 +31,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         <small>{D.fromPrice}</small>
         <b>{plan ? yen(plan.regular) : headline}</b>
         <small>{pricing?.extraGuest ? D.upToGuests(pricing.extraGuest.included) : D.priceTotalNote}{plan ? ` · ${plan.label}` : ""}</small>
+        <RatingSummary experience={x.slug} lang={lang} href="#reviews" size={13} />
       </div>
 
       {plans.length > 0 && (

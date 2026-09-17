@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { articleDate, latestArticles } from "@/lib/articles";
 import { featuredReviews } from "@/lib/reviews";
-import { Stars } from "@/components/site/reviews";
+import { RatingSummary, Stars } from "@/components/site/reviews";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
 import { pricingFor, yen } from "@/lib/pricing";
 import { t, type Lang } from "@/lib/i18n";
@@ -260,6 +260,7 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
       <div className="feature-copy">
         <p className="experience-city"><MapPin size={14} /> {cityTitle ?? exp.area} · {T.interpreterIncluded}</p>
         <h3>{exp.title}</h3>
+        <RatingSummary experience={exp.slug} lang={lang} size={13} />
         <p>{exp.tagline}</p>
         <ul className="feature-facts">
           <li><Clock3 size={14} /> {exp.duration}</li>
