@@ -1192,4 +1192,4 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .xp-cols { padding-bottom:72px; }
 @media(max-width:700px){ .xp-cols { padding-bottom:56px; } }
 /* Phones: keep the guests and the chef's hands in the vertical crop. */
-@media(max-width:700px){ .hero { background-position:80% center; } }
+@media(max-width:700px){ .hero { background-position:74% center; } }
