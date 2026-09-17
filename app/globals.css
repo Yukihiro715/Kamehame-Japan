@@ -1188,3 +1188,6 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
    sticky elements keep working) anything that still pokes past the viewport. */
 html, body { overflow-x:clip; }
 main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:clip; }
+/* Room between the last section (further reading) and the footer. */
+.xp-cols { padding-bottom:72px; }
+@media(max-width:700px){ .xp-cols { padding-bottom:56px; } }
