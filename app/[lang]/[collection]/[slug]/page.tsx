@@ -157,6 +157,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
     startTimes: avail?.startTimes, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
     listedMax: eg?.upTo ?? Math.min(exp.partySize?.max ?? 12, 12),
+    maxGuests: exp.partySize?.max,
   };
 
   return (
