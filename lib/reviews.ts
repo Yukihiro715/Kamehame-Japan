@@ -32,8 +32,11 @@ export interface Review {
   country: string;
   /** ISO date of the experience, not of the review. */
   date: string;
-  /** Where it came from, so we can show "verified" only where it is true. */
-  source: "google" | "bokun" | "direct";
+  /** Where it came from, so we can show "verified" only where it is true.
+   *  "venue": a guest of the host venue before KAMEHAME listed the evening —
+   *  shown with that provenance, never with the verified-booking badge, and
+   *  left out of the aggregate rating in structured data. */
+  source: "google" | "bokun" | "direct" | "venue";
   /** Who came: shown as a small tag beside the initials. */
   party?: "couple" | "family" | "friends" | "solo" | "business";
   /** Provenance note, e.g. that the guest attended as a monitor. */
@@ -121,6 +124,10 @@ export function distributionFor(experience: string): { stars: number; count: num
     return { stars, count, share: rs.length ? count / rs.length : 0 };
   });
 }
+
+/** Only reviews written through our own booking flow count toward the rating
+ *  we declare to search engines. */
+export const ownReviewsFor = (experience: string): Review[] => reviewsFor(experience).filter((r) => r.source !== "venue");
 
 export function aggregateFor(experience: string): Aggregate | null {
   const list = reviewsFor(experience);
