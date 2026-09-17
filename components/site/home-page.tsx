@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { ArrowDownRight, ArrowRight, CalendarDays, Clock3, MapPin, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,18 +10,18 @@ import { t, type Lang } from "@/lib/i18n";
 
 const COPY = {
   en: {
-    heroEyebrow: "Tokyo · Kyoto",
-    heroTitle: ["Meet the masters.", "Go beyond the surface."],
-    heroLede: "Intimate cultural experiences led by Japan's craftspeople, with a private interpreter guide by your side.",
-    heroCta: "Explore experiences", heroLink: "Why we are different",
+    heroEyebrow: "Curated experiences in Japan",
+    heroTitle: ["Don't just see Japan.", "Step into it."],
+    heroLede: "Memorable experiences hosted by local experts — starting with a private geiko evening in Kyoto, with sushi making, Japanese calligraphy, character nail art, golf and more to come. Traditional or modern, hands-on or behind the scenes: we select experiences worth making part of your trip.",
+    heroCta: "Explore experiences", heroLink: "Browse by city",
     heroBubble: "Not a demonstration —\nthis seat is yours.", heroSpeaker: "— your host",
-    trustEyebrow: "The KAMEHAME standard", trustTitle: ["Every detail,", "considered."],
+    trustEyebrow: "Why KAMEHAME", trustTitle: ["The curated way", "to experience Japan."],
     trust: [
-      { h: "Led by the master", p: "Learn directly from the people who have devoted their lives to the craft—not a scripted presenter." },
-      { h: "Guided in your language", p: "Your interpreter guide bridges every word and gesture, so the story behind the craft is never lost." },
-      { h: "Clear from the start", p: "Book online, pay securely in yen, and see the cancellation policy before you commit." },
+      { h: "Selected, not endless.", p: "We don't list everything. We choose experiences we believe are genuinely worth your time in Japan." },
+      { h: "Closer to the real thing.", p: "Meet the people behind the culture, craft, food, art and places you came to Japan for — from working professionals to local specialists." },
+      { h: "Easy to book. Easy to understand.", p: "Clear pricing, clear inclusions and clear meeting details. English support is available throughout, with interpreter guides included where the experience calls for one." },
     ],
-    trustSeal: "Small groups · Local experts · Thoughtful access",
+    trustSeal: "Small groups · Local hosts · Thoughtfully selected",
     craftQuote: "Sit a little closer — you should be able to hear the silk move.", craftSpeaker: "— your host for the evening",
     craftAlt: "A maiko dancing before a gold screen in a private Kyoto room, a guest seated an arm's length away",
     cityEyebrow: "Choose your city", cityTitle: ["Two cities.", "Countless stories."],
@@ -36,7 +34,7 @@ const COPY = {
     kicker: ["Explore by interest", (n: number) => `${n} ways into Japan`], catTitle: "Follow your curiosity.",
     catTypes: { sushi: "Food culture", sumo: "Living tradition", "tea-ceremony": "Mindful ritual", kimono: "Craft & style", geisha: "Performing arts", swordsmith: "Heritage craft", "anime-nail-art": "Pop culture" } as Record<string, string>,
     toursCard: { title: "Private tours", type: "Made for you" },
-    expEyebrow: "Selected experiences", expTitle: ["Start somewhere", "unforgettable."], expLink: "View all experiences",
+    expEyebrow: "Find your Japan.", expTitle: ["Eat. Make.", "Meet. Play."], expLink: "View all experiences",
     featureEyebrow: "Now booking", featureCta: "See the experience",
     tourEyebrow: "Private guided days", tourTitle: ["Let the experience", "become the journey."],
     tourBody: "Spend a full day with a private licensed guide in Tokyo or Kyoto. We can place any masterclass at the heart of a route shaped around your interests.",
@@ -49,18 +47,18 @@ const COPY = {
     closingTitle: ["We'll shape Japan", "around your story."], closingCta: "Plan a private experience",
   },
   es: {
-    heroEyebrow: "Tokio · Kioto",
-    heroTitle: ["Conoce a los maestros.", "Ve más allá de la superficie."],
-    heroLede: "Experiencias culturales íntimas dirigidas por los artesanos de Japón, con un guía intérprete privado a tu lado.",
-    heroCta: "Explora las experiencias", heroLink: "Por qué somos diferentes",
+    heroEyebrow: "Experiencias seleccionadas en Japón",
+    heroTitle: ["No te limites a ver Japón.", "Entra en él."],
+    heroLede: "Experiencias memorables con anfitriones locales — empezando por una velada privada con una geiko en Kioto, y pronto sushi, caligrafía japonesa, uñas de personajes, golf y más. Tradicional o moderno, con las manos o entre bastidores: elegimos experiencias que merecen un lugar en tu viaje.",
+    heroCta: "Explora las experiencias", heroLink: "Ver por ciudad",
     heroBubble: "Esto no es una demostración —\neste asiento es tuyo.", heroSpeaker: "— tu anfitrión",
-    trustEyebrow: "El estándar KAMEHAME", trustTitle: ["Cada detalle,", "pensado."],
+    trustEyebrow: "Por qué KAMEHAME", trustTitle: ["La forma seleccionada", "de vivir Japón."],
     trust: [
-      { h: "Dirigido por el maestro", p: "Aprende directamente de quienes han dedicado su vida al oficio — no de un presentador con guion." },
-      { h: "Guiado en tu idioma", p: "Tu guía intérprete traduce cada palabra y cada gesto, para que la historia detrás del oficio nunca se pierda." },
-      { h: "Claro desde el principio", p: "Reserva online, paga de forma segura en yenes y consulta la política de cancelación antes de decidir." },
+      { h: "Seleccionado, no infinito.", p: "No lo listamos todo. Elegimos experiencias que de verdad creemos que merecen tu tiempo en Japón." },
+      { h: "Más cerca de lo auténtico.", p: "Conoce a las personas detrás de la cultura, el oficio, la comida, el arte y los lugares por los que viniste a Japón — de profesionales en activo a especialistas locales." },
+      { h: "Fácil de reservar. Fácil de entender.", p: "Precios claros, inclusiones claras y punto de encuentro claro. Atención en inglés en todo momento, con guía intérprete incluido cuando la experiencia lo requiere." },
     ],
-    trustSeal: "Grupos reducidos · Expertos locales · Acceso cuidado",
+    trustSeal: "Grupos reducidos · Anfitriones locales · Selección cuidada",
     craftQuote: "Acércate un poco: deberías oír moverse la seda.", craftSpeaker: "— tu anfitriona de la velada",
     craftAlt: "Una maiko baila ante un biombo dorado en una sala privada de Kioto, con un invitado sentado a un paso",
     cityEyebrow: "Elige tu ciudad", cityTitle: ["Dos ciudades.", "Historias infinitas."],
@@ -73,7 +71,7 @@ const COPY = {
     kicker: ["Explora por interés", (n: number) => `${n} puertas a Japón`], catTitle: "Sigue tu curiosidad.",
     catTypes: { sushi: "Cultura gastronómica", sumo: "Tradición viva", "tea-ceremony": "Ritual consciente", kimono: "Oficio y estilo", geisha: "Artes escénicas", swordsmith: "Oficio ancestral", "anime-nail-art": "Cultura pop" } as Record<string, string>,
     toursCard: { title: "Tours privados", type: "A tu medida" },
-    expEyebrow: "Experiencias seleccionadas", expTitle: ["Empieza por algo", "inolvidable."], expLink: "Ver todas las experiencias",
+    expEyebrow: "Encuentra tu Japón.", expTitle: ["Come. Crea.", "Conoce. Juega."], expLink: "Ver todas las experiencias",
     featureEyebrow: "Reservas abiertas", featureCta: "Ver la experiencia",
     tourEyebrow: "Días privados con guía", tourTitle: ["Deja que la experiencia", "se vuelva el viaje."],
     tourBody: "Pasa un día completo con un guía privado titulado en Tokio o Kioto. Podemos poner cualquier clase magistral en el corazón de una ruta hecha a tu medida.",
@@ -86,18 +84,18 @@ const COPY = {
     closingTitle: ["Daremos forma a Japón", "alrededor de tu historia."], closingCta: "Planifica una experiencia privada",
   },
   ja: {
-    heroEyebrow: "東京 · 京都",
-    heroTitle: ["師に会いに行く。", "表面の先へ。"],
-    heroLede: "日本の作り手が直接教える少人数の文化体験を、通訳ガイド同行で海外のお客様にご提供しています。",
-    heroCta: "体験を見る", heroLink: "私たちの考え方",
+    heroEyebrow: "厳選した日本の体験",
+    heroTitle: ["日本を、見るだけで", "終わらせない。"],
+    heroLede: "地元の専門家がもてなす、記憶に残る体験。まずは京都の芸妓・舞妓との貸切の夕べから。寿司握り、書道、キャラクターネイル、ゴルフなども順次加わります。伝統もいまの文化も、手を動かす体験も舞台裏も——旅に組み込む価値のあるものだけを選んでいます。",
+    heroCta: "体験を見る", heroLink: "都市から探す",
     heroBubble: "これは実演ではありません。\nこの席は、あなたのものです。", heroSpeaker: "— お迎えする側より",
-    trustEyebrow: "KAMEHAME の基準", trustTitle: ["細部まで、", "考え抜く。"],
+    trustEyebrow: "KAMEHAME を選ぶ理由", trustTitle: ["厳選という", "日本の楽しみ方。"],
     trust: [
-      { h: "師が直接教える", p: "台本を読む案内役ではなく、その道に人生を注いできた本人から学びます。" },
-      { h: "母語で理解できる", p: "通訳ガイドが言葉も所作も訳します。技の背後にある物語が失われません。" },
-      { h: "最初から明快に", p: "オンラインで予約、日本円で安全に決済。キャンセル規定はお申し込み前にご確認いただけます。" },
+      { h: "数ではなく、厳選。", p: "何でも載せることはしません。日本での時間を使う価値が本当にあると考える体験だけを選んでいます。" },
+      { h: "本物に、もっと近く。", p: "あなたが日本に来た理由である文化・技・食・芸術・場所。その担い手——現役の専門職から地元の目利きまで——に会えます。" },
+      { h: "予約も理解も、簡単に。", p: "料金、含まれるもの、集合場所を明確に。英語でのサポートは常にあり、通訳ガイドが必要な体験には含まれています。" },
     ],
-    trustSeal: "少人数 · 現地の専門家 · 選び抜いた受け入れ先",
+    trustSeal: "少人数 · 地元のホスト · 厳選",
     craftQuote: "もう少し近くへ。衣擦れの音が聞こえるはずです。", craftSpeaker: "— 今夜のもてなし役より",
     craftAlt: "京都の貸切座敷で金屏風の前に舞う舞妓と、すぐそばに座る客",
     cityEyebrow: "都市を選ぶ", cityTitle: ["二つの都市。", "尽きない物語。"],
@@ -110,7 +108,7 @@ const COPY = {
     kicker: ["関心から探す", (n: number) => `日本への${n}つの扉`], catTitle: "気になるものから。",
     catTypes: { sushi: "食文化", sumo: "生きた伝統", "tea-ceremony": "静かな儀礼", kimono: "技と装い", geisha: "舞と芸", swordsmith: "古来の手仕事", "anime-nail-art": "ポップカルチャー" } as Record<string, string>,
     toursCard: { title: "プライベートツアー", type: "ご要望に合わせて" },
-    expEyebrow: "おすすめの体験", expTitle: ["忘れられない", "一つから。"], expLink: "すべての体験を見る",
+    expEyebrow: "あなたの日本を見つける。", expTitle: ["食べる。つくる。", "会う。遊ぶ。"], expLink: "すべての体験を見る",
     featureEyebrow: "受付中の体験", featureCta: "体験の詳細を見る",
     tourEyebrow: "ガイドと過ごす一日", tourTitle: ["その体験が、", "旅そのものになる。"],
     tourBody: "東京または京都で、専属の全国通訳案内士と一日を過ごしていただけます。どのマスタークラスでも、一日の中心に据えて組み立てられます。",
@@ -123,18 +121,18 @@ const COPY = {
     closingTitle: ["あなたの物語に合わせて", "日本を組み立てます。"], closingCta: "貸切の体験を相談する",
   },
   fr: {
-    heroEyebrow: "Tokyo · Kyoto",
-    heroTitle: ["Rencontrez les maîtres.", "Allez au-delà de la surface."],
-    heroLede: "Des expériences culturelles intimes menées par les artisans du Japon, avec un guide-interprète privé à vos côtés.",
-    heroCta: "Explorer les expériences", heroLink: "Pourquoi nous sommes différents",
+    heroEyebrow: "Expériences sélectionnées au Japon",
+    heroTitle: ["Ne vous contentez pas de voir le Japon.", "Entrez-y."],
+    heroLede: "Des expériences mémorables avec des hôtes locaux — à commencer par une soirée privée avec une geiko à Kyoto, bientôt rejointe par le sushi, la calligraphie japonaise, le nail art de personnages, le golf et plus encore. Traditionnel ou moderne, les mains dans la matière ou en coulisses : nous choisissons des expériences qui méritent une place dans votre voyage.",
+    heroCta: "Explorer les expériences", heroLink: "Parcourir par ville",
     heroBubble: "Ce n'est pas une démonstration —\ncette place est la vôtre.", heroSpeaker: "— votre hôte",
-    trustEyebrow: "Le standard KAMEHAME", trustTitle: ["Chaque détail,", "pensé."],
+    trustEyebrow: "Pourquoi KAMEHAME", trustTitle: ["Le Japon,", "façon sélection."],
     trust: [
-      { h: "Mené par le maître", p: "Apprenez directement de ceux qui ont consacré leur vie au métier — pas d'un présentateur avec un script." },
-      { h: "Guidé dans votre langue", p: "Votre guide-interprète traduit chaque mot et chaque geste, pour que l'histoire derrière le métier ne se perde jamais." },
-      { h: "Clair dès le départ", p: "Réservez en ligne, payez en toute sécurité en yens et consultez la politique d'annulation avant de décider." },
+      { h: "Sélectionné, pas exhaustif.", p: "Nous ne listons pas tout. Nous choisissons des expériences qui valent vraiment votre temps au Japon." },
+      { h: "Au plus près du vrai.", p: "Rencontrez les personnes derrière la culture, l'artisanat, la cuisine, l'art et les lieux qui vous ont fait venir au Japon — professionnels en activité ou spécialistes locaux." },
+      { h: "Facile à réserver. Facile à comprendre.", p: "Prix clairs, inclusions claires, rendez-vous clair. Un accompagnement en anglais à chaque étape, avec guide-interprète inclus lorsque l'expérience le demande." },
     ],
-    trustSeal: "Petits groupes · Experts locaux · Accès soigné",
+    trustSeal: "Petits groupes · Hôtes locaux · Sélection soignée",
     craftQuote: "Approchez-vous un peu : vous devriez entendre la soie bouger.", craftSpeaker: "— votre hôtesse de la soirée",
     craftAlt: "Une maiko danse devant un paravent doré dans une salle privée de Kyoto, un invité assis tout près",
     cityEyebrow: "Choisissez votre ville", cityTitle: ["Deux villes.", "Des histoires sans fin."],
@@ -147,7 +145,7 @@ const COPY = {
     kicker: ["Explorer par envie", (n: number) => `${n} portes sur le Japon`], catTitle: "Suivez votre curiosité.",
     catTypes: { sushi: "Culture gastronomique", sumo: "Tradition vivante", "tea-ceremony": "Rituel attentif", kimono: "Métier et style", geisha: "Arts de la scène", swordsmith: "Métier ancestral", "anime-nail-art": "Pop culture" } as Record<string, string>,
     toursCard: { title: "Journées privées", type: "Sur mesure" },
-    expEyebrow: "Expériences sélectionnées", expTitle: ["Commencez par", "l'inoubliable."], expLink: "Voir toutes les expériences",
+    expEyebrow: "Trouvez votre Japon.", expTitle: ["Goûter. Créer.", "Rencontrer. Jouer."], expLink: "Voir toutes les expériences",
     featureEyebrow: "Réservations ouvertes", featureCta: "Voir l'expérience",
     tourEyebrow: "Journées privées avec guide", tourTitle: ["Laissez l'expérience", "devenir le voyage."],
     tourBody: "Passez une journée entière avec un guide privé agréé à Tokyo ou Kyoto. N'importe quelle masterclass peut être au cœur d'un parcours fait pour vous.",
@@ -160,18 +158,18 @@ const COPY = {
     closingTitle: ["Nous façonnerons le Japon", "autour de votre histoire."], closingCta: "Planifier une expérience privée",
   },
   "zh-tw": {
-    heroEyebrow: "東京 · 京都",
-    heroTitle: ["與師傅相見。", "走進表面之下。"],
-    heroLede: "由日本職人親自帶領的私密文化體驗，專屬口譯導遊全程陪同。",
-    heroCta: "探索體驗", heroLink: "我們的不同之處",
+    heroEyebrow: "精選的日本體驗",
+    heroTitle: ["不只是看日本。", "走進去。"],
+    heroLede: "由在地專家親自接待的難忘體驗——從京都藝妓的私人晚宴開始，壽司製作、日本書道、角色美甲、高爾夫等將陸續加入。傳統或現代、動手做或看幕後：我們只挑選值得放進您旅程的體驗。",
+    heroCta: "探索體驗", heroLink: "依城市瀏覽",
     heroBubble: "這不是示範——\n這個位子是您的。", heroSpeaker: "— 您的東道主",
-    trustEyebrow: "KAMEHAME 的標準", trustTitle: ["每個細節，", "都經過思考。"],
+    trustEyebrow: "為什麼選 KAMEHAME", trustTitle: ["精選，", "是體驗日本的方式。"],
     trust: [
-      { h: "由師傅親自帶領", p: "直接向把一生投入這門技藝的人學習——而不是照稿解說的人。" },
-      { h: "以您的語言理解", p: "口譯導遊翻譯每一句話與每一個動作，技藝背後的故事一個都不會遺漏。" },
-      { h: "一開始就清楚", p: "線上預約、以日圓安全付款，並在決定前先看清取消政策。" },
+      { h: "精選，而非無限。", p: "我們不會什麼都列。只挑選我們真心認為值得您在日本花時間的體驗。" },
+      { h: "更貼近真實。", p: "認識文化、工藝、美食、藝術與場所背後的人——從現役專業人士到在地行家——正是您來日本的理由。" },
+      { h: "好預約，也好懂。", p: "價格清楚、內容清楚、集合地點清楚。全程提供英語協助，需要口譯導遊的體驗皆已包含。" },
     ],
-    trustSeal: "小團 · 在地專家 · 精選場地",
+    trustSeal: "小團 · 在地接待 · 用心挑選",
     craftQuote: "再靠近一點，您應該能聽見絲綢滑動的聲音。", craftSpeaker: "— 今晚的女主人",
     craftAlt: "舞妓在京都私人包廂的金屏風前起舞，客人就坐在一臂之遙",
     cityEyebrow: "選擇城市", cityTitle: ["兩座城市。", "說不完的故事。"],
@@ -184,7 +182,7 @@ const COPY = {
     kicker: ["依興趣探索", (n: number) => `通往日本的 ${n} 扇門`], catTitle: "跟著好奇心走。",
     catTypes: { sushi: "飲食文化", sumo: "活的傳統", "tea-ceremony": "靜心儀式", kimono: "技藝與風格", geisha: "表演藝術", swordsmith: "古老技藝", "anime-nail-art": "流行文化" } as Record<string, string>,
     toursCard: { title: "私人一日遊", type: "量身安排" },
-    expEyebrow: "精選體驗", expTitle: ["從一件難忘的事", "開始。"], expLink: "查看所有體驗",
+    expEyebrow: "找到你的日本。", expTitle: ["吃。做。", "見。玩。"], expLink: "查看所有體驗",
     featureEyebrow: "開放預約中", featureCta: "查看體驗",
     tourEyebrow: "與導遊共度的一天", tourTitle: ["讓體驗", "成為旅程本身。"],
     tourBody: "與私人持證導遊在東京或京都度過完整的一天。任何一堂大師課都可以成為專屬路線的核心。",
@@ -252,9 +250,9 @@ export function HomePage({ lang }: { lang: Lang }) {
   // one, and the city / interest sections only appear once there is a choice.
   const solo = live.length === 1 ? live[0] : undefined;
   const featured = (live.length >= 3 ? live : experiences).slice(0, 3);
-  const heroEyebrow = cities.length > 0 ? cities.map((c) => c.title).join(" · ") : C.heroEyebrow;
-  const heroHref = solo ? p(`/${solo.city}/${solo.slug}/`) : p("/experiences/");
-  const heroCta = solo ? C.featureCta : C.heroCta;
+  const heroHref = p("/experiences/");
+  const heroCta = C.heroCta;
+  const cityHref = cities.length === 1 ? p(`/${cities[0].slug}/`) : "#cities";
   const markFor = (e: Experience) => categories.find((c) => c.slug === e.category)?.mark ?? "";
   const cityTitle = (slug: string) => cities.find((c) => c.slug === slug)?.title;
   const [bubbleL1, bubbleL2] = C.heroBubble.split("\n");
@@ -267,12 +265,12 @@ export function HomePage({ lang }: { lang: Lang }) {
       <section className="hero" aria-labelledby="hero-heading">
         <div className="hero-grain" aria-hidden="true" />
         <div className="hero-copy">
-          <p className="eyebrow"><span /> {heroEyebrow}</p>
+          <p className="eyebrow"><span /> {C.heroEyebrow}</p>
           <h1 id="hero-heading">{C.heroTitle[0]}<br />{C.heroTitle[1]}</h1>
           <p className="hero-lede">{C.heroLede}</p>
           <div className="hero-actions">
             <Button asChild size="lg"><Link href={heroHref}>{heroCta} <ArrowDownRight /></Link></Button>
-            <a className="text-link" href="#approach">{C.heroLink}</a>
+            {cities.length === 1 ? <Link className="text-link" href={cityHref}>{C.heroLink}</Link> : <a className="text-link" href={cityHref}>{C.heroLink}</a>}
           </div>
         </div>
         <div className="hero-note bubble tail-left">

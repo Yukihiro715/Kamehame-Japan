@@ -79,10 +79,21 @@ export interface Experience {
    *  figure is derived for display. Absent for per-person products, where the
    *  table is derived from `price` × party. */
   pricing?: {
-    tiers: { party: number; total: number }[];
+    /** Whole-group totals by party size (products priced as a flat table). */
+    tiers?: { party: number; total: number }[];
     /** Rate that applies inside `windows`; only the tiers actually confirmed. */
     highSeason?: { tiers: { party: number; total: number }[]; windows: { from: string; to: string }[] };
+    /** Plan-based products: each plan is a price for a base party (`extraGuest.included`),
+     *  regular and peak season; further guests add `extraGuest` each up to `upTo`,
+     *  and larger parties are quoted. Plan names and blurbs live in `planText`. */
+    plans?: { id: string; regular: number; peak: number; recommended?: boolean }[];
+    extraGuest?: { regular: number; peak: number; included: number; upTo: number };
+    peakWindows?: { from: string; to: string }[];
   };
+  /** Localised text for `pricing.plans`, keyed by plan id. */
+  planText?: Record<string, { label: string; name: string; performers: string; blurb: string }>;
+  /** Optional extras chosen in the request form. No `price` means "on request". */
+  addOns?: { id: string; name: string; description: string; price?: number }[];
   /** Experience video. Absent until an asset exists; the whole video section,
    *  the "Watch the experience" link and its anchor are omitted when absent. */
   video?: {
@@ -162,7 +173,7 @@ export const cities: City[] = [
   },
   {
     slug: "kyoto", title: "Kyoto", jp: "京都", img: "/images/city-kyoto.jpg",
-    lead: "Kyoto is where Japan's rituals are still lived daily. Our Kyoto experiences open doors that stay closed to most visitors — an evening with a geiko, a bowl of tea whisked by a master, a walk through Higashiyama in silk — each with a private interpreter guide to carry every word across.",
+    lead: "Discover a different side of Kyoto through its living traditions. Spend a private evening with a geiko or maiko — dinner, a dance and conversation in your own room — with more Kyoto experiences in food, craft and special access on the way.",
   },
 ];
 
@@ -288,8 +299,13 @@ export const experiences: Experience[] = [
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     partySize: { min: 2, max: 40 },
     pricing: {
-      tiers: [{ party: 2, total: 139600 }, { party: 3, total: 157500 }, { party: 4, total: 166000 }, { party: 5, total: 190000 }],
-      highSeason: { tiers: [{ party: 2, total: 159600 }, { party: 3, total: 187500 }, { party: 4, total: 206000 }, { party: 5, total: 240000 }], windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }] },
+      plans: [
+        { id: "select", regular: 219800, peak: 249800 },
+        { id: "signature", regular: 379800, peak: 429800, recommended: true },
+        { id: "reserve", regular: 498000, peak: 559800 },
+      ],
+      extraGuest: { regular: 39800, peak: 49800, included: 2, upTo: 5 },
+      peakWindows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }],
     },
     taxIncluded: true,
     interactionTime: "about 1 hour 45 minutes",
@@ -297,8 +313,8 @@ export const experiences: Experience[] = [
     availabilityNote: "Closed over the New Year holidays.",
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
-    tagline: "Share a meal, enjoy a traditional dance, and join the conversation with an interpreter.",
-    duration: "2 hours", price: "¥139,600", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
+    tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an English-speaking interpreter throughout.",
+    duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · up to 5 guests (6+ on request)", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },
@@ -323,14 +339,20 @@ export const experiences: Experience[] = [
     itinerary: ["10 min before — Arrive at the venue with your guide (address in your confirmation)", "0:00 — Welcome to your private room; the banquet begins", "0:30 — Geiko and maiko join your table; conversation over dinner", "1:15 — Dance performance and ozashiki parlour games", "1:50 — Commemorative photos", "2:00 — End of the evening"],
     goodToKnow: [
       "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — book at least 3 days ahead (5pm Japan time cutoff).",
-      "Pricing is per group, everything included: ¥139,600 for 2 guests, ¥157,500 for 3, ¥166,000 for 4, ¥190,000 for 5; larger parties (up to 40) on request.",
-      "High-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30 (from ¥159,600 for 2 guests).",
+      "Three plans, each priced for up to 2 guests: Select from ¥219,800, Signature (live shamisen) from ¥379,800, Private Reserve (two performers and shamisen) from ¥498,000. Each additional guest up to 5: ¥39,800; six or more on request.",
+      "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30 (Select from ¥249,800; additional guests ¥49,800 each).",
       "Children: 2 and under join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
       "Allergies and dietary restrictions are catered for — tell us when you book.",
-      "Want a livelier room? An additional geiko or maiko can be arranged for ¥60,500.",
+      "Want live music or a fuller room? Choose Signature (a jikata playing shamisen live) or Private Reserve (two geiko or maiko plus the jikata).",
     ],
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
     includedShort: "Private room · Meal and drinks · English interpreter",
+    planText: {
+      select: { label: "Select", name: "Private Geisha Evening", performers: "One geiko or maiko", blurb: "The essential private geisha dining experience." },
+      signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko or maiko + live shamisen", blurb: "One geiko or maiko, joined by a jikata playing shamisen live." },
+      reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Two performers + live shamisen", blurb: "Two geiko or maiko, joined by a jikata for live shamisen. The fullest version of the evening." },
+    },
+    addOns: [{ id: "sake", name: "Premium Sake Upgrade", description: "Elevate your evening with a curated selection of premium Japanese sake." }],
     galleryNote: "The room and the dishes shown are examples; both vary by date and season.",
     highlights: [
       { icon: "group", title: "The room is yours", body: "A private banquet room for your party only — never shared with other guests." },
@@ -341,21 +363,21 @@ export const experiences: Experience[] = [
       "A private tatami room for your party — upstairs rooms are built like a Gion teahouse, ground-floor rooms look onto the inner garden",
       "A multi-course Japanese dinner: seasonal obanzai, sashimi, a meat course, tempura, rice and soup, dessert (changes with the market)",
       "Free-flow drinks throughout — beer, sake, shochu, wine, highballs, umeshu and soft drinks",
-      "One geiko or maiko hosting your table: conversation, one dance, and the parlour games Konpira Funefune and Tora-tora",
+      "Your geiko or maiko hosting your table: conversation, one dance, and the parlour games Konpira Funefune and Tora-tora (performers by plan)",
       "Photographs and video whenever you like, the dance included, plus commemorative photos with your host",
       "An English-speaking interpreter guide with you from arrival to farewell",
       "Tax and service charge — nothing is added on the day",
     ],
     notIncluded: [
-      "A second geiko or maiko, or a jikata shamisen player for live music: ¥60,500 each",
+      "Premium sake — available as an optional upgrade, priced with your quote",
       "Interpreters in languages other than English: quoted on request",
-      "Parties of six or more are quoted individually",
+      "Parties of six or more: contact us for private group pricing",
     ],
     schedule: [
       { time: "17:50", title: "Arrive with your guide", body: "The address is in your confirmation. Your guide meets you nearby and walks you in." },
       { time: "18:00", title: "Your private room", body: "You are seated on tatami; the first courses and drinks arrive.", img: "/images/geiko-room-upstairs.jpg" },
       { time: "18:15", title: "Your geiko or maiko arrives", body: "She joins the table straight from the okiya and stays about 1 hour 45 minutes. Conversation over dinner, with your interpreter carrying both sides.", img: "/images/geiko-conversation.jpg" },
-      { time: "19:00", title: "The dance", body: "One dance before the gold screen, to recorded music unless you add a shamisen player. Cameras are welcome.", img: "/images/geiko-dance.jpg" },
+      { time: "19:00", title: "The dance", body: "One dance before the gold screen — to recorded music on Select, to live shamisen on Signature and Private Reserve. Cameras are welcome.", img: "/images/geiko-dance.jpg" },
       { time: "19:15", title: "Ozashiki games", body: "Konpira Funefune, a rhythm game, and Tora-tora, rock-paper-scissors played with the whole body.", img: "/images/geiko-game-toratora.jpg" },
       { time: "19:50", title: "Photographs", body: "Commemorative photos with your host.", img: "/images/geiko-photo-together.jpg" },
       { time: "20:00", title: "End of the evening" },
@@ -368,7 +390,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Will it be a geiko or a maiko?", a: "One geiko or maiko is arranged for your date. The house cannot take requests for a particular person, or for a maiko over a geiko; if you have a preference we will pass it on, without promising." },
       { q: "How long until the date is confirmed?", a: "We reply within 24 hours with the price and conditions. The room is known at once; the geiko or maiko is secured only once the house formally starts arranging, which can take one to two weeks in busy months. Cancellation fees begin from that formal request, which is why we confirm the conditions with you first." },
-      { q: "Can we add live shamisen or a second host?", a: "Yes. The basic evening has one geiko or maiko dancing to recorded music. A jikata (shamisen player) or a second geiko or maiko can be added for ¥60,500 each — ask when you request your date." },
+      { q: "Can we add live shamisen or a second host?", a: "Yes — that is what the plans are for. Signature adds a jikata playing shamisen live; Private Reserve has two geiko or maiko plus the jikata. Choose the plan when you request your date." },
       { q: "Can we take photographs during the dance?", a: "Yes. Photos and video are welcome at any point, the dance included, and time is set aside at the end for commemorative photos with your host." },
       { q: "Are drinks included? Is there a dress code?", a: "Drinks are free-flow — beer, sake, shochu, wine, highballs, soft drinks — and included, as are tax and service charge. There is no dress code." },
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },

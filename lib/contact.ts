@@ -20,6 +20,10 @@ export interface Enquiry {
   country?: string;
   dates?: string;
   party?: string;
+  /** Experience pages: the chosen plan, extras and the on-page estimate. */
+  plan?: string;
+  addons?: string;
+  estimate?: string;
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;

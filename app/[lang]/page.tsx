@@ -12,24 +12,24 @@ export function generateStaticParams() {
 
 const META: Record<Lang, { title: string; description: string }> = {
   en: {
-    title: "KAMEHAME JAPAN | Authentic cultural experiences",
-    description: "Private cultural experiences in Tokyo and Kyoto, led by Japanese masters with an interpreter guide by your side.",
+    title: "KAMEHAME JAPAN | Curated experiences in Japan",
+    description: "The curated way to experience Japan: selected experiences with local experts, starting with a private geiko evening in Kyoto — food, craft, pop culture and more to come.",
   },
   es: {
-    title: "KAMEHAME JAPAN | Experiencias culturales auténticas",
-    description: "Experiencias culturales privadas en Tokio y Kioto, dirigidas por maestros japoneses con un guía intérprete a tu lado.",
+    title: "KAMEHAME JAPAN | Experiencias seleccionadas en Japón",
+    description: "La forma seleccionada de vivir Japón: experiencias elegidas con anfitriones locales, empezando por una velada privada con una geiko en Kioto — comida, oficio, cultura pop y más.",
   },
   ja: {
-    title: "KAMEHAME JAPAN | 訪日外国人向けの文化体験",
-    description: "東京と京都の職人・師のもとで行う少人数の文化体験を、通訳ガイド同行で海外のお客様にご提供しています。",
+    title: "KAMEHAME JAPAN | 厳選した日本の体験",
+    description: "厳選という日本の楽しみ方。地元の専門家がもてなす体験を、京都の芸妓・舞妓との貸切の夕べから。食・工芸・ポップカルチャーも順次。",
   },
   fr: {
-    title: "KAMEHAME JAPAN | Expériences culturelles authentiques",
-    description: "Des expériences culturelles privées à Tokyo et Kyoto, menées par des maîtres japonais avec un guide-interprète à vos côtés.",
+    title: "KAMEHAME JAPAN | Expériences sélectionnées au Japon",
+    description: "Le Japon façon sélection : des expériences choisies avec des hôtes locaux, à commencer par une soirée privée avec une geiko à Kyoto — cuisine, artisanat, pop culture et plus encore.",
   },
   "zh-tw": {
-    title: "KAMEHAME JAPAN | 道地的文化體驗",
-    description: "東京與京都的私人文化體驗，由日本職人親自帶領，口譯導遊全程陪同。",
+    title: "KAMEHAME JAPAN | 精選的日本體驗",
+    description: "精選的日本體驗方式：與在地專家共度的精選體驗，從京都藝妓的私人晚宴開始——美食、工藝、流行文化陸續加入。",
   },
 };
 

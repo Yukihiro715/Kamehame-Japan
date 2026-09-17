@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
   ...socialMeta({
     lang: "en",
-    title: "KAMEHAME JAPAN | Authentic cultural experiences",
+    title: "KAMEHAME JAPAN | Curated experiences in Japan",
     description:
       "Private cultural experiences in Tokyo and Kyoto, led by Japanese masters with an interpreter guide by your side.",
     path: "/",

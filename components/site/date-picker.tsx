@@ -15,12 +15,20 @@ import { t, type Lang } from "@/lib/i18n";
  *  inside a label to the label's input as a second click, which re-opened
  *  the calendar right after a day was picked. Label it with `htmlFor`. */
 export function DatePicker({
-  id, name, lang, min, required, closed, defaultOpenMonth,
-}: { id?: string; name: string; lang: Lang; min?: string; required?: boolean; closed?: (iso: string) => boolean; defaultOpenMonth?: string }) {
+  id, name, lang, min, required, closed, defaultOpenMonth, value: controlled, onChange, compact,
+}: {
+  id?: string; name: string; lang: Lang; min?: string; required?: boolean; closed?: (iso: string) => boolean; defaultOpenMonth?: string;
+  /** Controlled value (ISO date or ""); leave undefined to let the picker keep its own. */
+  value?: string; onChange?: (iso: string) => void;
+  /** Shorter display format for narrow slots (the booking card). */
+  compact?: boolean;
+}) {
   const F = t(lang).form;
   const locale = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" }[lang];
   const mondayFirst = lang === "es" || lang === "fr";
-  const [value, setValue] = useState("");
+  const [own, setOwn] = useState("");
+  const value = controlled ?? own;
+  const setValue = (v: string) => { setOwn(v); onChange?.(v); };
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState(() => (defaultOpenMonth ?? min ?? new Date().toISOString().slice(0, 10)).slice(0, 7));
   const root = useRef<HTMLDivElement>(null);
@@ -39,7 +47,9 @@ export function DatePicker({
     return () => { document.removeEventListener("pointerdown", onDoc); document.removeEventListener("keydown", onKey); };
   }, [open]);
 
-  const fmtLong = useMemo(() => new Intl.DateTimeFormat(locale, { year: "numeric", month: "long", day: "numeric", weekday: "short", timeZone: "UTC" }), [locale]);
+  const fmtLong = useMemo(() => new Intl.DateTimeFormat(locale, compact
+    ? { year: "numeric", month: "short", day: "numeric", weekday: "short", timeZone: "UTC" }
+    : { year: "numeric", month: "long", day: "numeric", weekday: "short", timeZone: "UTC" }), [locale, compact]);
   const fmtMonth = useMemo(() => new Intl.DateTimeFormat(locale, { year: "numeric", month: "long", timeZone: "UTC" }), [locale]);
   const weekdays = useMemo(() => {
     const f = new Intl.DateTimeFormat(locale, { weekday: "narrow", timeZone: "UTC" });

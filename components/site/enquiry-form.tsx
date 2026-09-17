@@ -1,73 +1,38 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 import { track } from "@/lib/analytics";
+import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
+import { isClosed, useBooking } from "@/components/site/booking-context";
 
 type Status = "idle" | "sending" | "sent" | "failed";
-
-/** Largest head count offered as its own option; beyond it the list ends in "N or more". */
-const GUEST_LIST_MAX = 12;
 
 const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
 const fmtDate = (iso: string, lang: Lang) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString(DATE_LOCALE[lang], { month: "short", day: "numeric", timeZone: "UTC" });
 
-export interface EnquiryExperience {
-  slug: string;
-  title: string;
-  partySize?: { min: number; max: number };
-  /** Days of notice the venue needs; the date picker starts after them. */
-  leadDays?: number;
-  /** Clock time (Japan) by which a request must be in, e.g. "17:00". After
-   *  it, the earliest selectable date moves one day later. */
-  cutoffTime?: string;
-  /** Start times the venue offers; shown as a select when present. */
-  startTimes?: string[];
-  /** Month-day windows the venue is closed, e.g. New Year; not selectable. */
-  closed?: { from: string; to: string }[];
-}
-
-/** True when the month-day of `iso` falls inside a closed window (windows may wrap the year end). */
-function isClosed(iso: string, windows?: { from: string; to: string }[]) {
-  if (!windows?.length) return false;
-  const md = iso.slice(5);
-  return windows.some((w) => (w.from <= w.to ? md >= w.from && md <= w.to : md >= w.from || md <= w.to));
-}
-
-export function EnquiryForm({
-  kind, lang, fallbackEmail, experience,
-}: { kind: EnquiryKind; lang: Lang; fallbackEmail: string; experience?: EnquiryExperience }) {
+/** The generic contact and trade forms take `kind` only. On an experience
+ *  page the form sits inside a BookingProvider and shares the plan, dates,
+ *  head count and extras with the booking card beside the page. */
+export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
+  kind: EnquiryKind; lang: Lang; fallbackEmail: string;
+  experience?: { slug: string; title: string };
+}) {
   const T = t(lang);
   const F = T.form;
+  const D = T.detail;
   const [status, setStatus] = useState<Status>("idle");
   const trade = kind === "trade";
-  const times = experience?.startTimes && experience.startTimes.length > 0 ? experience.startTimes : undefined;
-  // Pre-select the typical dinner slot so the example reads 18:00, not the last slot.
-  const sampleTime = times?.includes("18:00") ? "18:00" : times?.[0];
-  // Head count as a list: every size up to GUEST_LIST_MAX, then one "or more"
-  // entry for the venue's larger parties, which are quoted individually anyway.
-  const size = experience?.partySize ?? { min: 1, max: GUEST_LIST_MAX };
-  const guestCap = Math.min(size.max, GUEST_LIST_MAX);
-  const guestOptions = Array.from({ length: Math.max(0, guestCap - size.min + 1) }, (_, i) => size.min + i);
-  const guestMore = size.max > guestCap ? guestCap + 1 : undefined;
-  // Earliest selectable date — computed after mount so the server and the
-  // browser never disagree about "today".
-  const [minDate, setMinDate] = useState<string>();
-  useEffect(() => {
-    // "3 days before, by 17:00 Japan time": count from today in Japan, and
-    // once the cutoff hour has passed there, today no longer counts.
-    const lead = experience?.leadDays ?? 3;
-    const [ch, cm] = (experience?.cutoffTime ?? "17:00").split(":").map(Number);
-    const jst = new Date(Date.now() + 9 * 3600 * 1000);
-    const past = jst.getUTCHours() * 60 + jst.getUTCMinutes() >= ch * 60 + cm;
-    jst.setUTCDate(jst.getUTCDate() + lead + (past ? 1 : 0));
-    setMinDate(jst.toISOString().slice(0, 10));
-  }, [experience?.leadDays, experience?.cutoffTime]);
+  const b = useBooking();
+  const x = b?.experience;
+  const plans = b?.pricing?.plans ?? [];
+  const addOns = b?.pricing?.addOns ?? [];
+  const guestOptions = x ? Array.from({ length: x.listedMax - x.minGuests + 1 }, (_, i) => x.minGuests + i) : [];
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -75,10 +40,14 @@ export function EnquiryForm({
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     // The experience form asks for concrete dates and a head count; fold them
     // into the same two fields the generic form and the mailbox already use.
-    if (experience) {
+    if (b) {
       const slot = (d?: string, t?: string) => d ? [d, t].filter(Boolean).join(" ") : "";
-      data.dates = [slot(data.date, data.time), slot(data.altDate, data.altTime)].filter(Boolean).join(" / ");
-      data.party = data.guests;
+      data.dates = [slot(b.date, b.time), slot(b.altDate, b.altTime)].filter(Boolean).join(" / ");
+      data.party = b.guests;
+      const plan = plans.find((p) => p.id === b.plan);
+      if (plan) data.plan = `${plan.label} — ${plan.name}`;
+      if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
+      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${b.estimate.peak ? "peak season" : "regular season"}, ${b.guestsNumber} guests)`;
       delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
     }
     setStatus("sending");
@@ -96,8 +65,11 @@ export function EnquiryForm({
           enquiry_kind: kind,
           experience: experience?.slug,
           experience_title: experience?.title,
+          plan: b?.plan || undefined,
           language: lang,
           party_size: Number(data.party) || undefined,
+          value: b?.estimate?.total,
+          currency: b?.estimate ? "JPY" : undefined,
         });
         form.reset();
       }
@@ -126,6 +98,76 @@ export function EnquiryForm({
           <b>{experience.title}</b>
         </p>
       )}
+
+      {b && x && (
+        <>
+          {plans.length > 0 && (
+            <label className="form-row">
+              <span>{F.plan}</span>
+              <select name="plan-id" value={b.plan} onChange={(e) => b.set({ plan: e.target.value })}>
+                {plans.map((p) => <option key={p.id} value={p.id}>{p.label} — {p.name} · {yen(p.regular)}</option>)}
+              </select>
+            </label>
+          )}
+          <div className="form-row two">
+            <div className="field">
+              <label htmlFor="enq-date">{F.preferredDate}</label>
+              <DatePicker id="enq-date" name="date" lang={lang} min={b.minDate} required closed={(d) => isClosed(d, x.closed)} value={b.date} onChange={(d) => b.set({ date: d })} />
+              {b.minDate && <small className="form-hint">{F.earliestDate(fmtDate(b.minDate, lang), x.leadDays, x.cutoffTime)}</small>}
+            </div>
+            {x.startTimes?.length ? (
+              <label>
+                <span>{F.startTime}</span>
+                <select name="time" required value={b.time} onChange={(e) => b.set({ time: e.target.value })}>
+                  {x.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </label>
+            ) : <span />}
+          </div>
+          <div className="form-row two">
+            <div className="field">
+              <label htmlFor="enq-alt-date">{F.altDate}</label>
+              <DatePicker id="enq-alt-date" name="altDate" lang={lang} min={b.minDate} closed={(d) => isClosed(d, x.closed)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
+            </div>
+            {x.startTimes?.length ? (
+              <label>
+                <span>{F.altStartTime}</span>
+                <select name="altTime" value={b.altTime} onChange={(e) => b.set({ altTime: e.target.value })}>
+                  {x.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </label>
+            ) : <span />}
+          </div>
+          <div className="form-row two">
+            <label>
+              <span>{F.partyN}</span>
+              <select name="guests" required value={b.guests} onChange={(e) => b.set({ guests: e.target.value })}>
+                {guestOptions.map((n) => <option key={n} value={n}>{F.guests(n)}</option>)}
+                <option value={`${x.listedMax + 1}+`}>{F.guestsMore(x.listedMax + 1)}</option>
+              </select>
+            </label>
+            {addOns.length > 0 && (
+              <fieldset className="form-addons">
+                <legend>{F.addOns}</legend>
+                {addOns.map((a) => (
+                  <label key={a.id} className="form-check">
+                    <input type="checkbox" checked={b.addOns.includes(a.id)} onChange={() => b.toggleAddOn(a.id)} />
+                    <span><b>{a.name}</b><small>{a.price ? yen(a.price) : D.priceOnRequest}</small></span>
+                  </label>
+                ))}
+              </fieldset>
+            )}
+          </div>
+          <div className="form-estimate" aria-live="polite">
+            {b.estimate ? (
+              <><span>{D.estimateH} · {D.estimateFor(b.guestsNumber)} · {b.estimate.peak ? D.seasonPeak : D.seasonRegular}</span><b>{yen(b.estimate.total)}</b><small>{D.estimateNote}</small></>
+            ) : (
+              <><span>{D.estimateH}</span><small>{b.largeParty ? D.sixPlus(x.listedMax + 1) : D.quoteIndividually}</small></>
+            )}
+          </div>
+        </>
+      )}
+
       <div className="form-row two">
         <label>
           <span>{F.name}</span>
@@ -137,7 +179,7 @@ export function EnquiryForm({
         </label>
       </div>
 
-      {trade ? (
+      {trade && (
         <div className="form-row two">
           <label>
             <span>{F.company}</span>
@@ -148,48 +190,8 @@ export function EnquiryForm({
             <input name="country" type="text" autoComplete="country-name" maxLength={80} />
           </label>
         </div>
-      ) : experience ? (
-        <>
-          <div className="form-row two">
-            <div className="field">
-              <label htmlFor="enq-date">{F.preferredDate}</label>
-              <DatePicker id="enq-date" name="date" lang={lang} min={minDate} required closed={(d) => isClosed(d, experience.closed)} />
-              {minDate && <small className="form-hint">{F.earliestDate(fmtDate(minDate, lang), experience.leadDays ?? 3, experience.cutoffTime ?? "17:00")}</small>}
-            </div>
-            {times ? (
-              <label>
-                <span>{F.startTime}</span>
-                <select name="time" required defaultValue={sampleTime}>
-                  {times.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </label>
-            ) : <span />}
-          </div>
-          <div className="form-row two">
-            <div className="field">
-              <label htmlFor="enq-alt-date">{F.altDate}</label>
-              <DatePicker id="enq-alt-date" name="altDate" lang={lang} min={minDate} closed={(d) => isClosed(d, experience.closed)} />
-            </div>
-            {times ? (
-              <label>
-                <span>{F.altStartTime}</span>
-                <select name="altTime" defaultValue={sampleTime}>
-                  {times.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </label>
-            ) : <span />}
-          </div>
-          <div className="form-row two">
-            <label>
-              <span>{F.partyN}</span>
-              <select name="guests" required defaultValue={String(guestOptions[0])}>
-                {guestOptions.map((n) => <option key={n} value={n}>{F.guests(n)}</option>)}
-                {guestMore && <option value={`${guestMore}+`}>{F.guestsMore(guestMore)}</option>}
-              </select>
-            </label>
-          </div>
-        </>
-      ) : (
+      )}
+      {!trade && !b && (
         <div className="form-row two">
           <label>
             <span>{F.dates}</span>
@@ -203,10 +205,10 @@ export function EnquiryForm({
       )}
 
       <label className="form-row">
-        <span>{trade ? F.messageTrade : experience ? F.messageXp : F.message}</span>
+        <span>{trade ? F.messageTrade : b ? F.notesXp : F.message}</span>
         <textarea
-          name="message" required={!experience} rows={experience ? 4 : 7} maxLength={4000}
-          placeholder={trade ? F.messageTradeHint : experience ? F.messageXpHint : F.messageHint}
+          name="message" required={!b} rows={b ? 4 : 7} maxLength={4000}
+          placeholder={trade ? F.messageTradeHint : b ? F.notesXpHint : F.messageHint}
         />
       </label>
 
@@ -218,11 +220,11 @@ export function EnquiryForm({
 
       <div className="enquiry-actions">
         <button type="submit" className="contact-cta" disabled={status === "sending"}>
-          {status === "sending" ? F.sending : experience ? F.sendRequest : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : b ? F.sendRequest : F.send} <ArrowRight size={15} />
         </button>
-        {!experience && <span className="form-privacy">{F.privacy}</span>}
+        {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>
-      {experience && <p className="form-after">{F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
+      {b && <p className="form-after">{F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
 
       {status === "failed" && (
         <p className="form-error" role="alert">

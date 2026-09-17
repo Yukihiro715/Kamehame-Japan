@@ -14,7 +14,7 @@ export const citiesEs: City[] = [
   },
   {
     slug: "kyoto", title: "Kioto", jp: "京都", img: "/images/city-kyoto.jpg",
-    lead: "Kioto es donde los rituales de Japón todavía se viven a diario. Nuestras experiencias abren puertas que permanecen cerradas para la mayoría — una velada con una geiko, un cuenco de té batido por una maestra, un paseo en seda por Higashiyama — cada una con un guía intérprete privado que traduce cada palabra.",
+    lead: "Descubre otra cara de Kioto a través de sus tradiciones vivas. Pasa una velada privada con una geiko o maiko — cena, danza y conversación en tu propia sala — y pronto más experiencias en Kioto de comida, oficio y accesos especiales.",
   },
 ];
 
@@ -129,8 +129,8 @@ export const experiencesEs: Experience[] = [
   {
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "Banquete ozashiki con maiko y geiko",
-    tagline: "Un salón privado en Kioto: cena, danza y juegos de sobremesa con geiko y maiko",
-    duration: "2 horas", price: "¥139.600", priceUnit: "group", group: "Privado · 2–40 personas", ages: "Todas las edades", area: "Kioto (zona de Gion / Higashiyama)",
+    tagline: "Dos horas privadas en Kioto con una geiko o maiko. Compartid una cena japonesa de temporada, conversad en la mesa, ved una danza tradicional y jugad a los juegos ozashiki — con intérprete de inglés durante toda la velada.",
+    duration: "2 horas", price: "¥219.800", priceUnit: "group", group: "Privado · hasta 5 personas (6 o más, a consultar)", ages: "Todas las edades", area: "Kioto (zona de Gion / Higashiyama)",
     img: "/images/geiko-photo-together.jpg", alt: "Dos huéspedes y una maiko sonríen para una foto de recuerdo en una sala privada de Kioto",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "Conversación durante la cena, con el intérprete en ambos sentidos", caption: "Conversación durante la cena, con el intérprete en ambos sentidos" },
@@ -155,16 +155,22 @@ export const experiencesEs: Experience[] = [
     itinerary: ["10 min antes — Llegada al local con tu guía (dirección en la confirmación)", "0:00 — Bienvenida a tu salón privado; comienza el banquete", "0:30 — Geiko y maiko se unen a tu mesa; conversación durante la cena", "1:15 — Danza y juegos de sobremesa ozashiki", "1:50 — Fotos conmemorativas", "2:00 — Fin de la velada"],
     goodToKnow: [
       "Se celebra todos los días salvo las fiestas de Año Nuevo, con inicios entre las 12:00 y las 20:30 — reserva con al menos 3 días de antelación (cierre a las 17:00, hora de Japón).",
-      "El precio es por grupo, todo incluido: ¥139.600 para 2 personas, ¥157.500 para 3, ¥166.000 para 4, ¥190.000 para 5; grupos mayores (hasta 40) bajo consulta.",
-      "En temporada alta (15 mar – 31 may y 1 oct – 30 nov) rigen tarifas superiores (desde ¥159.600 para 2 personas).",
+      "Tres planes, cada uno con precio para hasta 2 personas: Select desde ¥219.800, Signature (shamisen en directo) desde ¥379.800, Private Reserve (dos artistas y shamisen) desde ¥498.000. Cada persona adicional hasta 5: ¥39.800; seis o más, a consultar.",
+      "En temporada alta (15 mar – 31 may y 1 oct – 30 nov) rigen tarifas superiores (Select desde ¥249.800; persona adicional ¥49.800).",
       "Niños: 2 años o menos gratis sin comida, de 3 a 11 años mitad de la tarifa de adulto, desde 12 años tarifa de adulto con el menú completo.",
       "Atendemos alergias y restricciones alimentarias — indícalo al reservar.",
-      "¿Quieres una sala más animada? Se puede añadir una geiko o maiko adicional por ¥60.500.",
+      "¿Música en directo o una sala más animada? Elige Signature (una jikata al shamisen en directo) o Private Reserve (dos geiko o maiko más la jikata).",
     ],
     story: { heading: "El mundo del karyukai", body: "El «mundo de la flor y el sauce» de Kioto funciona desde hace tres siglos a base de presentación y confianza. Una geiko no es una artista de alquiler, sino una maestra cuyas veladas se conceden a través de relaciones entre casas de té y mecenas. Sentarte en esa sala, con la conversación fluyendo en tu idioma, es el acceso más raro que ofrece Kioto." },
     availabilityNote: "Cerrado durante las fiestas de Año Nuevo.",
     interactionTime: "unas 1 h 45 min",
     includedShort: "Sala privada · Comida y bebida · Intérprete de inglés",
+    planText: {
+      select: { label: "Select", name: "Private Geisha Evening", performers: "Una geiko o maiko", blurb: "La velada privada esencial con una geisha." },
+      signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko o maiko + shamisen en directo", blurb: "Una geiko o maiko, acompañada por una jikata que toca el shamisen en directo." },
+      reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Dos artistas + shamisen en directo", blurb: "Dos geiko o maiko y una jikata con shamisen en directo. La versión más completa de la velada." },
+    },
+    addOns: [{ id: "sake", name: "Mejora con sake premium", description: "Eleva tu velada con una selección de sakes japoneses premium." }],
     galleryNote: "La sala y los platos de las fotos son ejemplos; ambos varían según la fecha y la temporada.",
     highlights: [
       { icon: "group", title: "La sala es suya", body: "Un salón de banquete privado solo para su grupo: nunca se comparte con otros huéspedes." },
@@ -175,13 +181,13 @@ export const experiencesEs: Experience[] = [
       "Una sala privada de tatami para su grupo: las del piso superior imitan una casa de té de Gion, las de la planta baja dan al jardín interior",
       "Una cena japonesa de varios platos: obanzai de temporada, sashimi, un plato de carne, tempura, arroz y sopa, postre (cambia según el mercado)",
       "Bebida libre durante toda la velada: cerveza, sake, shochu, vino, highballs, umeshu y refrescos",
-      "Una geiko o maiko como anfitriona: conversación, una danza y los juegos de salón Konpira Funefune y Tora-tora",
+      "Tu geiko o maiko como anfitriona: conversación, una danza y los juegos de salón Konpira Funefune y Tora-tora (artistas según el plan)",
       "Fotos y vídeo cuando quiera, danza incluida, más fotos de recuerdo con su anfitriona",
       "Un guía intérprete de habla inglesa desde la llegada hasta la despedida",
       "Impuestos y servicio: no se añade nada el día del evento",
     ],
     notIncluded: [
-      "Una segunda geiko o maiko, o una jikata (shamisen) para música en directo: ¥60.500 cada una",
+      "Sake premium: mejora opcional, con precio en tu presupuesto",
       "Intérpretes en idiomas distintos del inglés: presupuesto a petición",
       "Los grupos de seis o más se presupuestan individualmente",
     ],
@@ -189,7 +195,7 @@ export const experiencesEs: Experience[] = [
       { time: "17:50", title: "Llegada con su guía", body: "La dirección figura en su confirmación. Su guía les espera cerca y les acompaña adentro." },
       { time: "18:00", title: "Su sala privada", body: "Toman asiento sobre tatami; llegan los primeros platos y las bebidas.", img: "/images/geiko-room-upstairs.jpg" },
       { time: "18:15", title: "Llega su geiko o maiko", body: "Se une a la mesa directamente desde la okiya y se queda una hora y 45 minutos. Conversación durante la cena, con el intérprete en ambos sentidos.", img: "/images/geiko-conversation.jpg" },
-      { time: "19:00", title: "La danza", body: "Una danza ante el biombo dorado, con música grabada salvo que añadan una shamisen. Las cámaras son bienvenidas.", img: "/images/geiko-dance.jpg" },
+      { time: "19:00", title: "La danza", body: "Una danza ante el biombo dorado: con música grabada en Select, con shamisen en directo en Signature y Private Reserve. Las cámaras son bienvenidas.", img: "/images/geiko-dance.jpg" },
       { time: "19:15", title: "Juegos de ozashiki", body: "Konpira Funefune, un juego de ritmo, y Tora-tora, piedra-papel-tijera con todo el cuerpo.", img: "/images/geiko-game-toratora.jpg" },
       { time: "19:50", title: "Fotografías", body: "Fotos de recuerdo con su anfitriona.", img: "/images/geiko-photo-together.jpg" },
       { time: "20:00", title: "Fin de la velada" },
@@ -202,7 +208,7 @@ export const experiencesEs: Experience[] = [
     faq: [
       { q: "¿Será una geiko o una maiko?", a: "Se organiza una geiko o maiko para su fecha. La casa no puede aceptar peticiones de una persona concreta ni de maiko en lugar de geiko; si tiene preferencia la transmitiremos, sin prometerla." },
       { q: "¿Cuánto tarda en confirmarse la fecha?", a: "Respondemos en 24 horas con el precio y las condiciones. La sala se conoce al momento; la geiko o maiko se asegura solo cuando la casa inicia formalmente la gestión, que en meses de mucha demanda puede llevar una o dos semanas. Los gastos de cancelación empiezan con esa solicitud formal, por eso confirmamos antes las condiciones con usted." },
-      { q: "¿Podemos añadir shamisen en directo o una segunda anfitriona?", a: "Sí. La velada básica tiene una geiko o maiko que baila con música grabada. Puede añadirse una jikata (shamisen) o una segunda geiko o maiko por ¥60.500 cada una; pídalo al solicitar la fecha." },
+      { q: "¿Podemos añadir shamisen en directo o una segunda anfitriona?", a: "Sí, para eso están los planes. Signature añade una jikata que toca el shamisen en directo; Private Reserve incluye dos geiko o maiko más la jikata. Elija el plan al solicitar la fecha." },
       { q: "¿Podemos hacer fotos durante la danza?", a: "Sí. Fotos y vídeo son bienvenidos en cualquier momento, danza incluida, y al final se reserva tiempo para fotos de recuerdo con su anfitriona." },
       { q: "¿Están incluidas las bebidas? ¿Hay código de vestimenta?", a: "La bebida es libre (cerveza, sake, shochu, vino, highballs, refrescos) y está incluida, igual que impuestos y servicio. No hay código de vestimenta." },
       { q: "¿Nuestra anfitriona comerá y beberá con nosotros?", a: "Normalmente no. Muchas maiko son menores de veinte años y, por costumbre, geiko y maiko no comen en la mesa: sirven, conversan, bailan y juegan. No insista en ofrecerles comida o bebida; es la única norma de etiqueta que su guía mencionará." },
