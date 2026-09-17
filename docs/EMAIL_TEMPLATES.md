@@ -192,7 +192,7 @@ Hello {name},
 Thank you for spending the evening with us. We hope {geiko/maiko name, if shared} and the house made it one to remember.
 
 One favour: would you leave a short review? It takes two minutes, and it helps the next guests decide.
-{Review form link — unique to this booking}
+https://kamehame-japan.com/en/review/?experience=evening-with-geiko&ref={予約番号}   (日本語ページは /ja/review/、他言語も同様)
 
 Only guests with a confirmed booking can review, and we publish reviews as written. A photo from the evening is welcome if you'd like to add one.
 
@@ -208,7 +208,7 @@ KAMEHAME JAPAN · Prosent Inc.
 > 予約確認済みの方だけが投稿でき、内容は手を加えずに掲載します。写真も歓迎です。
 > 至らない点があれば、このメールへの返信で直接お知らせください。
 
-**口コミフォームの項目**(まずは Google フォーム。予約IDを URL に埋めて送る)
+**口コミフォーム**(サイト内 `/{lang}/review/`。URL に体験と予約番号を入れて送る。届いた内容は写真付きで hello@ にメールされる)
 - 総合評価(1〜5)/ タイトル / 感想 / 表示名(イニシャル可)/ 国 / 利用シーン(カップル・家族・友人・ひとり・仕事)/ 写真(任意)/ 「サイトへの掲載に同意する」
 - 届いたものは `lib/reviews.ts` に追加して公開(`verified: true`)。最初の1件からでも表示できます。**自作・依頼による創作は不可**(景表法のステマ規制、Google のレビューポリシー)。
 - Google のビジネスプロフィールへの投稿は、上記フォームの完了画面で任意にお願いする(サブ)。
