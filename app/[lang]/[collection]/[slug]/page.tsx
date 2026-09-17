@@ -22,7 +22,7 @@ import {
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { aggregateFor, REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
+import { ownAggregateFor, REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
 import { RatingSummary, ReviewSummaryPanel } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
@@ -72,10 +72,10 @@ function productJsonLd(
   title: string, description: string, img: string, url: string, price: string,
   slug?: string,
 ) {
-  // An aggregateRating is only emitted once REVIEWS_PUBLISHED is true and real
-  // reviews exist. Declaring a rating we invented would breach Google's
-  // structured-data policy and risk a manual action against the domain.
-  const agg = slug && REVIEWS_PUBLISHED ? aggregateFor(slug) : null;
+  // An aggregateRating is only emitted from reviews written through our own
+  // booking flow. Reviews the host venue collected are shown on the page with
+  // their provenance but are not ours to declare to search engines.
+  const agg = slug && REVIEWS_PUBLISHED ? ownAggregateFor(slug) : null;
 
   return {
     "@context": "https://schema.org",

@@ -21,9 +21,9 @@ export function ReviewList({ reviews, lang, initial = 3 }: { reviews: Review[]; 
         <article className="review-card" key={r.id}>
           <header>
             <Stars rating={r.rating} />
-            <time dateTime={r.date}>{reviewDate(r.date, lang)}</time>
+            {r.date && <time dateTime={r.date}>{reviewDate(r.date, lang)}</time>}
           </header>
-          <h3>{r.title}</h3>
+          {r.title && <h3>{r.title}</h3>}
           <p>{r.body}</p>
           {r.photos && r.photos.length > 0 && (
             <div className="review-photos">{r.photos.map((src) => <img key={src} src={src} alt="" loading="lazy" />)}</div>

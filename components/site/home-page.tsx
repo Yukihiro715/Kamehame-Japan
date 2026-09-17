@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { articleDate, latestArticles } from "@/lib/articles";
+import { featuredReviews } from "@/lib/reviews";
+import { Stars } from "@/components/site/reviews";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
 import { pricingFor, yen } from "@/lib/pricing";
 import { t, type Lang } from "@/lib/i18n";
@@ -295,6 +297,7 @@ export function HomePage({ lang }: { lang: Lang }) {
   const markFor = (e: Experience) => categories.find((c) => c.slug === e.category)?.mark ?? "";
   const cityTitle = (slug: string) => cities.find((c) => c.slug === slug)?.title;
   const journal = latestArticles(lang, 3);
+  const quotes = featuredReviews(3);
 
   return (
     <main id="top" lang={lang}>
@@ -481,7 +484,19 @@ export function HomePage({ lang }: { lang: Lang }) {
           <h2>{C.reviewTitle[0]}<br />{C.reviewTitle[1]}</h2>
           <div className="review-copy">
             <p>{C.reviewBody}</p>
-            <div className="review-placeholder"><ShieldCheck /><span><b>{C.reviewPh}</b><small>{C.reviewPhSub}</small></span></div>
+            {quotes.length > 0 ? (
+              <div className="home-quotes">
+                {quotes.map((r) => (
+                  <blockquote key={r.id}>
+                    <Stars rating={r.rating} size={13} />
+                    <p>{r.body}</p>
+                    <footer><b>{r.author}</b> · {r.country} · <span>{r.source === "venue" ? T.reviewVenueGuest : T.reviewVerified}</span></footer>
+                  </blockquote>
+                ))}
+              </div>
+            ) : (
+              <div className="review-placeholder"><ShieldCheck /><span><b>{C.reviewPh}</b><small>{C.reviewPhSub}</small></span></div>
+            )}
           </div>
         </div>
       </section>

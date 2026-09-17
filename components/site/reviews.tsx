@@ -1,5 +1,5 @@
 import { Star, ShieldCheck } from "lucide-react";
-import { aggregateFor, distributionFor, reviewDate, reviewsFor, type Review } from "@/lib/reviews";
+import { aggregateFor, distributionFor, ownReviewsFor, reviewDate, reviewsFor, type Review } from "@/lib/reviews";
 import { t, type Lang } from "@/lib/i18n";
 
 /** Five stars with the last one clipped to the fractional part. */
@@ -46,9 +46,9 @@ function ReviewCard({ review, lang }: { review: Review; lang: Lang }) {
     <article className="review-card">
       <header>
         <Stars rating={review.rating} />
-        <time dateTime={review.date}>{reviewDate(review.date, lang)}</time>
+        {review.date && <time dateTime={review.date}>{reviewDate(review.date, lang)}</time>}
       </header>
-      <h3>{review.title}</h3>
+      {review.title && <h3>{review.title}</h3>}
       <p>{review.body}</p>
       <footer>
         <span className="review-author">{review.author}</span>
@@ -97,7 +97,7 @@ export function ReviewSummaryPanel({ experience, lang }: { experience: string; l
         <b>{agg.average.toFixed(1)}</b>
         <Stars rating={agg.average} size={16} />
         <span>{T.reviewCount(agg.count)}</span>
-        <small><ShieldCheck size={13} /> {T.detail.reviewsVerifiedNote}</small>
+        <small><ShieldCheck size={13} /> {ownReviewsFor(experience).length ? T.detail.reviewsVerifiedNote : T.detail.reviewsVenueNote}</small>
       </div>
       <ol className="review-bars" aria-label={T.reviewsH}>
         {dist.map((d) => (
