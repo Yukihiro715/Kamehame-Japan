@@ -1228,3 +1228,23 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 
 /* footer: the cookie-settings button reads like the other links */
 .consent-reopen { text-decoration:none; }
+
+/* --- Reviews: marketplace-style summary panel, verified badge, early-days note --- */
+.review-panel { display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; padding:20px 22px; margin-bottom:18px; border:1px solid #e3ded3; border-radius:14px; background:#faf8f3; }
+.review-panel-score { display:grid; justify-items:center; gap:4px; text-align:center; min-width:140px; }
+.review-panel-score b { font-family:var(--font-display); font-weight:400; font-size:48px; line-height:1; letter-spacing:.02em; }
+.review-panel-score span { font-size:12.5px; color:var(--muted); }
+.review-panel-score small { display:inline-flex; align-items:center; gap:5px; margin-top:6px; font-size:11px; color:#4a463e; }
+.review-panel-score small svg { color:var(--kame); }
+.review-bars { list-style:none; margin:0; padding:0; display:grid; gap:6px; }
+.review-bars li { display:grid; grid-template-columns:14px 1fr 28px; align-items:center; gap:10px; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.review-bar { height:8px; border-radius:999px; background:#e9e4da; overflow:hidden; }
+.review-bar > span { display:block; height:100%; background:var(--kame); border-radius:999px; }
+.review-bar-n { text-align:right; }
+.review-photos { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px; }
+.review-photos img { width:96px; height:72px; object-fit:cover; border-radius:8px; }
+.xp2 .review-card { border:1px solid #e3ded3; border-radius:14px; box-shadow:none; }
+.review-verified { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:#eef7ee; color:#1f6b2f; font-size:10.5px; font-weight:700; }
+.review-soon { display:flex; gap:12px; align-items:flex-start; margin:0; padding:16px 18px; border:1px dashed #d6d0c3; border-radius:12px; background:var(--white); font-size:14px; line-height:1.75; color:#3d3a34; }
+.review-soon svg { flex:none; color:var(--kame); margin-top:3px; }
+@media(max-width:700px){ .review-panel { grid-template-columns:1fr; gap:18px; } }

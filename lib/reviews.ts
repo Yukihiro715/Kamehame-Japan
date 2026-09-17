@@ -38,6 +38,10 @@ export interface Review {
   party?: "couple" | "family" | "friends" | "solo" | "business";
   /** Provenance note, e.g. that the guest attended as a monitor. */
   note?: string;
+  /** True when the review was written through the link sent to a confirmed booking. */
+  verified?: boolean;
+  /** Guest photos, site-root-relative, published with permission. */
+  photos?: string[];
 }
 
 const SAMPLE_REVIEWS: Review[] = [
@@ -108,6 +112,15 @@ export const reviewsFor = (experience: string): Review[] =>
   REVIEWS_PUBLISHED ? SAMPLE_REVIEWS.filter((r) => r.experience === experience) : [];
 
 export interface Aggregate { average: number; count: number }
+
+/** How many reviews gave each star, 5 down to 1, for the breakdown bars. */
+export function distributionFor(experience: string): { stars: number; count: number; share: number }[] {
+  const rs = reviewsFor(experience);
+  return [5, 4, 3, 2, 1].map((stars) => {
+    const count = rs.filter((r) => Math.round(r.rating) === stars).length;
+    return { stars, count, share: rs.length ? count / rs.length : 0 };
+  });
+}
 
 export function aggregateFor(experience: string): Aggregate | null {
   const list = reviewsFor(experience);

@@ -182,6 +182,39 @@ See you tomorrow evening.
 
 ---
 
+## E. お礼と口コミのお願い(体験翌日)
+
+**件名:** `Thank you for last night — one small favour`
+
+```
+Hello {name},
+
+Thank you for spending the evening with us. We hope {geiko/maiko name, if shared} and the house made it one to remember.
+
+One favour: would you leave a short review? It takes two minutes, and it helps the next guests decide.
+{Review form link — unique to this booking}
+
+Only guests with a confirmed booking can review, and we publish reviews as written. A photo from the evening is welcome if you'd like to add one.
+
+If anything fell short, please tell us directly by replying to this email — we read every message.
+
+Warm regards,
+{your name}
+KAMEHAME JAPAN · Prosent Inc.
+```
+
+**日本語対訳**
+> 昨夜はありがとうございました。二分ほどで書ける口コミをお願いできますか({予約ごとのフォームリンク})。
+> 予約確認済みの方だけが投稿でき、内容は手を加えずに掲載します。写真も歓迎です。
+> 至らない点があれば、このメールへの返信で直接お知らせください。
+
+**口コミフォームの項目**(まずは Google フォーム。予約IDを URL に埋めて送る)
+- 総合評価(1〜5)/ タイトル / 感想 / 表示名(イニシャル可)/ 国 / 利用シーン(カップル・家族・友人・ひとり・仕事)/ 写真(任意)/ 「サイトへの掲載に同意する」
+- 届いたものは `lib/reviews.ts` に追加して公開(`verified: true`)。最初の1件からでも表示できます。**自作・依頼による創作は不可**(景表法のステマ規制、Google のレビューポリシー)。
+- Google のビジネスプロフィールへの投稿は、上記フォームの完了画面で任意にお願いする(サブ)。
+
+---
+
 ## 運用メモ
 
 - **返信は必ず hello@kamehame-japan.com から**(Google グループの「グループとして送信」または担当者の送信元に hello@ を追加)。お客様は自動返信の返信先が hello@ なので、スレッドが1本になります。

@@ -23,7 +23,7 @@ import {
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
 import { aggregateFor, REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
-import { RatingSummary } from "@/components/site/reviews";
+import { RatingSummary, ReviewSummaryPanel } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -393,14 +393,18 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </div>
             </section>
 
-            {/* ⑪ Reviews — only with real reviews */}
-            {hasReviews && (
-              <section className="xp-section" id="reviews">
-                <h2>{T.reviewsH}</h2>
-                <RatingSummary experience={exp.slug} lang={lang} size={16} />
-                <ReviewList reviews={reviews} lang={lang} />
-              </section>
-            )}
+            {/* ⑪ Reviews — real ones when they exist; until then, how they are collected */}
+            <section className="xp-section" id="reviews">
+              <h2>{hasReviews ? T.reviewsH : D.reviewsSoonH}</h2>
+              {hasReviews ? (
+                <>
+                  <ReviewSummaryPanel experience={exp.slug} lang={lang} />
+                  <ReviewList reviews={reviews} lang={lang} />
+                </>
+              ) : (
+                <p className="review-soon"><ShieldCheck size={16} /> <span>{D.reviewsSoon}</span></p>
+              )}
+            </section>
 
             {/* ⑫ FAQ */}
             <section className="xp-section">
