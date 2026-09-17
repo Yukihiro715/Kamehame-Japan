@@ -1,6 +1,7 @@
-// Legal notice (特定商取引法に基づく表記) and terms of service. Japanese is the
-// binding text; English is a courtesy translation and the other locales
-// show the English until a native review exists. Prices, cancellation and
+// Legal notice (特定商取引法に基づく表記) and terms of service. The legal notice
+// is a Japanese-law disclosure, so Japanese is its binding text; the terms
+// bind English-reading guests, so English is theirs. Other locales show the
+// English until a native review exists. Prices, cancellation and
 // payment mechanics here must match the experience pages and the partner
 // sheet — change both together.
 
@@ -49,7 +50,7 @@ const LEGAL_JA: LegalCopy = {
     ["申込みの有効期限", "空き状況のお問い合わせは予約の成立ではありません。当社からの条件のご案内に対し、ご案内に記載の期限内にお申込みいただいた時点で予約が確定します。"],
     ["キャンセル・返金", "予約確定後のお取消しには、各体験ページに記載のキャンセル規定に基づく取消料を申し受けます。取消料を差し引いた残額は、お支払い時と同じ方法で返金します。受け入れ先の事情(芸妓・舞妓を手配できなかった場合など)により提供できないときは、全額を返金します。"],
     ["最少催行人数・その他の条件", "各体験ページに記載しています(例:2名以上、開催曜日、予約締切)。"],
-    ["旅行手配について", "移動・宿泊を伴う手配は、当社の旅行手配パートナーが担当します。体験はいずれも現地集合・現地解散で、送迎は含まれません。"],
+    ["旅行手配について", "移動・宿泊を伴う手配は、当社の旅行手配パートナーである株式会社ELNX TRAVEL(旅行サービス手配業 東京都知事登録第20922号)が担当します。体験はいずれも現地集合・現地解散で、送迎は含まれません。"],
   ],
 };
 
@@ -72,19 +73,19 @@ const LEGAL_EN: LegalCopy = {
     ["When a booking exists", "An availability request is not a booking. A booking exists once you accept the conditions we send you, within the time stated in that message."],
     ["Cancellation and refunds", "After confirmation, cancellation fees apply as stated on each experience page. The balance after fees is refunded by the same method you paid. If the host cannot provide the experience (for example, no geiko or maiko can be secured), you receive a full refund."],
     ["Minimum party and other conditions", "Stated on each experience page (for example: two guests or more, days of operation, booking cutoff)."],
-    ["Travel arrangements", "Arrangements involving transport or accommodation are handled by our travel-arrangement partner. Every experience meets and ends on site; transfers are not included."],
+    ["Travel arrangements", "Arrangements involving transport or accommodation are handled by our travel-arrangement partner, ELNX TRAVEL Co., Ltd. (registered travel service arranger, Tokyo Governor No. 20922). Every experience meets and ends on site; transfers are not included."],
   ],
 };
 
 const TERMS_JA: TermsCopy = {
   title: "利用規約",
   metaDescription: "KAMEHAME JAPANの体験のお申込み、予約の成立、お支払い、キャンセル、責任の範囲について定めた利用規約。",
-  lead: "この規約は、KAMEHAME JAPAN(以下「当サイト」)を通じて体験をお申込みいただく際の条件を定めるものです。お申込みをもって、この規約に同意いただいたものとします。",
+  lead: "この規約は、KAMEHAME JAPAN(以下「当サイト」)を通じて体験をお申込みいただく際の条件を定めるものです。お申込みをもって、この規約に同意いただいたものとします。正文は英語版で、この日本語版は参考訳です。",
   updated: "最終更新",
   sections: [
     { heading: "1. 当サイトの役割", body: [
       "当サイトはProsent Inc.(以下「当社」)が運営します。当社は、京都・東京の受け入れ先(料理屋、工房、師匠など。以下「受け入れ先」)が提供する体験を、お客様に代わって手配し、通訳ガイドを同行させます。体験そのものは受け入れ先が提供します。",
-      "移動・宿泊を伴う手配は当社の旅行手配パートナーが担当します。体験はいずれも現地集合・現地解散です。",
+      "移動・宿泊を伴う手配は、当社の旅行手配パートナーである株式会社ELNX TRAVELが担当します。体験はいずれも現地集合・現地解散です。",
     ]},
     { heading: "2. お申込みと予約の成立", body: [
       "各体験ページの「空き状況を問い合わせる」からお送りいただく内容は、予約の申込みではなく空き状況の確認依頼です。当社は受け入れ先に確認のうえ、料金・条件・お支払期日をメールでご案内します。",
@@ -112,7 +113,7 @@ const TERMS_JA: TermsCopy = {
     ]},
     { heading: "8. 準拠法・管轄", body: [
       "この規約は日本法に準拠します。この規約または体験に関する紛争は、東京地方裁判所を第一審の専属的合意管轄裁判所とします。",
-      "この規約は日本語を正文とし、他の言語版は参考訳です。内容に相違がある場合は日本語版が優先します。",
+      "この規約は英語版を正文とし、日本語版を含む他の言語版は参考訳です。内容に相違がある場合は英語版が優先します。",
     ]},
     { heading: "9. 改定", body: [
       "当社はこの規約を改定することがあります。改定後の規約は当サイトに掲載した時点から適用され、下記の日付を更新します。既に確定した予約には、確定時点の規約が適用されます。",
@@ -123,12 +124,12 @@ const TERMS_JA: TermsCopy = {
 const TERMS_EN: TermsCopy = {
   title: "Terms of service",
   metaDescription: "The conditions for requesting and booking an experience through KAMEHAME JAPAN: how a booking comes into being, payment, cancellation and the limits of our responsibility.",
-  lead: "These terms govern requests and bookings made through KAMEHAME JAPAN. By sending a request you accept them. The Japanese version is the binding one; this is a courtesy translation.",
+  lead: "These terms govern requests and bookings made through KAMEHAME JAPAN. By sending a request you accept them. This English text is the binding version; other languages are provided for reference.",
   updated: "Last updated",
   sections: [
     { heading: "1. What we do", body: [
       "KAMEHAME JAPAN is operated by Prosent Inc. (\"we\"). We arrange, on your behalf, experiences provided by hosts in Kyoto and Tokyo — dining houses, workshops, masters — and place an interpreter guide at your side. The experience itself is provided by the host.",
-      "Arrangements involving transport or accommodation are handled by our travel-arrangement partner. Every experience meets and ends on site.",
+      "Arrangements involving transport or accommodation are handled by our travel-arrangement partner, ELNX TRAVEL Co., Ltd. Every experience meets and ends on site.",
     ]},
     { heading: "2. Requests and bookings", body: [
       "What you send through \"Request availability\" is a request to check a date, not a booking. We check with the host and reply by email with the price, the conditions and a payment deadline.",
@@ -156,7 +157,7 @@ const TERMS_EN: TermsCopy = {
     ]},
     { heading: "8. Governing law", body: [
       "These terms are governed by the laws of Japan. The Tokyo District Court has exclusive jurisdiction in the first instance over any dispute arising from them or from an experience.",
-      "The Japanese text is authoritative; other language versions are provided for convenience and the Japanese prevails where they differ.",
+      "This English text is authoritative; the Japanese and other language versions are provided for convenience and the English prevails where they differ.",
     ]},
     { heading: "9. Changes to these terms", body: [
       "We may revise these terms. The revised version applies from the moment it is published here, and the date below moves with it. A booking already confirmed stays under the terms in force when it was confirmed.",

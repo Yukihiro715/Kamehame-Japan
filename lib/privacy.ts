@@ -38,7 +38,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         heading: "When you send an enquiry",
         body: [
           "The enquiry form asks for your name, email address, the dates and start times you would like, how many of you there are, and anything you want us to check with the venue. It reaches us as an email; nothing is published and nothing is sold.",
-          "To answer you we pass what is needed — usually the date, the number of guests and any dietary or access requirement — to the host of the experience you asked about, and to our travel-arrangement partner where they handle the booking. We do not send them your email address unless you ask us to put you in direct contact.",
+          "To answer you we pass what is needed — usually the date, the number of guests and any dietary or access requirement — to the host of the experience you asked about, and to our travel-arrangement partner, ELNX TRAVEL Co., Ltd., where they handle the booking. We do not send them your email address unless you ask us to put you in direct contact.",
           "We keep enquiries for as long as it takes to answer you and to honour a booking made from them, and for up to three years afterwards so we can deal with questions about a past booking. Ask us to delete yours sooner and we will.",
         ],
       },
@@ -104,7 +104,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         heading: "お問い合わせをいただいたとき",
         body: [
           "フォームでは、お名前・メールアドレス・ご希望の日程と開始時刻・ご人数・受け入れ先に確認しておきたいことをお伺いします。内容はメールとして当方に届きます。公開することも、第三者に販売することもありません。",
-          "ご返信のために、必要な範囲(通常は日程・人数・食事や移動のご事情)を、お問い合わせの体験の受け入れ先と、予約を担当する旅行手配のパートナーにお伝えします。直接のおつなぎをご希望でない限り、メールアドレスはお伝えしません。",
+          "ご返信のために、必要な範囲(通常は日程・人数・食事や移動のご事情)を、お問い合わせの体験の受け入れ先と、予約を担当する旅行手配パートナー(株式会社ELNX TRAVEL)にお伝えします。直接のおつなぎをご希望でない限り、メールアドレスはお伝えしません。",
           "お問い合わせの内容は、ご返信と、そこから生じたご予約の履行に必要な期間、およびその後3年間(過去のご予約に関するお問い合わせに対応するため)保管します。それより早い削除をご希望の場合はお申し付けください。",
         ],
       },
@@ -170,7 +170,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         heading: "Cuando envía una consulta",
         body: [
           "El formulario pide su nombre, su correo electrónico, las fechas y horas de inicio que prefiere, cuántas personas son y cualquier cosa que quiera que consultemos con el local. Nos llega como un correo; no se publica nada ni se vende nada.",
-          "Para responderle trasladamos lo necesario —normalmente la fecha, el número de personas y cualquier necesidad dietética o de acceso— al anfitrión de la experiencia y a nuestro socio de organización de viajes cuando es quien gestiona la reserva. No les damos su correo electrónico salvo que nos pida ponerle en contacto directo.",
+          "Para responderle trasladamos lo necesario —normalmente la fecha, el número de personas y cualquier necesidad dietética o de acceso— al anfitrión de la experiencia y a nuestro socio de organización de viajes, ELNX TRAVEL Co., Ltd., cuando es quien gestiona la reserva. No les damos su correo electrónico salvo que nos pida ponerle en contacto directo.",
           "Conservamos las consultas el tiempo necesario para responderle y cumplir una reserva derivada de ellas, y hasta tres años después para poder atender preguntas sobre una reserva pasada. Si prefiere que la borremos antes, díganoslo.",
         ],
       },
@@ -236,7 +236,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         heading: "Lorsque vous envoyez une demande",
         body: [
           "Le formulaire demande votre nom, votre adresse e-mail, les dates et heures de début souhaitées, le nombre de personnes et ce que vous voulez que nous vérifiions auprès du lieu. Il nous parvient sous forme d'e-mail ; rien n'est publié, rien n'est vendu.",
-          "Pour vous répondre, nous transmettons le nécessaire — en général la date, le nombre de personnes et toute contrainte alimentaire ou d'accès — à l'hôte de l'expérience et à notre partenaire d'organisation de voyages lorsqu'il gère la réservation. Nous ne leur communiquons pas votre adresse e-mail, sauf si vous nous demandez une mise en relation directe.",
+          "Pour vous répondre, nous transmettons le nécessaire — en général la date, le nombre de personnes et toute contrainte alimentaire ou d'accès — à l'hôte de l'expérience et à notre partenaire d'organisation de voyages, ELNX TRAVEL Co., Ltd., lorsqu'il gère la réservation. Nous ne leur communiquons pas votre adresse e-mail, sauf si vous nous demandez une mise en relation directe.",
           "Nous conservons les demandes le temps de vous répondre et d'honorer une réservation qui en découle, puis jusqu'à trois ans afin de pouvoir traiter les questions sur une réservation passée. Demandez-nous de supprimer la vôtre plus tôt et nous le ferons.",
         ],
       },
@@ -302,7 +302,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         heading: "當您送出詢問時",
         body: [
           "表單會詢問您的姓名、電子郵件、希望的日期與開始時間、人數，以及希望我們向店家確認的事項。內容以電子郵件送達我們，不會公開，也不會出售。",
-          "為了回覆您，我們會將必要範圍（通常是日期、人數，以及飲食或行動方面的需求）轉達給該體驗的店家，以及負責處理預約的旅遊安排合作夥伴。除非您希望我們直接為您牽線，否則不會提供您的電子郵件。",
+          "為了回覆您，我們會將必要範圍（通常是日期、人數，以及飲食或行動方面的需求）轉達給該體驗的店家，以及負責處理預約的旅遊安排合作夥伴 ELNX TRAVEL Co., Ltd.。除非您希望我們直接為您牽線，否則不會提供您的電子郵件。",
           "詢問內容會保存至回覆完成、並履行由此產生的預約為止，之後再保存最多三年，以便處理關於既往預約的問題。若希望提前刪除，請告知我們。",
         ],
       },
