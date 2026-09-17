@@ -22,8 +22,8 @@ const COPY = {
       { h: "Easy to book. Easy to understand.", p: "Clear pricing, clear inclusions and clear meeting details. English support is available throughout, with interpreter guides included where the experience calls for one." },
     ],
     trustSeal: "Small groups · Local hosts · Thoughtfully selected",
-    craftQuote: "Sit a little closer — you should be able to hear the silk move.", craftSpeaker: "— your host for the evening",
-    craftAlt: "A maiko dancing before a gold screen in a private Kyoto room, a guest seated an arm's length away",
+    craftQuote: "Watch my hands — every movement has a meaning.", craftSpeaker: "— a Kyoto tea master",
+    craftAlt: "Tea ceremony host in kimono placing a tea bowl on tatami before seated guests",
     cityEyebrow: "Choose your city", cityTitle: ["Two cities.", "Countless stories."],
     cityLead: "Begin with where you'll be, then discover the people and practices that give each place its character.",
     cityTaglines: { tokyo: ["Modern rhythm.", "Enduring craft."], kyoto: ["Quiet rituals.", "Living heritage."] },
@@ -59,8 +59,8 @@ const COPY = {
       { h: "Fácil de reservar. Fácil de entender.", p: "Precios claros, inclusiones claras y punto de encuentro claro. Atención en inglés en todo momento, con guía intérprete incluido cuando la experiencia lo requiere." },
     ],
     trustSeal: "Grupos reducidos · Anfitriones locales · Selección cuidada",
-    craftQuote: "Acércate un poco: deberías oír moverse la seda.", craftSpeaker: "— tu anfitriona de la velada",
-    craftAlt: "Una maiko baila ante un biombo dorado en una sala privada de Kioto, con un invitado sentado a un paso",
+    craftQuote: "Mira mis manos: cada movimiento tiene un significado.", craftSpeaker: "— una maestra de té de Kioto",
+    craftAlt: "Anfitriona de la ceremonia del té dejando un cuenco sobre el tatami ante sus invitados",
     cityEyebrow: "Elige tu ciudad", cityTitle: ["Dos ciudades.", "Historias infinitas."],
     cityLead: "Empieza por donde vas a estar, y descubre a las personas y los oficios que dan carácter a cada lugar.",
     cityTaglines: { tokyo: ["Ritmo moderno.", "Oficio eterno."], kyoto: ["Rituales serenos.", "Herencia viva."] },
@@ -96,8 +96,8 @@ const COPY = {
       { h: "予約も理解も、簡単に。", p: "料金、含まれるもの、集合場所を明確に。英語でのサポートは常にあり、通訳ガイドが必要な体験には含まれています。" },
     ],
     trustSeal: "少人数 · 地元のホスト · 厳選",
-    craftQuote: "もう少し近くへ。衣擦れの音が聞こえるはずです。", craftSpeaker: "— 今夜のもてなし役より",
-    craftAlt: "京都の貸切座敷で金屏風の前に舞う舞妓と、すぐそばに座る客",
+    craftQuote: "手を見ていてください。すべての動きに意味があります。", craftSpeaker: "— 京都の茶道家",
+    craftAlt: "客の前の畳に茶碗を置く茶道の亭主",
     cityEyebrow: "都市を選ぶ", cityTitle: ["二つの都市。", "尽きない物語。"],
     cityLead: "滞在される街から始めてください。その土地の人と技が見えてきます。",
     cityTaglines: { tokyo: ["今日の速さ。", "変わらぬ手仕事。"], kyoto: ["静かな儀礼。", "生きた継承。"] },
@@ -133,8 +133,8 @@ const COPY = {
       { h: "Facile à réserver. Facile à comprendre.", p: "Prix clairs, inclusions claires, rendez-vous clair. Un accompagnement en anglais à chaque étape, avec guide-interprète inclus lorsque l'expérience le demande." },
     ],
     trustSeal: "Petits groupes · Hôtes locaux · Sélection soignée",
-    craftQuote: "Approchez-vous un peu : vous devriez entendre la soie bouger.", craftSpeaker: "— votre hôtesse de la soirée",
-    craftAlt: "Une maiko danse devant un paravent doré dans une salle privée de Kyoto, un invité assis tout près",
+    craftQuote: "Regardez mes mains : chaque geste a un sens.", craftSpeaker: "— une maîtresse de thé de Kyoto",
+    craftAlt: "Hôtesse de cérémonie du thé posant un bol sur le tatami devant ses invités",
     cityEyebrow: "Choisissez votre ville", cityTitle: ["Deux villes.", "Des histoires sans fin."],
     cityLead: "Partez de là où vous serez, et découvrez les personnes et les métiers qui donnent son caractère à chaque lieu.",
     cityTaglines: { tokyo: ["Rythme moderne.", "Métier éternel."], kyoto: ["Rituels sereins.", "Héritage vivant."] },
@@ -170,8 +170,8 @@ const COPY = {
       { h: "好預約，也好懂。", p: "價格清楚、內容清楚、集合地點清楚。全程提供英語協助，需要口譯導遊的體驗皆已包含。" },
     ],
     trustSeal: "小團 · 在地接待 · 用心挑選",
-    craftQuote: "再靠近一點，您應該能聽見絲綢滑動的聲音。", craftSpeaker: "— 今晚的女主人",
-    craftAlt: "舞妓在京都私人包廂的金屏風前起舞，客人就坐在一臂之遙",
+    craftQuote: "看我的手：每一個動作都有意義。", craftSpeaker: "— 京都茶道家",
+    craftAlt: "茶道主人在客人面前將茶碗放到榻榻米上",
     cityEyebrow: "選擇城市", cityTitle: ["兩座城市。", "說不完的故事。"],
     cityLead: "從您將停留的地方開始，認識賦予每個地方性格的人與技藝。",
     cityTaglines: { tokyo: ["現代的節奏。", "不變的手藝。"], kyoto: ["寧靜的儀式。", "活著的傳承。"] },
@@ -291,7 +291,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
         <div className="trust-seal"><ShieldCheck size={18} /> {C.trustSeal}</div>
         <figure className="craft-band">
-          <img src="/images/geiko-dance.jpg" alt={C.craftAlt} loading="lazy" />
+          <img src="/images/craft-hands.jpg" alt={C.craftAlt} loading="lazy" />
           <figcaption className="bubble tail-right craft-bubble">
             <p>&ldquo;{C.craftQuote}&rdquo;</p>
             <small>{C.craftSpeaker}</small>

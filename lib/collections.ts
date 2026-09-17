@@ -114,7 +114,7 @@ const STR: Record<Lang, CollectionStrings> = {
     faqCancelQ: "What is the cancellation policy?",
     cityStreet: (c) => `${c} street scene`,
     toursHeroAlt: "Path through the Arashiyama bamboo grove",
-    allHeroAlt: "A private tatami room in Kyoto opening onto a small garden",
+    allHeroAlt: "Tea ceremony host serving a bowl of tea",
   },
   es: {
     cityH1: (c) => `Experiencias en ${c}`,
@@ -151,7 +151,7 @@ const STR: Record<Lang, CollectionStrings> = {
     faqCancelQ: "¿Cuál es la política de cancelación?",
     cityStreet: (c) => `Escena urbana de ${c}`,
     toursHeroAlt: "Sendero del bosque de bambú de Arashiyama",
-    allHeroAlt: "Una sala privada de tatami en Kioto abierta a un pequeño jardín",
+    allHeroAlt: "Anfitriona de la ceremonia del té sirviendo un cuenco",
   },
   ja: {
     cityH1: (c) => `${c}の体験`,
@@ -188,7 +188,7 @@ const STR: Record<Lang, CollectionStrings> = {
     faqCancelQ: "キャンセル規定を教えてください。",
     cityStreet: (c) => `${c}の街並み`,
     toursHeroAlt: "嵐山の竹林の小径",
-    allHeroAlt: "小さな庭に面した京都の貸切座敷",
+    allHeroAlt: "茶碗を差し出す茶道の亭主",
   },
   fr: {
     cityH1: (c) => `Expériences à ${c}`,
@@ -225,7 +225,7 @@ const STR: Record<Lang, CollectionStrings> = {
     faqCancelQ: "Quelle est la politique d'annulation ?",
     cityStreet: (c) => `Scène de rue à ${c}`,
     toursHeroAlt: "Allée dans la bambouseraie d'Arashiyama",
-    allHeroAlt: "Une salle privée en tatami à Kyoto ouvrant sur un petit jardin",
+    allHeroAlt: "Hôtesse de cérémonie du thé servant un bol",
   },
   "zh-tw": {
     cityH1: (c) => `${c}的體驗`,
@@ -262,7 +262,7 @@ const STR: Record<Lang, CollectionStrings> = {
     faqCancelQ: "取消政策是什麼？",
     cityStreet: (c) => `${c}街景`,
     toursHeroAlt: "嵐山竹林小徑",
-    allHeroAlt: "面向小庭園的京都私人榻榻米包廂",
+    allHeroAlt: "遞上茶碗的茶道主人",
   },
 };
 
@@ -351,7 +351,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
   if (slug === "experiences") {
     return {
       slug, crumb: S.allCrumb, h1: S.allH1,
-      heroImg: "/images/geiko-room-garden.jpg", heroAlt: S.allHeroAlt,
+      heroImg: "/images/craft-hands.jpg", heroAlt: S.allHeroAlt,
       lead: S.allLead,
       items: [...experiences.map(expItem), ...tours.map(tourItem)],
       refine: [
