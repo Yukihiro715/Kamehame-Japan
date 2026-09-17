@@ -22,7 +22,7 @@ CC BY / CC BY-SA images require this attribution to be retained wherever the ima
 | `public/images/exp-sushi.jpg` | [Sushi Masa by Ki-setsu Interior Omakase Counter.jpg](https://commons.wikimedia.org/wiki/File:Sushi_Masa_by_Ki-setsu_Interior_Omakase_Counter.jpg) | Bobby.Creations | CC BY 4.0 |
 | `public/images/tour-journey.jpg` | [Torii path with lantern at Fushimi Inari Taisha Shrine, Kyoto, Japan.jpg](https://commons.wikimedia.org/wiki/File:Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg) | Basile Morin | CC BY-SA 4.0 |
 
-The home-page hero uses `public/images/geiko-conversation.jpg` (courtesy of the host venue, see below). The earlier hero image `public/omotenashi-hero.png` was supplied with the original project handoff and is kept in the repository for reuse.
+The home-page hero uses `public/images/hero-sushi-counter.jpg`, a JPEG re-encode of `public/omotenashi-hero.png`, which was supplied with the original project handoff.
 
 ## Partner-supplied photographs
 
