@@ -11,8 +11,16 @@ import { t, type Lang } from "@/lib/i18n";
 const COPY = {
   en: {
     heroEyebrow: "Curated experiences in Japan",
-    heroTitle: ["Don't just see Japan.", "Step into it."],
-    heroLede: "Memorable experiences hosted by local experts — starting with a private geiko evening in Kyoto, with sushi making, Japanese calligraphy, character nail art, golf and more to come. Traditional or modern, hands-on or behind the scenes: we select experiences worth making part of your trip.",
+    themesH: "Find your Japan.",
+    themes: [
+      { t: "Food & Drink", s: "Sushi / Cooking / Sake", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "Arts & Crafts", s: "Calligraphy / Craftsmanship", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "Tradition & Culture", s: "Geiko / Tea Ceremony / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
+      { t: "Pop Culture & Beauty", s: "Character Nails / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
+      { t: "Sports & Outdoors", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
+    ], comingSoon: "Coming soon",
+    heroTitle: ["Don't just", "see Japan.", "Step into it."],
+    heroLede: "Discover Japan through experiences you won't find on a typical itinerary. From food and craftsmanship to pop culture and private access, every experience is carefully selected.",
     heroCta: "Explore experiences", heroLink: "Browse by city",
     heroBubble: "Not a demonstration —\nthis seat is yours.", heroSpeaker: "— your host",
     trustEyebrow: "Why KAMEHAME", trustTitle: ["The curated way", "to experience Japan."],
@@ -22,7 +30,7 @@ const COPY = {
       { h: "Easy to book. Easy to understand.", p: "Clear pricing, clear inclusions and clear meeting details. English support is available throughout, with interpreter guides included where the experience calls for one." },
     ],
     trustSeal: "Small groups · Local hosts · Thoughtfully selected",
-    craftQuote: "Watch my hands — every movement has a meaning.", craftSpeaker: "— a Kyoto tea master",
+    craftQuote: "Not a demonstration — this seat is yours.", craftSpeaker: "— your host",
     craftAlt: "Tea ceremony host in kimono placing a tea bowl on tatami before seated guests",
     cityEyebrow: "Choose your city", cityTitle: ["Two cities.", "Countless stories."],
     cityLead: "Begin with where you'll be, then discover the people and practices that give each place its character.",
@@ -48,8 +56,16 @@ const COPY = {
   },
   es: {
     heroEyebrow: "Experiencias seleccionadas en Japón",
+    themesH: "Encuentra tu Japón.",
+    themes: [
+      { t: "Comida y bebida", s: "Sushi / Cocina / Sake", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "Arte y oficios", s: "Caligrafía / Artesanía", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "Tradición y cultura", s: "Geiko / Ceremonia del té / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
+      { t: "Cultura pop y belleza", s: "Uñas de personajes / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
+      { t: "Deporte y aire libre", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
+    ], comingSoon: "Próximamente",
     heroTitle: ["No te limites a ver Japón.", "Entra en él."],
-    heroLede: "Experiencias memorables con anfitriones locales — empezando por una velada privada con una geiko en Kioto, y pronto sushi, caligrafía japonesa, uñas de personajes, golf y más. Tradicional o moderno, con las manos o entre bastidores: elegimos experiencias que merecen un lugar en tu viaje.",
+    heroLede: "Descubre Japón a través de experiencias que no encontrarás en un itinerario al uso. De la comida y la artesanía a la cultura pop y los accesos privados, cada experiencia está cuidadosamente seleccionada.",
     heroCta: "Explora las experiencias", heroLink: "Ver por ciudad",
     heroBubble: "Esto no es una demostración —\neste asiento es tuyo.", heroSpeaker: "— tu anfitrión",
     trustEyebrow: "Por qué KAMEHAME", trustTitle: ["La forma seleccionada", "de vivir Japón."],
@@ -59,7 +75,7 @@ const COPY = {
       { h: "Fácil de reservar. Fácil de entender.", p: "Precios claros, inclusiones claras y punto de encuentro claro. Atención en inglés en todo momento, con guía intérprete incluido cuando la experiencia lo requiere." },
     ],
     trustSeal: "Grupos reducidos · Anfitriones locales · Selección cuidada",
-    craftQuote: "Mira mis manos: cada movimiento tiene un significado.", craftSpeaker: "— una maestra de té de Kioto",
+    craftQuote: "Esto no es una demostración — este asiento es tuyo.", craftSpeaker: "— tu anfitrión",
     craftAlt: "Anfitriona de la ceremonia del té dejando un cuenco sobre el tatami ante sus invitados",
     cityEyebrow: "Elige tu ciudad", cityTitle: ["Dos ciudades.", "Historias infinitas."],
     cityLead: "Empieza por donde vas a estar, y descubre a las personas y los oficios que dan carácter a cada lugar.",
@@ -85,8 +101,16 @@ const COPY = {
   },
   ja: {
     heroEyebrow: "厳選した日本の体験",
+    themesH: "あなたの日本を見つける。",
+    themes: [
+      { t: "食と酒", s: "寿司 / 料理 / 日本酒", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "アート・工芸", s: "書道 / 職人の技", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "伝統と文化", s: "芸妓・舞妓 / 茶道 / 着物", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
+      { t: "ポップカルチャー・美容", s: "キャラクターネイル / アニメ", img: "/images/cat-nail.jpg", mark: "爪" },
+      { t: "スポーツ・アウトドア", s: "ゴルフ / 相撲", img: "/images/cat-sumo.jpg", mark: "武" },
+    ], comingSoon: "近日公開",
     heroTitle: ["日本を、見るだけで", "終わらせない。"],
-    heroLede: "地元の専門家がもてなす、記憶に残る体験。まずは京都の芸妓・舞妓との貸切の夕べから。寿司握り、書道、キャラクターネイル、ゴルフなども順次加わります。伝統もいまの文化も、手を動かす体験も舞台裏も——旅に組み込む価値のあるものだけを選んでいます。",
+    heroLede: "普通の観光では出会えない体験で、日本を知る。食、職人の技、ポップカルチャー、特別なアクセスまで、ひとつひとつ厳選しています。",
     heroCta: "体験を見る", heroLink: "都市から探す",
     heroBubble: "これは実演ではありません。\nこの席は、あなたのものです。", heroSpeaker: "— お迎えする側より",
     trustEyebrow: "KAMEHAME を選ぶ理由", trustTitle: ["厳選という", "日本の楽しみ方。"],
@@ -96,7 +120,7 @@ const COPY = {
       { h: "予約も理解も、簡単に。", p: "料金、含まれるもの、集合場所を明確に。英語でのサポートは常にあり、通訳ガイドが必要な体験には含まれています。" },
     ],
     trustSeal: "少人数 · 地元のホスト · 厳選",
-    craftQuote: "手を見ていてください。すべての動きに意味があります。", craftSpeaker: "— 京都の茶道家",
+    craftQuote: "これは実演ではありません。この席は、あなたのものです。", craftSpeaker: "— お迎えする側より",
     craftAlt: "客の前の畳に茶碗を置く茶道の亭主",
     cityEyebrow: "都市を選ぶ", cityTitle: ["二つの都市。", "尽きない物語。"],
     cityLead: "滞在される街から始めてください。その土地の人と技が見えてきます。",
@@ -122,8 +146,16 @@ const COPY = {
   },
   fr: {
     heroEyebrow: "Expériences sélectionnées au Japon",
+    themesH: "Trouvez votre Japon.",
+    themes: [
+      { t: "Cuisine et boissons", s: "Sushi / Cuisine / Saké", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "Arts et artisanat", s: "Calligraphie / Savoir-faire", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "Tradition et culture", s: "Geiko / Cérémonie du thé / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
+      { t: "Pop culture et beauté", s: "Nail art de personnages / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
+      { t: "Sport et plein air", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
+    ], comingSoon: "Bientôt",
     heroTitle: ["Ne vous contentez pas de voir le Japon.", "Entrez-y."],
-    heroLede: "Des expériences mémorables avec des hôtes locaux — à commencer par une soirée privée avec une geiko à Kyoto, bientôt rejointe par le sushi, la calligraphie japonaise, le nail art de personnages, le golf et plus encore. Traditionnel ou moderne, les mains dans la matière ou en coulisses : nous choisissons des expériences qui méritent une place dans votre voyage.",
+    heroLede: "Découvrez le Japon à travers des expériences absentes des itinéraires classiques. De la cuisine et de l'artisanat à la pop culture et aux accès privés, chaque expérience est soigneusement sélectionnée.",
     heroCta: "Explorer les expériences", heroLink: "Parcourir par ville",
     heroBubble: "Ce n'est pas une démonstration —\ncette place est la vôtre.", heroSpeaker: "— votre hôte",
     trustEyebrow: "Pourquoi KAMEHAME", trustTitle: ["Le Japon,", "façon sélection."],
@@ -133,7 +165,7 @@ const COPY = {
       { h: "Facile à réserver. Facile à comprendre.", p: "Prix clairs, inclusions claires, rendez-vous clair. Un accompagnement en anglais à chaque étape, avec guide-interprète inclus lorsque l'expérience le demande." },
     ],
     trustSeal: "Petits groupes · Hôtes locaux · Sélection soignée",
-    craftQuote: "Regardez mes mains : chaque geste a un sens.", craftSpeaker: "— une maîtresse de thé de Kyoto",
+    craftQuote: "Ce n'est pas une démonstration — cette place est la vôtre.", craftSpeaker: "— votre hôte",
     craftAlt: "Hôtesse de cérémonie du thé posant un bol sur le tatami devant ses invités",
     cityEyebrow: "Choisissez votre ville", cityTitle: ["Deux villes.", "Des histoires sans fin."],
     cityLead: "Partez de là où vous serez, et découvrez les personnes et les métiers qui donnent son caractère à chaque lieu.",
@@ -159,8 +191,16 @@ const COPY = {
   },
   "zh-tw": {
     heroEyebrow: "精選的日本體驗",
+    themesH: "找到你的日本。",
+    themes: [
+      { t: "美食與酒", s: "壽司 / 料理 / 日本酒", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "藝術與工藝", s: "書道 / 職人技藝", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "傳統與文化", s: "藝妓 / 茶道 / 和服", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
+      { t: "流行文化與美容", s: "角色美甲 / 動漫", img: "/images/cat-nail.jpg", mark: "爪" },
+      { t: "運動與戶外", s: "高爾夫 / 相撲", img: "/images/cat-sumo.jpg", mark: "武" },
+    ], comingSoon: "即將推出",
     heroTitle: ["不只是看日本。", "走進去。"],
-    heroLede: "由在地專家親自接待的難忘體驗——從京都藝妓的私人晚宴開始，壽司製作、日本書道、角色美甲、高爾夫等將陸續加入。傳統或現代、動手做或看幕後：我們只挑選值得放進您旅程的體驗。",
+    heroLede: "透過一般行程找不到的體驗，認識日本。從美食、職人工藝到流行文化與私人通道，每一項體驗都經過精心挑選。",
     heroCta: "探索體驗", heroLink: "依城市瀏覽",
     heroBubble: "這不是示範——\n這個位子是您的。", heroSpeaker: "— 您的東道主",
     trustEyebrow: "為什麼選 KAMEHAME", trustTitle: ["精選，", "是體驗日本的方式。"],
@@ -170,7 +210,7 @@ const COPY = {
       { h: "好預約，也好懂。", p: "價格清楚、內容清楚、集合地點清楚。全程提供英語協助，需要口譯導遊的體驗皆已包含。" },
     ],
     trustSeal: "小團 · 在地接待 · 用心挑選",
-    craftQuote: "看我的手：每一個動作都有意義。", craftSpeaker: "— 京都茶道家",
+    craftQuote: "這不是示範——這個位子是您的。", craftSpeaker: "— 您的東道主",
     craftAlt: "茶道主人在客人面前將茶碗放到榻榻米上",
     cityEyebrow: "選擇城市", cityTitle: ["兩座城市。", "說不完的故事。"],
     cityLead: "從您將停留的地方開始，認識賦予每個地方性格的人與技藝。",
@@ -252,10 +292,8 @@ export function HomePage({ lang }: { lang: Lang }) {
   const featured = (live.length >= 3 ? live : experiences).slice(0, 3);
   const heroHref = p("/experiences/");
   const heroCta = C.heroCta;
-  const cityHref = cities.length === 1 ? p(`/${cities[0].slug}/`) : "#cities";
   const markFor = (e: Experience) => categories.find((c) => c.slug === e.category)?.mark ?? "";
   const cityTitle = (slug: string) => cities.find((c) => c.slug === slug)?.title;
-  const [bubbleL1, bubbleL2] = C.heroBubble.split("\n");
   const journal = latestArticles(lang, 3);
 
   return (
@@ -266,16 +304,31 @@ export function HomePage({ lang }: { lang: Lang }) {
         <div className="hero-grain" aria-hidden="true" />
         <div className="hero-copy">
           <p className="eyebrow"><span /> {C.heroEyebrow}</p>
-          <h1 id="hero-heading">{C.heroTitle[0]}<br />{C.heroTitle[1]}</h1>
+          <h1 id="hero-heading">{C.heroTitle.map((part, i) => <span className="hl" key={i}>{part}{i < C.heroTitle.length - 1 ? " " : ""}</span>)}</h1>
           <p className="hero-lede">{C.heroLede}</p>
           <div className="hero-actions">
             <Button asChild size="lg"><Link href={heroHref}>{heroCta} <ArrowDownRight /></Link></Button>
-            {cities.length === 1 ? <Link className="text-link" href={cityHref}>{C.heroLink}</Link> : <a className="text-link" href={cityHref}>{C.heroLink}</a>}
           </div>
         </div>
-        <div className="hero-note bubble tail-left">
-          <p>&ldquo;{bubbleL1}<br />{bubbleL2}&rdquo;</p>
-          <small>{C.heroSpeaker}</small>
+      </section>
+
+      <section className="themes-section" aria-labelledby="themes-heading">
+        <h2 id="themes-heading">{C.themesH}</h2>
+        <div className="themes-grid">
+          {C.themes.map((th) => {
+            const live = "href" in th && categories.some((c) => c.slug === th.href);
+            const inner = (
+              <>
+                <img src={th.img} alt="" loading="lazy" />
+                <span className="theme-mark" aria-hidden="true">{th.mark}</span>
+                <span className="theme-copy"><b>{th.t}</b><small>{th.s}</small></span>
+                {!live && <span className="theme-soon">{C.comingSoon}</span>}
+              </>
+            );
+            return live
+              ? <Link key={th.t} className="theme-card live" href={p(`/${(th as { href: string }).href}/`)}>{inner}</Link>
+              : <div key={th.t} className="theme-card">{inner}</div>;
+          })}
         </div>
       </section>
 

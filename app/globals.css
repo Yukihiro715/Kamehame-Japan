@@ -1193,3 +1193,38 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 @media(max-width:700px){ .xp-cols { padding-bottom:56px; } }
 /* Phones: keep the guests and the chef's hands in the vertical crop. */
 @media(max-width:700px){ .hero { background-position:74% center; } }
+
+/* --- First view, simplified: smaller headline, lighter overlay on the scene, one CTA --- */
+.hero { background-image:linear-gradient(90deg,rgba(10,12,9,.9) 0%,rgba(10,12,9,.68) 40%,rgba(10,12,9,.14) 68%,rgba(10,12,9,.06) 100%),url('/images/hero-sushi-counter.jpg'); }
+.hero h1 { font-size:clamp(44px,5.6vw,84px); max-width:760px; }
+.hero h1 .hl { display:inline; }
+.hero h1 .hl:last-child { display:block; }
+.hero-lede { max-width:520px; margin:26px 0 30px; }
+@media(max-width:700px){
+  .hero { min-height:640px; background-image:linear-gradient(180deg,rgba(10,12,9,.82) 0%,rgba(10,12,9,.55) 45%,rgba(10,12,9,.25) 100%),url('/images/hero-sushi-counter.jpg'); }
+  .hero h1 { font-size:clamp(38px,11.2vw,50px); }
+  .hero h1 .hl { display:block; }
+  .hero-lede { font-size:15.5px; margin:22px 0 26px; }
+}
+
+/* --- Themes under the first view: what KAMEHAME covers, live or coming --- */
+.themes-section { padding:56px clamp(24px,7vw,120px) 24px; }
+.themes-section h2 { margin:0 0 22px; font-family:var(--font-display); font-weight:400; font-size:clamp(28px,3vw,42px); letter-spacing:.02em; text-transform:uppercase; }
+.themes-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+.theme-card { position:relative; display:block; min-height:200px; overflow:hidden; border-radius:14px; background:var(--ink); color:var(--white); text-decoration:none; isolation:isolate; }
+.theme-card img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.78; transition:transform .5s ease, opacity .3s; }
+.theme-card::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(13,14,11,.1) 0%,rgba(13,14,11,.2) 45%,rgba(13,14,11,.78) 100%); }
+.theme-card.live:hover img { transform:scale(1.05); opacity:.9; }
+.theme-mark { position:absolute; z-index:1; right:14px; top:12px; font-family:Georgia,serif; font-size:26px; opacity:.85; text-shadow:0 2px 10px rgba(0,0,0,.5); }
+.theme-copy { position:absolute; z-index:1; left:16px; right:16px; bottom:16px; display:grid; gap:4px; }
+.theme-copy b { font-family:var(--font-display); font-weight:400; font-size:17px; letter-spacing:.04em; text-transform:uppercase; line-height:1.15; }
+.theme-copy small { font-size:11.5px; color:rgba(255,253,248,.8); line-height:1.4; }
+.theme-soon { position:absolute; z-index:1; left:14px; top:12px; padding:3px 8px; border-radius:999px; background:rgba(255,253,248,.92); color:var(--ink); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.theme-card:not(.live) img { opacity:.55; filter:saturate(.7); }
+:is([lang="ja"], [lang="zh-tw"]) .theme-copy b { text-transform:none; font-weight:700; font-size:15px; letter-spacing:.02em; }
+:is([lang="ja"], [lang="zh-tw"]) .themes-section h2 { font-size:clamp(24px,2.6vw,34px); line-height:1.3; }
+@media(max-width:980px){ .themes-grid { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:700px){ .themes-section { padding:40px 22px 10px; } .themes-grid { grid-template-columns:1fr 1fr; gap:10px; } .theme-card { min-height:150px; } .theme-copy b { font-size:14px; } }
+
+/* footer: the cookie-settings button reads like the other links */
+.consent-reopen { text-decoration:none; }
