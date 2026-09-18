@@ -1008,13 +1008,15 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
    ========================================================================= */
 .xp2 { background:var(--white); }
 .xp2 .crumbs { padding-bottom:6px; }
-.xp-head { padding:10px clamp(24px,7vw,120px) 22px; max-width:1200px; }
+/* one centred container for the crumbs, title, photos and the two columns */
+.xp2 .crumbs, .xp-head, .xp-mv, .xp-cols { max-width:1360px; margin-left:auto; margin-right:auto; padding-left:clamp(24px,5vw,64px); padding-right:clamp(24px,5vw,64px); }
+.xp-head { padding-top:10px; padding-bottom:22px; }
 .xp-head h1 { margin:0 0 12px; font-family:var(--font-display); font-weight:400; letter-spacing:.02em; text-transform:uppercase; font-size:clamp(30px,3.2vw,46px); line-height:1.04; }
 .xp-head .xp-conditions { margin:0; }
 .xp-head .xp-conditions li { border-radius:999px; border-color:#e6e1d6; }
 
 /* photos: grid on wide screens, the swipe track on phones */
-.xp-mv { padding:0 clamp(24px,7vw,120px); max-width:1200px; }
+.xp-mv { padding-top:0; padding-bottom:0; }
 .xp-mv .gallery-track { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; height:clamp(360px,38vw,520px); overflow:hidden; border-radius:16px; }
 .xp-mv .gallery-item { flex:none; min-width:0; min-height:0; height:100%; overflow:hidden; margin:0; }
 .xp-mv .gallery-item:first-child { grid-row:1 / 3; }
@@ -1031,7 +1033,7 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .xp-mv .xp-hero-photo { display:none; }
 
 /* two columns */
-.xp-cols { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:clamp(28px,4vw,64px); align-items:start; padding:28px clamp(24px,7vw,120px) 0; max-width:1200px; }
+.xp-cols { display:grid; grid-template-columns:minmax(0,1fr) 400px; gap:clamp(32px,4.5vw,72px); align-items:start; padding-top:28px; }
 .xp-main { min-width:0; grid-column:1; grid-row:1; }
 .xp-side { position:sticky; top:96px; grid-column:2; grid-row:1; }
 .xp2 .xp-section { padding:40px 0 0; }
@@ -1177,6 +1179,7 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 }
 @media(max-width:700px){
   .xp-head { padding:6px 22px 16px; }
+  .xp2 .crumbs { padding-left:22px; padding-right:22px; }
   .xp-head h1 { font-size:clamp(26px,7.6vw,34px); }
   .xp-mv { padding:0; }
   .xp-mv .gallery-track { display:none; }
