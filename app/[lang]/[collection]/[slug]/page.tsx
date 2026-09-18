@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine } from "lucide-react";
+import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Soup, Check } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -306,6 +306,26 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </section>
             )}
 
+            {/* ⑤′ Dietary needs the kitchen can meet */}
+            {exp.dietary && exp.dietary.length > 0 && (
+              <section className="xp-section" id="dietary">
+                <h2>{D.dietaryH}</h2>
+                <p className="xp-dietary-lead">{D.dietaryLead}</p>
+                <ul className="xp-dietary">
+                  {exp.dietary.map((k) => {
+                    const Icon = k === "vegetarian" ? Leaf : k === "glutenFree" ? WheatOff : Soup;
+                    return (
+                      <li key={k}>
+                        <span className="xp-dietary-icon"><Icon size={20} /></span>
+                        <span className="xp-dietary-copy"><b>{D.dietaryLabels[k] ?? k}</b><small><Check size={12} /> {D.dietaryOk}</small></span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <p className="xp-dietary-note">{D.dietaryOther}</p>
+              </section>
+            )}
+
             {/* ⑥ Highlights */}
             <section className="xp-section">
               <h2>{D.highlightsH}</h2>
@@ -430,7 +450,24 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 {D.flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
               </ol>
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
-              <p className="xp-cancel">{cancellation}</p>
+              {exp.cancellationTiers && exp.cancellationTiers.length > 0 ? (
+                <div className="xp-cancel-table">
+                  <table>
+                    <thead><tr><th>{D.cancelWhen}</th><th>{D.cancelFee}</th></tr></thead>
+                    <tbody>
+                      {exp.cancellationTiers.map((tier, i, all) => {
+                        const prev = i > 0 ? all[i - 1].until - 1 : undefined;
+                        const when = prev === undefined ? D.cancelFreeUntil(tier.until) : tier.until > 0 ? D.cancelBetween(prev, tier.until) : D.cancelFromDays(prev);
+                        const fee = tier.rate <= 0 ? D.cancelRateFree : tier.rate >= 100 ? D.cancelRateFull : D.cancelRatePct(tier.rate);
+                        return <tr key={tier.until} className={tier.rate <= 0 ? "free" : tier.rate >= 100 ? "full" : ""}><td>{when}</td><td>{fee}</td></tr>;
+                      })}
+                    </tbody>
+                  </table>
+                  <p className="xp-cancel-note">{cancellation}</p>
+                </div>
+              ) : (
+                <p className="xp-cancel">{cancellation}</p>
+              )}
 
               <h2 className="xp-sub">{live ? D.requestH : T.comingSoonCta}</h2>
               <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>

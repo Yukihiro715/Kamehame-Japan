@@ -63,6 +63,11 @@ export interface Experience {
   status?: ExperienceStatus;
   /** Overrides the site-wide cancellation policy when the venue's terms differ. */
   cancellation?: string;
+  /** Stepped cancellation fees: each step applies from `until` days before the date
+   *  (counted in Japan time) down to the next step. Rendered as a table. */
+  cancellationTiers?: { until: number; rate: number }[];
+  /** Dietary needs the kitchen can meet on request (keys of the i18n dietary labels). */
+  dietary?: string[];
   whatYoullDo: string[];
   master: { title: string; bio: string; quote: string };
   itinerary: string[];
@@ -136,7 +141,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map" | "taxIncluded";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "dietary";
 
 export interface Tour {
   slug: string;
@@ -309,12 +314,12 @@ export const experiences: Experience[] = [
     },
     taxIncluded: true,
     interactionTime: "about 1 hour 45 minutes",
-    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 3, cutoffTime: "17:00", closed: [{ from: "12-29", to: "01-03" }] },
+    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 7, cutoffTime: "17:00", closed: [{ from: "12-29", to: "01-03" }] },
     availabilityNote: "Closed over the New Year holidays.",
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
     tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an interpreter guide throughout, in English, Spanish or French.",
-    duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · up to 5 guests (6+ on request)", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
+    duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · 2–40 guests (6+ quoted individually)", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },
@@ -328,7 +333,9 @@ export const experiences: Experience[] = [
       { img: "/images/geiko-room-upstairs.jpg", alt: "An upstairs room built in the style of a Gion teahouse", caption: "An upstairs room built in the style of a Gion teahouse" },
       { img: "/images/geiko-room-garden.jpg", alt: "A ground-floor room looking onto the inner garden", caption: "A ground-floor room looking onto the inner garden" },
     ],
-    cancellation: "Cancellation fees apply once your booking is confirmed: 50% up to 4 days before, 75% 3–2 days before, 100% from the day before (Japan time; no-shows 100%). Date changes follow the same scale, and reducing your party applies the fee to the seats released. If a geiko or maiko cannot be secured for your date, you receive a full refund.",
+    cancellation: "Days are counted to the date of the experience, Japan time. Date changes follow the same scale, and reducing your party applies the fee to the seats released; refunds go back by the method you paid. If no geiko or maiko can be secured for your date, you receive a full refund whatever the timing.",
+    cancellationTiers: [{ until: 14, rate: 0 }, { until: 4, rate: 50 }, { until: 0, rate: 100 }],
+    dietary: ["vegetarian", "glutenFree", "dashiFree"],
     whatYoullDo: [
       "Settle into your own private banquet room — never shared with other guests.",
       "Dine on seasonal Kyoto cuisine as geiko and maiko join your table for conversation.",
@@ -363,13 +370,14 @@ export const experiences: Experience[] = [
       "A multi-course Japanese dinner: seasonal obanzai, sashimi, a meat course, tempura, rice and soup, dessert (changes with the market)",
       "Free-flow drinks throughout — beer, sake, shochu, wine, highballs, umeshu and soft drinks",
       "Your geiko or maiko hosting your table: conversation, one dance, and the parlour games Konpira Funefune and Tora-tora (performers by plan)",
-      "Photographs and video whenever you like, the dance included, plus commemorative photos with your host",
-      "An interpreter guide — English, Spanish or French, your choice — with you from arrival to farewell",
+      "Photographs and video are welcome, the dance included — no flash, no tripods, and your guide explains the house rules — plus commemorative photos with your host",
+      "Vegetarian, gluten-free and dashi-free (no fish stock) menus on request — tell us when you request your date",
+      "An interpreter guide — English, Spanish or French, your choice — with you from arrival to farewell: they welcome you in, explain Kyoto and the flower-town culture, the dance and each dish, and carry the conversation with your host both ways",
       "Tax and service charge — nothing is added on the day",
     ],
     notIncluded: [
       "Interpreters in languages other than English, Spanish or French: ask when you request your date",
-      "Parties of six or more: contact us for private group pricing",
+      "Parties of six or more are quoted individually — up to 40 guests, larger groups on request",
     ],
     schedule: [
       { time: "17:50", title: "Arrive with your guide", body: "The address is in your confirmation. Your guide meets you nearby and walks you in." },
@@ -381,20 +389,19 @@ export const experiences: Experience[] = [
       { time: "20:00", title: "End of the evening" },
     ],
     venue: {
-      known: ["Gion / Higashiyama, Kyoto — about 10 minutes on foot from Gion-Shijo Station (Keihan line)", "A private room in a traditional dining house: teahouse-style rooms upstairs, garden-view rooms downstairs", "Seating is on tatami — tell us if anyone needs a chair", "Meet on site — no transfers are arranged"],
+      known: ["Gion / Higashiyama, Kyoto — about 3 minutes on foot from Gion-Shijo Station (Keihan line)", "A private room in a traditional dining house: teahouse-style rooms upstairs, garden-view rooms downstairs", "Seating is on tatami — tell us if anyone needs a chair", "Meet on site — no transfers are arranged"],
       afterBooking: ["The house's name and street address", "A map and walking directions from the station", "Your guide's contact for the evening"],
       img: "/images/geiko-room-garden.jpg", alt: "A ground-floor tatami room looking onto the inner garden",
     },
     faq: [
       { q: "Will it be a geiko or a maiko?", a: "One geiko or maiko is arranged for your date. The house cannot take requests for a particular person, or for a maiko over a geiko; if you have a preference we will pass it on, without promising." },
-      { q: "How long until the date is confirmed?", a: "We reply within 24 hours with whether the room is free, the price and the conditions — that reply is not yet a booking. Your booking is confirmed when you accept those conditions by paying through the link we send; cancellation fees apply from that moment. We then place the formal request with the house, which secures your geiko or maiko — usually within a few days, up to one or two weeks in busy months. If none can be secured for your date, you receive a full refund." },
+      { q: "How long until the date is confirmed?", a: "We reply within 24 hours with whether the room is free, the price and the conditions — that reply is not yet a booking. Your booking is confirmed when you accept those conditions by paying through the link we send; cancellation terms apply from that moment. The house then secures your geiko or maiko: the formal request is placed no later than 14 days before your date (straight away for closer dates). If none can be secured, you receive a full refund." },
       { q: "Can we add live shamisen or a second host?", a: "Yes — that is what the plans are for. Signature adds a jikata playing shamisen live; Private Reserve has two geiko or maiko plus the jikata. Choose the plan when you request your date." },
-      { q: "Can we take photographs during the dance?", a: "Yes. Photos and video are welcome at any point, the dance included, and time is set aside at the end for commemorative photos with your host." },
+      { q: "Can we take photographs during the dance?", a: "Yes. Photos and video are welcome at any point, the dance included — without flash or tripods, following the house rules your guide explains — and time is set aside at the end for commemorative photos with your host." },
       { q: "Are drinks included? Is there a dress code?", a: "Drinks are free-flow — beer, sake, shochu, wine, highballs, soft drinks — and included, as are tax and service charge. There is no dress code." },
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },
-      { q: "Can dietary needs and allergies be catered for?", a: "Yes. Tell us when you request your date — allergies, vegetarian, vegan, halal — and the kitchen's answer comes back with the confirmation, before you pay." },
-      { q: "Can children join?", a: "Yes. Children aged 2 and under join free without a meal, ages 3–11 are half the adult rate, and 12 and over pay the adult rate with the full course. Seating is on tatami; tell us if anyone needs a chair." },
-      { q: "How far ahead must we book?", a: "By 17:00 Japan time three days before at the latest; two weeks ahead is comfortable, and spring and autumn (March–April, October–November) fill first. If no geiko or maiko can be secured for your date, you receive a full refund." },
+      { q: "Can dietary needs and allergies be catered for?", a: "Yes. Vegetarian, gluten-free and dashi-free (no fish stock) menus are prepared on request — tell us when you request your date. For allergies or any other need, ask in the same message and the kitchen's answer comes back with the conditions, before you pay." },
+      { q: "How far ahead must we book?", a: "By 17:00 Japan time seven days before at the latest; 10 to 14 days ahead is the comfortable window, and spring and autumn (March–April, October–November) fill first. During Miyako Odori (April) the house may only be able to confirm close to the date. The final time slot is confirmed with your availability reply." },
     ],
   },
   {
@@ -488,7 +495,7 @@ import type { Lang } from "@/lib/i18n";
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map", "taxIncluded"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map", "taxIncluded", "cancellationTiers", "dietary"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);

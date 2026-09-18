@@ -47,6 +47,7 @@ function bodyFor(e: Enquiry): string {
     e.dates && `Dates:    ${e.dates}`,
     e.party && `Party:    ${e.party}`,
     e.interpreter && `Interp.:  ${e.interpreter}`,
+    e.host && `Host:     ${e.host}`,
     e.addons && `Extras:   ${e.addons}`,
     e.estimate && `Estimate: ${e.estimate}`,
     `Language: ${e.lang}`,
@@ -91,7 +92,7 @@ async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void>
   if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
 }
 
-const MAX = { name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80, plan: 160, addons: 200, estimate: 120, interpreter: 40 };
+const MAX = { name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80, plan: 160, addons: 200, estimate: 120, interpreter: 40, host: 60 };
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.replace(/[\r\n]+/g, " ").trim().slice(0, max) : "";
@@ -115,6 +116,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     addons: clean(body.addons, MAX.addons) || undefined,
     estimate: clean(body.estimate, MAX.estimate) || undefined,
     interpreter: clean(body.interpreter, MAX.interpreter) || undefined,
+    host: clean(body.host, MAX.host) || undefined,
     lang: clean(body.lang, 5) || "en",
     experience: clean(body.experience, MAX.experience) || undefined,
     website: clean(body.website, 200) || undefined,

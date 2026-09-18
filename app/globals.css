@@ -1083,6 +1083,25 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .xp2 .xp-flow li { border-radius:12px; border-color:#e3ded3; }
 .xp2 .xp-flow li > span { border-radius:50%; }
 .xp2 .xp-cancel { border:1px solid #e3ded3; border-radius:12px; background:#faf8f3; }
+.xp-cancel-table { margin:0 0 8px; }
+.xp-cancel-table table { width:100%; border-collapse:separate; border-spacing:0; border:1px solid #e3ded3; border-radius:12px; overflow:hidden; background:var(--white); font-size:14px; line-height:1.6; }
+.xp-cancel-table th { text-align:left; padding:10px 16px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; background:#faf8f3; border-bottom:1px solid #ece7dc; }
+.xp-cancel-table td { padding:12px 16px; border-bottom:1px solid #ece7dc; vertical-align:top; }
+.xp-cancel-table tr:last-child td { border-bottom:0; }
+.xp-cancel-table td:last-child, .xp-cancel-table th:last-child { white-space:nowrap; font-weight:600; }
+.xp-cancel-table tr.free td:last-child { color:#1f7a3f; }
+.xp-cancel-table tr.full td:last-child { color:#b3261e; }
+.xp-cancel-note { margin:10px 0 0; font-size:12.5px; line-height:1.7; color:#5c584f; }
+:is([lang="ja"], [lang="zh-tw"]) .xp-cancel-table th { text-transform:none; letter-spacing:.04em; }
+@media(max-width:620px){ .xp-cancel-table td:last-child, .xp-cancel-table th:last-child { white-space:normal; } }
+.xp-dietary-lead { margin:-8px 0 14px; font-size:14px; line-height:1.7; color:#4a463e; }
+.xp-dietary { list-style:none; margin:0; padding:16px 18px; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px 24px; border:1px solid #e3ded3; border-radius:12px; background:var(--white); }
+.xp-dietary li { display:flex; gap:12px; align-items:center; }
+.xp-dietary-icon { flex:none; width:40px; height:40px; display:grid; place-items:center; border-radius:50%; background:#f3efe6; color:var(--ink); }
+.xp-dietary-copy { display:grid; gap:2px; font-size:14px; }
+.xp-dietary-copy b { font-weight:600; }
+.xp-dietary-copy small { display:inline-flex; align-items:center; gap:4px; font-size:12px; color:#1f7a3f; }
+.xp-dietary-note { margin:12px 0 0; font-size:13px; line-height:1.7; color:#4a463e; }
 .xp2 .enquiry-form input, .xp2 .enquiry-form textarea, .xp2 .enquiry-form select { border:1px solid #cfc9bd; border-radius:10px; box-shadow:none; }
 .xp2 .enquiry-form input:focus, .xp2 .enquiry-form textarea:focus, .xp2 .enquiry-form select:focus { border-color:var(--ink); box-shadow:0 0 0 3px rgba(238,124,24,.25); }
 .xp2 .dp-pop { border:1px solid #d9d3c7; border-radius:14px; box-shadow:0 12px 32px rgba(23,26,33,.14); }

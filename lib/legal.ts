@@ -47,8 +47,8 @@ const LEGAL_JA: LegalCopy = {
     ["お支払方法", "クレジットカード、または銀行振込"],
     ["お支払時期", "空き状況のご案内に記載の期限内に、ご案内の決済リンクからお支払いください。お支払いをもって条件に同意いただいたものとし、予約が確定します。期限までにお支払いが確認できない場合、お申込みは失効し、費用は発生しません。"],
     ["役務の提供時期", "ご予約確定時に定めた開催日時に、各体験ページ記載の会場にて提供します。"],
-    ["申込みの有効期限", "空き状況のお問い合わせは予約の成立ではありません。当社は24時間以内に空き状況・料金・条件をご案内し、ご案内に記載の期限内にお支払いいただいた時点で予約が確定します。芸妓・舞妓など出演者の手配を伴う体験では、予約確定後に受け入れ先が正式な手配を行います(通常は数日、繁忙期は1〜2週間程度)。"],
-    ["キャンセル・返金", "予約確定(お支払い)の時点から、各体験ページに記載のキャンセル規定に基づく取消料を申し受けます。取消料を差し引いた残額は、お支払い時と同じ方法で返金します。受け入れ先の事情(芸妓・舞妓を手配できなかった場合など)により提供できないときは、全額を返金します。"],
+    ["申込みの有効期限", "空き状況のお問い合わせは予約の成立ではありません。当社は24時間以内に空き状況・料金・条件をご案内し、ご案内に記載の期限内にお支払いいただいた時点で予約が確定します。芸妓・舞妓など出演者の手配を伴う体験では、予約確定後に受け入れ先が正式な手配を行います(遅くとも開催14日前まで)。"],
+    ["キャンセル・返金", "予約確定(お支払い)の時点から、各体験ページに記載のキャンセル規定に基づく取消料を申し受けます(芸妓・舞妓の夕べ:開催14日前まで無料、13〜4日前50%、3日前以降100%。日本時間で起算)。取消料を差し引いた残額は、お支払い時と同じ方法で返金します。受け入れ先の事情(芸妓・舞妓を手配できなかった場合など)により提供できないときは、全額を返金します。"],
     ["最少催行人数・その他の条件", "各体験ページに記載しています(例:2名以上、開催曜日、予約締切)。"],
     ["旅行手配について", "移動・宿泊を伴う手配は、当社の旅行手配パートナーである株式会社ELNX TRAVEL(旅行サービス手配業 東京都知事登録第20922号)が担当します。体験はいずれも現地集合・現地解散で、送迎は含まれません。"],
   ],
@@ -70,8 +70,8 @@ const LEGAL_EN: LegalCopy = {
     ["Payment methods", "Credit card or bank transfer."],
     ["When to pay", "Within the time stated in our availability reply, through the payment link in that reply. Paying is how you accept the conditions and confirm the booking. If payment has not arrived by then, the request lapses and nothing is charged."],
     ["When the service is provided", "At the date and time fixed when the booking was confirmed, at the venue described on the experience page."],
-    ["When a booking exists", "An availability request is not a booking. We reply within 24 hours with whether the date is free, the price and the conditions. A booking exists when you accept those conditions by paying through the link we send, within the time stated. Where a performer such as a geiko or maiko must be secured, the house does so after your booking, usually within a few days and up to one or two weeks in busy months."],
-    ["Cancellation and refunds", "Cancellation fees apply from the moment the booking is confirmed (your payment), as stated on each experience page. The balance after fees is refunded by the same method you paid. If the host cannot provide the experience (for example, no geiko or maiko can be secured for your date), you receive a full refund."],
+    ["When a booking exists", "An availability request is not a booking. We reply within 24 hours with whether the date is free, the price and the conditions. A booking exists when you accept those conditions by paying through the link we send, within the time stated. Where a performer such as a geiko or maiko must be secured, the house does so after your booking; the formal request is placed no later than 14 days before the date."],
+    ["Cancellation and refunds", "Cancellation fees apply from the moment the booking is confirmed (your payment), as stated on each experience page — for the geisha evening: free up to 14 days before the date, 50% from 13 to 4 days before, 100% from 3 days before, counted in Japan time. The balance after fees is refunded by the same method you paid. If the host cannot provide the experience (for example, no geiko or maiko can be secured for your date), you receive a full refund."],
     ["Minimum party and other conditions", "Stated on each experience page (for example: two guests or more, days of operation, booking cutoff)."],
     ["Travel arrangements", "Arrangements involving transport or accommodation are handled by our travel-arrangement partner, ELNX TRAVEL Co., Ltd. (registered travel service arranger, Tokyo Governor No. 20922). Every experience meets and ends on site; transfers are not included."],
   ],
@@ -89,14 +89,14 @@ const TERMS_JA: TermsCopy = {
     ]},
     { heading: "2. お申込みと予約の成立", body: [
       "各体験ページの「空き状況を問い合わせる」からお送りいただく内容は、予約の申込みではなく空き状況の確認依頼です。当社は24時間以内に、空き状況・料金・条件・お支払期限をメールでご案内します。このご案内はまだ予約ではありません。",
-      "ご案内に記載の期限内に、ご案内の決済リンクからお支払いいただいた時点で条件に同意したものとして予約が確定し、その時点からキャンセル規定が適用されます。芸妓・舞妓など出演者の手配を伴う体験では、予約確定後に受け入れ先が正式な手配を行います(通常は数日、繁忙期は1〜2週間程度)。当日の出演者を確保できなかった場合は全額を返金します。",
+      "ご案内に記載の期限内に、ご案内の決済リンクからお支払いいただいた時点で条件に同意したものとして予約が確定し、その時点からキャンセル規定が適用されます。芸妓・舞妓など出演者の手配を伴う体験では、予約確定後に受け入れ先が正式な手配を行います(遅くとも開催14日前まで)。当日の出演者を確保できなかった場合は全額を返金します。",
     ]},
     { heading: "3. 料金とお支払い", body: [
       "料金は各体験ページに表示する日本円の金額で、消費税・サービス料を含みます。人数・時期により異なります。ご案内した金額以外を当日に請求することはありません。",
       "お支払いはクレジットカードまたは銀行振込により、ご案内する期限までにお願いします。お支払いをもって予約が確定します。期限までにお支払いが確認できない場合、お申込みは失効し、費用は発生しません。振込手数料はお客様のご負担です。",
     ]},
     { heading: "4. 変更とキャンセル", body: [
-      "予約確定後のお取消し・日程変更・人数の減少には、各体験ページに記載のキャンセル規定に基づく取消料を申し受けます。返金は取消料を差し引いた残額を、お支払い時と同じ方法で行います。",
+      "予約確定後のお取消し・日程変更・人数の減少には、各体験ページに記載のキャンセル規定に基づく取消料を申し受けます(芸妓・舞妓の夕べ:開催14日前まで無料、13〜4日前50%、3日前以降100%。日本時間で起算)。返金は取消料を差し引いた残額を、お支払い時と同じ方法で行います。",
       "受け入れ先の事情(出演者を手配できない、休業など)や天災・交通機関の運休などにより体験を提供できない場合、当社は代替日程をご提案するか、全額を返金します。それ以上の損害(航空券・宿泊費など)は補償の対象外です。",
     ]},
     { heading: "5. 当日について", body: [
@@ -133,14 +133,14 @@ const TERMS_EN: TermsCopy = {
     ]},
     { heading: "2. Requests and bookings", body: [
       "What you send through \"Request availability\" is a request to check a date, not a booking. We reply within 24 hours with whether the date is free, the price, the conditions and a payment deadline. That reply is not yet a booking.",
-      "A booking exists when you accept those conditions by paying through the link we send, within the time stated, and the cancellation terms apply from that moment. Where a performer such as a geiko or maiko must be secured, the house does so after your booking, usually within a few days and up to one or two weeks in busy months. If none can be secured for your date, you receive a full refund.",
+      "A booking exists when you accept those conditions by paying through the link we send, within the time stated, and the cancellation terms apply from that moment. Where a performer such as a geiko or maiko must be secured, the house does so after your booking; the formal request is placed no later than 14 days before the date. If none can be secured for your date, you receive a full refund.",
     ]},
     { heading: "3. Prices and payment", body: [
       "Prices are those shown on each experience page, in Japanese yen, including consumption tax and service charge; they vary by party size and season. Nothing beyond the amount we confirm is charged on the day.",
       "Payment is by credit card or bank transfer, by the deadline we give you. Your payment is what confirms the booking. If payment has not arrived by then, the request lapses and nothing is charged. Bank transfer fees are yours.",
     ]},
     { heading: "4. Changes and cancellation", body: [
-      "After confirmation, cancellations, date changes and reductions in party size incur the cancellation fees stated on the experience page. Refunds are made by the same method you paid, less those fees.",
+      "After confirmation, cancellations, date changes and reductions in party size incur the cancellation fees stated on the experience page (for the geisha evening: free up to 14 days before the date, 50% from 13 to 4 days before, 100% from 3 days before, counted in Japan time). Refunds are made by the same method you paid, less those fees.",
       "If the host cannot provide the experience (no performer available, closure) or it cannot go ahead because of natural disaster or transport suspension, we offer an alternative date or refund you in full. Further losses such as flights or hotels are not covered.",
     ]},
     { heading: "5. On the day", body: [

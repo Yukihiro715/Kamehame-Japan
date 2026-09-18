@@ -33,6 +33,8 @@ export interface BookingState {
   addOns: string[];
   /** Interpreter guide language: "en" | "es" | "fr" | "none". Included in the price. */
   interpreter: string;
+  /** Geiko / maiko preference: "any" | "maiko" | "geiko". Passed on, never guaranteed. */
+  hostPref: string;
 }
 
 interface Booking extends BookingState {
@@ -67,6 +69,7 @@ export function BookingProvider({ experience, pricing, lang, children }: { exper
     date: "", time: defaultTime, altDate: "", altTime: defaultTime,
     guests: String(experience.minGuests), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
+    hostPref: "any",
   });
 
   // Earliest selectable date — computed after mount so the server and the
