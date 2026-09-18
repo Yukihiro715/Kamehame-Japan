@@ -26,8 +26,6 @@ export interface Enquiry {
   estimate?: string;
   /** Interpreter guide language chosen on an experience page (included). */
   interpreter?: string;
-  /** Geiko / maiko preference (passed on, never guaranteed). */
-  host?: string;
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;

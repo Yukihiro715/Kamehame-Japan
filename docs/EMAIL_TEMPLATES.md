@@ -62,7 +62,7 @@ Please use the same name and email address as in your request, so we can match y
 
 As soon as the payment is in, we arrange your evening with the house and send you the confirmation with the address, map and your guide's contact — within one business day.
 
-Anything we should pass on to the kitchen or the house (allergies, a chair instead of tatami, a birthday)? Just reply to this email.
+Anything we should pass on to the kitchen or the house (allergies, a birthday)? Just reply to this email.
 
 Warm regards,
 {your name}
@@ -79,7 +79,7 @@ hello@kamehame-japan.com
 > キャンセル:入金で予約確定、以降は当社規定(14日前まで無料、13〜4日前50%、3日前以降・無連絡100%。日本時間で起算)。正式手配は遅くとも開催14日前までに行う。芸舞妓が手配できなかった場合は全額返金
 > 確定するには:{期限}までに決済リンクからお支払いください(銀行振込も可)。お問い合わせ時と同じ氏名・メールアドレスで決済してください
 > 入金確認後1営業日以内に、住所・地図・ガイド連絡先を記載した確定通知を送ります
-> アレルギー・椅子の要否・お祝いなど、伝えておくことがあれば返信してください
+> アレルギー・お祝いなど、伝えておくことがあれば返信してください
 
 ---
 
@@ -137,11 +137,11 @@ YOUR GUIDE
 Phone / WhatsApp: {number} — for the day itself, if you are running late or cannot find the way.
 
 WHAT WE HAVE PASSED ON
-{e.g. One vegetarian guest; a chair for one guest; birthday of Ms. X}
+{e.g. One vegetarian guest; birthday of Ms. X}
 If anything has changed, reply to this email as soon as you can.
 
 GOOD TO KNOW
-- No dress code. Seating is on tatami (a chair is ready if you asked for one).
+- No dress code. Seating is on tatami.
 - Photos and video are welcome throughout, the dance included — no flash, no tripods.
 - Your host will pour and talk but, by custom, will not eat at the table — please don't press food or drink on her.
 - Cancellation from now: 13 to 4 days before 50%, from 3 days before 100% (free until 14 days before).
@@ -158,7 +158,7 @@ KAMEHAME JAPAN · Prosent Inc.
 > 日時:{日付} {開始10分前}までに到着(開始 {time})
 > 場所:{店名}{住所}{地図リンク}。祇園四条駅から徒歩約10分、赤提灯が目印
 > ガイド:{名前} が {集合場所} で {開始10分前} にお待ちします。当日連絡先:{番号}
-> 受け入れ先に伝えた内容:{食事制限・椅子・お祝いなど}。変更があればすぐ返信を
+> 受け入れ先に伝えた内容:{食事制限・お祝いなど}。変更があればすぐ返信を
 > 補足:ドレスコードなし/畳席/撮影可(フラッシュ・三脚不可)/芸舞妓は席で飲食しない慣習/この時点からのキャンセルは13〜4日前50%、3日前以降100%(14日前まで無料)
 
 ---

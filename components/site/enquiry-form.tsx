@@ -48,7 +48,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       if (plan) data.plan = `${plan.label} — ${plan.name}`;
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
       data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
-      if (plans.length) data.host = F.hostPrefOpts[b.hostPref] ?? b.hostPref;
       if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${b.estimate.peak ? "peak season" : "regular season"}, ${b.guestsNumber} guests)`;
       delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
     }
@@ -140,7 +139,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
               </label>
             ) : <span />}
           </div>
-          <div className="form-row two">
+          <div className="form-row two keep">
             <div className="field">
               <label htmlFor="enq-guests">{F.partyN}</label>
               <GuestStepper id="enq-guests" value={b.guests} min={x.minGuests} max={x.maxGuests ?? DEFAULT_MAX_GUESTS} onChange={(g) => b.set({ guests: g })} label={F.guests} decLabel={F.fewerGuests} incLabel={F.moreGuests} />
@@ -152,17 +151,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
               </select>
             </label>
           </div>
-          {plans.length > 0 && (
-            <div className="form-row two">
-              <label>
-                <span>{F.hostPref}</span>
-                <select name="host-choice" value={b.hostPref} onChange={(e) => b.set({ hostPref: e.target.value })}>
-                  {Object.entries(F.hostPrefOpts).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                </select>
-              </label>
-              <span />
-            </div>
-          )}
           <div className="form-row two">
             {addOns.length > 0 && (
               <fieldset className="form-addons">

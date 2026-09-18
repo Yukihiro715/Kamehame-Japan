@@ -389,7 +389,7 @@ export const experiences: Experience[] = [
       { time: "20:00", title: "End of the evening" },
     ],
     venue: {
-      known: ["Gion / Higashiyama, Kyoto — about 3 minutes on foot from Gion-Shijo Station (Keihan line)", "A private room in a traditional dining house: teahouse-style rooms upstairs, garden-view rooms downstairs", "Seating is on tatami — tell us if anyone needs a chair", "Meet on site — no transfers are arranged"],
+      known: ["Gion / Higashiyama, Kyoto — about 3 minutes on foot from Gion-Shijo Station (Keihan line)", "A private room in a traditional dining house: teahouse-style rooms upstairs, garden-view rooms downstairs", "Seating is on tatami", "Meet on site — no transfers are arranged"],
       afterBooking: ["The house's name and street address", "A map and walking directions from the station", "Your guide's contact for the evening"],
       img: "/images/geiko-room-garden.jpg", alt: "A ground-floor tatami room looking onto the inner garden",
     },

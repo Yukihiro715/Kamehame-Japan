@@ -200,7 +200,7 @@ export const experiencesEs: Experience[] = [
       { time: "20:00", title: "Fin de la velada" },
     ],
     venue: {
-      known: ["Gion / Higashiyama, Kioto: a unos 3 minutos a pie de la estación Gion-Shijo (línea Keihan)", "Una sala privada en una casa de comidas tradicional: salas tipo casa de té arriba, salas con vistas al jardín abajo", "Se sienta sobre tatami; avísenos si alguien necesita silla", "Encuentro en el lugar: no se organizan traslados"],
+      known: ["Gion / Higashiyama, Kioto: a unos 3 minutos a pie de la estación Gion-Shijo (línea Keihan)", "Una sala privada en una casa de comidas tradicional: salas tipo casa de té arriba, salas con vistas al jardín abajo", "Se sienta sobre tatami", "Encuentro en el lugar: no se organizan traslados"],
       afterBooking: ["El nombre y la dirección de la casa", "Un mapa e indicaciones a pie desde la estación", "El contacto de su guía para esa noche"],
       img: "/images/geiko-room-garden.jpg", alt: "Una sala de tatami de la planta baja con vistas al jardín interior",
     },

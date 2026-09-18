@@ -600,7 +600,7 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 .form-done p { margin:0; font-size:13.5px; line-height:1.8; color:#4a463e; }
 .trade-cta-block h2 { margin:0 0 14px; font-family:var(--font-display); font-weight:400; font-size:21px; letter-spacing:.04em; text-transform:uppercase; }
 :is([lang="ja"], [lang="zh-tw"]) .form-done b, :is([lang="ja"], [lang="zh-tw"]) .trade-cta-block h2 { text-transform:none; font-weight:700; }
-@media(max-width:620px){ .form-row.two { grid-template-columns:1fr; } .form-row.three { grid-template-columns:1fr 1fr; } .form-row.three label:first-child { grid-column:1 / -1; } }
+@media(max-width:620px){ .form-row.two { grid-template-columns:1fr; } .form-row.two.keep { grid-template-columns:1fr 1fr; gap:10px; } .form-row.three { grid-template-columns:1fr 1fr; } .form-row.three label:first-child { grid-column:1 / -1; } }
 
 /* --- Coming soon (placeholder experiences) ------------------------------- */
 .soon-badge { position:absolute; top:12px; left:12px; z-index:2; padding:5px 11px; background:var(--ink); color:var(--white);
@@ -1179,6 +1179,9 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 }
 @media(max-width:700px){
   .xp-head { padding:6px 22px 16px; }
+  .xp-head .xp-conditions { gap:2px 12px; margin-top:2px; }
+  .xp-head .xp-conditions li { border:0; background:none; padding:2px 0; font-size:12.5px; color:#4a463e; gap:5px; }
+  .xp-head .xp-conditions svg { width:13px; height:13px; }
   .xp2 .crumbs { padding-left:22px; padding-right:22px; }
   .xp-head h1 { font-size:clamp(26px,7.6vw,34px); }
   .xp-mv { padding:0; }
