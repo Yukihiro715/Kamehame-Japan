@@ -129,7 +129,7 @@ export const experiencesFr: Experience[] = [
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "Banquet ozashiki avec maiko et geiko",
     tagline: "Deux heures privées à Kyoto avec une geiko ou une maiko. Partagez un dîner japonais de saison, conversez à table, assistez à une danse traditionnelle et jouez aux jeux ozashiki — avec un guide-interprète tout au long de la soirée, en français, anglais ou espagnol.",
-    duration: "2 h", price: "¥219,800", priceUnit: "group", group: "Privé · 2 à 40 convives (6 et plus : devis individuel)", ages: "Tous âges", area: "Kyoto (Gion / Higashiyama)",
+    duration: "2 h", price: "¥219,800", priceUnit: "group", group: "Privé · 2 à 40 convives", ages: "Tous âges", area: "Kyoto (Gion / Higashiyama)",
     img: "/images/geiko-photo-together.jpg", alt: "Deux convives et une maiko sourient pour une photo souvenir dans une salle privée de Kyoto",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "La conversation autour du dîner, l'interprète assurant les deux sens", caption: "La conversation autour du dîner, l'interprète assurant les deux sens" },

@@ -319,7 +319,7 @@ export const experiences: Experience[] = [
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
     tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an interpreter guide throughout, in English, Spanish or French.",
-    duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · 2–40 guests (6+ quoted individually)", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
+    duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },

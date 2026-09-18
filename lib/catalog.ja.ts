@@ -134,7 +134,7 @@ export const experiencesJa: Experience[] = [
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "舞妓・芸妓とのお座敷",
     tagline: "京都で、芸妓または舞妓と過ごす貸切の2時間。季節の和食を囲み、語らい、舞を間近で観て、お座敷遊びに加わる——通訳ガイド(英語・スペイン語・フランス語)が最初から最後まで同席します。",
-    duration: "2時間", price: "¥219,800", priceUnit: "group", group: "貸切・2〜40名(6名以上は個別見積)", ages: "年齢制限なし", area: "京都(祇園・東山周辺)",
+    duration: "2時間", price: "¥219,800", priceUnit: "group", group: "貸切・2〜40名", ages: "年齢制限なし", area: "京都(祇園・東山周辺)",
     img: "/images/geiko-photo-together.jpg", alt: "京都の貸切座敷で、舞妓と一緒に記念撮影する参加者",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "お食事をしながらの歓談。通訳が双方の言葉を橋渡しします", caption: "お食事をしながらの歓談。通訳が双方の言葉を橋渡しします" },

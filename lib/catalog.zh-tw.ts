@@ -129,7 +129,7 @@ export const experiencesZh: Experience[] = [
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "舞妓與藝妓的座敷宴",
     tagline: "在京都與藝妓或舞妓共度兩小時的私人時光。共享當季日本料理、隔桌交談、欣賞傳統舞蹈、一起玩座敷遊戲——全程有口譯導遊陪同（英語、西班牙語或法語）。",
-    duration: "2 小時", price: "¥219,800", priceUnit: "group", group: "包場 · 2 至 40 位（6 位以上個別報價）", ages: "全年齡", area: "京都（祇園／東山一帶）",
+    duration: "2 小時", price: "¥219,800", priceUnit: "group", group: "包場 · 2 至 40 位", ages: "全年齡", area: "京都（祇園／東山一帶）",
     img: "/images/geiko-photo-together.jpg", alt: "在京都私人包廂中與舞妓合影留念的兩位賓客",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "邊用餐邊交談，口譯負責雙向傳譯", caption: "邊用餐邊交談，口譯負責雙向傳譯" },
