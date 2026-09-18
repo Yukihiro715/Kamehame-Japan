@@ -1151,6 +1151,8 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .stepper button:last-child { border-left:1px solid #e3ded3; }
 .stepper output { display:grid; place-items:center; font-size:15px; font-weight:600; font-variant-numeric:tabular-nums; text-align:center; padding:0 6px; }
 .stepper button:focus-visible { outline:2px solid var(--kame); outline-offset:-2px; }
+.enquiry-form .stepper { min-height:48px; }
+#request-form { scroll-margin-top:92px; }
 .bk-grid > *:last-child:nth-child(odd) { grid-column:1 / -1; }
 .bk-card .field, .bk-card label { display:grid; gap:5px; align-content:start; }
 .bk-card label > span, .bk-card .field > label { font-size:11.5px; letter-spacing:.04em; color:var(--muted); }

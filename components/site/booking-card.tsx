@@ -20,7 +20,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   const plans = pricing?.plans ?? [];
   const plan = plans.find((p) => p.id === b.plan);
   const jump = () => {
-    const el = document.querySelector("#request");
+    const el = document.querySelector("#request-form") ?? document.querySelector("#request");
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
     window.setTimeout(() => (document.querySelector<HTMLInputElement>("#request input[name=name]"))?.focus({ preventScroll: true }), 500);
   };
@@ -82,7 +82,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         )}
       </div>
 
-      <a className="bk-cta" href="#request" onClick={(e) => { e.preventDefault(); jump(); }}>{D.requestCta} <ArrowRight size={16} /></a>
+      <a className="bk-cta" href="#request-form" onClick={(e) => { e.preventDefault(); jump(); }}>{D.requestCta} <ArrowRight size={16} /></a>
       <ul className="bk-trust">
         <li><ShieldCheck size={14} /> {D.noPaymentNow}</li>
         <li><Clock3 size={14} /> {D.replyIn24}</li>

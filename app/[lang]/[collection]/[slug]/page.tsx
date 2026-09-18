@@ -196,7 +196,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <div className="bk-card">
                 <p className="soon-flag">{T.comingSoon}</p>
                 <p className="xp-note">{T.comingSoonBody}</p>
-                <a className="bk-cta" href="#request">{T.comingSoonCta}</a>
+                <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>
               </div>
             )}
           </aside>
@@ -469,7 +469,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <p className="xp-cancel">{cancellation}</p>
               )}
 
-              <h2 className="xp-sub">{live ? D.requestH : T.comingSoonCta}</h2>
+              <h2 className="xp-sub" id="request-form">{live ? D.requestH : T.comingSoonCta}</h2>
               <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>
               <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />
               {/* Bókun mount for the day online booking connects; nothing renders until then. */}
@@ -495,7 +495,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           </div>
 
         </div>
-        <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" />
+        <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />
       </BookingProvider>
 
       {moreInCity.length > 0 && (
