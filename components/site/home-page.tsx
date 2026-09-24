@@ -16,7 +16,7 @@ const COPY = {
     themesH: "Find your Japan.",
     themes: [
       { t: "Food & Drink", s: "Sushi / Cooking / Sake", img: "/images/cat-sushi.jpg", mark: "食" },
-      { t: "Arts & Crafts", s: "Calligraphy / Craftsmanship", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "Arts & Crafts", s: "Calligraphy / Craftsmanship", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "Tradition & Culture", s: "Geiko / Tea Ceremony / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "Pop Culture & Beauty", s: "Character Nails / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
       { t: "Sports & Outdoors", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
@@ -61,7 +61,7 @@ const COPY = {
     themesH: "Encuentra tu Japón.",
     themes: [
       { t: "Comida y bebida", s: "Sushi / Cocina / Sake", img: "/images/cat-sushi.jpg", mark: "食" },
-      { t: "Arte y oficios", s: "Caligrafía / Artesanía", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "Arte y oficios", s: "Caligrafía / Artesanía", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "Tradición y cultura", s: "Geiko / Ceremonia del té / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "Cultura pop y belleza", s: "Uñas de personajes / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
       { t: "Deporte y aire libre", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
@@ -106,7 +106,7 @@ const COPY = {
     themesH: "あなたの日本を見つける。",
     themes: [
       { t: "食と酒", s: "寿司 / 料理 / 日本酒", img: "/images/cat-sushi.jpg", mark: "食" },
-      { t: "アート・工芸", s: "書道 / 職人の技", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "アート・工芸", s: "書道 / 職人の技", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "伝統と文化", s: "芸妓・舞妓 / 茶道 / 着物", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "ポップカルチャー・美容", s: "キャラクターネイル / アニメ", img: "/images/cat-nail.jpg", mark: "爪" },
       { t: "スポーツ・アウトドア", s: "ゴルフ / 相撲", img: "/images/cat-sumo.jpg", mark: "武" },
@@ -151,7 +151,7 @@ const COPY = {
     themesH: "Trouvez votre Japon.",
     themes: [
       { t: "Cuisine et boissons", s: "Sushi / Cuisine / Saké", img: "/images/cat-sushi.jpg", mark: "食" },
-      { t: "Arts et artisanat", s: "Calligraphie / Savoir-faire", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "Arts et artisanat", s: "Calligraphie / Savoir-faire", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "Tradition et culture", s: "Geiko / Cérémonie du thé / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "Pop culture et beauté", s: "Nail art de personnages / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
       { t: "Sport et plein air", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
@@ -196,7 +196,7 @@ const COPY = {
     themesH: "找到你的日本。",
     themes: [
       { t: "美食與酒", s: "壽司 / 料理 / 日本酒", img: "/images/cat-sushi.jpg", mark: "食" },
-      { t: "藝術與工藝", s: "書道 / 職人技藝", img: "/images/craft-hands.jpg", mark: "技" },
+      { t: "藝術與工藝", s: "書道 / 職人技藝", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "傳統與文化", s: "藝妓 / 茶道 / 和服", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "流行文化與美容", s: "角色美甲 / 動漫", img: "/images/cat-nail.jpg", mark: "爪" },
       { t: "運動與戶外", s: "高爾夫 / 相撲", img: "/images/cat-sumo.jpg", mark: "武" },
@@ -258,7 +258,7 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
         <small>{eyebrow}</small>
       </div>
       <div className="feature-copy">
-        <p className="experience-city"><MapPin size={14} /> {cityTitle ?? exp.area} · {T.interpreterIncluded}</p>
+        <p className="experience-city"><MapPin size={14} /> {cityTitle ?? exp.area} · {exp.langTag ?? T.interpreterIncluded}</p>
         <h3>{exp.title}</h3>
         <RatingSummary experience={exp.slug} lang={lang} size={13} />
         <p>{exp.tagline}</p>
@@ -429,7 +429,7 @@ export function HomePage({ lang }: { lang: Lang }) {
                   <small>{String(i + 1).padStart(2, "0")}</small>
                 </div>
                 <div className="experience-copy">
-                  <p className="experience-city"><MapPin size={14} /> {cityTitle(item.city)} · {T.interpreterIncluded}</p>
+                  <p className="experience-city"><MapPin size={14} /> {cityTitle(item.city)} · {item.langTag ?? T.interpreterIncluded}</p>
                   <h3>{item.title}</h3>
                   <p>{item.tagline}</p>
                   <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span>{T.from} <b>{item.price}</b> {item.priceUnit === "group" ? T.perGroupShort : T.perPerson}</span></div>

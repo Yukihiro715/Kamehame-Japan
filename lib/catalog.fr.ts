@@ -9,7 +9,7 @@ export const CANCELLATION_FR =
 export const citiesFr: City[] = [
   {
     slug: "tokyo", title: "Tokyo", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "Tokyo garde ses traditions derrière des portes discrètes, à quelques rues des néons. Nos masterclasses vous assoient auprès de ceux qui les font vivre — un chef sushi à son propre comptoir, des lutteurs à l'entraînement du matin, un forgeron de katana à sa forge — toujours avec un guide-interprète privé à vos côtés.",
+    lead: "Tokyo garde ses traditions à quelques rues des néons. Nous commençons par un cours privé de calligraphie au pinceau à Shinjuku : des kanji choisis pour le sens de votre prénom, enseignés en anglais par une professeure de calligraphie. D'autres expériences à Tokyo arrivent bientôt.",
   },
   {
     slug: "kyoto", title: "Kyoto", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -41,7 +41,7 @@ export const experiencesFr: Experience[] = [
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy",
     title: "Votre prénom en kanji : cours de calligraphie au pinceau à Tokyo",
     tagline: "Deux heures avec une professeure de calligraphie à Tokyo. Dites-lui ce que signifie votre prénom, choisissez le kanji qui le porte, apprenez les traits et tracez votre propre œuvre sur un shikishi, scellée d'un cachet rouge et à emporter sur son support en bois.",
-    duration: "Environ 2 h", price: "¥16,800", group: "Privé · 1 à 4 personnes", ages: "Dès 10 ans", area: "Tokyo (Shinjuku)",
+    duration: "Environ 2 h", price: "¥19,800", group: "Privé · 1 à 4 personnes", ages: "Dès 10 ans", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Deux participants souriants avec les kanji qu'ils ont tracés lors d'un cours de calligraphie à Tokyo",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "La professeure montre un trait pendant qu'un participant s'exerce à côté" },

@@ -9,7 +9,7 @@ export const CANCELLATION_ZH =
 export const citiesZh: City[] = [
   {
     slug: "tokyo", title: "東京", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "東京的傳統藏在霓虹燈後幾條巷子裡、一扇扇不起眼的門後。我們的大師課讓您坐在守護這些技藝的人身旁——站在自己吧檯前的壽司職人、晨練中的力士、鍛冶場裡的刀匠——並全程有專屬口譯導遊陪同。",
+    lead: "東京把傳統藏在霓虹燈後的幾條街外。我們先從新宿的包場毛筆書法課開始：依名字的含義選字，由書法老師以英語授課。更多東京體驗陸續推出。",
   },
   {
     slug: "kyoto", title: "京都", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -41,7 +41,7 @@ export const experiencesZh: Experience[] = [
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy",
     title: "把名字寫成漢字：東京毛筆書法體驗",
     tagline: "與東京的筆文字老師共度兩小時。告訴老師你名字的含義，選出承載它的漢字，練習筆法，再把自己的作品寫在色紙上——蓋上朱印，放上木製座架帶回家。",
-    duration: "約 2 小時", price: "¥16,800", group: "包場 · 1 至 4 位", ages: "10 歲以上", area: "東京（新宿）",
+    duration: "約 2 小時", price: "¥19,800", group: "包場 · 1 至 4 位", ages: "10 歲以上", area: "東京（新宿）",
     img: "/images/kanji-hero-results.jpg", alt: "兩位參加者拿著在東京書法課寫的漢字微笑",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "老師示範筆法，參加者在旁練習" },

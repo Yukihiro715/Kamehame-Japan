@@ -200,7 +200,7 @@ export const CANCELLATION = "Free cancellation up to 7 days before the experienc
 export const cities: City[] = [
   {
     slug: "tokyo", title: "Tokyo", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "Tokyo holds its traditions close, behind quiet doors a few streets from the neon. Our Tokyo masterclasses seat you beside the people who keep those traditions alive — a sushi chef at his own counter, wrestlers at morning practice, a swordsmith at the forge — always with a private interpreter guide at your side.",
+    lead: "Tokyo keeps its traditions close, a few streets from the neon. We start with a private brush-calligraphy class in Shinjuku: kanji chosen for the meaning of your name, taught in English by a brush-lettering teacher. More Tokyo experiences are on the way.",
   },
   {
     slug: "kyoto", title: "Kyoto", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -230,13 +230,13 @@ export const experiences: Experience[] = [
   {
     // Tokyo calligraphy teacher; the partner's own brand is deliberately not
     // shown (guests would find it and book around us). Built from the condition
-    // sheet, 2026-09. In "preview" until real reviews arrive. Dates come from the
+    // sheet, 2026-09; live since 2026-09-24 at ¥19,800 per person. Dates come from the
     // teacher's lesson calendar and are replaced every three months: ◎ slots have
     // the studio booked; ▲ slots need the studio booked when a request comes in.
-    slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy", bookingType: "request", status: "preview",
+    slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy", bookingType: "request", status: "live",
     title: "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
     tagline: "Two hours with a Tokyo brush-lettering teacher. Tell her what your name means, choose the kanji that carries it, learn the strokes, and brush your own piece on a shikishi board — sealed with a red stamp and yours to take home on its wooden stand.",
-    duration: "About 2 hours", price: "¥16,800", priceUnit: "person", group: "Private · 1–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
+    duration: "About 2 hours", price: "¥19,800", priceUnit: "person", group: "Private · 1–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },

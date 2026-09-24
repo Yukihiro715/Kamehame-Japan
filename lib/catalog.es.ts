@@ -10,7 +10,7 @@ export const CANCELLATION_ES =
 export const citiesEs: City[] = [
   {
     slug: "tokyo", title: "Tokio", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "Tokio guarda sus tradiciones tras puertas discretas, a pocas calles del neón. Nuestras clases magistrales te sientan junto a quienes las mantienen vivas — un chef de sushi en su propia barra, luchadores en el entrenamiento matinal, un forjador de katanas en su fragua — siempre con un guía intérprete privado a tu lado.",
+    lead: "Tokio guarda sus tradiciones a pocas calles del neón. Empezamos con una clase privada de caligrafía con pincel en Shinjuku: kanji elegidos por el significado de tu nombre, enseñados en inglés por una profesora de caligrafía. Pronto habrá más experiencias en Tokio.",
   },
   {
     slug: "kyoto", title: "Kioto", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -42,7 +42,7 @@ export const experiencesEs: Experience[] = [
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy",
     title: "Tu nombre en kanji: clase de caligrafía con pincel en Tokio",
     tagline: "Dos horas con una profesora de caligrafía de Tokio. Cuéntale qué significa tu nombre, elige el kanji que lo expresa, aprende los trazos y pinta tu propia obra sobre un shikishi, con sello rojo y un soporte de madera para llevártela a casa.",
-    duration: "Unas 2 horas", price: "¥16,800", group: "Privado · 1–4 personas", ages: "Desde 10 años", area: "Tokio (Shinjuku)",
+    duration: "Unas 2 horas", price: "¥19,800", group: "Privado · 1–4 personas", ages: "Desde 10 años", area: "Tokio (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Dos participantes sonrientes con los kanji que pintaron en una clase de caligrafía en Tokio",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "La profesora muestra un trazo mientras un participante practica a su lado" },

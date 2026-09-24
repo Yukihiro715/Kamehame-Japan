@@ -14,7 +14,7 @@ export const CANCELLATION_JA =
 export const citiesJa: City[] = [
   {
     slug: "tokyo", title: "東京", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "東京の伝統は、ネオンから数本入った路地の、目立たない扉の内側に残っています。私たちがご案内するのは、その技を今も生業にしている方々の隣の席です。自身の店に立つ寿司職人、朝稽古の力士、鍛冶場の刀匠。通訳ガイドが必ず同行します。",
+    lead: "東京は、ネオンのすぐ裏に伝統を抱えています。まずは新宿での貸切の筆文字(書道)体験から。名前の意味から漢字を選び、筆文字講師が英語で教えます。東京の体験は順次追加していきます。",
   },
   {
     slug: "kyoto", title: "京都", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -46,7 +46,7 @@ export const experiencesJa: Experience[] = [
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy",
     title: "名前を漢字で。東京の筆文字(書道)体験",
     tagline: "東京の筆文字講師と過ごす2時間。お名前の意味を伝えて、その意味を持つ漢字を選び、筆づかいを練習して、色紙に自分の作品を書き上げます。朱印を押し、木製の台座に立ててお持ち帰りいただけます。",
-    duration: "約2時間", price: "¥16,800", group: "貸切・1〜4名", ages: "10歳以上", area: "東京(新宿)",
+    duration: "約2時間", price: "¥19,800", group: "貸切・1〜4名", ages: "10歳以上", area: "東京(新宿)",
     img: "/images/kanji-hero-results.jpg", alt: "東京の筆文字体験で書いた漢字を手に笑顔の参加者",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "講師が筆づかいを見せ、隣で参加者が練習" },

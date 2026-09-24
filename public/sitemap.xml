@@ -57,6 +57,61 @@
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/"/>
   </url>
   <url>
+    <loc>https://kamehame-japan.com/en/tokyo/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tokyo/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tokyo/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/"/>
+  </url>
+  <url>
     <loc>https://kamehame-japan.com/en/kyoto/</loc>
     <lastmod>2026-09-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -167,6 +222,61 @@
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/geisha/"/>
   </url>
   <url>
+    <loc>https://kamehame-japan.com/en/calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/calligraphy/"/>
+  </url>
+  <url>
     <loc>https://kamehame-japan.com/en/experiences/</loc>
     <lastmod>2026-09-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -220,6 +330,61 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/experiences/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/experiences/"/>
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/experiences/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kanji-name-calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tokyo/kanji-name-calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kanji-name-calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tokyo/kanji-name-calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kanji-name-calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/kanji-name-calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kanji-name-calligraphy/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/kanji-name-calligraphy/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/kanji-name-calligraphy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/kanji-name-calligraphy/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/kyoto/evening-with-geiko/</loc>
