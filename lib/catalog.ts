@@ -251,7 +251,6 @@ export const experiences: Experience[] = [
       { img: "/images/kanji-teacher-check.jpg", alt: "The teacher checking a guest's practice sheets" },
       { img: "/images/kanji-studio.jpg", alt: "The bright studio with a long shared table" },
     ],
-    galleryNote: "Photos from the teacher's trial classes; the studio may differ by date.",
     partySize: { min: 1, max: 4 },
     pricing: { minCharge: 2 },
     availability: {
@@ -294,7 +293,6 @@ export const experiences: Experience[] = [
     ],
     notIncluded: [
       "Transport to the studio (meet on site)",
-      "An interpreter guide — the teacher runs the class in English",
       "The teacher's postcards and prints, on sale at the studio if you would like one",
     ],
     schedule: [
@@ -322,7 +320,7 @@ export const experiences: Experience[] = [
       { q: "Do I need any experience?", a: "No. The class starts with the basic strokes, and the teacher adjusts the pace to your group." },
       { q: "How do you choose kanji for a name that isn't Japanese?", a: "By meaning. Tell us what your name means, as far as you know; the teacher suggests characters that carry it and explains each one. If you would rather not use your name, choose a word instead — light, dream, courage." },
       { q: "What do I take home?", a: "Your final piece on a shikishi board, sealed with a red stamp, and a wooden stand to display it." },
-      { q: "Which language is the class taught in?", a: "English — the teacher runs the class herself in simple English. No interpreter guide comes with this class." },
+      { q: "Which language is the class taught in?", a: "English — the teacher runs the class herself in simple English." },
       { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes. A class for one is priced as two guests; the booking box shows the total when you choose one guest." },
       { q: "What should I wear?", a: "Clothes you don't mind getting ink on. Aprons are provided." },

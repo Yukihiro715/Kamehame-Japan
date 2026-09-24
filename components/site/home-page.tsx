@@ -298,7 +298,8 @@ export function HomePage({ lang }: { lang: Lang }) {
   const markFor = (e: Experience) => categories.find((c) => c.slug === e.category)?.mark ?? "";
   const cityTitle = (slug: string) => cities.find((c) => c.slug === slug)?.title;
   const journal = latestArticles(lang, 3);
-  const quotes = featuredReviews(3);
+  // Only reviews of experiences listed on the site (not ones still in preview).
+  const quotes = featuredReviews(3, experiences.map((e) => e.slug));
 
   return (
     <main id="top" lang={lang}>

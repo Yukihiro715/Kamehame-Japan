@@ -23,8 +23,8 @@ export function ReviewList({ reviews, lang, initial = 3 }: { reviews: Review[]; 
             <Stars rating={r.rating} />
             {r.date && <time dateTime={r.date}>{reviewDate(r.date, lang)}</time>}
           </header>
-          {r.title && <h3>{r.title}</h3>}
-          <p>{r.body}</p>
+          {(r.i18n?.[lang]?.title ?? r.title) && <h3>{r.i18n?.[lang]?.title ?? r.title}</h3>}
+          <p>{r.i18n?.[lang]?.body ?? r.body}</p>
           {r.photos && r.photos.length > 0 && (
             <div className="review-photos">{r.photos.map((src) => <img key={src} src={src} alt="" loading="lazy" />)}</div>
           )}
@@ -34,8 +34,8 @@ export function ReviewList({ reviews, lang, initial = 3 }: { reviews: Review[]; 
             {r.party && <span className="review-party">{D.reviewParty[r.party] ?? r.party}</span>}
             {r.source === "sample"
               ? <span className="review-sample-tag">{D.reviewSample}</span>
-              : r.source === "venue"
-              ? <span className="review-note-tag">{T.reviewVenueGuest}</span>
+              : r.source === "venue" || r.source === "trial"
+              ? <span className="review-note-tag">{r.source === "trial" ? T.reviewTrialGuest : T.reviewVenueGuest}</span>
               : (r.verified || r.source !== "direct") && <span className="review-verified"><ShieldCheck size={12} /> {T.reviewVerified}</span>}
             {r.note && <span className="review-note-tag">{r.note}</span>}
           </footer>

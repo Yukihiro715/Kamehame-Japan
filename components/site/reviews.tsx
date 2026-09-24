@@ -97,7 +97,7 @@ export function ReviewSummaryPanel({ experience, lang }: { experience: string; l
         <b>{agg.average.toFixed(1)}</b>
         <Stars rating={agg.average} size={16} />
         <span>{T.reviewCount(agg.count)}</span>
-        <small><ShieldCheck size={13} /> {ownReviewsFor(experience).length ? T.detail.reviewsVerifiedNote : T.detail.reviewsVenueNote}</small>
+        <small><ShieldCheck size={13} /> {ownReviewsFor(experience).length ? T.detail.reviewsVerifiedNote : reviewsFor(experience).some((r) => r.source === "trial") ? T.detail.reviewsTrialNote : T.detail.reviewsVenueNote}</small>
       </div>
       <ol className="review-bars" aria-label={T.reviewsH}>
         {dist.map((d) => (

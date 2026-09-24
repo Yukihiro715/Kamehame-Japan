@@ -315,7 +315,6 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                       <ul className="check-list muted">{exp.notIncluded.map((i) => <li key={i}><span className="tick">—</span><span>{i}</span></li>)}</ul>
                     </div>
                   )}
-                  <p className="xp-included-note">{D.includedNote}</p>
                 </div>
               </section>
             )}
