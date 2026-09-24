@@ -109,6 +109,8 @@ export interface Experience {
     plans?: { id: string; regular: number; peak: number; recommended?: boolean }[];
     extraGuest?: { regular: number; peak: number; included: number; upTo: number };
     peakWindows?: { from: string; to: string }[];
+    /** Per-person products: a smaller party pays as this many guests (e.g. a solo guest pays for two). */
+    minCharge?: number;
   };
   /** Localised text for `pricing.plans`, keyed by plan id. */
   planText?: Record<string, { label: string; name: string; performers: string; blurb: string }>;
@@ -226,14 +228,15 @@ export const categories: Category[] = [
 
 export const experiences: Experience[] = [
   {
-    // Kanji Art Japan (teacher: Marie). Built from the partner's condition sheet,
-    // 2026-09. In "preview" until the open questions are answered and real
-    // reviews arrive; the dates are the teacher's confirmed slots (◎ only) and
-    // are replaced every three months.
+    // Tokyo calligraphy teacher; the partner's own brand is deliberately not
+    // shown (guests would find it and book around us). Built from the condition
+    // sheet, 2026-09. In "preview" until real reviews arrive. Dates come from the
+    // teacher's lesson calendar and are replaced every three months: ◎ slots have
+    // the studio booked; ▲ slots need the studio booked when a request comes in.
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy", bookingType: "request", status: "preview",
     title: "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
     tagline: "Two hours with a Tokyo brush-lettering teacher. Tell her what your name means, choose the kanji that carries it, learn the strokes, and brush your own piece on a shikishi board — sealed with a red stamp and yours to take home on its wooden stand.",
-    duration: "About 2 hours", price: "¥16,800", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
+    duration: "About 2 hours", price: "¥16,800", priceUnit: "person", group: "Private · 1–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },
@@ -249,15 +252,23 @@ export const experiences: Experience[] = [
       { img: "/images/kanji-studio.jpg", alt: "The bright studio with a long shared table" },
     ],
     galleryNote: "Photos from the teacher's trial classes; the studio may differ by date.",
-    partySize: { min: 2, max: 4 },
+    partySize: { min: 1, max: 4 },
+    pricing: { minCharge: 2 },
     availability: {
       daily: false, startTimes: ["10:30", "13:30", "16:00"], cutoffDays: 7, cutoffTime: "18:00",
       dates: [
-        { date: "2026-10-15", times: ["13:30", "16:00"] },
-        { date: "2026-11-17", times: ["10:30"] },
-        { date: "2026-11-25", times: ["16:00"] },
+        { date: "2026-10-15", times: ["10:30", "13:30", "16:00"] },
+        { date: "2026-10-20", times: ["10:30"] },
+        { date: "2026-10-26", times: ["10:30"] },
+        { date: "2026-10-28", times: ["13:30", "16:00"] },
+        { date: "2026-11-11", times: ["10:30", "13:30"] },
+        { date: "2026-11-17", times: ["10:30", "13:30"] },
+        { date: "2026-11-19", times: ["13:30", "16:00"] },
+        { date: "2026-11-25", times: ["13:30", "16:00"] },
         { date: "2026-12-01", times: ["10:30"] },
+        { date: "2026-12-03", times: ["10:30"] },
         { date: "2026-12-07", times: ["13:30", "16:00"] },
+        { date: "2026-12-14", times: ["10:30"] },
         { date: "2026-12-17", times: ["13:30", "16:00"] },
         { date: "2026-12-23", times: ["13:30", "16:00"] },
       ],
@@ -267,12 +278,12 @@ export const experiences: Experience[] = [
     langTag: "Taught in English",
     skipSiteFaq: true,
     includedShort: "Teacher-led class · All tools · Your finished piece + stand",
-    cancellation: "Free up to 72 hours before your start time; after that, and for no-shows, 100%. Days are counted in Japan time. Date changes are free up to 3 days before, if another date has room. The studio is booked by the hour, so a late arrival shortens practice rather than extending the class. If the teacher has to cancel, you hear by 17:00 the day before and receive a full refund.",
-    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
+    cancellation: "Days are counted to the date of the class, Japan time. Date changes follow the same scale, if another date has room. The studio is booked by the hour, so arriving late shortens practice rather than extending the class. If the teacher has to cancel, you hear by 17:00 the day before and receive a full refund.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     highlights: [
       { icon: "chat", title: "Kanji chosen for your name", body: "Tell us what your name means. The teacher suggests characters that carry that meaning, and you choose the one that feels like yours." },
       { icon: "photo", title: "A piece you take home", body: "Your final work on a shikishi board, sealed with a red stamp and set on a wooden stand — made and handed over the same day." },
-      { icon: "group", title: "Just your group", body: "Classes are not shared with other guests: two to four people, one teacher, one long table." },
+      { icon: "group", title: "Just your group", body: "Classes are not shared with other guests: one to four people, one teacher, one long table." },
     ],
     included: [
       "A two-hour class led by the teacher in simple English",
@@ -313,7 +324,7 @@ export const experiences: Experience[] = [
       { q: "What do I take home?", a: "Your final piece on a shikishi board, sealed with a red stamp, and a wooden stand to display it." },
       { q: "Which language is the class taught in?", a: "English — the teacher runs the class herself in simple English. No interpreter guide comes with this class." },
       { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
-      { q: "I'm travelling alone. Can I join?", a: "Classes run for two to four people. If you are on your own, say so in your request and we will ask the teacher whether a class for one is possible and at what price." },
+      { q: "I'm travelling alone. Can I join?", a: "Yes. A class for one is priced as two guests; the booking box shows the total when you choose one guest." },
       { q: "What should I wear?", a: "Clothes you don't mind getting ink on. Aprons are provided." },
       { q: "How does booking work?", a: "Choose a listed date and send a request; we reply within 24 hours with the price and conditions. Sending the request costs nothing. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
       { q: "What if we are late?", a: "The studio is booked by the hour, so the class ends on time and practice is shorter. Tell us as soon as you know you are running late." },

@@ -93,7 +93,8 @@ export function BookingProvider({ experience, pricing, lang, children }: { exper
   const [state, setState] = useState<BookingState>({
     plan: pricing?.plans?.find((p) => p.recommended)?.id ?? pricing?.plans?.[0]?.id ?? "",
     date: "", time: defaultTime, altDate: "", altTime: defaultTime,
-    guests: String(experience.minGuests), addOns: [],
+    // Start at two (the usual party) even where one guest may book.
+    guests: String(Math.min(Math.max(experience.minGuests, 2), experience.maxGuests ?? 99)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
   });
 

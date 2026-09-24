@@ -29,6 +29,8 @@ export interface PricingView {
   /** Per-person products: the price per guest and the largest party it covers. */
   perPerson?: number;
   maxGuests?: number;
+  /** A smaller party pays as this many guests. */
+  minCharge?: number;
 }
 
 const yenFormat = new Intl.NumberFormat("en-US");
@@ -108,10 +110,15 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
 
   // Per person: a short reference table across the party range.
   const unit = parseYen(exp.price);
+  const minCharge = pr?.minCharge ?? 1;
   const parties = [...new Set([size.min, 2, 4, size.max].filter((n) => n >= size.min && n <= size.max))].sort((a, b) => a - b);
   return {
     unit: "person",
-    rows: parties.map((party) => ({ party, total: unit * party, perPerson: unit })),
+    rows: parties.map((party) => {
+      const total = unit * Math.max(party, minCharge);
+      return { party, total, perPerson: Math.round(total / party) };
+    }),
+    minCharge,
     moreOnRequest: false,
     addOns: exp.addOns,
     perPerson: unit,
@@ -127,7 +134,7 @@ export interface Quote { total: number; peak: boolean; base: number; extraCount:
 export function quote(view: PricingView, planId: string, guests: number, iso?: string): Quote | null {
   if (!view.plans?.length && view.unit === "person" && view.perPerson) {
     if (view.maxGuests && guests > view.maxGuests) return null;
-    const total = view.perPerson * guests;
+    const total = view.perPerson * Math.max(guests, view.minCharge ?? 1);
     return { total, peak: false, base: total, extraCount: 0, extraEach: 0 };
   }
   const plan = view.plans?.find((p) => p.id === planId);
