@@ -29,3 +29,7 @@ The home-page hero uses `public/images/hero-sushi-counter.jpg`, a JPEG re-encode
 `public/images/geiko-*.jpg` (11 files) were supplied by the host of the Kyoto geiko evening from its own
 public website and social media, with permission to use them on kamehame-japan.com for this listing.
 They are not under a Creative Commons license and must not be reused elsewhere without the host's consent.
+
+`public/images/kanji-*.jpg` (12 files) come from the Tokyo calligraphy teacher's own trial classes
+(shared Google Photos album, September 2026), cropped to 4:3. The teacher's condition sheet allows their use on
+all channels; confirmation that the trial participants agreed to appear is on the open-questions list.

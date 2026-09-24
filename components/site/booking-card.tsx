@@ -2,7 +2,7 @@
 
 import { ArrowRight, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-react";
 import { DatePicker } from "@/components/site/date-picker";
-import { DEFAULT_MAX_GUESTS, isClosed, useBooking } from "@/components/site/booking-context";
+import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
 import { yen } from "@/lib/pricing";
 import { RatingSummary } from "@/components/site/reviews";
@@ -30,7 +30,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       <div className="bk-price">
         <small>{D.fromPrice}</small>
         <b>{plans.length ? yen(Math.min(...plans.map((p) => p.regular))) : headline}</b>
-        <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : D.priceTotalNote}</small>
+        <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : pricing?.unit === "person" ? T.perPersonUnit : D.priceTotalNote}</small>
         <RatingSummary experience={x.slug} lang={lang} href="#reviews" size={13} />
       </div>
 
@@ -51,13 +51,13 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       <div className="bk-grid">
         <div className="field">
           <label htmlFor="bk-date">{F.preferredDate}</label>
-          <DatePicker id="bk-date" name="bk-date" lang={lang} min={b.minDate} compact closed={(d) => isClosed(d, x.closed)} value={b.date} onChange={(d) => b.set({ date: d })} />
+          <DatePicker id="bk-date" name="bk-date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} compact closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
         </div>
         {x.startTimes && x.startTimes.length > 0 && (
           <label>
             <span>{F.startTime}</span>
             <select value={b.time} onChange={(e) => b.set({ time: e.target.value })}>
-              {x.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
+              {timesFor(x, b.date).map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </label>
         )}
@@ -70,9 +70,9 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       <div className="bk-est" aria-live="polite">
         {b.estimate ? (
           <>
-            <span>{D.estimateH} · {plan?.label} · {D.estimateFor(b.guestsNumber)}{b.date && ` · ${b.estimate.peak ? D.seasonPeak : D.seasonRegular}`}</span>
+            <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
             <b>{yen(b.estimate.total)}</b>
-            <small>{D.priceTotalNote}. {b.date ? D.estimateNote : D.pickDateForSeason}</small>
+            <small>{plans.length ? D.priceTotalNote : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>
           </>
         ) : (
           <>

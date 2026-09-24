@@ -30,9 +30,11 @@ export function ReviewList({ reviews, lang, initial = 3 }: { reviews: Review[]; 
           )}
           <footer>
             <span className="review-author">{r.author}</span>
-            <span className="review-country">{r.country}</span>
+            {r.source !== "sample" && <span className="review-country">{r.country}</span>}
             {r.party && <span className="review-party">{D.reviewParty[r.party] ?? r.party}</span>}
-            {r.source === "venue"
+            {r.source === "sample"
+              ? <span className="review-sample-tag">{D.reviewSample}</span>
+              : r.source === "venue"
               ? <span className="review-note-tag">{T.reviewVenueGuest}</span>
               : (r.verified || r.source !== "direct") && <span className="review-verified"><ShieldCheck size={12} /> {T.reviewVerified}</span>}
             {r.note && <span className="review-note-tag">{r.note}</span>}

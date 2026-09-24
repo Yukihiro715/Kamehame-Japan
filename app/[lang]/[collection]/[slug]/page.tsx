@@ -17,16 +17,18 @@ import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { pricingFor, yen } from "@/lib/pricing";
 import {
-  cancellationFor, catalogFor, cityBySlug, isLive, SITE_ORIGIN,
+  cancellationFor, catalogFor, cityBySlug, isLive, isPreview, previewsFor, SITE_ORIGIN,
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { ownAggregateFor, REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
+import { ownAggregateFor, REVIEWS_PUBLISHED, reviewsFor, sampleReviewsFor } from "@/lib/reviews";
 import { RatingSummary, ReviewSummaryPanel } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string; collection: string; slug: string }> }
+
+const DATE_LOCALES: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
 
 export function generateStaticParams() {
   return LANGS.flatMap((lang) => {
@@ -34,6 +36,7 @@ export function generateStaticParams() {
     return [
       ...tours.map((tr) => ({ lang, collection: "tours", slug: tr.slug })),
       ...experiences.map((e) => ({ lang, collection: e.city, slug: e.slug })),
+      ...previewsFor(lang).experiences.map((e) => ({ lang, collection: e.city, slug: e.slug })),
     ];
   });
 }
@@ -41,7 +44,8 @@ export function generateStaticParams() {
 function resolve(lang: Lang, collection: string, slug: string): { exp?: Experience; tour?: Tour } {
   const { experiences, tours } = catalogFor(lang);
   if (collection === "tours") return { tour: tours.find((tr) => tr.slug === slug) };
-  const exp = experiences.find((e) => e.slug === slug);
+  // Pages in preview resolve by URL for sign-off; nothing links to them.
+  const exp = experiences.find((e) => e.slug === slug) ?? previewsFor(lang).experiences.find((e) => e.slug === slug);
   if (exp && exp.city === collection) return { exp };
   return {};
 }
@@ -52,6 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { exp, tour } = resolve(lang, collection, slug);
   const item = exp ?? tour;
   if (!item) return {};
+  if (exp && isPreview(exp)) return { title: `${exp.title} | KAMEHAME JAPAN`, robots: { index: false, follow: false } };
   return withAlternates(
     socialMeta({
       lang,
@@ -116,16 +121,19 @@ const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Langua
 function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
   const D = T.detail;
-  const city = cityBySlug(exp.city, lang)!;
+  const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
-  const live = isLive(exp);
+  const preview = isPreview(exp);
+  // A page in preview shows the full booking flow so it can be checked end to end.
+  const live = isLive(exp) || preview;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
   const photos = [{ img: exp.img, alt: exp.alt }, ...exp.gallery];
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
+  const samples = preview && !hasReviews ? sampleReviewsFor(exp.slug) : [];
   const video = exp.video;
   const pricing = pricingFor(exp, lang);
   const perGroup = pricing.unit === "group";
@@ -141,7 +149,8 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       const [time, ...rest] = step.split(" — ");
       return { time, title: rest.join(" — ") };
     });
-  const faq = [...(exp.faq ?? []), ...D.siteFaq];
+  const faq = [...(exp.faq ?? []), ...(exp.skipSiteFaq ? [] : D.siteFaq)];
+  const flow = exp.flow ?? D.flow;
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const ctaLabel = live ? D.requestAvailability : T.comingSoonCta;
   const avail = exp.availability;
@@ -149,7 +158,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
     { Icon: MapPin, text: city.title },
     { Icon: Clock3, text: exp.duration },
     { Icon: Users, text: exp.group },
-    { Icon: Languages, text: T.interpreterGuide },
+    { Icon: Languages, text: exp.langTag ?? T.interpreterGuide },
   ];
   const booking = {
     slug: exp.slug, title: exp.title,
@@ -158,18 +167,23 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
     minGuests: exp.partySize?.min ?? 1,
     listedMax: eg?.upTo ?? Math.min(exp.partySize?.max ?? 12, 12),
     maxGuests: exp.partySize?.max,
+    dates: avail?.dates, interpreter: exp.interpreter,
+    notesLabel: exp.notesLabel, notesHint: exp.notesHint,
   };
+  const fmtDay = new Intl.DateTimeFormat(DATE_LOCALES[lang], { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
 
   return (
     <main className="subpage detail-page xp xp2" lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
       <Breadcrumbs trail={[
         { label: T.home, href: langHome(lang) },
-        { label: city.title, href: `/${lang}/${city.slug}/` },
+        // A city with nothing listed yet has no page to link to (e.g. while in preview).
+        { label: city.title, href: cityBySlug(exp.city, lang) ? `/${lang}/${city.slug}/` : undefined },
         { label: exp.title },
       ]} />
 
       <BookingProvider experience={booking} pricing={live ? pricing : undefined} lang={lang}>
+        {preview && <p className="xp-preview-banner" role="status">{D.previewBanner}</p>}
         {/* ① Title block */}
         <header className="xp-head">
           {!live && <p className="soon-flag">{T.comingSoon}</p>}
@@ -206,7 +220,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <h2>{D.overviewH}</h2>
               <p className="xp-lede">{exp.tagline}</p>
               <ul className="xp-overview-facts">
-                {avail && <li><CalendarDays size={15} /><span>{avail.daily ? D.availDaily : ""} · {D.availStart} {avail.startTimes[0]}–{avail.startTimes[avail.startTimes.length - 1]}</span></li>}
+                {avail && <li><CalendarDays size={15} /><span>{avail.dates ? D.availSelected : avail.daily ? D.availDaily : ""} · {D.availStart} {avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}</span></li>}
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
                 {exp.taxIncluded && <li><ShieldCheck size={15} /><span>{D.taxIncluded}</span></li>}
                 {avail && <li><Clock3 size={15} /><span>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
@@ -351,6 +365,13 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <ReviewList reviews={reviews} lang={lang} />
               </section>
             )}
+            {samples.length > 0 && (
+              <section className="xp-section" id="reviews">
+                <h2>{T.reviewsH}</h2>
+                <p className="xp-sample-note">{D.reviewsSampleNote}</p>
+                <ReviewList reviews={samples} lang={lang} />
+              </section>
+            )}
 
             {/* ⑦ Video — only when an asset exists */}
             {video && (
@@ -389,8 +410,17 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <h2>{D.availH}</h2>
                 <div className="xp-avail-box">
                   <dl>
-                    <div><dt>{D.availDays}</dt><dd>{avail.daily ? D.availDaily : "—"}{exp.availabilityNote && ` · ${exp.availabilityNote}`}</dd></div>
-                    <div><dt>{D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>
+                    {avail.dates ? (
+                      <div><dt>{D.availDatesH}</dt><dd>
+                        <ul className="xp-dates">
+                          {avail.dates.map((d) => <li key={d.date}><b>{fmtDay.format(new Date(`${d.date}T00:00:00Z`))}</b><span>{d.times.join(" / ")}</span></li>)}
+                        </ul>
+                        <small className="xp-dates-note">{D.availDatesNote}{exp.availabilityNote && ` ${exp.availabilityNote}`}</small>
+                      </dd></div>
+                    ) : (
+                      <div><dt>{D.availDays}</dt><dd>{avail.daily ? D.availDaily : "—"}{exp.availabilityNote && ` · ${exp.availabilityNote}`}</dd></div>
+                    )}
+                    {!avail.dates && <div><dt>{D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>}
                     <div><dt>{D.availCutoffH}</dt><dd>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</dd></div>
                   </dl>
                 </div>
@@ -447,7 +477,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <section className="xp-section xp-request" id="request">
               <h2>{D.flowH}</h2>
               <ol className="xp-flow">
-                {D.flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
+                {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
               </ol>
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
               {exp.cancellationTiers && exp.cancellationTiers.length > 0 ? (

@@ -33,7 +33,7 @@ export interface Review {
    *  "venue": a guest of the host venue before KAMEHAME listed the evening —
    *  shown with that provenance, never with the verified-booking badge, and
    *  left out of the aggregate rating in structured data. */
-  source: "google" | "bokun" | "direct" | "venue";
+  source: "google" | "bokun" | "direct" | "venue" | "sample";
   /** Who came: shown as a small tag beside the initials. */
   party?: "couple" | "family" | "friends" | "solo" | "business";
   /** Provenance note, e.g. that the guest attended as a monitor. */
@@ -66,6 +66,22 @@ const REVIEWS: Review[] = [
     body: "Beautiful evening and definitely something we'll remember. It is expensive, so I wasn't sure at first, but having the private room, dinner, drinks and interpreter made it feel worth it. I would have loved a little more time for photos at the end.",
   },
 ];
+
+/** Layout samples for experiences in "preview" only (see isPreview in the
+ *  catalog). They are not reviews: they never enter REVIEWS, the ratings, the
+ *  home page or structured data, and each card is labelled as a sample. They
+ *  are deleted when the partner's real reviews arrive and the page goes live. */
+const SAMPLE_REVIEWS: Review[] = [
+  { id: "s1", experience: "kanji-name-calligraphy", rating: 5, author: "Sample A", country: "—", source: "sample",
+    body: "Placeholder text. A guest's review of the class will appear here: what they wrote, which kanji they chose for their name, and how the teacher helped." },
+  { id: "s2", experience: "kanji-name-calligraphy", rating: 5, author: "Sample B", country: "—", source: "sample",
+    body: "Placeholder text. Second review slot, to check how two or three reviews sit beside the booking box on a phone and on a wide screen." },
+  { id: "s3", experience: "kanji-name-calligraphy", rating: 4, author: "Sample C", country: "—", source: "sample",
+    body: "Placeholder text. Third review slot. Real reviews from the teacher's monitor sessions replace all three before the page is published." },
+];
+
+/** Samples for a page in preview; the caller checks the status. */
+export const sampleReviewsFor = (experience: string): Review[] => SAMPLE_REVIEWS.filter((r) => r.experience === experience);
 
 /** Empty while unpublished, so no caller has to know about the flag. */
 export const reviewsFor = (experience: string): Review[] =>

@@ -18,6 +18,13 @@ export interface BookingExperience {
   listedMax: number;
   /** Ceiling of the head-count control (default 15). */
   maxGuests?: number;
+  /** Announced dates only (with each date's start times); every other day is closed. */
+  dates?: { date: string; times: string[] }[];
+  /** False when no interpreter guide comes with the product. */
+  interpreter?: boolean;
+  /** Request-form notes field copy, when the product needs something specific. */
+  notesLabel?: string;
+  notesHint?: string;
 }
 
 export const DEFAULT_MAX_GUESTS = 15;
@@ -50,6 +57,27 @@ interface Booking extends BookingState {
 }
 
 const Ctx = createContext<Booking | null>(null);
+
+/** True when a guest can pick `iso`: an announced date for dated products,
+ *  otherwise any day outside the closed windows. */
+export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed">) {
+  if (x.dates) return x.dates.some((d) => d.date === iso);
+  return !isClosed(iso, x.closed);
+}
+
+/** Earliest date a guest can actually pick: for dated products, the first
+ *  announced date on or after the booking cutoff. */
+export function firstOpenDate(x: Pick<BookingExperience, "dates">, min?: string): string | undefined {
+  if (!x.dates) return min;
+  if (!min) return undefined;
+  return x.dates.map((d) => d.date).sort().find((d) => d >= min);
+}
+
+/** Start times offered on `iso` (all of them when no date is chosen yet). */
+export function timesFor(x: Pick<BookingExperience, "dates" | "startTimes">, iso?: string): string[] {
+  if (x.dates && iso) return x.dates.find((d) => d.date === iso)?.times ?? [];
+  return x.startTimes ?? [];
+}
 
 /** True when the month-day of `iso` falls inside a closed window (windows may wrap the year end). */
 export function isClosed(iso: string, windows?: { from: string; to: string }[]) {
@@ -88,7 +116,22 @@ export function BookingProvider({ experience, pricing, lang, children }: { exper
     const largeParty = guestsNumber > experience.listedMax;
     return {
       ...state,
-      set: (patch) => setState((s) => ({ ...s, ...patch })),
+      set: (patch) => setState((s) => {
+        const next = { ...s, ...patch };
+        // On dated products a date carries its own start times: keep the chosen
+        // time when that date offers it, otherwise move to the date's first slot.
+        if (experience.dates) {
+          if (patch.date !== undefined && patch.date) {
+            const ts = timesFor(experience, patch.date);
+            if (ts.length && !ts.includes(next.time)) next.time = ts[0];
+          }
+          if (patch.altDate !== undefined && patch.altDate) {
+            const ts = timesFor(experience, patch.altDate);
+            if (ts.length && !ts.includes(next.altTime)) next.altTime = ts[0];
+          }
+        }
+        return next;
+      }),
       toggleAddOn: (id) => setState((s) => ({ ...s, addOns: s.addOns.includes(id) ? s.addOns.filter((x) => x !== id) : [...s.addOns, id] })),
       experience, pricing, minDate,
       estimate: pricing && !largeParty ? quote(pricing, state.plan, guestsNumber, state.date || undefined) : null,

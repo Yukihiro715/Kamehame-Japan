@@ -26,6 +26,9 @@ export interface PricingView {
   extraGuest?: { regular: number; peak: number; included: number; upTo: number };
   peakWindows?: { from: string; to: string }[];
   addOns?: { id: string; name: string; description: string; price?: number }[];
+  /** Per-person products: the price per guest and the largest party it covers. */
+  perPerson?: number;
+  maxGuests?: number;
 }
 
 const yenFormat = new Intl.NumberFormat("en-US");
@@ -111,14 +114,22 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
     rows: parties.map((party) => ({ party, total: unit * party, perPerson: unit })),
     moreOnRequest: false,
     addOns: exp.addOns,
+    perPerson: unit,
+    maxGuests: size.max,
   };
 }
 
 export interface Quote { total: number; peak: boolean; base: number; extraCount: number; extraEach: number }
 
-/** Price of a plan for a party on a date. Null when the party is larger than
- *  the listed range (quoted individually) or the product has no plans. */
+/** Price of a plan for a party on a date (or, for per-person products, the
+ *  party's total). Null when the party is larger than the listed range
+ *  (quoted individually) or there is nothing to price. */
 export function quote(view: PricingView, planId: string, guests: number, iso?: string): Quote | null {
+  if (!view.plans?.length && view.unit === "person" && view.perPerson) {
+    if (view.maxGuests && guests > view.maxGuests) return null;
+    const total = view.perPerson * guests;
+    return { total, peak: false, base: total, extraCount: 0, extraEach: 0 };
+  }
   const plan = view.plans?.find((p) => p.id === planId);
   const eg = view.extraGuest;
   if (!plan || !eg || guests > eg.upTo) return null;

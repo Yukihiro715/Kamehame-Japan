@@ -8,7 +8,7 @@ import { track } from "@/lib/analytics";
 import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
-import { DEFAULT_MAX_GUESTS, isClosed, useBooking } from "@/components/site/booking-context";
+import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -47,8 +47,8 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       const plan = plans.find((p) => p.id === b.plan);
       if (plan) data.plan = `${plan.label} — ${plan.name}`;
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
-      data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
-      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${b.estimate.peak ? D.seasonPeak : D.seasonRegular}, ${D.estimateFor(b.guestsNumber)})`;
+      if (x?.interpreter !== false) data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
+      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${[plans.length ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : "", D.estimateFor(b.guestsNumber)].filter(Boolean).join(", ")})`;
       delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
     }
     setStatus("sending");
@@ -113,14 +113,14 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
           <div className="form-row two">
             <div className="field">
               <label htmlFor="enq-date">{F.preferredDate}</label>
-              <DatePicker id="enq-date" name="date" lang={lang} min={b.minDate} required closed={(d) => isClosed(d, x.closed)} value={b.date} onChange={(d) => b.set({ date: d })} />
-              {b.minDate && <small className="form-hint">{F.earliestDate(fmtDate(b.minDate, lang), x.leadDays, x.cutoffTime)}</small>}
+              <DatePicker id="enq-date" name="date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} required closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
+              {firstOpenDate(x, b.minDate) && <small className="form-hint">{F.earliestDate(fmtDate(firstOpenDate(x, b.minDate)!, lang), x.leadDays, x.cutoffTime)}</small>}
             </div>
             {x.startTimes?.length ? (
               <label>
                 <span>{F.startTime}</span>
                 <select name="time" required value={b.time} onChange={(e) => b.set({ time: e.target.value })}>
-                  {x.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
+                  {timesFor(x, b.date).map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </label>
             ) : <span />}
@@ -128,13 +128,13 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
           <div className="form-row two">
             <div className="field">
               <label htmlFor="enq-alt-date">{F.altDate}</label>
-              <DatePicker id="enq-alt-date" name="altDate" lang={lang} min={b.minDate} closed={(d) => isClosed(d, x.closed)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
+              <DatePicker id="enq-alt-date" name="altDate" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} closed={(d) => !isBookable(d, x)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
             </div>
             {x.startTimes?.length ? (
               <label>
                 <span>{F.altStartTime}</span>
                 <select name="altTime" value={b.altTime} onChange={(e) => b.set({ altTime: e.target.value })}>
-                  {x.startTimes.map((s) => <option key={s} value={s}>{s}</option>)}
+                  {timesFor(x, b.altDate).map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </label>
             ) : <span />}
@@ -144,12 +144,14 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
               <label htmlFor="enq-guests">{F.partyN}</label>
               <GuestStepper id="enq-guests" value={b.guests} min={x.minGuests} max={x.maxGuests ?? DEFAULT_MAX_GUESTS} onChange={(g) => b.set({ guests: g })} label={F.guests} decLabel={F.fewerGuests} incLabel={F.moreGuests} />
             </div>
-            <label>
-              <span>{F.interpreter}</span>
-              <select name="interpreter-choice" value={b.interpreter} onChange={(e) => b.set({ interpreter: e.target.value })}>
-                {Object.entries(F.interpreterOpts).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-              </select>
-            </label>
+            {x.interpreter !== false ? (
+              <label>
+                <span>{F.interpreter}</span>
+                <select name="interpreter-choice" value={b.interpreter} onChange={(e) => b.set({ interpreter: e.target.value })}>
+                  {Object.entries(F.interpreterOpts).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                </select>
+              </label>
+            ) : <span />}
           </div>
           <div className="form-row two">
             {addOns.length > 0 && (
@@ -166,7 +168,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
           </div>
           <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{D.estimateH} · {plans.find((p) => p.id === b.plan)?.label} · {D.estimateFor(b.guestsNumber)}{b.date && ` · ${b.estimate.peak ? D.seasonPeak : D.seasonRegular}`}</span><b>{yen(b.estimate.total)}</b><small>{D.priceTotalNote}. {b.date ? D.estimateNote : D.pickDateForSeason}</small></>
+              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b>{yen(b.estimate.total)}</b><small>{plans.length ? D.priceTotalNote : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}
@@ -211,10 +213,10 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       )}
 
       <label className="form-row">
-        <span>{trade ? F.messageTrade : b ? F.notesXp : F.message}</span>
+        <span>{trade ? F.messageTrade : b ? (x?.notesLabel ?? F.notesXp) : F.message}</span>
         <textarea
           name="message" required={!b} rows={b ? 4 : 7} maxLength={4000}
-          placeholder={trade ? F.messageTradeHint : b ? F.notesXpHint : F.messageHint}
+          placeholder={trade ? F.messageTradeHint : b ? (x?.notesHint ?? F.notesXpHint) : F.messageHint}
         />
       </label>
 

@@ -9,10 +9,13 @@ export type CitySlug = "tokyo" | "kyoto";
  *  calendar; request products are held until the venue confirms the date. */
 export type BookingType = "instant" | "request";
 
-/** Whether an experience is backed by a signed partner ("live") or is still a
- *  placeholder awaiting one ("soon"). Undefined counts as "soon". */
-export type ExperienceStatus = "live" | "soon";
+/** Whether an experience is backed by a signed partner ("live"), is still a
+ *  placeholder awaiting one ("soon"), or is built and waiting for sign-off
+ *  ("preview": reachable by its URL for review, never listed, never indexed,
+ *  and the only status allowed to show sample reviews). Undefined counts as "soon". */
+export type ExperienceStatus = "live" | "soon" | "preview";
 export const isLive = (e: { status?: ExperienceStatus }) => e.status === "live";
+export const isPreview = (e: { status?: ExperienceStatus }) => e.status === "preview";
 
 /** Whether placeholder ("soon") experiences appear on the site at all. While
  *  false, catalogFor() returns only signed experiences, and only the cities
@@ -68,6 +71,18 @@ export interface Experience {
   cancellationTiers?: { until: number; rate: number }[];
   /** Dietary needs the kitchen can meet on request (keys of the i18n dietary labels). */
   dietary?: string[];
+  /** False when no interpreter guide comes with the product (the teacher runs it
+   *  in English): hides the interpreter choice and the "Interpreter guide" tag. */
+  interpreter?: boolean;
+  /** Replaces the "Interpreter guide" condition tag, e.g. "Taught in English". */
+  langTag?: string;
+  /** Request-form notes field, when the product needs something specific from guests. */
+  notesLabel?: string;
+  notesHint?: string;
+  /** Replaces the site-wide booking steps (written for the geiko evening). */
+  flow?: { title: string; body: string }[];
+  /** Leaves out the site-wide FAQ entries (interpreter, request, transport). */
+  skipSiteFaq?: boolean;
   whatYoullDo: string[];
   master: { title: string; bio: string; quote: string };
   itinerary: string[];
@@ -112,7 +127,16 @@ export interface Experience {
   galleryNote?: string;
   /** Operating pattern from the partner sheet: which days it runs, the start
    *  times offered, and the booking cutoff (days before, Japan-time clock). */
-  availability?: { daily: boolean; startTimes: string[]; cutoffDays: number; cutoffTime: string; closed?: { from: string; to: string }[] };
+  availability?: {
+    daily: boolean;
+    /** Every start time the product uses (for dated products: the union of the dates' times). */
+    startTimes: string[];
+    cutoffDays: number; cutoffTime: string;
+    closed?: { from: string; to: string }[];
+    /** Products that run on announced dates only (e.g. a teacher's calendar
+     *  released every three months): the open dates and each date's start times. */
+    dates?: { date: string; times: string[] }[];
+  };
   /** One line for the price block: what the headline price buys, e.g.
    *  "Private room · Meal and drinks · English interpreter". Localised. */
   includedShort?: string;
@@ -141,7 +165,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "dietary";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "dietary" | "interpreter" | "skipSiteFaq";
 
 export interface Tour {
   slug: string;
@@ -196,10 +220,111 @@ export const categories: Category[] = [
   { slug: "swordsmith", title: "Swordsmith", tag: "Traditional", mark: "刀", img: "/images/cat-sword.jpg",
     lead: "The Japanese sword is a thousand years of metallurgy in a single curve. Visit a working forge, watch a licensed swordsmith fold steel the traditional way, and hold history — guided and translated throughout." },
   { slug: "anime-nail-art", title: "Anime nail art", tag: "Pop culture", mark: "爪", img: "/images/cat-nail.jpg",
-    lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },
+    lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },  { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
+    lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
 ];
 
 export const experiences: Experience[] = [
+  {
+    // Kanji Art Japan (teacher: Marie). Built from the partner's condition sheet,
+    // 2026-09. In "preview" until the open questions are answered and real
+    // reviews arrive; the dates are the teacher's confirmed slots (◎ only) and
+    // are replaced every three months.
+    slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy", bookingType: "request", status: "preview",
+    title: "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
+    tagline: "Two hours with a Tokyo brush-lettering teacher. Tell her what your name means, choose the kanji that carries it, learn the strokes, and brush your own piece on a shikishi board — sealed with a red stamp and yours to take home on its wooden stand.",
+    duration: "About 2 hours", price: "¥16,800", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
+    img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
+    gallery: [
+      { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },
+      { img: "/images/kanji-guests-works.jpg", alt: "Two guests holding their finished kanji, 灯 (light) and 夢 (dream)" },
+      { img: "/images/kanji-works-table.jpg", alt: "Finished pieces laid out to dry, each with a red seal" },
+      { img: "/images/kanji-brush-focus.jpg", alt: "A guest concentrating on his final piece" },
+      { img: "/images/kanji-teacher-yume.jpg", alt: "The teacher holding 夢 (dream), brushed in a playful style" },
+      { img: "/images/kanji-writing-together.jpg", alt: "Two guests practising at a shared table" },
+      { img: "/images/kanji-teacher-guides.jpg", alt: "The teacher guiding a guest's practice sheet" },
+      { img: "/images/kanji-teacher-shows.jpg", alt: "The teacher showing a finished character" },
+      { img: "/images/kanji-brush-closeup.jpg", alt: "Close-up of a brush on practice paper" },
+      { img: "/images/kanji-teacher-check.jpg", alt: "The teacher checking a guest's practice sheets" },
+      { img: "/images/kanji-studio.jpg", alt: "The bright studio with a long shared table" },
+    ],
+    galleryNote: "Photos from the teacher's trial classes; the studio may differ by date.",
+    partySize: { min: 2, max: 4 },
+    availability: {
+      daily: false, startTimes: ["10:30", "13:30", "16:00"], cutoffDays: 7, cutoffTime: "18:00",
+      dates: [
+        { date: "2026-10-15", times: ["13:30", "16:00"] },
+        { date: "2026-11-17", times: ["10:30"] },
+        { date: "2026-11-25", times: ["16:00"] },
+        { date: "2026-12-01", times: ["10:30"] },
+        { date: "2026-12-07", times: ["13:30", "16:00"] },
+        { date: "2026-12-17", times: ["13:30", "16:00"] },
+        { date: "2026-12-23", times: ["13:30", "16:00"] },
+      ],
+    },
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Taught in English",
+    skipSiteFaq: true,
+    includedShort: "Teacher-led class · All tools · Your finished piece + stand",
+    cancellation: "Free up to 72 hours before your start time; after that, and for no-shows, 100%. Days are counted in Japan time. Date changes are free up to 3 days before, if another date has room. The studio is booked by the hour, so a late arrival shortens practice rather than extending the class. If the teacher has to cancel, you hear by 17:00 the day before and receive a full refund.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
+    highlights: [
+      { icon: "chat", title: "Kanji chosen for your name", body: "Tell us what your name means. The teacher suggests characters that carry that meaning, and you choose the one that feels like yours." },
+      { icon: "photo", title: "A piece you take home", body: "Your final work on a shikishi board, sealed with a red stamp and set on a wooden stand — made and handed over the same day." },
+      { icon: "group", title: "Just your group", body: "Classes are not shared with other guests: two to four people, one teacher, one long table." },
+    ],
+    included: [
+      "A two-hour class led by the teacher in simple English",
+      "All tools for the class: brush, ink, inkstone, felt mat and practice paper — and an apron",
+      "Your finished piece on a shikishi board, with a wooden display stand to take home",
+      "The red seal on your work, and time for photos at the end",
+      "Tax included — nothing is added on the day",
+    ],
+    notIncluded: [
+      "Transport to the studio (meet on site)",
+      "An interpreter guide — the teacher runs the class in English",
+      "The teacher's postcards and prints, on sale at the studio if you would like one",
+    ],
+    schedule: [
+      { time: "10:30", title: "Welcome", body: "Aprons on, and a short introduction to the brush, ink and paper." },
+      { time: "10:40", title: "Brush practice", body: "The basic strokes: pressure, speed and the pause at the end of a line.", img: "/images/kanji-brush-closeup.jpg" },
+      { time: "11:00", title: "Choosing your kanji", body: "From your name and its meaning, the teacher proposes characters and explains each one; you pick yours.", img: "/images/kanji-teacher-check.jpg" },
+      { time: "11:15", title: "Design and practice", body: "Choose a style — classic or playful — and practise the character until it feels right.", img: "/images/kanji-teacher-demo.jpg" },
+      { time: "11:45", title: "Your final piece", body: "Brush the final version on a shikishi board.", img: "/images/kanji-brush-focus.jpg" },
+      { time: "12:15", title: "Seal and photos", body: "The red seal goes on, then photos with your work before it goes on its stand.", img: "/images/kanji-guests-works.jpg" },
+      { time: "12:30", title: "End of the class" },
+    ],
+    venue: {
+      known: ["A rental studio in Shinjuku, Tokyo — the exact address comes with your confirmation", "Tables and chairs; a bright room with a long shared table", "Meet the teacher at the studio 5 minutes before the start", "Ink stains: wear clothes you don't mind marking — aprons are provided"],
+      afterBooking: ["The studio's name and address", "Directions from the nearest station", "The teacher's contact for the day"],
+      img: "/images/kanji-studio.jpg", alt: "The studio with its long shared table",
+    },
+    notesLabel: "Everyone's name and what it means, if you know — plus anything the teacher should know (optional)",
+    notesHint: "e.g. Emma — \"whole, universal\"; Liam — \"strong-willed protector\". One of us is left-handed…",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick one of the listed dates and a start time. Add each guest's name and its meaning if you know it." },
+      { title: "We reply within 24 hours", body: "With whether the class is free on that date, the price and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. We then ask for what the teacher needs: every guest's name and its meaning, nationality, and a phone number for the day." },
+    ],
+    faq: [
+      { q: "Do I need any experience?", a: "No. The class starts with the basic strokes, and the teacher adjusts the pace to your group." },
+      { q: "How do you choose kanji for a name that isn't Japanese?", a: "By meaning. Tell us what your name means, as far as you know; the teacher suggests characters that carry it and explains each one. If you would rather not use your name, choose a word instead — light, dream, courage." },
+      { q: "What do I take home?", a: "Your final piece on a shikishi board, sealed with a red stamp, and a wooden stand to display it." },
+      { q: "Which language is the class taught in?", a: "English — the teacher runs the class herself in simple English. No interpreter guide comes with this class." },
+      { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
+      { q: "I'm travelling alone. Can I join?", a: "Classes run for two to four people. If you are on your own, say so in your request and we will ask the teacher whether a class for one is possible and at what price." },
+      { q: "What should I wear?", a: "Clothes you don't mind getting ink on. Aprons are provided." },
+      { q: "How does booking work?", a: "Choose a listed date and send a request; we reply within 24 hours with the price and conditions. Sending the request costs nothing. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+      { q: "What if we are late?", a: "The studio is booked by the hour, so the class ends on time and practice is shorter. Tell us as soon as you know you are running late." },
+      { q: "Is transport included?", a: "No. You meet the teacher at the studio in Shinjuku; the address and directions come with your confirmation." },
+    ],
+    whatYoullDo: ["Learn the basic brush strokes", "Choose kanji that carry your name's meaning", "Brush your final piece on a shikishi board", "Take it home, sealed and on its stand"],
+    master: { title: "Your teacher", bio: "Marie teaches fude-moji — expressive brush lettering — in Tokyo and runs every class herself.", quote: "" },
+    itinerary: ["10:30 — Welcome and tools", "10:40 — Brush practice", "11:00 — Choosing your kanji", "11:15 — Design and practice", "11:45 — Final piece", "12:15 — Seal and photos"],
+    goodToKnow: ["Ages 10 and over; children pay the adult price.", "Wear clothes you don't mind marking; aprons are provided.", "Taught in simple English."],
+    story: { heading: "Why a name in kanji", body: "Kanji carry meaning, not just sound. Choosing characters for a name is how many Japanese parents name their children — and it turns a souvenir into something that is actually about you." },
+  },
   {
     slug: "sushi-masterclass", city: "tokyo", category: "sushi",
     partySize: { min: 1, max: 6 },
@@ -496,7 +621,7 @@ import type { Lang } from "@/lib/i18n";
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map", "taxIncluded", "cancellationTiers", "dietary"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map", "taxIncluded", "cancellationTiers", "dietary", "interpreter", "skipSiteFaq"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);
@@ -528,6 +653,12 @@ export function catalogFor(lang: Lang) {
     cities: full.cities.filter((c) => experiences.some((e) => e.city === c.slug)),
     categories: full.categories.filter((c) => experiences.some((e) => e.category === c.slug)),
   };
+}
+
+/** Experiences in "preview": built, reachable by URL for sign-off, never listed. */
+export function previewsFor(lang: Lang) {
+  const full = fullCatalog(lang);
+  return { experiences: full.experiences.filter(isPreview), cities: full.cities };
 }
 
 const CANCELLATIONS: Record<Lang, string> = {

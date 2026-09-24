@@ -28,8 +28,9 @@ export function StickyRequestBar({
   }, [watchHero, watchTarget]);
 
   const plan = b?.pricing?.plans?.find((p) => p.id === b.plan);
-  const shownPrice = b && plan ? yen(b.estimate?.total ?? plan.regular) : price;
-  const shownCondition = b && plan && D ? `${plan.label} · ${D.estimateFor(b.guestsNumber)}` : condition;
+  const perPerson = !!b && !plan && !!b.estimate;
+  const shownPrice = b && plan ? yen(b.estimate?.total ?? plan.regular) : perPerson ? yen(b!.estimate!.total) : price;
+  const shownCondition = b && plan && D ? `${plan.label} · ${D.estimateFor(b.guestsNumber)}` : perPerson && D ? D.estimateFor(b!.guestsNumber) : condition;
 
   const show = heroGone && !targetVisible;
   return (
