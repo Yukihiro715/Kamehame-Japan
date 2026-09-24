@@ -356,6 +356,20 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </div>
             </section>
 
+            {/* ⑥′ The teacher, in their own words */}
+            {exp.teacher && (
+              <section className="xp-section" id="teacher">
+                <h2>{D.teacherH}</h2>
+                <div className="xp-teacher">
+                  <img src={exp.teacher.img} alt={exp.teacher.alt} loading="lazy" />
+                  <div>
+                    <ul className="xp-teacher-creds">{exp.teacher.credentials.map((c) => <li key={c}><Check size={14} /> {c}</li>)}</ul>
+                    <blockquote>{exp.teacher.comment}</blockquote>
+                  </div>
+                </div>
+              </section>
+            )}
+
             {/* ⑪ Reviews — real ones when they exist; until then, how they are collected */}
             {hasReviews && (
               <section className="xp-section" id="reviews">

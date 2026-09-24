@@ -83,6 +83,9 @@ export interface Experience {
   flow?: { title: string; body: string }[];
   /** Leaves out the site-wide FAQ entries (interpreter, request, transport). */
   skipSiteFaq?: boolean;
+  /** The person who teaches or hosts, in their own words. No name on purpose
+   *  where the partner's brand must not be searchable. */
+  teacher?: { img: string; alt: string; credentials: string[]; comment: string };
   whatYoullDo: string[];
   master: { title: string; bio: string; quote: string };
   itinerary: string[];
@@ -295,13 +298,18 @@ export const experiences: Experience[] = [
       "Transport to the studio (meet on site)",
       "The teacher's postcards and prints, on sale at the studio if you would like one",
     ],
+    teacher: {
+      img: "/images/kanji-teacher-portrait.jpg", alt: "Your teacher, holding a character she brushed",
+      credentials: ["Seven years teaching brush-lettering art (fude-moji)", "Over 25 years making art — pastel, watercolour and more"],
+      comment: "Brush, ink and kanji hold a beauty and depth that are uniquely Japanese. Through this class I hope you'll touch Japanese culture and enjoy expressing yourself freely, putting your name and your feelings into a single character. If it's your first time, don't worry: I support each of you carefully, at your own pace.",
+    },
     schedule: [
-      { time: "10:30", title: "Welcome", body: "Aprons on, and a short introduction to the brush, ink and paper." },
-      { time: "10:40", title: "Brush practice", body: "The basic strokes: pressure, speed and the pause at the end of a line.", img: "/images/kanji-brush-closeup.jpg" },
-      { time: "11:00", title: "Choosing your kanji", body: "From your name and its meaning, the teacher proposes characters and explains each one; you pick yours.", img: "/images/kanji-teacher-check.jpg" },
-      { time: "11:15", title: "Design and practice", body: "Choose a style — classic or playful — and practise the character until it feels right.", img: "/images/kanji-teacher-demo.jpg" },
-      { time: "11:45", title: "Your final piece", body: "Brush the final version on a shikishi board.", img: "/images/kanji-brush-focus.jpg" },
-      { time: "12:15", title: "Seal and photos", body: "The red seal goes on, then photos with your work before it goes on its stand.", img: "/images/kanji-guests-works.jpg" },
+      { time: "10:30", title: "Welcome", body: "What the class involves, and an introduction to the brush, ink and paper." },
+      { time: "10:50", title: "Brush practice and choosing your kanji", body: "The basic strokes, then the teacher proposes characters from your name and its meaning; you pick yours.", img: "/images/kanji-brush-closeup.jpg" },
+      { time: "11:10", title: "Design and one-to-one guidance", body: "Choose a style and practise it, with individual guidance from the teacher.", img: "/images/kanji-teacher-demo.jpg" },
+      { time: "11:40", title: "Your final piece", body: "A full-size practice run, then the final version on a shikishi board.", img: "/images/kanji-brush-focus.jpg" },
+      { time: "12:00", title: "Seal, sharing and photos", body: "The red seal goes on; show each other your work and take photos.", img: "/images/kanji-guests-works.jpg" },
+      { time: "12:15", title: "Time to spare", body: "Extra practice, or a chat with the teacher before you go.", img: "/images/kanji-teacher-yume.jpg" },
       { time: "12:30", title: "End of the class" },
     ],
     venue: {
@@ -330,7 +338,7 @@ export const experiences: Experience[] = [
     ],
     whatYoullDo: ["Learn the basic brush strokes", "Choose kanji that carry your name's meaning", "Brush your final piece on a shikishi board", "Take it home, sealed and on its stand"],
     master: { title: "Your teacher", bio: "Marie teaches fude-moji — expressive brush lettering — in Tokyo and runs every class herself.", quote: "" },
-    itinerary: ["10:30 — Welcome and tools", "10:40 — Brush practice", "11:00 — Choosing your kanji", "11:15 — Design and practice", "11:45 — Final piece", "12:15 — Seal and photos"],
+    itinerary: ["10:30 — Welcome", "10:50 — Brush practice and choosing your kanji", "11:10 — Design and one-to-one guidance", "11:40 — Your final piece", "12:00 — Seal, sharing and photos", "12:15 — Time to spare"],
     goodToKnow: ["Ages 10 and over; children pay the adult price.", "Wear clothes you don't mind marking; aprons are provided.", "Taught in simple English."],
     story: { heading: "Why a name in kanji", body: "Kanji carry meaning, not just sound. Choosing characters for a name is how many Japanese parents name their children — and it turns a souvenir into something that is actually about you." },
   },

@@ -775,6 +775,13 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 .xp-dates li { display:flex; gap:10px; align-items:baseline; font-variant-numeric:tabular-nums; }
 .xp-dates b { font-weight:600; min-width:92px; }
 .xp-dates span { color:#4a463e; font-size:13px; }
+.xp-teacher { display:grid; grid-template-columns:200px 1fr; gap:24px; align-items:start; }
+.xp-teacher img { width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:14px; display:block; }
+.xp-teacher-creds { list-style:none; margin:0 0 14px; padding:0; display:grid; gap:6px; font-size:14.5px; font-weight:600; }
+.xp-teacher-creds li { display:flex; gap:8px; align-items:flex-start; }
+.xp-teacher-creds svg { color:var(--kame); flex:none; margin-top:3px; }
+.xp-teacher blockquote { margin:0; padding:14px 18px; border-left:3px solid var(--kame); background:#faf8f3; border-radius:0 12px 12px 0; font-size:14.5px; line-height:1.85; color:#3d3a34; }
+@media(max-width:620px){ .xp-teacher { grid-template-columns:104px 1fr; gap:14px; align-items:center; } .xp-teacher > div { display:contents; } .xp-teacher-creds { margin:0; font-size:13.5px; } .xp-teacher blockquote { grid-column:1 / -1; } }
 .xp-dates-note { display:block; margin-top:8px; font-size:12px; color:var(--muted); }
 .review-more { justify-self:start; margin-top:4px; background:var(--white); border:2px solid var(--ink); padding:10px 18px; font:inherit; font-size:12.5px; font-weight:700; cursor:pointer; }
 .review-more:hover { background:var(--ink); color:var(--white); }
