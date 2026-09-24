@@ -48,7 +48,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       if (plan) data.plan = `${plan.label} — ${plan.name}`;
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
       data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
-      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${b.estimate.peak ? "peak season" : "regular season"}, ${b.guestsNumber} guests)`;
+      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${b.estimate.peak ? D.seasonPeak : D.seasonRegular}, ${D.estimateFor(b.guestsNumber)})`;
       delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
     }
     setStatus("sending");
