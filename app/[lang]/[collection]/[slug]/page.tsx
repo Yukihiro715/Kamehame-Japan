@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Soup, Check } from "lucide-react";
+import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -313,7 +313,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <p className="xp-dietary-lead">{D.dietaryLead}</p>
                 <ul className="xp-dietary">
                   {exp.dietary.map((k) => {
-                    const Icon = k === "vegetarian" ? Leaf : k === "glutenFree" ? WheatOff : Soup;
+                    const Icon = k === "vegetarian" ? Leaf : k === "glutenFree" ? WheatOff : k === "steakSet" ? Beef : UtensilsCrossed;
                     return (
                       <li key={k}>
                         <span className="xp-dietary-icon"><Icon size={20} /></span>

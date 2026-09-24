@@ -34,7 +34,7 @@ Tax and service charge are included. Nothing is added on the day.
 
 WHAT'S INCLUDED
 - A private tatami room for your party
-- The multi-course Japanese dinner (seasonal menu)
+- The multi-course Japanese dinner (seasonal menu) — or, if you told us: vegetarian / gluten-free / wagyu steak set
 - Free-flow drinks, including alcohol
 - {By plan — Select: one geiko or maiko / Signature: one geiko or maiko + live shamisen / Private Reserve: two geiko or maiko + live shamisen}: conversation, one dance, ozashiki games
 - An interpreter guide throughout — English, Spanish or French (as chosen in the request)
@@ -44,7 +44,7 @@ NOT INCLUDED
 - Anything beyond your plan. If you would like live shamisen or a second host, reply and we re-quote on the matching plan (Signature / Private Reserve)
 
 MEETING
-Gion / Higashiyama, Kyoto, about 3 minutes on foot from Gion-Shijo Station.
+Gion / Higashiyama, Kyoto, about 8 minutes on foot from Gion-Shijo Station.
 The house's name and street address come with your confirmation, together with a map and your guide's contact.
 
 CANCELLATION
@@ -75,7 +75,7 @@ hello@kamehame-japan.com
 > プランと料金:{プラン名}、{n}名で合計 ¥{total}({通常期/繁忙期}料金。税・サービス料込。当日の追加なし)
 > 含まれるもの:貸切座敷/和食コース/飲み放題(アルコール含む)/プランに応じた出演者(Select:芸妓または舞妓1名/Signature:1名+地方の生三味線/Private Reserve:2名+地方の生三味線。歓談・舞・お座敷遊び)/通訳ガイド(英・西・仏から選択)/記念撮影
 > 含まれないもの:プラン外のもの。生三味線や2名出演を希望なら該当プランで再見積(単品オプションの案内はしない)
-> 集合:祇園・東山エリア、祇園四条駅から徒歩約3分。店名・住所・地図・ガイド連絡先は確定通知でお伝えします
+> 集合:祇園・東山エリア、祇園四条駅から徒歩約8分。店名・住所・地図・ガイド連絡先は確定通知でお伝えします
 > キャンセル:入金で予約確定、以降は当社規定(14日前まで無料、13〜4日前50%、3日前以降・無連絡100%。日本時間で起算)。正式手配は遅くとも開催14日前までに行う。芸舞妓が手配できなかった場合は全額返金
 > 確定するには:{期限}までに決済リンクからお支払いください(銀行振込も可)。お問い合わせ時と同じ氏名・メールアドレスで決済してください
 > 入金確認後1営業日以内に、住所・地図・ガイド連絡先を記載した確定通知を送ります
