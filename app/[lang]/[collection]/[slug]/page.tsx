@@ -398,7 +398,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <section className="xp-section">
               <h2>{D.scheduleH}</h2>
               {exp.interactionTime && exp.interactionTime !== exp.duration && (
-                <p className="xp-note">{D.interactionNote(exp.duration, exp.interactionTime)}</p>
+                <p className="xp-note">{exp.interactionNote ?? D.interactionNote(exp.duration, exp.interactionTime)}</p>
               )}
               {exp.schedule && avail && (
                 <p className="xp-note xp-note-sample">{D.scheduleSample(avail.startTimes.includes("18:00") ? "18:00" : avail.startTimes[0])}</p>
@@ -450,7 +450,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                       src={`https://maps.google.com/maps?q=${exp.map.lat},${exp.map.lng}&z=${exp.map.zoom ?? 15}&hl=${lang === "zh-tw" ? "zh-TW" : lang}&output=embed`}
                       title={D.venueH} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen
                     />
-                    <figcaption><MapPin size={13} /> {D.mapNote}</figcaption>
+                    <figcaption><MapPin size={13} /> {exp.mapNote ?? D.mapNote}</figcaption>
                   </figure>
                 )}
                 <div className="xp-venue-cols">

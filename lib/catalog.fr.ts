@@ -238,6 +238,8 @@ export const experiencesFr: Experience[] = [
     story: { heading: "Le monde du karyukai", body: "Le « monde des fleurs et des saules » de Kyoto repose depuis trois siècles sur la recommandation et la confiance. Une geiko n'est pas une artiste à louer mais une artiste dont les soirées se prolongent par les relations entre maisons de thé et clients fidèles. Être assis dans cette pièce, avec une conversation qui coule dans votre propre langue, est l'accès le plus rare que Kyoto puisse offrir." },
     availabilityNote: "Fermé pendant les fêtes du Nouvel An.",
     interactionTime: "environ 1 h 45",
+    interactionNote: "2 heures au total, dont environ 1 h 45 avec votre geiko ou maiko à table.",
+    mapNote: "Le repère indique la gare de Gion-Shijo (ligne Keihan) ; le lieu est à environ 8 minutes à pied. L'adresse exacte vous parvient avec la confirmation.",
     includedShort: "Salle privée · Repas et boissons · Guide-interprète (FR / EN / ES)",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "Une geiko ou maiko", blurb: "La soirée essentielle ; la danse est accompagnée d'une musique enregistrée." },

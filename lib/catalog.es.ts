@@ -239,6 +239,8 @@ export const experiencesEs: Experience[] = [
     story: { heading: "El mundo del karyukai", body: "El «mundo de la flor y el sauce» de Kioto funciona desde hace tres siglos a base de presentación y confianza. Una geiko no es una artista de alquiler, sino una maestra cuyas veladas se conceden a través de relaciones entre casas de té y mecenas. Sentarte en esa sala, con la conversación fluyendo en tu idioma, es el acceso más raro que ofrece Kioto." },
     availabilityNote: "Cerrado durante las fiestas de Año Nuevo.",
     interactionTime: "unas 1 h 45 min",
+    interactionNote: "2 horas en total; la geiko o maiko está en tu mesa unas 1 h 45 min.",
+    mapNote: "El marcador indica la estación de Gion-Shijo (línea Keihan); el local está a unos 8 minutos a pie. La dirección exacta llega con la confirmación.",
     includedShort: "Sala privada · Comida y bebida · Guía intérprete (ES / EN / FR)",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "Una geiko o maiko", blurb: "La velada esencial; la danza se acompaña con música grabada." },

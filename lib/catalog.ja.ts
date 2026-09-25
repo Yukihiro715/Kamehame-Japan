@@ -243,6 +243,8 @@ export const experiencesJa: Experience[] = [
     story: { heading: "花街という世界", body: "京都の花街は、三百年にわたって紹介と信用で動いてきました。芸妓は雇われて演じる人ではなく、茶屋と馴染み客との関係の上に一夜が成り立つ芸の人です。その部屋に座り、しかも会話がご自身の言葉で流れる。京都が開く扉の中で、これがもっとも稀なものです。" },
     availabilityNote: "年末年始はお休みです。",
     interactionTime: "約1時間45分",
+    interactionNote: "全体で2時間、そのうち約1時間45分は芸妓・舞妓がお席でご一緒します。",
+    mapNote: "ピンは京阪 祇園四条駅です。会場は駅から徒歩約8分。正確な住所は予約確定後にお伝えします。",
     includedShort: "貸切のお座敷 · 食事と飲み放題 · 通訳ガイド(英・西・仏)",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "芸妓または舞妓 1名", blurb: "ベーシックな貸切お座敷。舞の伴奏は録音音源です。" },

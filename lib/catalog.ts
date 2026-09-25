@@ -162,6 +162,10 @@ export interface Experience {
   schedule?: { time: string; title: string; body?: string; img?: string }[];
   /** Time actually spent with the practitioner, when shorter than `duration`. */
   interactionTime?: string;
+  /** Replaces the generic "N in total, M with your host" line when the host needs naming. */
+  interactionNote?: string;
+  /** Replaces the generic map caption, e.g. to say what the pin marks. */
+  mapNote?: string;
   /** What is known before booking vs. shared only in the confirmation. */
   venue?: { known: string[]; afterBooking: string[]; img?: string; alt?: string };
   /** Product-specific questions, confirmed with the venue. Site-level
@@ -456,6 +460,8 @@ export const experiences: Experience[] = [
     },
     taxIncluded: true,
     interactionTime: "about 1 hour 45 minutes",
+    interactionNote: "2 hours in total; your geiko or maiko is at your table for about 1 hour 45 minutes of it.",
+    mapNote: "The pin marks Gion-Shijo Station (Keihan line); the venue is about 8 minutes on foot from there. The exact address comes with your confirmation.",
     availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 7, cutoffTime: "17:00", closed: [{ from: "12-29", to: "01-03" }] },
     availabilityNote: "Closed over the New Year holidays.",
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },

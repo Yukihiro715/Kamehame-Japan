@@ -238,6 +238,8 @@ export const experiencesZh: Experience[] = [
     story: { heading: "花柳界的世界", body: "京都的「花柳界」三百年來靠引薦與信任運作。藝妓不是可以雇用的表演者，而是靠茶屋與熟客之間的關係延續夜晚的藝術家。坐在那間房裡，對話還能以您自己的語言流動，是京都所能給予最難得的一種進入。" },
     availabilityNote: "新年假期期間休息。",
     interactionTime: "約1小時45分",
+    interactionNote: "全程2小時，其中約1小時45分鐘由藝妓或舞妓在席間相伴。",
+    mapNote: "地圖標記為京阪祇園四條站，會場距車站步行約8分鐘。正確地址將隨確認通知一併告知。",
     includedShort: "私人包廂 · 餐點與飲料 · 口譯導遊（英／西／法）",
     planText: {
       select: { label: "Select", name: "Private Geisha Evening", performers: "一位藝妓或舞妓", blurb: "最基本的私人晚宴；舞蹈以錄音伴奏。" },
