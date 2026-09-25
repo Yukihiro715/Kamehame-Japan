@@ -181,6 +181,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
                 </select>
               </label>
             ) : <span />}
+            <small className="form-hint full">{F.altDateHint}</small>
           </div>
           <div className={card ? "form-row" : "form-row two keep"}>
             {!card && <div className="field">

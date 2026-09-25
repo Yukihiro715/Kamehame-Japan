@@ -31,8 +31,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   const plan = plans.find((p) => p.id === b.plan);
   const expand = () => {
     setOpen(true);
-    // After the fields render: bring them into view and start on the first one
-    // still missing (the date, which lives above, or the name).
+    // After the fields render: without a date, open the date above first;
+    // otherwise bring the new fields into view.
     window.setTimeout(() => {
       const date = document.querySelector<HTMLElement>("#bk-date");
       if (!b.date && date) {
@@ -40,8 +40,9 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         date.focus({ preventScroll: true });
         return;
       }
-      more.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      more.current?.querySelector<HTMLInputElement>("input[name=name]")?.focus({ preventScroll: true });
+      // Start the view at the second-choice date, the first new field; no
+      // focus, since focusing a date field would pop its calendar open.
+      more.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 60);
   };
   const jump = () => {

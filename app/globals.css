@@ -1369,3 +1369,4 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .bk-form button.bk-cta[disabled] { opacity:.6; cursor:wait; }
 .bk-form .form-after { margin:0; font-size:11.5px; line-height:1.6; }
 .bk-form .form-error { border-width:1px; border-radius:10px; }
+.form-row .form-hint.full { grid-column:1 / -1; margin-top:-4px; }
