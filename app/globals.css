@@ -594,6 +594,28 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 .form-privacy { font-size:11.5px; color:var(--muted); }
 .form-error { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0; padding:12px 14px; border:2px solid var(--kame); background:#fff4e8; font-size:13px; }
 .form-error a { font-weight:600; color:var(--ink); }
+/* --- Request received page --- */
+.thanks-page { background:var(--white); }
+.thanks { max-width:720px; margin:0 auto; padding:56px 22px 88px; }
+.thanks-head { text-align:center; margin-bottom:34px; }
+.thanks-check { display:inline-grid; place-items:center; width:76px; height:76px; border-radius:50%; background:#1f7a3f; color:#fff; margin-bottom:18px; box-shadow:0 0 0 10px #e3f2e8; }
+.thanks-head h1 { margin:0 0 10px; font-family:var(--font-display); font-weight:400; font-size:clamp(30px,4.4vw,44px); letter-spacing:.02em; text-transform:uppercase; line-height:1.1; }
+:is([lang="ja"], [lang="zh-tw"]) .thanks-head h1 { text-transform:none; font-family:inherit; font-weight:700; font-size:clamp(24px,3.4vw,32px); }
+.thanks-head p { margin:0; font-size:16px; line-height:1.7; color:#3d3a34; overflow-wrap:anywhere; }
+.thanks-card { border:1px solid #e3ded3; border-radius:14px; background:#fff; padding:20px 22px; margin-bottom:16px; }
+.thanks-card h2 { margin:0 0 12px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+.thanks-card dl { margin:0; display:grid; gap:0; }
+.thanks-card dl > div { display:grid; grid-template-columns:130px 1fr; gap:12px; padding:9px 0; border-bottom:1px solid #f0ece3; font-size:14.5px; }
+.thanks-card dl > div:last-child { border-bottom:0; }
+.thanks-card dt { color:var(--muted); }
+.thanks-card dd { margin:0; font-weight:600; }
+.thanks-steps { list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+.thanks-steps li { display:flex; gap:12px; align-items:flex-start; font-size:14.5px; line-height:1.7; }
+.thanks-steps svg { flex:none; color:var(--kame); margin-top:3px; }
+.thanks-actions { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:28px; }
+.thanks-btn { display:inline-flex; align-items:center; gap:8px; padding:13px 20px; border-radius:10px; border:1px solid var(--ink); color:var(--ink); background:#fff; font-weight:700; font-size:14px; text-decoration:none; }
+.thanks-btn.primary { background:var(--kame); border-color:var(--kame); }
+@media(max-width:620px){ .thanks { padding-top:40px; } .thanks-card dl > div { grid-template-columns:96px 1fr; } .thanks-actions { flex-direction:column; } .thanks-btn { justify-content:center; } }
 .form-done { display:flex; gap:14px; align-items:flex-start; border:2px solid var(--ink); background:var(--white); padding:22px; box-shadow:6px 6px 0 var(--kame); }
 .form-done svg { color:var(--kame); flex:none; margin-top:2px; }
 .form-done b { display:block; margin-bottom:6px; font-family:var(--font-display); font-size:16px; letter-spacing:.04em; text-transform:uppercase; }

@@ -5,6 +5,7 @@ import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 import { eventId, track } from "@/lib/analytics";
+import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
 import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
@@ -59,10 +60,10 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
         body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug }),
       });
       const json = (await res.json()) as { ok: boolean };
-      setStatus(json.ok ? "sent" : "failed");
-      if (json.ok) {
+      if (!json.ok) { setStatus("failed"); return; }
+      {
         // GTM turns this into the GA4 / Ads conversion; no tag IDs live here.
-        track("enquiry_sent", {
+        const event = {
           // Unique per submission: Google Ads uses it as the transaction ID so a
           // double submit or a reload never counts twice.
           enquiry_id: eventId("enq"),
@@ -77,8 +78,30 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
           party_size: Number(data.party) || undefined,
           value: b?.estimate?.total,
           currency: b?.estimate ? "JPY" : undefined,
-        });
-        form.reset();
+        };
+        // Hand over to the confirmation page, which fires the conversion once it
+        // has loaded (so leaving this page cannot cut the tag off) and shows a
+        // clear "received". If storage is blocked, confirm here instead.
+        const sent: SentEnquiry = {
+          kind: kind === "trade" ? "trade" : "guest",
+          email: data.email?.trim() || undefined,
+          experienceTitle: experience?.title,
+          experienceUrl: experience ? window.location.pathname : undefined,
+          // Readable dates for the page ("15 Oct 10:30"), not the raw ISO sent to the mailbox.
+          dates: b ? [b.date && `${fmtDate(b.date, lang)} ${b.time}`, b.altDate && `${fmtDate(b.altDate, lang)} ${b.altTime}`].filter(Boolean).join(" / ") || undefined : data.dates || undefined,
+          guests: b ? D.estimateFor(b.guestsNumber) : undefined,
+          estimate: b?.estimate ? yen(b.estimate.total) : undefined,
+          event,
+        };
+        try {
+          sessionStorage.setItem(SENT_KEY, JSON.stringify(sent));
+          window.location.assign(`/${lang}/thanks/`);
+          return;
+        } catch {
+          track("enquiry_sent", event);
+          setStatus("sent");
+          form.reset();
+        }
       }
     } catch {
       setStatus("failed");
