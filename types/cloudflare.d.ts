@@ -15,6 +15,8 @@ declare module "cloudflare:workers" {
     /** Resend API key. When present, enquiries go out through Resend (which
      *  can also write to the visitor); otherwise through the send_email binding. */
     RESEND_API_KEY?: string;
+    /** Slack Incoming Webhook for new-enquiry alerts (optional). */
+    SLACK_WEBHOOK_URL?: string;
     DB?: unknown;
   };
 }

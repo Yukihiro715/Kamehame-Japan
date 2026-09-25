@@ -2,6 +2,7 @@ import { CONTACT_EMAIL, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
 import { acknowledgement } from "@/lib/mail-copy";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
+import { notifySlack, slackMessage } from "@/lib/slack";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -53,6 +54,12 @@ function bodyFor(e: Enquiry): string {
     "",
     e.message,
   ].filter((l): l is string => typeof l === "string").join("\n");
+}
+
+/** The experience's Japanese title, for the team's Slack alert. */
+function jaTitle(e: Enquiry): string | undefined {
+  if (!e.experience) return undefined;
+  return catalogFor("ja").experiences.find((x) => x.slug === e.experience)?.title;
 }
 
 /** The experience's title in the visitor's language, for the acknowledgement. */
@@ -169,9 +176,13 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ ok: false, error: "unconfigured", fallback }, { status: 503 });
   }
 
+  // The team's Slack alert, in Japanese, whatever the page language was.
+  const alert = (delivered: boolean) => notifySlack(cf.env.SLACK_WEBHOOK_URL, slackMessage(enquiry, jaTitle(enquiry), delivered));
+
   if (resendKey) {
     try {
       await sendViaResend(resendKey, to, enquiry);
+      await alert(true);
       return Response.json({ ok: true });
     } catch (err) {
       console.error("contact: resend failed, trying send_email", err);
@@ -180,10 +191,12 @@ export async function POST(request: Request): Promise<Response> {
   if (cf.env.EMAIL) {
     try {
       await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to)));
+      await alert(true);
       return Response.json({ ok: true });
     } catch (err) {
       console.error("contact: send_email failed", err);
     }
   }
+  await alert(false);
   return Response.json({ ok: false, error: "send_failed", fallback }, { status: 502 });
 }

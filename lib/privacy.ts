@@ -59,7 +59,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Who else sees it, and where",
         body: [
-          "Google Ireland / Google LLC process the measurement data described above, which can involve a transfer to the United States under the European Commission's standard contractual clauses and the EU–US Data Privacy Framework. Cloudflare serves the site and processes the technical request data any web server needs. Our email provider carries your enquiry. Each of them acts on our instructions only.",
+          "Google Ireland / Google LLC process the measurement data described above, which can involve a transfer to the United States under the European Commission's standard contractual clauses and the EU–US Data Privacy Framework. Cloudflare serves the site and processes the technical request data any web server needs. Our email provider carries your enquiry, and Slack shows our team a short alert (the experience, dates, party size and your first name — not your email address or notes). Each of them acts on our instructions only.",
         ],
       },
       {
@@ -125,7 +125,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "第三者への提供と保管場所",
         body: [
-          "上記の計測データはGoogle Ireland / Google LLCが処理し、欧州委員会の標準契約条項およびEU–US データプライバシーフレームワークに基づき米国へ移転される場合があります。サイトの配信はCloudflareが行い、ウェブサーバーが必要とする技術的なリクエスト情報を処理します。お問い合わせの配送はメール事業者が行います。いずれも当方の指示の範囲でのみ取り扱います。",
+          "上記の計測データはGoogle Ireland / Google LLCが処理し、欧州委員会の標準契約条項およびEU–US データプライバシーフレームワークに基づき米国へ移転される場合があります。サイトの配信はCloudflareが行い、ウェブサーバーが必要とする技術的なリクエスト情報を処理します。お問い合わせの配送はメール事業者が行い、社内への通知にはSlackを使います(体験・日程・人数・お名前のみで、メールアドレスや備考は含みません)。いずれも当方の指示の範囲でのみ取り扱います。",
         ],
       },
       {
@@ -191,7 +191,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Quién más lo ve, y dónde",
         body: [
-          "Google Ireland / Google LLC tratan los datos de medición descritos arriba, lo que puede implicar una transferencia a Estados Unidos al amparo de las cláusulas contractuales tipo de la Comisión Europea y del Marco de Privacidad de Datos UE–EE. UU. Cloudflare sirve el sitio y trata los datos técnicos de la petición que necesita cualquier servidor web. Nuestro proveedor de correo transporta su consulta. Todos actúan únicamente siguiendo nuestras instrucciones.",
+          "Google Ireland / Google LLC tratan los datos de medición descritos arriba, lo que puede implicar una transferencia a Estados Unidos al amparo de las cláusulas contractuales tipo de la Comisión Europea y del Marco de Privacidad de Datos UE–EE. UU. Cloudflare sirve el sitio y trata los datos técnicos de la petición que necesita cualquier servidor web. Nuestro proveedor de correo transporta su consulta y Slack muestra a nuestro equipo un aviso breve (experiencia, fechas, número de personas y su nombre, sin su correo ni sus notas). Todos actúan únicamente siguiendo nuestras instrucciones.",
         ],
       },
       {
@@ -257,7 +257,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Qui d'autre y a accès, et où",
         body: [
-          "Google Ireland / Google LLC traitent les données de mesure décrites ci-dessus, ce qui peut impliquer un transfert vers les États-Unis au titre des clauses contractuelles types de la Commission européenne et du cadre de protection des données UE–États-Unis. Cloudflare sert le site et traite les données techniques de requête dont tout serveur web a besoin. Notre prestataire de messagerie achemine votre demande. Chacun agit uniquement sur nos instructions.",
+          "Google Ireland / Google LLC traitent les données de mesure décrites ci-dessus, ce qui peut impliquer un transfert vers les États-Unis au titre des clauses contractuelles types de la Commission européenne et du cadre de protection des données UE–États-Unis. Cloudflare sert le site et traite les données techniques de requête dont tout serveur web a besoin. Notre prestataire de messagerie achemine votre demande, et Slack affiche à notre équipe une brève alerte (expérience, dates, nombre de personnes et prénom, sans votre adresse e-mail ni vos remarques). Chacun agit uniquement sur nos instructions.",
         ],
       },
       {
@@ -323,7 +323,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "還有誰會接觸到，以及在哪裡",
         body: [
-          "上述成效衡量資料由 Google Ireland / Google LLC 處理，可能依歐盟執委會的標準契約條款與歐盟—美國資料隱私框架傳輸至美國。網站由 Cloudflare 提供服務，並處理任何網頁伺服器所需的技術性請求資料。您的詢問由我們的電子郵件服務商傳送。以上各方均僅依我們的指示處理。",
+          "上述成效衡量資料由 Google Ireland / Google LLC 處理，可能依歐盟執委會的標準契約條款與歐盟—美國資料隱私框架傳輸至美國。網站由 Cloudflare 提供服務，並處理任何網頁伺服器所需的技術性請求資料。您的詢問由我們的電子郵件服務商傳送，並透過 Slack 向我們的團隊發送簡短通知（體驗、日期、人數與您的名字，不含電子郵件地址與備註）。以上各方均僅依我們的指示處理。",
         ],
       },
       {
