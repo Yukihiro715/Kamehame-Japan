@@ -1,24 +1,49 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { ArrowRight, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-react";
 import { DatePicker } from "@/components/site/date-picker";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
 import { yen } from "@/lib/pricing";
 import { RatingSummary } from "@/components/site/reviews";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 
+/** Wide screens: the card sits beside the page, so its button opens the rest
+ *  of the request (name, email, notes) inside the card. Phones: the card is
+ *  in the flow above the content, and the button scrolls to the form below. */
+const SIDE_BY_SIDE = "(min-width: 981px)";
+
 /** The booking box beside the page (below the photos on phones): plan, date,
- *  head count and a running estimate, then a button to the request form. */
+ *  head count and a running estimate, then the request itself. */
 export function BookingCard({ lang, headline }: { lang: Lang; headline: string }) {
   const b = useBooking();
   const T = t(lang);
   const D = T.detail;
   const F = T.form;
+  const [open, setOpen] = useState(false);
+  const more = useRef<HTMLDivElement>(null);
   if (!b) return null;
   const { pricing, experience: x } = b;
   const plans = pricing?.plans ?? [];
   const plan = plans.find((p) => p.id === b.plan);
+  const expand = () => {
+    setOpen(true);
+    // After the fields render: bring them into view and start on the first one
+    // still missing (the date, which lives above, or the name).
+    window.setTimeout(() => {
+      const date = document.querySelector<HTMLElement>("#bk-date");
+      if (!b.date && date) {
+        date.scrollIntoView({ behavior: "smooth", block: "center" });
+        date.focus({ preventScroll: true });
+        return;
+      }
+      more.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      more.current?.querySelector<HTMLInputElement>("input[name=name]")?.focus({ preventScroll: true });
+    }, 60);
+  };
   const jump = () => {
     const el = document.querySelector("#request-form") ?? document.querySelector("#request");
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -26,7 +51,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   };
 
   return (
-    <div className="bk-card" id="booking">
+    <div className={`bk-card${open ? " open" : ""}`} id="booking">
       <div className="bk-price">
         <small>{D.fromPrice}</small>
         <b>{plans.length ? yen(Math.min(...plans.map((p) => p.regular))) : headline}</b>
@@ -82,7 +107,16 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         )}
       </div>
 
-      <a className="bk-cta" href="#request-form" onClick={(e) => { e.preventDefault(); jump(); }}>{D.requestCta} <ArrowRight size={16} /></a>
+      {open ? (
+        <div className="bk-more" ref={more}>
+          <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: x.slug, title: x.title }} variant="card" />
+        </div>
+      ) : (
+        <a className="bk-cta" href="#request-form" onClick={(e) => {
+          e.preventDefault();
+          if (window.matchMedia(SIDE_BY_SIDE).matches) expand(); else jump();
+        }}>{D.requestCta} <ArrowRight size={16} /></a>
+      )}
       <ul className="bk-trust">
         <li><ShieldCheck size={14} /> {D.noPaymentNow}</li>
         <li><Clock3 size={14} /> {D.replyIn24}</li>

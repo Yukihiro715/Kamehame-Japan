@@ -20,10 +20,15 @@ const fmtDate = (iso: string, lang: Lang) =>
 
 /** The generic contact and trade forms take `kind` only. On an experience
  *  page the form sits inside a BookingProvider and shares the plan, dates,
- *  head count and extras with the booking card beside the page. */
-export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
+ *  head count and extras with the booking card beside the page.
+ *
+ *  `variant="card"` is the same form opened inside the booking card on wide
+ *  screens: the card already shows the plan, date, time, guests and estimate,
+ *  so it adds only what is still missing. */
+export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "page" }: {
   kind: EnquiryKind; lang: Lang; fallbackEmail: string;
   experience?: { slug: string; title: string };
+  variant?: "page" | "card";
 }) {
   const T = t(lang);
   const F = T.form;
@@ -34,10 +39,18 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
   const x = b?.experience;
   const plans = b?.pricing?.plans ?? [];
   const addOns = b?.pricing?.addOns ?? [];
+  const card = variant === "card";
+  const [needDate, setNeedDate] = useState(false);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
+    // In the card the date picker sits above the form, outside its validation.
+    if (card && b && !b.date) {
+      setNeedDate(true);
+      document.querySelector<HTMLElement>("#bk-date")?.focus();
+      return;
+    }
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     // The experience form asks for concrete dates and a head count; fold them
     // into the same two fields the generic form and the mailbox already use.
@@ -121,8 +134,9 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
   }
 
   return (
-    <form className="enquiry-form" onSubmit={submit} noValidate={false} data-clarity-mask="True">
-      {experience && (
+    <form className={card ? "bk-form" : "enquiry-form"} onSubmit={submit} noValidate={false} data-clarity-mask="True">
+      {card && needDate && !b?.date && <p className="form-error" role="alert">{F.chooseDateFirst}</p>}
+      {experience && !card && (
         <p className="form-context">
           <span>{F.about}</span>{" "}
           <b>{experience.title}</b>
@@ -131,7 +145,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
 
       {b && x && (
         <>
-          {plans.length > 0 && (
+          {plans.length > 0 && !card && (
             <label className="form-row">
               <span>{F.plan}</span>
               <select name="plan-id" value={b.plan} onChange={(e) => b.set({ plan: e.target.value })}>
@@ -139,7 +153,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
               </select>
             </label>
           )}
-          <div className="form-row two">
+          {!card && <div className="form-row two">
             <div className="field">
               <label htmlFor="enq-date">{F.preferredDate}</label>
               <DatePicker id="enq-date" name="date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} required closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
@@ -153,11 +167,11 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
                 </select>
               </label>
             ) : <span />}
-          </div>
+          </div>}
           <div className="form-row two">
             <div className="field">
-              <label htmlFor="enq-alt-date">{F.altDate}</label>
-              <DatePicker id="enq-alt-date" name="altDate" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} closed={(d) => !isBookable(d, x)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
+              <label htmlFor={card ? "bk-alt-date" : "enq-alt-date"}>{F.altDate}</label>
+              <DatePicker id={card ? "bk-alt-date" : "enq-alt-date"} name="altDate" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} closed={(d) => !isBookable(d, x)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
             </div>
             {x.startTimes?.length ? (
               <label>
@@ -168,11 +182,11 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
               </label>
             ) : <span />}
           </div>
-          <div className="form-row two keep">
-            <div className="field">
+          <div className={card ? "form-row" : "form-row two keep"}>
+            {!card && <div className="field">
               <label htmlFor="enq-guests">{F.partyN}</label>
               <GuestStepper id="enq-guests" value={b.guests} min={x.minGuests} max={x.maxGuests ?? DEFAULT_MAX_GUESTS} onChange={(g) => b.set({ guests: g })} label={F.guests} decLabel={F.fewerGuests} incLabel={F.moreGuests} />
-            </div>
+            </div>}
             {x.interpreter !== false ? (
               <label>
                 <span>{F.interpreter}</span>
@@ -180,9 +194,9 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
                   {Object.entries(F.interpreterOpts).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                 </select>
               </label>
-            ) : <span />}
+            ) : !card && <span />}
           </div>
-          <div className="form-row two">
+          <div className={card ? "form-row" : "form-row two"}>
             {addOns.length > 0 && (
               <fieldset className="form-addons">
                 <legend>{F.addOns}</legend>
@@ -195,17 +209,17 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
               </fieldset>
             )}
           </div>
-          <div className="form-estimate" aria-live="polite">
+          {!card && <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
               <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b>{yen(b.estimate.total)}</b><small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}
-          </div>
+          </div>}
         </>
       )}
 
-      <div className="form-row two">
+      <div className={card ? "form-row" : "form-row two"}>
         <label>
           <span>{F.name}</span>
           <input name="name" type="text" required autoComplete="name" maxLength={120} />
@@ -244,7 +258,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       <label className="form-row">
         <span>{trade ? F.messageTrade : b ? (x?.notesLabel ?? F.notesXp) : F.message}</span>
         <textarea
-          name="message" required={!b} rows={b ? 4 : 7} maxLength={4000}
+          name="message" required={!b} rows={card ? 3 : b ? 4 : 7} maxLength={4000}
           placeholder={trade ? F.messageTradeHint : b ? (x?.notesHint ?? F.notesXpHint) : F.messageHint}
         />
       </label>
@@ -256,7 +270,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       </label>
 
       <div className="enquiry-actions">
-        <button type="submit" className="contact-cta" disabled={status === "sending"}>
+        <button type="submit" className={card ? "bk-cta" : "contact-cta"} disabled={status === "sending"}>
           {status === "sending" ? F.sending : b ? F.sendRequest : F.send} <ArrowRight size={15} />
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}

@@ -150,6 +150,7 @@ const strings = {
     form: {
       pickDate: "Select a date", clear: "Clear", earliestShort: (d: string) => `Earliest: ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Earliest date: ${d} — requests close at ${t} Japan time, ${n} days before.`,
+      chooseDateFirst: "Choose a date first — it is at the top of this box.",
       sendRequest: "Send availability request", sendRequestNote: "Sending this enquiry does not confirm a booking. We will contact you with the next steps.",
       altStartTime: "Start time (alternative)", startTime: "Preferred start time", noPreference: "No preference",
       interpreter: "Interpreter guide (included)", interpreterOpts: { en: "English", es: "Spanish", fr: "French", none: "Not needed" } as Record<string, string>, plan: "Plan", addOns: "Optional extras", notesXp: "Allergies, dietary needs — or anything else we should tell the venue (optional)", notesXpHint: "e.g. one guest is vegetarian, a shellfish allergy, a birthday to mark…", guests: (n: number) => (n === 1 ? "1 guest" : `${n} guests`), guestsMore: (n: number) => `${n} or more`, preferredDate: "Preferred date", altDate: "Alternative date (optional)", partyN: "Number of guests", fewerGuests: "One guest fewer", moreGuests: "One guest more", messageXp: "Anything we should check with the venue? (optional)", messageXpHint: "Dietary needs, mobility, a birthday, a preferred start time…",
@@ -348,6 +349,7 @@ const strings = {
     form: {
       pickDate: "Elija una fecha", clear: "Borrar", earliestShort: (d: string) => `Más próxima: ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Fecha más próxima: ${d} — las solicitudes cierran a las ${t} (hora de Japón), ${n} días antes.`,
+      chooseDateFirst: "Elige primero una fecha: está arriba, en este mismo cuadro.",
       sendRequest: "Enviar solicitud de disponibilidad", sendRequestNote: "Enviar esta consulta no confirma una reserva. Le contactaremos con los siguientes pasos.",
       altStartTime: "Hora de inicio (alternativa)", startTime: "Hora de inicio preferida", noPreference: "Sin preferencia",
       interpreter: "Guía intérprete (incluido)", interpreterOpts: { en: "Inglés", es: "Español", fr: "Francés", none: "No lo necesitamos" } as Record<string, string>, plan: "Plan", addOns: "Extras opcionales", notesXp: "Alergias, necesidades dietéticas — o cualquier otra cosa que debamos decir al lugar (opcional)", notesXpHint: "p. ej. una persona vegetariana, alergia al marisco, un cumpleaños…", guests: (n: number) => (n === 1 ? "1 persona" : `${n} personas`), guestsMore: (n: number) => `${n} o más`, preferredDate: "Fecha preferida", altDate: "Fecha alternativa (opcional)", partyN: "Número de personas", fewerGuests: "Una persona menos", moreGuests: "Una persona más", messageXp: "¿Algo que consultar con el lugar? (opcional)", messageXpHint: "Alergias, movilidad, un cumpleaños, hora de inicio preferida…",
@@ -544,6 +546,7 @@ const strings = {
     form: {
       pickDate: "日付を選択", clear: "クリア", earliestShort: (d: string) => `最短:${d}`,
       earliestDate: (d: string, n: number, t: string) => `最短で${d}から(${n}日前の${t}・日本時間で締切)`,
+      chooseDateFirst: "先に上の欄で日付を選んでください。",
       sendRequest: "空き状況を問い合わせる", sendRequestNote: "送信しても予約は確定しません。次のご案内をこちらからご連絡します。",
       altStartTime: "開始時刻(第2希望)", startTime: "希望の開始時刻", noPreference: "指定なし",
       interpreter: "通訳ガイド(料金に含む)", interpreterOpts: { en: "英語", es: "スペイン語", fr: "フランス語", none: "不要" } as Record<string, string>, plan: "プラン", addOns: "オプション", notesXp: "アレルギー・食事制限など、受け入れ先に伝えておくこと(任意)", notesXpHint: "例:1名がベジタリアン、甲殻類アレルギー、誕生日のお祝い など", guests: (n: number) => `${n}名`, guestsMore: (n: number) => `${n}名以上`, preferredDate: "第1希望日", altDate: "第2希望日(任意)", partyN: "ご人数", fewerGuests: "1名減らす", moreGuests: "1名増やす", messageXp: "受け入れ先に確認しておくこと(任意)", messageXpHint: "食事制限、移動のご事情、お祝い、希望の開始時刻など",
@@ -739,6 +742,7 @@ const strings = {
     form: {
       pickDate: "Choisir une date", clear: "Effacer", earliestShort: (d: string) => `Au plus tôt : ${d}`,
       earliestDate: (d: string, n: number, t: string) => `Date la plus proche : ${d} — les demandes ferment à ${t} heure du Japon, ${n} jours avant.`,
+      chooseDateFirst: "Choisissez d'abord une date, en haut de cet encadré.",
       sendRequest: "Envoyer la demande de disponibilité", sendRequestNote: "L'envoi de cette demande ne confirme pas une réservation. Nous vous contacterons pour la suite.",
       altStartTime: "Heure de début (autre date)", startTime: "Heure de début souhaitée", noPreference: "Sans préférence",
       interpreter: "Guide-interprète (compris)", interpreterOpts: { en: "Anglais", es: "Espagnol", fr: "Français", none: "Pas nécessaire" } as Record<string, string>, plan: "Formule", addOns: "Options", notesXp: "Allergies, régimes — ou tout ce que nous devrions dire au lieu (facultatif)", notesXpHint: "ex. un convive végétarien, une allergie aux crustacés, un anniversaire…", guests: (n: number) => (n === 1 ? "1 personne" : `${n} personnes`), guestsMore: (n: number) => `${n} ou plus`, preferredDate: "Date souhaitée", altDate: "Autre date possible (facultatif)", partyN: "Nombre de personnes", fewerGuests: "Une personne de moins", moreGuests: "Une personne de plus", messageXp: "Quelque chose à vérifier auprès du lieu ? (facultatif)", messageXpHint: "Régimes, mobilité, anniversaire, heure de début souhaitée…",
@@ -936,6 +940,7 @@ const strings = {
     form: {
       pickDate: "選擇日期", clear: "清除", earliestShort: (d: string) => `最早：${d}`,
       earliestDate: (d: string, n: number, t: string) => `最早可選 ${d}（${n} 天前、日本時間 ${t} 截止）`,
+      chooseDateFirst: "請先在上方選擇日期。",
       sendRequest: "送出空檔詢問", sendRequestNote: "送出詢問並不代表預約成立，我們會與您聯繫後續步驟。",
       altStartTime: "開始時間（備選）", startTime: "希望的開始時間", noPreference: "不指定",
       interpreter: "口譯導遊（已包含）", interpreterOpts: { en: "英語", es: "西班牙語", fr: "法語", none: "不需要" } as Record<string, string>, plan: "方案", addOns: "可選加購", notesXp: "過敏、飲食限制——或其他需要告知店家的事項（可不填）", notesXpHint: "例：一位素食者、甲殼類過敏、慶祝生日等", guests: (n: number) => `${n} 位`, guestsMore: (n: number) => `${n} 位以上`, preferredDate: "首選日期", altDate: "備選日期（可不填）", partyN: "人數", fewerGuests: "減少 1 位", moreGuests: "增加 1 位", messageXp: "需要向店家確認的事項（可不填）", messageXpHint: "飲食限制、行動需求、慶祝活動、希望的開始時間等",
