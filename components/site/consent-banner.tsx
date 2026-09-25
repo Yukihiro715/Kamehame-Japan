@@ -29,6 +29,9 @@ function update(choice: Choice) {
   gtag("consent", "update", {
     ad_storage: choice, ad_user_data: choice, ad_personalization: choice, analytics_storage: choice,
   });
+  // Clarity keeps its own consent state (stub defined in the head script).
+  const clarity = (window as unknown as { clarity?: (...args: unknown[]) => void }).clarity;
+  clarity?.("consentv2", { ad_Storage: choice, analytics_Storage: choice });
   w.dataLayer.push({ event: "consent_choice", consent_choice: choice });
   try { localStorage.setItem(CONSENT_KEY, choice); } catch { /* private mode */ }
 }

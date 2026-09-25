@@ -74,7 +74,7 @@ export function ReviewForm({ lang, experiences, fallbackEmail }: { lang: Lang; e
   const current = experiences.find((x) => x.slug === experience);
 
   return (
-    <form className="enquiry-form review-form" onSubmit={submit}>
+    <form className="enquiry-form review-form" onSubmit={submit} data-clarity-mask="True">
       {experiences.length > 1 ? (
         <label className="form-row">
           <span>{R.about}</span>

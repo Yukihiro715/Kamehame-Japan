@@ -19,7 +19,7 @@ export interface PrivacyCopy {
   };
 }
 
-const UPDATED = "2026-09-15";
+const UPDATED = "2026-09-25";
 
 const PRIVACY: Record<Lang, PrivacyCopy> = {
   en: {
@@ -53,13 +53,15 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         body: [
           "The site loads Google Tag Manager, which in turn runs Google Analytics 4 and — where you have agreed — Google Ads measurement. We use it to see which pages and which experiences people read, and whether our advertising reaches the right travellers. When you send an enquiry after arriving from one of our adverts, the email address you entered is passed to Google in hashed (irreversibly scrambled) form so the enquiry can be matched to that advert — only if you have agreed to advertising measurement.",
           "In the EEA, the United Kingdom and Switzerland nothing is stored on your device until you choose. Until then Google receives only a cookieless signal that a page was viewed, with no identifier. Outside those countries measurement runs by default and you can turn it off with the Cookie settings link in the footer.",
-          "We do not run any other tracker, advertising pixel, social plugin or chat widget. When a page embeds a Google map, Google receives the request for that map; and when the booking system goes live, its own provider will be named here first.",
+          "Where measurement is on, Microsoft Clarity records how pages are used — scrolling, taps, clicks and mouse movement — so we can see where the site is hard to use. Form fields and anything you type are masked in your browser before anything is sent, and in the EEA, the United Kingdom and Switzerland Clarity loads only after you accept.",
+          "We do not run any other tracker, advertising pixel, social plugin or chat widget. When a page embeds a Google map, Google receives the request for that map.",
         ],
       },
       {
         heading: "Who else sees it, and where",
         body: [
-          "Google Ireland / Google LLC process the measurement data described above, which can involve a transfer to the United States under the European Commission's standard contractual clauses and the EU–US Data Privacy Framework. Cloudflare serves the site and processes the technical request data any web server needs. Our email provider carries your enquiry, and Slack shows our team a short alert (the experience, dates, party size and your first name — not your email address or notes). Each of them acts on our instructions only.",
+          "Google Ireland / Google LLC process the measurement data described above, which can involve a transfer to the United States under the European Commission's standard contractual clauses and the EU–US Data Privacy Framework. Cloudflare serves the site and processes the technical request data any web server needs. Our email provider carries your enquiry, and Slack shows our team a short alert (the experience, dates, party size and your first name — not your email address or notes). Microsoft processes the Clarity data, also under the Data Privacy Framework. Each of them acts on our instructions only.",
+          "When you pay through the link in our reply, the payment page is run by Stripe, which handles your card details under its own privacy policy; we never see your card number. You then return to our site, which reads back from Stripe only the amount, the currency and the email address of that payment, to confirm your booking and — if you agreed to advertising measurement — to report it to Google Ads in the same hashed form as above.",
         ],
       },
       {
@@ -72,7 +74,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Changes",
         body: [
-          "When the site starts taking bookings and payments online, or adds any new tool that touches your data, this page changes before that goes live, and the date below moves with it.",
+          "Whenever we add a new tool that touches your data, this page changes before that goes live, and the date below moves with it.",
         ],
       },
     ],
@@ -84,6 +86,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["kh-consent", "Remembers your cookie choice so you are not asked again.", "6 months"],
         ["_ga, _ga_*", "Google Analytics: tells returning visits apart from new ones.", "2 years"],
         ["_gcl_*", "Google Ads: links a visit to the advert it came from.", "90 days"],
+        ["_clck, _clsk", "Microsoft Clarity: keeps the pages of one visit together.", "1 year / 1 day"],
       ],
     },
   },
@@ -119,13 +122,15 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         body: [
           "本サイトはGoogleタグマネージャーを読み込み、その中でGoogleアナリティクス4と、同意をいただいた場合にGoogle広告の効果測定を実行します。どのページやどの体験が読まれているか、広告が適切な旅行者に届いているかを把握するために使用します。広告から訪問された方がお問い合わせを送信した場合、広告の効果測定に同意いただいているときに限り、入力されたメールアドレスを復元できない形(ハッシュ化)にしてGoogleに送り、どの広告からのお問い合わせかを照合します。",
           "EEA・英国・スイスからのアクセスでは、お選びいただくまでお客様の端末に何も保存しません。それまでGoogleに送られるのは、識別子を含まない「ページが表示された」という情報のみです。これらの地域以外では計測が初期状態で有効になっており、フッターの「Cookie設定」からいつでも無効にできます。",
-          "これ以外の解析ツール・広告ピクセル・SNSプラグイン・チャットツールは使用していません。Googleマップを埋め込んだページでは、その地図の読み込みのためGoogleにリクエストが送られます。予約システムを導入する際は、事前に本ページに記載します。",
+          "計測が有効な場合、Microsoft Clarityでページの使われ方(スクロール、タップ、クリック、マウスの動き)を記録し、使いにくい箇所の改善に役立てます。入力欄とその入力内容は送信前にブラウザ上で伏せ字にされ、EEA・英国・スイスからのアクセスでは、同意いただいた後にのみClarityを読み込みます。",
+          "これ以外の解析ツール・広告ピクセル・SNSプラグイン・チャットツールは使用していません。Googleマップを埋め込んだページでは、その地図の読み込みのためGoogleにリクエストが送られます。",
         ],
       },
       {
         heading: "第三者への提供と保管場所",
         body: [
-          "上記の計測データはGoogle Ireland / Google LLCが処理し、欧州委員会の標準契約条項およびEU–US データプライバシーフレームワークに基づき米国へ移転される場合があります。サイトの配信はCloudflareが行い、ウェブサーバーが必要とする技術的なリクエスト情報を処理します。お問い合わせの配送はメール事業者が行い、社内への通知にはSlackを使います(体験・日程・人数・お名前のみで、メールアドレスや備考は含みません)。いずれも当方の指示の範囲でのみ取り扱います。",
+          "上記の計測データはGoogle Ireland / Google LLCが処理し、欧州委員会の標準契約条項およびEU–US データプライバシーフレームワークに基づき米国へ移転される場合があります。サイトの配信はCloudflareが行い、ウェブサーバーが必要とする技術的なリクエスト情報を処理します。お問い合わせの配送はメール事業者が行い、社内への通知にはSlackを使います(体験・日程・人数・お名前のみで、メールアドレスや備考は含みません)。Clarityのデータは Microsoft が処理し、同じくデータプライバシーフレームワークの対象です。いずれも当方の指示の範囲でのみ取り扱います。",
+          "ご返信内のリンクからお支払いいただく際の決済ページはStripeが運営し、カード情報はStripeが自社のプライバシーポリシーに基づいて取り扱います。当方がカード番号を目にすることはありません。お支払い後に本サイトへ戻った際、ご予約の確定と、広告の効果測定に同意いただいている場合のGoogle広告への成果報告(上記と同じハッシュ化)のため、Stripeからそのお支払いの金額・通貨・メールアドレスのみを取得します。",
         ],
       },
       {
@@ -138,7 +143,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "変更",
         body: [
-          "オンラインでの予約・決済の受付を開始する場合や、お客様の情報に触れるツールを新たに導入する場合は、公開前に本ページを更新し、下記の日付も更新します。",
+          "お客様の情報に触れるツールを新たに導入する場合は、公開前に本ページを更新し、下記の日付も更新します。",
         ],
       },
     ],
@@ -150,6 +155,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["kh-consent", "Cookieの選択を記憶し、繰り返し確認しないようにします。", "6か月"],
         ["_ga, _ga_*", "Googleアナリティクス:再訪と新規の訪問を区別します。", "2年"],
         ["_gcl_*", "Google広告:どの広告から訪問したかを対応づけます。", "90日"],
+        ["_clck, _clsk", "Microsoft Clarity:1回の訪問のページをまとめて扱います。", "1年/1日"],
       ],
     },
   },
@@ -185,13 +191,15 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         body: [
           "El sitio carga Google Tag Manager, que a su vez ejecuta Google Analytics 4 y, si usted lo acepta, la medición de Google Ads. Lo usamos para ver qué páginas y qué experiencias se leen y si nuestra publicidad llega a los viajeros adecuados. Si envía una consulta tras llegar desde uno de nuestros anuncios, el correo que escribió se transmite a Google cifrado de forma irreversible (hash) para asociar la consulta a ese anuncio, solo si aceptó la medición publicitaria.",
           "En el EEE, el Reino Unido y Suiza no se guarda nada en su dispositivo hasta que usted elija. Hasta entonces Google solo recibe una señal sin cookies de que se vio una página, sin identificador. Fuera de esos países la medición funciona por defecto y puede desactivarla con el enlace «Configuración de cookies» del pie de página.",
-          "No usamos ningún otro rastreador, píxel publicitario, complemento social ni chat. Cuando una página incrusta un mapa de Google, Google recibe la petición de ese mapa; y cuando entre en servicio el sistema de reservas, su proveedor se indicará aquí antes.",
+          "Cuando la medición está activa, Microsoft Clarity registra cómo se usan las páginas (desplazamiento, toques, clics y movimiento del ratón) para ver dónde el sitio resulta difícil de usar. Los campos de formulario y lo que escribe se ocultan en su navegador antes de enviar nada, y en el EEE, el Reino Unido y Suiza Clarity solo se carga después de que usted acepte.",
+          "No usamos ningún otro rastreador, píxel publicitario, complemento social ni chat. Cuando una página incrusta un mapa de Google, Google recibe la petición de ese mapa.",
         ],
       },
       {
         heading: "Quién más lo ve, y dónde",
         body: [
-          "Google Ireland / Google LLC tratan los datos de medición descritos arriba, lo que puede implicar una transferencia a Estados Unidos al amparo de las cláusulas contractuales tipo de la Comisión Europea y del Marco de Privacidad de Datos UE–EE. UU. Cloudflare sirve el sitio y trata los datos técnicos de la petición que necesita cualquier servidor web. Nuestro proveedor de correo transporta su consulta y Slack muestra a nuestro equipo un aviso breve (experiencia, fechas, número de personas y su nombre, sin su correo ni sus notas). Todos actúan únicamente siguiendo nuestras instrucciones.",
+          "Google Ireland / Google LLC tratan los datos de medición descritos arriba, lo que puede implicar una transferencia a Estados Unidos al amparo de las cláusulas contractuales tipo de la Comisión Europea y del Marco de Privacidad de Datos UE–EE. UU. Cloudflare sirve el sitio y trata los datos técnicos de la petición que necesita cualquier servidor web. Nuestro proveedor de correo transporta su consulta y Slack muestra a nuestro equipo un aviso breve (experiencia, fechas, número de personas y su nombre, sin su correo ni sus notas). Microsoft trata los datos de Clarity, también al amparo del Marco de Privacidad de Datos. Todos actúan únicamente siguiendo nuestras instrucciones.",
+          "Cuando paga con el enlace de nuestra respuesta, la página de pago la gestiona Stripe, que trata los datos de su tarjeta según su propia política de privacidad; nosotros nunca vemos el número de la tarjeta. Después vuelve a nuestro sitio, que solo consulta a Stripe el importe, la moneda y el correo de ese pago, para confirmar su reserva y, si aceptó la medición publicitaria, comunicarla a Google Ads con el mismo cifrado (hash) descrito arriba.",
         ],
       },
       {
@@ -204,7 +212,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Cambios",
         body: [
-          "Cuando el sitio empiece a aceptar reservas y pagos en línea, o incorpore cualquier herramienta nueva que trate sus datos, esta página cambiará antes de que eso entre en servicio, y la fecha de abajo cambiará con ella.",
+          "Cuando incorporemos cualquier herramienta nueva que trate sus datos, esta página cambiará antes de que entre en servicio, y la fecha de abajo cambiará con ella.",
         ],
       },
     ],
@@ -216,6 +224,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["kh-consent", "Recuerda su elección sobre cookies para no volver a preguntar.", "6 meses"],
         ["_ga, _ga_*", "Google Analytics: distingue las visitas nuevas de las recurrentes.", "2 años"],
         ["_gcl_*", "Google Ads: relaciona una visita con el anuncio del que procede.", "90 días"],
+        ["_clck, _clsk", "Microsoft Clarity: agrupa las páginas de una misma visita.", "1 año / 1 día"],
       ],
     },
   },
@@ -251,13 +260,15 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         body: [
           "Le site charge Google Tag Manager, qui exécute Google Analytics 4 et, si vous l'acceptez, la mesure Google Ads. Nous l'utilisons pour voir quelles pages et quelles expériences sont lues, et si notre publicité touche les bons voyageurs. Si vous envoyez une demande après être arrivé par l'une de nos annonces, l'adresse e-mail saisie est transmise à Google sous forme hachée (brouillée de façon irréversible) pour rattacher la demande à cette annonce, uniquement si vous avez accepté la mesure publicitaire.",
           "Dans l'EEE, au Royaume-Uni et en Suisse, rien n'est enregistré sur votre appareil avant votre choix. Jusque-là, Google ne reçoit qu'un signal sans cookie indiquant qu'une page a été vue, sans identifiant. En dehors de ces pays, la mesure est active par défaut et le lien « Paramètres des cookies » en bas de page permet de la désactiver.",
-          "Nous n'utilisons aucun autre traceur, pixel publicitaire, module social ou outil de chat. Lorsqu'une page intègre une carte Google, Google reçoit la requête correspondante ; et lorsque le système de réservation sera en service, son prestataire sera indiqué ici au préalable.",
+          "Lorsque la mesure est active, Microsoft Clarity enregistre la façon dont les pages sont utilisées (défilement, touchers, clics et mouvements de souris) afin de repérer ce qui est difficile à utiliser. Les champs de formulaire et ce que vous saisissez sont masqués dans votre navigateur avant tout envoi, et dans l'EEE, au Royaume-Uni et en Suisse, Clarity ne se charge qu'après votre accord.",
+          "Nous n'utilisons aucun autre traceur, pixel publicitaire, module social ou outil de chat. Lorsqu'une page intègre une carte Google, Google reçoit la requête correspondante.",
         ],
       },
       {
         heading: "Qui d'autre y a accès, et où",
         body: [
-          "Google Ireland / Google LLC traitent les données de mesure décrites ci-dessus, ce qui peut impliquer un transfert vers les États-Unis au titre des clauses contractuelles types de la Commission européenne et du cadre de protection des données UE–États-Unis. Cloudflare sert le site et traite les données techniques de requête dont tout serveur web a besoin. Notre prestataire de messagerie achemine votre demande, et Slack affiche à notre équipe une brève alerte (expérience, dates, nombre de personnes et prénom, sans votre adresse e-mail ni vos remarques). Chacun agit uniquement sur nos instructions.",
+          "Google Ireland / Google LLC traitent les données de mesure décrites ci-dessus, ce qui peut impliquer un transfert vers les États-Unis au titre des clauses contractuelles types de la Commission européenne et du cadre de protection des données UE–États-Unis. Cloudflare sert le site et traite les données techniques de requête dont tout serveur web a besoin. Notre prestataire de messagerie achemine votre demande, et Slack affiche à notre équipe une brève alerte (expérience, dates, nombre de personnes et prénom, sans votre adresse e-mail ni vos remarques). Microsoft traite les données de Clarity, également dans le cadre de protection des données. Chacun agit uniquement sur nos instructions.",
+          "Lorsque vous payez via le lien de notre réponse, la page de paiement est gérée par Stripe, qui traite les données de votre carte selon sa propre politique de confidentialité ; nous ne voyons jamais le numéro de carte. Vous revenez ensuite sur notre site, qui ne lit auprès de Stripe que le montant, la devise et l'adresse e-mail de ce paiement, pour confirmer votre réservation et, si vous avez accepté la mesure publicitaire, la signaler à Google Ads sous la même forme hachée que ci-dessus.",
         ],
       },
       {
@@ -270,7 +281,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Modifications",
         body: [
-          "Lorsque le site commencera à accepter réservations et paiements en ligne, ou ajoutera un outil touchant à vos données, cette page sera modifiée avant la mise en service, et la date ci-dessous suivra.",
+          "Lorsque nous ajouterons un outil touchant à vos données, cette page sera modifiée avant sa mise en service, et la date ci-dessous suivra.",
         ],
       },
     ],
@@ -282,6 +293,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["kh-consent", "Mémorise votre choix pour ne plus vous le demander.", "6 mois"],
         ["_ga, _ga_*", "Google Analytics : distingue les visites nouvelles des visites répétées.", "2 ans"],
         ["_gcl_*", "Google Ads : relie une visite à l'annonce dont elle provient.", "90 jours"],
+        ["_clck, _clsk", "Microsoft Clarity : regroupe les pages d'une même visite.", "1 an / 1 jour"],
       ],
     },
   },
@@ -317,13 +329,15 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         body: [
           "本網站載入 Google 代碼管理工具，並由其執行 Google Analytics 4，以及在您同意時執行 Google Ads 成效衡量。我們用來了解哪些頁面與體驗被閱讀，以及廣告是否觸及合適的旅客。若您透過我們的廣告進入網站並送出詢問，且已同意廣告成效衡量，您輸入的電子郵件地址會以無法還原的雜湊形式傳送給 Google，用來比對該詢問來自哪則廣告。",
           "在歐洲經濟區、英國與瑞士，在您做出選擇之前不會在您的裝置上儲存任何資料；在此之前 Google 只會收到「有人看了某個頁面」的無 Cookie 訊號，不含任何識別碼。在這些地區之外，成效衡量預設啟用，您可透過頁尾的「Cookie 設定」關閉。",
-          "我們不使用其他追蹤工具、廣告像素、社群外掛或客服聊天工具。當頁面嵌入 Google 地圖時，Google 會收到該地圖的載入請求；預約系統上線時，其服務供應商會事先記載於本頁。",
+          "在成效衡量啟用時，我們透過 Microsoft Clarity 記錄頁面的使用方式（捲動、點按、點擊與滑鼠移動），以找出網站不易使用之處。表單欄位與您輸入的內容會在傳送前於瀏覽器中遮蔽；來自歐洲經濟區、英國與瑞士的造訪，僅在您同意後才會載入 Clarity。",
+          "我們不使用其他追蹤工具、廣告像素、社群外掛或客服聊天工具。當頁面嵌入 Google 地圖時，Google 會收到該地圖的載入請求。",
         ],
       },
       {
         heading: "還有誰會接觸到，以及在哪裡",
         body: [
-          "上述成效衡量資料由 Google Ireland / Google LLC 處理，可能依歐盟執委會的標準契約條款與歐盟—美國資料隱私框架傳輸至美國。網站由 Cloudflare 提供服務，並處理任何網頁伺服器所需的技術性請求資料。您的詢問由我們的電子郵件服務商傳送，並透過 Slack 向我們的團隊發送簡短通知（體驗、日期、人數與您的名字，不含電子郵件地址與備註）。以上各方均僅依我們的指示處理。",
+          "上述成效衡量資料由 Google Ireland / Google LLC 處理，可能依歐盟執委會的標準契約條款與歐盟—美國資料隱私框架傳輸至美國。網站由 Cloudflare 提供服務，並處理任何網頁伺服器所需的技術性請求資料。您的詢問由我們的電子郵件服務商傳送，並透過 Slack 向我們的團隊發送簡短通知（體驗、日期、人數與您的名字，不含電子郵件地址與備註）。Clarity 的資料由 Microsoft 處理，同樣適用資料隱私框架。以上各方均僅依我們的指示處理。",
+          "透過我們回覆中的連結付款時，付款頁面由 Stripe 營運，您的信用卡資料由 Stripe 依其隱私權政策處理，我們不會看到卡號。付款後您會回到本網站，本網站僅向 Stripe 讀取該筆付款的金額、幣別與電子郵件，用於確認預約，並在您同意廣告成效衡量時，以與上述相同的雜湊形式回報給 Google Ads。",
         ],
       },
       {
@@ -336,7 +350,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "變更",
         body: [
-          "當本網站開始接受線上預約與付款，或導入任何接觸您資料的新工具時，將於上線前更新本頁，下方日期亦會一併更新。",
+          "當我們導入任何接觸您資料的新工具時，將於上線前更新本頁，下方日期亦會一併更新。",
         ],
       },
     ],
@@ -348,6 +362,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["kh-consent", "記住您對 Cookie 的選擇，以免重複詢問。", "6 個月"],
         ["_ga, _ga_*", "Google Analytics：區分新訪客與回訪訪客。", "2 年"],
         ["_gcl_*", "Google Ads：將造訪與來源廣告對應起來。", "90 天"],
+        ["_clck, _clsk", "Microsoft Clarity：將同一次造訪的頁面歸為一組。", "1 年／1 天"],
       ],
     },
   },

@@ -9,6 +9,10 @@
 // is protected whether or not the banner managed to detect them. Outside
 // those countries analytics runs by default, and the footer's "Cookie
 // settings" link still lets anyone turn it off.
+//
+// Microsoft Clarity (loaded by GTM, gated on analytics_storage) does not read
+// Consent Mode, so the same choice is queued for it through its own
+// consentv2 call; the stub keeps the call until the Clarity script arrives.
 
 export const CONSENT_KEY = "kh-consent";
 
@@ -25,5 +29,6 @@ window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
 gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500,region:${JSON.stringify(STRICT_REGIONS)}});
 gtag('consent','default',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted',functionality_storage:'granted',security_storage:'granted'});
 gtag('set','ads_data_redaction',true);gtag('set','url_passthrough',true);
-try{var c=localStorage.getItem(${JSON.stringify(CONSENT_KEY)});if(c==='granted'||c==='denied'){gtag('consent','update',{ad_storage:c,ad_user_data:c,ad_personalization:c,analytics_storage:c})}}catch(e){}
+window.clarity=window.clarity||function(){(window.clarity.q=window.clarity.q||[]).push(arguments)};
+try{var c=localStorage.getItem(${JSON.stringify(CONSENT_KEY)});if(c==='granted'||c==='denied'){gtag('consent','update',{ad_storage:c,ad_user_data:c,ad_personalization:c,analytics_storage:c});clarity('consentv2',{ad_Storage:c,analytics_Storage:c})}}catch(e){}
 `.trim();

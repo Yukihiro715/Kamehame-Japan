@@ -55,13 +55,13 @@ export function ThanksView({ lang }: { lang: Lang }) {
       <div className="thanks-head">
         <span className="thanks-check" aria-hidden="true"><Check size={34} strokeWidth={3} /></span>
         <h1>{K.h}</h1>
-        <p>{sent?.email ? K.leadEmail(sent.email) : K.lead}</p>
+        <p data-clarity-mask="True">{sent?.email ? K.leadEmail(sent.email) : K.lead}</p>
       </div>
 
       {rows.length > 0 && (
         <section className="thanks-card">
           <h2>{K.summaryH}</h2>
-          <dl>{rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+          <dl data-clarity-mask="True">{rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
         </section>
       )}
 

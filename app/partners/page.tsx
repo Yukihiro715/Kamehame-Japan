@@ -134,7 +134,7 @@ export default function PartnersPage() {
       <section className="partner-section" id="partner-contact">
         <h2>お問い合わせ</h2>
         <p className="partner-note">下記の内容をお知らせください。担当者よりご連絡のうえ、詳細をご説明します。</p>
-        <form className="partner-form">
+        <form className="partner-form" data-clarity-mask="True">
           <div className="form-grid">
             <label>店舗・工房名<input type="text" name="venue" autoComplete="organization" /></label>
             <label>業種<input type="text" name="type" placeholder="例:寿司、茶道、刀鍛冶" /></label>

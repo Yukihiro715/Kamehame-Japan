@@ -17,6 +17,8 @@ declare module "cloudflare:workers" {
     RESEND_API_KEY?: string;
     /** Slack Incoming Webhook for new-enquiry alerts (optional). */
     SLACK_WEBHOOK_URL?: string;
+    /** Stripe restricted key (Checkout Sessions: read) for the booked page. */
+    STRIPE_READ_KEY?: string;
     DB?: unknown;
   };
 }

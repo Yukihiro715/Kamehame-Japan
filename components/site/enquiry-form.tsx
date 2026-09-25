@@ -121,7 +121,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
   }
 
   return (
-    <form className="enquiry-form" onSubmit={submit} noValidate={false}>
+    <form className="enquiry-form" onSubmit={submit} noValidate={false} data-clarity-mask="True">
       {experience && (
         <p className="form-context">
           <span>{F.about}</span>{" "}
