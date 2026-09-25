@@ -54,8 +54,9 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   return (
     <div className={`bk-card${open ? " open" : ""}`} id="booking">
       <div className="bk-price">
-        <small>{D.fromPrice}</small>
-        <b>{plans.length ? yen(Math.min(...plans.map((p) => p.regular))) : headline}</b>
+        {/* "From" only where the price varies (plans, seasons); a fixed per-person price has none. */}
+        {plans.length > 0 && D.fromPrice && <small>{D.fromPrice}</small>}
+        <b>{plans.length ? <>{yen(Math.min(...plans.map((p) => p.regular)))}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</> : headline}</b>
         <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : pricing?.unit === "person" ? T.perPersonUnit : D.priceTotalNote}</small>
         <RatingSummary experience={x.slug} lang={lang} href="#reviews" size={13} />
       </div>

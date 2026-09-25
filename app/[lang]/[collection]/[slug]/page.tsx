@@ -238,7 +238,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                     <li key={p.id} className={p.recommended ? "rec" : ""}>
                       <span className="plan-compare-label">{p.label}{p.recommended && <em>{D.recommended}</em>}</span>
                       <span className="plan-compare-what"><b>{p.performers}</b><small>{p.blurb}</small></span>
-                      <span className="plan-compare-price">{D.fromPrice && <small>{D.fromPrice}</small>}{yen(p.regular)}</span>
+                      <span className="plan-compare-price">{D.fromPrice && <small>{D.fromPrice}</small>}<span>{yen(p.regular)}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</span></span>
                     </li>
                   ))}
                 </ul>
