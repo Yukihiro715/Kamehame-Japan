@@ -12,6 +12,7 @@ interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: stri
 
 /** Where a Stripe payment link sends the guest after paying. Stripe only
  *  redirects on success; the lookup confirms it and supplies the real amount.
+ *  Without a confirmed lookup the page still thanks the guest but reports nothing.
  *  The "booking_paid" conversion fires once per checkout session. */
 export function BookedView({ lang }: { lang: Lang }) {
   const K = t(lang).booked;
@@ -36,8 +37,9 @@ export function BookedView({ lang }: { lang: Lang }) {
       try { data = (await (await fetch(`/api/booking?session_id=${encodeURIComponent(id)}`)).json()) as Lookup; } catch { /* offline */ }
       if (cancelled) return;
       if (data.ok && typeof data.amount === "number") setAmount(data.currency === "JPY" || !data.currency ? yen(data.amount) : `${data.amount} ${data.currency}`);
-      // A lookup that says "not paid" never counts; one that could not run still does.
-      if (data.ok && !data.paid) return;
+      // Only a payment Stripe confirms as paid counts: a made-up or mistyped
+      // session_id must never become a conversion.
+      if (!data.ok || !data.paid) return;
       const flag = `kh-paid-${id}`;
       try { if (localStorage.getItem(flag)) return; localStorage.setItem(flag, "1"); } catch { /* private mode */ }
       track("booking_paid", {
