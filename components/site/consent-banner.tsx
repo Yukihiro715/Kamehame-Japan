@@ -20,10 +20,15 @@ function inStrictRegion() {
 function update(choice: Choice) {
   const w = window as unknown as { dataLayer?: unknown[] };
   w.dataLayer = w.dataLayer || [];
-  // Consent Mode expects the raw arguments object, exactly as gtag sends it.
-  w.dataLayer.push(["consent", "update", {
+  // Consent Mode only reads the Arguments object that gtag() pushes — a plain
+  // array is ignored, which left an "Accept" without effect until the next page.
+  const gtag = function () {
+    // eslint-disable-next-line prefer-rest-params
+    w.dataLayer!.push(arguments);
+  } as (...args: unknown[]) => void;
+  gtag("consent", "update", {
     ad_storage: choice, ad_user_data: choice, ad_personalization: choice, analytics_storage: choice,
-  }]);
+  });
   w.dataLayer.push({ event: "consent_choice", consent_choice: choice });
   try { localStorage.setItem(CONSENT_KEY, choice); } catch { /* private mode */ }
 }

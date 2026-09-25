@@ -9,6 +9,9 @@ declare global {
   interface Window { dataLayer?: DataLayerEvent[] }
 }
 
+/** A unique id for one conversion (Google Ads de-duplicates on it). */
+export const eventId = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
 /** Push an event for GTM. Safe before the container loads (the snippet
  *  creates the array) and a no-op during server rendering. */
 export function track(event: string, params: Record<string, unknown> = {}) {

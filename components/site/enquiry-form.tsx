@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
-import { track } from "@/lib/analytics";
+import { eventId, track } from "@/lib/analytics";
 import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
@@ -63,6 +63,12 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience }: {
       if (json.ok) {
         // GTM turns this into the GA4 / Ads conversion; no tag IDs live here.
         track("enquiry_sent", {
+          // Unique per submission: Google Ads uses it as the transaction ID so a
+          // double submit or a reload never counts twice.
+          enquiry_id: eventId("enq"),
+          // Enhanced conversions: GTM's Ads tag reads this; Google hashes it and
+          // only uses it where the visitor granted ad_user_data.
+          user_data: data.email ? { email: data.email.trim().toLowerCase() } : undefined,
           enquiry_kind: kind,
           experience: experience?.slug,
           experience_title: experience?.title,

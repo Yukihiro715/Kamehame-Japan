@@ -51,7 +51,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Measurement and advertising",
         body: [
-          "The site loads Google Tag Manager, which in turn runs Google Analytics 4 and — where you have agreed — Google Ads measurement. We use it to see which pages and which experiences people read, and whether our advertising reaches the right travellers.",
+          "The site loads Google Tag Manager, which in turn runs Google Analytics 4 and — where you have agreed — Google Ads measurement. We use it to see which pages and which experiences people read, and whether our advertising reaches the right travellers. When you send an enquiry after arriving from one of our adverts, the email address you entered is passed to Google in hashed (irreversibly scrambled) form so the enquiry can be matched to that advert — only if you have agreed to advertising measurement.",
           "In the EEA, the United Kingdom and Switzerland nothing is stored on your device until you choose. Until then Google receives only a cookieless signal that a page was viewed, with no identifier. Outside those countries measurement runs by default and you can turn it off with the Cookie settings link in the footer.",
           "We do not run any other tracker, advertising pixel, social plugin or chat widget. When a page embeds a Google map, Google receives the request for that map; and when the booking system goes live, its own provider will be named here first.",
         ],
@@ -117,7 +117,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "計測と広告",
         body: [
-          "本サイトはGoogleタグマネージャーを読み込み、その中でGoogleアナリティクス4と、同意をいただいた場合にGoogle広告の効果測定を実行します。どのページやどの体験が読まれているか、広告が適切な旅行者に届いているかを把握するために使用します。",
+          "本サイトはGoogleタグマネージャーを読み込み、その中でGoogleアナリティクス4と、同意をいただいた場合にGoogle広告の効果測定を実行します。どのページやどの体験が読まれているか、広告が適切な旅行者に届いているかを把握するために使用します。広告から訪問された方がお問い合わせを送信した場合、広告の効果測定に同意いただいているときに限り、入力されたメールアドレスを復元できない形(ハッシュ化)にしてGoogleに送り、どの広告からのお問い合わせかを照合します。",
           "EEA・英国・スイスからのアクセスでは、お選びいただくまでお客様の端末に何も保存しません。それまでGoogleに送られるのは、識別子を含まない「ページが表示された」という情報のみです。これらの地域以外では計測が初期状態で有効になっており、フッターの「Cookie設定」からいつでも無効にできます。",
           "これ以外の解析ツール・広告ピクセル・SNSプラグイン・チャットツールは使用していません。Googleマップを埋め込んだページでは、その地図の読み込みのためGoogleにリクエストが送られます。予約システムを導入する際は、事前に本ページに記載します。",
         ],
@@ -183,7 +183,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Medición y publicidad",
         body: [
-          "El sitio carga Google Tag Manager, que a su vez ejecuta Google Analytics 4 y, si usted lo acepta, la medición de Google Ads. Lo usamos para ver qué páginas y qué experiencias se leen y si nuestra publicidad llega a los viajeros adecuados.",
+          "El sitio carga Google Tag Manager, que a su vez ejecuta Google Analytics 4 y, si usted lo acepta, la medición de Google Ads. Lo usamos para ver qué páginas y qué experiencias se leen y si nuestra publicidad llega a los viajeros adecuados. Si envía una consulta tras llegar desde uno de nuestros anuncios, el correo que escribió se transmite a Google cifrado de forma irreversible (hash) para asociar la consulta a ese anuncio, solo si aceptó la medición publicitaria.",
           "En el EEE, el Reino Unido y Suiza no se guarda nada en su dispositivo hasta que usted elija. Hasta entonces Google solo recibe una señal sin cookies de que se vio una página, sin identificador. Fuera de esos países la medición funciona por defecto y puede desactivarla con el enlace «Configuración de cookies» del pie de página.",
           "No usamos ningún otro rastreador, píxel publicitario, complemento social ni chat. Cuando una página incrusta un mapa de Google, Google recibe la petición de ese mapa; y cuando entre en servicio el sistema de reservas, su proveedor se indicará aquí antes.",
         ],
@@ -249,7 +249,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "Mesure et publicité",
         body: [
-          "Le site charge Google Tag Manager, qui exécute Google Analytics 4 et, si vous l'acceptez, la mesure Google Ads. Nous l'utilisons pour voir quelles pages et quelles expériences sont lues, et si notre publicité touche les bons voyageurs.",
+          "Le site charge Google Tag Manager, qui exécute Google Analytics 4 et, si vous l'acceptez, la mesure Google Ads. Nous l'utilisons pour voir quelles pages et quelles expériences sont lues, et si notre publicité touche les bons voyageurs. Si vous envoyez une demande après être arrivé par l'une de nos annonces, l'adresse e-mail saisie est transmise à Google sous forme hachée (brouillée de façon irréversible) pour rattacher la demande à cette annonce, uniquement si vous avez accepté la mesure publicitaire.",
           "Dans l'EEE, au Royaume-Uni et en Suisse, rien n'est enregistré sur votre appareil avant votre choix. Jusque-là, Google ne reçoit qu'un signal sans cookie indiquant qu'une page a été vue, sans identifiant. En dehors de ces pays, la mesure est active par défaut et le lien « Paramètres des cookies » en bas de page permet de la désactiver.",
           "Nous n'utilisons aucun autre traceur, pixel publicitaire, module social ou outil de chat. Lorsqu'une page intègre une carte Google, Google reçoit la requête correspondante ; et lorsque le système de réservation sera en service, son prestataire sera indiqué ici au préalable.",
         ],
@@ -315,7 +315,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       {
         heading: "成效衡量與廣告",
         body: [
-          "本網站載入 Google 代碼管理工具，並由其執行 Google Analytics 4，以及在您同意時執行 Google Ads 成效衡量。我們用來了解哪些頁面與體驗被閱讀，以及廣告是否觸及合適的旅客。",
+          "本網站載入 Google 代碼管理工具，並由其執行 Google Analytics 4，以及在您同意時執行 Google Ads 成效衡量。我們用來了解哪些頁面與體驗被閱讀，以及廣告是否觸及合適的旅客。若您透過我們的廣告進入網站並送出詢問，且已同意廣告成效衡量，您輸入的電子郵件地址會以無法還原的雜湊形式傳送給 Google，用來比對該詢問來自哪則廣告。",
           "在歐洲經濟區、英國與瑞士，在您做出選擇之前不會在您的裝置上儲存任何資料；在此之前 Google 只會收到「有人看了某個頁面」的無 Cookie 訊號，不含任何識別碼。在這些地區之外，成效衡量預設啟用，您可透過頁尾的「Cookie 設定」關閉。",
           "我們不使用其他追蹤工具、廣告像素、社群外掛或客服聊天工具。當頁面嵌入 Google 地圖時，Google 會收到該地圖的載入請求；預約系統上線時，其服務供應商會事先記載於本頁。",
         ],
