@@ -32,6 +32,11 @@ function update(choice: Choice) {
   // Clarity keeps its own consent state (stub defined in the head script).
   const clarity = (window as unknown as { clarity?: (...args: unknown[]) => void }).clarity;
   clarity?.("consentv2", { ad_Storage: choice, analytics_Storage: choice });
+  // The Meta Pixel ignores Consent Mode; GTM only loads it with ad_storage granted.
+  // If it is already running on this page, a change of mind has to reach it too.
+  // (Never define window.fbq here: Meta's loader skips itself when fbq exists.)
+  const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
+  fbq?.("consent", choice === "granted" ? "grant" : "revoke");
   w.dataLayer.push({ event: "consent_choice", consent_choice: choice });
   try { localStorage.setItem(CONSENT_KEY, choice); } catch { /* private mode */ }
 }

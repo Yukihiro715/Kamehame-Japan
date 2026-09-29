@@ -19,7 +19,7 @@ export interface PrivacyCopy {
   };
 }
 
-const UPDATED = "2026-09-25";
+const UPDATED = "2026-09-29";
 
 const PRIVACY: Record<Lang, PrivacyCopy> = {
   en: {
@@ -54,13 +54,16 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
           "The site loads Google Tag Manager, which in turn runs Google Analytics 4 and — where you have agreed — Google Ads measurement. We use it to see which pages and which experiences people read, and whether our advertising reaches the right travellers. When you send an enquiry after arriving from one of our adverts, the email address you entered is passed to Google in hashed (irreversibly scrambled) form so the enquiry can be matched to that advert — only if you have agreed to advertising measurement.",
           "In the EEA, the United Kingdom and Switzerland nothing is stored on your device until you choose. Until then Google receives only a cookieless signal that a page was viewed, with no identifier. Outside those countries measurement runs by default and you can turn it off with the Cookie settings link in the footer.",
           "Where measurement is on, Microsoft Clarity records how pages are used — scrolling, taps, clicks and mouse movement — so we can see where the site is hard to use. Form fields and anything you type are masked in your browser before anything is sent, and in the EEA, the United Kingdom and Switzerland Clarity loads only after you accept.",
-          "We do not run any other tracker, advertising pixel, social plugin or chat widget. When a page embeds a Google map, Google receives the request for that map.",
+          "Where you have agreed to advertising measurement (outside the EEA, the United Kingdom and Switzerland, unless you turn it off), the site also loads the Meta Pixel from Meta. It tells Meta which pages were viewed and when you send an enquiry or pay for a booking, with the amount, the currency and a reference number, so we can measure our adverts on Facebook and Instagram and show them to people who have visited the site. With it Meta receives the page address (including any parameters), the page you came from, your IP address, browser and device details, and the identifiers in the _fbp and _fbc cookies; and, when you send an enquiry or pay, the email address you used, which the pixel scrambles irreversibly (hashes) in your browser before sending. Meta also uses this information for its own purposes, as its privacy policy explains. We never send Meta what you write in the notes, anything about diet or health, or your name.",
+          "You can stop this at any time with the Cookie settings link in the footer. To control ads based on your activity on other sites, use your ad preferences in Facebook or Instagram, or the industry opt-out pages at www.aboutads.info/choices and www.youronlinechoices.eu.",
+          "We do not run any other tracker, social plugin or chat widget. When a page embeds a Google map, Google receives the request for that map.",
         ],
       },
       {
         heading: "Who else sees it, and where",
         body: [
           "Google Ireland / Google LLC process the measurement data described above, which can involve a transfer to the United States under the European Commission's standard contractual clauses and the EU–US Data Privacy Framework. Cloudflare serves the site and processes the technical request data any web server needs. Our email provider carries your enquiry, and Slack shows our team a short alert (the experience, dates, party size and your first name — not your email address or notes). Microsoft processes the Clarity data, also under the Data Privacy Framework. Each of them acts on our instructions only.",
+          "Meta handles the Meta Pixel data differently: Meta Platforms Ireland Limited (Block J, Serpentine Avenue, Dublin 4, Ireland) for visitors in the EEA, and Meta Platforms, Inc. (1 Meta Way, Menlo Park, California, USA) for everyone else. In the EEA we and Meta Ireland are joint controllers for collecting that data and sending it to Meta; after that, Meta is responsible for its own use of it. It can be transferred to the United States under the EU–US Data Privacy Framework and standard contractual clauses.",
           "When you pay through the link in our reply, the payment page is run by Stripe, which handles your card details under its own privacy policy; we never see your card number. You then return to our site, which reads back from Stripe only the amount, the currency and the email address of that payment, to confirm your booking and — if you agreed to advertising measurement — to report it to Google Ads in the same hashed form as above.",
         ],
       },
@@ -87,6 +90,8 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["_ga, _ga_*", "Google Analytics: tells returning visits apart from new ones.", "2 years"],
         ["_gcl_*", "Google Ads: links a visit to the advert it came from.", "90 days"],
         ["_clck, _clsk", "Microsoft Clarity: keeps the pages of one visit together.", "1 year / 1 day"],
+        ["_fbp, _fbc", "Meta Pixel: recognises your browser, and a visit that came from a Meta ad, to measure and show our adverts.", "90 days, renewed on each visit"],
+        ["fr (facebook.com)", "Meta: kept on Meta's own domain to deliver and measure ads.", "90 days"],
       ],
     },
   },
@@ -123,13 +128,16 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
           "本サイトはGoogleタグマネージャーを読み込み、その中でGoogleアナリティクス4と、同意をいただいた場合にGoogle広告の効果測定を実行します。どのページやどの体験が読まれているか、広告が適切な旅行者に届いているかを把握するために使用します。広告から訪問された方がお問い合わせを送信した場合、広告の効果測定に同意いただいているときに限り、入力されたメールアドレスを復元できない形(ハッシュ化)にしてGoogleに送り、どの広告からのお問い合わせかを照合します。",
           "EEA・英国・スイスからのアクセスでは、お選びいただくまでお客様の端末に何も保存しません。それまでGoogleに送られるのは、識別子を含まない「ページが表示された」という情報のみです。これらの地域以外では計測が初期状態で有効になっており、フッターの「Cookie設定」からいつでも無効にできます。",
           "計測が有効な場合、Microsoft Clarityでページの使われ方(スクロール、タップ、クリック、マウスの動き)を記録し、使いにくい箇所の改善に役立てます。入力欄とその入力内容は送信前にブラウザ上で伏せ字にされ、EEA・英国・スイスからのアクセスでは、同意いただいた後にのみClarityを読み込みます。",
-          "これ以外の解析ツール・広告ピクセル・SNSプラグイン・チャットツールは使用していません。Googleマップを埋め込んだページでは、その地図の読み込みのためGoogleにリクエストが送られます。",
+          "広告の効果測定に同意いただいている場合(EEA・英国・スイス以外では、無効にしない限り)、MetaのMetaピクセルも読み込みます。表示されたページと、お問い合わせの送信・ご予約のお支払いがあったこと(金額・通貨・受付番号)をMetaに知らせ、FacebookやInstagramの広告の効果を測定し、サイトを訪れた方に広告を表示するために使用します。その際Metaには、ページのアドレス(パラメータを含む)、参照元のページ、IPアドレス、ブラウザや端末の情報、_fbp・_fbc Cookieの識別子が送られます。お問い合わせの送信時やお支払い時には、ご利用のメールアドレスも、ブラウザ上で復元できない形(ハッシュ化)にしてから送られます。Metaはこれらの情報を、Metaのプライバシーポリシーに従い自らの目的にも利用します。備考欄の内容、食事や健康に関する情報、お名前はMetaに送りません。",
+          "フッターの「Cookie設定」からいつでも停止できます。他のサイトでの行動に基づく広告は、FacebookやInstagramの広告設定、または業界団体のオプトアウトページ(www.aboutads.info/choices、www.youronlinechoices.eu)から管理できます。",
+          "これ以外の解析ツール・SNSプラグイン・チャットツールは使用していません。Googleマップを埋め込んだページでは、その地図の読み込みのためGoogleにリクエストが送られます。",
         ],
       },
       {
         heading: "第三者への提供と保管場所",
         body: [
           "上記の計測データはGoogle Ireland / Google LLCが処理し、欧州委員会の標準契約条項およびEU–US データプライバシーフレームワークに基づき米国へ移転される場合があります。サイトの配信はCloudflareが行い、ウェブサーバーが必要とする技術的なリクエスト情報を処理します。お問い合わせの配送はメール事業者が行い、社内への通知にはSlackを使います(体験・日程・人数・お名前のみで、メールアドレスや備考は含みません)。Clarityのデータは Microsoft が処理し、同じくデータプライバシーフレームワークの対象です。いずれも当方の指示の範囲でのみ取り扱います。",
+          "Metaピクセルのデータは、EEAからの訪問者についてはMeta Platforms Ireland Limited(Block J, Serpentine Avenue, Dublin 4, Ireland)、それ以外の訪問者についてはMeta Platforms, Inc.(1 Meta Way, Menlo Park, California, USA)が取り扱います。EEAでは、データの収集とMetaへの送信について当方とMeta Irelandが共同管理者となり、送信後の利用はMetaが自らの責任で行います。データはEU–USデータプライバシーフレームワークおよび標準契約条項に基づき米国へ移転される場合があります。",
           "ご返信内のリンクからお支払いいただく際の決済ページはStripeが運営し、カード情報はStripeが自社のプライバシーポリシーに基づいて取り扱います。当方がカード番号を目にすることはありません。お支払い後に本サイトへ戻った際、ご予約の確定と、広告の効果測定に同意いただいている場合のGoogle広告への成果報告(上記と同じハッシュ化)のため、Stripeからそのお支払いの金額・通貨・メールアドレスのみを取得します。",
         ],
       },
@@ -156,6 +164,8 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["_ga, _ga_*", "Googleアナリティクス:再訪と新規の訪問を区別します。", "2年"],
         ["_gcl_*", "Google広告:どの広告から訪問したかを対応づけます。", "90日"],
         ["_clck, _clsk", "Microsoft Clarity:1回の訪問のページをまとめて扱います。", "1年/1日"],
+        ["_fbp, _fbc", "Metaピクセル:ブラウザと、Meta広告からの訪問であることを識別し、広告の測定と表示に使います。", "90日(訪問のたびに更新)"],
+        ["fr(facebook.com)", "Meta:Metaのドメインに保存され、広告の配信と測定に使われます。", "90日"],
       ],
     },
   },
@@ -192,13 +202,16 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
           "El sitio carga Google Tag Manager, que a su vez ejecuta Google Analytics 4 y, si usted lo acepta, la medición de Google Ads. Lo usamos para ver qué páginas y qué experiencias se leen y si nuestra publicidad llega a los viajeros adecuados. Si envía una consulta tras llegar desde uno de nuestros anuncios, el correo que escribió se transmite a Google cifrado de forma irreversible (hash) para asociar la consulta a ese anuncio, solo si aceptó la medición publicitaria.",
           "En el EEE, el Reino Unido y Suiza no se guarda nada en su dispositivo hasta que usted elija. Hasta entonces Google solo recibe una señal sin cookies de que se vio una página, sin identificador. Fuera de esos países la medición funciona por defecto y puede desactivarla con el enlace «Configuración de cookies» del pie de página.",
           "Cuando la medición está activa, Microsoft Clarity registra cómo se usan las páginas (desplazamiento, toques, clics y movimiento del ratón) para ver dónde el sitio resulta difícil de usar. Los campos de formulario y lo que escribe se ocultan en su navegador antes de enviar nada, y en el EEE, el Reino Unido y Suiza Clarity solo se carga después de que usted acepte.",
-          "No usamos ningún otro rastreador, píxel publicitario, complemento social ni chat. Cuando una página incrusta un mapa de Google, Google recibe la petición de ese mapa.",
+          "Si usted ha aceptado la medición publicitaria (fuera del EEE, el Reino Unido y Suiza, salvo que la desactive), el sitio carga también el píxel de Meta. Informa a Meta de las páginas vistas y de cuándo envía una consulta o paga una reserva, con el importe, la moneda y un número de referencia, para medir nuestros anuncios en Facebook e Instagram y mostrarlos a quienes han visitado el sitio. Meta recibe así la dirección de la página (con sus parámetros), la página de procedencia, su dirección IP, datos del navegador y del dispositivo y los identificadores de las cookies _fbp y _fbc; y, cuando envía una consulta o paga, el correo que utilizó, que el píxel cifra de forma irreversible (hash) en su navegador antes de enviarlo. Meta usa también esta información para sus propios fines, como explica su política de privacidad. Nunca enviamos a Meta lo que escribe en las notas, información sobre alimentación o salud, ni su nombre.",
+          "Puede detenerlo en cualquier momento con el enlace Configuración de cookies del pie de página. Para controlar los anuncios basados en su actividad en otros sitios, use sus preferencias de anuncios en Facebook o Instagram, o las páginas de exclusión del sector: www.aboutads.info/choices y www.youronlinechoices.eu.",
+          "No usamos ningún otro rastreador, complemento social ni chat. Cuando una página incrusta un mapa de Google, Google recibe la petición de ese mapa.",
         ],
       },
       {
         heading: "Quién más lo ve, y dónde",
         body: [
           "Google Ireland / Google LLC tratan los datos de medición descritos arriba, lo que puede implicar una transferencia a Estados Unidos al amparo de las cláusulas contractuales tipo de la Comisión Europea y del Marco de Privacidad de Datos UE–EE. UU. Cloudflare sirve el sitio y trata los datos técnicos de la petición que necesita cualquier servidor web. Nuestro proveedor de correo transporta su consulta y Slack muestra a nuestro equipo un aviso breve (experiencia, fechas, número de personas y su nombre, sin su correo ni sus notas). Microsoft trata los datos de Clarity, también al amparo del Marco de Privacidad de Datos. Todos actúan únicamente siguiendo nuestras instrucciones.",
+          "Meta trata los datos del píxel de Meta de otra manera: Meta Platforms Ireland Limited (Block J, Serpentine Avenue, Dublin 4, Irlanda) para los visitantes del EEE y Meta Platforms, Inc. (1 Meta Way, Menlo Park, California, EE. UU.) para los demás. En el EEE, nosotros y Meta Ireland somos corresponsables de la recogida de esos datos y de su envío a Meta; después, Meta es responsable de su propio uso. Pueden transferirse a Estados Unidos al amparo del Marco de Privacidad de Datos UE–EE. UU. y de cláusulas contractuales tipo.",
           "Cuando paga con el enlace de nuestra respuesta, la página de pago la gestiona Stripe, que trata los datos de su tarjeta según su propia política de privacidad; nosotros nunca vemos el número de la tarjeta. Después vuelve a nuestro sitio, que solo consulta a Stripe el importe, la moneda y el correo de ese pago, para confirmar su reserva y, si aceptó la medición publicitaria, comunicarla a Google Ads con el mismo cifrado (hash) descrito arriba.",
         ],
       },
@@ -225,6 +238,8 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["_ga, _ga_*", "Google Analytics: distingue las visitas nuevas de las recurrentes.", "2 años"],
         ["_gcl_*", "Google Ads: relaciona una visita con el anuncio del que procede.", "90 días"],
         ["_clck, _clsk", "Microsoft Clarity: agrupa las páginas de una misma visita.", "1 año / 1 día"],
+        ["_fbp, _fbc", "Píxel de Meta: reconoce su navegador, y una visita que llega desde un anuncio de Meta, para medir y mostrar nuestros anuncios.", "90 días, renovados en cada visita"],
+        ["fr (facebook.com)", "Meta: se guarda en el dominio de Meta para mostrar y medir anuncios.", "90 días"],
       ],
     },
   },
@@ -261,13 +276,16 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
           "Le site charge Google Tag Manager, qui exécute Google Analytics 4 et, si vous l'acceptez, la mesure Google Ads. Nous l'utilisons pour voir quelles pages et quelles expériences sont lues, et si notre publicité touche les bons voyageurs. Si vous envoyez une demande après être arrivé par l'une de nos annonces, l'adresse e-mail saisie est transmise à Google sous forme hachée (brouillée de façon irréversible) pour rattacher la demande à cette annonce, uniquement si vous avez accepté la mesure publicitaire.",
           "Dans l'EEE, au Royaume-Uni et en Suisse, rien n'est enregistré sur votre appareil avant votre choix. Jusque-là, Google ne reçoit qu'un signal sans cookie indiquant qu'une page a été vue, sans identifiant. En dehors de ces pays, la mesure est active par défaut et le lien « Paramètres des cookies » en bas de page permet de la désactiver.",
           "Lorsque la mesure est active, Microsoft Clarity enregistre la façon dont les pages sont utilisées (défilement, touchers, clics et mouvements de souris) afin de repérer ce qui est difficile à utiliser. Les champs de formulaire et ce que vous saisissez sont masqués dans votre navigateur avant tout envoi, et dans l'EEE, au Royaume-Uni et en Suisse, Clarity ne se charge qu'après votre accord.",
-          "Nous n'utilisons aucun autre traceur, pixel publicitaire, module social ou outil de chat. Lorsqu'une page intègre une carte Google, Google reçoit la requête correspondante.",
+          "Si vous avez accepté la mesure publicitaire (hors EEE, Royaume-Uni et Suisse : sauf si vous la désactivez), le site charge aussi le pixel Meta. Il indique à Meta les pages consultées et le moment où vous envoyez une demande ou payez une réservation, avec le montant, la devise et un numéro de référence, afin de mesurer nos publicités sur Facebook et Instagram et de les montrer aux personnes qui ont visité le site. Meta reçoit ainsi l'adresse de la page (paramètres compris), la page de provenance, votre adresse IP, des informations sur votre navigateur et votre appareil, et les identifiants des cookies _fbp et _fbc ; et, lorsque vous envoyez une demande ou payez, l'adresse e-mail utilisée, que le pixel brouille de façon irréversible (hachage) dans votre navigateur avant l'envoi. Meta utilise aussi ces informations à ses propres fins, comme l'explique sa politique de confidentialité. Nous n'envoyons jamais à Meta ce que vous écrivez dans les remarques, d'informations sur l'alimentation ou la santé, ni votre nom.",
+          "Vous pouvez l'arrêter à tout moment avec le lien « Paramètres des cookies » en bas de page. Pour gérer les publicités fondées sur votre activité sur d'autres sites, utilisez vos préférences publicitaires dans Facebook ou Instagram, ou les pages d'opposition du secteur : www.aboutads.info/choices et www.youronlinechoices.eu.",
+          "Nous n'utilisons aucun autre traceur, module social ou outil de chat. Lorsqu'une page intègre une carte Google, Google reçoit la requête correspondante.",
         ],
       },
       {
         heading: "Qui d'autre y a accès, et où",
         body: [
           "Google Ireland / Google LLC traitent les données de mesure décrites ci-dessus, ce qui peut impliquer un transfert vers les États-Unis au titre des clauses contractuelles types de la Commission européenne et du cadre de protection des données UE–États-Unis. Cloudflare sert le site et traite les données techniques de requête dont tout serveur web a besoin. Notre prestataire de messagerie achemine votre demande, et Slack affiche à notre équipe une brève alerte (expérience, dates, nombre de personnes et prénom, sans votre adresse e-mail ni vos remarques). Microsoft traite les données de Clarity, également dans le cadre de protection des données. Chacun agit uniquement sur nos instructions.",
+          "Meta traite les données du pixel Meta autrement : Meta Platforms Ireland Limited (Block J, Serpentine Avenue, Dublin 4, Irlande) pour les visiteurs de l'EEE, et Meta Platforms, Inc. (1 Meta Way, Menlo Park, Californie, États-Unis) pour les autres. Dans l'EEE, nous sommes responsables conjoints avec Meta Ireland de la collecte de ces données et de leur transmission à Meta ; Meta est ensuite responsable de sa propre utilisation. Elles peuvent être transférées vers les États-Unis dans le cadre de protection des données UE–États-Unis et de clauses contractuelles types.",
           "Lorsque vous payez via le lien de notre réponse, la page de paiement est gérée par Stripe, qui traite les données de votre carte selon sa propre politique de confidentialité ; nous ne voyons jamais le numéro de carte. Vous revenez ensuite sur notre site, qui ne lit auprès de Stripe que le montant, la devise et l'adresse e-mail de ce paiement, pour confirmer votre réservation et, si vous avez accepté la mesure publicitaire, la signaler à Google Ads sous la même forme hachée que ci-dessus.",
         ],
       },
@@ -294,6 +312,8 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["_ga, _ga_*", "Google Analytics : distingue les visites nouvelles des visites répétées.", "2 ans"],
         ["_gcl_*", "Google Ads : relie une visite à l'annonce dont elle provient.", "90 jours"],
         ["_clck, _clsk", "Microsoft Clarity : regroupe les pages d'une même visite.", "1 an / 1 jour"],
+        ["_fbp, _fbc", "Pixel Meta : reconnaît votre navigateur, et une visite venue d'une publicité Meta, pour mesurer et diffuser nos publicités.", "90 jours, renouvelés à chaque visite"],
+        ["fr (facebook.com)", "Meta : déposé sur le domaine de Meta pour diffuser et mesurer les publicités.", "90 jours"],
       ],
     },
   },
@@ -330,13 +350,16 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
           "本網站載入 Google 代碼管理工具，並由其執行 Google Analytics 4，以及在您同意時執行 Google Ads 成效衡量。我們用來了解哪些頁面與體驗被閱讀，以及廣告是否觸及合適的旅客。若您透過我們的廣告進入網站並送出詢問，且已同意廣告成效衡量，您輸入的電子郵件地址會以無法還原的雜湊形式傳送給 Google，用來比對該詢問來自哪則廣告。",
           "在歐洲經濟區、英國與瑞士，在您做出選擇之前不會在您的裝置上儲存任何資料；在此之前 Google 只會收到「有人看了某個頁面」的無 Cookie 訊號，不含任何識別碼。在這些地區之外，成效衡量預設啟用，您可透過頁尾的「Cookie 設定」關閉。",
           "在成效衡量啟用時，我們透過 Microsoft Clarity 記錄頁面的使用方式（捲動、點按、點擊與滑鼠移動），以找出網站不易使用之處。表單欄位與您輸入的內容會在傳送前於瀏覽器中遮蔽；來自歐洲經濟區、英國與瑞士的造訪，僅在您同意後才會載入 Clarity。",
-          "我們不使用其他追蹤工具、廣告像素、社群外掛或客服聊天工具。當頁面嵌入 Google 地圖時，Google 會收到該地圖的載入請求。",
+          "若您同意廣告成效衡量（歐洲經濟區、英國與瑞士以外地區，除非您關閉），本網站也會載入 Meta 的 Meta 像素。它會告知 Meta 您瀏覽了哪些頁面，以及您送出詢問或支付預約的時間，連同金額、幣別與參考編號，用於衡量我們在 Facebook 與 Instagram 的廣告成效，並向曾造訪本網站的人顯示廣告。Meta 因此會收到頁面網址（含參數）、來源頁面、您的 IP 位址、瀏覽器與裝置資訊，以及 _fbp、_fbc Cookie 中的識別碼；在您送出詢問或付款時，還會收到您使用的電子郵件地址，該地址會先在您的瀏覽器中以無法還原的方式（雜湊）處理後再傳送。Meta 也會依其隱私政策，將這些資訊用於自身目的。我們絕不會將備註欄內容、飲食或健康相關資訊或您的姓名傳送給 Meta。",
+          "您可隨時透過頁尾的「Cookie 設定」停止。若要管理依您在其他網站的活動而投放的廣告，請使用 Facebook 或 Instagram 的廣告偏好設定，或業界的選擇退出頁面：www.aboutads.info/choices 與 www.youronlinechoices.eu。",
+          "我們不使用其他追蹤工具、社群外掛或客服聊天工具。當頁面嵌入 Google 地圖時，Google 會收到該地圖的載入請求。",
         ],
       },
       {
         heading: "還有誰會接觸到，以及在哪裡",
         body: [
           "上述成效衡量資料由 Google Ireland / Google LLC 處理，可能依歐盟執委會的標準契約條款與歐盟—美國資料隱私框架傳輸至美國。網站由 Cloudflare 提供服務，並處理任何網頁伺服器所需的技術性請求資料。您的詢問由我們的電子郵件服務商傳送，並透過 Slack 向我們的團隊發送簡短通知（體驗、日期、人數與您的名字，不含電子郵件地址與備註）。Clarity 的資料由 Microsoft 處理，同樣適用資料隱私框架。以上各方均僅依我們的指示處理。",
+          "Meta 像素的資料則由 Meta 處理：歐洲經濟區的訪客由 Meta Platforms Ireland Limited（Block J, Serpentine Avenue, Dublin 4, Ireland）處理，其他訪客由 Meta Platforms, Inc.（1 Meta Way, Menlo Park, California, USA）處理。在歐洲經濟區，我們與 Meta Ireland 就該資料的蒐集及傳送給 Meta 為共同控管者；傳送後，由 Meta 自行負責其使用。資料可能依歐盟—美國資料隱私框架及標準契約條款傳輸至美國。",
           "透過我們回覆中的連結付款時，付款頁面由 Stripe 營運，您的信用卡資料由 Stripe 依其隱私權政策處理，我們不會看到卡號。付款後您會回到本網站，本網站僅向 Stripe 讀取該筆付款的金額、幣別與電子郵件，用於確認預約，並在您同意廣告成效衡量時，以與上述相同的雜湊形式回報給 Google Ads。",
         ],
       },
@@ -363,6 +386,8 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
         ["_ga, _ga_*", "Google Analytics：區分新訪客與回訪訪客。", "2 年"],
         ["_gcl_*", "Google Ads：將造訪與來源廣告對應起來。", "90 天"],
         ["_clck, _clsk", "Microsoft Clarity：將同一次造訪的頁面歸為一組。", "1 年／1 天"],
+        ["_fbp, _fbc", "Meta 像素：辨識您的瀏覽器，以及來自 Meta 廣告的造訪，用於衡量與顯示我們的廣告。", "90 天（每次造訪時更新）"],
+        ["fr（facebook.com）", "Meta：儲存在 Meta 的網域，用於投放與衡量廣告。", "90 天"],
       ],
     },
   },
