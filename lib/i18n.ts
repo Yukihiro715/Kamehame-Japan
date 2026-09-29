@@ -110,7 +110,7 @@ const strings = {
     // enquiry form
     consent: {
       title: "Cookies on this site",
-      body: "We use cookies to see how the site is used and to measure our advertising. Nothing is stored until you choose. Necessary cookies are always on.",
+      body: "We use cookies to see how the site is used, to measure our advertising and, with Meta, to show our adverts to people who have visited. Nothing is stored until you choose. Necessary cookies are always on.",
       accept: "Accept", reject: "Reject", settings: "Cookie settings", more: "Privacy & cookies",
     },
     thanks: {
@@ -309,7 +309,7 @@ const strings = {
     comingSoonCta: "Avisadme cuando se abra",
     consent: {
       title: "Cookies en este sitio",
-      body: "Usamos cookies para ver cómo se utiliza el sitio y medir nuestra publicidad. No se guarda nada hasta que usted elija. Las cookies necesarias están siempre activas.",
+      body: "Usamos cookies para ver cómo se utiliza el sitio, medir nuestra publicidad y, con Meta, mostrar nuestros anuncios a quienes han visitado el sitio. No se guarda nada hasta que usted elija. Las cookies necesarias están siempre activas.",
       accept: "Aceptar", reject: "Rechazar", settings: "Configuración de cookies", more: "Privacidad y cookies",
     },
     thanks: {
@@ -506,7 +506,7 @@ const strings = {
     comingSoonCta: "公開時に知らせてほしい",
     consent: {
       title: "Cookieの使用について",
-      body: "サイトの利用状況の把握と広告の効果測定にCookieを使用します。お選びいただくまで何も保存しません。必要なCookieは常に有効です。",
+      body: "サイトの利用状況の把握、広告の効果測定、そしてMetaを通じてサイトを訪れた方に広告を表示するためにCookieを使用します。お選びいただくまで何も保存しません。必要なCookieは常に有効です。",
       accept: "同意する", reject: "同意しない", settings: "Cookie設定", more: "プライバシーとCookie",
     },
     thanks: {
@@ -702,7 +702,7 @@ const strings = {
     comingSoonCta: "Prévenez-moi à l'ouverture",
     consent: {
       title: "Cookies sur ce site",
-      body: "Nous utilisons des cookies pour comprendre l'usage du site et mesurer notre publicité. Rien n'est enregistré avant votre choix. Les cookies nécessaires restent actifs.",
+      body: "Nous utilisons des cookies pour comprendre l'usage du site, mesurer notre publicité et, avec Meta, montrer nos publicités aux personnes qui ont visité le site. Rien n'est enregistré avant votre choix. Les cookies nécessaires restent actifs.",
       accept: "Accepter", reject: "Refuser", settings: "Paramètres des cookies", more: "Confidentialité et cookies",
     },
     thanks: {
@@ -900,7 +900,7 @@ const strings = {
     comingSoonCta: "開放時通知我",
     consent: {
       title: "本網站的 Cookie",
-      body: "我們使用 Cookie 了解網站使用情形並衡量廣告成效。在您選擇之前不會儲存任何資料。必要的 Cookie 一律啟用。",
+      body: "我們使用 Cookie 了解網站使用情形、衡量廣告成效，並透過 Meta 向曾造訪本網站的人顯示我們的廣告。在您選擇之前不會儲存任何資料。必要的 Cookie 一律啟用。",
       accept: "同意", reject: "拒絕", settings: "Cookie 設定", more: "隱私權與 Cookie",
     },
     thanks: {

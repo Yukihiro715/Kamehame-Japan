@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
 import { GTM_ID } from "@/lib/analytics";
 import { consentDefaultScript } from "@/lib/consent";
+import { RouteChangeEvent } from "@/components/site/route-change-event";
 import { socialMeta } from "@/lib/seo";
 import "./globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: gtmSnippet }} />
       </head>
       <body>
+        <RouteChangeEvent />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}

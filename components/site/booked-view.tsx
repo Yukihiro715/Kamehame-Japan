@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Mail, MapPin, Receipt } from "lucide-react";
 import { track } from "@/lib/analytics";
+import { acceptedExplicitly } from "@/lib/consent";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { LANGS, t, type Lang } from "@/lib/i18n";
 import { yen } from "@/lib/pricing";
@@ -20,7 +21,9 @@ export function BookedView({ lang }: { lang: Lang }) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("session_id") ?? "";
+    // The head script moves session_id out of the URL before any tag loads.
+    let id = params.get("session_id") ?? "";
+    if (!id) { try { id = sessionStorage.getItem("kh-checkout-session") ?? ""; } catch { /* storage blocked: the id stayed in the URL */ } }
 
     // One redirect URL serves every language: send the guest to their own.
     if (lang === "en" && !params.has("stay")) {
@@ -34,7 +37,7 @@ export function BookedView({ lang }: { lang: Lang }) {
     let cancelled = false;
     (async () => {
       let data: Lookup = { ok: false };
-      try { data = (await (await fetch(`/api/booking?session_id=${encodeURIComponent(id)}`)).json()) as Lookup; } catch { /* offline */ }
+      try { data = (await (await fetch(`/api/booking?session_id=${encodeURIComponent(id)}${acceptedExplicitly() ? "&email=1" : ""}`)).json()) as Lookup; } catch { /* offline */ }
       if (cancelled) return;
       if (data.ok && typeof data.amount === "number") setAmount(data.currency === "JPY" || !data.currency ? yen(data.amount) : `${data.amount} ${data.currency}`);
       // Only a payment Stripe confirms as paid counts: a made-up or mistyped

@@ -5,6 +5,7 @@ import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 import { eventId, track } from "@/lib/analytics";
+import { acceptedExplicitly } from "@/lib/consent";
 import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
 import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
@@ -80,9 +81,10 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           // Unique per submission: Google Ads uses it as the transaction ID so a
           // double submit or a reload never counts twice.
           enquiry_id: eventId("enq"),
-          // Enhanced conversions: GTM's Ads tag reads this; Google hashes it and
-          // only uses it where the visitor granted ad_user_data.
-          user_data: data.email ? { email: data.email.trim().toLowerCase() } : undefined,
+          // Enhanced conversions / Meta advanced matching: GTM's tags read this and
+          // it leaves the browser hashed. Only after an explicit Accept, not the
+          // regional default (see acceptedExplicitly).
+          user_data: data.email && acceptedExplicitly() ? { email: data.email.trim().toLowerCase() } : undefined,
           enquiry_kind: kind,
           experience: experience?.slug,
           experience_title: experience?.title,
@@ -134,7 +136,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   }
 
   return (
-    <form className={card ? "bk-form" : "enquiry-form"} onSubmit={submit} noValidate={false} data-clarity-mask="True">
+    <form className={card ? "bk-form" : "enquiry-form"} method="post" action="/api/contact" onSubmit={submit} noValidate={false} data-clarity-mask="True">
       {card && needDate && !b?.date && <p className="form-error" role="alert">{F.chooseDateFirst}</p>}
       {experience && !card && (
         <p className="form-context">

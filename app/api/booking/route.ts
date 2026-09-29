@@ -17,8 +17,14 @@ async function readKey(): Promise<string | undefined> {
 
 const noStore = { "cache-control": "no-store" };
 
+/** How long after the checkout started the payer's email is still returned. */
+const EMAIL_WINDOW_S = 2 * 60 * 60;
+
 export async function GET(request: Request): Promise<Response> {
-  const id = new URL(request.url).searchParams.get("session_id") ?? "";
+  const params = new URL(request.url).searchParams;
+  const id = params.get("session_id") ?? "";
+  // The page asks for the email only when the guest clicked Accept.
+  const wantsEmail = params.get("email") === "1";
   if (!/^cs_(test|live)_[A-Za-z0-9]{10,200}$/.test(id)) {
     return Response.json({ ok: false, error: "invalid" }, { status: 400, headers: noStore });
   }
@@ -32,8 +38,12 @@ export async function GET(request: Request): Promise<Response> {
     if (!res.ok) return Response.json({ ok: false, error: "not_found" }, { status: 404, headers: noStore });
     const s = (await res.json()) as {
       payment_status?: string; amount_total?: number | null; currency?: string | null;
-      customer_details?: { email?: string | null } | null;
+      customer_details?: { email?: string | null } | null; created?: number;
     };
+    // The session id is the only thing a caller shows, so the payer's email
+    // is returned only while the guest is plausibly still coming back from
+    // paying — not to whoever holds an old id later.
+    const fresh = typeof s.created === "number" && Date.now() / 1000 - s.created < EMAIL_WINDOW_S;
     // JPY is a zero-decimal currency: amount_total is already in yen.
     return Response.json({
       ok: true,
@@ -41,7 +51,7 @@ export async function GET(request: Request): Promise<Response> {
       amount: typeof s.amount_total === "number" ? s.amount_total : undefined,
       currency: s.currency ? s.currency.toUpperCase() : undefined,
       // Only for the guest's own enhanced-conversion match on this page.
-      email: s.customer_details?.email ?? undefined,
+      email: wantsEmail && fresh ? s.customer_details?.email ?? undefined : undefined,
     }, { headers: noStore });
   } catch (err) {
     console.error("booking: stripe lookup failed", err);
