@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check } from "lucide-react";
+import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -9,6 +9,7 @@ import { BookingBox } from "@/components/site/booking-box";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider } from "@/components/site/booking-context";
 import { BookingCard } from "@/components/site/booking-card";
+import { DateList } from "@/components/site/date-list";
 import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { VideoFacade } from "@/components/site/video-facade";
@@ -116,7 +117,7 @@ export default async function DetailPage({ params }: Props) {
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }
 
-const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles };
+const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles, brush: Brush };
 
 function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
@@ -219,6 +220,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <section className="xp-section" id="overview">
               <h2>{D.overviewH}</h2>
               <p className="xp-lede">{exp.tagline}</p>
+              {exp.overview?.map((p) => <p key={p} className="xp-overview-p">{p}</p>)}
               <ul className="xp-overview-facts">
                 {avail && <li><CalendarDays size={15} /><span>{avail.dates ? D.availSelected : avail.daily ? D.availDaily : ""} · {D.availStart} {avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}</span></li>}
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
@@ -226,6 +228,12 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 {avail && <li><Clock3 size={15} /><span>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
                 {plans.length > 0 && <li><Users size={15} /><span>{D.performerNote}</span></li>}
               </ul>
+              {exp.overviewFigure && (
+                <figure className="xp-overview-fig">
+                  <img src={exp.overviewFigure.img} alt={exp.overviewFigure.alt} loading="lazy" />
+                  {exp.overviewFigure.caption && <figcaption>{exp.overviewFigure.caption}</figcaption>}
+                </figure>
+              )}
             </section>
 
             {/* ④ Plans (plan-priced products) */}
@@ -425,9 +433,10 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                   <dl>
                     {avail.dates ? (
                       <div><dt>{D.availDatesH}</dt><dd>
-                        <ul className="xp-dates">
-                          {avail.dates.map((d) => <li key={d.date}><b>{fmtDay.format(new Date(`${d.date}T00:00:00Z`))}</b><span>{d.times.join(" / ")}</span></li>)}
-                        </ul>
+                        <DateList
+                          items={avail.dates.map((d) => ({ date: d.date, label: fmtDay.format(new Date(`${d.date}T00:00:00Z`)), times: d.times.join(" / ") }))}
+                          more={D.availDatesMore} less={D.availDatesLess}
+                        />
                         <small className="xp-dates-note">{D.availDatesNote}{exp.availabilityNote && ` ${exp.availabilityNote}`}</small>
                       </dd></div>
                     ) : (

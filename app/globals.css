@@ -1372,3 +1372,12 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .form-row .form-hint.full { grid-column:1 / -1; margin-top:-4px; }
 /* Japanese "〜" / Chinese "起" after a starting price, where English puts "From" before it */
 .from-suffix { margin-left:2px; font-size:.55em; font-weight:400; letter-spacing:0; }
+/* overview: extra paragraphs under the lead, and an uncropped figure */
+.xp-overview-p { margin:14px 0 0; font-size:15.5px; line-height:1.85; color:#3d3a34; }
+.xp-overview-fig { margin:22px 0 0; }
+.xp-overview-fig img { display:block; width:100%; height:auto; border-radius:12px; border:1px solid #ece7dc; }
+.xp-overview-fig figcaption { margin-top:8px; font-size:12.5px; color:var(--muted); }
+.xp-dates-more { margin-top:10px; padding:0; border:0; background:none; font:inherit; font-size:13px; font-weight:600; color:var(--ink); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+/* four highlights read better as two rows of two than three plus one */
+.xp-highlights:has(> :nth-child(4):last-child) { grid-template-columns:repeat(2,1fr); }
+@media(max-width:700px){ .xp-highlights:has(> :nth-child(4):last-child) { grid-template-columns:1fr; } }

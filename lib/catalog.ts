@@ -153,7 +153,7 @@ export interface Experience {
    *  booking: a public landmark in the same district, never the venue itself. */
   map?: { lat: number; lng: number; zoom?: number };
   /** Three value cards. Falls back to the site-wide trio when absent. */
-  highlights?: { title: string; body: string; icon: "group" | "chat" | "interpreter" | "dance" | "meal" | "photo" }[];
+  highlights?: { title: string; body: string; icon: "group" | "chat" | "interpreter" | "dance" | "meal" | "photo" | "brush" }[];
   /** Confirmed with the venue. Absent means "not confirmed" and nothing is
    *  claimed — never "all inclusive" by default. */
   included?: string[];
@@ -162,6 +162,10 @@ export interface Experience {
   schedule?: { time: string; title: string; body?: string; img?: string }[];
   /** Time actually spent with the practitioner, when shorter than `duration`. */
   interactionTime?: string;
+  /** Further overview paragraphs under the lead (`tagline`). */
+  overview?: string[];
+  /** A full-width picture at the end of the overview, shown uncropped. */
+  overviewFigure?: { img: string; alt: string; caption?: string };
   /** Replaces the generic "N in total, M with your host" line when the host needs naming. */
   interactionNote?: string;
   /** Replaces the generic map caption, e.g. to say what the pin marks. */
@@ -242,12 +246,15 @@ export const experiences: Experience[] = [
     // the studio booked; ▲ slots need the studio booked when a request comes in.
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy", bookingType: "request", status: "live",
     title: "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
-    tagline: "Two hours with a Tokyo brush-lettering teacher. Tell her what your name means, choose the kanji that carries it, learn the strokes, and brush your own piece on a shikishi board — sealed with a red stamp and yours to take home on its wooden stand.",
+    tagline: "Create a one-of-a-kind kanji artwork inspired by your own name, in a private class in Tokyo. Before the day we ask about your name and its meaning, and the teacher prepares three kanji for you; you choose the one that feels most like you and turn it into art with brush and ink.",
+    overview: ["This is not a calligraphy class about writing perfectly or following strict rules. What matters is what your kanji means to you, and expressing it in your own way.", "You start by exploring how the brush moves — lines, dry-brush texture, the moods of ink. Then you choose a style, Cute, Bold or Elegant, and develop your character with one-to-one guidance from the teacher. No experience with brushes or kanji is needed.", "A red seal completes the piece, and it goes home with you: a kanji chosen for you and shaped by your own hands — a piece of art from your time in Tokyo, not just a souvenir."],
+    overviewFigure: { img: "/images/kanji-styles.jpg", alt: "Style examples: six kanji brushed in the Cute, Bold and Elegant styles", caption: "The three styles to choose from — Cute, Bold and Elegant (examples)." },
     duration: "About 2 hours", price: "¥19,800", priceUnit: "person", group: "Private · 1–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },
       { img: "/images/kanji-guests-works.jpg", alt: "Two guests holding their finished kanji, 灯 (light) and 夢 (dream)" },
+      { img: "/images/kanji-finished-stand.jpg", alt: "A finished 夢 (dream) on its wooden stand, ready to take home" },
       { img: "/images/kanji-works-table.jpg", alt: "Finished pieces laid out to dry, each with a red seal" },
       { img: "/images/kanji-brush-focus.jpg", alt: "A guest concentrating on his final piece" },
       { img: "/images/kanji-teacher-yume.jpg", alt: "The teacher holding 夢 (dream), brushed in a playful style" },
@@ -256,6 +263,8 @@ export const experiences: Experience[] = [
       { img: "/images/kanji-teacher-shows.jpg", alt: "The teacher showing a finished character" },
       { img: "/images/kanji-brush-closeup.jpg", alt: "Close-up of a brush on practice paper" },
       { img: "/images/kanji-teacher-check.jpg", alt: "The teacher checking a guest's practice sheets" },
+      { img: "/images/kanji-table-setup.jpg", alt: "Brush, ink and inkstone beside a finished 舞 (dance)" },
+      { img: "/images/kanji-teacher-seal.jpg", alt: "The teacher with a finished piece and the box of red seals" },
       { img: "/images/kanji-studio.jpg", alt: "The bright studio with a long shared table" },
     ],
     partySize: { min: 1, max: 4 },
@@ -277,6 +286,26 @@ export const experiences: Experience[] = [
         { date: "2026-12-14", times: ["10:30"] },
         { date: "2026-12-17", times: ["13:30", "16:00"] },
         { date: "2026-12-23", times: ["13:30", "16:00"] },
+        { date: "2027-01-07", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-01-12", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-01-18", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-01-21", times: ["13:30", "16:00"] },
+        { date: "2027-01-25", times: ["10:30", "13:30"] },
+        { date: "2027-01-28", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-02-02", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-02-04", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-02-09", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-02-15", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-02-18", times: ["13:30", "16:00"] },
+        { date: "2027-02-23", times: ["13:30"] },
+        { date: "2027-03-02", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-03-04", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-03-09", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-03-15", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-03-18", times: ["13:30", "16:00"] },
+        { date: "2027-03-23", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-03-25", times: ["10:30", "13:30", "16:00"] },
+        { date: "2027-03-31", times: ["13:30", "16:00"] },
       ],
     },
     taxIncluded: true,
@@ -287,7 +316,8 @@ export const experiences: Experience[] = [
     cancellation: "Days are counted to the date of the class, Japan time. Date changes follow the same scale, if another date has room. The studio is booked by the hour, so arriving late shortens practice rather than extending the class. If the teacher has to cancel, you hear by 17:00 the day before and receive a full refund.",
     cancellationTiers: [{ until: 7, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     highlights: [
-      { icon: "chat", title: "Kanji chosen for your name", body: "Tell us what your name means. The teacher suggests characters that carry that meaning, and you choose the one that feels like yours." },
+      { icon: "chat", title: "Three kanji prepared for you", body: "Before the class we ask about your name and its meaning. The teacher prepares three characters for you; on the day you choose the one that feels most like you." },
+      { icon: "brush", title: "Art, not a handwriting test", body: "Choose a style — Cute, Bold or Elegant — and make the character your own. No experience with brushes or kanji needed." },
       { icon: "photo", title: "A piece you take home", body: "Your final work on a shikishi board, sealed with a red stamp and set on a wooden stand — made and handed over the same day." },
       { icon: "group", title: "Just your group", body: "Classes are not shared with other guests: one to four people, one teacher, one long table." },
     ],
@@ -304,13 +334,13 @@ export const experiences: Experience[] = [
     ],
     teacher: {
       img: "/images/kanji-teacher-portrait.jpg", alt: "Your teacher, holding a character she brushed",
-      credentials: ["Seven years teaching brush-lettering art (fude-moji)", "Over 25 years making art — pastel, watercolour and more"],
-      comment: "Brush, ink and kanji hold a beauty and depth that are uniquely Japanese. Through this class I hope you'll touch Japanese culture and enjoy expressing yourself freely, putting your name and your feelings into a single character. If it's your first time, don't worry: I support each of you carefully, at your own pace.",
+      credentials: ["7 years of experience teaching Japanese brush lettering art", "Over 25 years of experience in pastel art, watercolor painting, and various other forms of art and craft"],
+      comment: "Brushes, ink, and kanji each have a unique beauty and depth that are deeply rooted in Japanese culture. Through this experience, I hope you will enjoy discovering Japanese culture while freely expressing yourself by putting your name, feelings, or personal meaning into a single kanji character. Even if it is your first time, I will guide you carefully and provide personalized support so that everyone can enjoy the experience with confidence.",
     },
     schedule: [
       { time: "10:30", title: "Welcome", body: "What the class involves, and an introduction to the brush, ink and paper." },
-      { time: "10:50", title: "Brush practice and choosing your kanji", body: "The basic strokes, then the teacher proposes characters from your name and its meaning; you pick yours.", img: "/images/kanji-brush-closeup.jpg" },
-      { time: "11:10", title: "Design and one-to-one guidance", body: "Choose a style and practise it, with individual guidance from the teacher.", img: "/images/kanji-teacher-demo.jpg" },
+      { time: "10:50", title: "Brush practice and choosing your kanji", body: "Get to know the brush — lines, dry-brush texture, the moods of ink — and learn what each of your three kanji means; choose the one that feels like you.", img: "/images/kanji-brush-closeup.jpg" },
+      { time: "11:10", title: "Your style: Cute, Bold or Elegant", body: "Choose the direction you like and practise it, with one-to-one guidance from the teacher.", img: "/images/kanji-teacher-demo.jpg" },
       { time: "11:40", title: "Your final piece", body: "A full-size practice run, then the final version on a shikishi board.", img: "/images/kanji-brush-focus.jpg" },
       { time: "12:00", title: "Seal, sharing and photos", body: "The red seal goes on; show each other your work and take photos.", img: "/images/kanji-guests-works.jpg" },
       { time: "12:15", title: "Time to spare", body: "Extra practice, or a chat with the teacher before you go.", img: "/images/kanji-teacher-yume.jpg" },
@@ -330,7 +360,8 @@ export const experiences: Experience[] = [
     ],
     faq: [
       { q: "Do I need any experience?", a: "No. The class starts with the basic strokes, and the teacher adjusts the pace to your group." },
-      { q: "How do you choose kanji for a name that isn't Japanese?", a: "By meaning. Tell us what your name means, as far as you know; the teacher suggests characters that carry it and explains each one. If you would rather not use your name, choose a word instead — light, dream, courage." },
+      { q: "My handwriting isn't neat. Does that matter?", a: "Not at all. The class isn't about writing perfectly: it's about what the kanji means to you and expressing it your way. You choose a style — Cute, Bold or Elegant — and the teacher guides you step by step." },
+      { q: "How do you choose kanji for a name that isn't Japanese?", a: "By meaning. Before the class we ask what your name means and where it comes from, as far as you know. The teacher prepares three characters that carry that meaning or image, and explains each one on the day. If you would rather not use your name, tell us a word instead — light, dream, courage." },
       { q: "What do I take home?", a: "Your final piece on a shikishi board, sealed with a red stamp, and a wooden stand to display it." },
       { q: "Which language is the class taught in?", a: "English — the teacher runs the class herself in simple English." },
       { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
@@ -341,8 +372,8 @@ export const experiences: Experience[] = [
       { q: "Is transport included?", a: "No. You meet the teacher at the studio in Shinjuku; the address and directions come with your confirmation." },
     ],
     whatYoullDo: ["Learn the basic brush strokes", "Choose kanji that carry your name's meaning", "Brush your final piece on a shikishi board", "Take it home, sealed and on its stand"],
-    master: { title: "Your teacher", bio: "Marie teaches fude-moji — expressive brush lettering — in Tokyo and runs every class herself.", quote: "" },
-    itinerary: ["10:30 — Welcome", "10:50 — Brush practice and choosing your kanji", "11:10 — Design and one-to-one guidance", "11:40 — Your final piece", "12:00 — Seal, sharing and photos", "12:15 — Time to spare"],
+    master: { title: "Your teacher", bio: "Your teacher teaches fude-moji — expressive brush lettering — in Tokyo and runs every class herself.", quote: "" },
+    itinerary: ["10:30 — Welcome", "10:50 — Brush practice and choosing your kanji", "11:10 — Your style: Cute, Bold or Elegant", "11:40 — Your final piece", "12:00 — Seal, sharing and photos", "12:15 — Time to spare"],
     goodToKnow: ["Ages 10 and over; children pay the adult price.", "Wear clothes you don't mind marking; aprons are provided.", "Taught in simple English."],
     story: { heading: "Why a name in kanji", body: "Kanji carry meaning, not just sound. Choosing characters for a name is how many Japanese parents name their children — and it turns a souvenir into something that is actually about you." },
   },
