@@ -493,7 +493,7 @@ export const experiences: Experience[] = [
     interactionTime: "about 1 hour 45 minutes",
     interactionNote: "2 hours in total; your geiko or maiko is at your table for about 1 hour 45 minutes of it.",
     mapNote: "The pin marks Gion-Shijo Station (Keihan line); the venue is about 8 minutes on foot from there. The exact address comes with your confirmation.",
-    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 7, cutoffTime: "17:00", closed: [{ from: "12-29", to: "01-03" }] },
+    availability: { daily: true, startTimes: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "20:30"], cutoffDays: 1, cutoffTime: "17:00", closed: [{ from: "12-29", to: "01-03" }] },
     availabilityNote: "Closed over the New Year holidays.",
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
@@ -517,14 +517,14 @@ export const experiences: Experience[] = [
     dietary: ["standard", "vegetarian", "glutenFree", "steakSet"],
     whatYoullDo: [
       "Settle into your own private banquet room — never shared with other guests.",
-      "Dine on seasonal Kyoto cuisine as geiko and maiko join your table for conversation.",
+      "Dine on seasonal Kyoto cuisine as your geiko or maiko joins your table for conversation.",
       "Watch a dance performed an arm's length away, then try ozashiki parlour games together.",
       "Finish with commemorative photos with your hosts.",
     ],
     master: { quote: "For one evening, this room is yours. Come, let us talk.", title: "Geiko and maiko of Kyoto's hanamachi", bio: "Your evening is hosted by working geiko or maiko of Kyoto's flower-and-willow world, arranged especially for your date. The venue is a private banquet house in the Gion / Higashiyama district; its name and address are shared once your booking is confirmed." },
     itinerary: ["10 min before — Arrive at the venue with your guide (address in your confirmation)", "0:00 — Welcome to your private room; the banquet begins", "0:30 — Geiko and maiko join your table; conversation over dinner", "1:00 — Dance performance and ozashiki parlour games", "1:50 — Commemorative photos", "2:00 — End of the evening"],
     goodToKnow: [
-      "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — book at least 3 days ahead (5pm Japan time cutoff).",
+      "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — requests close at 5pm Japan time the day before.",
       "Three plans, each priced for up to 2 guests: Select from ¥219,800, Signature (live shamisen) from ¥379,800, Private Reserve (two performers and shamisen) from ¥498,000. Each additional guest up to 5: ¥39,800; six or more on request.",
       "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30 (Select from ¥249,800; additional guests ¥49,800 each).",
       "Children: 2 and under join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
@@ -541,7 +541,7 @@ export const experiences: Experience[] = [
     galleryNote: "The room and the dishes shown are examples; both vary by date and season.",
     highlights: [
       { icon: "group", title: "The room is yours", body: "A private banquet room for your party only — never shared with other guests." },
-      { icon: "chat", title: "Conversation, not just a show", body: "Geiko and maiko join your table to talk, then dance an arm's length away, then play ozashiki games with you." },
+      { icon: "chat", title: "Conversation, not just a show", body: "Your geiko or maiko joins your table to talk, dances an arm's length away, then plays ozashiki games with you." },
       { icon: "interpreter", title: "Ask anything", body: "An interpreter guide carries the conversation both ways, so your questions reach the room and the answers reach you." },
     ],
     included: [
@@ -581,7 +581,7 @@ export const experiences: Experience[] = [
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },
       { q: "Can dietary needs and allergies be catered for?", a: "Yes. Choose from the standard kaiseki course, a vegetarian menu (fish stock can be left out), a gluten-free menu, or a wagyu steak set for guests who eat no fish (salad, steak and rice, served all at once, so its pace differs from the other courses). For allergies or religious restrictions, name the ingredients you cannot eat and the kitchen swaps them within the course; there is no certified halal or kosher menu, and cross-contamination cannot be ruled out entirely. Swaps are for allergies and religious needs, not preferences. Tell us in your request and the kitchen's answer comes back with the conditions, before you pay." },
       { q: "Can children join? What do they pay?", a: "Yes. Children aged 2 and under join free without a meal; ages 3 to 11 pay half the adult rate; 12 and over pay the adult rate. Children of 3 and over are served the same course as adults — there is no children's menu. Count everyone in the number of guests and tell us the children's ages in your request; the quote we send applies the reduction." },
-      { q: "How far ahead must we book?", a: "By 17:00 Japan time seven days before at the latest; 10 to 14 days ahead is the comfortable window, and spring and autumn (March–April, October–November) fill first. During Miyako Odori (April) the house may only be able to confirm close to the date. The final time slot is confirmed with your availability reply." },
+      { q: "How far ahead must we book?", a: "By 17:00 Japan time the day before at the latest. For a date in the next few days we reply as quickly as we can, and can confirm only if a geiko or maiko is free at such short notice; a booking made less than 4 days ahead cannot be refunded once paid, unless none can be secured. 10 to 14 days ahead is the comfortable window, and spring and autumn (March–April, October–November) fill first. During Miyako Odori (April) the house may only be able to confirm close to the date. The final time slot is confirmed with your availability reply." },
     ],
   },
   {

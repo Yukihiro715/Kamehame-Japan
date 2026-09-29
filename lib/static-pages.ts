@@ -322,7 +322,7 @@ const FAQ: Record<Lang, FaqCopy> = {
           },
           {
             q: "Can I cancel or change my date?",
-            a: "Cancellation terms are printed on every experience page, because they differ by venue. Some are free up to seven days before; others charge from four days out. Read the terms on the page you are booking.",
+            a: "Cancellation terms are printed on every experience page, because they differ by venue. Free cancellation ends 7 days before for some and 14 days before for others, and fees rise as the date gets closer. Read the terms on the page you are booking.",
           },
           {
             q: "What if the venue cancels?",
@@ -419,7 +419,7 @@ const FAQ: Record<Lang, FaqCopy> = {
           },
           {
             q: "¿Puedo cancelar o cambiar la fecha?",
-            a: "Las condiciones de cancelación están impresas en cada página, porque varían según el local. Algunas son gratuitas hasta siete días antes; otras cobran desde cuatro días antes. Lee las condiciones de la página que estés reservando.",
+            a: "Las condiciones de cancelación están impresas en cada página, porque varían según el local. En unas la cancelación gratuita termina 7 días antes y en otras 14 días antes, y los cargos suben a medida que se acerca la fecha. Lee las condiciones de la página que estés reservando.",
           },
           {
             q: "¿Y si cancela el local?",
@@ -516,7 +516,7 @@ const FAQ: Record<Lang, FaqCopy> = {
           },
           {
             q: "キャンセルや日程変更はできますか。",
-            a: "キャンセル規定は受け入れ先ごとに異なるため、各体験ページに記載しています。7日前まで無料のものもあれば、4日前から料金が発生するものもあります。お申し込みになるページの規定をご確認ください。",
+            a: "キャンセル規定は受け入れ先ごとに異なるため、各体験ページに記載しています。無料でキャンセルできるのが7日前までのものと14日前までのものがあり、日程が近づくほどキャンセル料が上がります。お申し込みになるページの規定をご確認ください。",
           },
           {
             q: "受け入れ先の都合で中止になった場合は。",
@@ -557,7 +557,7 @@ const FAQ: Record<Lang, FaqCopy> = {
       { heading: "Paiement et modifications", items: [
         { q: "Dans quelle devise est-ce que je paie ?", a: "Les prix sont fixés et débités en yens japonais. Votre banque convertit à son propre taux, le montant dans votre devise peut donc différer légèrement d'une estimation affichée." },
         { q: "Qu'est-ce qui est inclus dans le prix ?", a: "La séance elle-même et votre guide-interprète. Tout ce qui n'est pas inclus — un souvenir que vous gardez, un artiste supplémentaire, l'expédition d'une pièce — est listé sur la page avant de réserver." },
-        { q: "Puis-je annuler ou changer de date ?", a: "Les conditions d'annulation figurent sur chaque page, car elles varient selon le lieu. Certaines sont gratuites jusqu'à sept jours avant ; d'autres facturent à partir de quatre jours. Lisez les conditions de la page que vous réservez." },
+        { q: "Puis-je annuler ou changer de date ?", a: "Les conditions d'annulation figurent sur chaque page, car elles varient selon le lieu. L'annulation gratuite s'arrête 7 jours avant pour certaines et 14 jours avant pour d'autres, et les frais augmentent à l'approche de la date. Lisez les conditions de la page que vous réservez." },
         { q: "Et si le lieu annule ?", a: "Vous êtes intégralement remboursé. Lorsque nous pouvons d'abord proposer une autre date, nous le faisons." },
       ]},
     ],
@@ -589,7 +589,7 @@ const FAQ: Record<Lang, FaqCopy> = {
       { heading: "付款與更改", items: [
         { q: "以什麼貨幣付款？", a: "價格以日圓訂定並收取。您的發卡機構會以自己的匯率換算，因此您的貨幣金額可能與頁面上的估算略有出入。" },
         { q: "價格包含什麼？", a: "體驗本身與您的口譯導遊。不包含的項目——可帶走的作品、額外表演者、將作品寄回家——都在預約前列於體驗頁面。" },
-        { q: "可以取消或更改日期嗎？", a: "取消條款因場地而異，因此印在每個體驗頁面上。有些七天前免費，有些從四天前開始收費。請閱讀您預約頁面上的條款。" },
+        { q: "可以取消或更改日期嗎？", a: "取消條款因場地而異，因此印在每個體驗頁面上。有些於七天前、有些於十四天前之前可免費取消，越接近體驗日，取消費用越高。請閱讀您預約頁面上的條款。" },
         { q: "如果場地方取消呢？", a: "您將獲得全額退款。若能先提供替代日期，我們會先提供。" },
       ]},
     ],

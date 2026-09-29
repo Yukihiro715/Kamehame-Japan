@@ -61,7 +61,7 @@ const ARTICLES: Article[] = [
           "Two hours, a private room, seasonal Kyoto cooking, and conversation. The dance happens about halfway through and is performed close enough that you can hear the fabric move. Then come the ozashiki games, which are simple, competitive and usually where the room relaxes.",
           "The part most guests do not expect is how ordinary the conversation is. Geiko and maiko are trained to host, which mostly means being interested in you. With an interpreter carrying both directions, that works exactly as it should.",
           "## Practical notes",
-          "Book at least three days ahead — the cutoff is 5pm Japan time, three days before. Spring and autumn fill first. Pricing is per group rather than per person, so a party of four costs less each than a party of two. Tell us about allergies when you request the date, not on the evening.",
+          "Requests close at 5pm Japan time the day before, but 10 to 14 days ahead is the comfortable window: short-notice dates depend on a geiko or maiko being free. Spring and autumn fill first. Pricing is per group rather than per person, so a party of four costs less each than a party of two. Tell us about allergies when you request the date, not on the evening.",
         ],
       },
       ja: {
@@ -79,7 +79,7 @@ const ARTICLES: Article[] = [
           "二時間、貸切のお座敷、季節の京料理、そして会話です。舞は中ほどで、衣擦れが聞こえる距離で披露されます。そのあとのお座敷遊びは単純で、勝ち負けがあり、たいていここで座が和みます。",
           "多くのお客様が意外に思われるのは、会話がごく普通だということです。芸妓・舞妓はもてなしの訓練を受けており、それは要するに相手に関心を持つということです。通訳が双方向で入れば、そのまま機能します。",
           "## 実務的なこと",
-          "3日前の17時(日本時間)が締切です。春と秋から先に埋まります。料金は1名あたりではなくグループ単位なので、4名なら1人あたりの負担は2名のときより下がります。アレルギーは当日ではなく、ご依頼の時点でお知らせください。",
+          "前日の17時(日本時間)まで受け付けますが、直前は芸妓・舞妓の手配次第のため、10〜14日前が安心です。春と秋から先に埋まります。料金は1名あたりではなくグループ単位なので、4名なら1人あたりの負担は2名のときより下がります。アレルギーは当日ではなく、ご依頼の時点でお知らせください。",
         ],
       },
     },

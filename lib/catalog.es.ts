@@ -229,14 +229,14 @@ export const experiencesEs: Experience[] = [
     cancellation: "Los días se cuentan hasta la fecha de la experiencia, hora de Japón. Los cambios de fecha siguen la misma escala y reducir el grupo aplica la tarifa a las plazas liberadas; los reembolsos se hacen por el mismo método de pago. Si no puede asegurarse ninguna geiko o maiko para tu fecha, recibes el reembolso completo sea cual sea el momento.",
     whatYoullDo: [
       "Acomódate en tu propio salón de banquete privado — nunca compartido con otros clientes.",
-      "Cena cocina de temporada de Kioto mientras geiko y maiko se unen a tu mesa para conversar.",
+      "Cena cocina de temporada de Kioto mientras tu geiko o maiko se une a tu mesa para conversar.",
       "Contempla una danza a un brazo de distancia y prueba los juegos de sobremesa ozashiki.",
       "Termina con fotos conmemorativas junto a tus anfitrionas.",
     ],
     master: { quote: "Por una noche, esta sala es tuya. Ven, hablemos.", title: "Geiko y maiko del hanamachi de Kioto", bio: "Tu velada la acogen geiko o maiko en activo del mundo de la flor y el sauce de Kioto, contratadas especialmente para tu fecha. El local es una casa de banquetes privada del barrio de Gion / Higashiyama; su nombre y dirección se comparten al confirmar la reserva." },
     itinerary: ["10 min antes — Llegada al local con tu guía (dirección en la confirmación)", "0:00 — Bienvenida a tu salón privado; comienza el banquete", "0:30 — Geiko y maiko se unen a tu mesa; conversación durante la cena", "1:00 — Danza y juegos de sobremesa ozashiki", "1:50 — Fotos conmemorativas", "2:00 — Fin de la velada"],
     goodToKnow: [
-      "Se celebra todos los días salvo las fiestas de Año Nuevo, con inicios entre las 12:00 y las 20:30 — reserva con al menos 3 días de antelación (cierre a las 17:00, hora de Japón).",
+      "Se celebra todos los días salvo las fiestas de Año Nuevo, con inicios entre las 12:00 y las 20:30 — las solicitudes cierran a las 17:00 (hora de Japón) del día anterior.",
       "Tres planes, cada uno con precio para hasta 2 personas: Select desde ¥219.800, Signature (shamisen en directo) desde ¥379.800, Private Reserve (dos artistas y shamisen) desde ¥498.000. Cada persona adicional hasta 5: ¥39.800; seis o más, a consultar.",
       "En temporada alta (15 mar – 31 may y 1 oct – 30 nov) rigen tarifas superiores (Select desde ¥249.800; persona adicional ¥49.800).",
       "Niños: 2 años o menos gratis sin comida, de 3 a 11 años mitad de la tarifa de adulto, desde 12 años tarifa de adulto con el menú completo.",
@@ -257,7 +257,7 @@ export const experiencesEs: Experience[] = [
     galleryNote: "La sala y los platos de las fotos son ejemplos; ambos varían según la fecha y la temporada.",
     highlights: [
       { icon: "group", title: "La sala es suya", body: "Un salón de banquete privado solo para su grupo: nunca se comparte con otros huéspedes." },
-      { icon: "chat", title: "Conversación, no solo espectáculo", body: "Geiko y maiko se sientan a su mesa para conversar, bailan a un brazo de distancia y luego juegan con ustedes a los juegos de ozashiki." },
+      { icon: "chat", title: "Conversación, no solo espectáculo", body: "Su geiko o maiko se sienta a su mesa para conversar, baila a un brazo de distancia y luego juega con ustedes a los juegos de ozashiki." },
       { icon: "interpreter", title: "Pregunte lo que quiera", body: "Un guía intérprete lleva la conversación en ambos sentidos: sus preguntas llegan a la sala y las respuestas vuelven a usted." },
     ],
     included: [
@@ -297,7 +297,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Nuestra anfitriona comerá y beberá con nosotros?", a: "Normalmente no. Muchas maiko son menores de veinte años y, por costumbre, geiko y maiko no comen en la mesa: sirven, conversan, bailan y juegan. No insista en ofrecerles comida o bebida; es la única norma de etiqueta que su guía mencionará." },
       { q: "¿Atienden necesidades dietéticas y alergias?", a: "Sí. Elige entre el kaiseki estándar, un menú vegetariano (puede prepararse sin caldo de pescado), un menú sin gluten o un set de filete de wagyu para quien no come pescado (ensalada, filete y arroz, servidos de una vez, por lo que su ritmo difiere del de los demás menús). Para alergias o restricciones religiosas, indica los ingredientes que no puedes comer y la cocina los sustituye dentro del menú; no hay menú halal ni kosher certificado y no puede descartarse por completo la contaminación cruzada. Las sustituciones son por alergia o religión, no por preferencia. Indícalo en tu solicitud y la respuesta de la cocina llega con las condiciones, antes de pagar." },
       { q: "¿Pueden venir niños? ¿Cuánto pagan?", a: "Sí. Los niños de 2 años o menos participan gratis sin comida; de 3 a 11 años pagan la mitad de la tarifa de adulto; a partir de 12 años, la tarifa de adulto. A partir de 3 años reciben el mismo menú que los adultos: no hay menú infantil. Cuenta a todos en el número de personas e indica las edades de los niños en tu solicitud; el presupuesto que enviamos aplica la reducción." },
-      { q: "¿Con cuánta antelación hay que reservar?", a: "Como muy tarde a las 17:00 hora de Japón siete días antes; entre 10 y 14 días de antelación es lo cómodo, y primavera y otoño (marzo–abril, octubre–noviembre) se llenan primero. Durante el Miyako Odori (abril) la casa puede confirmar solo cerca de la fecha. La franja horaria definitiva se confirma con la respuesta de disponibilidad." },
+      { q: "¿Con cuánta antelación hay que reservar?", a: "Como muy tarde a las 17:00 hora de Japón del día anterior. Para una fecha en los próximos días respondemos lo antes posible, y solo podemos confirmar si hay una geiko o maiko libre con tan poca antelación; una reserva hecha con menos de 4 días de antelación no es reembolsable una vez pagada, salvo que no pueda asegurarse ninguna. Entre 10 y 14 días de antelación es lo cómodo, y primavera y otoño (marzo–abril, octubre–noviembre) se llenan primero. Durante el Miyako Odori (abril) la casa puede confirmar solo cerca de la fecha. La franja horaria definitiva se confirma con la respuesta de disponibilidad." },
     ],
   },
   {

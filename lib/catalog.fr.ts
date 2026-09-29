@@ -228,14 +228,14 @@ export const experiencesFr: Experience[] = [
     cancellation: "Les jours se comptent jusqu'à la date de l'expérience, heure du Japon. Les changements de date suivent le même barème, et la réduction du nombre de convives applique les frais aux places libérées ; les remboursements se font par le moyen de paiement utilisé. Si aucune geiko ou maiko ne peut être réservée pour votre date, vous êtes intégralement remboursé, quel que soit le moment.",
     whatYoullDo: [
       "Installez-vous dans votre propre salon de banquet — jamais partagé avec d'autres convives.",
-      "Dînez d'une cuisine de Kyoto de saison pendant que geiko et maiko rejoignent votre table pour converser.",
+      "Dînez d'une cuisine de Kyoto de saison pendant que votre geiko ou maiko rejoint votre table pour converser.",
       "Assistez à une danse exécutée à portée de main, puis essayez ensemble les jeux de salon ozashiki.",
       "Terminez par des photos souvenir avec vos hôtesses.",
     ],
     master: { quote: "Pour un soir, cette pièce est la vôtre. Venez, parlons.", title: "Geiko et maiko des hanamachi de Kyoto", bio: "Votre soirée est animée par des geiko ou maiko en activité du monde des fleurs et des saules de Kyoto, engagées spécialement pour votre date. Le lieu est une maison de banquet privée du quartier de Gion / Higashiyama ; son nom et son adresse sont communiqués une fois votre réservation confirmée." },
     itinerary: ["10 min avant — Arrivée au lieu avec votre guide (adresse dans votre confirmation)", "0:00 — Bienvenue dans votre salon privé ; le banquet commence", "0:30 — Geiko et maiko rejoignent votre table ; conversation pendant le dîner", "1:00 — Danse et jeux de salon ozashiki", "1:50 — Photos souvenir", "2:00 — Fin de la soirée"],
     goodToKnow: [
-      "Tous les jours sauf pendant les fêtes du Nouvel An, débuts de 12:00 à 20:30 — réservez au moins 3 jours à l'avance (clôture à 17 h, heure du Japon).",
+      "Tous les jours sauf pendant les fêtes du Nouvel An, débuts de 12:00 à 20:30 — les demandes ferment la veille à 17 h, heure du Japon.",
       "Trois formules, chacune tarifée pour 2 convives : Select dès ¥219,800, Signature (shamisen en direct) dès ¥379,800, Private Reserve (deux artistes et shamisen) dès ¥498,000. Chaque convive supplémentaire jusqu'à 5 : ¥39,800 ; six et plus sur demande.",
       "Tarifs haute saison du 15 mars au 31 mai et du 1er octobre au 30 novembre (Select dès ¥249,800 ; convive supplémentaire ¥49,800).",
       "Enfants : gratuit sans repas jusqu'à 2 ans, demi-tarif adulte de 3 à 11 ans, tarif adulte avec menu complet dès 12 ans.",
@@ -256,7 +256,7 @@ export const experiencesFr: Experience[] = [
     galleryNote: "La salle et les plats photographiés sont donnés à titre d'exemple ; ils varient selon la date et la saison.",
     highlights: [
       { icon: "group", title: "La salle est à vous", body: "Un salon de banquet privé réservé à votre groupe, jamais partagé avec d'autres convives." },
-      { icon: "chat", title: "Une conversation, pas seulement un spectacle", body: "Geiko et maiko s'installent à votre table pour discuter, dansent à portée de main, puis jouent avec vous aux jeux d'ozashiki." },
+      { icon: "chat", title: "Une conversation, pas seulement un spectacle", body: "Votre geiko ou maiko s'installe à votre table pour discuter, danse à portée de main, puis joue avec vous aux jeux d'ozashiki." },
       { icon: "interpreter", title: "Posez toutes vos questions", body: "Un guide-interprète porte la conversation dans les deux sens : vos questions atteignent la salle et les réponses vous reviennent." },
     ],
     included: [
@@ -296,7 +296,7 @@ export const experiencesFr: Experience[] = [
       { q: "Notre hôtesse mange-t-elle et boit-elle avec nous ?", a: "Généralement non. Beaucoup de maiko ont moins de vingt ans et, par tradition, geiko et maiko ne mangent pas à table : elles servent, conversent, dansent et jouent. N'insistez pas pour leur offrir à manger ou à boire ; c'est la seule règle d'étiquette que votre guide mentionnera." },
       { q: "Les régimes et allergies sont-ils pris en compte ?", a: "Oui. Choisissez entre le kaiseki classique, un menu végétarien (le bouillon de poisson peut être omis), un menu sans gluten ou un set de steak de wagyu pour ceux qui ne mangent pas de poisson (salade, steak et riz, servis en une fois, donc à un rythme différent des autres menus). Pour les allergies ou les restrictions religieuses, indiquez les ingrédients que vous ne pouvez pas manger et la cuisine les remplace dans le menu ; il n'existe pas de menu halal ou casher certifié, et la contamination croisée ne peut être totalement exclue. Les substitutions concernent les allergies et les impératifs religieux, pas les préférences. Précisez-le dans votre demande ; la réponse de la cuisine vous parvient avec les conditions, avant tout paiement." },
       { q: "Les enfants sont-ils les bienvenus ? Que paient-ils ?", a: "Oui. Les enfants de 2 ans et moins participent gratuitement sans repas ; de 3 à 11 ans, la moitié du tarif adulte ; à partir de 12 ans, le tarif adulte. Dès 3 ans, ils reçoivent le même menu que les adultes : il n'y a pas de menu enfant. Comptez tout le monde dans le nombre de convives et indiquez l'âge des enfants dans votre demande ; le devis envoyé applique la réduction." },
-      { q: "Combien de temps à l'avance faut-il réserver ?", a: "Au plus tard sept jours avant, avant 17 h heure du Japon ; 10 à 14 jours à l'avance est la fenêtre confortable, et le printemps et l'automne (mars–avril, octobre–novembre) se remplissent en premier. Pendant le Miyako Odori (avril), la maison ne peut parfois confirmer que peu avant la date. Le créneau horaire définitif est confirmé avec la réponse de disponibilité." },
+      { q: "Combien de temps à l'avance faut-il réserver ?", a: "Au plus tard la veille, avant 17 h heure du Japon. Pour une date dans les prochains jours, nous répondons au plus vite, et ne pouvons confirmer que si une geiko ou une maiko est libre dans un délai aussi court ; une réservation faite moins de 4 jours avant n'est pas remboursable une fois payée, sauf si aucune ne peut être réservée. 10 à 14 jours à l'avance est la fenêtre confortable, et le printemps et l'automne (mars–avril, octobre–novembre) se remplissent en premier. Pendant le Miyako Odori (avril), la maison ne peut parfois confirmer que peu avant la date. Le créneau horaire définitif est confirmé avec la réponse de disponibilité." },
     ],
   },
   {
