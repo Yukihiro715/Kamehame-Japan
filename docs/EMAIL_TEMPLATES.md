@@ -36,7 +36,7 @@ WHAT'S INCLUDED
 - A private tatami room for your party
 - The multi-course Japanese dinner (seasonal menu) — or, if you told us: vegetarian / gluten-free / wagyu steak set
 - Free-flow drinks, including alcohol
-- {By plan — Select: one geiko or maiko / Signature: one geiko or maiko + live shamisen / Private Reserve: two geiko or maiko + live shamisen}: conversation, one dance, ozashiki games
+- {By plan — Select: one geiko or maiko / Signature: one geiko or maiko + live shamisen / Private Reserve: two geiko or maiko + live shamisen}: conversation, one or two dances, ozashiki games
 - An interpreter guide throughout — English, Spanish or French (as chosen in the request)
 - Commemorative photographs
 
