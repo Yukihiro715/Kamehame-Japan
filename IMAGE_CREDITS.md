@@ -33,4 +33,4 @@ They are not under a Creative Commons license and must not be reused elsewhere w
 `public/images/kanji-*.jpg` (17 files) come from the Tokyo calligraphy teacher's own trial classes
 (shared Google Photos album, September 2026), cropped to 4:3 (the four added on 2026-09-29 to 3:4).
 `kanji-styles.jpg` is the teacher's own chart of style examples (Cute / Bold / Elegant), shown uncropped. The teacher's condition sheet allows their use on
-all channels; confirmation that the trial participants agreed to appear is on the open-questions list.
+all channels; the trial participants' agreement to appear was confirmed with the partner on 2026-09-29.
