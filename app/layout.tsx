@@ -15,7 +15,18 @@ export const metadata: Metadata = {
       "Private cultural experiences in Tokyo and Kyoto, led by Japanese masters with an interpreter guide by your side.",
     path: "/",
   }),
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  // SVG for modern browsers, .ico for older ones and crawlers that ask for
+  // /favicon.ico, PNG for iOS home screens (no SVG there) and Android.
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
+  manifest: "/site.webmanifest",
 };
 
 const gtmSnippet = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
