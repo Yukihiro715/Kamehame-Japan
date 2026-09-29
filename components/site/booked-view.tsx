@@ -22,15 +22,19 @@ export function BookedView({ lang }: { lang: Lang }) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     // The head script moves session_id out of the URL before any tag loads.
+    // (and, for this document only, into window.khCheckoutSession when storage is blocked).
     let id = params.get("session_id") ?? "";
-    if (!id) { try { id = sessionStorage.getItem("kh-checkout-session") ?? ""; } catch { /* storage blocked: the id stayed in the URL */ } }
+    const w = window as unknown as { khCheckoutSession?: string };
+    if (!id && w.khCheckoutSession) { id = w.khCheckoutSession; delete w.khCheckoutSession; }
+    if (!id) { try { id = sessionStorage.getItem("kh-checkout-session") ?? ""; } catch { /* storage blocked */ } }
 
     // One redirect URL serves every language: send the guest to their own.
     if (lang === "en" && !params.has("stay")) {
       const pref = (navigator.languages ?? [navigator.language]).map((l) => l.toLowerCase());
       const match = pref.map((l) => (l.startsWith("zh-tw") || l.startsWith("zh-hant") ? "zh-tw" : l.slice(0, 2)))
         .find((l) => l !== "en" && (LANGS as readonly string[]).includes(l));
-      if (match) { window.location.replace(`/${match}/booked/${window.location.search}`); return; }
+      // The id rides along only as far as the next page's head script, which strips it again.
+      if (match) { const q = new URLSearchParams(window.location.search); if (id) q.set("session_id", id); const qs = q.toString(); window.location.replace(`/${match}/booked/${qs ? `?${qs}` : ""}`); return; }
     }
     if (!/^cs_(test|live)_/.test(id)) return;
 

@@ -16,7 +16,11 @@
 // The Meta Pixel also ignores Consent Mode: GTM gates it on ad_storage, and
 // fbq('consent', …) reaches it when it is already running.
 
-export const CONSENT_KEY = "kh-consent";
+export const CONSENT_KEY = "kh-consent-2";
+/** Choices saved before the banner named Meta. A Reject saved there still
+ *  stands; an Accept did not cover Meta, so it is dropped and the visitor is
+ *  asked again. */
+const OLD_CONSENT_KEY = "kh-consent";
 
 /** EEA + UK + Switzerland, where consent is required before storage. */
 const STRICT_REGIONS = [
@@ -39,12 +43,13 @@ export function acceptedExplicitly(): boolean {
  *  re-applies the stored choice when a page comes back from the back/forward
  *  cache or the choice changes in another tab. */
 export const consentDefaultScript = `
-try{var kq=new URLSearchParams(location.search),ks=kq.get('session_id');if(ks&&location.pathname.split('/')[2]==='booked'){sessionStorage.setItem('kh-checkout-session',ks);kq.delete('session_id');var kr=kq.toString();history.replaceState(history.state,'',location.pathname+(kr?'?'+kr:'')+location.hash)}}catch(e){}
+try{var kq=new URLSearchParams(location.search),ks=kq.get('session_id');if(ks&&location.pathname.split('/')[2]==='booked'){window.khCheckoutSession=ks;try{sessionStorage.setItem('kh-checkout-session',ks)}catch(e){}kq.delete('session_id');var kr=kq.toString();history.replaceState(history.state,'',location.pathname+(kr?'?'+kr:'')+location.hash)}}catch(e){}
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
 gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500,region:${JSON.stringify(STRICT_REGIONS)}});
 gtag('consent','default',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted',functionality_storage:'granted',security_storage:'granted'});
 gtag('set','ads_data_redaction',true);gtag('set','url_passthrough',true);
 window.clarity=window.clarity||function(){(window.clarity.q=window.clarity.q||[]).push(arguments)};
+try{var ko=localStorage.getItem(${JSON.stringify(OLD_CONSENT_KEY)});if(ko!==null){if(ko==='denied'&&localStorage.getItem(${JSON.stringify(CONSENT_KEY)})===null)localStorage.setItem(${JSON.stringify(CONSENT_KEY)},'denied');localStorage.removeItem(${JSON.stringify(OLD_CONSENT_KEY)})}}catch(e){}
 try{var c=localStorage.getItem(${JSON.stringify(CONSENT_KEY)});if(c==='granted'||c==='denied'){gtag('consent','update',{ad_storage:c,ad_user_data:c,ad_personalization:c,analytics_storage:c});clarity('consentv2',{ad_Storage:c,analytics_Storage:c})}}catch(e){}
 function khConsent(s){if(s!=='granted'&&s!=='denied')return;gtag('consent','update',{ad_storage:s,ad_user_data:s,ad_personalization:s,analytics_storage:s});clarity('consentv2',{ad_Storage:s,analytics_Storage:s});if(typeof window.fbq==='function')fbq('consent',s==='granted'?'grant':'revoke')}
 addEventListener('pageshow',function(e){if(!e.persisted)return;try{khConsent(localStorage.getItem(${JSON.stringify(CONSENT_KEY)}))}catch(x){}});
