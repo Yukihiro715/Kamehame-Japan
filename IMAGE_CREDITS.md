@@ -36,3 +36,8 @@ On 2026-09-29 the host also agreed to their use in KAMEHAME JAPAN's own advertis
 (shared Google Photos album, September 2026), cropped to 4:3 (the four added on 2026-09-29 to 3:4).
 `kanji-styles.jpg` is the teacher's own chart of style examples (Cute / Bold / Elegant), shown uncropped. The teacher's condition sheet allows their use on
 all channels; the trial participants' agreement to appear was confirmed with the partner on 2026-09-29.
+
+`public/images/golf-*.jpg` (5 files) are stills from the golf partner's own course video (Mt. Fuji area,
+supplied as screenshots on 2026-09-30). On-screen titles were removed by inpainting and the broadcast
+graphics cropped out. The partner's condition sheet allows their use on all channels. Frames showing
+guests' faces or names were left out.
