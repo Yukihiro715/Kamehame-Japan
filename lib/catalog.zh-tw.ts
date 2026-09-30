@@ -9,7 +9,7 @@ export const CANCELLATION_ZH =
 export const citiesZh: City[] = [
   {
     slug: "tokyo", title: "東京", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "東京把傳統藏在霓虹燈後的幾條街外。我們先從新宿的包場毛筆書法課開始：依名字的含義選字，由書法老師以英語授課。更多東京體驗陸續推出。",
+    lead: "東京把傳統藏在霓虹燈後的幾條街外。我們先從新宿的包場毛筆書法課開始：依名字的含義選字，由書法老師以英語授課。也可從東京飯店搭乘專車，前往富士山麓打一天高爾夫。更多東京體驗陸續推出。",
   },
   {
     slug: "kyoto", title: "京都", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -127,7 +127,7 @@ export const experiencesZh: Experience[] = [
       "以旅客身分在日本打高爾夫，比看起來困難：開球時段要用日文預約，球場位於市區以外，球場會館也有自己的規矩。這一天把這些全都替你打點好。",
       "導遊會預約球場、與你同車前往、辦理報到，並與你們一組同場打球，邊打邊說明球場與禮儀。含租借球桿與午餐，還能帶走一支這一場球的短片，以及刻有你漢字名字的球標。",
     ],
-    duration: "全天，飯店來回", price: "¥220,000", group: "私人專車與導遊 · 2 至 4 位球友", ages: "18 歲以上", area: "富士山／箱根地區（於東京接送）",
+    duration: "全天，飯店來回", price: "¥270,000", group: "私人專車與導遊 · 2 至 4 位球友", ages: "18 歲以上", area: "富士山／箱根地區（於東京接送）",
     img: "/images/golf-hero.jpg", alt: "秋日富士山麓球場的松樹與池塘",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "雲海之上的富士山" },
@@ -160,7 +160,7 @@ export const experiencesZh: Experience[] = [
       "五位或六位需另行報價",
     ],
     addOns: [
-      { id: "pro-video", name: "專業攝影與錄影", description: "導遊以專用相機拍攝當天，並交付一至二分鐘的剪輯影片。價格請洽詢。" },
+      { id: "pro-video", name: "專業攝影與錄影", description: "導遊以專用相機拍攝當天，並交付一至二分鐘的剪輯影片。2 位 ¥120,000，3 位 ¥144,000；4 位請洽詢。", price: 120000, priceFrom: true },
     ],
     schedule: [
       { time: "05:55", title: "在飯店大廳會合", body: "導遊與司機於出發前五分鐘與你會合。" },

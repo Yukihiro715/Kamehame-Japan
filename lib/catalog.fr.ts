@@ -9,7 +9,7 @@ export const CANCELLATION_FR =
 export const citiesFr: City[] = [
   {
     slug: "tokyo", title: "Tokyo", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "Tokyo garde ses traditions à quelques rues des néons. Nous commençons par un cours privé de calligraphie au pinceau à Shinjuku : des kanji choisis pour le sens de votre prénom, enseignés en anglais par une professeure de calligraphie. D'autres expériences à Tokyo arrivent bientôt.",
+    lead: "Tokyo garde ses traditions à quelques rues des néons. Nous commençons par un cours privé de calligraphie au pinceau à Shinjuku : des kanji choisis pour le sens de votre prénom, enseignés en anglais par une professeure de calligraphie. Depuis Tokyo, une journée de golf près du mont Fuji vous attend aussi, avec une voiture privée depuis votre hôtel. D'autres expériences à Tokyo arrivent bientôt.",
   },
   {
     slug: "kyoto", title: "Kyoto", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -127,7 +127,7 @@ export const experiencesFr: Experience[] = [
       "Jouer au golf au Japon quand on est de passage est plus difficile qu'il n'y paraît : les départs se réservent en japonais, les parcours se trouvent hors de la ville et les club-houses ont leurs propres usages. Cette journée s'occupe de tout.",
       "Votre guide réserve le golf, fait le trajet avec vous, gère l'enregistrement et joue la partie avec votre groupe, en vous expliquant le parcours et l'étiquette au fil du jeu. Les clubs de location et le déjeuner sont compris, et vous repartez avec une courte vidéo de votre partie et un marque-balle à votre nom en kanji.",
     ],
-    duration: "Journée complète, d'hôtel à hôtel", price: "¥220,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji / Hakone (prise en charge à Tokyo)",
+    duration: "Journée complète, d'hôtel à hôtel", price: "¥270,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji / Hakone (prise en charge à Tokyo)",
     img: "/images/golf-hero.jpg", alt: "Un pin et un étang sur un parcours près du mont Fuji, en automne",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "Le mont Fuji au-dessus des nuages" },
@@ -160,7 +160,7 @@ export const experiencesFr: Experience[] = [
       "Les groupes de cinq ou six font l'objet d'un devis sur demande",
     ],
     addOns: [
-      { id: "pro-video", name: "Photo et vidéo professionnelles", description: "Votre guide filme la journée avec une caméra dédiée et vous remet un montage d'une à deux minutes. Prix sur demande." },
+      { id: "pro-video", name: "Photo et vidéo professionnelles", description: "Votre guide filme la journée avec une caméra dédiée et vous remet un montage d'une à deux minutes. ¥120,000 pour deux golfeurs, ¥144,000 pour trois ; pour quatre, sur demande.", price: 120000, priceFrom: true },
     ],
     schedule: [
       { time: "05:55", title: "Rendez-vous dans le hall de votre hôtel", body: "Votre guide et votre chauffeur vous retrouvent cinq minutes avant le départ." },

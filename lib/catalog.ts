@@ -118,7 +118,7 @@ export interface Experience {
   /** Localised text for `pricing.plans`, keyed by plan id. */
   planText?: Record<string, { label: string; name: string; performers: string; blurb: string }>;
   /** Optional extras chosen in the request form. No `price` means "on request". */
-  addOns?: { id: string; name: string; description: string; price?: number }[];
+  addOns?: { id: string; name: string; description: string; price?: number; /** The price is the lowest of several (shown as "From …"). */ priceFrom?: boolean }[];
   /** Experience video. Absent until an asset exists; the whole video section,
    *  the "Watch the experience" link and its anchor are omitted when absent. */
   video?: {
@@ -211,7 +211,7 @@ export const CANCELLATION = "Free cancellation up to 7 days before the experienc
 export const cities: City[] = [
   {
     slug: "tokyo", title: "Tokyo", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "Tokyo keeps its traditions close, a few streets from the neon. We start with a private brush-calligraphy class in Shinjuku: kanji chosen for the meaning of your name, taught in English by a brush-lettering teacher. More Tokyo experiences are on the way.",
+    lead: "Tokyo keeps its traditions close, a few streets from the neon. We start with a private brush-calligraphy class in Shinjuku: kanji chosen for the meaning of your name, taught in English by a brush-lettering teacher. From Tokyo, there is also a golf day near Mt. Fuji, with a private car from your hotel. More Tokyo experiences are on the way.",
   },
   {
     slug: "kyoto", title: "Kyoto", jp: "京都", img: "/images/city-kyoto.jpg",
@@ -380,17 +380,19 @@ export const experiences: Experience[] = [
     story: { heading: "Why a name in kanji", body: "Kanji carry meaning, not just sound. Choosing characters for a name is how many Japanese parents name their children — and it turns a souvenir into something that is actually about you." },
   },
   {
-    // Golf near Mt. Fuji with a golf partner (condition sheet, 2026-09). In
-    // "preview" until the travel-business question (hotel transfers), insurance
-    // and the selling price are settled. Tiers are the sheet's group totals.
-    slug: "mt-fuji-golf-day", city: "tokyo", category: "golf", bookingType: "request", status: "preview",
+    // Golf near Mt. Fuji with a golf partner (condition sheet, 2026-09). Live
+    // since 2026-09-30. Tiers = the partner's wholesale group totals + ¥25,000
+    // per golfer; the video add-on = wholesale + 20% (¥144,000 for three).
+    // The owner is handling the travel-business registration question raised
+    // by the hotel transfers.
+    slug: "mt-fuji-golf-day", city: "tokyo", category: "golf", bookingType: "request", status: "live",
     title: "Golf Day near Mt. Fuji, from Your Tokyo Hotel",
     tagline: "A day of golf near Mt. Fuji, arranged from door to door: a private car collects you from your Tokyo hotel at 6:00, you play a round at a course in the Fuji–Hakone area with an English-speaking guide who plays alongside you, have lunch at the clubhouse, and are driven back.",
     overview: [
       "Playing golf in Japan as a visitor is harder than it looks: tee times are booked in Japanese, the courses sit outside the city, and clubhouses have their own customs. This day takes care of all of it.",
       "Your guide books the course, rides with you, handles check-in and plays the round with your group, explaining the course and the etiquette as you go. Rental clubs and lunch are included, and you go home with a short video of your round and a ball marker with your name in kanji.",
     ],
-    duration: "Full day, hotel to hotel", price: "¥220,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji / Hakone area (pick-up in Tokyo)",
+    duration: "Full day, hotel to hotel", price: "¥270,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji / Hakone area (pick-up in Tokyo)",
     img: "/images/golf-hero.jpg", alt: "A pine tree and pond on a course near Mt. Fuji, in autumn colours",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "Mt. Fuji above the clouds" },
@@ -400,7 +402,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos show a course in the Mt. Fuji area. Your course depends on tee times for your date, and Mt. Fuji shows only on a clear day.",
     partySize: { min: 2, max: 4 },
-    pricing: { tiers: [{ party: 2, total: 220000 }, { party: 3, total: 268000 }, { party: 4, total: 357000 }] },
+    pricing: { tiers: [{ party: 2, total: 270000 }, { party: 3, total: 343000 }, { party: 4, total: 457000 }] },
     availability: { daily: true, startTimes: ["06:00"], cutoffDays: 3, cutoffTime: "18:00" },
     taxIncluded: true,
     interpreter: false,
@@ -430,7 +432,7 @@ export const experiences: Experience[] = [
       "Parties of five or six are quoted on request",
     ],
     addOns: [
-      { id: "pro-video", name: "Professional photography and video", description: "Your guide films the day with a dedicated camera and delivers a one-to-two-minute edit. Price on request." },
+      { id: "pro-video", name: "Professional photography and video", description: "Your guide films the day with a dedicated camera and delivers a one-to-two-minute edit. ¥120,000 for two golfers, ¥144,000 for three; four on request.", price: 120000, priceFrom: true },
     ],
     schedule: [
       { time: "05:55", title: "Meet in your hotel lobby", body: "Your guide and driver meet you five minutes before departure." },

@@ -264,7 +264,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                         <div>
                           <b>{a.name}</b>
                           <p>{a.description}</p>
-                          <small>{a.price ? yen(a.price) : D.priceOnRequest}</small>
+                          <small>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</small>
                         </div>
                       </div>
                     ))}

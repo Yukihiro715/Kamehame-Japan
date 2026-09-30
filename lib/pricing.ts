@@ -25,7 +25,7 @@ export interface PricingView {
   plans?: PlanView[];
   extraGuest?: { regular: number; peak: number; included: number; upTo: number };
   peakWindows?: { from: string; to: string }[];
-  addOns?: { id: string; name: string; description: string; price?: number }[];
+  addOns?: { id: string; name: string; description: string; price?: number; priceFrom?: boolean }[];
   /** Per-person products: the price per guest and the largest party it covers. */
   perPerson?: number;
   maxGuests?: number;

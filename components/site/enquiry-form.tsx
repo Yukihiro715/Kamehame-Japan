@@ -206,7 +206,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
                 {addOns.map((a) => (
                   <label key={a.id} className="form-check">
                     <input type="checkbox" checked={b.addOns.includes(a.id)} onChange={() => b.toggleAddOn(a.id)} />
-                    <span><b>{a.name}</b><small>{a.price ? yen(a.price) : D.priceOnRequest}</small></span>
+                    <span><b>{a.name}</b><small>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</small></span>
                   </label>
                 ))}
               </fieldset>
