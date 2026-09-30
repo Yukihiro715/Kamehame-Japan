@@ -246,6 +246,8 @@ export const experiences: Experience[] = [
     // sheet, 2026-09; live since 2026-09-24 at ¥19,800 per person. Dates come from the
     // teacher's lesson calendar and are replaced every three months: ◎ slots have
     // the studio booked; ▲ slots need the studio booked when a request comes in.
+    // The calendar has two tables (■ teacher/space, ★ summary); a slot is open
+    // when either marks it ◎ or ▲ (teacher, 2026-09-30).
     slug: "kanji-name-calligraphy", city: "tokyo", category: "calligraphy", bookingType: "request", status: "live",
     title: "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
     tagline: "Create a one-of-a-kind kanji artwork inspired by your own name, in a private class in Tokyo. Before the day we ask about your name and its meaning, and the teacher prepares three kanji for you; you choose the one that feels most like you and turn it into art with brush and ink.",
@@ -274,6 +276,7 @@ export const experiences: Experience[] = [
     availability: {
       daily: false, startTimes: ["10:30", "13:30", "16:00"], cutoffDays: 7, cutoffTime: "18:00",
       dates: [
+        { date: "2026-10-06", times: ["13:30", "16:00"] },
         { date: "2026-10-15", times: ["10:30", "13:30", "16:00"] },
         { date: "2026-10-20", times: ["10:30"] },
         { date: "2026-10-26", times: ["10:30"] },
@@ -283,7 +286,7 @@ export const experiences: Experience[] = [
         { date: "2026-11-19", times: ["13:30", "16:00"] },
         { date: "2026-11-25", times: ["13:30", "16:00"] },
         { date: "2026-12-01", times: ["10:30"] },
-        { date: "2026-12-03", times: ["10:30"] },
+        { date: "2026-12-03", times: ["10:30", "13:30"] },
         { date: "2026-12-07", times: ["13:30", "16:00"] },
         { date: "2026-12-14", times: ["10:30"] },
         { date: "2026-12-17", times: ["13:30", "16:00"] },
