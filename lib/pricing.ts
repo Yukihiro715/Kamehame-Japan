@@ -104,6 +104,7 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
         window: windowLabel(hs.windows, lang),
       },
       moreOnRequest: size.max > Math.max(...rows.map((r) => r.party)),
+      peakWindows: hs?.windows,
       addOns: exp.addOns,
     };
   }
@@ -136,6 +137,12 @@ export function quote(view: PricingView, planId: string, guests: number, iso?: s
     if (view.maxGuests && guests > view.maxGuests) return null;
     const total = view.perPerson * Math.max(guests, view.minCharge ?? 1);
     return { total, peak: false, base: total, extraCount: 0, extraEach: 0 };
+  }
+  // Flat group table: the row for this party size (high-season table when the date falls in it).
+  if (!view.plans?.length && view.unit === "group") {
+    const peak = !!iso && !!view.highSeason && !!view.peakWindows?.length && isPeak(iso, view.peakWindows);
+    const row = (peak ? view.highSeason!.rows : view.rows).find((r) => r.party === guests);
+    return row ? { total: row.total, peak, base: row.total, extraCount: 0, extraEach: 0 } : null;
   }
   const plan = view.plans?.find((p) => p.id === planId);
   const eg = view.extraGuest;

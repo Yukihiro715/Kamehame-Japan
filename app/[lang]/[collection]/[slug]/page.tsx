@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check } from "lucide-react";
+import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check, Car, Flag } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -117,7 +117,7 @@ export default async function DetailPage({ params }: Props) {
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }
 
-const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles, brush: Brush };
+const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles, brush: Brush, car: Car, flag: Flag };
 
 function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
