@@ -274,7 +274,7 @@ export const experiences: Experience[] = [
     partySize: { min: 1, max: 4 },
     pricing: { minCharge: 2 },
     availability: {
-      daily: false, startTimes: ["10:30", "13:30", "16:00"], cutoffDays: 7, cutoffTime: "18:00",
+      daily: false, startTimes: ["10:30", "13:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00",
       dates: [
         { date: "2026-10-06", times: ["13:30", "16:00"] },
         { date: "2026-10-15", times: ["10:30", "13:30", "16:00"] },
@@ -372,6 +372,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes. A class for one is priced as two guests; the booking box shows the total when you choose one guest." },
       { q: "What should I wear?", a: "Clothes you don't mind getting ink on. Aprons are provided." },
+      { q: "Can we book at short notice?", a: "Yes, until 18:00 Japan time the day before. On some dates the studio is booked only when a request comes in, so for a class in the next few days we can confirm only if the studio is still free." },
       { q: "How does booking work?", a: "Choose a listed date and send a request; we reply within 24 hours with the price and conditions. Sending the request costs nothing. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
       { q: "What if we are late?", a: "The studio is booked by the hour, so the class ends on time and practice is shorter. Tell us as soon as you know you are running late." },
       { q: "Is transport included?", a: "No. You meet the teacher at the studio in Shinjuku; the address and directions come with your confirmation." },

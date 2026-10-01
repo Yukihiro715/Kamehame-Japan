@@ -109,6 +109,7 @@ export const experiencesFr: Experience[] = [
       { q: "Les enfants peuvent-ils participer ?", a: "Dès 10 ans, car on utilise de la vraie encre. Ils paient le tarif adulte." },
       { q: "Je voyage seul(e). Puis-je participer ?", a: "Oui. Un cours pour une personne est facturé comme pour deux ; l'encadré de réservation affiche le total quand vous choisissez une personne." },
       { q: "Comment s'habiller ?", a: "Avec des vêtements que l'encre peut tacher. Des tabliers sont fournis." },
+      { q: "Peut-on réserver au dernier moment ?", a: "Oui, jusqu'à 18 h, heure du Japon, la veille. Certains jours, le studio n'est réservé qu'à l'arrivée d'une demande : pour un cours dans les prochains jours, nous ne pouvons confirmer que s'il est encore libre." },
       { q: "Comment se passe la réservation ?", a: "Choisissez une date publiée et envoyez une demande ; nous répondons sous 24 heures avec le prix et les conditions. La demande est gratuite. La réservation est confirmée lorsque vous réglez via le lien envoyé, et les conditions d'annulation commencent alors." },
       { q: "Et si nous sommes en retard ?", a: "Le studio est loué à l'heure : le cours se termine à l'heure prévue et l'exercice est raccourci. Prévenez-nous dès que vous savez que vous serez en retard." },
       { q: "Le transport est-il compris ?", a: "Non. Vous retrouvez la professeure au studio de Shinjuku ; l'adresse et l'itinéraire arrivent avec votre confirmation." },

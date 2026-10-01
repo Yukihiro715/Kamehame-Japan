@@ -110,6 +110,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Pueden venir niños?", a: "Desde 10 años, porque se usa tinta de verdad. Pagan el precio de adulto." },
       { q: "Viajo solo/a. ¿Puedo participar?", a: "Sí. Una clase para una persona se cobra como dos; el cuadro de reserva muestra el total al elegir una persona." },
       { q: "¿Qué ropa llevo?", a: "Ropa que no te importe manchar de tinta. Hay delantales." },
+      { q: "¿Se puede reservar con poca antelación?", a: "Sí, hasta las 18:00 (hora de Japón) del día anterior. Algunos días el estudio se reserva solo cuando llega una solicitud, así que para una clase en los próximos días solo podemos confirmar si el estudio sigue libre." },
       { q: "¿Cómo funciona la reserva?", a: "Elige una fecha publicada y envía la solicitud; respondemos en 24 horas con el precio y las condiciones. Enviar la solicitud no cuesta nada. La reserva se confirma cuando pagas con el enlace que te enviamos y las condiciones de cancelación empiezan entonces." },
       { q: "¿Y si llegamos tarde?", a: "El estudio se alquila por horas: la clase termina a su hora y la práctica se acorta. Avísanos en cuanto sepas que llegas tarde." },
       { q: "¿Está incluido el transporte?", a: "No. Te encuentras con la profesora en el estudio de Shinjuku; la dirección y las indicaciones llegan con la confirmación." },
