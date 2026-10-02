@@ -35,7 +35,7 @@ export const categoriesEs: Category[] = [
     lead: "Las artistas de uñas de Tokio tratan cada uña como un lienzo. Trae a tu personaje favorito y llévate arte fan portátil pintado por una artista que vive de esto — el lado más ligero y juguetón del oficio japonés." },
   { slug: "calligraphy", title: "Caligrafía", tag: "Arte y artesanía", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "Un pincel, tinta negra y un solo carácter. Aprende los trazos con una profesora, elige kanji con el significado de tu nombre y llévate una obra hecha por ti." },
-  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-tee-shot.jpg",
     lead: "El golf en Japón tiene sus propias costumbres y algunas de las mejores vistas del país. Juega en un campo cerca del monte Fuji, con coche privado desde tu hotel de Tokio y un guía que habla inglés y se ocupa de todo lo demás." },
 ];
 
@@ -130,10 +130,10 @@ export const experiencesEs: Experience[] = [
       "Tu guía reserva el campo, viaja contigo, se encarga del check-in y juega la vuelta con tu grupo (con cuatro golfistas acompaña al grupo un caddie del campo), explicándote el campo y la etiqueta sobre la marcha. Los palos de alquiler y la comida están incluidos, y te llevas un vídeo corto de tu vuelta y un marcador de bola con tu nombre en kanji.",
     ],
     duration: "Día completo, de hotel a hotel", price: "¥180,000", group: "Coche privado y guía · 2–4 golfistas", ages: "Desde 18 años", area: "Zona del monte Fuji / Hakone (recogida en Tokio)",
-    img: "/images/golf-hero.jpg", alt: "Un pino y un estanque en un campo cerca del monte Fuji, en otoño",
+    img: "/images/golf-tee-shot.jpg", alt: "Un golpe de salida con las montañas al fondo",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "El monte Fuji sobre las nubes" },
-      { img: "/images/golf-tee-shot.jpg", alt: "Un golpe de salida con las montañas al fondo" },
+      { img: "/images/golf-hero.jpg", alt: "Un pino y un estanque en un campo cerca del monte Fuji, en otoño" },
       { img: "/images/golf-mountains.jpg", alt: "Un ave sobre las montañas junto al campo" },
       { img: "/images/golf-flags.jpg", alt: "Banderas ondeando sobre el campo" },
     ],

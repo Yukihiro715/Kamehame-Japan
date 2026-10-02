@@ -34,7 +34,7 @@ export const categoriesZh: Category[] = [
     lead: "東京的美甲師把指甲當成畫布。帶上您喜愛的角色或圖案，由每天都在畫這些的美甲師，為您完成可以戴在手上的粉絲創作——日本工藝輕鬆好玩的一面。" },
   { slug: "calligraphy", title: "書法", tag: "藝術與工藝", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "一支筆、黑墨與一個字。跟著老師學筆法，選出承載名字含義的漢字，帶回親手寫的作品。" },
-  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-fuji.jpg",
+  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-tee-shot.jpg",
     lead: "日本的高爾夫有自己的規矩，也有全國數一數二的美景。在富士山附近的球場打一場球，私人專車從您在東京的飯店出發，由說英語的導遊打點其餘的一切。" },
 ];
 
@@ -129,10 +129,10 @@ export const experiencesZh: Experience[] = [
       "導遊會預約球場、與你同車前往、辦理報到，並與你們一組同場打球（四位時改由球場桿弟陪同），邊打邊說明球場與禮儀。含租借球桿與午餐，還能帶走一支這一場球的短片，以及刻有你漢字名字的球標。",
     ],
     duration: "全天，飯店來回", price: "¥180,000", group: "私人專車與導遊 · 2 至 4 位球友", ages: "18 歲以上", area: "富士山／箱根地區（於東京接送）",
-    img: "/images/golf-hero.jpg", alt: "秋日富士山麓球場的松樹與池塘",
+    img: "/images/golf-tee-shot.jpg", alt: "遠眺群山的開球",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "雲海之上的富士山" },
-      { img: "/images/golf-tee-shot.jpg", alt: "遠眺群山的開球" },
+      { img: "/images/golf-hero.jpg", alt: "秋日富士山麓球場的松樹與池塘" },
       { img: "/images/golf-mountains.jpg", alt: "球場旁山間飛翔的鳥" },
       { img: "/images/golf-flags.jpg", alt: "球場上飄揚的旗幟" },
     ],

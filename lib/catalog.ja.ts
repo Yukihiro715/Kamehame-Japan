@@ -39,7 +39,7 @@ export const categoriesJa: Category[] = [
     lead: "東京のネイリストは、爪をキャンバスとして扱います。お好きなキャラクターやデザインをお持ちいただき、毎日これを描いている作家の手で、身につけられるファンアートに。日本の手仕事の、軽やかな一面です。" },
   { slug: "calligraphy", title: "書道・筆文字", tag: "アート・クラフト", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "筆と墨と、一文字。講師から筆づかいを習い、名前の意味を持つ漢字を選んで、自分で書いた作品を持ち帰ります。" },
-  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-fuji.jpg",
+  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-tee-shot.jpg",
     lead: "日本のゴルフには独自の作法があり、国内屈指の景色があります。東京のホテルから専用車で、英語を話すガイドと一緒に、富士山麓のゴルフ場でラウンドを。" },
 ];
 
@@ -134,10 +134,10 @@ export const experiencesJa: Experience[] = [
       "ガイドがコースを予約し、車に同乗してチェックインを代行し、2〜3名ならグループと一緒にラウンドしながらコースやマナーを説明します(4名の場合はゴルフ場のキャディが同伴します)。レンタルクラブと昼食付き。当日のダイジェスト映像と、お名前を漢字で入れたボールマーカーをお持ち帰りいただけます。",
     ],
     duration: "1日(ホテル発着)", price: "¥180,000", group: "専用車・専属ガイド・2〜4名", ages: "18歳以上", area: "富士山・箱根エリア(東京のホテル発着)",
-    img: "/images/golf-hero.jpg", alt: "紅葉の季節、富士山麓のゴルフ場の松と池",
+    img: "/images/golf-tee-shot.jpg", alt: "山々を望むティーショット",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "雲の上にそびえる富士山" },
-      { img: "/images/golf-tee-shot.jpg", alt: "山々を望むティーショット" },
+      { img: "/images/golf-hero.jpg", alt: "紅葉の季節、富士山麓のゴルフ場の松と池" },
       { img: "/images/golf-mountains.jpg", alt: "コース脇の山の上を飛ぶ鳥" },
       { img: "/images/golf-flags.jpg", alt: "コースにはためく旗" },
     ],

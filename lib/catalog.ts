@@ -235,7 +235,7 @@ export const categories: Category[] = [
   { slug: "anime-nail-art", title: "Anime nail art", tag: "Pop culture", mark: "爪", img: "/images/cat-nail.jpg",
     lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },  { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-tee-shot.jpg",
     lead: "Golf in Japan has its own customs and some of the country's finest views. Play a course near Mt. Fuji, with a private car from your Tokyo hotel and an English-speaking guide who takes care of the rest." },
 ];
 
@@ -399,10 +399,10 @@ export const experiences: Experience[] = [
       "Your guide books the course, rides with you, handles check-in and plays the round with your group (a party of four plays with a course caddie instead), explaining the course and the etiquette as you go. Rental clubs and lunch are included, and you go home with a short video of your round and a ball marker with your name in kanji.",
     ],
     duration: "Full day, hotel to hotel", price: "¥180,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji / Hakone area (pick-up in Tokyo)",
-    img: "/images/golf-hero.jpg", alt: "A pine tree and pond on a course near Mt. Fuji, in autumn colours",
+    img: "/images/golf-tee-shot.jpg", alt: "A tee shot with the mountains beyond",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "Mt. Fuji above the clouds" },
-      { img: "/images/golf-tee-shot.jpg", alt: "A tee shot with the mountains beyond" },
+      { img: "/images/golf-hero.jpg", alt: "A pine tree and pond on a course near Mt. Fuji, in autumn colours" },
       { img: "/images/golf-mountains.jpg", alt: "A bird above the mountains by the course" },
       { img: "/images/golf-flags.jpg", alt: "Flags flying over the course" },
     ],

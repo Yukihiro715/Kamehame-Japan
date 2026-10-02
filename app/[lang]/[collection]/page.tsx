@@ -45,6 +45,9 @@ export default async function CollectionPage({ params }: Props) {
   // Articles attached to any experience in this city or category.
   const { experiences, cities } = catalogFor(lang);
   const reading = articlesForCollection(collection, lang, (slug) => experiences.find((e) => e.slug === slug));
+  // Hero eyebrow: only the cities this city or category actually runs in.
+  const inCollection = experiences.filter((e) => e.city === collection || e.category === collection);
+  const heroCities = inCollection.length ? cities.filter((c) => inCollection.some((e) => e.city === c.slug)) : cities;
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -64,7 +67,7 @@ export default async function CollectionPage({ params }: Props) {
       <section className="collection-hero">
         <img src={data.heroImg} alt={data.heroAlt} />
         <div className="collection-hero-copy">
-          <p className="eyebrow"><span /> {T.eyebrowHero(cities.map((c) => c.title))}</p>
+          <p className="eyebrow"><span /> {T.eyebrowHero(heroCities.map((c) => c.title))}</p>
           <h1>{data.h1}</h1>
         </div>
       </section>

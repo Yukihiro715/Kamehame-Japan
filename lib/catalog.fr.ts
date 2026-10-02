@@ -34,7 +34,7 @@ export const categoriesFr: Category[] = [
     lead: "Les nail artists de Tokyo traitent l'ongle comme une toile. Apportez votre personnage ou motif préféré et repartez avec un fan art à porter, réalisé par une artiste qui fait cela tous les jours — la face légère et joueuse de l'artisanat japonais." },
   { slug: "calligraphy", title: "Calligraphie", tag: "Arts et artisanat", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "Un pinceau, de l'encre noire et un seul caractère. Apprenez les traits avec une professeure, choisissez des kanji qui portent le sens de votre prénom et repartez avec une œuvre faite de vos mains." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-tee-shot.jpg",
     lead: "Au Japon, le golf a ses propres usages et quelques-uns des plus beaux panoramas du pays. Jouez sur un parcours près du mont Fuji, avec une voiture privée depuis votre hôtel à Tokyo et un guide anglophone qui s'occupe de tout le reste." },
 ];
 
@@ -129,10 +129,10 @@ export const experiencesFr: Experience[] = [
       "Votre guide réserve le golf, fait le trajet avec vous, gère l'enregistrement et joue la partie avec votre groupe (à quatre, un caddie du golf vous accompagne à sa place), en vous expliquant le parcours et l'étiquette au fil du jeu. Les clubs de location et le déjeuner sont compris, et vous repartez avec une courte vidéo de votre partie et un marque-balle à votre nom en kanji.",
     ],
     duration: "Journée complète, d'hôtel à hôtel", price: "¥180,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji / Hakone (prise en charge à Tokyo)",
-    img: "/images/golf-hero.jpg", alt: "Un pin et un étang sur un parcours près du mont Fuji, en automne",
+    img: "/images/golf-tee-shot.jpg", alt: "Un coup de départ face aux montagnes",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "Le mont Fuji au-dessus des nuages" },
-      { img: "/images/golf-tee-shot.jpg", alt: "Un coup de départ face aux montagnes" },
+      { img: "/images/golf-hero.jpg", alt: "Un pin et un étang sur un parcours près du mont Fuji, en automne" },
       { img: "/images/golf-mountains.jpg", alt: "Un oiseau au-dessus des montagnes près du parcours" },
       { img: "/images/golf-flags.jpg", alt: "Des drapeaux flottant au-dessus du parcours" },
     ],
