@@ -126,9 +126,9 @@ export const experiencesFr: Experience[] = [
     tagline: "Une journée de golf près du mont Fuji, organisée de porte à porte : une voiture privée vient vous chercher à votre hôtel de Tokyo à 6 h, vous jouez un parcours dans la région Fuji–Hakone avec un guide anglophone qui joue à vos côtés, vous déjeunez au club-house, puis on vous ramène.",
     overview: [
       "Jouer au golf au Japon quand on est de passage est plus difficile qu'il n'y paraît : les départs se réservent en japonais, les parcours se trouvent hors de la ville et les club-houses ont leurs propres usages. Cette journée s'occupe de tout.",
-      "Votre guide réserve le golf, fait le trajet avec vous, gère l'enregistrement et joue la partie avec votre groupe, en vous expliquant le parcours et l'étiquette au fil du jeu. Les clubs de location et le déjeuner sont compris, et vous repartez avec une courte vidéo de votre partie et un marque-balle à votre nom en kanji.",
+      "Votre guide réserve le golf, fait le trajet avec vous, gère l'enregistrement et joue la partie avec votre groupe (à quatre, un caddie du golf vous accompagne à sa place), en vous expliquant le parcours et l'étiquette au fil du jeu. Les clubs de location et le déjeuner sont compris, et vous repartez avec une courte vidéo de votre partie et un marque-balle à votre nom en kanji.",
     ],
-    duration: "Journée complète, d'hôtel à hôtel", price: "¥270,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji / Hakone (prise en charge à Tokyo)",
+    duration: "Journée complète, d'hôtel à hôtel", price: "¥180,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji / Hakone (prise en charge à Tokyo)",
     img: "/images/golf-hero.jpg", alt: "Un pin et un étang sur un parcours près du mont Fuji, en automne",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "Le mont Fuji au-dessus des nuages" },
@@ -141,16 +141,16 @@ export const experiencesFr: Experience[] = [
     includedShort: "Voiture privée depuis votre hôtel · Partie avec un guide anglophone · Clubs et déjeuner",
     cancellation: "Les jours se comptent jusqu'à la date de votre partie, à l'heure du Japon ; l'annulation gratuite prend fin à 18 h sept jours avant. La date peut être changée jusqu'à 14 jours avant si une autre heure de départ est libre, et le nombre de golfeurs réduit jusqu'à 7 jours avant. Si le golf ferme en raison de la météo, il en décide le jour même et vous êtes remboursé de tout, hormis les frais déjà engagés, comme la voiture si elle est déjà partie.",
     highlights: [
-      { icon: "car", title: "De porte à porte depuis votre hôtel", body: "Une voiture privée prend votre groupe en charge à 6 h et vous ramène après le déjeuner, une boisson vous attendant à bord." },
+      { icon: "car", title: "De porte à porte depuis votre hôtel", body: "Une voiture privée prend votre groupe en charge à 6 h et vous ramène après le déjeuner." },
       { icon: "flag", title: "Un parcours près du mont Fuji", body: "Des golfs de la région de Hakone et du mont Fuji, à environ 90 à 150 km du centre de Tokyo, réservés pour votre date." },
-      { icon: "interpreter", title: "Un guide qui joue avec vous", body: "Votre guide anglophone s'occupe de l'enregistrement et des usages du club-house, et joue la partie aux côtés de votre groupe." },
+      { icon: "interpreter", title: "Un guide qui joue avec vous", body: "Votre guide anglophone s'occupe de l'enregistrement et des usages du club-house, et joue la partie avec les groupes de deux ou trois ; à quatre, un caddie du golf vous accompagne." },
       { icon: "photo", title: "Des souvenirs de la journée", body: "Une courte vidéo des meilleurs moments de votre partie, envoyée ensuite, et un marque-balle à votre nom en kanji." },
     ],
     included: [
-      "Prise en charge et retour à votre hôtel de Tokyo en voiture privée de luxe, avec une boisson de bienvenue à bord",
+      "Prise en charge et retour à votre hôtel de Tokyo en voiture privée de luxe",
       "Le green fee d'une partie sur un golf de la région de Hakone ou du mont Fuji",
       "Clubs de location",
-      "Un guide de golf anglophone qui joue la partie avec vous — deux guides pour un groupe de quatre",
+      "Un guide de golf anglophone qui joue la partie avec vous — à quatre, c'est un caddie du golf qui vous accompagne sur le parcours",
       "Déjeuner au club-house",
       "Une vidéo des meilleurs moments de votre journée, d'environ une minute, envoyée ensuite",
       "Un marque-balle de golf à votre nom en kanji",
@@ -165,9 +165,9 @@ export const experiencesFr: Experience[] = [
     ],
     schedule: [
       { time: "05:55", title: "Rendez-vous dans le hall de votre hôtel", body: "Votre guide et votre chauffeur vous retrouvent cinq minutes avant le départ." },
-      { time: "06:00", title: "Route vers le golf", body: "Environ deux heures en voiture privée en direction de Hakone ou du mont Fuji, avec une boisson de bienvenue à bord." },
+      { time: "06:00", title: "Route vers le golf", body: "Environ deux heures en voiture privée en direction de Hakone ou du mont Fuji." },
       { time: "08:00", title: "Arrivée et enregistrement", body: "Votre guide vous enregistre, s'occupe des clubs de location et vous explique le parcours et les usages du club-house." },
-      { time: "08:30", title: "Premier départ", body: "Votre partie, avec votre guide qui joue à vos côtés et vous aide sur le parcours au fil du jeu." },
+      { time: "08:30", title: "Premier départ", body: "Votre partie, avec votre guide (ou, à quatre, un caddie du golf) à vos côtés, qui vous aide sur le parcours au fil du jeu." },
       { time: "Après la partie", title: "Déjeuner au club-house", body: "Le déjeuner est compris." },
       { time: "Après-midi", title: "Retour à votre hôtel", body: "La voiture vous ramène à Tokyo ; votre vidéo des meilleurs moments suit par e-mail." },
     ],
@@ -184,7 +184,7 @@ export const experiencesFr: Experience[] = [
     ],
     faq: [
       { q: "Sur quel parcours jouerons-nous ?", a: "Sur un golf de la région de Hakone ou du mont Fuji, choisi selon les heures de départ disponibles à votre date — à environ 90 à 150 km du centre de Tokyo. Nous confirmons le golf dans notre réponse, avant votre paiement. Si vous avez une préférence, indiquez-la dans votre demande." },
-      { q: "La voiture et le guide sont-ils rien que pour nous ?", a: "Oui. Votre groupe voyage dans sa propre voiture avec votre guide, et le guide joue la partie avec vous. À quatre, vous jouez en deux groupes, chacun avec un guide." },
+      { q: "La voiture et le guide sont-ils rien que pour nous ?", a: "Oui. Votre groupe voyage dans sa propre voiture avec votre guide. À deux ou trois, le guide joue la partie avec vous ; à quatre, c'est un caddie du golf qui vous accompagne sur le parcours." },
       { q: "Où venez-vous nous chercher ?", a: "À votre hôtel à Tokyo, à 6 h. Indiquez l'hôtel dans votre demande ; pour un hôtel hors du centre de Tokyo, demandez-nous et nous vérifierons." },
       { q: "Y a-t-il un code vestimentaire ?", a: "Oui. Les golfs japonais attendent une veste à l'arrivée au club-house et une chemise à col sur le parcours. Votre guide vous explique le reste le jour même." },
       { q: "Les clubs sont-ils compris ? Et les chaussures ?", a: "Les clubs de location sont compris. Apportez vos propres chaussures de golf ; si vous devez en louer une paire, indiquez-nous votre pointure et nous vérifierons auprès du golf." },

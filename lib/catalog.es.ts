@@ -127,9 +127,9 @@ export const experiencesEs: Experience[] = [
     tagline: "Un día de golf cerca del monte Fuji, organizado de puerta a puerta: un coche privado te recoge en tu hotel de Tokio a las 6:00, juegas una vuelta en un campo de la zona de Fuji–Hakone con un guía que habla inglés y juega a tu lado, comes en la casa club y te llevan de vuelta.",
     overview: [
       "Jugar al golf en Japón como visitante es más difícil de lo que parece: las horas de salida se reservan en japonés, los campos están fuera de la ciudad y las casas club tienen sus propias costumbres. Este día se ocupa de todo.",
-      "Tu guía reserva el campo, viaja contigo, se encarga del check-in y juega la vuelta con tu grupo, explicándote el campo y la etiqueta sobre la marcha. Los palos de alquiler y la comida están incluidos, y te llevas un vídeo corto de tu vuelta y un marcador de bola con tu nombre en kanji.",
+      "Tu guía reserva el campo, viaja contigo, se encarga del check-in y juega la vuelta con tu grupo (con cuatro golfistas acompaña al grupo un caddie del campo), explicándote el campo y la etiqueta sobre la marcha. Los palos de alquiler y la comida están incluidos, y te llevas un vídeo corto de tu vuelta y un marcador de bola con tu nombre en kanji.",
     ],
-    duration: "Día completo, de hotel a hotel", price: "¥270,000", group: "Coche privado y guía · 2–4 golfistas", ages: "Desde 18 años", area: "Zona del monte Fuji / Hakone (recogida en Tokio)",
+    duration: "Día completo, de hotel a hotel", price: "¥180,000", group: "Coche privado y guía · 2–4 golfistas", ages: "Desde 18 años", area: "Zona del monte Fuji / Hakone (recogida en Tokio)",
     img: "/images/golf-hero.jpg", alt: "Un pino y un estanque en un campo cerca del monte Fuji, en otoño",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "El monte Fuji sobre las nubes" },
@@ -142,16 +142,16 @@ export const experiencesEs: Experience[] = [
     includedShort: "Coche privado desde tu hotel · Vuelta con un guía que habla inglés · Palos y comida",
     cancellation: "Los días se cuentan hasta la fecha de tu vuelta, en hora de Japón; la cancelación gratuita termina a las 18:00 siete días antes. La fecha puede cambiarse hasta 14 días antes si hay otra hora de salida libre, y el número de golfistas puede reducirse hasta 7 días antes. Si el campo cierra por el tiempo, lo decide el mismo día y se te reembolsa todo salvo los gastos ya incurridos, como el coche si ya ha salido.",
     highlights: [
-      { icon: "car", title: "De puerta a puerta desde tu hotel", body: "Un coche privado recoge a tu grupo a las 6:00 y lo trae de vuelta después de la comida, con una bebida esperando a bordo." },
+      { icon: "car", title: "De puerta a puerta desde tu hotel", body: "Un coche privado recoge a tu grupo a las 6:00 y lo trae de vuelta después de la comida." },
       { icon: "flag", title: "Un campo cerca del monte Fuji", body: "Campos de la zona de Hakone y el monte Fuji, a unos 90 a 150 km del centro de Tokio, reservados para tu fecha." },
-      { icon: "interpreter", title: "Un guía que juega contigo", body: "Tu guía, que habla inglés, se encarga del check-in y de las costumbres de la casa club, y juega la vuelta junto a tu grupo." },
+      { icon: "interpreter", title: "Un guía que juega contigo", body: "Tu guía, que habla inglés, se encarga del check-in y de las costumbres de la casa club, y juega la vuelta con grupos de dos o tres; un grupo de cuatro juega con un caddie del campo." },
       { icon: "photo", title: "Recuerdos del día", body: "Un vídeo corto con los mejores momentos de tu vuelta, que se envía después, y un marcador de bola con tu nombre en kanji." },
     ],
     included: [
-      "Recogida y regreso a tu hotel de Tokio en un coche privado de lujo, con una bebida de bienvenida a bordo",
+      "Recogida y regreso a tu hotel de Tokio en un coche privado de lujo",
       "Green fee de una vuelta en un campo de la zona de Hakone o del monte Fuji",
       "Palos de alquiler",
-      "Un guía de golf que habla inglés y juega la vuelta contigo; dos guías para un grupo de cuatro",
+      "Un guía de golf que habla inglés y juega la vuelta contigo; con cuatro golfistas, en su lugar acompaña al grupo un caddie del campo",
       "Comida en la casa club",
       "Un vídeo con los mejores momentos de tu día, de un minuto aproximadamente, que se envía después",
       "Un marcador de bola de golf con tu nombre en kanji",
@@ -166,9 +166,9 @@ export const experiencesEs: Experience[] = [
     ],
     schedule: [
       { time: "05:55", title: "Encuentro en el vestíbulo de tu hotel", body: "Tu guía y el conductor se reúnen contigo cinco minutos antes de la salida." },
-      { time: "06:00", title: "Trayecto al campo", body: "Unas dos horas en coche privado hacia Hakone o el monte Fuji, con una bebida de bienvenida a bordo." },
+      { time: "06:00", title: "Trayecto al campo", body: "Unas dos horas en coche privado hacia Hakone o el monte Fuji." },
       { time: "08:00", title: "Llegada y check-in", body: "Tu guía hace el check-in, se ocupa de los palos de alquiler y te explica el campo y las costumbres de la casa club." },
-      { time: "08:30", title: "Salida desde el tee", body: "Tu vuelta, con tu guía jugando a tu lado y ayudándote con el campo sobre la marcha." },
+      { time: "08:30", title: "Salida desde el tee", body: "Tu vuelta, con tu guía (o, con cuatro golfistas, un caddie del campo) a tu lado, ayudándote con el campo sobre la marcha." },
       { time: "Después de la vuelta", title: "Comida en la casa club", body: "La comida está incluida." },
       { time: "Por la tarde", title: "Regreso a tu hotel", body: "El coche te lleva de vuelta a Tokio; tu vídeo con los mejores momentos llega después por correo electrónico." },
     ],
@@ -185,7 +185,7 @@ export const experiencesEs: Experience[] = [
     ],
     faq: [
       { q: "¿En qué campo jugaremos?", a: "En un campo de la zona de Hakone o del monte Fuji, elegido según las horas de salida disponibles para tu fecha, a unos 90 a 150 km del centro de Tokio. Te confirmamos el campo en nuestra respuesta, antes de que pagues. Si tienes alguna preferencia, indícala en tu solicitud." },
-      { q: "¿El coche y el guía son solo para nosotros?", a: "Sí. Tu grupo viaja en su propio coche con tu guía, y el guía juega la vuelta con el grupo. Un grupo de cuatro juega en dos partidas, cada una con un guía." },
+      { q: "¿El coche y el guía son solo para nosotros?", a: "Sí. Tu grupo viaja en su propio coche con tu guía. Con dos o tres golfistas, el guía juega la vuelta con el grupo; con cuatro, en su lugar acompaña al grupo un caddie del campo." },
       { q: "¿Dónde nos recogen?", a: "En tu hotel de Tokio, a las 6:00. Indica el hotel en tu solicitud; si tu hotel está fuera del centro de Tokio, consúltanos y lo comprobaremos." },
       { q: "¿Hay código de vestimenta?", a: "Sí. Los clubes japoneses esperan chaqueta al llegar a la casa club y camisa con cuello en el campo. Tu guía te explica el resto ese día." },
       { q: "¿Están incluidos los palos? ¿Y los zapatos?", a: "Los palos de alquiler están incluidos. Trae tus propios zapatos de golf; si necesitas alquilar un par, dinos tu talla y lo consultaremos con el campo." },

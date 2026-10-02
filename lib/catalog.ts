@@ -385,8 +385,10 @@ export const experiences: Experience[] = [
   },
   {
     // Golf near Mt. Fuji with a golf partner (condition sheet, 2026-09). Live
-    // since 2026-09-30. Tiers = the partner's wholesale group totals + ¥25,000
-    // per golfer; the video add-on = wholesale + 20% (¥144,000 for three).
+    // since 2026-09-30. Repriced 2026-10-02 on the partner's lower costs
+    // (wholesale ¥126k / ¥147k / ¥182k): ¥180k / ¥220k / ¥280k. For four the
+    // guide does not play; a course caddie goes round instead. The video add-on
+    // = wholesale + 20% (¥144,000 for three).
     // The owner is handling the travel-business registration question raised
     // by the hotel transfers.
     slug: "mt-fuji-golf-day", city: "tokyo", category: "golf", bookingType: "request", status: "live",
@@ -394,9 +396,9 @@ export const experiences: Experience[] = [
     tagline: "A day of golf near Mt. Fuji, arranged from door to door: a private car collects you from your Tokyo hotel at 6:00, you play a round at a course in the Fuji–Hakone area with an English-speaking guide who plays alongside you, have lunch at the clubhouse, and are driven back.",
     overview: [
       "Playing golf in Japan as a visitor is harder than it looks: tee times are booked in Japanese, the courses sit outside the city, and clubhouses have their own customs. This day takes care of all of it.",
-      "Your guide books the course, rides with you, handles check-in and plays the round with your group, explaining the course and the etiquette as you go. Rental clubs and lunch are included, and you go home with a short video of your round and a ball marker with your name in kanji.",
+      "Your guide books the course, rides with you, handles check-in and plays the round with your group (a party of four plays with a course caddie instead), explaining the course and the etiquette as you go. Rental clubs and lunch are included, and you go home with a short video of your round and a ball marker with your name in kanji.",
     ],
-    duration: "Full day, hotel to hotel", price: "¥270,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji / Hakone area (pick-up in Tokyo)",
+    duration: "Full day, hotel to hotel", price: "¥180,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji / Hakone area (pick-up in Tokyo)",
     img: "/images/golf-hero.jpg", alt: "A pine tree and pond on a course near Mt. Fuji, in autumn colours",
     gallery: [
       { img: "/images/golf-fuji.jpg", alt: "Mt. Fuji above the clouds" },
@@ -406,7 +408,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos show a course in the Mt. Fuji area. Your course depends on tee times for your date, and Mt. Fuji shows only on a clear day.",
     partySize: { min: 2, max: 4 },
-    pricing: { tiers: [{ party: 2, total: 270000 }, { party: 3, total: 343000 }, { party: 4, total: 457000 }] },
+    pricing: { tiers: [{ party: 2, total: 180000 }, { party: 3, total: 220000 }, { party: 4, total: 280000 }] },
     availability: { daily: true, startTimes: ["06:00"], cutoffDays: 3, cutoffTime: "18:00" },
     taxIncluded: true,
     interpreter: false,
@@ -416,16 +418,16 @@ export const experiences: Experience[] = [
     cancellation: "Days are counted to the date of your round, Japan time; free cancellation ends at 18:00 seven days before. The date can be changed up to 14 days before if another tee time is free, and the number of golfers reduced up to 7 days before. If the course closes for weather, it decides on the day and you are refunded everything except costs already incurred, such as the car if it has already set out.",
     cancellationTiers: [{ until: 7, rate: 0 }, { until: 2, rate: 50 }, { until: 0, rate: 100 }],
     highlights: [
-      { icon: "car", title: "Door to door from your hotel", body: "A private car collects your group at 6:00 and brings you back after lunch, with a drink waiting on board." },
+      { icon: "car", title: "Door to door from your hotel", body: "A private car collects your group at 6:00 and brings you back after lunch." },
       { icon: "flag", title: "A course near Mt. Fuji", body: "Courses in the Hakone and Mt. Fuji area, about 90 to 150 km from central Tokyo, booked for your date." },
-      { icon: "interpreter", title: "A guide who plays with you", body: "Your English-speaking guide handles check-in and clubhouse customs and plays the round alongside your group." },
+      { icon: "interpreter", title: "A guide who plays with you", body: "Your English-speaking guide handles check-in and clubhouse customs and plays the round with groups of two or three; a party of four plays with a course caddie." },
       { icon: "photo", title: "Keepsakes from the day", body: "A short highlight video of your round, sent afterwards, and a ball marker with your name in kanji." },
     ],
     included: [
-      "Pick-up and drop-off at your Tokyo hotel in a private luxury car, with a welcome drink on board",
+      "Pick-up and drop-off at your Tokyo hotel in a private luxury car",
       "Green fee for a round at a course in the Hakone or Mt. Fuji area",
       "Rental clubs",
-      "An English-speaking golf guide who plays the round with you — two guides for a party of four",
+      "An English-speaking golf guide who plays the round with you — for a party of four, a course caddie goes round with you instead",
       "Lunch at the clubhouse",
       "A highlight video of your day, about one minute long, sent afterwards",
       "A golf ball marker with your name in kanji",
@@ -440,9 +442,9 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "05:55", title: "Meet in your hotel lobby", body: "Your guide and driver meet you five minutes before departure." },
-      { time: "06:00", title: "Drive to the course", body: "About two hours by private car towards Hakone or Mt. Fuji, with a welcome drink on board." },
+      { time: "06:00", title: "Drive to the course", body: "About two hours by private car towards Hakone or Mt. Fuji." },
       { time: "08:00", title: "Arrive and check in", body: "Your guide checks you in, sorts rental clubs and explains the course and the clubhouse customs." },
-      { time: "08:30", title: "Tee off", body: "Your round, with your guide playing alongside and helping with the course as you go." },
+      { time: "08:30", title: "Tee off", body: "Your round, with your guide (or, for four golfers, a course caddie) alongside, helping with the course as you go." },
       { title: "Lunch at the clubhouse", time: "After the round", body: "Lunch is included." },
       { time: "Afternoon", title: "Back to your hotel", body: "The car takes you back to Tokyo; your highlight video follows by email." },
     ],
@@ -459,7 +461,7 @@ export const experiences: Experience[] = [
     ],
     faq: [
       { q: "Which course will we play?", a: "A course in the Hakone or Mt. Fuji area, chosen by tee times for your date — about 90 to 150 km from central Tokyo. We confirm the course in our reply, before you pay. If you have a preference, tell us in your request." },
-      { q: "Is the car and the guide just for us?", a: "Yes. Your group rides in its own car with your guide, and the guide plays the round with you. A party of four plays in two groups, each with a guide." },
+      { q: "Is the car and the guide just for us?", a: "Yes. Your group rides in its own car with your guide. For two or three golfers the guide plays the round with you; for four, a course caddie goes round with you instead." },
       { q: "Where do you pick us up?", a: "At your hotel in Tokyo, at 6:00. Tell us the hotel in your request; for hotels outside central Tokyo, ask and we will check." },
       { q: "Is there a dress code?", a: "Yes. Japanese clubs expect a jacket when you arrive at the clubhouse and a collared shirt on the course. Your guide explains the rest on the day." },
       { q: "Are clubs included? What about shoes?", a: "Rental clubs are included. Bring your own golf shoes; if you need to rent a pair, tell us your size and we will check with the course." },
