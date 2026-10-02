@@ -1381,3 +1381,15 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 /* four highlights read better as two rows of two than three plus one */
 .xp-highlights:has(> :nth-child(4):last-child) { grid-template-columns:repeat(2,1fr); }
 @media(max-width:700px){ .xp-highlights:has(> :nth-child(4):last-child) { grid-template-columns:1fr; } }
+
+/* Two-column rows: label, control and hint share rows across the two cells, so a
+   label that wraps (e.g. "Second-choice date (recommended)" on a phone) no longer
+   pushes its control below the one beside it. Browsers without subgrid keep the
+   per-cell layout above. */
+@supports (grid-template-rows: subgrid) {
+  .form-row.two { row-gap:6px; column-gap:14px; }
+  .form-row.two > .field, .form-row.two > label { display:grid; grid-template-rows:subgrid; grid-row:span 3; gap:0; align-content:start; }
+  .bk-grid { row-gap:5px; column-gap:10px; }
+  .bk-grid > .field, .bk-grid > label { display:grid; grid-template-rows:subgrid; grid-row:span 2; gap:0; }
+  .bk-grid > *:nth-child(n+3) { padding-top:5px; }
+}
