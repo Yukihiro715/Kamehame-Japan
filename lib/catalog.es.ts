@@ -132,10 +132,10 @@ export const experiencesEs: Experience[] = [
     duration: "Día completo, de hotel a hotel", price: "¥180,000", group: "Coche privado y guía · 2–4 golfistas", ages: "Desde 18 años", area: "Zona del monte Fuji / Hakone (recogida en Tokio)",
     img: "/images/golf-tee-shot.jpg", alt: "Un golpe de salida con las montañas al fondo",
     gallery: [
-      { img: "/images/golf-fuji.jpg", alt: "El monte Fuji sobre las nubes" },
       { img: "/images/golf-hero.jpg", alt: "Un pino y un estanque en un campo cerca del monte Fuji, en otoño" },
       { img: "/images/golf-mountains.jpg", alt: "Un ave sobre las montañas junto al campo" },
       { img: "/images/golf-flags.jpg", alt: "Banderas ondeando sobre el campo" },
+      { img: "/images/golf-fuji.jpg", alt: "El monte Fuji sobre las nubes" },
     ],
     galleryNote: "Las fotos muestran un campo de la zona del monte Fuji. Tu campo depende de las horas de salida disponibles para tu fecha, y el monte Fuji solo se ve en días despejados.",
     langTag: "Guía de golf que habla inglés",
@@ -175,6 +175,7 @@ export const experiencesEs: Experience[] = [
     venue: {
       known: ["Un campo de la zona de Hakone o del monte Fuji, a unos 90 a 150 km del centro de Tokio, elegido según las horas de salida disponibles para tu fecha", "Recogida y regreso en tu hotel de Tokio", "Encuentro en el vestíbulo de tu hotel a las 5:55"],
       afterBooking: ["El nombre del campo y la hora de salida", "El nombre de tu guía y su contacto para ese día", "Los datos del coche y del conductor"],
+      img: "/images/golf-hero.jpg", alt: "Un pino y un estanque en un campo cerca del monte Fuji, en otoño",
     },
     notesLabel: "Tu hotel en Tokio, el nivel o hándicap de cada golfista y cualquier cosa que debamos saber (opcional)",
     notesHint: "p. ej. Hotel en Shinjuku; hándicaps 12 y 20; uno de nosotros necesita palos para zurdos",

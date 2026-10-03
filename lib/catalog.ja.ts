@@ -136,10 +136,10 @@ export const experiencesJa: Experience[] = [
     duration: "1日(ホテル発着)", price: "¥180,000", group: "専用車・専属ガイド・2〜4名", ages: "18歳以上", area: "富士山・箱根エリア(東京のホテル発着)",
     img: "/images/golf-tee-shot.jpg", alt: "山々を望むティーショット",
     gallery: [
-      { img: "/images/golf-fuji.jpg", alt: "雲の上にそびえる富士山" },
       { img: "/images/golf-hero.jpg", alt: "紅葉の季節、富士山麓のゴルフ場の松と池" },
       { img: "/images/golf-mountains.jpg", alt: "コース脇の山の上を飛ぶ鳥" },
       { img: "/images/golf-flags.jpg", alt: "コースにはためく旗" },
+      { img: "/images/golf-fuji.jpg", alt: "雲の上にそびえる富士山" },
     ],
     galleryNote: "写真は富士山エリアのゴルフ場の一例です。コースはご希望日の空き状況で決まり、富士山は晴れた日のみ見えます。",
     langTag: "英語を話すゴルフガイド",
@@ -179,6 +179,7 @@ export const experiencesJa: Experience[] = [
     venue: {
       known: ["東京都心から約90〜150kmの箱根・富士エリアのゴルフ場(ご希望日の空き状況で決定)", "東京のホテルでのお迎え・お送り", "5:55にホテルのロビーに集合"],
       afterBooking: ["ゴルフ場名とティータイム", "当日のガイドの名前と連絡先", "送迎車とドライバーの情報"],
+      img: "/images/golf-hero.jpg", alt: "紅葉の季節、富士山麓のゴルフ場の松と池",
     },
     notesLabel: "ご宿泊のホテル、各プレーヤーのレベルやハンディキャップ、その他お伝えいただきたいこと(任意)",
     notesHint: "例:新宿のホテル/ハンディ12と20/1名は左利き用クラブ希望",

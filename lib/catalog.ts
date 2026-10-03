@@ -401,10 +401,10 @@ export const experiences: Experience[] = [
     duration: "Full day, hotel to hotel", price: "¥180,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji / Hakone area (pick-up in Tokyo)",
     img: "/images/golf-tee-shot.jpg", alt: "A tee shot with the mountains beyond",
     gallery: [
-      { img: "/images/golf-fuji.jpg", alt: "Mt. Fuji above the clouds" },
       { img: "/images/golf-hero.jpg", alt: "A pine tree and pond on a course near Mt. Fuji, in autumn colours" },
       { img: "/images/golf-mountains.jpg", alt: "A bird above the mountains by the course" },
       { img: "/images/golf-flags.jpg", alt: "Flags flying over the course" },
+      { img: "/images/golf-fuji.jpg", alt: "Mt. Fuji above the clouds" },
     ],
     galleryNote: "Photos show a course in the Mt. Fuji area. Your course depends on tee times for your date, and Mt. Fuji shows only on a clear day.",
     partySize: { min: 2, max: 4 },
@@ -451,6 +451,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A course in the Hakone or Mt. Fuji area, about 90 to 150 km from central Tokyo, chosen by tee times for your date", "Pick-up and drop-off at your hotel in Tokyo", "Meet in your hotel lobby at 5:55"],
       afterBooking: ["The course name and tee time", "Your guide's name and contact for the day", "The car and driver details"],
+      img: "/images/golf-hero.jpg", alt: "A pine tree and pond on a course near Mt. Fuji, in autumn colours",
     },
     notesLabel: "Your hotel in Tokyo, each golfer's level or handicap, and anything we should know (optional)",
     notesHint: "e.g. Hotel in Shinjuku; handicaps 12 and 20; one of us needs left-handed clubs",

@@ -131,10 +131,10 @@ export const experiencesZh: Experience[] = [
     duration: "全天，飯店來回", price: "¥180,000", group: "私人專車與導遊 · 2 至 4 位球友", ages: "18 歲以上", area: "富士山／箱根地區（於東京接送）",
     img: "/images/golf-tee-shot.jpg", alt: "遠眺群山的開球",
     gallery: [
-      { img: "/images/golf-fuji.jpg", alt: "雲海之上的富士山" },
       { img: "/images/golf-hero.jpg", alt: "秋日富士山麓球場的松樹與池塘" },
       { img: "/images/golf-mountains.jpg", alt: "球場旁山間飛翔的鳥" },
       { img: "/images/golf-flags.jpg", alt: "球場上飄揚的旗幟" },
+      { img: "/images/golf-fuji.jpg", alt: "雲海之上的富士山" },
     ],
     galleryNote: "照片為富士山地區的球場。實際球場依你所選日期的開球時段而定，富士山只有在晴天才看得到。",
     langTag: "說英語的高爾夫導遊",
@@ -174,6 +174,7 @@ export const experiencesZh: Experience[] = [
     venue: {
       known: ["箱根或富士山地區的球場，距東京市中心約 90 至 150 公里，依你所選日期的開球時段決定", "於你在東京的飯店接送", "5:55 在飯店大廳會合"],
       afterBooking: ["球場名稱與開球時間", "當天導遊的姓名與聯絡方式", "專車與司機資訊"],
+      img: "/images/golf-hero.jpg", alt: "秋日富士山麓球場的松樹與池塘",
     },
     notesLabel: "你在東京下榻的飯店、每位球友的程度或差點，以及需要讓我們知道的事（可不填）",
     notesHint: "例：新宿的飯店；差點 12 與 20；其中一人需要左手球桿",

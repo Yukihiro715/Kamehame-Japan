@@ -131,10 +131,10 @@ export const experiencesFr: Experience[] = [
     duration: "Journée complète, d'hôtel à hôtel", price: "¥180,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji / Hakone (prise en charge à Tokyo)",
     img: "/images/golf-tee-shot.jpg", alt: "Un coup de départ face aux montagnes",
     gallery: [
-      { img: "/images/golf-fuji.jpg", alt: "Le mont Fuji au-dessus des nuages" },
       { img: "/images/golf-hero.jpg", alt: "Un pin et un étang sur un parcours près du mont Fuji, en automne" },
       { img: "/images/golf-mountains.jpg", alt: "Un oiseau au-dessus des montagnes près du parcours" },
       { img: "/images/golf-flags.jpg", alt: "Des drapeaux flottant au-dessus du parcours" },
+      { img: "/images/golf-fuji.jpg", alt: "Le mont Fuji au-dessus des nuages" },
     ],
     galleryNote: "Les photos montrent un parcours de la région du mont Fuji. Votre parcours dépend des heures de départ disponibles à votre date, et le mont Fuji n'est visible que par temps clair.",
     langTag: "Guide de golf anglophone",
@@ -174,6 +174,7 @@ export const experiencesFr: Experience[] = [
     venue: {
       known: ["Un golf de la région de Hakone ou du mont Fuji, à environ 90 à 150 km du centre de Tokyo, choisi selon les heures de départ disponibles à votre date", "Prise en charge et retour à votre hôtel à Tokyo", "Rendez-vous dans le hall de votre hôtel à 5 h 55"],
       afterBooking: ["Le nom du golf et l'heure de départ", "Le nom de votre guide et son contact pour le jour même", "Les informations sur la voiture et le chauffeur"],
+      img: "/images/golf-hero.jpg", alt: "Un pin et un étang sur un parcours près du mont Fuji, en automne",
     },
     notesLabel: "Votre hôtel à Tokyo, le niveau ou handicap de chaque golfeur, et tout ce que nous devons savoir (facultatif)",
     notesHint: "ex. Hôtel à Shinjuku ; handicaps 12 et 20 ; l'un de nous a besoin de clubs pour gaucher",
