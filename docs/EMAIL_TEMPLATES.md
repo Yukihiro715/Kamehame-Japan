@@ -223,7 +223,7 @@ KAMEHAME JAPAN · Prosent Inc.
 
 ```
 ① 自動返信(サイトが送信)
-② 初回返信(G-0)— 24時間以内。週末の問い合わせは「火曜までに提案」と伝える
+② 初回返信(G-0)— 24時間以内。提携先がすぐ返せる場合は「今日か明日」、週末などで時間がかかる場合は日付を伝える
 ③ ゴルフ提携先に照会(G-1)→ コース・ティータイム・料金・仮押さえ期限が出たら
 ④ 条件案内+支払いリンク(G-A)
 ⑤ 入金確認 → 提携先に正式手配 → 確定通知(G-C:集合場所・ガイド連絡先・車両)
@@ -244,7 +244,7 @@ Hello {name},
 
 Thank you for your request. We are now checking courses in the Mt. Fuji region for {weekday, date}, with a {time} departure from your hotel in {area}, for {n} golfers{, with rental clubs for both of you}.
 
-You will have the proposed course, tee time and final price by {day, e.g. Tuesday 7 October}. Nothing is charged until you have seen them and decided to go ahead.
+You will have the proposed course, tee time and final price {today or tomorrow / by {day}}. Nothing is charged until you have seen them and decided to go ahead.
 
 Warm regards,
 {your name}
