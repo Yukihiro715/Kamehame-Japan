@@ -82,7 +82,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         </div>
         {x.startTimes && x.startTimes.length > 0 && (
           <label>
-            <span>{F.startTime}</span>
+            <span>{x.timeLabel ?? F.startTime}</span>
             <select value={b.time} onChange={(e) => b.set({ time: e.target.value })}>
               {timesFor(x, b.date).map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
@@ -117,10 +117,10 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         <a className="bk-cta" href="#request-form" onClick={(e) => {
           e.preventDefault();
           if (window.matchMedia(SIDE_BY_SIDE).matches) expand(); else jump();
-        }}>{D.requestCta} <ArrowRight size={16} /></a>
+        }}>{x.ctaLabel ?? D.requestCta} <ArrowRight size={16} /></a>
       )}
       <ul className="bk-trust">
-        <li><ShieldCheck size={14} /> {D.noPaymentNow}</li>
+        <li><ShieldCheck size={14} /> {x.ctaNote ?? D.noPaymentNow}</li>
         <li><Clock3 size={14} /> {D.replyIn24}</li>
         <li><CalendarDays size={14} /> {D.availCutoff(x.leadDays, x.cutoffTime)}</li>
       </ul>

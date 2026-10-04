@@ -170,6 +170,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
     maxGuests: exp.partySize?.max,
     dates: avail?.dates, interpreter: exp.interpreter,
     notesLabel: exp.notesLabel, notesHint: exp.notesHint,
+    ctaLabel: exp.cta?.label, ctaNote: exp.cta?.note, timeLabel: exp.timeLabel,
   };
   const fmtDay = new Intl.DateTimeFormat(DATE_LOCALES[lang], { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
 
@@ -222,7 +223,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <p className="xp-lede">{exp.tagline}</p>
               {exp.overview?.map((p) => <p key={p} className="xp-overview-p">{p}</p>)}
               <ul className="xp-overview-facts">
-                {avail && <li><CalendarDays size={15} /><span>{avail.dates ? D.availSelected : avail.daily ? D.availDaily : ""} · {D.availStart} {avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}</span></li>}
+                {avail && <li><CalendarDays size={15} /><span>{avail.dates ? D.availSelected : avail.daily ? D.availDaily : ""} · {exp.timeLabel ?? D.availStart} {avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}</span></li>}
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
                 {exp.taxIncluded && <li><ShieldCheck size={15} /><span>{D.taxIncluded}</span></li>}
                 {avail && <li><Clock3 size={15} /><span>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
@@ -409,7 +410,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <p className="xp-note">{exp.interactionNote ?? D.interactionNote(exp.duration, exp.interactionTime)}</p>
               )}
               {exp.schedule && avail && (
-                <p className="xp-note xp-note-sample">{D.scheduleSample(avail.startTimes.includes("18:00") ? "18:00" : avail.startTimes[0])}</p>
+                <p className="xp-note xp-note-sample">{exp.scheduleNote ?? D.scheduleSample(avail.startTimes.includes("18:00") ? "18:00" : avail.startTimes[0])}</p>
               )}
               <ol className="xp-timeline">
                 {schedule.map((st) => (
@@ -442,7 +443,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                     ) : (
                       <div><dt>{D.availDays}</dt><dd>{avail.daily ? D.availDaily : "—"}{exp.availabilityNote && ` · ${exp.availabilityNote}`}</dd></div>
                     )}
-                    {!avail.dates && <div><dt>{D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>}
+                    {!avail.dates && <div><dt>{exp.timeLabel ?? D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>}
                     <div><dt>{D.availCutoffH}</dt><dd>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</dd></div>
                   </dl>
                 </div>
@@ -451,7 +452,8 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
             {/* ⑩ Venue */}
             <section className="xp-section">
-              <h2>{D.venueH}</h2>
+              <h2>{exp.venue?.heading ?? D.venueH}</h2>
+              {exp.venue?.lead && <p className="xp-note">{exp.venue.lead}</p>}
               <div className="xp-venue">
                 {exp.map && (
                   <figure className="xp-map">
@@ -464,13 +466,13 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 )}
                 <div className="xp-venue-cols">
                   <div>
-                    <h3>{D.venueKnownH}</h3>
+                    <h3>{exp.venue?.knownHeading ?? D.venueKnownH}</h3>
                     <ul className="know-list">
                       {(exp.venue?.known ?? [exp.area, T.meetOnSite]).map((k) => <li key={k}>{k}</li>)}
                     </ul>
                   </div>
                   <div>
-                    <h3>{D.venueAfterH}</h3>
+                    <h3>{exp.venue?.afterHeading ?? D.venueAfterH}</h3>
                     <ul className="know-list">
                       {(exp.venue?.afterBooking ?? [T.meetingChip(exp.area)]).map((k) => <li key={k}>{k}</li>)}
                     </ul>
@@ -521,8 +523,8 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <p className="xp-cancel">{cancellation}</p>
               )}
 
-              <h2 className="xp-sub" id="request-form">{live ? D.requestH : T.comingSoonCta}</h2>
-              <p className="xp-note">{live ? D.requestLead : T.comingSoonBody}</p>
+              <h2 className="xp-sub" id="request-form">{live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
+              <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>
               <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />
               {/* Bókun mount for the day online booking connects; nothing renders until then. */}
               <div id="bokun-widget-mount" data-experience={exp.slug} data-booking-type={exp.bookingType ?? "instant"} hidden />
@@ -547,7 +549,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           </div>
 
         </div>
-        <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />
+        <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />
       </BookingProvider>
 
       {moreInCity.length > 0 && (

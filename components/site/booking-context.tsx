@@ -25,6 +25,11 @@ export interface BookingExperience {
   /** Request-form notes field copy, when the product needs something specific. */
   notesLabel?: string;
   notesHint?: string;
+  /** Product-specific button text and the trust line under it. */
+  ctaLabel?: string;
+  ctaNote?: string;
+  /** Label of the time control, when the time is not a start time (e.g. departure). */
+  timeLabel?: string;
 }
 
 export const DEFAULT_MAX_GUESTS = 15;

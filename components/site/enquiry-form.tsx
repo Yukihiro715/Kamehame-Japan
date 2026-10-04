@@ -163,7 +163,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
             </div>
             {x.startTimes?.length ? (
               <label>
-                <span>{F.startTime}</span>
+                <span>{x.timeLabel ?? F.startTime}</span>
                 <select name="time" required value={b.time} onChange={(e) => b.set({ time: e.target.value })}>
                   {timesFor(x, b.date).map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
@@ -259,7 +259,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
 
       <div className="enquiry-actions">
         <button type="submit" className={card ? "bk-cta" : "contact-cta"} disabled={status === "sending"}>
-          {status === "sending" ? F.sending : b ? F.sendRequest : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : b ? x?.ctaLabel ?? F.sendRequest : F.send} <ArrowRight size={15} />
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>
