@@ -217,6 +217,116 @@ KAMEHAME JAPAN · Prosent Inc.
 
 ---
 
+## G. ゴルフ(Private Mt. Fuji Golf Experience)の流れ
+
+芸妓と同じ骨格ですが、**支払いの前にコース名とティータイムを提示する**とページで約束しているので、順番が一つ増えます。
+
+```
+① 自動返信(サイトが送信)
+② 初回返信(G-0)— 24時間以内。週末の問い合わせは「火曜までに提案」と伝える
+③ ゴルフ提携先に照会(G-1)→ コース・ティータイム・料金・仮押さえ期限が出たら
+④ 条件案内+支払いリンク(G-A)
+⑤ 入金確認 → 提携先に正式手配 → 確定通知(G-C:集合場所・ガイド連絡先・車両)
+⑥ 前日リマインド(任意)、翌日お礼+口コミ依頼(E と同じ)
+```
+
+**Stripe の商品(ゴルフ)** — 初回に作成し、以後は価格だけ差し替える
+- `Private Mt. Fuji Golf Experience from Tokyo`:3価格 ¥180,000(2 golfers)/ ¥220,000(3 golfers)/ ¥280,000(4 golfers)
+- `Professional photography and video — Mt. Fuji golf`:2価格 ¥120,000(2 golfers)/ ¥144,000(3 golfers)
+- 支払いリンクは**予約ごとに1本**。品目1 = 人数に合う価格 ×1、品目2 = 撮影オプション(希望時のみ)×1。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)、「支払い回数を制限」= 1回。5〜6名はお見積もり額の価格を追加して同じ手順。
+
+### G-0. 初回返信(照会中)
+
+**件名:** `Your request — Private Mt. Fuji Golf Experience, {date}`
+
+```
+Hello {name},
+
+Thank you for your request. We are now checking courses in the Mt. Fuji region for {weekday, date}, with a {time} departure from your hotel in {area}, for {n} golfers{, with rental clubs for both of you}.
+
+You will have the proposed course, tee time and final price by {day, e.g. Tuesday 7 October}. Nothing is charged until you have seen them and decided to go ahead.
+
+Warm regards,
+{your name}
+KAMEHAME JAPAN · Prosent Inc.
+hello@kamehame-japan.com
+```
+
+### G-1. 提携先への照会(日本語・担当者が送る)
+
+> 件名: 【予約照会】富士山ゴルフ {月/日(曜)} {n}名 {出発エリア}発 {出発時刻}
+> 日程 / 出発時刻・場所(ホテル名) / 人数(性別・HC) / レンタルクラブ(レディース・メンズ、利き手) / 希望コースがあれば
+> 確認事項: ①コース候補とティータイム(出発時刻に合うもの) ②料金(卸条件どおりか) ③ティータイムの仮押さえと、いつまで押さえられるか ④シューズのレンタル可否 ⑤2〜3名はガイドがラウンド同行、4名はキャディ ⑥集合(ロビーは出発5分前)と車両
+> お客様にはコース・ティータイム・料金を提示したうえでお支払いいただき、入金後に正式手配をお願いします。
+
+### G-A. 条件案内(コース確定・支払いリンク付き)
+
+**件名:** `Your golf day is available — Private Mt. Fuji Golf Experience, {weekday, date} · {time} departure`
+
+```
+Hello {name},
+
+Good news: we can arrange your golf day on {weekday, date} for {n} golfers, departing from your hotel in {area} at {time}.
+
+YOUR COURSE AND TEE TIME
+{Course name}, {area} — tee off at {tee time}. About {x} hours by private car from {area}. Mt. Fuji is in view from the course on a clear day.
+
+PRICE
+¥{total} for {n} golfers — the total for your private group. Tax included; nothing is added on the day.
+
+WHAT'S INCLUDED
+- Private car from your hotel to the course and back ({time} departure; your guide and driver meet you in the lobby at {time − 5 min})
+- Green fee for the round
+- Rental clubs {for both of you (one ladies' set, one men's set)}
+- An English-speaking golf guide who rides with you, handles check-in and {plays the round with you / for four golfers: a course caddie goes round with you}
+- Lunch at the clubhouse
+- A short highlight film of your day, sent afterwards, and a ball marker with your name in kanji
+
+NOT INCLUDED
+- Golf shoes — bring your own, or tell us your sizes and we will check rental with the course
+- Optional: professional photography and video of the day, ¥{120,000 / 144,000} for {n} golfers — reply if you would like it added
+
+CANCELLATION
+Your booking is confirmed when your payment arrives, and these terms apply from then (days counted to {date}, Japan time):
+- until 18:00 on {date − 7 days}: free — full refund
+- 6 to 2 days before: 50%
+- from the day before, and no-shows: 100%
+If the course closes for weather, it decides on the day and you are refunded everything except costs already incurred.
+
+TO CONFIRM
+Please pay by {deadline, e.g. Friday 10 October, 18:00 Japan time} through this secure link:
+{Stripe payment link}
+Please use the same name and email address as in your request. (Bank transfer is also possible — reply and we will send the details.)
+
+AFTER PAYMENT
+Within one business day we send your confirmation with the meeting point in your hotel lobby, your guide's name and phone / WhatsApp, the car details and a few notes for the day (dress code: a jacket on arrival, a collared shirt on the course).
+
+THREE QUICK THINGS — reply any time, before or after paying
+- The name of your hotel in {area}
+- Both golfers' full names, and whether either of you plays left-handed, so the rental clubs are right
+- A mobile number or WhatsApp we can reach on the day
+
+Warm regards,
+{your name}
+KAMEHAME JAPAN · Prosent Inc.
+hello@kamehame-japan.com
+```
+
+**日本語対訳(担当者用)**
+> {date}、{n}名、{area}のホテルを{time}出発で手配できます。
+> コースとティータイム:{コース名}、ティーオフ {時刻}。専用車で約{x}時間。晴れれば富士山が見えます
+> 料金:{n}名で合計 ¥{total}(貸切の総額。税込、当日の追加なし)
+> 含まれるもの:ホテル往復の専用車(ロビー集合は出発5分前)/プレーフィ/レンタルクラブ/英語ガイド(2〜3名はラウンド同行、4名はキャディ)/クラブハウスの昼食/ハイライト映像とボールマーカー
+> 含まれないもの:シューズ(持参、またはサイズを知らせてもらいゴルフ場に確認)/撮影オプション(希望があれば追加)
+> キャンセル:入金で確定。7日前の18時まで無料、6〜2日前50%、前日以降・無連絡100%。天候クローズは発生済み費用を除き返金
+> 確定するには:{期限}までに決済リンクから。問い合わせと同じ氏名・メールで
+> 入金後1営業日以内に、ロビーの集合場所・ガイドの名前と連絡先・車両・服装の注意を記載した確定通知を送る
+> 返信でほしいこと(支払いの前後どちらでも可):ホテル名/2名の氏名と利き手/当日の携帯番号または WhatsApp
+
+**運用:** 氏名・ホテル名・連絡先は支払いの条件にしない(まず入金)。足りないものは確定通知(G-C)を送る前に集める。提携先への正式手配は入金後すぐ(無料キャンセルは7日前まで、提携先の取消条件と重ならないよう確認)。
+
+---
+
 ## 運用メモ
 
 - **返信は必ず hello@kamehame-japan.com から**(Google グループの「グループとして送信」または担当者の送信元に hello@ を追加)。お客様は自動返信の返信先が hello@ なので、スレッドが1本になります。
