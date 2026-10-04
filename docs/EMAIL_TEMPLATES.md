@@ -233,16 +233,17 @@ KAMEHAME JAPAN · Prosent Inc.
 **Stripe の商品(ゴルフ)** — 初回に作成し、以後は価格だけ差し替える
 - `Private Mt. Fuji Golf Experience from Tokyo`:3価格 ¥180,000(2 golfers)/ ¥220,000(3 golfers)/ ¥280,000(4 golfers)
 - `Professional photography and video — Mt. Fuji golf`:2価格 ¥120,000(2 golfers)/ ¥144,000(3 golfers)
-- 支払いリンクは**予約ごとに1本**。品目1 = 人数に合う価格 ×1、品目2 = 撮影オプション(希望時のみ)×1。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)、「支払い回数を制限」= 1回。5〜6名はお見積もり額の価格を追加して同じ手順。
-- 作成済みのリンク(2026-10-04。いずれも支払い1回で自動的に無効になるので、使ったら同じ設定で作り直す):
+- 支払いリンクは**人数ごとに1本を使い回す**(2026-10-04 決定。「支払い回数を制限」は付けない)。品目 = 人数に合う価格 ×1、数量変更は「許可しない」。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)。撮影オプション付き・5〜6名は、その予約用に別のリンクを作る。
+- 入金の照合は Stripe の通知の**氏名・メールアドレス・金額**で行う(メールで「問い合わせと同じ氏名・メールで決済」を依頼済み)。照合できたら Stripe の支払いに予約番号をメモする。
+- 作成済みのリンク(2026-10-04):
 
 | 人数 | 金額 | リンク |
 | --- | --- | --- |
-| 2名 | ¥180,000 | https://book.stripe.com/6oU9AT3fHa390YnaZc3Je0d (KJ-261028-01 用) |
+| 2名 | ¥180,000 | https://book.stripe.com/6oU9AT3fHa390YnaZc3Je0d |
 | 3名 | ¥220,000 | https://book.stripe.com/cNi28r7vX6QX6iH2sG3Je0c |
 | 4名 | ¥280,000 | https://book.stripe.com/14AfZh6rT1wD9uT5ES3Je0b |
 
-  **使わないリンク**(金額が ¥18,000 になっていた最初の2名用。Stripe で「無効化」しておく): https://book.stripe.com/00wfZh7vXcbhePd0ky3Je0a
+  無効化済み(金額が ¥18,000 になっていた最初の2名用): https://book.stripe.com/00wfZh7vXcbhePd0ky3Je0a
 
 ### 入金後の流れ(ゴルフ)
 
@@ -450,7 +451,7 @@ hello@kamehame-japan.com
   2. 1品目: プランの価格(体験日の季節)、数量1
   3. 2品目: 3名以上なら同じ季節の「Additional guest」、**数量 = 人数 − 2**(3名→1、5名→3)。数量の変更は「お客様に許可しない」
   4. 「支払い後」→「顧客をウェブサイトにリダイレクト」→ `https://kamehame-japan.com/en/booked/?session_id={CHECKOUT_SESSION_ID}`(サイトの予約確定ページ。金額の表示と広告の成果計測をここで行う)
-  5. 詳細設定の「支払い回数を制限」→ **1回**(払われたらリンクが自動で無効になる)
+  5. 「支払い回数を制限」は付けない(2026-10-04 決定。入金は氏名・メール・金額で照合する)
   6. 作成したリンクを条件案内(A)の `{Stripe payment link}` に貼る
   - 例: Signature・通常期・4名 → Signature regular ×1(¥379,800)+ Additional guest regular ×2(¥79,600)= ¥459,400。サイトの見積もりと同額になる
   - 6名以上は見積もり額で決める。Additional guest の数量を増やすか、見積もり額の価格を追加して同じ手順で発行
