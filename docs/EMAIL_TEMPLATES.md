@@ -234,6 +234,112 @@ KAMEHAME JAPAN · Prosent Inc.
 - `Private Mt. Fuji Golf Experience from Tokyo`:3価格 ¥180,000(2 golfers)/ ¥220,000(3 golfers)/ ¥280,000(4 golfers)
 - `Professional photography and video — Mt. Fuji golf`:2価格 ¥120,000(2 golfers)/ ¥144,000(3 golfers)
 - 支払いリンクは**予約ごとに1本**。品目1 = 人数に合う価格 ×1、品目2 = 撮影オプション(希望時のみ)×1。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)、「支払い回数を制限」= 1回。5〜6名はお見積もり額の価格を追加して同じ手順。
+- 作成済みのリンク(2026-10-04。いずれも支払い1回で自動的に無効になるので、使ったら同じ設定で作り直す):
+
+| 人数 | 金額 | リンク |
+| --- | --- | --- |
+| 2名 | ¥180,000 | https://book.stripe.com/00wfZh7vXcbhePd0ky3Je0a (KJ-261028-01 用) |
+| 3名 | ¥220,000 | https://book.stripe.com/cNi28r7vX6QX6iH2sG3Je0c |
+| 4名 | ¥280,000 | https://book.stripe.com/14AfZh6rT1wD9uT5ES3Je0b |
+
+### 入金後の流れ(ゴルフ)
+
+```
+入金当日   Stripe の通知(氏名・メール・金額)を問い合わせと照合 → 予約番号を採番(KJ-体験日-連番)、Stripe の支払いにメモ
+          → 提携先に正式手配(G-2)。ガイド名・連絡先・車両・ロビー集合の案内を依頼
+          → お客様に「入金確認」(G-B)。足りない情報(ホテル名・氏名・利き手・携帯)はここで集める
+翌営業日まで 提携先から詳細が届いたら確定通知(G-C)。届かなくても G-B は当日中に送る
+7日前      無料キャンセル期限(18:00)。提携先の手配が最終か確認
+前日       リマインド(G-D):集合時刻・ガイドの電話・天気・持ち物
+翌日       お礼+口コミ依頼(E と同じ。URL の experience=mt-fuji-golf-day)。ハイライト映像は提携先から届き次第転送
+```
+
+### G-2. 提携先への正式手配(日本語)
+
+> 件名: 【正式手配】富士山ゴルフ {月/日(曜)} {n}名 {予約番号}
+> 入金を確認しましたので正式手配をお願いします。
+> 日程・コース・ティータイム / 出発 {時刻} {ホテル名}(ロビー集合 {出発5分前}) / 参加者氏名(性別・HC・利き手) / レンタルクラブ / お客様の携帯 / 撮影オプションの有無
+> 折り返しお願いしたいこと: ①当日のガイド名と電話(WhatsApp 可否) ②車両(車種・ナンバー・ドライバー名) ③ロビーでの目印 ④ハイライト映像の納品時期 ⑤貴社の取消条件の起算日
+
+### G-B. 入金確認(入金当日)
+
+**件名:** `Payment received — Private Mt. Fuji Golf Experience, {weekday, date} · {予約番号}`
+
+```
+Hello {name},
+
+Thank you — we have received your payment of ¥{total}, and your golf day on {weekday, date} is confirmed. Your booking reference is {予約番号}.
+
+We are now making the final arrangements with the course and your guide. Within one business day you will receive your confirmation with the meeting point in your hotel lobby, your guide's name and phone, and the car details.
+
+{If anything is still missing:}
+To complete the arrangements, could you reply with:
+- The name of your hotel in {area}
+- Both golfers' full names, and whether either of you plays left-handed
+- A mobile number or WhatsApp we can reach on the day
+
+Warm regards,
+{your name}
+KAMEHAME JAPAN · Prosent Inc.
+```
+
+**日本語対訳**
+> ¥{total} のお支払いを確認しました。{date} のゴルフは確定です。予約番号は {番号}。
+> ゴルフ場とガイドと最終手配中で、1営業日以内に集合場所・ガイドの名前と電話・車両を記載した確定通知を送ります。
+> (未入手なら)ホテル名/お二人の氏名と利き手/当日の携帯番号を返信してください。
+
+### G-C. 確定通知(詳細が揃ったら)
+
+**件名:** `Confirmed — Private Mt. Fuji Golf Experience, {weekday, date} · {予約番号}`
+
+```
+Hello {name},
+
+Everything is arranged for your golf day. Here are the details.
+
+DATE AND MEETING
+{Weekday, date} — please be in the lobby of {hotel name} by {time − 5 min}. The car leaves at {time}.
+Your guide, {guide name}, will be waiting in the lobby {landmark, e.g. near the reception desk}.
+
+YOUR COURSE
+{Course name}, {area}
+Tee off at {tee time}. About {x} hours by private car from your hotel; you arrive around {time} and check in with your guide.
+
+YOUR GUIDE AND CAR
+{Guide name} — phone / WhatsApp: {number} (for the day itself, if you are running late or cannot find each other)
+Car: {make / colour}, driver {name}
+
+WHAT WE HAVE ARRANGED
+- Rental clubs: {one ladies' set, one men's set; both right-handed}
+- Lunch at the clubhouse
+- {Professional photography and video — yes / no}
+- A ball marker with your names in kanji, handed to you on the day; your highlight film follows by email within {x} days
+
+WHAT TO BRING
+- Golf shoes {or: rental shoes in sizes … are reserved for you}
+- A jacket to wear on arrival at the clubhouse, and a collared shirt for the course
+- Glove, sunscreen or a layer for the morning — it is cooler near Mt. Fuji than in Tokyo
+
+GOOD TO KNOW
+- The car waits 15 minutes at the hotel; after that we may miss the tee time.
+- If the course closes for weather, it decides on the day; you are refunded everything except costs already incurred.
+- Cancellation from now: {6 to 2 days before: 50%; from the day before: 100% — with the actual dates}.
+
+We hope you have a wonderful day. If anything comes up before then, we are at hello@kamehame-japan.com.
+
+Warm regards,
+{your name}
+KAMEHAME JAPAN · Prosent Inc.
+```
+
+**日本語対訳**
+> 手配がすべて整いました。
+> 日時・集合:{date}、{ホテル名}のロビーに{出発5分前}まで。出発 {time}。ガイド {名前} が {目印} でお待ちします
+> コース:{コース名}。ティーオフ {時刻}。ホテルから約{x}時間、{到着時刻}頃に到着しガイドがチェックイン
+> ガイド・車両:{名前}、電話/WhatsApp {番号}(当日用)。車両 {車種・色}、ドライバー {名前}
+> 手配済み:レンタルクラブ({内容})/クラブハウス昼食/撮影オプション有無/ボールマーカーは当日お渡し、ハイライト映像は{x}日以内にメール
+> 持ち物:ゴルフシューズ(またはレンタル手配済み)/到着時のジャケットと襟付きシャツ/グローブ・日焼け止め・上着(富士山麓は東京より涼しい)
+> 補足:車はホテルで15分待機/天候クローズは発生済み費用を除き返金/この時点からのキャンセル規定(実際の日付で)
 
 ### G-0. 初回返信(照会中)
 
