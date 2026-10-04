@@ -100,6 +100,36 @@ const REVIEWS: Review[] = [
     body: "Besides the class itself, being able to take the finished piece home is what drew me in. On the wooden stand it looks different from when I was practising. The slightly uneven lines feel charming because I wrote them myself — I'm looking forward to putting it up at home.",
     i18n: { ja: { title: "飾れる作品を持ち帰れるのがよかったです", body: "体験そのものはもちろん、完成した作品を持ち帰れるところに魅力を感じて参加しました。木製の台座に置くと、練習していたときとはまた違った雰囲気になります。少し不揃いな線も自分で書いたからこその味に感じられて、部屋に飾るのが楽しみです。" } },
   },
+  // source "partner": guests of the golf partner's own Mt. Fuji golf days,
+  // supplied by the partner on 2026-10-04. Shown with that label, no verified
+  // badge, and left out of the rating declared in structured data. One
+  // mention of KAMEHAME that the partner had inserted into Michael R.'s text
+  // was removed; the rest is as supplied.
+  {
+    id: "g1", experience: "mt-fuji-golf-day", rating: 5, author: "James W.", country: "GB", source: "partner", party: "couple",
+    title: "A special day together, away from the city",
+    body: "My girlfriend and I both enjoy golf, so we wanted to play at least once during our trip to Japan. Having a private car pick us up from our hotel made the early start easy. Our guide was warm and fun to talk to, and we felt comfortable straight away. Between the golf, lunch and conversations along the way, it became one of our favourite days together in Japan.",
+  },
+  {
+    id: "g2", experience: "mt-fuji-golf-day", rating: 5, author: "Michael R.", country: "US", source: "partner",
+    title: "We couldn't arrange it ourselves, so we were glad to find this",
+    body: "I tried to book a round from overseas but couldn't work out how to complete a reservation at the courses I was interested in. Rather than spend more of our holiday planning around it, we got in touch with the team. They sent us the proposed course, tee time and price before we paid, which made us feel much more comfortable. It was a relief to have the booking and transport sorted together.",
+  },
+  {
+    id: "g3", experience: "mt-fuji-golf-day", rating: 5, author: "Sarah T.", country: "AU", source: "partner",
+    title: "Our guide made the day even better",
+    body: "We booked for the golf, but our guide ended up being a big part of what made the day so enjoyable. They were friendly, had a great sense of humour and were happy to answer our questions about Japan. There were plenty of laughs throughout the day, and nothing felt awkward or overly formal. We left with lovely memories of both the golf and the people we met.",
+  },
+  {
+    id: "g4", experience: "mt-fuji-golf-day", rating: 5, author: "Adrian L.", country: "SG", source: "partner",
+    title: "Even the drive became part of the experience",
+    body: "During the drive, we mentioned that we liked anime, and our guide introduced us to a few Japanese anime songs we hadn't heard before. We ended up chatting about our favourite shows and saved some of the songs to listen to later. It was such a small, unexpected moment, but it made the day feel personal. The golf was great, and the journey was genuinely fun too.",
+  },
+  {
+    id: "g5", experience: "mt-fuji-golf-day", rating: 4, author: "David C.", country: "CA", source: "partner", party: "couple",
+    title: "A golf day we could simply enjoy",
+    body: "My wife and I wanted to play golf in Japan, but neither of us wanted to spend our trip figuring out reservations and transport. This was a good fit for us. We could review the arrangements beforehand, then just be ready at our hotel on the morning. Our guide was lovely company, and lunch at the clubhouse gave us time to relax together. We were tired by the end, but very happy we'd made a day of it.",
+  },
 ];
 
 /** Layout samples for experiences in "preview" only (see isPreview in the
