@@ -12,6 +12,8 @@ export interface BookingExperience {
   /** Clock time (Japan) by which a request must be in, e.g. "17:00". */
   cutoffTime: string;
   startTimes?: string[];
+  /** Pre-selected start time (default: 18:00 if offered, else the first). */
+  defaultTime?: string;
   closed?: { from: string; to: string }[];
   minGuests: number;
   /** Largest head count the price covers; above it the group is quoted individually. */
@@ -93,7 +95,7 @@ export function isClosed(iso: string, windows?: { from: string; to: string }[]) 
 export function BookingProvider({ experience, pricing, lang, children }: { experience: BookingExperience; pricing?: PricingView; lang?: string; children: ReactNode }) {
   const times = experience.startTimes;
   // Pre-select the typical dinner slot so the example reads 18:00, not the last slot.
-  const defaultTime = times?.includes("18:00") ? "18:00" : times?.[0] ?? "";
+  const defaultTime = experience.defaultTime && times?.includes(experience.defaultTime) ? experience.defaultTime : times?.includes("18:00") ? "18:00" : times?.[0] ?? "";
   const [state, setState] = useState<BookingState>({
     plan: pricing?.plans?.find((p) => p.recommended)?.id ?? pricing?.plans?.[0]?.id ?? "",
     date: "", time: defaultTime,

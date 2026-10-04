@@ -34,7 +34,7 @@ export const categoriesZh: Category[] = [
     lead: "東京的美甲師把指甲當成畫布。帶上您喜愛的角色或圖案，由每天都在畫這些的美甲師，為您完成可以戴在手上的粉絲創作——日本工藝輕鬆好玩的一面。" },
   { slug: "calligraphy", title: "書法", tag: "藝術與工藝", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "一支筆、黑墨與一個字。跟著老師學筆法，選出承載名字含義的漢字，帶回親手寫的作品。" },
-  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-cart-fuji.jpg",
+  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-flag-fuji.jpg",
     lead: "日本的高爾夫有自己的規矩，也有全國數一數二的美景。在富士山地區度過私人的高爾夫一日：球場與開球時段為你安排，私人專車從東京飯店出發，並有英語協助。" },
 ];
 
@@ -129,11 +129,12 @@ export const experiencesZh: Experience[] = [
       "開球時段的預約、接送與租借球桿由我們處理，並有英語協助陪你度過這一天。飯店出發時間可在 5:00 至 7:00 之間自選；我們依此提案球場與開球時段，並連同最終價格在付款前讓你確認。少花時間安排，多留時間打球。",
     ],
     duration: "全天，飯店來回", price: "¥180,000", group: "私人專車與導遊 · 2 至 4 位球友", ages: "18 歲以上", area: "富士山地區（於東京接送）",
-    img: "/images/golf-cart-fuji.jpg", alt: "球道上的高爾夫球車，背後是富士山",
+    img: "/images/golf-flag-fuji.jpg", alt: "松林後方聳立著富士山的果嶺與旗桿",
     gallery: [
       { img: "/images/golf-fuji-clouds.jpg", alt: "從球場望去、雲層之上的富士山" },
-      { img: "/images/golf-green.jpg", alt: "果嶺上的球友，遠方是富士山" },
+      { img: "/images/golf-fairway.jpg", alt: "初夏時分，富士山下的球道與沙坑" },
       { img: "/images/golf-pond.jpg", alt: "球道旁池塘中倒映的富士山" },
+      { img: "/images/golf-green.jpg", alt: "果嶺上的球友，遠方是富士山" },
       { img: "/images/golf-swing.jpg", alt: "朝富士山方向的開球" },
     ],
     galleryNote: "照片為富士山地區的球場。實際球場依你的日期提案，富士山只有在晴天才看得到。",

@@ -37,8 +37,7 @@ On 2026-09-29 the host also agreed to their use in KAMEHAME JAPAN's own advertis
 `kanji-styles.jpg` is the teacher's own chart of style examples (Cute / Bold / Elegant), shown uncropped. The teacher's condition sheet allows their use on
 all channels; the trial participants' agreement to appear was confirmed with the partner on 2026-09-29.
 
-`public/images/golf-*.jpg` (5 files: `golf-cart-fuji`, `golf-fuji-clouds`, `golf-green`, `golf-pond`, `golf-swing`)
-were supplied by the owner on 2026-10-04 to replace the earlier video stills. The cart photo was cropped to
-remove a third-party watermark along the bottom edge and the swing photo to remove an overlaid title; the
-green and pond photos were supplied at 640 px and upscaled 2x. The source and licence of each file is to be
+`public/images/golf-*.jpg` (6 files: `golf-flag-fuji`, `golf-fuji-clouds`, `golf-fairway`, `golf-pond`, `golf-green`, `golf-swing`)
+were supplied by the owner on 2026-10-04 to replace the earlier video stills. The swing photo was cropped to
+remove an overlaid title; the green, pond and fairway photos were supplied at about 640–700 px and upscaled 2x. The source and licence of each file is to be
 confirmed with the owner / golf partner before use in paid ads.

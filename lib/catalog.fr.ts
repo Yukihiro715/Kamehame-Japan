@@ -34,7 +34,7 @@ export const categoriesFr: Category[] = [
     lead: "Les nail artists de Tokyo traitent l'ongle comme une toile. Apportez votre personnage ou motif préféré et repartez avec un fan art à porter, réalisé par une artiste qui fait cela tous les jours — la face légère et joueuse de l'artisanat japonais." },
   { slug: "calligraphy", title: "Calligraphie", tag: "Arts et artisanat", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "Un pinceau, de l'encre noire et un seul caractère. Apprenez les traits avec une professeure, choisissez des kanji qui portent le sens de votre prénom et repartez avec une œuvre faite de vos mains." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-cart-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-flag-fuji.jpg",
     lead: "Au Japon, le golf a ses propres usages et quelques-uns des plus beaux panoramas du pays. Une journée de golf privée dans la région du mont Fuji, avec votre golf et votre heure de départ organisés pour vous, une voiture privée depuis votre hôtel à Tokyo et un accompagnement en anglais." },
 ];
 
@@ -129,11 +129,12 @@ export const experiencesFr: Experience[] = [
       "Nous nous chargeons de la réservation de votre heure de départ, des transferts et des clubs de location, avec un accompagnement en anglais pour vous guider au fil de la journée. Vous choisissez l'heure de départ depuis votre hôtel, entre 5 h et 7 h ; nous proposons le golf et l'heure de départ en conséquence, et vous les voyez, avec le prix définitif, avant de payer. Moins de temps à organiser. Plus de temps à jouer.",
     ],
     duration: "Journée complète, d'hôtel à hôtel", price: "¥180,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région du mont Fuji (prise en charge à Tokyo)",
-    img: "/images/golf-cart-fuji.jpg", alt: "Une voiturette de golf sur le fairway, le mont Fuji en arrière-plan",
+    img: "/images/golf-flag-fuji.jpg", alt: "Un green et son drapeau, le mont Fuji dressé derrière les pins",
     gallery: [
       { img: "/images/golf-fuji-clouds.jpg", alt: "Le mont Fuji au-dessus des nuages, vu du parcours" },
-      { img: "/images/golf-green.jpg", alt: "Des golfeurs sur le green, le mont Fuji au loin" },
+      { img: "/images/golf-fairway.jpg", alt: "Un fairway et un bunker sous le mont Fuji au début de l'été" },
       { img: "/images/golf-pond.jpg", alt: "Le mont Fuji reflété dans un étang au bord du fairway" },
+      { img: "/images/golf-green.jpg", alt: "Des golfeurs sur le green, le mont Fuji au loin" },
       { img: "/images/golf-swing.jpg", alt: "Un coup de départ face au mont Fuji" },
     ],
     galleryNote: "Les photos montrent des parcours de la région du mont Fuji. Votre parcours est proposé pour votre date, et le mont Fuji n'est visible que par temps clair.",

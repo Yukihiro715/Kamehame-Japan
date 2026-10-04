@@ -164,7 +164,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const booking = {
     slug: exp.slug, title: exp.title,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
-    startTimes: avail?.startTimes, closed: avail?.closed,
+    startTimes: avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
     listedMax: eg?.upTo ?? Math.min(exp.partySize?.max ?? 12, 12),
     maxGuests: exp.partySize?.max,

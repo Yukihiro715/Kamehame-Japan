@@ -35,7 +35,7 @@ export const categoriesEs: Category[] = [
     lead: "Las artistas de uñas de Tokio tratan cada uña como un lienzo. Trae a tu personaje favorito y llévate arte fan portátil pintado por una artista que vive de esto — el lado más ligero y juguetón del oficio japonés." },
   { slug: "calligraphy", title: "Caligrafía", tag: "Arte y artesanía", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "Un pincel, tinta negra y un solo carácter. Aprende los trazos con una profesora, elige kanji con el significado de tu nombre y llévate una obra hecha por ti." },
-  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-cart-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-flag-fuji.jpg",
     lead: "El golf en Japón tiene sus propias costumbres y algunas de las mejores vistas del país. Un día de golf privado en la región del monte Fuji, con tu campo y tu hora de salida organizados para ti, coche privado desde tu hotel de Tokio y apoyo en inglés." },
 ];
 
@@ -130,11 +130,12 @@ export const experiencesEs: Experience[] = [
       "Nos ocupamos de la reserva de la hora de salida, de los traslados y de los palos de alquiler, con apoyo en inglés para orientarte durante el día. Tú eliges la hora de salida desde tu hotel, entre las 5:00 y las 7:00; nosotros proponemos el campo y la hora de salida a juego, y los ves, con el precio final, antes de pagar. Menos tiempo organizando. Más tiempo disfrutando del golf.",
     ],
     duration: "Día completo, de hotel a hotel", price: "¥180,000", group: "Coche privado y guía · 2–4 golfistas", ages: "Desde 18 años", area: "Región del monte Fuji (recogida en Tokio)",
-    img: "/images/golf-cart-fuji.jpg", alt: "Un carrito de golf en la calle, con el monte Fuji detrás",
+    img: "/images/golf-flag-fuji.jpg", alt: "Un green con su bandera, el monte Fuji alzándose tras los pinos",
     gallery: [
       { img: "/images/golf-fuji-clouds.jpg", alt: "El monte Fuji sobre las nubes, visto desde el campo" },
-      { img: "/images/golf-green.jpg", alt: "Golfistas en el green, con el monte Fuji al fondo" },
+      { img: "/images/golf-fairway.jpg", alt: "Una calle y un búnker bajo el monte Fuji a principios de verano" },
       { img: "/images/golf-pond.jpg", alt: "El monte Fuji reflejado en un estanque junto a la calle" },
+      { img: "/images/golf-green.jpg", alt: "Golfistas en el green, con el monte Fuji al fondo" },
       { img: "/images/golf-swing.jpg", alt: "Un golpe de salida hacia el monte Fuji" },
     ],
     galleryNote: "Las fotos muestran campos de la región del monte Fuji. Tu campo se propone para tu fecha, y el monte Fuji solo se ve en días despejados.",

@@ -137,6 +137,8 @@ export interface Experience {
     /** Every start time the product uses (for dated products: the union of the dates' times). */
     startTimes: string[];
     cutoffDays: number; cutoffTime: string;
+    /** Pre-selected start time in the booking box (default: 18:00 if offered, else the first). */
+    defaultTime?: string;
     closed?: { from: string; to: string }[];
     /** Products that run on announced dates only (e.g. a teacher's calendar
      *  released every three months): the open dates and each date's start times. */
@@ -248,7 +250,7 @@ export const categories: Category[] = [
   { slug: "anime-nail-art", title: "Anime nail art", tag: "Pop culture", mark: "爪", img: "/images/cat-nail.jpg",
     lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },  { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-cart-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-flag-fuji.jpg",
     lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
 ];
 
@@ -414,17 +416,18 @@ export const experiences: Experience[] = [
       "We handle your tee-time reservation, transfers and rental clubs, with English-speaking support to help you navigate the day. You choose the departure time from your hotel, between 5:00 and 7:00; we propose the course and tee time to match, and you see them, with the final price, before you pay. Less time organising. More time enjoying the golf.",
     ],
     duration: "Full day, hotel to hotel", price: "¥180,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Mt. Fuji region (pick-up in Tokyo)",
-    img: "/images/golf-cart-fuji.jpg", alt: "A golf cart on the fairway, with Mt. Fuji behind",
+    img: "/images/golf-flag-fuji.jpg", alt: "A green with its flag, Mt. Fuji rising behind the pines",
     gallery: [
       { img: "/images/golf-fuji-clouds.jpg", alt: "Mt. Fuji above the clouds, seen from the course" },
-      { img: "/images/golf-green.jpg", alt: "Golfers on the green, with Mt. Fuji beyond" },
+      { img: "/images/golf-fairway.jpg", alt: "A fairway and bunker below Mt. Fuji in early summer" },
       { img: "/images/golf-pond.jpg", alt: "Mt. Fuji reflected in a pond beside the fairway" },
+      { img: "/images/golf-green.jpg", alt: "Golfers on the green, with Mt. Fuji beyond" },
       { img: "/images/golf-swing.jpg", alt: "A tee shot towards Mt. Fuji" },
     ],
     galleryNote: "Photos show courses in the Mt. Fuji region. Your course is proposed for your date, and Mt. Fuji shows only on a clear day.",
     partySize: { min: 2, max: 4 },
     pricing: { tiers: [{ party: 2, total: 180000 }, { party: 3, total: 220000 }, { party: 4, total: 280000 }] },
-    availability: { daily: true, startTimes: ["05:00", "05:30", "06:00", "06:30", "07:00"], cutoffDays: 3, cutoffTime: "18:00" },
+    availability: { daily: true, startTimes: ["05:00", "05:30", "06:00", "06:30", "07:00"], defaultTime: "06:00", cutoffDays: 3, cutoffTime: "18:00" },
     taxIncluded: true,
     interpreter: false,
     langTag: "English-speaking golf guide",

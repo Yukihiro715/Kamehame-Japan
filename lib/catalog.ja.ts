@@ -39,7 +39,7 @@ export const categoriesJa: Category[] = [
     lead: "東京のネイリストは、爪をキャンバスとして扱います。お好きなキャラクターやデザインをお持ちいただき、毎日これを描いている作家の手で、身につけられるファンアートに。日本の手仕事の、軽やかな一面です。" },
   { slug: "calligraphy", title: "書道・筆文字", tag: "アート・クラフト", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "筆と墨と、一文字。講師から筆づかいを習い、名前の意味を持つ漢字を選んで、自分で書いた作品を持ち帰ります。" },
-  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-cart-fuji.jpg",
+  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-flag-fuji.jpg",
     lead: "日本のゴルフには独自の作法があり、国内屈指の景色があります。コースとティータイムを手配し、東京のホテルから専用車で、英語サポート付きで過ごす富士山エリアのプライベートゴルフの一日。" },
 ];
 
@@ -134,11 +134,12 @@ export const experiencesJa: Experience[] = [
       "ティータイムの予約、送迎、レンタルクラブはこちらで手配し、英語を話すガイドが当日をサポートします。ホテルの出発時刻は5時から7時の間で選べ、それに合わせてコースとティータイムをご提案。コース・ティータイム・最終料金を確認してからお支払いいただけます。予約や移動の調整ではなく、ゴルフそのものを楽しむための体験です。",
     ],
     duration: "1日(ホテル発着)", price: "¥180,000", group: "専用車・専属ガイド・2〜4名", ages: "18歳以上", area: "富士山エリア(東京のホテル発着)",
-    img: "/images/golf-cart-fuji.jpg", alt: "富士山を背にフェアウェイに停まるゴルフカート",
+    img: "/images/golf-flag-fuji.jpg", alt: "松林の向こうに富士山がそびえるグリーンと旗",
     gallery: [
       { img: "/images/golf-fuji-clouds.jpg", alt: "コースから望む、雲の上にそびえる富士山" },
-      { img: "/images/golf-green.jpg", alt: "富士山を望むグリーンでプレーするゴルファー" },
+      { img: "/images/golf-fairway.jpg", alt: "初夏、富士山を望むフェアウェイとバンカー" },
       { img: "/images/golf-pond.jpg", alt: "フェアウェイ脇の池に映る富士山" },
+      { img: "/images/golf-green.jpg", alt: "富士山を望むグリーンでプレーするゴルファー" },
       { img: "/images/golf-swing.jpg", alt: "富士山に向かって放つティーショット" },
     ],
     galleryNote: "写真は富士山エリアのゴルフ場の一例です。コースはご希望日に合わせてご提案し、富士山は晴れた日のみ見えます。",
