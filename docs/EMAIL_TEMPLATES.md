@@ -377,7 +377,7 @@ hello@kamehame-japan.com
 ```
 Hello {name},
 
-Good news — your golf day is available:
+Good news — your course is arranged:
 
 - {Weekday, date} · departure from your hotel in {area} at {time}
 - {Course name}, {area} · tee off at {tee time}
@@ -386,7 +386,7 @@ Good news — your golf day is available:
 TO CONFIRM
 Pay by {deadline, e.g. Thursday 9 October, 18:00 Japan time} through this secure link:
 {Stripe payment link}
-Please use the same name and email as in your request. Your booking is confirmed as soon as the payment arrives.
+Please use the same name and email as in your request. Your booking is confirmed as soon as the payment arrives. The tee time is held until then; after the deadline it may have to change.
 
 WHAT'S INCLUDED
 - Private car from your hotel to the course and back
@@ -411,8 +411,8 @@ hello@kamehame-japan.com
 ```
 
 **日本語対訳(担当者用)**
-> 日程が取れました:{date} {area}のホテルを{time}出発/{コース名}、ティーオフ{時刻}/{n}名で合計 ¥{total}(税込、当日の追加なし)
-> 確定するには:{期限}までに決済リンクから。問い合わせと同じ氏名・メールで。入金で予約確定
+> コースの手配ができました:{date} {area}のホテルを{time}出発/{コース名}、ティーオフ{時刻}/{n}名で合計 ¥{total}(税込、当日の追加なし)
+> 確定するには:{期限}までに決済リンクから。問い合わせと同じ氏名・メールで。入金で予約確定。ティータイムは期限まで押さえ、過ぎると変わる可能性がある
 > 含まれるもの:ホテル往復の専用車/プレーフィ・レンタルクラブ/英語ガイド(同乗・一緒にラウンド)/クラブハウス昼食/ハイライト映像とボールマーカー。含まれないもの:シューズ。オプション:撮影 ¥{120,000}
 > キャンセル(入金後・日本時間):7日前18時まで無料、6〜2日前50%、前日以降・無連絡100%。天候クローズは発生済み費用を除き返金
 > 入金後1営業日以内に、ロビー集合場所・ガイドの名前と連絡先・車両を送る
