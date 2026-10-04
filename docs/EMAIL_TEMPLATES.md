@@ -238,9 +238,11 @@ KAMEHAME JAPAN · Prosent Inc.
 
 | 人数 | 金額 | リンク |
 | --- | --- | --- |
-| 2名 | ¥180,000 | https://book.stripe.com/00wfZh7vXcbhePd0ky3Je0a (KJ-261028-01 用) |
+| 2名 | ¥180,000 | https://book.stripe.com/6oU9AT3fHa390YnaZc3Je0d (KJ-261028-01 用) |
 | 3名 | ¥220,000 | https://book.stripe.com/cNi28r7vX6QX6iH2sG3Je0c |
 | 4名 | ¥280,000 | https://book.stripe.com/14AfZh6rT1wD9uT5ES3Je0b |
+
+  **使わないリンク**(金額が ¥18,000 になっていた最初の2名用。Stripe で「無効化」しておく): https://book.stripe.com/00wfZh7vXcbhePd0ky3Je0a
 
 ### 入金後の流れ(ゴルフ)
 
