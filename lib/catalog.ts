@@ -276,7 +276,6 @@ export const experiences: Experience[] = [
     availability: {
       daily: false, startTimes: ["10:30", "13:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00",
       dates: [
-        { date: "2026-10-06", times: ["13:30", "16:00"] },
         { date: "2026-10-15", times: ["10:30", "13:30", "16:00"] },
         { date: "2026-10-20", times: ["10:30"] },
         { date: "2026-10-26", times: ["10:30"] },
