@@ -57,14 +57,14 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
     // into the same two fields the generic form and the mailbox already use.
     if (b) {
       const slot = (d?: string, t?: string) => d ? [d, t].filter(Boolean).join(" ") : "";
-      data.dates = [slot(b.date, b.time), slot(b.altDate, b.altTime)].filter(Boolean).join(" / ");
+      data.dates = slot(b.date, b.time);
       data.party = b.guests;
       const plan = plans.find((p) => p.id === b.plan);
       if (plan) data.plan = `${plan.label} — ${plan.name}`;
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
       if (x?.interpreter !== false) data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
       if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${[plans.length ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : "", D.estimateFor(b.guestsNumber)].filter(Boolean).join(", ")})`;
-      delete data.date; delete data.altDate; delete data.guests; delete data.time; delete data.altTime;
+      delete data.date; delete data.guests; delete data.time;
     }
     setStatus("sending");
     try {
@@ -103,7 +103,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           experienceTitle: experience?.title,
           experienceUrl: experience ? window.location.pathname : undefined,
           // Readable dates for the page ("15 Oct 10:30"), not the raw ISO sent to the mailbox.
-          dates: b ? [b.date && `${fmtDate(b.date, lang)} ${b.time}`, b.altDate && `${fmtDate(b.altDate, lang)} ${b.altTime}`].filter(Boolean).join(" / ") || undefined : data.dates || undefined,
+          dates: b ? (b.date ? `${fmtDate(b.date, lang)} ${b.time}` : undefined) : data.dates || undefined,
           guests: b ? D.estimateFor(b.guestsNumber) : undefined,
           estimate: b?.estimate ? yen(b.estimate.total) : undefined,
           event,
@@ -170,21 +170,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
               </label>
             ) : <span />}
           </div>}
-          <div className="form-row two">
-            <div className="field">
-              <label htmlFor={card ? "bk-alt-date" : "enq-alt-date"}>{F.altDate}</label>
-              <DatePicker id={card ? "bk-alt-date" : "enq-alt-date"} name="altDate" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} closed={(d) => !isBookable(d, x)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
-            </div>
-            {x.startTimes?.length ? (
-              <label>
-                <span>{F.altStartTime}</span>
-                <select name="altTime" value={b.altTime} onChange={(e) => b.set({ altTime: e.target.value })}>
-                  {timesFor(x, b.altDate).map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </label>
-            ) : <span />}
-            <small className="form-hint full">{F.altDateHint}</small>
-          </div>
           <div className={card ? "form-row" : "form-row two keep"}>
             {!card && <div className="field">
               <label htmlFor="enq-guests">{F.partyN}</label>

@@ -35,7 +35,6 @@ export const DEFAULT_MAX_GUESTS = 15;
 export interface BookingState {
   plan: string;
   date: string; time: string;
-  altDate: string; altTime: string;
   guests: string;
   addOns: string[];
   /** Interpreter guide language: "en" | "es" | "fr" | "none". Included in the price. */
@@ -92,7 +91,7 @@ export function BookingProvider({ experience, pricing, lang, children }: { exper
   const defaultTime = times?.includes("18:00") ? "18:00" : times?.[0] ?? "";
   const [state, setState] = useState<BookingState>({
     plan: pricing?.plans?.find((p) => p.recommended)?.id ?? pricing?.plans?.[0]?.id ?? "",
-    date: "", time: defaultTime, altDate: "", altTime: defaultTime,
+    date: "", time: defaultTime,
     // Start at two (the usual party) even where one guest may book.
     guests: String(Math.min(Math.max(experience.minGuests, 2), experience.maxGuests ?? 99)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
@@ -125,10 +124,6 @@ export function BookingProvider({ experience, pricing, lang, children }: { exper
           if (patch.date !== undefined && patch.date) {
             const ts = timesFor(experience, patch.date);
             if (ts.length && !ts.includes(next.time)) next.time = ts[0];
-          }
-          if (patch.altDate !== undefined && patch.altDate) {
-            const ts = timesFor(experience, patch.altDate);
-            if (ts.length && !ts.includes(next.altTime)) next.altTime = ts[0];
           }
         }
         return next;

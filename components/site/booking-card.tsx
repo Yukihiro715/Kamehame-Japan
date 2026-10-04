@@ -40,8 +40,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         date.focus({ preventScroll: true });
         return;
       }
-      // Start the view at the second-choice date, the first new field; no
-      // focus, since focusing a date field would pop its calendar open.
+      // Bring the extra fields into view without focusing anything (focusing
+      // a field would pop its calendar or keyboard open).
       more.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 60);
   };
