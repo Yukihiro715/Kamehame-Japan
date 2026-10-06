@@ -622,19 +622,19 @@ export const experiences: Experience[] = [
     partySize: { min: 2, max: 40 },
     pricing: {
       // Repriced 2026-10-06 to test demand: the house's party-size list price
-      // less 10% (wholesale) plus ¥30k / 35k / 40k / 50k for 2 / 3 / 4 / 5
+      // less 10% (wholesale) plus ¥35k / 40k / 45k / 55k for 2 / 3 / 4 / 5
       // guests, rounded up to the thousand. Live shamisen and a second
       // performer are flat supplements (house: ¥60,500 each, same in both
-      // seasons, also less 10%, plus ¥10k / 20k). Six or more are quoted.
-      tiers: [{ party: 2, total: 156000 }, { party: 3, total: 177000 }, { party: 4, total: 190000 }, { party: 5, total: 221000 }],
+      // seasons, also less 10%, plus ¥15k / 25k). Six or more are quoted.
+      tiers: [{ party: 2, total: 161000 }, { party: 3, total: 182000 }, { party: 4, total: 195000 }, { party: 5, total: 226000 }],
       highSeason: {
-        tiers: [{ party: 2, total: 174000 }, { party: 3, total: 204000 }, { party: 4, total: 226000 }, { party: 5, total: 266000 }],
+        tiers: [{ party: 2, total: 179000 }, { party: 3, total: 209000 }, { party: 4, total: 231000 }, { party: 5, total: 271000 }],
         windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }],
       },
       plans: [
         { id: "select", supplement: 0 },
-        { id: "signature", supplement: 65000 },
-        { id: "reserve", supplement: 130000 },
+        { id: "signature", supplement: 70000 },
+        { id: "reserve", supplement: 135000 },
       ],
     },
     taxIncluded: true,
@@ -646,7 +646,7 @@ export const experiences: Experience[] = [
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
     tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an interpreter guide throughout, in English, Spanish or French.",
-    duration: "2 hours", price: "¥156,000", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
+    duration: "2 hours", price: "¥161,000", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },
@@ -673,8 +673,8 @@ export const experiences: Experience[] = [
     itinerary: ["10 min before — Arrive at the venue with your guide (address in your confirmation)", "0:00 — Welcome to your private room; the banquet begins", "0:30 — Geiko and maiko join your table; conversation over dinner", "1:00 — Dance performance and ozashiki parlour games", "1:50 — Commemorative photos", "2:00 — End of the evening"],
     goodToKnow: [
       "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — requests close at 5pm Japan time the day before.",
-      "Priced by party size: 2 guests ¥156,000, 3 guests ¥177,000, 4 guests ¥190,000, 5 guests ¥221,000; six or more on request. Live shamisen adds ¥65,000 and two performers with shamisen add ¥130,000, whatever the size of your party.",
-      "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30: 2 guests ¥174,000, 3 guests ¥204,000, 4 guests ¥226,000, 5 guests ¥266,000.",
+      "Priced by party size: 2 guests ¥161,000, 3 guests ¥182,000, 4 guests ¥195,000, 5 guests ¥226,000; six or more on request. Live shamisen adds ¥70,000 and two performers with shamisen add ¥135,000, whatever the size of your party.",
+      "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30: 2 guests ¥179,000, 3 guests ¥209,000, 4 guests ¥231,000, 5 guests ¥271,000.",
       "Children: 2 and under join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
       "Allergies and dietary restrictions are catered for — tell us when you book.",
       "Want live music or a fuller room? Choose With Live Shamisen (a jikata playing shamisen live) or Two Performers (two geiko or maiko plus the jikata).",
@@ -723,7 +723,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Will it be a geiko or a maiko?", a: "One geiko or maiko is arranged for your date. The house cannot take requests for a particular person, or for a maiko over a geiko; if you have a preference we will pass it on, without promising." },
       { q: "How long until the date is confirmed?", a: "We reply within 24 hours with whether the room is free, the price and the conditions — that reply is not yet a booking. Your booking is confirmed when you accept those conditions by paying through the link we send; cancellation terms apply from that moment. The house then secures your geiko or maiko: the formal request is placed no later than 14 days before your date (straight away for closer dates). If none can be secured, you receive a full refund." },
-      { q: "Can we add live shamisen or a second host?", a: "Yes — that is what the plans are for. With Live Shamisen adds a jikata playing shamisen live (+¥65,000); Two Performers has two geiko or maiko plus the jikata (+¥130,000). The supplement is the same for any party size. Choose the plan when you request your date." },
+      { q: "Can we add live shamisen or a second host?", a: "Yes — that is what the plans are for. With Live Shamisen adds a jikata playing shamisen live (+¥70,000); Two Performers has two geiko or maiko plus the jikata (+¥135,000). The supplement is the same for any party size. Choose the plan when you request your date." },
       { q: "Can we take photographs during the dance?", a: "Yes. Photos and video are welcome at any point, the dance included — without flash or tripods, following the house rules your guide explains — and time is set aside at the end for commemorative photos with your host." },
       { q: "Are drinks included? Is there a dress code?", a: "Drinks are free-flow — beer, sake, shochu, wine, highballs, soft drinks — and included, as are tax and service charge. There is no dress code." },
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },

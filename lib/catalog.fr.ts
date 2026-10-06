@@ -309,7 +309,7 @@ export const experiencesFr: Experience[] = [
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     title: "Banquet ozashiki avec maiko et geiko",
     tagline: "Deux heures privées à Kyoto avec une geiko ou une maiko. Partagez un dîner japonais de saison, conversez à table, assistez à une danse traditionnelle et jouez aux jeux ozashiki — avec un guide-interprète tout au long de la soirée, en français, anglais ou espagnol.",
-    duration: "2 h", price: "¥156,000", priceUnit: "group", group: "Privé · 2 à 40 convives", ages: "Tous âges", area: "Kyoto (Gion / Higashiyama)",
+    duration: "2 h", price: "¥161,000", priceUnit: "group", group: "Privé · 2 à 40 convives", ages: "Tous âges", area: "Kyoto (Gion / Higashiyama)",
     img: "/images/geiko-photo-together.jpg", alt: "Deux convives et une maiko sourient pour une photo souvenir dans une salle privée de Kyoto",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "La conversation autour du dîner, l'interprète assurant les deux sens", caption: "La conversation autour du dîner, l'interprète assurant les deux sens" },
@@ -334,8 +334,8 @@ export const experiencesFr: Experience[] = [
     itinerary: ["10 min avant — Arrivée au lieu avec votre guide (adresse dans votre confirmation)", "0:00 — Bienvenue dans votre salon privé ; le banquet commence", "0:30 — Geiko et maiko rejoignent votre table ; conversation pendant le dîner", "1:00 — Danse et jeux de salon ozashiki", "1:50 — Photos souvenir", "2:00 — Fin de la soirée"],
     goodToKnow: [
       "Tous les jours sauf pendant les fêtes du Nouvel An, débuts de 12:00 à 20:30 — les demandes ferment la veille à 17 h, heure du Japon.",
-      "Le prix dépend de la taille du groupe : 2 convives ¥156,000, 3 convives ¥177,000, 4 convives ¥190,000, 5 convives ¥221,000 ; six et plus sur demande. Le shamisen en direct ajoute ¥65,000 et deux artistes avec shamisen ajoutent ¥130,000, quelle que soit la taille du groupe.",
-      "Tarifs haute saison du 15 mars au 31 mai et du 1er octobre au 30 novembre : 2 convives ¥174,000, 3 convives ¥204,000, 4 convives ¥226,000, 5 convives ¥266,000.",
+      "Le prix dépend de la taille du groupe : 2 convives ¥161,000, 3 convives ¥182,000, 4 convives ¥195,000, 5 convives ¥226,000 ; six et plus sur demande. Le shamisen en direct ajoute ¥70,000 et deux artistes avec shamisen ajoutent ¥135,000, quelle que soit la taille du groupe.",
+      "Tarifs haute saison du 15 mars au 31 mai et du 1er octobre au 30 novembre : 2 convives ¥179,000, 3 convives ¥209,000, 4 convives ¥231,000, 5 convives ¥271,000.",
       "Enfants : gratuit sans repas jusqu'à 2 ans, demi-tarif adulte de 3 à 11 ans, tarif adulte avec menu complet dès 12 ans.",
       "Allergies et régimes particuliers pris en compte — signalez-les à la réservation.",
       "Envie de musique en direct ou d'une salle plus animée ? Choisissez Avec shamisen en direct (une jikata au shamisen, en direct) ou Deux artistes (deux geiko ou maiko et la jikata).",
@@ -388,7 +388,7 @@ export const experiencesFr: Experience[] = [
     faq: [
       { q: "Sera-ce une geiko ou une maiko ?", a: "Une geiko ou une maiko est réservée pour votre date. La maison ne peut accepter ni la demande d'une personne précise, ni celle d'une maiko plutôt qu'une geiko ; si vous avez une préférence, nous la transmettrons sans la garantir." },
       { q: "Combien de temps avant la confirmation de la date ?", a: "Nous répondons sous 24 heures avec la disponibilité de la salle, le prix et les conditions ; cette réponse n'est pas encore une réservation. La réservation est confirmée lorsque vous acceptez ces conditions en réglant via le lien que nous envoyons ; les conditions d'annulation s'appliquent à partir de ce moment. La maison réserve ensuite votre geiko ou maiko : la demande formelle est déposée au plus tard 14 jours avant votre date (immédiatement pour les dates plus proches). Si aucune n'est disponible, vous êtes intégralement remboursé." },
-      { q: "Peut-on ajouter du shamisen en direct ou une seconde hôtesse ?", a: "Oui, c'est à cela que servent les formules. Avec shamisen en direct ajoute une jikata au shamisen, en direct (+¥65,000) ; Deux artistes réunit deux geiko ou maiko et la jikata (+¥130,000). Le supplément est le même quelle que soit la taille du groupe. Choisissez la formule lors de votre demande de date." },
+      { q: "Peut-on ajouter du shamisen en direct ou une seconde hôtesse ?", a: "Oui, c'est à cela que servent les formules. Avec shamisen en direct ajoute une jikata au shamisen, en direct (+¥70,000) ; Deux artistes réunit deux geiko ou maiko et la jikata (+¥135,000). Le supplément est le même quelle que soit la taille du groupe. Choisissez la formule lors de votre demande de date." },
       { q: "Peut-on photographier pendant la danse ?", a: "Oui. Photos et vidéos sont les bienvenues à tout moment, danse comprise — sans flash ni trépied, selon les règles de la maison que votre guide explique —, et un temps est réservé en fin de soirée aux photos souvenir avec votre hôtesse." },
       { q: "Les boissons sont-elles comprises ? Y a-t-il un code vestimentaire ?", a: "Les boissons sont à volonté (bière, saké, shochu, vin, highballs, boissons sans alcool) et comprises, de même que taxes et service. Il n'y a pas de code vestimentaire." },
       { q: "Notre hôtesse mange-t-elle et boit-elle avec nous ?", a: "Généralement non. Beaucoup de maiko ont moins de vingt ans et, par tradition, geiko et maiko ne mangent pas à table : elles servent, conversent, dansent et jouent. N'insistez pas pour leur offrir à manger ou à boire ; c'est la seule règle d'étiquette que votre guide mentionnera." },
