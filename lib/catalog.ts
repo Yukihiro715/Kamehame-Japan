@@ -109,7 +109,15 @@ export interface Experience {
     /** Plan-based products: each plan is a price for a base party (`extraGuest.included`),
      *  regular and peak season; further guests add `extraGuest` each up to `upTo`,
      *  and larger parties are quoted. Plan names and blurbs live in `planText`. */
-    plans?: { id: string; regular: number; peak: number; recommended?: boolean }[];
+    plans?: {
+      id: string;
+      /** Plan-priced products: the plan's price for the base party (regular / peak season). */
+      regular?: number; peak?: number;
+      recommended?: boolean;
+      /** Supplement plans: a flat amount added to the party-size table (`tiers` /
+       *  `highSeason`) whatever the party size, e.g. a live musician. 0 for the base plan. */
+      supplement?: number;
+    }[];
     extraGuest?: { regular: number; peak: number; included: number; upTo: number };
     peakWindows?: { from: string; to: string }[];
     /** Per-person products: a smaller party pays as this many guests (e.g. a solo guest pays for two). */
@@ -613,13 +621,21 @@ export const experiences: Experience[] = [
     slug: "evening-with-geiko", city: "kyoto", category: "geisha", bookingType: "request", status: "live",
     partySize: { min: 2, max: 40 },
     pricing: {
+      // Repriced 2026-10-06 to test demand: the house's party-size list price
+      // less 10% (wholesale) plus ¥30k / 35k / 40k / 50k for 2 / 3 / 4 / 5
+      // guests, rounded up to the thousand. Live shamisen and a second
+      // performer are flat supplements (house: ¥60,500 each, same in both
+      // seasons, also less 10%, plus ¥10k / 20k). Six or more are quoted.
+      tiers: [{ party: 2, total: 156000 }, { party: 3, total: 177000 }, { party: 4, total: 190000 }, { party: 5, total: 221000 }],
+      highSeason: {
+        tiers: [{ party: 2, total: 174000 }, { party: 3, total: 204000 }, { party: 4, total: 226000 }, { party: 5, total: 266000 }],
+        windows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }],
+      },
       plans: [
-        { id: "select", regular: 219800, peak: 249800 },
-        { id: "signature", regular: 379800, peak: 429800, recommended: true },
-        { id: "reserve", regular: 498000, peak: 559800 },
+        { id: "select", supplement: 0 },
+        { id: "signature", supplement: 65000 },
+        { id: "reserve", supplement: 130000 },
       ],
-      extraGuest: { regular: 39800, peak: 49800, included: 2, upTo: 5 },
-      peakWindows: [{ from: "03-15", to: "05-31" }, { from: "10-01", to: "11-30" }],
     },
     taxIncluded: true,
     interactionTime: "about 1 hour 45 minutes",
@@ -630,7 +646,7 @@ export const experiences: Experience[] = [
     map: { lat: 35.0037, lng: 135.7723, zoom: 15 },
     title: "Private Geisha Dining in Kyoto",
     tagline: "Spend two private hours in Kyoto with a geiko or maiko. Share a seasonal Japanese dinner, talk across the table, watch a traditional dance and play ozashiki games together — with an interpreter guide throughout, in English, Spanish or French.",
-    duration: "2 hours", price: "¥219,800", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
+    duration: "2 hours", price: "¥156,000", priceUnit: "group", group: "Private · 2–40 guests", ages: "All ages", area: "Kyoto (Gion / Higashiyama area)",
     img: "/images/geiko-photo-together.jpg", alt: "Two guests and a maiko smiling for a commemorative photo in a private Kyoto room",
     gallery: [
       { img: "/images/geiko-conversation.jpg", alt: "Conversation over dinner, with your interpreter carrying both sides", caption: "Conversation over dinner, with your interpreter carrying both sides" },
@@ -657,18 +673,18 @@ export const experiences: Experience[] = [
     itinerary: ["10 min before — Arrive at the venue with your guide (address in your confirmation)", "0:00 — Welcome to your private room; the banquet begins", "0:30 — Geiko and maiko join your table; conversation over dinner", "1:00 — Dance performance and ozashiki parlour games", "1:50 — Commemorative photos", "2:00 — End of the evening"],
     goodToKnow: [
       "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — requests close at 5pm Japan time the day before.",
-      "Three plans, each priced for up to 2 guests: Select from ¥219,800, Signature (live shamisen) from ¥379,800, Private Reserve (two performers and shamisen) from ¥498,000. Each additional guest up to 5: ¥39,800; six or more on request.",
-      "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30 (Select from ¥249,800; additional guests ¥49,800 each).",
+      "Priced by party size: 2 guests ¥156,000, 3 guests ¥177,000, 4 guests ¥190,000, 5 guests ¥221,000; six or more on request. Live shamisen adds ¥65,000 and two performers with shamisen add ¥130,000, whatever the size of your party.",
+      "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30: 2 guests ¥174,000, 3 guests ¥204,000, 4 guests ¥226,000, 5 guests ¥266,000.",
       "Children: 2 and under join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
       "Allergies and dietary restrictions are catered for — tell us when you book.",
-      "Want live music or a fuller room? Choose Signature (a jikata playing shamisen live) or Private Reserve (two geiko or maiko plus the jikata).",
+      "Want live music or a fuller room? Choose With Live Shamisen (a jikata playing shamisen live) or Two Performers (two geiko or maiko plus the jikata).",
     ],
     story: { heading: "The world of the karyukai", body: "Kyoto's 'flower and willow world' has run on introduction and trust for three centuries. A geiko is not a performer for hire but an artist whose evenings are extended through relationships between teahouses and patrons. Being seated in that room, with conversation flowing in your own language, is the rarest kind of access Kyoto offers." },
     includedShort: "Private room · Meal and drinks · Interpreter guide (EN / ES / FR)",
     planText: {
-      select: { label: "Select", name: "Private Geisha Evening", performers: "One geiko or maiko", blurb: "The essential evening; the dance is performed to recorded music." },
-      signature: { label: "Signature", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko or maiko + live shamisen", blurb: "One geiko or maiko, joined by a jikata playing shamisen live." },
-      reserve: { label: "Private Reserve", name: "The Complete Geisha Evening", performers: "Two performers + live shamisen", blurb: "Two geiko or maiko, joined by a jikata for live shamisen. The fullest version of the evening." },
+      select: { label: "The Evening", name: "Private Geisha Evening", performers: "One geiko or maiko", blurb: "The essential evening; the dance is performed to recorded music." },
+      signature: { label: "With Live Shamisen", name: "Private Geisha Evening with Live Shamisen", performers: "Geiko or maiko + live shamisen", blurb: "One geiko or maiko, joined by a jikata playing shamisen live." },
+      reserve: { label: "Two Performers", name: "The Complete Geisha Evening", performers: "Two performers + live shamisen", blurb: "Two geiko or maiko, joined by a jikata for live shamisen. The fullest version of the evening." },
     },
     galleryNote: "The room and the dishes shown are examples; both vary by date and season.",
     highlights: [
@@ -694,7 +710,7 @@ export const experiences: Experience[] = [
       { time: "17:50", title: "Arrive with your guide", body: "The address is in your confirmation. Your guide meets you nearby and walks you in." },
       { time: "18:00", title: "Your private room", body: "You are seated on tatami; the first courses and drinks arrive.", img: "/images/geiko-room-upstairs.jpg" },
       { time: "18:15", title: "Your geiko or maiko arrives", body: "She joins the table straight from the okiya and stays about 1 hour 45 minutes. Conversation over dinner, with your interpreter carrying both sides.", img: "/images/geiko-conversation.jpg" },
-      { time: "19:00", title: "The dance", body: "One or two dances before the gold screen, from about 19:00 to 19:30 — to recorded music on Select, to live shamisen on Signature and Private Reserve. Cameras are welcome.", img: "/images/geiko-dance.jpg" },
+      { time: "19:00", title: "The dance", body: "One or two dances before the gold screen, from about 19:00 to 19:30 — to recorded music on The Evening, to live shamisen on the two plans with a jikata. Cameras are welcome.", img: "/images/geiko-dance.jpg" },
       { time: "19:30", title: "Ozashiki games", body: "Konpira Funefune, a rhythm game, and Tora-tora, rock-paper-scissors played with the whole body.", img: "/images/geiko-game-toratora.jpg" },
       { time: "19:50", title: "Photographs", body: "Commemorative photos with your host.", img: "/images/geiko-photo-together.jpg" },
       { time: "20:00", title: "End of the evening" },
@@ -707,7 +723,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Will it be a geiko or a maiko?", a: "One geiko or maiko is arranged for your date. The house cannot take requests for a particular person, or for a maiko over a geiko; if you have a preference we will pass it on, without promising." },
       { q: "How long until the date is confirmed?", a: "We reply within 24 hours with whether the room is free, the price and the conditions — that reply is not yet a booking. Your booking is confirmed when you accept those conditions by paying through the link we send; cancellation terms apply from that moment. The house then secures your geiko or maiko: the formal request is placed no later than 14 days before your date (straight away for closer dates). If none can be secured, you receive a full refund." },
-      { q: "Can we add live shamisen or a second host?", a: "Yes — that is what the plans are for. Signature adds a jikata playing shamisen live; Private Reserve has two geiko or maiko plus the jikata. Choose the plan when you request your date." },
+      { q: "Can we add live shamisen or a second host?", a: "Yes — that is what the plans are for. With Live Shamisen adds a jikata playing shamisen live (+¥65,000); Two Performers has two geiko or maiko plus the jikata (+¥130,000). The supplement is the same for any party size. Choose the plan when you request your date." },
       { q: "Can we take photographs during the dance?", a: "Yes. Photos and video are welcome at any point, the dance included — without flash or tripods, following the house rules your guide explains — and time is set aside at the end for commemorative photos with your host." },
       { q: "Are drinks included? Is there a dress code?", a: "Drinks are free-flow — beer, sake, shochu, wine, highballs, soft drinks — and included, as are tax and service charge. There is no dress code." },
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },

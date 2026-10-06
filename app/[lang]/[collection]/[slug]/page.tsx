@@ -16,7 +16,7 @@ import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { pricingFor, yen } from "@/lib/pricing";
+import { pricingFor, yen, type PricingView } from "@/lib/pricing";
 import {
   cancellationFor, catalogFor, cityBySlug, isLive, isPreview, previewsFor, SITE_ORIGIN,
   type Experience, type Tour,
@@ -107,6 +107,40 @@ function productJsonLd(
   };
 }
 
+/** Party-size price table with the collapsible high-season table under it. */
+function PriceTable({ pricing, D, perGroup }: { pricing: PricingView; D: ReturnType<typeof t>["detail"]; perGroup: boolean }) {
+  return (
+    <>
+      <table className="xp-pricing">
+        <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
+        <tbody>
+          {pricing.rows.map((r) => (
+            <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="xp-pricing-note">{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}{pricing.moreOnRequest && ` ${D.largerParties}`}</p>
+      {pricing.highSeason && (
+        <details className="xp-high-season">
+          <summary>
+            <span><b>{D.highSeasonH}</b> · {pricing.highSeason.window}</span>
+            <span className="xp-toggle"><em>{D.highSeasonOpen}</em><em>{D.highSeasonClose}</em></span>
+          </summary>
+          <table className="xp-pricing compact">
+            <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
+            <tbody>
+              {pricing.highSeason.rows.map((r) => (
+                <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="xp-pricing-note">{D.highSeasonNote(pricing.highSeason.window)}</p>
+        </details>
+      )}
+    </>
+  );
+}
+
 export default async function DetailPage({ params }: Props) {
   const { lang, collection, slug } = await params;
   if (!isLang(lang)) notFound();
@@ -143,6 +177,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const headlineCondition = perGroup ? `${T.perGroupUnit} · ${D.stickyGroupOf(first.party)}` : T.perPersonUnit;
   const plans = pricing.plans ?? [];
   const eg = pricing.extraGuest;
+  const supplementPlans = pricing.planMode === "supplement";
 
   const highlights = (exp.highlights ?? D.defaultHighlights.map((h, i) => ({ ...h, icon: (["group", "spark", "interpreter"] as const)[i] })));
   const schedule: { time: string; title: string; body?: string; img?: string }[] =
@@ -166,7 +201,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
     startTimes: avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
-    listedMax: eg?.upTo ?? Math.min(exp.partySize?.max ?? 12, 12),
+    listedMax: eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),
     maxGuests: exp.partySize?.max,
     dates: avail?.dates, interpreter: exp.interpreter,
     notesLabel: exp.notesLabel, notesHint: exp.notesHint,
@@ -238,22 +273,27 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             </section>
 
             {/* ④ Plans (plan-priced products) */}
-            {plans.length > 0 && eg && (
+            {plans.length > 0 && (eg || supplementPlans) && (
               <section className="xp-section" id="pricing">
                 <h2>{D.plansH}</h2>
-                <p className="plan-compare-lead">{D.plansLead}</p>
+                <p className="plan-compare-lead">{supplementPlans ? D.plansLeadSupplement : D.plansLead}</p>
+                {/* Supplement plans: the party-size table is the price; plans add a flat amount. */}
+                {supplementPlans && <PriceTable pricing={pricing} D={D} perGroup={perGroup} />}
                 <ul className="plan-compare">
                   {plans.map((p) => (
                     <li key={p.id} className={p.recommended ? "rec" : ""}>
                       <span className="plan-compare-label">{p.label}{p.recommended && <em>{D.recommended}</em>}</span>
                       <span className="plan-compare-what"><b>{p.performers}</b><small>{p.blurb}</small></span>
-                      <span className="plan-compare-price">{D.fromPrice && <small>{D.fromPrice}</small>}<span>{yen(p.regular)}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</span></span>
+                      <span className="plan-compare-price">{supplementPlans
+                        ? (p.supplement ? <span>+{yen(p.supplement)}</span> : <small>{D.planBase}</small>)
+                        : <>{D.fromPrice && <small>{D.fromPrice}</small>}<span>{yen(p.regular)}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</span></>}</span>
                     </li>
                   ))}
                 </ul>
                 <div className="plan-notes">
-                  <p>{D.extraGuestNote(yen(eg.regular), yen(eg.peak), eg.upTo)}{pricing.highSeason ? ` · ${D.highSeasonH}: ${pricing.highSeason.window}` : ""}</p>
-                  {pricing.moreOnRequest && <p>{D.sixPlus(eg.upTo + 1)}</p>}
+                  {eg && <p>{D.extraGuestNote(yen(eg.regular), yen(eg.peak), eg.upTo)}{pricing.highSeason ? ` · ${D.highSeasonH}: ${pricing.highSeason.window}` : ""}</p>}
+                  {supplementPlans && <p>{D.planSupplementNote}</p>}
+                  {pricing.moreOnRequest && <p>{D.sixPlus((eg?.upTo ?? Math.max(...pricing.rows.map((r) => r.party))) + 1)}</p>}
                   {exp.taxIncluded && <p>{D.taxIncluded}. {D.noPayment}</p>}
                 </div>
                 {pricing.addOns && pricing.addOns.length > 0 && (
@@ -278,32 +318,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             {plans.length === 0 && (
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
-                <table className="xp-pricing">
-                  <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
-                  <tbody>
-                    {pricing.rows.map((r) => (
-                      <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
-                    ))}
-                  </tbody>
-                </table>
-                <p className="xp-pricing-note">{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}{pricing.moreOnRequest && ` ${D.largerParties}`}</p>
-                {pricing.highSeason && (
-                  <details className="xp-high-season">
-                    <summary>
-                      <span><b>{D.highSeasonH}</b> · {pricing.highSeason.window}</span>
-                      <span className="xp-toggle"><em>{D.highSeasonOpen}</em><em>{D.highSeasonClose}</em></span>
-                    </summary>
-                    <table className="xp-pricing compact">
-                      <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
-                      <tbody>
-                        {pricing.highSeason.rows.map((r) => (
-                          <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <p className="xp-pricing-note">{D.highSeasonNote(pricing.highSeason.window)}</p>
-                  </details>
-                )}
+                <PriceTable pricing={pricing} D={D} perGroup={perGroup} />
               </section>
             )}
 

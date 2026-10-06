@@ -69,7 +69,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
               <input type="radio" name="bk-plan" value={p.id} checked={b.plan === p.id} onChange={() => b.set({ plan: p.id })} />
               <span className="bk-plan-check"><Check size={12} /></span>
               <span className="bk-plan-copy"><b>{p.label}</b><small>{p.performers}</small></span>
-              <span className="bk-plan-price">{yen(p.regular)}</span>
+              <span className="bk-plan-price">{pricing?.planMode === "supplement" ? (p.supplement ? `+${yen(p.supplement)}` : D.planBaseShort) : yen(p.regular)}</span>
             </label>
           ))}
         </fieldset>

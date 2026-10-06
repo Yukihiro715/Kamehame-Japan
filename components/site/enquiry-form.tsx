@@ -151,7 +151,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
             <label className="form-row">
               <span>{F.plan}</span>
               <select name="plan-id" value={b.plan} onChange={(e) => b.set({ plan: e.target.value })}>
-                {plans.map((p) => <option key={p.id} value={p.id}>{p.label} — {p.name} · {yen(p.regular)}</option>)}
+                {plans.map((p) => <option key={p.id} value={p.id}>{p.label} — {p.name} · {b?.pricing?.planMode === "supplement" ? (p.supplement ? `+${yen(p.supplement)}` : D.planBaseShort) : yen(p.regular)}</option>)}
               </select>
             </label>
           )}

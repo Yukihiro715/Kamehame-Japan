@@ -14,6 +14,8 @@ export interface PriceRow { party: number; total: number; perPerson: number }
 export interface PlanView {
   id: string; label: string; name: string; performers: string; blurb: string;
   regular: number; peak: number; recommended: boolean;
+  /** Supplement plans: the flat amount added to the party-size table (0 for the base plan). */
+  supplement?: number;
 }
 
 export interface PricingView {
@@ -23,6 +25,8 @@ export interface PricingView {
   /** True when the venue takes larger parties than the table shows. */
   moreOnRequest: boolean;
   plans?: PlanView[];
+  /** "supplement": plans are flat amounts on top of `rows` / `highSeason` (see Experience.pricing.plans). */
+  planMode?: "supplement";
   extraGuest?: { regular: number; peak: number; included: number; upTo: number };
   peakWindows?: { from: string; to: string }[];
   addOns?: { id: string; name: string; description: string; price?: number; priceFrom?: boolean }[];
@@ -68,11 +72,37 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
   const size = exp.partySize ?? { min: 1, max: 6 };
   const pr = exp.pricing;
 
+  // Party-size table plus flat plan supplements (e.g. the geiko evening: a
+  // base table by party, then +¥ for live shamisen or a second performer).
+  if (exp.priceUnit === "group" && pr?.tiers && pr.plans) {
+    const text = exp.planText ?? {};
+    const toRows = (t: { party: number; total: number }[]) => t.map((r) => ({ party: r.party, total: r.total, perPerson: Math.round(r.total / r.party) }));
+    const rows = toRows(pr.tiers);
+    const hs = pr.highSeason;
+    const hsRows = hs ? toRows(hs.tiers) : undefined;
+    const plans: PlanView[] = pr.plans.map((p) => {
+      const sup = p.supplement ?? 0;
+      return {
+        id: p.id, supplement: sup, recommended: !!p.recommended,
+        regular: rows[0].total + sup, peak: (hsRows?.[0].total ?? rows[0].total) + sup,
+        label: text[p.id]?.label ?? p.id, name: text[p.id]?.name ?? exp.title,
+        performers: text[p.id]?.performers ?? "", blurb: text[p.id]?.blurb ?? "",
+      };
+    });
+    return {
+      unit: "group",
+      rows,
+      highSeason: hs && hsRows ? { rows: hsRows, window: windowLabel(hs.windows, lang) } : undefined,
+      moreOnRequest: size.max > Math.max(...rows.map((r) => r.party)),
+      plans, planMode: "supplement", peakWindows: hs?.windows, addOns: exp.addOns,
+    };
+  }
+
   if (exp.priceUnit === "group" && pr?.plans && pr.extraGuest) {
     const eg = pr.extraGuest;
     const text = exp.planText ?? {};
     const plans: PlanView[] = pr.plans.map((p) => ({
-      id: p.id, regular: p.regular, peak: p.peak, recommended: !!p.recommended,
+      id: p.id, regular: p.regular ?? 0, peak: p.peak ?? p.regular ?? 0, recommended: !!p.recommended,
       label: text[p.id]?.label ?? p.id, name: text[p.id]?.name ?? exp.title,
       performers: text[p.id]?.performers ?? "", blurb: text[p.id]?.blurb ?? "",
     }));
@@ -138,11 +168,14 @@ export function quote(view: PricingView, planId: string, guests: number, iso?: s
     const total = view.perPerson * Math.max(guests, view.minCharge ?? 1);
     return { total, peak: false, base: total, extraCount: 0, extraEach: 0 };
   }
-  // Flat group table: the row for this party size (high-season table when the date falls in it).
-  if (!view.plans?.length && view.unit === "group") {
+  // Flat group table: the row for this party size (high-season table when the
+  // date falls in it), plus the chosen plan's flat supplement where plans are
+  // supplements rather than separate price lists.
+  if ((!view.plans?.length || view.planMode === "supplement") && view.unit === "group") {
     const peak = !!iso && !!view.highSeason && !!view.peakWindows?.length && isPeak(iso, view.peakWindows);
     const row = (peak ? view.highSeason!.rows : view.rows).find((r) => r.party === guests);
-    return row ? { total: row.total, peak, base: row.total, extraCount: 0, extraEach: 0 } : null;
+    const sup = view.plans?.find((p) => p.id === planId)?.supplement ?? 0;
+    return row ? { total: row.total + sup, peak, base: row.total, extraCount: sup ? 1 : 0, extraEach: sup } : null;
   }
   const plan = view.plans?.find((p) => p.id === planId);
   const eg = view.extraGuest;

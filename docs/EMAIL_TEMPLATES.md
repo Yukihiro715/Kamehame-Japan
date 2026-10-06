@@ -36,12 +36,12 @@ WHAT'S INCLUDED
 - A private tatami room for your party
 - The multi-course Japanese dinner (seasonal menu) — or, if you told us: vegetarian / gluten-free / wagyu steak set
 - Free-flow drinks, including alcohol
-- {By plan — Select: one geiko or maiko / Signature: one geiko or maiko + live shamisen / Private Reserve: two geiko or maiko + live shamisen}: conversation, one or two dances, ozashiki games
+- {By plan — The Evening: one geiko or maiko / With Live Shamisen: one geiko or maiko + live shamisen / Two Performers: two geiko or maiko + live shamisen}: conversation, one or two dances, ozashiki games
 - An interpreter guide throughout — English, Spanish or French (as chosen in the request)
 - Commemorative photographs
 
 NOT INCLUDED
-- Anything beyond your plan. If you would like live shamisen or a second host, reply and we re-quote on the matching plan (Signature / Private Reserve)
+- Anything beyond your plan. If you would like live shamisen (+¥65,000) or a second performer with shamisen (+¥130,000), reply and we re-quote
 
 MEETING
 Gion / Higashiyama, Kyoto, about 8 minutes on foot from Gion-Shijo Station.
@@ -73,8 +73,8 @@ hello@kamehame-japan.com
 **日本語対訳(担当者用)**
 > {name} 様 / ご希望の {date} {time}、{n}名様で受け入れ先の空きが取れました。
 > プランと料金:{プラン名}、{n}名で合計 ¥{total}({通常期/繁忙期}料金。税・サービス料込。当日の追加なし)
-> 含まれるもの:貸切座敷/和食コース/飲み放題(アルコール含む)/プランに応じた出演者(Select:芸妓または舞妓1名/Signature:1名+地方の生三味線/Private Reserve:2名+地方の生三味線。歓談・舞・お座敷遊び)/通訳ガイド(英・西・仏から選択)/記念撮影
-> 含まれないもの:プラン外のもの。生三味線や2名出演を希望なら該当プランで再見積(単品オプションの案内はしない)
+> 含まれるもの:貸切座敷/和食コース/飲み放題(アルコール含む)/プランに応じた出演者(お座敷:芸妓または舞妓1名/生三味線つき:1名+地方の生三味線/出演者2名:2名+地方の生三味線。歓談・舞・お座敷遊び)/通訳ガイド(英・西・仏から選択)/記念撮影
+> 含まれないもの:プラン外のもの。生三味線(+¥65,000)や2名出演(+¥130,000)を希望なら再見積
 > 集合:祇園・東山エリア、祇園四条駅から徒歩約8分。店名・住所・地図・ガイド連絡先は確定通知でお伝えします
 > キャンセル:入金で予約確定、以降は当社規定(14日前まで無料、13〜4日前50%、3日前以降・無連絡100%。日本時間で起算)。正式手配は遅くとも開催14日前までに行う。芸舞妓が手配できなかった場合は全額返金
 > 確定するには:{期限}までに決済リンクからお支払いください(銀行振込も可)。お問い合わせ時と同じ氏名・メールアドレスで決済してください
@@ -428,19 +428,31 @@ hello@kamehame-japan.com
 - 条件案内(A)を送ったら、**受け入れ先には「仮押さえ」の連絡**をしておく(正式手配は入金後。芸舞妓の手配開始=受け入れ先の取消料発生なので、入金前に正式手配しない)。
 - **正式手配は入金確認後、遅くとも開催14日前まで**に行う(14日前を切っている予約はすぐに手配)。お客様の無料キャンセル期間(14日前まで)と受け入れ先の取消料発生(正式手配後)を重ねないための基準。都をどり期間(4月)は直前まで出演状況が読めないので、空き返信の時点でその旨を一言添える。
 - サイトの締切は**7日前17時(日本時間)**。カレンダーもそこで止まる。10〜14日前を推奨と案内している。
-- **Stripe の商品**(2026-09-25 作成。料金改定のときはここの価格だけを差し替える)
-  - Private Geisha Dining in Kyoto — Select / — Signature / — Private Reserve: 各2価格(regular season / high season。2名までの料金)
-  - Additional guest — Private Geisha Dining in Kyoto: 2価格(regular ¥39,800 / high ¥49,800)。ユニットラベル `guest`
+- **料金(2026-10-06 改定)**: 人数別の総額 + プランの定額追加。受け入れ先の定価の10%引き(卸値)に、2名 ¥30,000 / 3名 ¥35,000 / 4名 ¥40,000 / 5名 ¥50,000 を上乗せし千円単位に切り上げ。追加出演者は受け入れ先 各¥60,500(両シーズン同額・10%引き対象)に ¥10,000(三味線)/ ¥20,000(2名+三味線)を上乗せ
+
+| 人数 | 通常期 | ハイシーズン(3/15〜5/31、10/1〜11/30) |
+| --- | --- | --- |
+| 2名 | ¥156,000 | ¥174,000 |
+| 3名 | ¥177,000 | ¥204,000 |
+| 4名 | ¥190,000 | ¥226,000 |
+| 5名 | ¥221,000 | ¥266,000 |
+
+  - 生三味線つき: +¥65,000 / 出演者2名(2名+生三味線): +¥130,000(人数・季節にかかわらず定額)。6名以上は個別見積もり
+- **Stripe の商品**(2026-10-06 に作り直し。料金改定のときはここの価格だけを差し替える)
+  - `Private Geisha Evening in Kyoto`: 8価格(2 guests regular ¥156,000 / 3 guests regular ¥177,000 / 4 guests regular ¥190,000 / 5 guests regular ¥221,000 / 2 guests high season ¥174,000 / 3 guests high season ¥204,000 / 4 guests high season ¥226,000 / 5 guests high season ¥266,000)。各価格の説明欄に人数と季節を書く
+  - `Live shamisen (jikata) — Private Geisha Evening`: ¥65,000
+  - `Second performer and live shamisen — Private Geisha Evening`: ¥130,000
+  - 旧商品(Select / Signature / Private Reserve / Additional guest)は**アーカイブ**して、新規リンクで選ばないようにする
   - 繁忙期(high season)は 3/15〜5/31 と 10/1〜11/30。**体験日**で判断する(問い合わせ日ではない)
 - **支払いリンクは予約ごとに1本作る**(使い回さない)。空きが確定し、条件案内(A)を送るときに:
   1. Stripe →「支払いリンク」→「＋新規作成」
-  2. 1品目: プランの価格(体験日の季節)、数量1
-  3. 2品目: 3名以上なら同じ季節の「Additional guest」、**数量 = 人数 − 2**(3名→1、5名→3)。数量の変更は「お客様に許可しない」
+  2. 1品目: `Private Geisha Evening in Kyoto` の、人数と体験日の季節に合う価格、数量1
+  3. 2品目: 生三味線つきなら `Live shamisen` ×1、出演者2名なら `Second performer and live shamisen` ×1(お座敷プランは2品目なし)。数量の変更は「お客様に許可しない」
   4. 「支払い後」→「顧客をウェブサイトにリダイレクト」→ `https://kamehame-japan.com/en/booked/?session_id={CHECKOUT_SESSION_ID}`(サイトの予約確定ページ。金額の表示と広告の成果計測をここで行う)
   5. 「支払い回数を制限」は付けない(2026-10-04 決定。入金は氏名・メール・金額で照合する)
   6. 作成したリンクを条件案内(A)の `{Stripe payment link}` に貼る
-  - 例: Signature・通常期・4名 → Signature regular ×1(¥379,800)+ Additional guest regular ×2(¥79,600)= ¥459,400。サイトの見積もりと同額になる
-  - 6名以上は見積もり額で決める。Additional guest の数量を増やすか、見積もり額の価格を追加して同じ手順で発行
+  - 例: 生三味線つき・通常期・4名 → 4 guests regular ×1(¥190,000)+ Live shamisen ×1(¥65,000)= ¥255,000。サイトの見積もりと同額になる
+  - 6名以上は見積もり額で決める。見積もり額の価格を追加して同じ手順で発行
   - Stripe の「請求書」機能は使わない(支払い後にサイトへ戻らないため、予約確定の計測ができない)
 - 入金は Stripe の通知メールの**氏名・メールアドレス**で問い合わせと突き合わせる(本文で「同じ氏名・メールで決済」を依頼済み)。リンクを予約ごとに分けているので、どのリンクで払われたかでも照合できる。
 
