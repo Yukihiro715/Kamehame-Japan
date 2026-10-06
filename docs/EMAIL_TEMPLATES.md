@@ -232,8 +232,9 @@ KAMEHAME JAPAN · Prosent Inc.
 
 **Stripe の商品(ゴルフ)** — 初回に作成し、以後は価格だけ差し替える
 - `Private Mt. Fuji Golf Experience from Tokyo`:3価格 ¥180,000(2 golfers)/ ¥220,000(3 golfers)/ ¥280,000(4 golfers)
-- `Professional photography and video — Mt. Fuji golf`:2価格 ¥120,000(2 golfers)/ ¥144,000(3 golfers)
-- 支払いリンクは**人数ごとに1本を使い回す**(2026-10-04 決定。「支払い回数を制限」は付けない)。品目 = 人数に合う価格 ×1、数量変更は「許可しない」。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)。撮影オプション付き・5〜6名は、その予約用に別のリンクを作る。
+- `Highlight film — Mt. Fuji golf`:¥96,000(2〜3名のグループ。4名は不可。当日の追加も可。卸 ¥80,000)
+- `Kanji ball marker — Mt. Fuji golf`:¥6,000、ユニットラベル `golfer`、数量 = 人数(2週間前までに確定した予約のみ。卸 1名 ¥5,000)
+- 支払いリンクは**人数ごとに1本を使い回す**(2026-10-04 決定。「支払い回数を制限」は付けない)。品目 = 人数に合う価格 ×1、数量変更は「許可しない」。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)。オプション付き(映像 ×1、マーカー ×人数)・5〜6名・コース指定の追加料金ありは、その予約用に別のリンクを作る。
 - 入金の照合は Stripe の通知の**氏名・メールアドレス・金額**で行う(メールで「問い合わせと同じ氏名・メールで決済」を依頼済み)。照合できたら Stripe の支払いに予約番号をメモする。
 - 作成済みのリンク(2026-10-04):
 
@@ -315,8 +316,8 @@ Car: {make / colour}, driver {name}
 WHAT WE HAVE ARRANGED
 - Rental clubs: {one ladies' set, one men's set; both right-handed}
 - Lunch at the clubhouse
-- {Professional photography and video — yes / no}
-- A ball marker with your names in kanji, handed to you on the day; your highlight film follows by email within {x} days
+- {Highlight film — yes (delivered about a week after) / no}
+- {Ball markers with your names in kanji — yes, handed to you on the day / no}
 
 WHAT TO BRING
 - Golf shoes {or: rental shoes in sizes … are reserved for you}
@@ -340,7 +341,7 @@ KAMEHAME JAPAN · Prosent Inc.
 > 日時・集合:{date}、{ホテル名}のロビーに{出発5分前}まで。出発 {time}。ガイド {名前} が {目印} でお待ちします
 > コース:{コース名}。ティーオフ {時刻}。ホテルから約{x}時間、{到着時刻}頃に到着しガイドがチェックイン
 > ガイド・車両:{名前}、電話/WhatsApp {番号}(当日用)。車両 {車種・色}、ドライバー {名前}
-> 手配済み:レンタルクラブ({内容})/クラブハウス昼食/撮影オプション有無/ボールマーカーは当日お渡し、ハイライト映像は{x}日以内にメール
+> 手配済み:レンタルクラブ({内容})/クラブハウス昼食/ハイライト映像の有無(約1週間後にお届け)/ボールマーカーの有無(当日お渡し)
 > 持ち物:ゴルフシューズ(またはレンタル手配済み)/到着時のジャケットと襟付きシャツ/グローブ・日焼け止め・上着(富士山麓は東京より涼しい)
 > 補足:車はホテルで15分待機/天候クローズは発生済み費用を除き返金/この時点からのキャンセル規定(実際の日付で)
 
@@ -393,8 +394,7 @@ WHAT'S INCLUDED
 - Green fee, rental clubs {for both of you (ladies' and men's sets)}
 - English-speaking golf guide who rides with you and plays the round with you
 - Lunch at the clubhouse
-- Highlight film of the day and a ball marker with your name in kanji
-Not included: golf shoes (bring your own, or ask us about rental). Optional: professional photography and video, ¥{120,000} for {n} golfers.
+Not included: golf shoes (bring your own, or ask us about rental). Optional: a highlight film of your day (¥96,000 per group of two or three, delivered about a week later) and ball markers with your names in kanji (¥6,000 per golfer, confirmed two weeks ahead).
 
 CANCELLATION (from payment, Japan time)
 Free until 18:00 on {date − 7}; 50% from {date − 6} to {date − 2}; 100% from {date − 1} and no-shows. Weather closure: full refund except costs already incurred.
@@ -413,7 +413,7 @@ hello@kamehame-japan.com
 **日本語対訳(担当者用)**
 > コースの手配ができました:{date} {area}のホテルを{time}出発/{コース名}、ティーオフ{時刻}/{n}名で合計 ¥{total}(税込、当日の追加なし)
 > 確定するには:{期限}までに決済リンクから。問い合わせと同じ氏名・メールで。入金で予約確定。ティータイムは期限まで押さえ、過ぎると変わる可能性がある
-> 含まれるもの:ホテル往復の専用車/プレーフィ・レンタルクラブ/英語ガイド(同乗・一緒にラウンド)/クラブハウス昼食/ハイライト映像とボールマーカー。含まれないもの:シューズ。オプション:撮影 ¥{120,000}
+> 含まれるもの:ホテル往復の専用車/プレーフィ・レンタルクラブ/英語ガイド(同乗・一緒にラウンド)/クラブハウス昼食。含まれないもの:シューズ。オプション:ハイライト映像 ¥96,000(2〜3名のグループ、約1週間後)/漢字ボールマーカー 1名 ¥6,000(2週間前までの確定が条件)
 > キャンセル(入金後・日本時間):7日前18時まで無料、6〜2日前50%、前日以降・無連絡100%。天候クローズは発生済み費用を除き返金
 > 入金後1営業日以内に、ロビー集合場所・ガイドの名前と連絡先・車両を送る
 > 返信でほしいこと(支払いの前後どちらでも):ホテル名/2名の氏名と利き手/当日の携帯

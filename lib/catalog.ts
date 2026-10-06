@@ -409,8 +409,8 @@ export const experiences: Experience[] = [
     // Golf in the Mt. Fuji region with a golf partner (condition sheet, 2026-09).
     // Live since 2026-09-30. Repriced 2026-10-02 on the partner's lower costs
     // (wholesale ¥126k / ¥147k / ¥182k): ¥180k / ¥220k / ¥280k. For four the
-    // guide does not play; a course caddie goes round instead. The video add-on
-    // = wholesale + 20% (¥144,000 for three).
+    // guide does not play; a course caddie goes round instead. Add-ons (film,
+    // kanji ball marker) are the partner's price + 20% (terms of 2026-10-06).
     // Copy reworked 2026-10-04 (private golf day, course proposed before
     // payment, departure 5:00–7:00). "Prestigious course" / "local golf
     // network" claims are left out until the partner confirms them.
@@ -455,7 +455,7 @@ export const experiences: Experience[] = [
       { icon: "car", title: "Your hotel. Your private car. Your golf day.", body: "Travel from your Tokyo hotel to the course and back in comfort, leaving at the time you choose between 5:00 and 7:00, with no transport to organise and no unfamiliar routes to navigate." },
       { icon: "flag", title: "A memorable round in the Mt. Fuji region", body: "We arrange your course and tee time, with the details shared before you decide to book." },
       { icon: "interpreter", title: "Local guidance for a smoother day", body: "Enjoy help with check-in, clubhouse etiquette and the practical details, so you can feel at ease and focus on your round. For two or three golfers your guide plays the round with you; a party of four plays with a course caddie." },
-      { icon: "photo", title: "A round to remember. A keepsake to take home.", body: "Relive the day with a short highlight film and a personalised golf ball marker featuring your name in kanji." },
+      { icon: "photo", title: "A round to remember. A keepsake to take home.", body: "Optional keepsakes: a short highlight film of your day, delivered about a week later, and a ball marker with your name in kanji, handed to you on the day." },
     ],
     included: [
       "Private car from your Tokyo hotel to the course and back, departing at the time you choose (5:00 to 7:00)",
@@ -463,18 +463,19 @@ export const experiences: Experience[] = [
       "Rental clubs",
       "An English-speaking golf guide who rides with you, handles check-in and plays the round with a party of two or three — for four golfers, a course caddie goes round with you instead (English not guaranteed)",
       "Lunch at the clubhouse",
-      "A highlight film of your day, about one minute long, sent afterwards",
-      "A golf ball marker with your name in kanji",
       "Tax, included in the price shown",
     ],
     notIncluded: [
       "Golf shoes — bring your own, or ask and we will check rental with the course",
-      "Professional photography and video (optional extra, below)",
+      "Highlight film and kanji ball marker (optional extras, below)",
       "A supplement when you ask for a specific course — Fuji Classic and other premium courses cost more, and some clubs add a fee for overseas visitors. It depends on the course and the season, and you see it in your quote before you pay",
       "Parties of five or six are quoted on request",
     ],
     addOns: [
-      { id: "pro-video", name: "Professional photography and video", description: "Your guide films the day with a dedicated camera and delivers a one-to-two-minute edit. ¥120,000 for two golfers, ¥144,000 for three; four on request.", price: 120000, priceFrom: true },
+      // Partner terms 2026-10-06: film ¥80,000 per group of 2–3 (not for 4; can be
+      // added on the day), marker ¥5,000 per golfer (confirmed 2 weeks ahead); +20%.
+      { id: "highlight-film", name: "Highlight film of your day", description: "Your guide films the round and delivers a short edit about a week after your day. ¥96,000 per group of two or three golfers (not available for parties of four). You can also decide on the day.", price: 96000 },
+      { id: "kanji-marker", name: "Ball marker with your name in kanji", description: "Handed to you on the day. ¥6,000 per golfer. Order it when you book — it needs your booking confirmed at least two weeks before your date.", price: 6000 },
     ],
     schedule: [
       { time: "05:55", title: "Meet in your hotel lobby", body: "Your guide and driver meet you five minutes before the departure time you chose." },
@@ -482,7 +483,7 @@ export const experiences: Experience[] = [
       { time: "08:00", title: "Arrive and check in", body: "Your guide checks you in, sorts rental clubs and explains the course and the clubhouse customs." },
       { time: "08:30", title: "Tee off", body: "Your round, with your guide (or, for four golfers, a course caddie) alongside, helping with the course as you go." },
       { title: "Lunch at the clubhouse", time: "After the round", body: "Lunch is included." },
-      { time: "Afternoon", title: "Back to your hotel", body: "The car takes you back to Tokyo; your highlight film follows by email." },
+      { time: "Afternoon", title: "Back to your hotel", body: "The car takes you back to Tokyo." },
     ],
     venue: {
       heading: "Your Course, Personally Arranged",
@@ -512,7 +513,7 @@ export const experiences: Experience[] = [
       { q: "How far ahead should we book?", a: "At least 30 days ahead if you can — the earlier you enquire, the wider the choice of courses and tee times. Requests close at 18:00 Japan time three days before; within seven days of the date we can confirm only if a tee time can still be found." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours, and send the proposed course, tee time and final price before you pay. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
-    whatYoullDo: ["Ride from your hotel to the course in a private car", "Play a round in the Mt. Fuji region, the day's details arranged for you", "Lunch at the clubhouse", "Ride back to Tokyo, with your highlight film to follow"],
+    whatYoullDo: ["Ride from your hotel to the course in a private car", "Play a round in the Mt. Fuji region, the day's details arranged for you", "Lunch at the clubhouse", "Ride back to Tokyo"],
     master: { title: "Your golf guide", bio: "An English-speaking guide from our golf partner, who arranges the course, rides with you and plays the round with a party of two or three.", quote: "" },
     itinerary: ["05:55 — Meet in your hotel lobby (five minutes before your departure)", "06:00 — Leave Tokyo", "08:00 — Arrive and check in", "08:30 — Tee off", "After the round — Lunch at the clubhouse", "Afternoon — Back to your hotel"],
     goodToKnow: ["Ages 18 and over.", "Pick-up from your Tokyo hotel at 5:00, 5:30, 6:00, 6:30 or 7:00 — your choice.", "Clubhouse dress code: a jacket on arrival, a collared shirt on the course.", "Rental clubs are included; bring golf shoes.", "Asking for a specific course (Fuji Classic and other premium courses) adds a supplement that depends on the course and season — quoted before you pay."],

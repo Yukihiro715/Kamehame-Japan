@@ -154,7 +154,7 @@ export const experiencesEs: Experience[] = [
       { icon: "car", title: "Tu hotel. Tu coche privado. Tu día de golf.", body: "Viaja de tu hotel de Tokio al campo y de vuelta con comodidad, saliendo a la hora que elijas entre las 5:00 y las 7:00, sin transporte que organizar ni rutas desconocidas." },
       { icon: "flag", title: "Una vuelta memorable en la región del monte Fuji", body: "Organizamos tu campo y tu hora de salida, y te contamos los detalles antes de que decidas reservar." },
       { icon: "interpreter", title: "Apoyo local para un día sin complicaciones", body: "Ayuda con el check-in, la etiqueta de la casa club y los detalles prácticos, para que estés tranquilo y te concentres en tu vuelta. Con dos o tres golfistas, tu guía juega la vuelta contigo; un grupo de cuatro juega con un caddie del campo." },
-      { icon: "photo", title: "Una vuelta para recordar. Un recuerdo para llevarte.", body: "Revive el día con un breve vídeo de los mejores momentos y un marcador de bola personalizado con tu nombre en kanji." },
+      { icon: "photo", title: "Una vuelta para recordar. Un recuerdo para llevarte.", body: "Recuerdos opcionales: un breve vídeo de los mejores momentos, entregado una semana después, y un marcador de bola con tu nombre en kanji, que recibes el mismo día." },
     ],
     included: [
       "Coche privado de tu hotel de Tokio al campo y de vuelta, con salida a la hora que elijas (de 5:00 a 7:00)",
@@ -162,18 +162,17 @@ export const experiencesEs: Experience[] = [
       "Palos de alquiler",
       "Un guía de golf que habla inglés, viaja contigo, se encarga del check-in y juega la vuelta con grupos de dos o tres; con cuatro golfistas, en su lugar acompaña al grupo un caddie del campo (inglés no garantizado)",
       "Comida en la casa club",
-      "Un vídeo con los mejores momentos de tu día, de un minuto aproximadamente, que se envía después",
-      "Un marcador de bola de golf con tu nombre en kanji",
       "Impuestos, incluidos en el precio indicado",
     ],
     notIncluded: [
       "Zapatos de golf: trae los tuyos, o pídenoslo y consultaremos el alquiler con el campo",
-      "Fotografía y vídeo profesionales (extra opcional, más abajo)",
+      "Vídeo de los mejores momentos y marcador de bola en kanji (extras opcionales, más abajo)",
       "Un suplemento si pides un campo concreto: Fuji Classic y otros campos de primer nivel cuestan más, y algunos clubes cobran una tasa a los visitantes extranjeros. Depende del campo y de la temporada, y lo verás en tu presupuesto antes de pagar",
       "Los grupos de cinco o seis se presupuestan bajo petición",
     ],
     addOns: [
-      { id: "pro-video", name: "Fotografía y vídeo profesionales", description: "Tu guía filma el día con una cámara dedicada y te entrega un montaje de uno a dos minutos. ¥120,000 para dos golfistas, ¥144,000 para tres; para cuatro, a consultar.", price: 120000, priceFrom: true },
+      { id: "highlight-film", name: "Vídeo de los mejores momentos de tu día", description: "Tu guía filma la vuelta y te entrega un breve montaje aproximadamente una semana después. ¥96,000 por grupo de dos o tres golfistas (no disponible para grupos de cuatro). También puedes decidirlo el mismo día.", price: 96000 },
+      { id: "kanji-marker", name: "Marcador de bola con tu nombre en kanji", description: "Te lo entregamos el mismo día. ¥6,000 por golfista. Pídelo al reservar: tu reserva debe estar confirmada al menos dos semanas antes de la fecha.", price: 6000 },
     ],
     schedule: [
       { time: "05:55", title: "Encuentro en el vestíbulo de tu hotel", body: "Tu guía y el conductor se reúnen contigo cinco minutos antes de la hora de salida que elegiste." },
@@ -181,7 +180,7 @@ export const experiencesEs: Experience[] = [
       { time: "08:00", title: "Llegada y check-in", body: "Tu guía hace el check-in, se ocupa de los palos de alquiler y te explica el campo y las costumbres de la casa club." },
       { time: "08:30", title: "Salida desde el tee", body: "Tu vuelta, con tu guía (o, con cuatro golfistas, un caddie del campo) a tu lado, ayudándote con el campo sobre la marcha." },
       { time: "Después de la vuelta", title: "Comida en la casa club", body: "La comida está incluida." },
-      { time: "Por la tarde", title: "Regreso a tu hotel", body: "El coche te lleva de vuelta a Tokio; tu vídeo con los mejores momentos llega después por correo electrónico." },
+      { time: "Por la tarde", title: "Regreso a tu hotel", body: "El coche te lleva de vuelta a Tokio." },
     ],
     venue: {
       heading: "Tu campo, organizado personalmente",
@@ -211,7 +210,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Con cuánta antelación hay que reservar?", a: "Si puedes, con al menos 30 días de antelación: cuanto antes consultes, más campos y horas de salida habrá para elegir. Las solicitudes cierran a las 18:00 hora de Japón tres días antes; a menos de siete días de la fecha solo podemos confirmar si todavía puede encontrarse una hora de salida." },
       { q: "¿Cómo funciona la reserva?", a: "Elige una fecha y envía la solicitud; no cuesta nada. Respondemos en 24 horas y te enviamos el campo propuesto, la hora de salida y el precio final antes de que pagues. La reserva se confirma cuando pagas con el enlace que te enviamos, y las condiciones de cancelación empiezan entonces." },
     ],
-    whatYoullDo: ["Viajar de tu hotel al campo en coche privado", "Jugar una vuelta en la región del monte Fuji, con los detalles del día organizados para ti", "Comer en la casa club", "Volver a Tokio y recibir después tu vídeo con los mejores momentos"],
+    whatYoullDo: ["Viajar de tu hotel al campo en coche privado", "Jugar una vuelta en la región del monte Fuji, con los detalles del día organizados para ti", "Comer en la casa club", "Volver a Tokio"],
     master: { title: "Tu guía de golf", bio: "Un guía que habla inglés, de nuestro socio de golf, que organiza el campo, viaja contigo y juega la vuelta con grupos de dos o tres.", quote: "" },
     itinerary: ["05:55 — Encuentro en el vestíbulo de tu hotel (cinco minutos antes de tu salida)", "06:00 — Salida de Tokio", "08:00 — Llegada y check-in", "08:30 — Salida desde el tee", "Después de la vuelta — Comida en la casa club", "Por la tarde — Regreso a tu hotel"],
     goodToKnow: ["Desde 18 años.", "Recogida en tu hotel de Tokio a las 5:00, 5:30, 6:00, 6:30 o 7:00, a tu elección.", "Vestimenta en la casa club: chaqueta al llegar, camisa con cuello en el campo.", "Los palos de alquiler están incluidos; trae zapatos de golf.", "Pedir un campo concreto (Fuji Classic y otros campos de primer nivel) añade un suplemento que depende del campo y de la temporada, presupuestado antes de pagar."],

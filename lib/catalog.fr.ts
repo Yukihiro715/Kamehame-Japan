@@ -153,7 +153,7 @@ export const experiencesFr: Experience[] = [
       { icon: "car", title: "Votre hôtel. Votre voiture privée. Votre journée de golf.", body: "Allez de votre hôtel de Tokyo au golf et revenez confortablement, en partant à l'heure de votre choix entre 5 h et 7 h, sans transport à organiser ni itinéraire inconnu." },
       { icon: "flag", title: "Une partie mémorable dans la région du mont Fuji", body: "Nous organisons votre golf et votre heure de départ, et vous en communiquons les détails avant que vous ne décidiez de réserver." },
       { icon: "interpreter", title: "Un accompagnement local pour une journée plus fluide", body: "De l'aide pour l'enregistrement, l'étiquette du club-house et les détails pratiques, pour être à l'aise et vous concentrer sur votre partie. À deux ou trois golfeurs, votre guide joue la partie avec vous ; à quatre, un caddie du golf vous accompagne." },
-      { icon: "photo", title: "Une partie à retenir. Un souvenir à emporter.", body: "Revivez la journée avec un court film des meilleurs moments et un marque-balle personnalisé à votre nom en kanji." },
+      { icon: "photo", title: "Une partie à retenir. Un souvenir à emporter.", body: "Souvenirs en option : un court film des meilleurs moments, livré environ une semaine plus tard, et un marque-balle à votre nom en kanji, remis le jour même." },
     ],
     included: [
       "Voiture privée de votre hôtel de Tokyo au golf et retour, départ à l'heure de votre choix (de 5 h à 7 h)",
@@ -161,18 +161,17 @@ export const experiencesFr: Experience[] = [
       "Clubs de location",
       "Un guide de golf anglophone qui fait le trajet avec vous, gère l'enregistrement et joue la partie à deux ou trois golfeurs ; à quatre, un caddie du golf vous accompagne à sa place (anglais non garanti)",
       "Déjeuner au club-house",
-      "Un film des meilleurs moments de votre journée, d'environ une minute, envoyé ensuite",
-      "Un marque-balle à votre nom en kanji",
       "Taxes, comprises dans le prix affiché",
     ],
     notIncluded: [
       "Chaussures de golf : apportez les vôtres, ou demandez-nous et nous vérifierons la location auprès du golf",
-      "Photo et vidéo professionnelles (option payante, ci-dessous)",
+      "Film des meilleurs moments et marque-balle en kanji (options payantes, ci-dessous)",
       "Un supplément si vous demandez un golf précis : Fuji Classic et les autres golfs de prestige coûtent plus cher, et certains clubs facturent une redevance aux visiteurs étrangers. Il dépend du golf et de la saison, et figure dans votre devis avant tout paiement",
       "Les groupes de cinq ou six font l'objet d'un devis sur demande",
     ],
     addOns: [
-      { id: "pro-video", name: "Photo et vidéo professionnelles", description: "Votre guide filme la journée avec une caméra dédiée et vous remet un montage d'une à deux minutes. ¥120,000 pour deux golfeurs, ¥144,000 pour trois ; à quatre, sur demande.", price: 120000, priceFrom: true },
+      { id: "highlight-film", name: "Film des meilleurs moments de votre journée", description: "Votre guide filme la partie et vous remet un court montage environ une semaine après. ¥96,000 par groupe de deux ou trois golfeurs (non disponible à quatre). Vous pouvez aussi décider le jour même.", price: 96000 },
+      { id: "kanji-marker", name: "Marque-balle à votre nom en kanji", description: "Remis le jour même. ¥6,000 par golfeur. À commander à la réservation : votre réservation doit être confirmée au moins deux semaines avant la date.", price: 6000 },
     ],
     schedule: [
       { time: "05:55", title: "Rendez-vous dans le hall de votre hôtel", body: "Votre guide et le chauffeur vous retrouvent cinq minutes avant l'heure de départ choisie." },
@@ -180,7 +179,7 @@ export const experiencesFr: Experience[] = [
       { time: "08:00", title: "Arrivée et enregistrement", body: "Votre guide vous enregistre, s'occupe des clubs de location et vous explique le parcours et les usages du club-house." },
       { time: "08:30", title: "Départ au tee", body: "Votre partie, avec votre guide (ou, à quatre golfeurs, un caddie du golf) à vos côtés pour vous aider sur le parcours." },
       { time: "Après la partie", title: "Déjeuner au club-house", body: "Le déjeuner est compris." },
-      { time: "Après-midi", title: "Retour à votre hôtel", body: "La voiture vous ramène à Tokyo ; votre film des meilleurs moments suit par e-mail." },
+      { time: "Après-midi", title: "Retour à votre hôtel", body: "La voiture vous ramène à Tokyo." },
     ],
     venue: {
       heading: "Votre golf, organisé pour vous",
@@ -210,7 +209,7 @@ export const experiencesFr: Experience[] = [
       { q: "Combien de temps à l'avance réserver ?", a: "Au moins 30 jours à l'avance si possible : plus vous nous écrivez tôt, plus le choix de golfs et d'heures de départ est large. Les demandes ferment à 18 h, heure du Japon, trois jours avant ; à moins de sept jours de la date, nous ne pouvons confirmer que si une heure de départ peut encore être trouvée." },
       { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; c'est gratuit. Nous répondons sous 24 heures et vous envoyons le golf proposé, l'heure de départ et le prix définitif avant que vous ne payiez. La réservation est confirmée lorsque vous payez via le lien que nous envoyons, et les conditions d'annulation commencent alors." },
     ],
-    whatYoullDo: ["Aller de votre hôtel au golf en voiture privée", "Jouer une partie dans la région du mont Fuji, les détails de la journée organisés pour vous", "Déjeuner au club-house", "Revenir à Tokyo, votre film des meilleurs moments à suivre"],
+    whatYoullDo: ["Aller de votre hôtel au golf en voiture privée", "Jouer une partie dans la région du mont Fuji, les détails de la journée organisés pour vous", "Déjeuner au club-house", "Revenir à Tokyo"],
     master: { title: "Votre guide de golf", bio: "Un guide anglophone de notre partenaire golf, qui organise le golf, fait le trajet avec vous et joue la partie à deux ou trois golfeurs.", quote: "" },
     itinerary: ["05:55 — Rendez-vous dans le hall de votre hôtel (cinq minutes avant votre départ)", "06:00 — Départ de Tokyo", "08:00 — Arrivée et enregistrement", "08:30 — Départ au tee", "Après la partie — Déjeuner au club-house", "Après-midi — Retour à votre hôtel"],
     goodToKnow: ["Dès 18 ans.", "Prise en charge à votre hôtel de Tokyo à 5 h, 5 h 30, 6 h, 6 h 30 ou 7 h, à votre choix.", "Tenue au club-house : une veste à l'arrivée, un polo à col sur le parcours.", "Les clubs de location sont compris ; apportez des chaussures de golf.", "Demander un golf précis (Fuji Classic et autres golfs de prestige) entraîne un supplément selon le golf et la saison, chiffré avant tout paiement."],
