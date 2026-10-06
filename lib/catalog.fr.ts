@@ -168,6 +168,7 @@ export const experiencesFr: Experience[] = [
     notIncluded: [
       "Chaussures de golf : apportez les vôtres, ou demandez-nous et nous vérifierons la location auprès du golf",
       "Photo et vidéo professionnelles (option payante, ci-dessous)",
+      "Un supplément si vous demandez un golf précis : Fuji Classic et les autres golfs de prestige coûtent plus cher, et certains clubs facturent une redevance aux visiteurs étrangers. Il dépend du golf et de la saison, et figure dans votre devis avant tout paiement",
       "Les groupes de cinq ou six font l'objet d'un devis sur demande",
     ],
     addOns: [
@@ -183,7 +184,7 @@ export const experiencesFr: Experience[] = [
     ],
     venue: {
       heading: "Votre golf, organisé pour vous",
-      lead: "Indiquez-nous votre date et vos éventuelles préférences de golf. Nous vérifions les disponibilités et vous envoyons le golf proposé, l'heure de départ et le prix définitif avant tout paiement.",
+      lead: "Indiquez-nous votre date et vos éventuelles préférences de golf. Nous vérifions les disponibilités et vous envoyons le golf proposé, l'heure de départ et le prix définitif avant tout paiement. Les golfs de prestige comme Fuji Classic peuvent être demandés ; ils entraînent un supplément qui dépend du golf et de la saison, indiqué dans votre devis.",
       knownHeading: "Avant de payer", afterHeading: "Une fois la réservation confirmée",
       known: ["Le golf proposé (dans la région du mont Fuji, la zone Fuji–Hakone à environ 90 à 150 km du centre de Tokyo) et son heure de départ, envoyés avec votre devis", "Le prix définitif pour votre groupe", "Prise en charge et retour à votre hôtel de Tokyo, départ entre 5 h et 7 h à votre choix"],
       afterBooking: ["Le nom de votre guide et son contact pour la journée", "Les détails de la voiture et du chauffeur", "Le point de rendez-vous dans le hall de votre hôtel"],
@@ -197,7 +198,7 @@ export const experiencesFr: Experience[] = [
       { title: "Vérifiez, puis réglez pour confirmer", body: "Relisez le golf, l'heure de départ et le prix. La réservation est confirmée à réception de votre paiement, et les conditions d'annulation commencent alors. Le contact de votre guide et les détails de la voiture suivent." },
     ],
     faq: [
-      { q: "Sur quel golf jouerons-nous ?", a: "Un golf de la région du mont Fuji (la zone Fuji–Hakone, à environ 90 à 150 km du centre de Tokyo), proposé pour votre date. Vous voyez le nom du golf et l'heure de départ avec votre devis, avant de payer. Si vous avez un golf en tête, indiquez-le dans votre demande et nous essaierons de l'obtenir." },
+      { q: "Sur quel golf jouerons-nous ?", a: "Un golf de la région du mont Fuji (la zone Fuji–Hakone, à environ 90 à 150 km du centre de Tokyo), proposé pour votre date. Vous voyez le nom du golf et l'heure de départ avec votre devis, avant de payer. Si vous avez un golf en tête, indiquez-le dans votre demande et nous essaierons de l'obtenir. Les golfs de prestige comme Fuji Classic peuvent généralement être réservés, mais ils coûtent plus cher : le green fee est plus élevé et certains clubs facturent une redevance aux visiteurs étrangers ; un supplément s'applique donc, selon le golf et la saison. Il figure dans votre devis, avant tout paiement." },
       { q: "La voiture et le guide sont-ils rien que pour nous ?", a: "Oui. Votre groupe voyage dans sa propre voiture avec votre guide. À deux ou trois golfeurs, le guide joue la partie avec vous ; à quatre, un caddie du golf vous accompagne à sa place, et il se peut qu'il ne parle pas anglais." },
       { q: "Quand et où venez-vous nous chercher ?", a: "À votre hôtel de Tokyo, à l'heure de départ de votre choix : 5 h, 5 h 30, 6 h, 6 h 30 ou 7 h. Le trajet dure environ deux heures. Indiquez l'hôtel dans votre demande ; pour un hôtel hors du centre de Tokyo, demandez-nous et nous vérifierons." },
       { q: "Quelle heure de départ choisir ?", a: "Un départ plus tôt signifie une heure de départ au tee plus tôt et un après-midi plus libre ; un départ à 7 h signifie jouer et rentrer plus tard. Nous proposons une heure de départ au tee adaptée à votre départ et vous prévenons si le golf n'a que d'autres créneaux." },
@@ -212,7 +213,7 @@ export const experiencesFr: Experience[] = [
     whatYoullDo: ["Aller de votre hôtel au golf en voiture privée", "Jouer une partie dans la région du mont Fuji, les détails de la journée organisés pour vous", "Déjeuner au club-house", "Revenir à Tokyo, votre film des meilleurs moments à suivre"],
     master: { title: "Votre guide de golf", bio: "Un guide anglophone de notre partenaire golf, qui organise le golf, fait le trajet avec vous et joue la partie à deux ou trois golfeurs.", quote: "" },
     itinerary: ["05:55 — Rendez-vous dans le hall de votre hôtel (cinq minutes avant votre départ)", "06:00 — Départ de Tokyo", "08:00 — Arrivée et enregistrement", "08:30 — Départ au tee", "Après la partie — Déjeuner au club-house", "Après-midi — Retour à votre hôtel"],
-    goodToKnow: ["Dès 18 ans.", "Prise en charge à votre hôtel de Tokyo à 5 h, 5 h 30, 6 h, 6 h 30 ou 7 h, à votre choix.", "Tenue au club-house : une veste à l'arrivée, un polo à col sur le parcours.", "Les clubs de location sont compris ; apportez des chaussures de golf."],
+    goodToKnow: ["Dès 18 ans.", "Prise en charge à votre hôtel de Tokyo à 5 h, 5 h 30, 6 h, 6 h 30 ou 7 h, à votre choix.", "Tenue au club-house : une veste à l'arrivée, un polo à col sur le parcours.", "Les clubs de location sont compris ; apportez des chaussures de golf.", "Demander un golf précis (Fuji Classic et autres golfs de prestige) entraîne un supplément selon le golf et la saison, chiffré avant tout paiement."],
     story: { heading: "Le golf à la japonaise", body: "Au Japon, le golf a ses propres rituels : la veste à l'arrivée, le soin apporté au parcours, le déjeuner sans hâte. Joué face au mont Fuji par un matin clair, c'est un autre jeu." },
   },
   {

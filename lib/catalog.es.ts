@@ -169,6 +169,7 @@ export const experiencesEs: Experience[] = [
     notIncluded: [
       "Zapatos de golf: trae los tuyos, o pídenoslo y consultaremos el alquiler con el campo",
       "Fotografía y vídeo profesionales (extra opcional, más abajo)",
+      "Un suplemento si pides un campo concreto: Fuji Classic y otros campos de primer nivel cuestan más, y algunos clubes cobran una tasa a los visitantes extranjeros. Depende del campo y de la temporada, y lo verás en tu presupuesto antes de pagar",
       "Los grupos de cinco o seis se presupuestan bajo petición",
     ],
     addOns: [
@@ -184,7 +185,7 @@ export const experiencesEs: Experience[] = [
     ],
     venue: {
       heading: "Tu campo, organizado personalmente",
-      lead: "Dinos tu fecha preferida y tus preferencias de campo, si las tienes. Comprobamos la disponibilidad y te enviamos el campo propuesto, la hora de salida y el precio final antes de que hagas ningún pago.",
+      lead: "Dinos tu fecha preferida y tus preferencias de campo, si las tienes. Comprobamos la disponibilidad y te enviamos el campo propuesto, la hora de salida y el precio final antes de que hagas ningún pago. Puedes pedir campos de primer nivel como Fuji Classic; llevan un suplemento que depende del campo y de la temporada, indicado en tu presupuesto.",
       knownHeading: "Antes de pagar", afterHeading: "Una vez confirmada la reserva",
       known: ["El campo propuesto (en la región del monte Fuji, la zona de Fuji–Hakone, a unos 90 a 150 km del centro de Tokio) y su hora de salida, enviados con tu presupuesto", "El precio final para tu grupo", "Recogida y regreso en tu hotel de Tokio, con salida entre las 5:00 y las 7:00 a tu elección"],
       afterBooking: ["El nombre de tu guía y su contacto para ese día", "Los datos del coche y del conductor", "Dónde encontraros en el vestíbulo de tu hotel"],
@@ -198,7 +199,7 @@ export const experiencesEs: Experience[] = [
       { title: "Revisa y paga para confirmar", body: "Repasa el campo, la hora de salida y el precio. La reserva se confirma cuando llega tu pago, y las condiciones de cancelación empiezan entonces. Después te enviamos el contacto de tu guía y los datos del coche." },
     ],
     faq: [
-      { q: "¿En qué campo jugaremos?", a: "En un campo de la región del monte Fuji (la zona de Fuji–Hakone, a unos 90 a 150 km del centro de Tokio), propuesto para tu fecha. Verás el nombre del campo y la hora de salida con tu presupuesto, antes de pagar. Si tienes un campo en mente, indícalo en tu solicitud y lo intentaremos." },
+      { q: "¿En qué campo jugaremos?", a: "En un campo de la región del monte Fuji (la zona de Fuji–Hakone, a unos 90 a 150 km del centro de Tokio), propuesto para tu fecha. Verás el nombre del campo y la hora de salida con tu presupuesto, antes de pagar. Si tienes un campo en mente, indícalo en tu solicitud y lo intentaremos. Los campos de primer nivel como Fuji Classic suelen poder organizarse, pero cuestan más: el green fee es mayor y algunos clubes cobran una tasa a los visitantes extranjeros, así que se aplica un suplemento que depende del campo y de la temporada. Aparece en tu presupuesto, antes de pagar." },
       { q: "¿El coche y el guía son solo para nosotros?", a: "Sí. Tu grupo viaja en su propio coche con tu guía. Con dos o tres golfistas, el guía juega la vuelta con el grupo; con cuatro, en su lugar acompaña al grupo un caddie del campo, que puede no hablar inglés." },
       { q: "¿Cuándo y dónde nos recogen?", a: "En tu hotel de Tokio, a la hora de salida que elijas: 5:00, 5:30, 6:00, 6:30 o 7:00. El trayecto dura unas dos horas. Indica el hotel en tu solicitud; si está fuera del centro de Tokio, consúltanos y lo comprobaremos." },
       { q: "¿Qué hora de salida elegimos?", a: "Una salida más temprana supone una hora de salida al tee más temprana y más tarde libre; salir a las 7:00 supone jugar y volver más tarde. Proponemos una hora de salida al tee acorde con tu hora de salida y te avisamos si el campo solo tiene otras horas." },
@@ -213,7 +214,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Viajar de tu hotel al campo en coche privado", "Jugar una vuelta en la región del monte Fuji, con los detalles del día organizados para ti", "Comer en la casa club", "Volver a Tokio y recibir después tu vídeo con los mejores momentos"],
     master: { title: "Tu guía de golf", bio: "Un guía que habla inglés, de nuestro socio de golf, que organiza el campo, viaja contigo y juega la vuelta con grupos de dos o tres.", quote: "" },
     itinerary: ["05:55 — Encuentro en el vestíbulo de tu hotel (cinco minutos antes de tu salida)", "06:00 — Salida de Tokio", "08:00 — Llegada y check-in", "08:30 — Salida desde el tee", "Después de la vuelta — Comida en la casa club", "Por la tarde — Regreso a tu hotel"],
-    goodToKnow: ["Desde 18 años.", "Recogida en tu hotel de Tokio a las 5:00, 5:30, 6:00, 6:30 o 7:00, a tu elección.", "Vestimenta en la casa club: chaqueta al llegar, camisa con cuello en el campo.", "Los palos de alquiler están incluidos; trae zapatos de golf."],
+    goodToKnow: ["Desde 18 años.", "Recogida en tu hotel de Tokio a las 5:00, 5:30, 6:00, 6:30 o 7:00, a tu elección.", "Vestimenta en la casa club: chaqueta al llegar, camisa con cuello en el campo.", "Los palos de alquiler están incluidos; trae zapatos de golf.", "Pedir un campo concreto (Fuji Classic y otros campos de primer nivel) añade un suplemento que depende del campo y de la temporada, presupuestado antes de pagar."],
     story: { heading: "El golf a la japonesa", body: "En Japón, el golf tiene sus propios rituales: la chaqueta al llegar, el cuidado del campo, la comida sin prisas. Jugado a la vista del monte Fuji en una mañana despejada, es otro juego." },
   },
   {

@@ -470,6 +470,7 @@ export const experiences: Experience[] = [
     notIncluded: [
       "Golf shoes — bring your own, or ask and we will check rental with the course",
       "Professional photography and video (optional extra, below)",
+      "A supplement when you ask for a specific course — Fuji Classic and other premium courses cost more, and some clubs add a fee for overseas visitors. It depends on the course and the season, and you see it in your quote before you pay",
       "Parties of five or six are quoted on request",
     ],
     addOns: [
@@ -485,7 +486,7 @@ export const experiences: Experience[] = [
     ],
     venue: {
       heading: "Your Course, Personally Arranged",
-      lead: "Tell us your preferred date and any course preferences. We'll check availability and send you the proposed course, tee time and final price before you make a payment.",
+      lead: "Tell us your preferred date and any course preferences. We'll check availability and send you the proposed course, tee time and final price before you make a payment. Premium courses such as Fuji Classic can be requested; they carry a supplement that depends on the course and the season, shown in your quote.",
       knownHeading: "Before you pay", afterHeading: "Once your booking is confirmed",
       known: ["The proposed course — in the Mt. Fuji region, the Fuji–Hakone area about 90 to 150 km from central Tokyo — and its tee time, sent with your quote", "The final price for your party", "Pick-up and drop-off at your hotel in Tokyo, departing between 5:00 and 7:00 at your choice"],
       afterBooking: ["Your guide's name and contact for the day", "The car and driver details", "Where to meet in your hotel lobby"],
@@ -499,7 +500,7 @@ export const experiences: Experience[] = [
       { title: "Review, then pay to confirm", body: "Look over the course, tee time and price. Your booking is confirmed when your payment arrives, and cancellation terms start then. Your guide's contact and the car details follow." },
     ],
     faq: [
-      { q: "Which course will we play?", a: "A course in the Mt. Fuji region — the Fuji–Hakone area, about 90 to 150 km from central Tokyo — proposed for your date. You see the course name and tee time with your quote, before you pay. If you have a course in mind, tell us in your request and we will try for it." },
+      { q: "Which course will we play?", a: "A course in the Mt. Fuji region — the Fuji–Hakone area, about 90 to 150 km from central Tokyo — proposed for your date. You see the course name and tee time with your quote, before you pay. If you have a course in mind, tell us in your request and we will try for it. Premium courses such as Fuji Classic can usually be arranged, but they cost more: the green fee is higher and some clubs add a fee for overseas visitors, so a supplement applies that depends on the course and the season. It is shown in your quote, before you pay." },
       { q: "Is the car and the guide just for us?", a: "Yes. Your group rides in its own car with your guide. For two or three golfers the guide plays the round with you; for four, a course caddie goes round with you instead, and the caddie may not speak English." },
       { q: "When and where do you pick us up?", a: "At your hotel in Tokyo, at the departure time you choose: 5:00, 5:30, 6:00, 6:30 or 7:00. The drive is about two hours. Tell us the hotel in your request; for hotels outside central Tokyo, ask and we will check." },
       { q: "Which departure time should we choose?", a: "An earlier departure means an earlier tee time and more of the afternoon free; a 7:00 departure means a later tee off and a later return. We propose a tee time to match your departure and tell you if the course only has other times." },
@@ -514,7 +515,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Ride from your hotel to the course in a private car", "Play a round in the Mt. Fuji region, the day's details arranged for you", "Lunch at the clubhouse", "Ride back to Tokyo, with your highlight film to follow"],
     master: { title: "Your golf guide", bio: "An English-speaking guide from our golf partner, who arranges the course, rides with you and plays the round with a party of two or three.", quote: "" },
     itinerary: ["05:55 — Meet in your hotel lobby (five minutes before your departure)", "06:00 — Leave Tokyo", "08:00 — Arrive and check in", "08:30 — Tee off", "After the round — Lunch at the clubhouse", "Afternoon — Back to your hotel"],
-    goodToKnow: ["Ages 18 and over.", "Pick-up from your Tokyo hotel at 5:00, 5:30, 6:00, 6:30 or 7:00 — your choice.", "Clubhouse dress code: a jacket on arrival, a collared shirt on the course.", "Rental clubs are included; bring golf shoes."],
+    goodToKnow: ["Ages 18 and over.", "Pick-up from your Tokyo hotel at 5:00, 5:30, 6:00, 6:30 or 7:00 — your choice.", "Clubhouse dress code: a jacket on arrival, a collared shirt on the course.", "Rental clubs are included; bring golf shoes.", "Asking for a specific course (Fuji Classic and other premium courses) adds a supplement that depends on the course and season — quoted before you pay."],
     story: { heading: "Golf, the Japanese way", body: "In Japan golf comes with its own rituals: the jacket on arrival, the care taken of the course, the unhurried lunch. Played in sight of Mt. Fuji on a clear morning, it is a different game." },
   },
   {
