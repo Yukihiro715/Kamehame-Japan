@@ -488,9 +488,9 @@ export const experiences: Experience[] = [
     venue: {
       heading: "Your Course, Personally Arranged",
       lead: "Tell us your preferred date and any course preferences. We'll check availability and send you the proposed course, tee time and final price before you make a payment. Premium courses such as Fuji Classic can be requested; they carry a supplement that depends on the course and the season, shown in your quote.",
-      knownHeading: "Before you pay", afterHeading: "Once your booking is confirmed",
+      knownHeading: "Before you pay", afterHeading: "After you book",
       known: ["The proposed course — in the Mt. Fuji region, the Fuji–Hakone area about 90 to 150 km from central Tokyo — and its tee time, sent with your quote", "The final price for your party", "Pick-up and drop-off at your hotel in Tokyo, departing between 5:00 and 7:00 at your choice"],
-      afterBooking: ["Your guide's name and contact for the day", "The car and driver details", "Where to meet in your hotel lobby"],
+      afterBooking: ["Where to meet in your hotel lobby — with your confirmation", "Your guide's name and phone number, and the car and driver details — the day before your round"],
       img: "/images/golf-pond.jpg", alt: "Mt. Fuji reflected in a pond beside the fairway",
     },
     notesLabel: "Your hotel in Tokyo, each golfer's level or handicap, any course preferences, and anything else we should know (optional)",
@@ -498,7 +498,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Tell us your date and preferences", body: "Choose a date and a departure time, and tell us your hotel, how many golfers, roughly how you play and any course you have in mind. Sending the request costs nothing." },
       { title: "A first reply within 24 hours", body: "We confirm your request and check courses for your date. The proposed course, tee time and final price usually follow within one business day; for requests sent at the weekend, the tee time may be confirmed on Monday." },
-      { title: "Review, then pay to confirm", body: "Look over the course, tee time and price. Your booking is confirmed when your payment arrives, and cancellation terms start then. Your guide's contact and the car details follow." },
+      { title: "Review, then pay to confirm", body: "Look over the course, tee time and price. Your booking is confirmed when your payment arrives, and cancellation terms start then. Your confirmation gives the meeting point in your hotel lobby; your guide's name and phone number and the car details come the day before your round." },
     ],
     faq: [
       { q: "Which course will we play?", a: "A course in the Mt. Fuji region — the Fuji–Hakone area, about 90 to 150 km from central Tokyo — proposed for your date. You see the course name and tee time with your quote, before you pay. If you have a course in mind, tell us in your request and we will try for it. Premium courses such as Fuji Classic can usually be arranged, but they cost more: the green fee is higher and some clubs add a fee for overseas visitors, so a supplement applies that depends on the course and the season. It is shown in your quote, before you pay." },

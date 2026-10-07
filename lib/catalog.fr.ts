@@ -184,9 +184,9 @@ export const experiencesFr: Experience[] = [
     venue: {
       heading: "Votre golf, organisé pour vous",
       lead: "Indiquez-nous votre date et vos éventuelles préférences de golf. Nous vérifions les disponibilités et vous envoyons le golf proposé, l'heure de départ et le prix définitif avant tout paiement. Les golfs de prestige comme Fuji Classic peuvent être demandés ; ils entraînent un supplément qui dépend du golf et de la saison, indiqué dans votre devis.",
-      knownHeading: "Avant de payer", afterHeading: "Une fois la réservation confirmée",
+      knownHeading: "Avant de payer", afterHeading: "Après la réservation",
       known: ["Le golf proposé (dans la région du mont Fuji, la zone Fuji–Hakone à environ 90 à 150 km du centre de Tokyo) et son heure de départ, envoyés avec votre devis", "Le prix définitif pour votre groupe", "Prise en charge et retour à votre hôtel de Tokyo, départ entre 5 h et 7 h à votre choix"],
-      afterBooking: ["Le nom de votre guide et son contact pour la journée", "Les détails de la voiture et du chauffeur", "Le point de rendez-vous dans le hall de votre hôtel"],
+      afterBooking: ["Le point de rendez-vous dans le hall de votre hôtel : avec votre confirmation", "Le nom et le téléphone de votre guide, et les détails de la voiture et du chauffeur : la veille de votre partie"],
       img: "/images/golf-pond.jpg", alt: "Le mont Fuji reflété dans un étang au bord du fairway",
     },
     notesLabel: "Votre hôtel à Tokyo, le niveau ou l'index de chaque golfeur, vos préférences de golf et tout ce que nous devrions savoir (facultatif)",
@@ -194,7 +194,7 @@ export const experiencesFr: Experience[] = [
     flow: [
       { title: "Indiquez-nous votre date et vos préférences", body: "Choisissez une date et une heure de départ, puis indiquez votre hôtel, le nombre de golfeurs, votre niveau approximatif et, le cas échéant, le golf que vous avez en tête. L'envoi de la demande est gratuit." },
       { title: "Une première réponse sous 24 heures", body: "Nous confirmons votre demande et cherchons des golfs pour votre date. Le golf proposé, l'heure de départ et le prix définitif suivent en général sous un jour ouvré ; pour une demande envoyée le week-end, l'heure de départ peut être confirmée le lundi." },
-      { title: "Vérifiez, puis réglez pour confirmer", body: "Relisez le golf, l'heure de départ et le prix. La réservation est confirmée à réception de votre paiement, et les conditions d'annulation commencent alors. Le contact de votre guide et les détails de la voiture suivent." },
+      { title: "Vérifiez, puis réglez pour confirmer", body: "Relisez le golf, l'heure de départ et le prix. La réservation est confirmée à réception de votre paiement, et les conditions d'annulation commencent alors. Votre confirmation indique le point de rendez-vous dans le hall de votre hôtel ; le nom et le téléphone de votre guide et les détails de la voiture vous parviennent la veille de votre partie." },
     ],
     faq: [
       { q: "Sur quel golf jouerons-nous ?", a: "Un golf de la région du mont Fuji (la zone Fuji–Hakone, à environ 90 à 150 km du centre de Tokyo), proposé pour votre date. Vous voyez le nom du golf et l'heure de départ avec votre devis, avant de payer. Si vous avez un golf en tête, indiquez-le dans votre demande et nous essaierons de l'obtenir. Les golfs de prestige comme Fuji Classic peuvent généralement être réservés, mais ils coûtent plus cher : le green fee est plus élevé et certains clubs facturent une redevance aux visiteurs étrangers ; un supplément s'applique donc, selon le golf et la saison. Il figure dans votre devis, avant tout paiement." },

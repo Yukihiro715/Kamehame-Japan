@@ -185,9 +185,9 @@ export const experiencesEs: Experience[] = [
     venue: {
       heading: "Tu campo, organizado personalmente",
       lead: "Dinos tu fecha preferida y tus preferencias de campo, si las tienes. Comprobamos la disponibilidad y te enviamos el campo propuesto, la hora de salida y el precio final antes de que hagas ningún pago. Puedes pedir campos de primer nivel como Fuji Classic; llevan un suplemento que depende del campo y de la temporada, indicado en tu presupuesto.",
-      knownHeading: "Antes de pagar", afterHeading: "Una vez confirmada la reserva",
+      knownHeading: "Antes de pagar", afterHeading: "Después de reservar",
       known: ["El campo propuesto (en la región del monte Fuji, la zona de Fuji–Hakone, a unos 90 a 150 km del centro de Tokio) y su hora de salida, enviados con tu presupuesto", "El precio final para tu grupo", "Recogida y regreso en tu hotel de Tokio, con salida entre las 5:00 y las 7:00 a tu elección"],
-      afterBooking: ["El nombre de tu guía y su contacto para ese día", "Los datos del coche y del conductor", "Dónde encontraros en el vestíbulo de tu hotel"],
+      afterBooking: ["Dónde encontraros en el vestíbulo de tu hotel: con tu confirmación", "El nombre y el teléfono de tu guía, y los datos del coche y del conductor: el día anterior a tu vuelta"],
       img: "/images/golf-pond.jpg", alt: "El monte Fuji reflejado en un estanque junto a la calle",
     },
     notesLabel: "Tu hotel en Tokio, el nivel o hándicap de cada golfista, tus preferencias de campo y cualquier otra cosa que debamos saber (opcional)",
@@ -195,7 +195,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Dinos tu fecha y tus preferencias", body: "Elige una fecha y una hora de salida, e indica tu hotel, el número de golfistas, vuestro nivel aproximado y el campo que tengas en mente, si lo hay. Enviar la solicitud no cuesta nada." },
       { title: "Una primera respuesta en 24 horas", body: "Confirmamos tu solicitud y buscamos campos para tu fecha. El campo propuesto, la hora de salida y el precio final suelen llegar en un día laborable; para las solicitudes enviadas en fin de semana, la hora de salida puede confirmarse el lunes." },
-      { title: "Revisa y paga para confirmar", body: "Repasa el campo, la hora de salida y el precio. La reserva se confirma cuando llega tu pago, y las condiciones de cancelación empiezan entonces. Después te enviamos el contacto de tu guía y los datos del coche." },
+      { title: "Revisa y paga para confirmar", body: "Repasa el campo, la hora de salida y el precio. La reserva se confirma cuando llega tu pago, y las condiciones de cancelación empiezan entonces. Tu confirmación indica el punto de encuentro en el vestíbulo de tu hotel; el nombre y el teléfono de tu guía y los datos del coche llegan el día anterior a tu vuelta." },
     ],
     faq: [
       { q: "¿En qué campo jugaremos?", a: "En un campo de la región del monte Fuji (la zona de Fuji–Hakone, a unos 90 a 150 km del centro de Tokio), propuesto para tu fecha. Verás el nombre del campo y la hora de salida con tu presupuesto, antes de pagar. Si tienes un campo en mente, indícalo en tu solicitud y lo intentaremos. Los campos de primer nivel como Fuji Classic suelen poder organizarse, pero cuestan más: el green fee es mayor y algunos clubes cobran una tasa a los visitantes extranjeros, así que se aplica un suplemento que depende del campo y de la temporada. Aparece en tu presupuesto, antes de pagar." },

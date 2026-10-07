@@ -252,9 +252,9 @@ KAMEHAME JAPAN · Prosent Inc.
 入金当日   Stripe の通知(氏名・メール・金額)を問い合わせと照合 → 予約番号を採番(KJ-体験日-連番)、Stripe の支払いにメモ
           → 提携先に正式手配(G-2)。ガイド名・連絡先・車両・ロビー集合の案内を依頼
           → お客様に「入金確認」(G-B)。足りない情報(ホテル名・氏名・利き手・携帯)はここで集める
-翌営業日まで 提携先から詳細が届いたら確定通知(G-C)。届かなくても G-B は当日中に送る
+翌営業日まで 確定通知(G-C:集合場所・コース・持ち物)。ガイド名・電話・車両は提携先から前日に届くので G-D で送る
 7日前      無料キャンセル期限(18:00)。提携先の手配が最終か確認
-前日       リマインド(G-D):集合時刻・ガイドの電話・天気・持ち物
+前日       前日案内(G-D):集合時刻・ガイドの名前と電話・車両・天気・持ち物(提携先の情報が届き次第、必ず送る)
 翌日       お礼+口コミ依頼(E と同じ。URL の experience=mt-fuji-golf-day)。ハイライト映像は提携先から届き次第転送
 ```
 
@@ -274,7 +274,7 @@ Hello {name},
 
 Thank you — we have received your payment of ¥{total}, and your golf day on {weekday, date} is confirmed. Your booking reference is {予約番号}.
 
-We are now making the final arrangements with the course and your guide. Within one business day you will receive your confirmation with the meeting point in your hotel lobby, your guide's name and phone, and the car details.
+We are now making the final arrangements with the course and your guide. Within one business day you will receive your confirmation with the meeting point in your hotel lobby. Your guide's name and phone number and the car details come the day before your round.
 
 {If anything is still missing:}
 To complete the arrangements, could you reply with:
@@ -289,7 +289,7 @@ KAMEHAME JAPAN · Prosent Inc.
 
 **日本語対訳**
 > ¥{total} のお支払いを確認しました。{date} のゴルフは確定です。予約番号は {番号}。
-> ゴルフ場とガイドと最終手配中で、1営業日以内に集合場所・ガイドの名前と電話・車両を記載した確定通知を送ります。
+> ゴルフ場とガイドと最終手配中で、1営業日以内に集合場所を記載した確定通知を送ります。ガイドの名前と電話・車両は前日にお知らせします。
 > (未入手なら)ホテル名/お二人の氏名と利き手/当日の携帯番号を返信してください。
 
 ### G-C. 確定通知(詳細が揃ったら)
@@ -303,15 +303,11 @@ Everything is arranged for your golf day. Here are the details.
 
 DATE AND MEETING
 {Weekday, date} — please be in the lobby of {hotel name} by {time − 5 min}. The car leaves at {time}.
-Your guide, {guide name}, will be waiting in the lobby {landmark, e.g. near the reception desk}.
+Your guide will be waiting in the lobby {landmark, e.g. near the reception desk}. Their name and phone number, and the car details, follow the day before.
 
 YOUR COURSE
 {Course name}, {area}
 Tee off at {tee time}. About {x} hours by private car from your hotel; you arrive around {time} and check in with your guide.
-
-YOUR GUIDE AND CAR
-{Guide name} — phone / WhatsApp: {number} (for the day itself, if you are running late or cannot find each other)
-Car: {make / colour}, driver {name}
 
 WHAT WE HAVE ARRANGED
 - Rental clubs: {one ladies' set, one men's set; both right-handed}
@@ -338,9 +334,8 @@ KAMEHAME JAPAN · Prosent Inc.
 
 **日本語対訳**
 > 手配がすべて整いました。
-> 日時・集合:{date}、{ホテル名}のロビーに{出発5分前}まで。出発 {time}。ガイド {名前} が {目印} でお待ちします
+> 日時・集合:{date}、{ホテル名}のロビーに{出発5分前}まで。出発 {time}。ガイドが {目印} でお待ちします(名前・電話・車両は前日に)
 > コース:{コース名}。ティーオフ {時刻}。ホテルから約{x}時間、{到着時刻}頃に到着しガイドがチェックイン
-> ガイド・車両:{名前}、電話/WhatsApp {番号}(当日用)。車両 {車種・色}、ドライバー {名前}
 > 手配済み:レンタルクラブ({内容})/クラブハウス昼食/ハイライト映像の有無(約1週間後にお届け)/ボールマーカーの有無(当日お渡し)
 > 持ち物:ゴルフシューズ(またはレンタル手配済み)/到着時のジャケットと襟付きシャツ/グローブ・日焼け止め・上着(富士山麓は東京より涼しい)
 > 補足:車はホテルで15分待機/天候クローズは発生済み費用を除き返金/この時点からのキャンセル規定(実際の日付で)
@@ -400,7 +395,7 @@ CANCELLATION (from payment, Japan time)
 Free until 18:00 on {date − 7}; 50% from {date − 6} to {date − 2}; 100% from {date − 1} and no-shows. Weather closure: full refund except costs already incurred.
 
 AFTER PAYMENT
-Within one business day you receive the meeting point in your hotel lobby, your guide's name and phone / WhatsApp, and the car details.
+Within one business day you receive your confirmation with the meeting point in your hotel lobby. Your guide's name and phone / WhatsApp and the car details come the day before your round.
 
 Could you also reply with your hotel's name, both golfers' full names (and whether either of you plays left-handed), and a mobile number for the day? Before or after paying — either is fine.
 
@@ -415,10 +410,33 @@ hello@kamehame-japan.com
 > 確定するには:{期限}までに決済リンクから。問い合わせと同じ氏名・メールで。入金で予約確定。ティータイムは期限まで押さえ、過ぎると変わる可能性がある
 > 含まれるもの:ホテル往復の専用車/プレーフィ・レンタルクラブ/英語ガイド(同乗・一緒にラウンド)/クラブハウス昼食。含まれないもの:シューズ。オプション:ハイライト映像 ¥96,000(2〜3名のグループ、約1週間後)/漢字ボールマーカー 1名 ¥6,000(2週間前までの確定が条件)
 > キャンセル(入金後・日本時間):7日前18時まで無料、6〜2日前50%、前日以降・無連絡100%。天候クローズは発生済み費用を除き返金
-> 入金後1営業日以内に、ロビー集合場所・ガイドの名前と連絡先・車両を送る
+> 入金後1営業日以内に、ロビー集合場所を記載した確定通知を送る。ガイドの名前と連絡先・車両は前日に送る
 > 返信でほしいこと(支払いの前後どちらでも):ホテル名/2名の氏名と利き手/当日の携帯
 
 **コース指定の追加料金:** 富士クラシックなどの名門コースを指定された場合、卸値が基本プランより高く(海外客の追加料金があるコースもある)、G-A の PRICE に「course supplement for {course}: +¥…」を1行足して、合計を案内する(2026-10-06 の例: 3名・富士クラシック、卸値 ¥219,000 → 案内 ¥290,000)。サイトにも「コース指定は追加料金、見積もりで提示」と明記済み。
+
+### G-D. 前日案内(ガイド・車両が届いたら。必ず送る)
+
+**件名:** `Tomorrow — {course}, {time} pick-up · {予約番号}`
+
+```
+Hello {name},
+
+Everything is ready for tomorrow.
+
+- {time − 5 min}: please be in the lobby of {hotel name}, {landmark}. The car leaves at {time}.
+- Your guide: {guide name} — phone / WhatsApp {number} (for tomorrow, if you are running late or cannot find each other)
+- Car: {make / colour}, driver {name}
+- {Course name}, tee off {tee time}
+
+The forecast for the course is {weather}; {e.g. bring a layer for the morning / an umbrella}.
+
+See you tomorrow.
+{your name}, KAMEHAME JAPAN
+```
+
+**日本語対訳**
+> 明日の準備が整いました。{出発5分前}に{ホテル名}のロビー({目印})へ。出発 {time}。ガイド {名前}、電話/WhatsApp {番号}。車両 {車種・色}、ドライバー {名前}。{コース名}、ティーオフ {時刻}。天気 {予報}。
 
 **運用:** 氏名・ホテル名・連絡先は支払いの条件にしない(まず入金)。足りないものは確定通知(G-C)を送る前に集める。提携先への正式手配は入金後すぐ(無料キャンセルは7日前まで、提携先の取消条件と重ならないよう確認)。
 
