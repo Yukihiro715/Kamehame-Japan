@@ -96,7 +96,7 @@ export const experiencesFr: Experience[] = [
     notesLabel: "Le prénom de chacun et sa signification si vous la connaissez, et tout ce que la professeure doit savoir (facultatif)",
     notesHint: "ex. Emma — « entière, universelle » ; Liam — « protecteur résolu ». L'un de nous est gaucher…",
     flow: [
-      { title: "Choisissez une date et envoyez votre demande", body: "Choisissez une des dates publiées et une heure de début. Ajoutez le prénom de chacun et sa signification si vous la connaissez." },
+      { title: "Choisissez une date et envoyez votre demande", body: "Choisissez une date et une heure de début. Ajoutez le prénom de chacun et sa signification si vous la connaissez." },
       { title: "Nous répondons sous 24 heures", body: "Avec la disponibilité du cours ce jour-là, le prix et les conditions." },
       { title: "Réglez pour confirmer", body: "La réservation est confirmée à réception de votre paiement ; les conditions d'annulation commencent alors. Nous vous demandons ensuite ce dont la professeure a besoin : le prénom et le sens de chacun, la nationalité et un téléphone pour le jour même." },
     ],
@@ -110,7 +110,7 @@ export const experiencesFr: Experience[] = [
       { q: "Je voyage seul(e). Puis-je participer ?", a: "Oui. Un cours pour une personne est facturé comme pour deux ; l'encadré de réservation affiche le total quand vous choisissez une personne." },
       { q: "Comment s'habiller ?", a: "Avec des vêtements que l'encre peut tacher. Des tabliers sont fournis." },
       { q: "Peut-on réserver au dernier moment ?", a: "Oui, jusqu'à 18 h, heure du Japon, la veille. Certains jours, le studio n'est réservé qu'à l'arrivée d'une demande : pour un cours dans les prochains jours, nous ne pouvons confirmer que s'il est encore libre." },
-      { q: "Comment se passe la réservation ?", a: "Choisissez une date publiée et envoyez une demande ; nous répondons sous 24 heures avec le prix et les conditions. La demande est gratuite. La réservation est confirmée lorsque vous réglez via le lien envoyé, et les conditions d'annulation commencent alors." },
+      { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; nous répondons sous 24 heures avec le prix et les conditions. La demande est gratuite. La réservation est confirmée lorsque vous réglez via le lien envoyé, et les conditions d'annulation commencent alors." },
       { q: "Et si nous sommes en retard ?", a: "Le studio est loué à l'heure : le cours se termine à l'heure prévue et l'exercice est raccourci. Prévenez-nous dès que vous savez que vous serez en retard." },
       { q: "Le transport est-il compris ?", a: "Non. Vous retrouvez la professeure au studio de Shinjuku ; l'adresse et l'itinéraire arrivent avec votre confirmation." },
     ],

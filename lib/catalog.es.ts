@@ -97,7 +97,7 @@ export const experiencesEs: Experience[] = [
     notesLabel: "El nombre de cada persona y su significado, si lo sabes, y cualquier otra cosa que deba saber la profesora (opcional)",
     notesHint: "p. ej. Emma — «entera, universal»; Liam — «protector decidido». Una persona es zurda…",
     flow: [
-      { title: "Elige una fecha y envía tu solicitud", body: "Elige una de las fechas publicadas y una hora de inicio. Añade el nombre de cada persona y su significado si lo sabes." },
+      { title: "Elige una fecha y envía tu solicitud", body: "Elige una fecha y una hora de inicio. Añade el nombre de cada persona y su significado si lo sabes." },
       { title: "Respondemos en 24 horas", body: "Con la disponibilidad de la clase ese día, el precio y las condiciones." },
       { title: "Paga para confirmar", body: "La reserva se confirma cuando llega tu pago; las condiciones de cancelación empiezan entonces. Después te pedimos lo que necesita la profesora: el nombre y significado de cada persona, la nacionalidad y un teléfono para ese día." },
     ],
@@ -111,7 +111,7 @@ export const experiencesEs: Experience[] = [
       { q: "Viajo solo/a. ¿Puedo participar?", a: "Sí. Una clase para una persona se cobra como dos; el cuadro de reserva muestra el total al elegir una persona." },
       { q: "¿Qué ropa llevo?", a: "Ropa que no te importe manchar de tinta. Hay delantales." },
       { q: "¿Se puede reservar con poca antelación?", a: "Sí, hasta las 18:00 (hora de Japón) del día anterior. Algunos días el estudio se reserva solo cuando llega una solicitud, así que para una clase en los próximos días solo podemos confirmar si el estudio sigue libre." },
-      { q: "¿Cómo funciona la reserva?", a: "Elige una fecha publicada y envía la solicitud; respondemos en 24 horas con el precio y las condiciones. Enviar la solicitud no cuesta nada. La reserva se confirma cuando pagas con el enlace que te enviamos y las condiciones de cancelación empiezan entonces." },
+      { q: "¿Cómo funciona la reserva?", a: "Elige una fecha y envía la solicitud; respondemos en 24 horas con el precio y las condiciones. Enviar la solicitud no cuesta nada. La reserva se confirma cuando pagas con el enlace que te enviamos y las condiciones de cancelación empiezan entonces." },
       { q: "¿Y si llegamos tarde?", a: "El estudio se alquila por horas: la clase termina a su hora y la práctica se acorta. Avísanos en cuanto sepas que llegas tarde." },
       { q: "¿Está incluido el transporte?", a: "No. Te encuentras con la profesora en el estudio de Shinjuku; la dirección y las indicaciones llegan con la confirmación." },
     ],
