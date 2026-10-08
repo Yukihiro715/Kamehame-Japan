@@ -8,6 +8,7 @@ import { t, type Lang } from "@/lib/i18n";
 export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
   const T = t(lang);
   const { cities } = catalogFor(lang);
+  const [operatedBefore, operatedAfter] = T.footerOperated.split("{operator}");
   return (
     <footer className="site-footer-block">
       <Brand lang={lang} />
@@ -24,7 +25,10 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
         <Link href={`/${lang}/terms/`}>{T.footerTerms}</Link>
         <ConsentSettingsLink lang={lang} />
       </div>
-      <div className="footer-meta"><p>{T.footerOperated}</p><p>© 2026 KAMEHAME JAPAN</p></div>
+      <div className="footer-meta">
+        <p>{operatedBefore}<a href="https://prosent.co.jp/company/" rel="noreferrer">Prosent Inc.</a>{operatedAfter}</p>
+        <p>© 2026 KAMEHAME JAPAN</p>
+      </div>
       <FooterLanguages lang={lang} />
       <Link className="partner-link" href="/partners/">体験パートナー募集 →</Link>
       <details className="photo-credits">

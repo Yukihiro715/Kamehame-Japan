@@ -23,12 +23,14 @@ export interface TermsCopy {
   sections: { heading: string; body: string[] }[];
 }
 
-export const LEGAL_UPDATED = "2026-09-15";
+export const LEGAL_UPDATED = "2026-10-08";
 
 const OPERATOR = { ja: "Prosent Inc.", en: "Prosent Inc." };
 const ADDRESS_JA = "〒104-0054 東京都中央区勝どき1-3-1 43F";
 const ADDRESS_EN = "Kachidoki 1-3-1, 43F, Chuo-ku, Tokyo 104-0054, Japan";
 const REP = { ja: "伊藤 千央", en: "Chihiro Ito" };
+const CORPORATE_NUMBER = "7010001232139";
+const OPERATOR_SITE = "https://prosent.co.jp/";
 const EMAIL = "hello@kamehame-japan.com";
 
 const LEGAL_JA: LegalCopy = {
@@ -39,9 +41,11 @@ const LEGAL_JA: LegalCopy = {
     ["販売業者", OPERATOR.ja],
     ["運営統括責任者", REP.ja],
     ["所在地", ADDRESS_JA],
+    ["法人番号", CORPORATE_NUMBER],
     ["電話番号", "ご請求があれば遅滞なく開示します。まずは下記メールアドレスまでご連絡ください。"],
     ["メールアドレス", EMAIL],
     ["サイトURL", "https://kamehame-japan.com/"],
+    ["運営会社サイト", OPERATOR_SITE],
     ["販売価格", "各体験ページに表示する金額(消費税・サービス料込み、日本円)。人数・時期により異なります。"],
     ["商品代金以外に必要な料金", "銀行振込の場合の振込手数料、およびインターネット接続にかかる通信料はお客様のご負担です。上位プラン(三味線の生演奏、出演者2名など)の料金は各体験ページに記載しています。"],
     ["お支払方法", "クレジットカード、または銀行振込"],
@@ -62,9 +66,11 @@ const LEGAL_EN: LegalCopy = {
     ["Seller", OPERATOR.en],
     ["Person in charge", REP.en],
     ["Address", ADDRESS_EN],
+    ["Corporate number", `${CORPORATE_NUMBER} (Japan National Tax Agency corporate number)`],
     ["Telephone", "Disclosed without delay on request. Please write to the address below first."],
     ["Email", EMAIL],
     ["Website", "https://kamehame-japan.com/"],
+    ["Operator's website", OPERATOR_SITE],
     ["Prices", "As shown on each experience page, in Japanese yen, including consumption tax and service charge. Prices vary by party size and season."],
     ["Costs beyond the price", "Bank transfer fees and your own internet connection costs. Plan upgrades (live shamisen, a second host) are priced on each experience page."],
     ["Payment methods", "Credit card or bank transfer."],

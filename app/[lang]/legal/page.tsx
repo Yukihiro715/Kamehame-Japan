@@ -39,7 +39,7 @@ export default async function LegalPage({ params }: Props) {
           <p className="detail-tagline">{copy.lead}</p>
           <dl className="legal-table">
             {copy.rows.map(([k, v]) => (
-              <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
+              <div key={k}><dt>{k}</dt><dd>{/^https?:\/\/\S+$/.test(v) ? <a href={v} rel="noreferrer">{v}</a> : v}</dd></div>
             ))}
           </dl>
         </article>

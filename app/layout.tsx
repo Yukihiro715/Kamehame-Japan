@@ -3,7 +3,7 @@ import { SITE_ORIGIN } from "@/lib/catalog";
 import { GTM_ID } from "@/lib/analytics";
 import { consentDefaultScript } from "@/lib/consent";
 import { RouteChangeEvent } from "@/components/site/route-change-event";
-import { socialMeta } from "@/lib/seo";
+import { socialMeta, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,6 +35,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`;
 
+// Who runs the site, in a form search engines and reputation services can
+// read: the brand, the company behind it, its corporate number and address.
+// The same details appear on the legal-notice page.
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_ORIGIN}/#organization`,
+  name: SITE_NAME,
+  legalName: "Prosent Inc. (株式会社プロセント)",
+  url: `${SITE_ORIGIN}/`,
+  logo: `${SITE_ORIGIN}/icon-512.png`,
+  email: "hello@kamehame-japan.com",
+  taxID: "7010001232139",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Kachidoki 1-3-1, 43F",
+    addressLocality: "Chuo-ku",
+    addressRegion: "Tokyo",
+    postalCode: "104-0054",
+    addressCountry: "JP",
+  },
+  areaServed: "JP",
+  sameAs: ["https://prosent.co.jp/"],
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
@@ -45,6 +70,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* Google Tag Manager — GA4, Ads conversions and Search Console
             verification are all configured inside the container. */}
         <script dangerouslySetInnerHTML={{ __html: gtmSnippet }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </head>
       <body>
         <RouteChangeEvent />
