@@ -5,12 +5,12 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider, type BookingExperience } from "@/components/site/booking-context";
-import { Gallery } from "@/components/site/gallery";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { ReviewList } from "@/components/site/review-list";
 import { ReviewSummaryPanel } from "@/components/site/reviews";
 import { CancellationTable } from "@/components/site/cancellation-table";
-import { VariantPhoto, VariantPicker } from "@/components/site/variant-picker";
+import { VariantPicker } from "@/components/site/variant-picker";
+import { VariantGallery, VariantRail } from "@/components/site/variant-rail";
 import { CoursePreference } from "@/components/site/course-preference";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { countOf, fromPrice, pricingForVariant, yen } from "@/lib/pricing";
@@ -75,28 +75,25 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       ]} />
 
       <BookingProvider experience={booking} pricings={pricings} lang={lang}>
-        {/* 1. First view: title, one line, benefits, the photo of the chosen plan, both prices, one button */}
-        <header className="vh" id="booking">
-          <div className="vh-copy">
-            <h1>{exp.title}</h1>
-            <p className="vh-lede">{exp.tagline}</p>
-            <ul className="vh-benefits">
-              {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
-            </ul>
-          </div>
-          <VariantPhoto variants={variants} />
-          <div className="vh-pick">
-            <VariantPicker variants={variants} copy={vc.pricing} name="hero-variant" />
-            <a className="bk-cta vh-cta" href="#request-form">{ctaLabel} <ArrowRight size={16} /></a>
-            <p className="vh-note"><ShieldCheck size={14} /> {exp.cta?.note ?? D.noPaymentNow}</p>
-          </div>
+        {/* 1. First view: title, one line, benefits, then the photos (the big
+            tile follows the chosen plan) and, beside the page, the card with
+            the price, the plan switch and the button */}
+        <header className="xp-head vh-head">
+          <h1>{exp.title}</h1>
+          <p className="vh-lede">{exp.tagline}</p>
+          <ul className="vh-benefits">
+            {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
+          </ul>
         </header>
 
         <section className="xp-mv" aria-label={D.gallery}>
-          <Gallery photos={photos} lang={lang} note={exp.galleryNote} />
+          <VariantGallery photos={photos} variants={variants} lang={lang} note={exp.galleryNote} />
         </section>
 
         <div className="xp-cols">
+          <aside className="xp-side">
+            <VariantRail variants={variants} copy={vc.pricing} lang={lang} ctaLabel={ctaLabel} ctaNote={exp.cta?.note ?? D.noPaymentNow} />
+          </aside>
           <div className="xp-main">
             {/* 2. Choose */}
             <section className="xp-section" id="choose">

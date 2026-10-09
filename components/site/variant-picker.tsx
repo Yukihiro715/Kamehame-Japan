@@ -33,21 +33,3 @@ export function VariantPicker({ variants, copy, detailed, name }: {
     </div>
   );
 }
-
-/** Hero photo that follows the chosen plan, with that plan's other photos
- *  as a small strip under it. */
-export function VariantPhoto({ variants }: { variants: ExperienceVariant[] }) {
-  const b = useBooking();
-  const v = variants.find((x) => x.id === b?.variant) ?? variants[0];
-  const strip = (v.gallery ?? []).slice(0, 3);
-  return (
-    <figure className="vh-photo">
-      <img key={v.id} className="vh-main" src={v.img} alt={v.alt} />
-      {strip.length > 1 && (
-        <div className="vh-thumbs">
-          {strip.map((g) => <img key={g.img} src={g.img} alt={g.alt} loading="lazy" />)}
-        </div>
-      )}
-    </figure>
-  );
-}
