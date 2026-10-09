@@ -133,21 +133,14 @@ export default function PartnersPage() {
 
       <section className="partner-section" id="partner-contact">
         <h2>お問い合わせ</h2>
-        <p className="partner-note">下記の内容をお知らせください。担当者よりご連絡のうえ、詳細をご説明します。</p>
-        <form className="partner-form" data-clarity-mask="True">
-          <div className="form-grid">
-            <label>店舗・工房名<input type="text" name="venue" autoComplete="organization" /></label>
-            <label>業種<input type="text" name="type" placeholder="例:寿司、茶道、刀鍛冶" /></label>
-            <label>所在地(市区まで)<input type="text" name="location" placeholder="例:東京都台東区" /></label>
-            <label>ご担当者名<input type="text" name="name" autoComplete="name" /></label>
-            <label>ご連絡先(電話・メール)<input type="text" name="contact" autoComplete="email" /></label>
-          </div>
-          <label>メッセージ<textarea name="message" rows={4} placeholder="受け入れ可能な曜日・時間帯、気になる点など" /></label>
-          <div className="form-actions">
-            <button type="button" disabled aria-disabled="true">送信する</button>
-            <p>フォームは現在準備中です。当面はお打ち合わせの際に直接ご相談ください。</p>
-          </div>
-        </form>
+        <p className="partner-note">
+          メールで下記をお知らせください。担当者よりご連絡のうえ、詳細をご説明します。<br />
+          店舗・工房名／業種(例:寿司、茶道、刀鍛冶)／所在地(市区まで)／ご担当者名／ご連絡先／受け入れ可能な曜日・時間帯、気になる点
+        </p>
+        <p className="partner-note">
+          <a href="mailto:hello@kamehame-japan.com?subject=%E4%BD%93%E9%A8%93%E3%83%91%E3%83%BC%E3%83%88%E3%83%8A%E3%83%BC%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">hello@kamehame-japan.com</a>
+          (件名「体験パートナーのご相談」)
+        </p>
       </section>
 
       <footer className="partner-footer">

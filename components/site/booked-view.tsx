@@ -18,6 +18,10 @@ interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: stri
 export function BookedView({ lang }: { lang: Lang }) {
   const K = t(lang).booked;
   const [amount, setAmount] = useState<string>();
+  // Rendered as "confirmed" only once a checkout session id is seen in the
+  // browser. Without one (a crawler, a shared link, a typed URL) the page
+  // explains what it is instead of announcing a payment that did not happen.
+  const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -40,6 +44,9 @@ export function BookedView({ lang }: { lang: Lang }) {
 
     let cancelled = false;
     (async () => {
+      // A well-formed session id is enough to show the confirmation; the
+      // lookup below only adds the amount and reports the conversion.
+      setConfirmed(true);
       let data: Lookup = { ok: false };
       try { data = (await (await fetch(`/api/booking?session_id=${encodeURIComponent(id)}${acceptedExplicitly() ? "&email=1" : ""}`)).json()) as Lookup; } catch { /* offline */ }
       if (cancelled) return;
@@ -59,6 +66,20 @@ export function BookedView({ lang }: { lang: Lang }) {
     })();
     return () => { cancelled = true; };
   }, [lang]);
+
+  if (!confirmed) {
+    return (
+      <div className="thanks">
+        <div className="thanks-head">
+          <h1>{K.noSessionH}</h1>
+          <p>{K.noSession(CONTACT_EMAIL)}</p>
+        </div>
+        <div className="thanks-actions">
+          <Link className="thanks-btn primary" href={`/${lang}/experiences/`}>{K.browse} <ArrowRight size={16} /></Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="thanks">

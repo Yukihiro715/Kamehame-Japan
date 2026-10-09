@@ -45,6 +45,20 @@ function withSecurityHeaders(res: Response): Response {
   return out;
 }
 
+// Served from the Worker so it never hits the app router's trailing-slash
+// redirect. Expires must stay within a year of the deploy date (RFC 9116).
+const SECURITY_TXT = [
+  "Contact: mailto:hello@kamehame-japan.com",
+  "Expires: 2027-10-01T00:00:00.000Z",
+  "Preferred-Languages: en, ja",
+  "Canonical: https://kamehame-japan.com/.well-known/security.txt",
+  "",
+].join("\n");
+
+// Confirmation pages reached from a Stripe payment link or the enquiry form.
+// They already carry a noindex meta tag; the header covers non-HTML readers.
+const PRIVATE_PAGE = /^\/(en|es|ja|fr|zh-tw)\/(booked|thanks)\/?$/;
+
 const HTML_END = "</body></html>";
 
 /**
@@ -107,6 +121,12 @@ const worker = {
       return withSecurityHeaders(new Response(null, { status: 301, headers: { location: url.toString() } }));
     }
 
+    if (url.pathname === "/.well-known/security.txt" || url.pathname === "/security.txt") {
+      return withSecurityHeaders(new Response(SECURITY_TXT, {
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=86400" },
+      }));
+    }
+
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       const res = await handleImageOptimization(request, {
@@ -120,7 +140,9 @@ const worker = {
     }
 
     const res = await handler.fetch(request, env, ctx);
-    return withSecurityHeaders(closeDocumentLast(res));
+    const out = withSecurityHeaders(closeDocumentLast(res));
+    if (PRIVATE_PAGE.test(url.pathname)) out.headers.set("x-robots-tag", "noindex, nofollow");
+    return out;
   },
 };
 

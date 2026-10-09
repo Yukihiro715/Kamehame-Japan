@@ -48,6 +48,19 @@ test("closes the document after the last inline script", async () => {
   assert.ok(html.includes("__VINEXT_RSC_DONE__"), "RSC payload is still delivered");
 });
 
+test("serves security.txt and marks confirmation pages noindex", async () => {
+  const txt = await render("/.well-known/security.txt");
+  assert.equal(txt.status, 200);
+  assert.match(txt.headers.get("content-type") ?? "", /^text\/plain/);
+  assert.match(await txt.text(), /^Contact: mailto:hello@kamehame-japan\.com$/m);
+
+  const booked = await render("/en/booked/");
+  assert.equal(booked.status, 200);
+  assert.equal(booked.headers.get("x-robots-tag"), "noindex, nofollow");
+  const home = await render("/");
+  assert.equal(home.headers.get("x-robots-tag"), null);
+});
+
 test("sends baseline security headers", async () => {
   const response = await render();
 

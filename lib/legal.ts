@@ -23,7 +23,7 @@ export interface TermsCopy {
   sections: { heading: string; body: string[] }[];
 }
 
-export const LEGAL_UPDATED = "2026-10-08";
+export const LEGAL_UPDATED = "2026-10-09";
 
 const OPERATOR = { ja: "Prosent Inc.", en: "Prosent Inc." };
 const ADDRESS_JA = "〒104-0054 東京都中央区勝どき1-3-1 43F";
@@ -48,7 +48,7 @@ const LEGAL_JA: LegalCopy = {
     ["運営会社サイト", OPERATOR_SITE],
     ["販売価格", "各体験ページに表示する金額(消費税・サービス料込み、日本円)。人数・時期により異なります。"],
     ["商品代金以外に必要な料金", "銀行振込の場合の振込手数料、およびインターネット接続にかかる通信料はお客様のご負担です。上位プラン(三味線の生演奏、出演者2名など)の料金は各体験ページに記載しています。"],
-    ["お支払方法", "クレジットカード、または銀行振込"],
+    ["お支払方法", "クレジットカード(メールでご案内するStripeの決済ページ book.stripe.com でのお支払い。カード情報を当サイトやメールでお尋ねすることはありません)、または銀行振込"],
     ["お支払時期", "空き状況のご案内に記載の期限内に、ご案内の決済リンクからお支払いください。お支払いをもって条件に同意いただいたものとし、予約が確定します。期限までにお支払いが確認できない場合、お申込みは失効し、費用は発生しません。"],
     ["役務の提供時期", "ご予約確定時に定めた開催日時に、各体験ページ記載の会場にて提供します。"],
     ["申込みの有効期限", "空き状況のお問い合わせは予約の成立ではありません。当社は24時間以内に空き状況・料金・条件をご案内し、ご案内に記載の期限内にお支払いいただいた時点で予約が確定します。芸妓・舞妓など出演者の手配を伴う体験では、予約確定後に受け入れ先が正式な手配を行います(遅くとも開催14日前まで)。"],
@@ -73,7 +73,7 @@ const LEGAL_EN: LegalCopy = {
     ["Operator's website", OPERATOR_SITE],
     ["Prices", "As shown on each experience page, in Japanese yen, including consumption tax and service charge. Prices vary by party size and season."],
     ["Costs beyond the price", "Bank transfer fees and your own internet connection costs. Plan upgrades (live shamisen, a second host) are priced on each experience page."],
-    ["Payment methods", "Credit card or bank transfer."],
+    ["Payment methods", "Credit card, paid on a Stripe-hosted payment page (book.stripe.com) that we send by email — we never ask for card details on this site or by email — or bank transfer."],
     ["When to pay", "Within the time stated in our availability reply, through the payment link in that reply. Paying is how you accept the conditions and confirm the booking. If payment has not arrived by then, the request lapses and nothing is charged."],
     ["When the service is provided", "At the date and time fixed when the booking was confirmed, at the venue described on the experience page."],
     ["When a booking exists", "An availability request is not a booking. We reply within 24 hours with whether the date is free, the price and the conditions. A booking exists when you accept those conditions by paying through the link we send, within the time stated. Where a performer such as a geiko or maiko must be secured, the house does so after your booking; the formal request is placed no later than 14 days before the date."],

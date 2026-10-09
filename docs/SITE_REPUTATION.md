@@ -19,6 +19,14 @@ the verdicts came from heuristics that a brand-new domain triggers easily.
 Google Safe Browsing, Norton Safe Web and the served HTML (identical to the
 build) were clean. Fortinet showed "Detected" on URLVoid (1 of 36 engines).
 
+## Update 2026-10-09: five reputation feeds, not browser warnings
+
+The guest's screenshot showed SSLTrust's "Website Security Check", which replays VirusTotal's ~93 URL scanners. On 2026-10-05 it showed 3 positives; on 2026-10-09 it shows 5: Forcepoint ThreatSeeker (phishing), Fortinet (phishing), Sophos (malware), Webroot/OpenText BrightCloud (malicious), alphaMountain.ai (phishing). All five are stored, automated new-domain classifications in five independent databases; none is a report of actual phishing, and the live site holds no credential or card forms, malware, obfuscation or cloaking. They do not clear on their own (VirusTotal re-crawled the fixed site on 2026-10-08 and the five remained), so each vendor needs its own reclassification request. Full per-vendor steps, form fields and paste-ready English texts: `docs/REPUTATION_RECLASSIFICATION.md`.
+
+Do not run SSLTrust, VirusTotal, URLVoid or similar aggregate checkers again until all five requests are filed: every run resubmits the URL to ~93 engines and refreshes the stored verdicts.
+
+Site-side changes made 2026-10-09: `/.well-known/security.txt` served by the Worker; `X-Robots-Tag: noindex` on the booked and thanks pages; the booked page no longer announces a payment unless a Stripe checkout session id is present; the placeholder partner form became a contact block; the empty hidden widget mount was removed from experience pages; the legal notice states that card payments happen on a Stripe-hosted page.
+
 ## Manual checklist (owner actions)
 
 Done items get a date.
