@@ -215,7 +215,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             )}
           </div>
         </div>
-        <StickyRequestBar price={yen(minPrice)} condition={countOf(O.golfers, size.min)} label={ctaLabel} lang={lang} watchHero="#golf-options" watchTarget="#request-form" golf={O} />
+        <StickyRequestBar price={yen(minPrice)} condition={countOf(O.golfers, size.min)} label={ctaLabel} lang={lang} watchHero="#golf-options" watchTarget="#request" golf={O} />
       </BookingProvider>
 
       {moreInCity.length > 0 && (
