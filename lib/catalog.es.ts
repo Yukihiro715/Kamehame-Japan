@@ -219,7 +219,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Con cuánta antelación debemos reservar?", a: "Al menos 30 días antes si es posible: cuanto antes consultes, más opciones de campos y horas de salida. Las solicitudes se cierran a las 18:00, hora de Japón, tres días antes; a menos de siete días de la fecha solo podemos confirmar si aún se encuentra una hora de salida." },
     ],
     variantCopy: {
-      sub: "Tokio y monte Fuji · Traslados privados desde el hotel",
+      benefits: ["Traslados privados desde el hotel", "18 hoyos", "Guía de habla inglesa", "Green fees y palos de alquiler incluidos"],
       crumb: "Día de golf privado",
       photoNote: "Las fotos muestran campos de ejemplo. Tu campo se confirma antes del pago. Las vistas del monte Fuji dependen del campo y del tiempo.",
       options: {
@@ -227,6 +227,7 @@ export const experiencesEs: Experience[] = [
         from: "Desde", approx: "aprox.", perPerson: " / persona",
         total: "{total} en total · {n} golfistas", totalShort: "{total} en total", perPersonRef: "{price} / persona",
         customQuote: "Presupuesto a medida", customQuoteLine: "Campo concreto · {n} golfistas",
+        includes: "Incluye traslados privados, 18 hoyos, palos de alquiler, asistencia en inglés y comida.",
         note: "Paquete con campo recomendado. Campo, hora de salida y precio final confirmados antes del pago.",
         customNote: "Un campo concreto se presupuesta de forma individual. Desmárcalo en el formulario para volver a ver el precio del paquete.",
         ctaNote: "Consultar no requiere ningún pago.",

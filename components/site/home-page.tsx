@@ -7,7 +7,7 @@ import { articleDate, latestArticles } from "@/lib/articles";
 import { featuredReviews } from "@/lib/reviews";
 import { RatingSummary, Stars } from "@/components/site/reviews";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
-import { pricingFor, yen } from "@/lib/pricing";
+import { listPrice, pricingFor, yen } from "@/lib/pricing";
 import { t, type Lang } from "@/lib/i18n";
 
 const COPY = {
@@ -248,7 +248,9 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
   const D = T.detail;
   const pricing = pricingFor(exp, lang);
   const first = pricing.rows[0];
-  const perGroup = pricing.unit === "group";
+  const lp = listPrice(exp, lang);
+  // Group-priced products headline the group total; products sold by party size headline the per-person figure.
+  const perGroup = pricing.unit === "group" && !lp.note;
   const avail = exp.availability;
   return (
     <Link className="feature-card" href={`/${lang}/${exp.city}/${exp.slug}/`}>
@@ -271,9 +273,9 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
           {perGroup ? (
             <b><small>{D.priceHeadline(first.party)[0]}</small>{yen(first.total)}<small>{D.priceHeadline(first.party)[1]}</small></b>
           ) : (
-            <b><small>{T.from} </small>{exp.price}<small> {T.perPerson}</small></b>
+            <b><small>{T.from} </small>{lp.price}<small> {T.perPerson}</small></b>
           )}
-          <p>{exp.includedShort ?? D.priceTotalNote}{exp.taxIncluded && ` · ${D.taxIncluded}`}</p>
+          <p>{lp.note ? `${lp.note} · ` : ""}{exp.includedShort ?? D.priceTotalNote}{exp.taxIncluded && ` · ${D.taxIncluded}`}</p>
         </div>
         <span className="feature-cta">{cta} <ArrowRight size={15} /></span>
       </div>
@@ -432,7 +434,7 @@ export function HomePage({ lang }: { lang: Lang }) {
                   <p className="experience-city"><MapPin size={14} /> {cityTitle(item.city)} · {item.langTag ?? T.interpreterIncluded}</p>
                   <h3>{item.title}</h3>
                   <p>{item.tagline}</p>
-                  <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span>{T.from} <b>{item.price}</b> {item.priceUnit === "group" ? T.perGroupShort : T.perPerson}</span></div>
+                  <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span className="listing-price"><span>{T.from} <b>{listPrice(item, lang).price}</b> {listPrice(item, lang).unit === "group" ? T.perGroupShort : T.perPerson}</span>{listPrice(item, lang).note && <small>{listPrice(item, lang).note}</small>}</span></div>
                 </div>
               </Link>
             ))}

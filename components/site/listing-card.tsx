@@ -19,7 +19,10 @@ export function ListingCard({ item, lang = "en" }: { item: ListingItem; lang?: L
         <p className="listing-line">{item.line}</p>
         <div className="listing-meta">
           <span><Clock3 size={14} /> {item.meta}</span>
-          <span>{T.from} <b>{item.price}</b>{item.kind === "experience" ? ` ${item.unit === "group" ? T.perGroupShort : T.perPerson}` : ""}</span>
+          <span className={item.priceNote ? "listing-price has-note" : "listing-price"}>
+            <span>{T.from} <b>{item.price}</b>{item.kind === "experience" ? ` ${item.unit === "group" ? T.perGroupShort : T.perPerson}` : ""}</span>
+            {item.priceNote && <small>{item.priceNote}</small>}
+          </span>
         </div>
       </div>
     </Link>

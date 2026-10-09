@@ -7,7 +7,7 @@
 // read the same whichever shape the catalog entry uses.
 
 import type { Experience, ExperienceVariant } from "@/lib/catalog";
-import type { Lang } from "@/lib/i18n";
+import { t, type Lang } from "@/lib/i18n";
 
 export interface PriceRow { party: number; total: number; perPerson: number }
 
@@ -219,3 +219,24 @@ export const approxPrice = (copy: { approx: string }, price: number, approximate
 /** "¥87,500 / person" / "1名あたり ¥87,500": the per-person figure as a reference beside a fixed total, never "From". */
 export const perPersonRefText = (copy: { approx: string; perPersonRef: string }, price: number, approximate: boolean) =>
   copy.perPersonRef.replace("{price}", approxPrice(copy, price, approximate));
+
+export interface ListPrice { price: string; unit: "person" | "group"; /** "Based on 4 golfers · ¥330,000 per group" */ note?: string; /** "4 golfers" — for tiles too small for the note */ party?: string }
+
+/** The price a listing card or tile shows. Products sold by area and party
+ *  size (golf) show the lowest per-person figure at the pre-selected party
+ *  size, with the party and the group total beside it, so the card and the
+ *  page open on the same numbers; everything else shows the catalog price. */
+export function listPrice(exp: Experience, lang: Lang): ListPrice {
+  const vc = exp.variantCopy;
+  if (exp.variants?.length && vc) {
+    const n = exp.partySize?.default ?? exp.partySize?.min ?? 2;
+    const totals = exp.variants.map((v) => tierTotal(v.tiers, n)).filter((x): x is number => x !== null);
+    if (totals.length) {
+      const total = Math.min(...totals);
+      const pp = perPersonOf(total, n);
+      const party = countOf(vc.options.golfers, n);
+      return { price: approxPrice(vc.options, pp.perPerson, pp.approximate), unit: "person", note: t(lang).listBasedOn(party, yen(total)), party };
+    }
+  }
+  return { price: exp.price, unit: exp.priceUnit ?? "person" };
+}

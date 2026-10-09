@@ -6,6 +6,7 @@ import {
   isLive, TOURS_PUBLISHED, type Experience, type Tour,
 } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
+import { listPrice } from "@/lib/pricing";
 
 export interface ListingItem {
   kind: "experience" | "tour";
@@ -22,6 +23,8 @@ export interface ListingItem {
   line: string;
   meta: string;
   price: string;
+  /** Under the price: the party size and group total the figure is based on. */
+  priceNote?: string;
 }
 
 export interface Faq { q: string; a: string }
@@ -274,12 +277,15 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
   const cityTitle = (citySlug: string) => cityBySlug(citySlug, lang)?.title ?? citySlug;
   const catBySlug = (c: string) => categories.find((x) => x.slug === c);
 
-  const expItem = (e: Experience): ListingItem => ({
-    kind: "experience", slug: e.slug, live: isLive(e), unit: e.priceUnit ?? "person", href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
-    tags: [catBySlug(e.category)?.tag ?? "", e.group.startsWith("Priva") || e.group.startsWith("Private") ? S.privateTag : S.smallGroupTag].filter(Boolean),
-    title: e.title, line: e.tagline,
-    meta: `${cityTitle(e.city)} · ${e.duration}`, price: e.price,
-  });
+  const expItem = (e: Experience): ListingItem => {
+    const lp = listPrice(e, lang);
+    return {
+      kind: "experience", slug: e.slug, live: isLive(e), unit: lp.unit, href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
+      tags: [catBySlug(e.category)?.tag ?? "", e.group.startsWith("Priva") || e.group.startsWith("Private") ? S.privateTag : S.smallGroupTag].filter(Boolean),
+      title: e.title, line: e.tagline,
+      meta: `${cityTitle(e.city)} · ${e.duration}`, price: lp.price, priceNote: lp.note,
+    };
+  };
   const tourItem = (tr: Tour): ListingItem => ({
     kind: "tour", slug: tr.slug, live: false, unit: "group", href: p(`/tours/${tr.slug}/`), img: tr.img, alt: tr.alt,
     tags: [S.tourTag, S.privateTag],

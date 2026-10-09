@@ -18,7 +18,7 @@ import { CancellationTable } from "@/components/site/cancellation-table";
 import { VariantDetail } from "@/components/site/variant-detail";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { pricingFor, yen, type PricingView } from "@/lib/pricing";
+import { pricingFor, yen, type PricingView, listPrice } from "@/lib/pricing";
 import {
   cancellationFor, catalogFor, cityBySlug, isLive, isPreview, previewsFor, SITE_ORIGIN,
   type Experience, type Tour,
@@ -525,7 +525,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
                 <img src={e.img} alt={e.alt} loading="lazy" />
                 <b>{e.title}</b>
-                <small>{e.duration} · {T.from} {e.price}</small>
+                <small>{e.duration} · {T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
               </Link>
             ))}
           </div>
@@ -606,7 +606,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
             <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
               <img src={e.img} alt={e.alt} loading="lazy" />
               <b>{e.title}</b>
-              <small>{e.duration} · {T.from} {e.price}</small>
+              <small>{e.duration} · {T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
             </Link>
           ))}
         </div>

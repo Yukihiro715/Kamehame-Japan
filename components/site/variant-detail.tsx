@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Clock3, Wine } from "lucide-react";
+import { Check, Clock3, Wine } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -12,7 +12,7 @@ import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
 import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { countOf, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
+import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
 import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
@@ -78,12 +78,15 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         {/* 1. Title block: a short H1 and one line, then straight to the photos */}
         <header className="xp-head vh-head">
           <h1>{exp.title}</h1>
-          <p className="vh-sub">{vc.sub}</p>
         </header>
 
         <div className="xp-cols vh-cols">
           <section className="xp-mv vh-mv" aria-label={D.gallery}>
-            <GolfGallery photos={photos} variants={variants} lang={lang} note={vc.photoNote} />
+            <GolfGallery photos={photos} variants={variants} lang={lang} />
+            <ul className="vh-benefits">
+              {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
+            </ul>
+            <p className="gg-note">{vc.photoNote}</p>
           </section>
 
           {/* 2. The one place to choose the party size and the area */}
@@ -226,7 +229,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
                 <img src={e.img} alt={e.alt} loading="lazy" />
                 <b>{e.title}</b>
-                <small>{e.duration} · {T.from} {e.price}</small>
+                <small>{e.duration} · {T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
               </Link>
             ))}
           </div>

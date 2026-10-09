@@ -17,8 +17,8 @@ const thumb = (img: string) => img.replace(/^\/images\//, "/images/thumbs/");
  *  chosen area's photo comes first and its other photos follow; the rest of
  *  the set stays viewable so both areas can be compared. No autoplay, and
  *  switching area never scrolls the page. */
-export function GolfGallery({ photos, variants, lang, note }: {
-  photos: GolfPhoto[]; variants: ExperienceVariant[]; lang: Lang; note?: string;
+export function GolfGallery({ photos, variants, lang }: {
+  photos: GolfPhoto[]; variants: ExperienceVariant[]; lang: Lang;
 }) {
   const b = useBooking();
   const chosen = variants.find((v) => v.id === b?.variant) ?? variants[0];
@@ -29,12 +29,12 @@ export function GolfGallery({ photos, variants, lang, note }: {
     return [...first, ...same, ...rest];
   }, [photos, chosen]);
   // Remount on an area switch: the track starts again at the new first photo.
-  return <GalleryView key={chosen.id} photos={ordered} variants={variants} lang={lang} note={note} />;
+  return <GalleryView key={chosen.id} photos={ordered} variants={variants} lang={lang} />;
 }
 
 type View = { mode: "sheet" } | { mode: "single"; index: number; fromSheet: boolean };
 
-function GalleryView({ photos, variants, lang, note }: { photos: GolfPhoto[]; variants: ExperienceVariant[]; lang: Lang; note?: string }) {
+function GalleryView({ photos, variants, lang }: { photos: GolfPhoto[]; variants: ExperienceVariant[]; lang: Lang }) {
   const D = t(lang).detail;
   const track = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
@@ -136,7 +136,6 @@ function GalleryView({ photos, variants, lang, note }: { photos: GolfPhoto[]; va
           ))}
         </div>
       )}
-      {note && <p className="gg-note">{note}</p>}
 
       {view?.mode === "sheet" && (
         <div className="photo-sheet" role="dialog" aria-modal="true" aria-label={D.allPhotosH(n)}>

@@ -247,6 +247,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .listing-meta { margin-top:auto; padding-top:16px; display:flex; justify-content:space-between; gap:10px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); }
 .listing-meta span { display:flex; align-items:center; gap:6px; }
 .listing-meta b { color:var(--ink); }
+.listing-meta .listing-price { display:grid; gap:2px; justify-items:end; text-align:right; }
+.listing-meta .listing-price > span { display:flex; align-items:center; gap:4px; }
+.listing-meta .listing-price small { font-size:10.5px; line-height:1.4; color:var(--muted); }
+.experience-meta .listing-price { display:grid; gap:2px; justify-items:end; text-align:right; }
+.experience-meta .listing-price > span { display:flex; align-items:center; gap:4px; }
+.experience-meta .listing-price small { font-size:10px; line-height:1.4; color:#aaa89e; }
 .collection-seo { display:grid; grid-template-columns:1.1fr .9fr; gap:60px; margin-top:80px; padding-top:50px; border-top:1px solid var(--border); }
 .collection-seo h2 { margin:0 0 16px; font-family:var(--font-display); font-weight:400; font-size:21px; letter-spacing:.04em; text-transform:uppercase; }
 .collection-seo p { margin:0; color:var(--muted); line-height:1.85; font-size:14px; }
@@ -1400,9 +1406,12 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
    them (under them on phones), a read-only summary in the form, the price
    table inside the FAQ. Everything else reuses the xp2 rules above.
    ========================================================================= */
-.xp-variant .xp-head { padding-bottom:16px; }
-.xp-variant .xp-head h1 { margin-bottom:8px; }
-.vh-sub { margin:0; font-size:15.5px; line-height:1.6; color:#4a463e; }
+.xp-variant .xp-head { padding-bottom:14px; }
+.xp-variant .xp-head h1 { margin-bottom:0; }
+.vh-benefits { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.vh-benefits li { display:inline-flex; align-items:center; gap:6px; border:1px solid #e6e1d6; border-radius:999px; background:var(--white); padding:7px 12px; font-size:12.5px; line-height:1.3; color:#3d3a34; }
+.vh-benefits svg { color:var(--kame); flex:none; }
+.vh-mv { display:grid; gap:12px; }
 /* columns: photos top-left, the panel on the right across both rows, the content under the photos */
 .vh-cols { grid-template-rows:auto auto; padding-top:0; }
 .vh-cols .xp-mv { grid-column:1; grid-row:1; max-width:none; padding:0; }
@@ -1443,7 +1452,9 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-size legend, .go-areas legend { padding:0; margin-bottom:4px; font-size:12px; letter-spacing:.04em; color:var(--muted); }
 .go-seg { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
 .go-seg.two { grid-template-columns:1fr 1fr; }
-.go-seg-opt { position:relative; display:grid; place-items:center; min-height:44px; padding:0 8px; border:1px solid #d9d3c7; border-radius:10px; background:var(--white); font-size:13.5px; font-weight:600; color:#4a463e; cursor:pointer; transition:border-color .15s, background .15s, color .15s, box-shadow .15s; }
+.go-seg-opt { position:relative; display:grid; place-items:center; align-content:center; justify-content:center; min-height:40px; padding:0 8px; border:1px solid #d9d3c7; border-radius:10px; background:var(--white); font-size:13.5px; font-weight:600; color:#4a463e; cursor:pointer; transition:border-color .15s, background .15s, color .15s, box-shadow .15s; }
+/* the card's generic label rule stacks content at the top; the pill centres it */
+.go-card .go-seg-opt, .golf-form .go-seg-opt { align-content:center; justify-content:center; gap:0; }
 /* the generic card and form rules colour every span; the pill label keeps its own */
 .go-card .go-seg-opt > span, .golf-form .go-seg-opt > span { display:inline-flex; align-items:center; gap:5px; font-size:inherit; letter-spacing:.01em; color:inherit; white-space:nowrap; }
 .go-seg-opt svg { color:var(--ink); flex:none; }
@@ -1467,7 +1478,8 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-card .go-price.quote small { font-size:11.5px; color:var(--muted); line-height:1.4; }
 .go-card .go-total { font-size:13px; font-weight:600; color:var(--ink); line-height:1.4; overflow-wrap:anywhere; }
 .go-total .nw { white-space:nowrap; }
-.go-note { margin:0; font-size:12.5px; line-height:1.6; color:#4a463e; }
+.go-includes { margin:0; font-size:13px; line-height:1.6; color:var(--ink); }
+.go-note { margin:-6px 0 0; font-size:12.5px; line-height:1.6; color:#4a463e; }
 .go-card .bk-cta { min-height:54px; }
 .go-cta-note { margin:-6px 0 0; display:flex; gap:6px; align-items:center; font-size:12px; color:#4a463e; }
 .go-cta-note svg { color:var(--kame); flex:none; }
@@ -1580,11 +1592,10 @@ body[data-kh-modal] .sticky-request { display:none; }
 @media(max-width:700px){
   .xp-variant .xp-head { padding:4px 20px 12px; }
   .xp-variant .xp-head h1 { font-size:clamp(30px,8vw,34px); line-height:1.12; }
-  .vh-sub { font-size:14.5px; }
   .vh-cols { padding:0; }
   .gg-frame { border-radius:0; }
   .gg-thumbs { padding:0 20px; scroll-padding:0 20px; }
-  .gg-note { padding:0 20px; }
+  .gg-note, .vh-benefits { padding-left:20px; padding-right:20px; }
   .vh-side { padding:0 20px; margin-bottom:24px; }
   .vh-cols .xp-main { padding:0 20px; }
   .go-rental-row { grid-template-columns:1fr 1fr; }

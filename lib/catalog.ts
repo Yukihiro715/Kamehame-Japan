@@ -68,8 +68,8 @@ export interface ExperienceVariant {
  *  Strings with {n}, {price} or {total} are templates (plain text so they can
  *  cross to client components). */
 export interface VariantPageCopy {
-  /** One line under the H1, e.g. "Tokyo & Mt. Fuji · Private hotel transfers". */
-  sub: string;
+  /** Benefit chips under the photos, e.g. "Private hotel transfers". */
+  benefits: string[];
   /** Breadcrumb tail, e.g. "Private Golf Day". */
   crumb: string;
   /** Note under the photos (example courses, views depend on the weather). */
@@ -91,6 +91,8 @@ export interface VariantPageCopy {
     customQuote: string;
     /** "Preferred course · {n} golfers" */
     customQuoteLine: string;
+    /** One line under the cards: what both packages include. */
+    includes: string;
     /** Under the cards: recommended-course package, confirmed before payment. */
     note: string;
     /** Replaces it while a specific course is requested in the form. */
@@ -580,7 +582,7 @@ export const experiences: Experience[] = [
       { q: "How far ahead should we book?", a: "At least 30 days ahead if you can — the earlier you enquire, the wider the choice of courses and tee times. Requests close at 6:00 pm JST three days before; within seven days of the date we can confirm only if a tee time can still be found." },
     ],
     variantCopy: {
-      sub: "Tokyo & Mt. Fuji · Private hotel transfers",
+      benefits: ["Private hotel transfers", "18-hole golf", "English-speaking guide", "Green fees & rental clubs included"],
       crumb: "Private Golf Day",
       photoNote: "Example courses shown. Your course is confirmed before payment. Mt. Fuji views depend on the course and weather.",
       options: {
@@ -588,6 +590,7 @@ export const experiences: Experience[] = [
         from: "From", approx: "approx.", perPerson: " / person",
         total: "{total} total · {n} golfers", totalShort: "{total} total", perPersonRef: "{price} / person",
         customQuote: "Custom quote", customQuoteLine: "Specific course · {n} golfers",
+        includes: "Includes private transfers, 18 holes, rental clubs, English-speaking assistance and lunch.",
         note: "Recommended-course package. Course, tee time and final price confirmed before payment.",
         customNote: "A specific course is quoted individually. Untick it in the form to see the package price again.",
         ctaNote: "No payment required to enquire.",

@@ -78,6 +78,12 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.ok(html.includes('class="vh-timings" open'), "sample timings start open");
   assert.ok(html.includes("6:00 pm JST") && !/18:00 Japan time/.test(html), "times read as 12-hour JST");
   assert.ok(html.includes("/images/golf-fuji-aerial.jpg") && !/golf-flag-fuji|golf-swing|golf-fairway/.test(html), "new photos only");
+  assert.ok(text.includes("Includes private transfers, 18 holes, rental clubs, English-speaking assistance and lunch."), "shared includes line");
+  assert.ok(text.includes("Private hotel transfers") && !text.includes("Tokyo & Mt. Fuji · Private hotel transfers"), "benefit chips, no subtitle");
+  // the listing card opens on the same numbers as the page
+  const list = (await (await render("/en/golf/")).text()).replace(/<[^>]+>/g, "");
+  assert.ok(list.includes("¥82,500") && list.includes("Based on 4 golfers · ¥330,000 per group"), "listing card shows the per-person figure with its party size and group total");
+  assert.doesNotMatch(list, /¥180,000|¥250,000 \/ group/, "no old or bare group price on the listing");
   // one place to choose, one form, no second-choice date, no quote-by-party-size
   assert.equal(html.split('id="golf-options"').length - 1, 1, "exactly one options panel");
   assert.equal(html.split('id="request-form"').length - 1, 1, "exactly one request form anchor");

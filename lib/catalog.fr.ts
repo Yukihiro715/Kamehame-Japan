@@ -218,7 +218,7 @@ export const experiencesFr: Experience[] = [
       { q: "Combien de temps à l'avance réserver ?", a: "Au moins 30 jours à l'avance si possible : plus tôt vous nous contactez, plus le choix de parcours et d'heures de départ est large. Les demandes sont closes à 18 h, heure du Japon, trois jours avant ; à moins de sept jours de la date, nous ne pouvons confirmer que si une heure de départ reste disponible." },
     ],
     variantCopy: {
-      sub: "Tokyo et mont Fuji · Transferts privés depuis l'hôtel",
+      benefits: ["Transferts privés depuis l'hôtel", "18 trous", "Guide anglophone", "Green fees et clubs de location inclus"],
       crumb: "Journée de golf privée",
       photoNote: "Parcours donnés en exemple. Votre parcours est confirmé avant le paiement. La vue sur le mont Fuji dépend du parcours et de la météo.",
       options: {
@@ -226,6 +226,7 @@ export const experiencesFr: Experience[] = [
         from: "Dès", approx: "env.", perPerson: " / pers.",
         total: "{total} au total · {n} golfeurs", totalShort: "{total} au total", perPersonRef: "{price} / pers.",
         customQuote: "Devis sur mesure", customQuoteLine: "Parcours précis · {n} golfeurs",
+        includes: "Comprend les transferts privés, 18 trous, les clubs de location, l'accompagnement en anglais et le déjeuner.",
         note: "Formule avec parcours recommandé. Parcours, heure de départ et prix définitif confirmés avant le paiement.",
         customNote: "Un parcours précis fait l'objet d'un devis individuel. Décochez-le dans le formulaire pour revoir le prix du forfait.",
         ctaNote: "Aucun paiement n'est demandé pour une demande.",

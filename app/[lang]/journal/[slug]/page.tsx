@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { articleBySlug, articleDate, articlesFor } from "@/lib/articles";
 import { catalogFor, SITE_ORIGIN } from "@/lib/catalog";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
+import { listPrice } from "@/lib/pricing";
 import { absolute, socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string; slug: string }> }
@@ -97,7 +98,7 @@ export default async function ArticlePage({ params }: Props) {
                     <span className="article-cta-copy">
                       <b>{e.title}</b>
                       <small>{e.duration} · {e.area}</small>
-                      <em>{T.from} {e.price}</em>
+                      <em>{T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</em>
                     </span>
                     <ArrowRight className="article-cta-arrow" size={20} />
                   </Link>

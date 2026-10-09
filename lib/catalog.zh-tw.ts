@@ -218,7 +218,7 @@ export const experiencesZh: Experience[] = [
       { q: "應該多早預約？", a: "可以的話請至少提前 30 天：越早詢問，球場與開球時段的選擇越多。詢問於打球日 3 天前的日本時間 18:00 截止；距離打球日不到 7 天時，只有在仍能取得開球時段的情況下才能確認。" },
     ],
     variantCopy: {
-      sub: "東京近郊・富士山地區／含飯店私人接送",
+      benefits: ["私人飯店接送", "18 洞", "英語導遊", "含果嶺費與租借球桿"],
       crumb: "私人高爾夫日",
       photoNote: "照片為球場範例。你的球場會在付款前確認。富士山景觀視球場與天氣而定。",
       options: {
@@ -226,6 +226,7 @@ export const experiencesZh: Experience[] = [
         from: "每位", approx: "約", perPerson: "", fromSuffix: " 起",
         total: "{n} 位參加／每組 {total}", totalShort: "每組 {total}", perPersonRef: "每位 {price}",
         customQuote: "指定球場，個別報價", customQuoteLine: "指定球場 · {n} 位球友",
+        includes: "含私人接送、18 洞、租借球桿、英語協助與午餐。",
         note: "推薦球場方案。球場、開球時段與最終價格於付款前確認。",
         customNote: "指定球場將個別報價。取消表單中的勾選即可恢復顯示方案價格。",
         ctaNote: "詢問無需付款。",
