@@ -3,6 +3,8 @@ import { acknowledgement } from "@/lib/mail-copy";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
+import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type GolfCourseMode } from "@/lib/golf-prices";
+import { yen } from "@/lib/pricing";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -45,18 +47,19 @@ function bodyFor(e: Enquiry): string {
     e.company && `Company:  ${e.company}`,
     e.country && `Country:  ${e.country}`,
     e.plan && `Plan:     ${e.plan}`,
-    e.area && `Area:     ${e.area}`,
-    e.coursePref && `Course:   ${e.coursePref}${e.course ? ` — ${e.course}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}`,
+    e.area && `Area:     ${e.area}${e.areaId ? ` (${e.areaId})` : ""}`,
+    e.courseMode && `Course:   ${e.courseMode === "specific" ? "specific course requested — custom quote" : "our recommended course (package price)"}${e.course ? ` — ${e.course}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}`,
     e.dates && `Dates:    ${e.dates}`,
-    e.altDate && `Alt date: ${e.altDate}`,
     e.party && `Party:    ${e.party}`,
-    e.handicap && `Level:    ${e.handicap}`,
-    e.rental && `Rental:   ${e.rental}${e.handed ? ` — ${e.handed}` : ""}`,
+    e.level && `Level:    ${e.level}`,
+    e.rental && `Rental:   ${e.rental}`,
+    e.clubs && `Clubs:    ${e.clubs}`,
     e.pickup && `Pick-up:  ${e.pickup}`,
     e.whatsapp && `WhatsApp: ${e.whatsapp}`,
     e.interpreter && `Interp.:  ${e.interpreter}`,
     e.addons && `Extras:   ${e.addons}`,
     e.estimate && `Estimate: ${e.estimate}`,
+    e.priceNote && `Price:    ${e.priceNote}`,
     `Language: ${e.lang}`,
     "",
     e.message,
@@ -106,8 +109,8 @@ async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void>
 }
 
 const MAX = {
-  name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80, plan: 160, addons: 200, estimate: 160, interpreter: 40,
-  area: 120, coursePref: 80, course: 160, courseUrl: 200, altDate: 40, handicap: 160, rental: 40, handed: 120, pickup: 200, whatsapp: 60,
+  name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80, plan: 160, addons: 300, estimate: 160, interpreter: 40,
+  area: 120, course: 160, courseUrl: 200, level: 200, rental: 400, clubs: 200, pickup: 300, whatsapp: 60,
 };
 
 function clean(v: unknown, max: number): string {
@@ -121,29 +124,51 @@ function parse(body: Record<string, unknown>): Enquiry | null {
   // The message keeps its line breaks; everything else is single-line.
   const message = typeof body.message === "string" ? body.message.trim().slice(0, MAX.message) : "";
   const area = clean(body.area, MAX.area) || undefined;
-  // The two-plan request carries its substance in its own fields; its notes are optional.
+  // The golf request carries its substance in its own fields; its notes are optional.
   if (!name || !email || (!message && !area)) return null;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
+  const party = clean(body.party, MAX.party) || undefined;
+
+  // The golf page: the choice is validated against the price master and the
+  // reference price is read from it here — what the browser sends is the
+  // area, the party size and the course mode, never an amount.
+  let golf: Pick<Enquiry, "areaId" | "courseMode" | "estimate" | "priceNote"> = {};
+  if (area || body.area_id !== undefined) {
+    const areaId = body.area_id;
+    const golfers = Number(party);
+    const mode: GolfCourseMode = body.course_mode === "specific" ? "specific" : "recommended";
+    if (!isGolfArea(areaId) || !isGolfGolfers(golfers)) return null;
+    const price = golfPackagePrice(areaId, golfers, mode);
+    golf = {
+      areaId, courseMode: mode,
+      estimate: price ? yen(price.groupTotal) : undefined,
+      priceNote: price
+        ? `${yen(price.groupTotal)} package for ${golfers} golfers, ${areaId}, recommended course${price.approximate ? ` (approx. ${yen(price.perPersonDisplay)} per golfer, rounded)` : ` (${yen(price.perPersonDisplay)} per golfer)`} — price list ${GOLF_PRICE_VERSION}; extras separate; the final quote is confirmed before payment`
+        : `custom quote — a specific course was requested (${golfers} golfers, ${areaId}); no package price applies — price list ${GOLF_PRICE_VERSION}`,
+    };
+  }
   return {
     kind, name, email, message,
     company: clean(body.company, MAX.company) || undefined,
     country: clean(body.country, MAX.country) || undefined,
     dates: clean(body.dates, MAX.dates) || undefined,
-    party: clean(body.party, MAX.party) || undefined,
+    party,
     plan: clean(body.plan, MAX.plan) || undefined,
     addons: clean(body.addons, MAX.addons) || undefined,
-    estimate: clean(body.estimate, MAX.estimate) || undefined,
+    // Other pages send their on-page estimate; the golf page's comes from the master above.
+    estimate: golf.areaId ? golf.estimate : clean(body.estimate, MAX.estimate) || undefined,
     interpreter: clean(body.interpreter, MAX.interpreter) || undefined,
     area,
-    coursePref: clean(body.course_pref, MAX.coursePref) || undefined,
-    course: clean(body.course, MAX.course) || undefined,
-    courseUrl: clean(body.course_url, MAX.courseUrl) || undefined,
-    altDate: clean(body.alt_date, MAX.altDate) || undefined,
-    handicap: clean(body.handicap, MAX.handicap) || undefined,
+    areaId: golf.areaId,
+    courseMode: golf.courseMode,
+    course: golf.courseMode === "specific" ? clean(body.course, MAX.course) || undefined : undefined,
+    courseUrl: golf.courseMode === "specific" ? clean(body.course_url, MAX.courseUrl) || undefined : undefined,
+    level: clean(body.level, MAX.level) || undefined,
     rental: clean(body.rental, MAX.rental) || undefined,
-    handed: clean(body.handed, MAX.handed) || undefined,
+    clubs: clean(body.clubs, MAX.clubs) || undefined,
     pickup: clean(body.pickup, MAX.pickup) || undefined,
     whatsapp: clean(body.whatsapp, MAX.whatsapp) || undefined,
+    priceNote: golf.priceNote,
     lang: clean(body.lang, 5) || "en",
     experience: clean(body.experience, MAX.experience) || undefined,
     website: clean(body.website, 200) || undefined,

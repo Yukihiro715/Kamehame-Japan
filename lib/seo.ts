@@ -82,8 +82,9 @@ export function withAlternates(meta: Metadata, languages: Record<string, string>
  *  only emitted from reviews written through our own booking flow: reviews
  *  the host venue or a partner collected are shown on the page with their
  *  provenance but are not ours to declare to search engines. */
-export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string) {
+export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string, highPrice?: number) {
   const agg = slug && REVIEWS_PUBLISHED ? ownAggregateFor(slug) : null;
+  const low = price.replace(/[^\d]/g, "");
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -91,7 +92,10 @@ export function productJsonLd(title: string, description: string, img: string, u
     description,
     image: `${SITE_ORIGIN}${img}`,
     url: `${SITE_ORIGIN}${url}`,
-    offers: { "@type": "Offer", priceCurrency: "JPY", price: price.replace(/[^\d]/g, ""), availability: "https://schema.org/PreOrder" },
+    // A range (the golf packages by area and party size) or a single lowest price.
+    offers: highPrice
+      ? { "@type": "AggregateOffer", priceCurrency: "JPY", lowPrice: low, highPrice: String(highPrice), availability: "https://schema.org/PreOrder" }
+      : { "@type": "Offer", priceCurrency: "JPY", price: low, availability: "https://schema.org/PreOrder" },
     ...(agg && { aggregateRating: { "@type": "AggregateRating", ratingValue: agg.average, reviewCount: agg.count, bestRating: 5, worstRating: 1 } }),
   };
 }

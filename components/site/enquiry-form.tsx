@@ -3,18 +3,15 @@
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { EnquiryKind } from "@/lib/contact";
-import type { ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 import { eventId, track } from "@/lib/analytics";
 import { acceptedExplicitly } from "@/lib/consent";
 import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
-import { countOf, fromPrice, yen } from "@/lib/pricing";
+import { yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
-import { VariantPicker } from "@/components/site/variant-picker";
-import { CoursePreference } from "@/components/site/course-preference";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
@@ -28,16 +25,12 @@ const fmtDate = (iso: string, lang: Lang) =>
  *
  *  `variant="card"` is the same form opened inside the booking card on wide
  *  screens: the card already shows the plan, date, time, guests and estimate,
- *  so it adds only what is still missing.
- *
- *  `golf` turns it into the stepped request of the two-plan page: area,
- *  course preference, dates, group, contact, with a summary line that
- *  matches what the mailbox receives. */
-export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "page", golf }: {
+ *  so it adds only what is still missing. (The golf page has its own form:
+ *  see golf-request-form.tsx.) */
+export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "page" }: {
   kind: EnquiryKind; lang: Lang; fallbackEmail: string;
   experience?: { slug: string; title: string };
   variant?: "page" | "card";
-  golf?: { variants: ExperienceVariant[]; copy: VariantPageCopy };
 }) {
   const T = t(lang);
   const F = T.form;
@@ -50,9 +43,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   const addOns = b?.pricing?.addOns ?? [];
   const card = variant === "card";
   const [needDate, setNeedDate] = useState(false);
-  const g = golf && b ? golf : undefined;
-  const G = g?.copy;
-  const [rental, setRental] = useState<"all" | "some" | "none">("all");
   const started = useRef(false);
 
   /** One "form started" event per page view, on the first focus inside the form. */
@@ -60,17 +50,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
     if (started.current || !b) return;
     started.current = true;
     track(`${x?.eventPrefix ?? "experience"}_booking_form_started`, { experience: experience?.slug });
-  };
-
-  /** What the two-plan form shows above its button, and what it sends: the
-   *  same words in both places. */
-  const golfSummary = () => {
-    if (!g || !b || !G) return null;
-    const v = b.variantView;
-    const pref = G.coursePreference.options.find((o) => o.id === b.coursePref);
-    const line = [v?.title, countOf(G.pricing.golfers, b.guestsNumber), pref?.title].filter(Boolean).join(" · ");
-    const price = b.customQuote || !v ? G.pricing.customQuote : fromPrice(G.pricing, v.price);
-    return { line, price, custom: b.customQuote || !v };
   };
 
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -85,7 +64,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       return;
     }
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
-    const summary = golfSummary();
     // The experience form asks for concrete dates and a head count; fold them
     // into the same two fields the generic form and the mailbox already use.
     if (b) {
@@ -97,16 +75,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
       if (x?.interpreter !== false) data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
       if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${[plans.length ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : "", D.estimateFor(b.guestsNumber)].filter(Boolean).join(", ")})`;
-      if (g && G && summary) {
-        const v = b.variantView;
-        data.area = v ? `${v.title} (${v.id})` : "";
-        data.course_pref = G.coursePreference.options.find((o) => o.id === b.coursePref)?.title ?? b.coursePref;
-        if (b.coursePref === "preferred") { data.course = b.courseName; data.course_url = b.courseUrl; }
-        if (b.altDate) data.alt_date = b.altDate;
-        // The mailbox sees exactly what the guest saw above the button.
-        data.estimate = `${summary.price} — ${summary.line}`;
-      }
-      delete data.date; delete data.guests; delete data.time; delete data["alt-date"];
+      delete data.date; delete data.guests; delete data.time;
     }
     setStatus("sending");
     try {
@@ -131,11 +100,6 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           experience: experience?.slug,
           experience_title: experience?.title,
           plan: b?.plan || undefined,
-          // Two-plan pages: which area and how the course is chosen, so the two
-          // areas can be counted separately.
-          area: g ? b?.variant : undefined,
-          course_preference: g ? b?.coursePref : undefined,
-          custom_quote: g ? !!b?.customQuote : undefined,
           language: lang,
           party_size: Number(data.party) || undefined,
           value: b?.estimate?.total,
@@ -147,12 +111,12 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         const sent: SentEnquiry = {
           kind: kind === "trade" ? "trade" : "guest",
           email: data.email?.trim() || undefined,
-          experienceTitle: g && b?.variantView ? `${experience?.title} — ${b.variantView.title}` : experience?.title,
+          experienceTitle: experience?.title,
           experienceUrl: experience ? window.location.pathname : undefined,
           // Readable dates for the page ("15 Oct 10:30"), not the raw ISO sent to the mailbox.
           dates: b ? (b.date ? `${fmtDate(b.date, lang)} ${b.time}` : undefined) : data.dates || undefined,
-          guests: b ? (G ? countOf(G.pricing.golfers, b.guestsNumber) : D.estimateFor(b.guestsNumber)) : undefined,
-          estimate: summary ? summary.price : b?.estimate ? yen(b.estimate.total) : undefined,
+          guests: b ? D.estimateFor(b.guestsNumber) : undefined,
+          estimate: b?.estimate ? yen(b.estimate.total) : undefined,
           event,
         };
         try {
@@ -182,116 +146,17 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
     );
   }
 
-  const summary = golfSummary();
-
   return (
     <form className={card ? "bk-form" : "enquiry-form"} method="post" action="/api/contact" onSubmit={submit} onFocusCapture={markStarted} noValidate={false} data-clarity-mask="True">
       {card && needDate && !b?.date && <p className="form-error" role="alert">{F.chooseDateFirst}</p>}
-      {experience && !card && !g && (
+      {experience && !card && (
         <p className="form-context">
           <span>{F.about}</span>{" "}
           <b>{experience.title}</b>
         </p>
       )}
 
-      {/* Two-plan request: five steps, then the summary the mailbox also gets */}
-      {g && G && b && x && (
-        <>
-          <fieldset className="form-step">
-            <legend>{G.form.steps.area}</legend>
-            <VariantPicker variants={g.variants} copy={G.pricing} name="form-variant" />
-          </fieldset>
-          <fieldset className="form-step">
-            <legend>{G.form.steps.course}</legend>
-            <CoursePreference copy={G.coursePreference} name="form-course" />
-          </fieldset>
-          <fieldset className="form-step">
-            <legend>{G.form.steps.dates}</legend>
-            <div className="form-row three">
-              <div className="field">
-                <label htmlFor="enq-date">{F.preferredDate}</label>
-                <DatePicker id="enq-date" name="date" lang={lang} min={b.minDate} required closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
-                {b.minDate && <small className="form-hint">{F.earliestDate(fmtDate(b.minDate, lang), x.leadDays, x.cutoffTime)}</small>}
-              </div>
-              <div className="field">
-                <label htmlFor="enq-alt-date">{G.form.altDate}</label>
-                <DatePicker id="enq-alt-date" name="alt-date" lang={lang} min={b.minDate} closed={(d) => !isBookable(d, x)} value={b.altDate} onChange={(d) => b.set({ altDate: d })} />
-              </div>
-              {x.startTimes?.length ? (
-                <label>
-                  <span>{x.timeLabel ?? F.startTime}</span>
-                  <select name="time" required value={b.time} onChange={(e) => b.set({ time: e.target.value })}>
-                    {timesFor(x, b.date).map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                </label>
-              ) : <span />}
-            </div>
-          </fieldset>
-          <fieldset className="form-step">
-            <legend>{G.form.steps.group}</legend>
-            <div className="form-row two">
-              <div className="field">
-                <label htmlFor="enq-guests">{G.form.golfers}</label>
-                <GuestStepper id="enq-guests" value={b.guests} min={x.minGuests} max={x.maxGuests ?? DEFAULT_MAX_GUESTS} onChange={(n) => b.set({ guests: n })} label={(n) => countOf(G.pricing.golfers, n)} decLabel={F.fewerGuests} incLabel={F.moreGuests} />
-              </div>
-              <label>
-                <span>{G.form.experience}</span>
-                <input name="handicap" type="text" maxLength={160} placeholder={G.form.experienceHint} />
-              </label>
-            </div>
-            <div className="form-row two">
-              <label>
-                <span>{G.form.rental}</span>
-                <select name="rental" value={G.form.rentalOpts[rental]} onChange={(e) => setRental((Object.keys(G.form.rentalOpts) as ("all" | "some" | "none")[]).find((k) => G.form.rentalOpts[k] === e.target.value) ?? "all")}>
-                  {(Object.keys(G.form.rentalOpts) as ("all" | "some" | "none")[]).map((k) => <option key={k} value={G.form.rentalOpts[k]}>{G.form.rentalOpts[k]}</option>)}
-                </select>
-              </label>
-              {rental !== "none" ? (
-                <label>
-                  <span>{G.form.handed}</span>
-                  <input name="handed" type="text" maxLength={120} placeholder={G.form.handedHint} />
-                </label>
-              ) : <span />}
-            </div>
-          </fieldset>
-          <fieldset className="form-step">
-            <legend>{G.form.steps.contact}</legend>
-            <div className="form-row two">
-              <label>
-                <span>{F.name}</span>
-                <input name="name" type="text" required autoComplete="name" maxLength={120} />
-              </label>
-              <label>
-                <span>{F.email}</span>
-                <EmailInput lang={lang} required />
-              </label>
-            </div>
-            <div className="form-row two">
-              <label>
-                <span>{G.form.pickup}</span>
-                <input name="pickup" type="text" required maxLength={200} placeholder={G.form.pickupHint} />
-              </label>
-              <label>
-                <span>{G.form.whatsapp}</span>
-                <input name="whatsapp" type="tel" maxLength={60} autoComplete="tel" />
-              </label>
-            </div>
-            <label className="form-row">
-              <span>{G.form.requests}</span>
-              <textarea name="message" rows={4} maxLength={4000} placeholder={G.form.requestsHint} />
-            </label>
-          </fieldset>
-          {summary && (
-            <div className="form-estimate" aria-live="polite">
-              <span>{G.form.summaryH}</span>
-              <b>{summary.price}</b>
-              <small>{summary.line}. {summary.custom ? G.pricing.customQuoteNote : D.estimateNote}</small>
-            </div>
-          )}
-        </>
-      )}
-
-      {b && x && !g && (
+      {b && x && (
         <>
           {plans.length > 0 && !card && (
             <label className="form-row">
@@ -353,18 +218,16 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         </>
       )}
 
-      {!g && (
-        <div className={card ? "form-row" : "form-row two"}>
-          <label>
-            <span>{F.name}</span>
-            <input name="name" type="text" required autoComplete="name" maxLength={120} />
-          </label>
-          <label>
-            <span>{F.email}</span>
-            <EmailInput lang={lang} required />
-          </label>
-        </div>
-      )}
+      <div className={card ? "form-row" : "form-row two"}>
+        <label>
+          <span>{F.name}</span>
+          <input name="name" type="text" required autoComplete="name" maxLength={120} />
+        </label>
+        <label>
+          <span>{F.email}</span>
+          <EmailInput lang={lang} required />
+        </label>
+      </div>
 
       {trade && (
         <div className="form-row two">
@@ -391,15 +254,13 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         </div>
       )}
 
-      {!g && (
-        <label className="form-row">
-          <span>{trade ? F.messageTrade : b ? (x?.notesLabel ?? F.notesXp) : F.message}</span>
-          <textarea
-            name="message" required={!b} rows={card ? 3 : b ? 4 : 7} maxLength={4000}
-            placeholder={trade ? F.messageTradeHint : b ? (x?.notesHint ?? F.notesXpHint) : F.messageHint}
-          />
-        </label>
-      )}
+      <label className="form-row">
+        <span>{trade ? F.messageTrade : b ? (x?.notesLabel ?? F.notesXp) : F.message}</span>
+        <textarea
+          name="message" required={!b} rows={card ? 3 : b ? 4 : 7} maxLength={4000}
+          placeholder={trade ? F.messageTradeHint : b ? (x?.notesHint ?? F.notesXpHint) : F.messageHint}
+        />
+      </label>
 
       {/* Honeypot: hidden from people, filled by bots. */}
       <label className="form-hp" aria-hidden="true">
@@ -409,11 +270,11 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
 
       <div className="enquiry-actions">
         <button type="submit" className={card ? "bk-cta" : "contact-cta"} disabled={status === "sending"}>
-          {status === "sending" ? F.sending : G ? G.form.cta : b ? x?.ctaLabel ?? F.sendRequest : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : b ? x?.ctaLabel ?? F.sendRequest : F.send} <ArrowRight size={15} />
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>
-      {b && <p className="form-after">{G ? G.form.note : F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
+      {b && <p className="form-after">{F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
 
       {status === "failed" && (
         <p className="form-error" role="alert">

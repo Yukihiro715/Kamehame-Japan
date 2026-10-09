@@ -26,18 +26,21 @@ export interface Enquiry {
   estimate?: string;
   /** Interpreter guide language chosen on an experience page (included). */
   interpreter?: string;
-  /** Two-plan pages (golf): the chosen area, how the course is chosen, and
-   *  the group and pick-up details the stepped form asks for. */
+  /** The golf page: the chosen area (its title, and its id for the price
+   *  master), how the course is chosen, and the group, rental and pick-up
+   *  details its form asks for. `priceNote` is the server's own reading of
+   *  the price master for this request (internal notification only). */
   area?: string;
-  coursePref?: string;
+  areaId?: string;
+  courseMode?: "recommended" | "specific";
   course?: string;
   courseUrl?: string;
-  altDate?: string;
-  handicap?: string;
+  level?: string;
   rental?: string;
-  handed?: string;
+  clubs?: string;
   pickup?: string;
   whatsapp?: string;
+  priceNote?: string;
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;

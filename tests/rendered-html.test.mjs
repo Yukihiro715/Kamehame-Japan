@@ -61,17 +61,60 @@ test("serves security.txt and marks confirmation pages noindex", async () => {
   assert.equal(home.headers.get("x-robots-tag"), null);
 });
 
-test("golf page sells two plans with the guide not playing", async () => {
+test("golf page: two areas, published prices for 2–4 golfers, one options panel, one form", async () => {
   const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
 
   assert.match(html, /<title>Private Golf Day from Tokyo \| Mt\. Fuji &amp; Tokyo Area \| KAMEHAME JAPAN<\/title>/);
-  assert.ok(html.includes("¥250,000") && html.includes("¥270,000"), "both plan prices are on the page");
+  assert.match(html, /<h1>Private Golf Day from Tokyo<\/h1>/);
+  // every package price from the master is on the page (the read-only table), the old ones are not
+  for (const price of ["¥250,000", "¥270,000", "¥290,000", "¥310,000", "¥330,000", "¥350,000"]) {
+    assert.ok(html.includes(price), `price table shows ${price}`);
+  }
   assert.doesNotMatch(html, /¥180,000|¥220,000|¥280,000/, "the old prices are gone");
-  assert.doesNotMatch(html, /plays the round|course caddie/i, "no guide-plays or caddie copy");
-  for (const field of ['name="form-variant"', 'name="form-course"', 'name="pickup"', 'name="handicap"', 'name="rental"', 'name="whatsapp"']) {
+  // the default selection: Mt. Fuji, two golfers, per person first, group total beside it
+  const text = html.replace(/<[^>]+>/g, "");
+  assert.ok(text.includes("¥135,000") && text.includes("¥270,000 total · 2 golfers"), "Mt. Fuji per-person and total for two");
+  assert.ok(text.includes("¥125,000") && text.includes("¥250,000 total · 2 golfers"), "Tokyo per-person and total for two");
+  // one place to choose, one form, no second-choice date, no quote-by-party-size
+  assert.equal(html.split('id="golf-options"').length - 1, 1, "exactly one options panel");
+  assert.equal(html.split('id="request-form"').length - 1, 1, "exactly one request form anchor");
+  assert.equal(html.split("<form ").length - 1, 1, "exactly one form");
+  assert.doesNotMatch(html, /alt-date|Alternative date|Second-choice/i, "no second-choice date");
+  assert.doesNotMatch(html, /quoted individually for this group size|3–4 golfers: Custom quote/i, "no quote by party size");
+  // the guide assists; nobody promises a playing guide or a caddie
+  assert.ok(html.includes("does not normally play"), "guide does not play");
+  assert.doesNotMatch(html, /caddie (is )?included|guide plays the round with you/i);
+  for (const field of ['name="golfers"', 'name="area"', 'name="specific-course"', 'name="pickup"', 'name="hotel-undecided"', 'name="level"', 'name="rental-1"', 'name="handed-1"', 'name="whatsapp"']) {
     assert.ok(html.includes(field), `request form has ${field}`);
   }
-  assert.ok(html.includes("Custom Quote"), "larger parties and preferred courses are quoted");
+  assert.ok(html.includes("Send Golf Day Request"), "the submit button has its own label");
+  assert.ok(html.includes("Check Availability"), "the page CTA is Check Availability");
+  assert.ok(html.includes("Custom quote"), "a specific course is quoted");
+  assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"250000"') && html.includes('"highPrice":"350000"'), "structured data carries the price range");
+});
+
+test("golf request: the server validates the choice against the price master", async () => {
+  const post = async (body) => {
+    const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+    workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}-${Math.random()}`);
+    const { default: worker } = await import(workerUrl.href);
+    const res = await worker.fetch(
+      new Request("http://localhost/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }),
+      { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
+      { waitUntil() {}, passThroughOnException() {} },
+    );
+    return { status: res.status, json: await res.json() };
+  };
+  const base = { kind: "guest", lang: "en", experience: "mt-fuji-golf-day", name: "Test", email: "test@example.com", area: "Tokyo Area Golf Day", dates: "2027-04-10 07:00", pickup: "Hotel X" };
+  // a valid choice gets past validation (delivery is unconfigured in the test runner, which is the next step)
+  const ok = await post({ ...base, area_id: "tokyo", party: "3", course_mode: "recommended" });
+  assert.equal(ok.status, 503);
+  assert.equal(ok.json.error, "unconfigured");
+  // an area or a party size outside the master is refused, whatever the browser claims
+  for (const bad of [{ area_id: "osaka", party: "2" }, { area_id: "fuji", party: "5" }, { area_id: "fuji", party: "1" }]) {
+    const r = await post({ ...base, ...bad });
+    assert.equal(r.status, 400, `rejects ${JSON.stringify(bad)}`);
+  }
 });
 
 test("sends baseline security headers", async () => {

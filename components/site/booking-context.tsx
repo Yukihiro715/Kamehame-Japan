@@ -7,8 +7,8 @@ import { track } from "@/lib/analytics";
 /** One alternative on a two-plan page, as the booking state needs it. */
 export interface BookingVariant {
   id: string; title: string; short: string;
-  /** Whole-group price for `basePartySize` guests; other party sizes are quoted. */
-  price: number; basePartySize: number;
+  /** Whole-group package prices by party size; other sizes are quoted. */
+  tiers: { party: number; total: number }[];
   defaultTime?: string;
 }
 
@@ -48,8 +48,6 @@ export interface BookingExperience {
   coursePreference?: boolean;
   /** Prefix of the choice events pushed for GTM, e.g. "golf" → golf_area_selected. */
   eventPrefix?: string;
-  /** Price words for the sticky bar and the summary line on two-plan pages. */
-  priceCopy?: { from: string; fromSuffix?: string; customQuote: string; /** Template with {n}. */ golfers: string };
 }
 
 export const DEFAULT_MAX_GUESTS = 15;
@@ -66,12 +64,10 @@ export interface BookingState {
   interpreter: string;
   /** Two-plan pages: the chosen variant id. */
   variant: string;
-  /** Golf: how the course is chosen — "recommended" (ours) or "preferred" (the guest's, quoted). */
+  /** Golf: how the course is chosen — "recommended" (ours, the package price) or "preferred" (the guest's, quoted). */
   coursePref: "recommended" | "preferred";
   courseName: string;
   courseUrl: string;
-  /** Second-choice date, when the form asks for one. */
-  altDate: string;
 }
 
 interface Booking extends BookingState {
@@ -134,13 +130,14 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
   const pickDefault = (preferred?: string) =>
     preferred && times?.includes(preferred) ? preferred : experience.defaultTime && times?.includes(experience.defaultTime) ? experience.defaultTime : times?.includes("18:00") ? "18:00" : times?.[0] ?? "";
   const firstPricing = pricings?.[initialVariant] ?? pricing;
+  const maxGuests = experience.maxGuests ?? DEFAULT_MAX_GUESTS;
   const [state, setState] = useState<BookingState>({
     plan: firstPricing?.plans?.find((p) => p.recommended)?.id ?? firstPricing?.plans?.[0]?.id ?? "",
     date: "", time: pickDefault(variantTime(initialVariant)),
     // Start at two (the usual party) even where one guest may book.
-    guests: String(Math.min(Math.max(experience.minGuests, 2), experience.maxGuests ?? 99)), addOns: [],
+    guests: String(Math.min(Math.max(experience.minGuests, 2), maxGuests)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
-    variant: initialVariant, coursePref: "recommended", courseName: "", courseUrl: "", altDate: "",
+    variant: initialVariant, coursePref: "recommended", courseName: "", courseUrl: "",
   });
   // Until the guest picks a time, switching variant moves to that variant's usual departure.
   const [timeTouched, setTimeTouched] = useState(false);
@@ -159,6 +156,26 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     setMinDate(jst.toISOString().slice(0, 10));
   }, [experience.leadDays, experience.cutoffTime]);
 
+  // Two-plan pages: an advert may pre-select the area and party size with
+  // ?area=tokyo&golfers=3. Read once after mount (the server render cannot
+  // see the query); anything unknown keeps the default, and this is not a
+  // choice the visitor made, so no choice event is pushed.
+  useEffect(() => {
+    if (!experience.variants?.length) return;
+    const q = new URLSearchParams(window.location.search);
+    const area = q.get("area");
+    const golfers = Number(q.get("golfers"));
+    const patch: Partial<BookingState> = {};
+    if (area && experience.variants.some((v) => v.id === area) && area !== initialVariant) {
+      patch.variant = area;
+      patch.time = pickDefault(variantTime(area));
+    }
+    if (Number.isInteger(golfers) && golfers >= experience.minGuests && golfers <= maxGuests) patch.guests = String(golfers);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the query string is only known in the browser
+    if (Object.keys(patch).length) setState((s) => ({ ...s, ...patch }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
+  }, []);
+
   const value = useMemo<Booking>(() => {
     const activePricing = pricings?.[state.variant] ?? pricing;
     const guestsNumber = Number(state.guests) || experience.minGuests;
@@ -169,9 +186,12 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     return {
       ...state,
       set: (patch) => {
-        // Choice events for GTM (area, course preference), once per actual change.
+        // Choice events for GTM (area, party size, course preference), once per actual change.
         if (patch.variant !== undefined && patch.variant !== state.variant) {
           track(`${prefix}_area_selected`, { area: patch.variant, experience: experience.slug });
+        }
+        if (experience.variants && patch.guests !== undefined && patch.guests !== state.guests) {
+          track(`${prefix}_group_size_selected`, { golfers: Number(patch.guests), area: state.variant, experience: experience.slug });
         }
         if (patch.coursePref !== undefined && patch.coursePref !== state.coursePref) {
           track(`${prefix}_course_preference_selected`, { preference: patch.coursePref, experience: experience.slug });

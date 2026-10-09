@@ -13,7 +13,7 @@ interface AckCopy {
   thanksTrade: string;
   notYet: string;
   echoH: string;
-  labels: { dates: string; party: string; company: string; country: string; message: string; plan: string; extras: string; estimate: string; interpreter: string; area: string; course: string; altDate: string; level: string; rental: string; pickup: string; whatsapp: string };
+  labels: { dates: string; party: string; company: string; country: string; message: string; plan: string; extras: string; estimate: string; interpreter: string; area: string; course: string; courseRecommended: string; courseSpecific: string; level: string; rental: string; clubs: string; pickup: string; whatsapp: string };
   addMore: string;
   sign: string;
 }
@@ -29,7 +29,7 @@ const COPY: Record<Lang, AckCopy> = {
     thanksTrade: "Thank you for your enquiry. A person will reply within 24 hours, Japan time, with our trade conditions.",
     notYet: "This is not a booking confirmation yet. We first check the date with the host, then send you the price and the conditions. Nothing is charged until you have seen them and chosen to go ahead.",
     echoH: "What you sent us:",
-    labels: { dates: "Dates", party: "Guests", company: "Company", country: "Country", message: "Notes", plan: "Plan", extras: "Extras", estimate: "Estimate", interpreter: "Interpreter", area: "Golf area", course: "Course", altDate: "Alternative date", level: "Golf experience", rental: "Rental clubs", pickup: "Pick-up", whatsapp: "WhatsApp" },
+    labels: { dates: "Dates", party: "Guests", company: "Company", country: "Country", message: "Notes", plan: "Plan", extras: "Extras", estimate: "Estimate", interpreter: "Interpreter", area: "Golf area", course: "Course", courseRecommended: "Our recommended course (package price)", courseSpecific: "Specific course requested (quoted individually)", level: "Golf experience", rental: "Rental clubs", clubs: "Club preferences", pickup: "Pick-up", whatsapp: "WhatsApp" },
     addMore: "If you want to add anything, just reply to this email.",
     sign: "KAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com\nhttps://kamehame-japan.com/",
   },
@@ -43,7 +43,7 @@ const COPY: Record<Lang, AckCopy> = {
     thanksTrade: "お問い合わせいただき、ありがとうございます。担当者が日本時間24時間以内に、取引条件をご案内します。",
     notYet: "この時点では予約は確定していません。まず受け入れ先に日程を確認し、料金と条件をお送りします。内容をご確認のうえお申込みいただくまで、お支払いは発生しません。",
     echoH: "お送りいただいた内容:",
-    labels: { dates: "日程", party: "人数", company: "会社名", country: "国", message: "備考", plan: "プラン", extras: "オプション", estimate: "概算", interpreter: "通訳", area: "エリア", course: "コース", altDate: "第2希望日", level: "ゴルフ経験", rental: "レンタルクラブ", pickup: "お迎え場所", whatsapp: "WhatsApp" },
+    labels: { dates: "日程", party: "人数", company: "会社名", country: "国", message: "備考", plan: "プラン", extras: "オプション", estimate: "概算", interpreter: "通訳", area: "エリア", course: "コース", courseRecommended: "おすすめコース(標準料金)", courseSpecific: "希望コース指定(個別見積もり)", level: "ゴルフ経験", rental: "レンタルクラブ", clubs: "クラブのご希望", pickup: "お迎え場所", whatsapp: "WhatsApp" },
     addMore: "追加でお伝えいただくことがあれば、このメールにそのまま返信してください。",
     sign: "KAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com\nhttps://kamehame-japan.com/",
   },
@@ -57,7 +57,7 @@ const COPY: Record<Lang, AckCopy> = {
     thanksTrade: "Gracias por su consulta. Una persona le responderá en un plazo de 24 horas, hora de Japón, con nuestras condiciones para agencias.",
     notYet: "Esto no es todavía una confirmación de reserva. Primero comprobamos la fecha con el anfitrión y después le enviamos el precio y las condiciones. No se cobra nada hasta que las haya visto y decida seguir adelante.",
     echoH: "Lo que nos ha enviado:",
-    labels: { dates: "Fechas", party: "Personas", company: "Empresa", country: "País", message: "Notas", plan: "Plan", extras: "Extras", estimate: "Estimación", interpreter: "Intérprete", area: "Zona de golf", course: "Campo", altDate: "Fecha alternativa", level: "Nivel de golf", rental: "Palos de alquiler", pickup: "Recogida", whatsapp: "WhatsApp" },
+    labels: { dates: "Fechas", party: "Personas", company: "Empresa", country: "País", message: "Notas", plan: "Plan", extras: "Extras", estimate: "Estimación", interpreter: "Intérprete", area: "Zona de golf", course: "Campo", courseRecommended: "Campo recomendado por nosotros (precio del paquete)", courseSpecific: "Campo concreto solicitado (presupuesto individual)", level: "Nivel de golf", rental: "Palos de alquiler", clubs: "Preferencias de palos", pickup: "Recogida", whatsapp: "WhatsApp" },
     addMore: "Si quiere añadir algo, responda simplemente a este correo.",
     sign: "KAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com\nhttps://kamehame-japan.com/",
   },
@@ -71,7 +71,7 @@ const COPY: Record<Lang, AckCopy> = {
     thanksTrade: "Merci pour votre demande. Une personne vous répondra sous 24 heures, heure du Japon, avec nos conditions professionnelles.",
     notYet: "Ce n'est pas encore une confirmation de réservation. Nous vérifions d'abord la date auprès de l'hôte, puis nous vous envoyons le prix et les conditions. Rien n'est débité avant que vous les ayez vus et décidé de poursuivre.",
     echoH: "Ce que vous nous avez envoyé :",
-    labels: { dates: "Dates", party: "Personnes", company: "Société", country: "Pays", message: "Remarques", plan: "Formule", extras: "Options", estimate: "Estimation", interpreter: "Interprète", area: "Zone de golf", course: "Parcours", altDate: "Date alternative", level: "Niveau de golf", rental: "Clubs de location", pickup: "Prise en charge", whatsapp: "WhatsApp" },
+    labels: { dates: "Dates", party: "Personnes", company: "Société", country: "Pays", message: "Remarques", plan: "Formule", extras: "Options", estimate: "Estimation", interpreter: "Interprète", area: "Zone de golf", course: "Parcours", courseRecommended: "Parcours recommandé par nos soins (prix du forfait)", courseSpecific: "Parcours précis demandé (devis individuel)", level: "Niveau de golf", rental: "Clubs de location", clubs: "Préférences de clubs", pickup: "Prise en charge", whatsapp: "WhatsApp" },
     addMore: "Pour ajouter quelque chose, répondez simplement à cet e-mail.",
     sign: "KAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com\nhttps://kamehame-japan.com/",
   },
@@ -85,7 +85,7 @@ const COPY: Record<Lang, AckCopy> = {
     thanksTrade: "感謝您的詢問。我們的同仁將於日本時間 24 小時內回覆並提供業者合作條件。",
     notYet: "目前尚未成立預約。我們會先向店家確認日期，再將價格與條件寄給您；在您確認並決定進行之前，不會產生任何費用。",
     echoH: "您送出的內容：",
-    labels: { dates: "日期", party: "人數", company: "公司", country: "國家", message: "備註", plan: "方案", extras: "加購", estimate: "預估", interpreter: "口譯", area: "高爾夫區域", course: "球場", altDate: "備選日期", level: "高爾夫經驗", rental: "租借球桿", pickup: "接送地點", whatsapp: "WhatsApp" },
+    labels: { dates: "日期", party: "人數", company: "公司", country: "國家", message: "備註", plan: "方案", extras: "加購", estimate: "預估", interpreter: "口譯", area: "高爾夫區域", course: "球場", courseRecommended: "我們推薦的球場(套裝價格)", courseSpecific: "指定球場(個別報價)", level: "高爾夫經驗", rental: "租借球桿", clubs: "球桿需求", pickup: "接送地點", whatsapp: "WhatsApp" },
     addMore: "若需補充，直接回覆此郵件即可。",
     sign: "KAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com\nhttps://kamehame-japan.com/",
   },
@@ -101,13 +101,13 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
     e.company && `${c.labels.company}: ${e.company}`,
     e.country && `${c.labels.country}: ${e.country}`,
     e.plan && `${c.labels.plan}: ${e.plan}`,
-    e.area && `${c.labels.area}: ${e.area.replace(/ \([a-z-]+\)$/, "")}`,
-    e.coursePref && `${c.labels.course}: ${e.coursePref}${e.course ? ` — ${e.course}` : ""}`,
+    e.area && `${c.labels.area}: ${e.area}`,
+    e.courseMode && `${c.labels.course}: ${e.courseMode === "specific" ? c.labels.courseSpecific : c.labels.courseRecommended}${e.course ? ` — ${e.course}` : ""}`,
     e.dates && `${c.labels.dates}: ${e.dates}`,
-    e.altDate && `${c.labels.altDate}: ${e.altDate}`,
     e.party && `${c.labels.party}: ${e.party}`,
-    e.handicap && `${c.labels.level}: ${e.handicap}`,
-    e.rental && `${c.labels.rental}: ${e.rental}${e.handed ? ` — ${e.handed}` : ""}`,
+    e.level && `${c.labels.level}: ${e.level}`,
+    e.rental && `${c.labels.rental}: ${e.rental}`,
+    e.clubs && `${c.labels.clubs}: ${e.clubs}`,
     e.pickup && `${c.labels.pickup}: ${e.pickup}`,
     e.whatsapp && `${c.labels.whatsapp}: ${e.whatsapp}`,
     e.interpreter && `${c.labels.interpreter}: ${e.interpreter}`,

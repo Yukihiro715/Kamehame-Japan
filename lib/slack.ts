@@ -20,7 +20,7 @@ export function slackMessage(e: Enquiry, experienceTitle: string | undefined, de
         ["体験", experienceTitle ?? e.experience ?? "一般のお問い合わせ"],
         ["プラン", e.plan],
         ["エリア", e.area],
-        ["コース", e.coursePref ? `${e.coursePref}${e.course ? ` — ${e.course}` : ""}` : undefined],
+        ["コース", e.courseMode ? (e.courseMode === "specific" ? `希望コース指定(個別見積もり)${e.course ? ` — ${e.course}` : ""}` : "おすすめコース(標準料金)") : undefined],
         ["日程", e.dates],
         ["人数", e.party],
         ["通訳", e.interpreter],

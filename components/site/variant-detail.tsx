@@ -1,43 +1,43 @@
 import Link from "next/link";
-import { ArrowRight, Brush, Camera, Car, Check, Clock3, Flag, Languages, MapPin, MessageCircle, Music, ShieldCheck, Sparkles, Users, Utensils, Wine } from "lucide-react";
+import { Clock3, Wine } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
-import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider, type BookingExperience } from "@/components/site/booking-context";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { ReviewList } from "@/components/site/review-list";
 import { ReviewSummaryPanel } from "@/components/site/reviews";
 import { CancellationTable } from "@/components/site/cancellation-table";
-import { VariantPicker } from "@/components/site/variant-picker";
-import { VariantGallery, VariantRail } from "@/components/site/variant-rail";
-import { CoursePreference } from "@/components/site/course-preference";
+import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
+import { GolfOptions } from "@/components/site/golf-options";
+import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { countOf, fromPrice, pricingForVariant, yen } from "@/lib/pricing";
+import { countOf, fromPrice, perPersonOf, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
 import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
 import { langHome, t, type Lang } from "@/lib/i18n";
 import { productJsonLd } from "@/lib/seo";
 
-const ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles, brush: Brush, car: Car, flag: Flag };
-
-/** The two-plan page (one URL, two products): first view with both prices,
- *  the plan cards, what is included, why us, how the day works, reviews, how
- *  the course is chosen, pricing, FAQ, terms and the stepped request form.
- *  Every plan card, the sticky bar and the form share one booking state. */
+/** The golf page (one URL, two areas, three party sizes). In order: a short
+ *  title block, the photos, the one options panel (beside the photos on wide
+ *  screens, under them on phones), what the day is and includes, reviews,
+ *  how the day goes, FAQ with the read-only price table, the single request
+ *  form, the terms. The panel, the sticky bar and the form share one booking
+ *  state, so the area and the party size are chosen once. */
 export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
   const D = T.detail;
   const vc = exp.variantCopy!;
   const variants = exp.variants!;
-  const H = vc.headings ?? {};
+  const H = vc.headings;
+  const O = vc.options;
   const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
-  const photos = [{ img: exp.img, alt: exp.alt }, ...exp.gallery];
+  const photos: GolfPhoto[] = [{ img: exp.img, alt: exp.alt, area: variants.find((v) => v.img === exp.img)?.id }, ...exp.gallery];
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
   const pricings = Object.fromEntries(variants.map((v) => [v.id, pricingForVariant(exp, v, lang)]));
@@ -47,22 +47,22 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const flow = exp.flow ?? D.flow;
   const faq = exp.faq ?? [];
   const cancellation = exp.cancellation ?? cancellationFor(lang);
-  const minPrice = Math.min(...variants.map((v) => v.price));
-  const baseParty = Math.max(...variants.map((v) => v.basePartySize));
+  const totals = variants.flatMap((v) => v.tiers.map((x) => x.total));
+  const minPrice = Math.min(...totals);
+  const maxPrice = Math.max(...totals);
   const addOns = exp.addOns ?? [];
   const ctaLabel = exp.cta?.label ?? D.requestCta;
+  const stop = lang === "ja" || lang === "zh-tw" ? "。" : ".";
 
   const booking: BookingExperience = {
     slug: exp.slug, title: exp.title,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
     startTimes: avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
-    minGuests: size.min, listedMax: baseParty, maxGuests: size.max,
+    minGuests: size.min, listedMax: size.max, maxGuests: size.max,
     interpreter: false,
-    notesLabel: exp.notesLabel, notesHint: exp.notesHint,
     ctaLabel, ctaNote: exp.cta?.note, timeLabel: exp.timeLabel,
-    variants: variants.map((v) => ({ id: v.id, title: v.title, short: v.short, price: v.price, basePartySize: v.basePartySize, defaultTime: v.defaultTime })),
+    variants: variants.map((v) => ({ id: v.id, title: v.title, short: v.short, tiers: v.tiers, defaultTime: v.defaultTime })),
     defaultVariant: exp.defaultVariant, coursePreference: true, eventPrefix: exp.category,
-    priceCopy: { from: vc.pricing.from, fromSuffix: vc.pricing.fromSuffix, customQuote: vc.pricing.customQuote, golfers: vc.pricing.golfers },
   };
 
   return (
@@ -71,82 +71,39 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       <Breadcrumbs trail={[
         { label: T.home, href: langHome(lang) },
         { label: city.title, href: cityBySlug(exp.city, lang) ? `/${lang}/${city.slug}/` : undefined },
-        { label: exp.title },
+        { label: vc.crumb },
       ]} />
 
       <BookingProvider experience={booking} pricings={pricings} lang={lang}>
-        {/* 1. First view: title, one line, benefits, then the photos (the big
-            tile follows the chosen plan) and, beside the page, the card with
-            the price, the plan switch and the button */}
+        {/* 1. Title block: a short H1 and one line, then straight to the photos */}
         <header className="xp-head vh-head">
           <h1>{exp.title}</h1>
-          <p className="vh-lede">{exp.tagline}</p>
-          <ul className="vh-benefits">
-            {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
-          </ul>
+          <p className="vh-sub">{vc.sub}</p>
         </header>
 
-        <section className="xp-mv" aria-label={D.gallery}>
-          <VariantGallery photos={photos} variants={variants} lang={lang} note={exp.galleryNote} />
-        </section>
+        <div className="xp-cols vh-cols">
+          <section className="xp-mv vh-mv" aria-label={D.gallery}>
+            <GolfGallery photos={photos} variants={variants} lang={lang} note={vc.photoNote} />
+          </section>
 
-        <div className="xp-cols">
-          <aside className="xp-side">
-            <VariantRail variants={variants} copy={vc.pricing} lang={lang} ctaLabel={ctaLabel} ctaNote={exp.cta?.note ?? D.noPaymentNow} />
+          {/* 2. The one place to choose the party size and the area */}
+          <aside className="xp-side vh-side">
+            <GolfOptions variants={variants} copy={O} lang={lang} ctaLabel={ctaLabel} parties={parties} />
           </aside>
+
           <div className="xp-main">
-            {/* 2. Choose */}
-            <section className="xp-section" id="choose">
-              <h2>{vc.variantsH}</h2>
-              <p className="xp-note">{vc.variantsLead}</p>
-              <VariantPicker variants={variants} copy={vc.pricing} detailed name="section-variant" />
+            {/* 3. What the day is, what it includes, what the guide does */}
+            <section className="xp-section" id="about">
+              <h2>{H.about}</h2>
+              {exp.overview?.[0] && <p className="xp-lede">{exp.overview[0]}</p>}
+              <div className="xp-included vh-included">
+                {exp.included && <div><h3>{H.included}</h3><ul className="check-list">{exp.included.map((i) => <li key={i}><span className="tick">✓</span><span>{i}</span></li>)}</ul></div>}
+                {exp.notIncluded && <div><h3>{D.notIncludedH}</h3><ul className="check-list muted">{exp.notIncluded.map((i) => <li key={i}><span className="tick">—</span><span>{i}</span></li>)}</ul></div>}
+              </div>
+              <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>
             </section>
 
-            {/* 3. Included */}
-            {(exp.included || exp.notIncluded) && (
-              <section className="xp-section" id="included">
-                <h2>{H.included ?? D.includedH}</h2>
-                <div className="xp-included">
-                  {exp.included && <div><ul className="check-list">{exp.included.map((i) => <li key={i}><span className="tick">✓</span><span>{i}</span></li>)}</ul></div>}
-                  {exp.notIncluded && <div><h3>{D.notIncludedH}</h3><ul className="check-list muted">{exp.notIncluded.map((i) => <li key={i}><span className="tick">—</span><span>{i}</span></li>)}</ul></div>}
-                </div>
-                {exp.overview?.[1] && <p className="xp-note vh-guide-note">{exp.overview[1]}</p>}
-              </section>
-            )}
-
-            {/* 4. Why */}
-            {exp.highlights && (
-              <section className="xp-section" id="why">
-                <h2>{H.highlights ?? D.highlightsH}</h2>
-                <div className="xp-highlights four">
-                  {exp.highlights.map((h) => {
-                    const Icon = ICONS[h.icon as keyof typeof ICONS] ?? Sparkles;
-                    return <div className="xp-highlight" key={h.title}><Icon size={20} /><b>{h.title}</b><p>{h.body}</p></div>;
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* 5. How the day works: booking steps, then the day itself */}
-            <section className="xp-section" id="how">
-              <h2>{H.flow ?? D.flowH}</h2>
-              <ol className="xp-flow">
-                {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
-              </ol>
-              {exp.schedule && (
-                <>
-                  <h3 className="xp-sub-h">{D.scheduleH}</h3>
-                  {exp.scheduleNote && <p className="xp-note xp-note-sample">{exp.scheduleNote}</p>}
-                  <ol className="xp-timeline">
-                    {exp.schedule.map((st) => (
-                      <li key={st.time + st.title}><span className="xp-time">{st.time}</span><div><b>{st.title}</b>{st.body && <p>{st.body}</p>}</div></li>
-                    ))}
-                  </ol>
-                </>
-              )}
-            </section>
-
-            {/* 6. Reviews */}
+            {/* 4. Reviews (as supplied; not rewritten for the new packages) */}
             {hasReviews && (
               <section className="xp-section" id="reviews">
                 <h2>{T.reviewsH}</h2>
@@ -155,77 +112,92 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </section>
             )}
 
-            {/* 7. How the course is chosen */}
-            <section className="xp-section" id="course">
-              <h2>{vc.coursePreference.heading}</h2>
-              {vc.coursePreference.lead && <p className="xp-note">{vc.coursePreference.lead}</p>}
-              <CoursePreference copy={vc.coursePreference} name="section-course" />
-              {exp.venue?.known && exp.venue.afterBooking && (
-                <div className="xp-venue-cols vh-known">
-                  <div><h3>{exp.venue.knownHeading ?? D.venueKnownH}</h3><ul className="know-list">{exp.venue.known.map((k) => <li key={k}>{k}</li>)}</ul></div>
-                  <div><h3>{exp.venue.afterHeading ?? D.venueAfterH}</h3><ul className="know-list">{exp.venue.afterBooking.map((k) => <li key={k}>{k}</li>)}</ul></div>
-                </div>
-              )}
-            </section>
-
-            {/* 8. Pricing & booking */}
-            <section className="xp-section" id="pricing">
-              <h2>{vc.pricing.heading}</h2>
-              <table className="xp-pricing vp-table">
-                <thead><tr><th>{vc.pricing.packageCol}</th>{parties.map((n) => <th key={n}>{countOf(vc.pricing.golfers, n)}</th>)}</tr></thead>
-                <tbody>
-                  {variants.map((v) => (
-                    <tr key={v.id}>
-                      <td><b>{v.title}</b></td>
-                      {parties.map((n) => n === v.basePartySize
-                        ? <td key={n} className="total" data-label={countOf(vc.pricing.golfers, n)}><span>{fromPrice(vc.pricing, v.price)}<small>{yen(Math.round(v.price / n))} {vc.pricing.perGolferNote}</small></span></td>
-                        : <td key={n} className="quote" data-label={countOf(vc.pricing.golfers, n)}><span>{vc.pricing.customQuote}</span></td>)}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <ul className="vp-notes">
-                {vc.pricing.notes.map((n) => <li key={n}>{n}</li>)}
-                {exp.taxIncluded && <li>{D.taxIncluded}{lang === "ja" || lang === "zh-tw" ? "。" : "."}</li>}
-              </ul>
-              {addOns.length > 0 && (
-                <>
-                  <h3 className="xp-sub-h">{D.addOnsH}</h3>
-                  <div className="vp-addons">
-                    {addOns.map((a) => (
-                      <div className="addon" key={a.id}>
-                        <Wine size={18} />
-                        <div><b>{a.name}</b><p>{a.description}</p><small>{a.price ? yen(a.price) : D.priceOnRequest}</small></div>
-                      </div>
+            {/* 5. The day, the sample timings folded away, then how booking works */}
+            <section className="xp-section" id="how">
+              <h2>{H.day}</h2>
+              <ol className="xp-flow vh-day">
+                {vc.day.steps.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
+              </ol>
+              <p className="xp-note">{vc.day.note}</p>
+              {exp.schedule && (
+                <details className="vh-timings">
+                  <summary>{vc.day.timingsH}</summary>
+                  {exp.scheduleNote && <p className="xp-note xp-note-sample">{exp.scheduleNote}</p>}
+                  <ol className="xp-timeline">
+                    {exp.schedule.map((st) => (
+                      <li key={st.time + st.title}><span className="xp-time">{st.time}</span><div><b>{st.title}</b>{st.body && <p>{st.body}</p>}</div></li>
                     ))}
-                  </div>
-                </>
+                  </ol>
+                </details>
               )}
-              <p className="vp-cta-row"><a className="bk-cta" href="#request-form">{ctaLabel} <ArrowRight size={16} /></a><span className="vh-note"><ShieldCheck size={14} /> {exp.cta?.note ?? D.noPaymentNow}</span></p>
+              <h3 className="xp-sub-h">{vc.day.bookingH}</h3>
+              <ol className="xp-flow">
+                {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
+              </ol>
             </section>
 
-            {/* 9. FAQ */}
-            {faq.length > 0 && (
-              <section className="xp-section" id="faq">
-                <h2>{H.faq ?? D.faqH}</h2>
-                <div className="faq-list">
-                  {faq.map((f) => <details key={f.q}><summary>{f.q}</summary><p>{f.a}</p></details>)}
-                </div>
-              </section>
-            )}
+            {/* 6. FAQ, with the read-only price table (no choices here) */}
+            <section className="xp-section" id="faq">
+              <h2>{H.faq}</h2>
+              <div className="faq-list">
+                {faq.map((f) => <details key={f.q}><summary>{f.q}</summary><p>{f.a}</p></details>)}
+                <details id="prices" className="vh-prices">
+                  <summary>{vc.prices.heading}</summary>
+                  <p className="xp-note">{vc.prices.only}</p>
+                  <table className="xp-pricing vp-table vh-table">
+                    <thead><tr><th>{vc.prices.golfersCol}</th>{variants.map((v) => <th key={v.id}>{v.short}</th>)}</tr></thead>
+                    <tbody>
+                      {parties.map((n) => (
+                        <tr key={n}>
+                          <td data-label={vc.prices.golfersCol}><b>{countOf(O.golfers, n)}</b></td>
+                          {variants.map((v) => {
+                            const total = tierTotal(v.tiers, n);
+                            if (total === null) return <td key={v.id} className="quote" data-label={v.short}><span>{O.customQuote}</span></td>;
+                            const pp = perPersonOf(total, n);
+                            return (
+                              <td key={v.id} className="total" data-label={v.short}>
+                                <span><b>{yen(total)}</b><small>{fromPrice(O, pp.perPerson, pp.approximate)}{O.perPerson}</small></span>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <ul className="vp-notes">
+                    <li>{vc.prices.approxNote}</li>
+                    {vc.prices.notes.map((x) => <li key={x}>{x}</li>)}
+                    {exp.taxIncluded && <li>{D.taxIncluded}{stop}</li>}
+                  </ul>
+                  {addOns.length > 0 && (
+                    <>
+                      <h3 className="xp-sub-h">{D.addOnsH}</h3>
+                      <div className="vp-addons">
+                        {addOns.map((a) => (
+                          <div className="addon" key={a.id}>
+                            <Wine size={18} />
+                            <div><b>{a.name}</b><p>{a.description}</p><small>{a.price ? yen(a.price) : D.priceOnRequest}</small></div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </details>
+              </div>
+            </section>
 
-            {/* 10. Terms */}
+            {/* 7. The one request form */}
+            <section className="xp-section xp-request" id="request">
+              <h2 id="request-form">{H.request}</h2>
+              <p className="xp-note">{exp.cta?.lead ?? D.requestLead}</p>
+              <GolfRequestForm lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} variants={variants} copy={vc} addOns={addOns} />
+            </section>
+
+            {/* 8. Terms, linked from under the form's button */}
             <section className="xp-section" id="terms">
-              <h2>{H.terms ?? D.cancellationH}</h2>
+              <h2>{H.terms}</h2>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
               {avail && <p className="vh-note vh-known"><Clock3 size={14} /> {D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</p>}
-            </section>
-
-            {/* 11. Request */}
-            <section className="xp-section xp-request" id="request">
-              <h2 id="request-form">{H.request ?? exp.cta?.heading ?? D.requestH}</h2>
-              <p className="xp-note">{exp.cta?.lead ?? D.requestLead}</p>
-              <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} golf={{ variants, copy: vc }} />
             </section>
 
             {reading.length > 0 && (
@@ -243,7 +215,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             )}
           </div>
         </div>
-        <StickyRequestBar price={fromPrice(vc.pricing, minPrice)} condition={countOf(vc.pricing.golfers, baseParty)} label={ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />
+        <StickyRequestBar price={yen(minPrice)} condition={countOf(O.golfers, size.min)} label={ctaLabel} lang={lang} watchHero="#golf-options" watchTarget="#request-form" golf={O} />
       </BookingProvider>
 
       {moreInCity.length > 0 && (
@@ -262,7 +234,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       )}
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, exp.price, exp.slug)),
+        __html: JSON.stringify(productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, exp.price, exp.slug, maxPrice)),
       }} />
       <SiteFooter lang={lang} />
     </main>

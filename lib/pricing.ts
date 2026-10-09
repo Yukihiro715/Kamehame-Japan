@@ -43,8 +43,14 @@ export const yen = (n: number) => `¥${yenFormat.format(n)}`;
 /** "{n} golfers" → "2 golfers" (two-plan page copy). */
 export const countOf = (template: string, n: number) => template.replace("{n}", String(n));
 
-/** "From ¥250,000" / "¥250,000〜", as the language puts it. */
-export const fromPrice = (copy: { from: string; fromSuffix?: string }, price: number) => `${copy.from ? `${copy.from} ` : ""}${yen(price)}${copy.fromSuffix ?? ""}`;
+/** "From ¥125,000" / "1名 ¥125,000〜", as the language puts it; `approx`
+ *  adds the rounded-figure word ("From approx. ¥96,667", "1名 約¥96,667〜"). */
+export const fromPrice = (copy: { from: string; approx?: string; fromSuffix?: string }, price: number, approx = false) => {
+  const lead = [copy.from, approx ? copy.approx : ""].filter(Boolean).join(" ");
+  // "約" sits against the figure ("1名 約¥96,667〜"); every other lead takes a space.
+  const gap = lead && !/[約约]$/.test(lead) ? " " : "";
+  return `${lead}${gap}${yen(price)}${copy.fromSuffix ?? ""}`;
+};
 
 /** "¥45,000" → 45000 */
 const parseYen = (s: string) => Number(s.replace(/[^\d]/g, "")) || 0;
@@ -193,8 +199,15 @@ export function quote(view: PricingView, planId: string, guests: number, iso?: s
   return { total: base + extraCount * extraEach, peak, base, extraCount, extraEach };
 }
 
-/** Price view of one alternative on a two-plan page: a one-row table for its
- *  base party. Any other party size is above the table and so quoted. */
+/** Price view of one alternative on a two-plan page: its package table by
+ *  party size. Any party size outside the table is quoted. */
 export function pricingForVariant(exp: Experience, v: ExperienceVariant, lang: Lang): PricingView {
-  return pricingFor({ ...exp, pricing: { ...(exp.pricing ?? {}), tiers: [{ party: v.basePartySize, total: v.price }], plans: undefined, highSeason: undefined } }, lang);
+  return pricingFor({ ...exp, pricing: { ...(exp.pricing ?? {}), tiers: v.tiers, plans: undefined, highSeason: undefined } }, lang);
 }
+
+/** Per-person figure of a group price, for display only: rounded, and
+ *  flagged as approximate when it does not divide exactly (three golfers). */
+export const perPersonOf = (total: number, n: number) => ({ perPerson: Math.round(total / n), approximate: total % n !== 0 });
+
+/** The package total for a party size, or null when that size is quoted. */
+export const tierTotal = (tiers: { party: number; total: number }[], n: number) => tiers.find((t) => t.party === n)?.total ?? null;

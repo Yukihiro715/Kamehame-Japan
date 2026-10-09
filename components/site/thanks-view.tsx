@@ -16,6 +16,8 @@ export interface SentEnquiry {
   dates?: string;
   guests?: string;
   estimate?: string;
+  /** One product-specific line under the lead (e.g. the golf page's "not confirmed yet"). */
+  note?: string;
   /** The enquiry_sent event, pushed here so the conversion fires on this page. */
   event: Record<string, unknown>;
 }
@@ -58,6 +60,7 @@ export function ThanksView({ lang }: { lang: Lang }) {
         <span className="thanks-check" aria-hidden="true"><Check size={34} strokeWidth={3} /></span>
         <h1>{K.h}</h1>
         <p data-clarity-mask="True">{sent?.email ? K.leadEmail(sent.email) : K.lead}</p>
+        {sent?.note && <p className="thanks-note">{sent.note}</p>}
       </div>
 
       {rows.length > 0 && (
