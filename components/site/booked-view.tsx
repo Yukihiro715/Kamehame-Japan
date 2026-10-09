@@ -9,7 +9,7 @@ import { CONTACT_EMAIL } from "@/lib/contact";
 import { LANGS, t, type Lang } from "@/lib/i18n";
 import { yen } from "@/lib/pricing";
 
-interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: string; email?: string; error?: string }
+interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: string; email?: string; error?: string; items?: { name: string; quantity: number; amount: number }[]; reference?: string }
 
 /** Where a Stripe payment link sends the guest after paying. Stripe only
  *  redirects on success; the lookup confirms it and supplies the real amount.
@@ -56,12 +56,20 @@ export function BookedView({ lang }: { lang: Lang }) {
       if (!data.ok || !data.paid) return;
       const flag = `kh-paid-${id}`;
       try { if (localStorage.getItem(flag)) return; localStorage.setItem(flag, "1"); } catch { /* private mode */ }
-      track("booking_paid", {
+      const paid = {
         transaction_id: id,
         value: data.amount,
         currency: data.currency ?? "JPY",
         user_data: data.email ? { email: data.email.trim().toLowerCase() } : undefined,
         language: lang,
+      };
+      track("booking_paid", paid);
+      // GA4 e-commerce shape of the same payment: one item per payment-link
+      // product, so the areas (named in the Stripe product) can be told apart.
+      track("purchase", {
+        ...paid,
+        booking_reference: data.reference,
+        items: (data.items ?? []).map((it) => ({ item_name: it.name, quantity: it.quantity, price: it.amount })),
       });
     })();
     return () => { cancelled = true; };

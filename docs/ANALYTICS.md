@@ -154,3 +154,17 @@ Cookieなしの計測も行動モデリングも失われます(=ベーシック
 
 - **サーバーサイドGTM**: 月額のサーバー費用がかかるので、当面は不要。
 - **Bókun導入後**: 予約完了(purchase)イベントの計測を追加します。
+
+## ゴルフLP(2プラン)のイベント — 2026-10-10
+
+`dataLayer` に push するイベント。GTM 側でトリガーを作れば GA4 / Ads に流せる。
+
+| イベント | いつ | 主なパラメータ |
+| --- | --- | --- |
+| `golf_area_selected` | 東京近郊 / 富士山エリアを切り替えたとき(ヒーロー、選択セクション、フォームのどこでも) | `area`(`tokyo` / `fuji`)、`experience` |
+| `golf_course_preference_selected` | おすすめ / 希望コースを切り替えたとき | `preference`(`recommended` / `preferred`) |
+| `golf_booking_form_started` | リクエストフォームに最初にフォーカスしたとき(1回) | `experience` |
+| `enquiry_sent` と `generate_lead` | 送信完了ページ(/thanks/)で、同じ内容を2つの名前で | `enquiry_id`、`area`、`course_preference`、`custom_quote`、`party_size`、`value`(2名・おすすめのときのみ)、`currency` |
+| `booking_paid` と `purchase` | Stripe 決済完了ページ(/booked/)で、Stripe の支払い確認後に1回 | `transaction_id`、`value`、`currency`、`booking_reference`、`items[]`(Stripe の商品名・数量・金額) |
+
+`golf_quote_sent`(見積送付)はサイトでは計測できない。見積メールを送ったら予約台帳に日付を記録する。GA4 で問い合わせ(`generate_lead`)と決済(`purchase`)を別のコンバージョンとして登録し、`enquiry_sent` / `booking_paid` のトリガーを使っている場合は二重登録にならないようどちらか一方にする。

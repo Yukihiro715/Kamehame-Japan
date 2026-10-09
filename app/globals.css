@@ -1394,3 +1394,99 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
   .bk-grid > .field, .bk-grid > label { display:grid; grid-template-rows:subgrid; grid-row:span 2; gap:0; }
   .bk-grid > *:nth-child(n+3) { padding-top:5px; }
 }
+
+/* =========================================================================
+   Two-plan page (golf): first view with both prices, plan cards, course
+   choice, pricing table and the stepped request form.
+   ========================================================================= */
+.xp-variant .vh { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr); grid-template-areas:"copy copy" "photo pick"; gap:18px clamp(24px,4vw,56px); align-items:start; max-width:1360px; margin:0 auto; padding:10px clamp(24px,5vw,64px) 14px; }
+.vh-copy { grid-area:copy; max-width:900px; }
+.vh-copy h1 { margin:0 0 12px; font-family:var(--font-display); font-weight:400; letter-spacing:.02em; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); line-height:1.04; }
+.vh-lede { margin:0 0 14px; font-size:16.5px; line-height:1.7; color:#3d3a34; max-width:760px; }
+.vh-benefits { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.vh-benefits li { display:inline-flex; align-items:center; gap:6px; border:1px solid #e6e1d6; border-radius:999px; background:var(--white); padding:7px 12px; font-size:12.5px; }
+.vh-benefits svg { color:var(--kame); flex:none; }
+.vh-photo { grid-area:photo; margin:0; display:grid; gap:8px; min-width:0; }
+.vh-photo .vh-main { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:16px; display:block; background:#e9e4da; }
+.vh-thumbs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.vh-thumbs img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px; display:block; background:#e9e4da; }
+.vh-pick { grid-area:pick; display:grid; gap:12px; }
+.vp { display:grid; gap:10px; }
+.vp-compact { grid-template-columns:1fr 1fr; }
+.vp-detailed { grid-template-columns:1fr 1fr; gap:14px; }
+.vp-card { position:relative; display:grid; gap:8px; align-content:start; padding:16px 16px 14px; border:1px solid #d9d3c7; border-radius:14px; background:var(--white); cursor:pointer; transition:border-color .15s, box-shadow .15s, background .15s; }
+.vp-card input, .cp-card input { position:absolute; left:0; top:0; width:1px; height:1px; min-height:0; opacity:0; pointer-events:none; margin:0; padding:0; border:0; }
+.vp-card.on, .cp-card.on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; }
+.vp-card:focus-within, .cp-card:focus-within { outline:2px solid var(--kame); outline-offset:2px; }
+.vp-check { position:absolute; top:12px; right:12px; width:20px; height:20px; border-radius:50%; border:1px solid #cfc9bd; display:grid; place-items:center; color:transparent; background:var(--white); }
+.vp-card.on .vp-check, .cp-card.on .vp-check { background:var(--ink); border-color:var(--ink); color:var(--white); }
+.vp-title { font-family:var(--font-display); font-weight:400; font-size:15px; letter-spacing:.06em; text-transform:uppercase; line-height:1.25; padding-right:28px; }
+.vp-tagline { font-size:12.5px; line-height:1.55; color:#5c584f; }
+.vp-bullets { list-style:none; margin:0; padding:0; display:grid; gap:4px; font-size:13px; line-height:1.55; color:#4a463e; }
+.vp-bullets li { display:flex; gap:7px; align-items:flex-start; }
+.vp-bullets li::before { content:"✓"; color:var(--kame); flex:none; }
+.vp-price { display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+.vp-price b { font-family:var(--font-display); font-weight:400; font-size:24px; letter-spacing:.02em; line-height:1.1; }
+.vp-price small { font-size:11.5px; color:var(--muted); letter-spacing:.04em; }
+.vp-select { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 14px; border-radius:10px; border:1px solid var(--ink); font-family:var(--font-display); font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+.vp-card.on .vp-select { background:var(--ink); color:var(--white); }
+.vh-cta { min-height:54px; }
+.vh-note { margin:0; display:flex; gap:8px; align-items:center; font-size:12.5px; color:#4a463e; }
+.vh-note svg { color:var(--kame); flex:none; }
+.vh-guide-note { margin-top:18px; }
+.xp-variant .xp-cols { grid-template-columns:minmax(0,1fr); }
+.xp-variant .xp-main { max-width:980px; }
+.xp-variant .xp-highlights.four { grid-template-columns:repeat(2,1fr); }
+.xp-sub-h { margin:28px 0 12px; font-family:var(--font-display); font-weight:400; font-size:16px; letter-spacing:.06em; text-transform:uppercase; }
+.vh-known { margin-top:22px; }
+/* course choice */
+.cp { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.cp-card { position:relative; display:grid; gap:8px; align-content:start; padding:16px; border:1px solid #d9d3c7; border-radius:14px; background:var(--white); cursor:pointer; transition:border-color .15s, box-shadow .15s, background .15s; }
+.cp-badge { justify-self:start; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:999px; background:#f3efe6; color:#4a463e; }
+.cp-card.on .cp-badge { background:var(--kame); color:var(--ink); }
+.cp-title { font-weight:600; font-size:15px; line-height:1.4; padding-right:26px; }
+.cp-body { font-size:13.5px; line-height:1.65; color:#4a463e; }
+.cp-note { font-size:12px; line-height:1.6; color:var(--muted); }
+.cp-fields { grid-column:1 / -1; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.cp-fields label { display:grid; gap:6px; }
+.cp-fields span { font-size:12px; letter-spacing:.04em; color:var(--muted); }
+.cp-fields input { width:100%; box-sizing:border-box; height:48px; padding:10px 14px; border:2px solid var(--ink); background:var(--white); font:inherit; font-size:14px; color:var(--ink); }
+.cp-fields input:focus { outline:none; border-color:var(--kame); box-shadow:4px 4px 0 var(--kame); }
+/* pricing table */
+.vp-table td.total small { display:block; font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.vp-table td.quote { color:#5c584f; font-size:13px; }
+.vp-notes { list-style:none; margin:14px 0 0; padding:14px 16px; border-radius:12px; background:#f7f4ec; font-size:13px; line-height:1.7; color:#3d3a34; display:grid; gap:6px; }
+.vp-notes li { display:flex; gap:8px; }
+.vp-notes li::before { content:"·"; flex:none; }
+.vp-addons { display:grid; gap:10px; }
+.vp-cta-row { margin:22px 0 0; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.vp-cta-row .bk-cta { min-width:260px; }
+/* stepped form */
+.form-step { margin:0; padding:0; border:0; display:grid; gap:12px; min-width:0; }
+.form-step > legend { padding:0; margin:0 0 6px; font-family:var(--font-display); font-weight:400; font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); }
+.form-step + .form-step { margin-top:6px; padding-top:20px; border-top:1px solid #ece7dc; }
+.enquiry-form .vp-card, .enquiry-form .cp-card { padding:14px; }
+.enquiry-form .vp-title { font-size:13.5px; }
+.enquiry-form .vp-price b { font-size:20px; }
+.enquiry-form .cp-fields input { height:48px; }
+/* the generic form rule colours every span: keep the card marks and prices as designed */
+.enquiry-form .vp-check { color:transparent; font-size:0; }
+.enquiry-form .vp-card.on .vp-check, .enquiry-form .cp-card.on .vp-check { color:var(--white); }
+.enquiry-form .vp-title, .enquiry-form .cp-title { color:var(--ink); letter-spacing:.06em; }
+.enquiry-form .cp-title { letter-spacing:0; font-size:14.5px; }
+.enquiry-form .vp-price small, .enquiry-form .vp-tagline, .enquiry-form .cp-body, .enquiry-form .cp-note, .enquiry-form .cp-badge { letter-spacing:0; }
+.enquiry-form .cp-badge { letter-spacing:.08em; }
+@media(max-width:980px){
+  .xp-variant .vh { grid-template-columns:1fr; grid-template-areas:"copy" "photo" "pick"; }
+  .vh-thumbs { display:none; }
+}
+@media(max-width:700px){
+  .xp-variant .vh { padding:6px 22px 16px; gap:14px; }
+  .vp-compact, .vp-detailed, .cp, .cp-fields, .xp-variant .xp-highlights.four { grid-template-columns:1fr; }
+  .vh-copy h1 { font-size:clamp(26px,7.6vw,34px); }
+  .vh-photo .vh-main { border-radius:12px; }
+  .enquiry-form .form-row.three { grid-template-columns:1fr; }
+  .vp-cta-row .bk-cta { width:100%; }
+}
+:is([lang="ja"], [lang="zh-tw"]) .vh-copy h1 { font-size:clamp(22px,2.6vw,34px); line-height:1.3; }
+:is([lang="ja"], [lang="zh-tw"]) .vp-title, :is([lang="ja"], [lang="zh-tw"]) .vp-select, :is([lang="ja"], [lang="zh-tw"]) .form-step > legend { letter-spacing:.04em; }

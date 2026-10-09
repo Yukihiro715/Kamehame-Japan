@@ -8,7 +8,8 @@ import { t, type Lang } from "@/lib/i18n";
 /** Bottom bar on small screens: shows once the booking card has scrolled
  *  away, hides again while the request section (and its form) is on screen,
  *  and keeps clear of the iPhone home indicator. Inside a BookingProvider it
- *  follows the chosen plan and head count. */
+ *  follows the chosen plan and head count; on a two-plan page it names the
+ *  chosen area and its price, or "Custom Quote". */
 export function StickyRequestBar({
   price, condition, label, lang, watchHero = "#hero-cta", watchTarget = "#request",
 }: { price: string; condition: string; label: string; lang?: Lang; watchHero?: string; watchTarget?: string }) {
@@ -28,9 +29,21 @@ export function StickyRequestBar({
   }, [watchHero, watchTarget]);
 
   const plan = b?.pricing?.plans?.find((p) => p.id === b.plan);
-  const perPerson = !!b && !plan && !!b.estimate;
-  const shownPrice = b && plan ? yen(b.estimate?.total ?? plan.regular) : perPerson ? yen(b!.estimate!.total) : price;
-  const shownCondition = b && plan && D ? `${plan.label} · ${D.estimateFor(b.guestsNumber)}` : perPerson && D ? D.estimateFor(b!.guestsNumber) : condition;
+  const variant = b?.variantView;
+  const copy = b?.experience.priceCopy;
+  const perPerson = !!b && !plan && !variant && !!b.estimate;
+  let shownPrice = price;
+  let shownCondition = condition;
+  if (b && variant && copy) {
+    shownPrice = b.customQuote ? copy.customQuote : `${copy.from ? `${copy.from} ` : ""}${yen(variant.price)}${copy.fromSuffix ?? ""}`;
+    shownCondition = `${variant.short} · ${copy.golfers.replace("{n}", String(b.guestsNumber))}`;
+  } else if (b && plan) {
+    shownPrice = yen(b.estimate?.total ?? plan.regular);
+    if (D) shownCondition = `${plan.label} · ${D.estimateFor(b.guestsNumber)}`;
+  } else if (perPerson) {
+    shownPrice = yen(b!.estimate!.total);
+    if (D) shownCondition = D.estimateFor(b!.guestsNumber);
+  }
 
   const show = heroGone && !targetVisible;
   return (

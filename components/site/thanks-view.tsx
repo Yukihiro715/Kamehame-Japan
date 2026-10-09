@@ -37,6 +37,8 @@ export function ThanksView({ lang }: { lang: Lang }) {
       sessionStorage.removeItem(SENT_KEY);
       const s = JSON.parse(raw) as SentEnquiry;
       track("enquiry_sent", s.event);
+      // GA4's recommended name for the same moment; GTM may trigger on either.
+      track("generate_lead", s.event);
       // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the previous page
       setSent(s);
     } catch { /* storage blocked: the generic message below still applies */ }

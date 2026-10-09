@@ -32,13 +32,15 @@ export async function GET(request: Request): Promise<Response> {
   if (!key) return Response.json({ ok: false, error: "unconfigured" }, { status: 503, headers: noStore });
 
   try {
-    const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}`, {
+    const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}?expand[]=line_items`, {
       headers: { authorization: `Bearer ${key}` },
     });
     if (!res.ok) return Response.json({ ok: false, error: "not_found" }, { status: 404, headers: noStore });
     const s = (await res.json()) as {
       payment_status?: string; amount_total?: number | null; currency?: string | null;
       customer_details?: { email?: string | null } | null; created?: number;
+      client_reference_id?: string | null;
+      line_items?: { data?: { description?: string | null; quantity?: number | null; amount_total?: number | null }[] } | null;
     };
     // The session id is the only thing a caller shows, so the payer's email
     // is returned only while the guest is plausibly still coming back from
@@ -52,6 +54,11 @@ export async function GET(request: Request): Promise<Response> {
       currency: s.currency ? s.currency.toUpperCase() : undefined,
       // Only for the guest's own enhanced-conversion match on this page.
       email: wantsEmail && fresh ? s.customer_details?.email ?? undefined : undefined,
+      // What was paid for, by the payment link's product names (e.g. "Golf ·
+      // Tokyo Area · 2 golfers"), and the booking reference when the link
+      // carried one (?client_reference_id=KJ-…).
+      items: s.line_items?.data?.map((li) => ({ name: li.description ?? "", quantity: li.quantity ?? 1, amount: li.amount_total ?? 0 })),
+      reference: s.client_reference_id ?? undefined,
     }, { headers: noStore });
   } catch (err) {
     console.error("booking: stripe lookup failed", err);

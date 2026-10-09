@@ -26,6 +26,18 @@ export interface Enquiry {
   estimate?: string;
   /** Interpreter guide language chosen on an experience page (included). */
   interpreter?: string;
+  /** Two-plan pages (golf): the chosen area, how the course is chosen, and
+   *  the group and pick-up details the stepped form asks for. */
+  area?: string;
+  coursePref?: string;
+  course?: string;
+  courseUrl?: string;
+  altDate?: string;
+  handicap?: string;
+  rental?: string;
+  handed?: string;
+  pickup?: string;
+  whatsapp?: string;
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;

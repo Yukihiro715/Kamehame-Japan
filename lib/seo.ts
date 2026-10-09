@@ -7,6 +7,7 @@
 import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
+import { ownAggregateFor, REVIEWS_PUBLISHED } from "@/lib/reviews";
 
 export const SITE_NAME = "KAMEHAME JAPAN";
 
@@ -74,5 +75,23 @@ export function withAlternates(meta: Metadata, languages: Record<string, string>
         Object.entries(languages).map(([code, p]) => [code, absolute(p)]),
       ),
     },
+  };
+}
+
+/** schema.org Product for an experience or tour page. An aggregateRating is
+ *  only emitted from reviews written through our own booking flow: reviews
+ *  the host venue or a partner collected are shown on the page with their
+ *  provenance but are not ours to declare to search engines. */
+export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string) {
+  const agg = slug && REVIEWS_PUBLISHED ? ownAggregateFor(slug) : null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: title,
+    description,
+    image: `${SITE_ORIGIN}${img}`,
+    url: `${SITE_ORIGIN}${url}`,
+    offers: { "@type": "Offer", priceCurrency: "JPY", price: price.replace(/[^\d]/g, ""), availability: "https://schema.org/PreOrder" },
+    ...(agg && { aggregateRating: { "@type": "AggregateRating", ratingValue: agg.average, reviewCount: agg.count, bestRating: 5, worstRating: 1 } }),
   };
 }

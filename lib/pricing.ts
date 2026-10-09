@@ -6,7 +6,7 @@
 // `rows` always describes the entry plan so summaries ("From ¥… for 2 guests")
 // read the same whichever shape the catalog entry uses.
 
-import type { Experience } from "@/lib/catalog";
+import type { Experience, ExperienceVariant } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 
 export interface PriceRow { party: number; total: number; perPerson: number }
@@ -39,6 +39,12 @@ export interface PricingView {
 
 const yenFormat = new Intl.NumberFormat("en-US");
 export const yen = (n: number) => `¥${yenFormat.format(n)}`;
+
+/** "{n} golfers" → "2 golfers" (two-plan page copy). */
+export const countOf = (template: string, n: number) => template.replace("{n}", String(n));
+
+/** "From ¥250,000" / "¥250,000〜", as the language puts it. */
+export const fromPrice = (copy: { from: string; fromSuffix?: string }, price: number) => `${copy.from ? `${copy.from} ` : ""}${yen(price)}${copy.fromSuffix ?? ""}`;
 
 /** "¥45,000" → 45000 */
 const parseYen = (s: string) => Number(s.replace(/[^\d]/g, "")) || 0;
@@ -185,4 +191,10 @@ export function quote(view: PricingView, planId: string, guests: number, iso?: s
   const extraEach = peak ? eg.peak : eg.regular;
   const extraCount = Math.max(0, guests - eg.included);
   return { total: base + extraCount * extraEach, peak, base, extraCount, extraEach };
+}
+
+/** Price view of one alternative on a two-plan page: a one-row table for its
+ *  base party. Any other party size is above the table and so quoted. */
+export function pricingForVariant(exp: Experience, v: ExperienceVariant, lang: Lang): PricingView {
+  return pricingFor({ ...exp, pricing: { ...(exp.pricing ?? {}), tiers: [{ party: v.basePartySize, total: v.price }], plans: undefined, highSeason: undefined } }, lang);
 }

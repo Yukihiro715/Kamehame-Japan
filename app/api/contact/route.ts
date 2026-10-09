@@ -33,7 +33,7 @@ const REPLY = "hello@kamehame-japan.com";
 function subjectFor(e: Enquiry): string {
   return e.kind === "trade"
     ? `[Trade] ${e.company ?? e.name} — ${e.country ?? ""}`.trim()
-    : `[Request] ${e.experience ? `${e.experience} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
+    : `[Request] ${e.experience ? `${e.experience}${e.area ? ` · ${e.area}` : ""} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
 }
 
 function bodyFor(e: Enquiry): string {
@@ -45,8 +45,15 @@ function bodyFor(e: Enquiry): string {
     e.company && `Company:  ${e.company}`,
     e.country && `Country:  ${e.country}`,
     e.plan && `Plan:     ${e.plan}`,
+    e.area && `Area:     ${e.area}`,
+    e.coursePref && `Course:   ${e.coursePref}${e.course ? ` — ${e.course}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}`,
     e.dates && `Dates:    ${e.dates}`,
+    e.altDate && `Alt date: ${e.altDate}`,
     e.party && `Party:    ${e.party}`,
+    e.handicap && `Level:    ${e.handicap}`,
+    e.rental && `Rental:   ${e.rental}${e.handed ? ` — ${e.handed}` : ""}`,
+    e.pickup && `Pick-up:  ${e.pickup}`,
+    e.whatsapp && `WhatsApp: ${e.whatsapp}`,
     e.interpreter && `Interp.:  ${e.interpreter}`,
     e.addons && `Extras:   ${e.addons}`,
     e.estimate && `Estimate: ${e.estimate}`,
@@ -98,7 +105,10 @@ async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void>
   if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
 }
 
-const MAX = { name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80, plan: 160, addons: 200, estimate: 120, interpreter: 40 };
+const MAX = {
+  name: 120, email: 200, company: 160, country: 80, dates: 120, party: 60, message: 4000, experience: 80, plan: 160, addons: 200, estimate: 160, interpreter: 40,
+  area: 120, coursePref: 80, course: 160, courseUrl: 200, altDate: 40, handicap: 160, rental: 40, handed: 120, pickup: 200, whatsapp: 60,
+};
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.replace(/[\r\n]+/g, " ").trim().slice(0, max) : "";
@@ -110,7 +120,9 @@ function parse(body: Record<string, unknown>): Enquiry | null {
   const email = clean(body.email, MAX.email);
   // The message keeps its line breaks; everything else is single-line.
   const message = typeof body.message === "string" ? body.message.trim().slice(0, MAX.message) : "";
-  if (!name || !email || !message) return null;
+  const area = clean(body.area, MAX.area) || undefined;
+  // The two-plan request carries its substance in its own fields; its notes are optional.
+  if (!name || !email || (!message && !area)) return null;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
   return {
     kind, name, email, message,
@@ -122,6 +134,16 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     addons: clean(body.addons, MAX.addons) || undefined,
     estimate: clean(body.estimate, MAX.estimate) || undefined,
     interpreter: clean(body.interpreter, MAX.interpreter) || undefined,
+    area,
+    coursePref: clean(body.course_pref, MAX.coursePref) || undefined,
+    course: clean(body.course, MAX.course) || undefined,
+    courseUrl: clean(body.course_url, MAX.courseUrl) || undefined,
+    altDate: clean(body.alt_date, MAX.altDate) || undefined,
+    handicap: clean(body.handicap, MAX.handicap) || undefined,
+    rental: clean(body.rental, MAX.rental) || undefined,
+    handed: clean(body.handed, MAX.handed) || undefined,
+    pickup: clean(body.pickup, MAX.pickup) || undefined,
+    whatsapp: clean(body.whatsapp, MAX.whatsapp) || undefined,
     lang: clean(body.lang, 5) || "en",
     experience: clean(body.experience, MAX.experience) || undefined,
     website: clean(body.website, 200) || undefined,

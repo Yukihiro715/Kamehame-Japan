@@ -217,7 +217,10 @@ KAMEHAME JAPAN · Prosent Inc.
 
 ---
 
-## G. ゴルフ(Private Mt. Fuji Golf Experience)の流れ
+## G. ゴルフ(Private Golf Day from Tokyo — Mt. Fuji or Tokyo Area)の流れ
+
+> **2026-10-10 改定(LP仕様書 Ver.2)。** 1ページで2商品:東京近郊 ¥250,000 / 富士山エリア ¥270,000(いずれも2名、おすすめコース、平日・土日祝共通の開始価格)。3〜4名と希望コース指定は「Custom Quote」(個別見積もり)。両プランともハイヤー送迎・英語ガイド・18ホールのプレー代・レンタルクラブ・規定内の昼食込み。**ガイドはプレーしない**(チェックイン・レンタル・現地手続きのサポート)。問い合わせには「エリア」「コース希望(おすすめ/指定)」「第2希望日」「経験・ハンディキャップ」「レンタル要否と利き手」「お迎え場所」「WhatsApp」が付く。以下のテンプレートの「guide … plays the round with you」「course caddie」の行は使わず、送迎込み・ガイド同行(プレーなし)の表現に読み替える。旧価格(¥180,000/220,000/280,000)は 2026-10-10 以前の予約にのみ適用。
+> Stripe の商品名はエリアが分かる名前にする(例 `Golf · Tokyo Area · 2 golfers`、`Golf · Mt. Fuji Area · 2 golfers`): 決済完了ページの `purchase` イベントが商品名をそのまま GA4 に送るので、エリア別の成約数が取れる。予約番号は決済リンクの `?client_reference_id=KJ-…` で渡せる。
 
 芸妓と同じ骨格ですが、**支払いの前にコース名とティータイムを提示する**とページで約束しているので、順番が一つ増えます。
 
@@ -231,7 +234,7 @@ KAMEHAME JAPAN · Prosent Inc.
 ```
 
 **Stripe の商品(ゴルフ)** — 初回に作成し、以後は価格だけ差し替える
-- `Private Mt. Fuji Golf Experience from Tokyo`:3価格 ¥180,000(2 golfers)/ ¥220,000(3 golfers)/ ¥280,000(4 golfers)
+- 2026-10-10 以降: `Golf · Tokyo Area · 2 golfers` ¥250,000 / `Golf · Mt. Fuji Area · 2 golfers` ¥270,000(3〜4名・コース指定は見積もりごとにリンクを作る)。旧: `Private Mt. Fuji Golf Experience from Tokyo` 3価格 ¥180,000 / ¥220,000 / ¥280,000(既存予約のみ)
 - `Highlight film — Mt. Fuji golf`:¥96,000(2〜3名のグループ。4名は不可。当日の追加も可。卸 ¥80,000)
 - `Kanji ball marker — Mt. Fuji golf`:¥6,000、ユニットラベル `golfer`、数量 = 人数(2週間前までに確定した予約のみ。卸 1名 ¥5,000)
 - 支払いリンクは**人数ごとに1本を使い回す**(2026-10-04 決定。「支払い回数を制限」は付けない)。品目 = 人数に合う価格 ×1、数量変更は「許可しない」。「支払い後」のリダイレクトは `https://kamehame-japan.com/{lang}/booked/?session_id={CHECKOUT_SESSION_ID}`(お客様の言語。英語なら `/en/`)。オプション付き(映像 ×1、マーカー ×人数)・5〜6名・コース指定の追加料金ありは、その予約用に別のリンクを作る。
@@ -387,7 +390,7 @@ Please use the same name and email as in your request. Your booking is confirmed
 WHAT'S INCLUDED
 - Private car from your hotel to the course and back
 - Green fee, rental clubs {for both of you (ladies' and men's sets)}
-- English-speaking golf guide who rides with you and plays the round with you
+- English-speaking golf guide who rides with you and helps with check-in, rental clubs and the clubhouse (the guide does not play)
 - Lunch at the clubhouse
 Not included: golf shoes (bring your own, or ask us about rental). Optional: a highlight film of your day (¥96,000 per group of two or three, delivered about a week later) and ball markers with your names in kanji (¥6,000 per golfer, confirmed two weeks ahead).
 
@@ -408,7 +411,7 @@ hello@kamehame-japan.com
 **日本語対訳(担当者用)**
 > コースの手配ができました:{date} {area}のホテルを{time}出発/{コース名}、ティーオフ{時刻}/{n}名で合計 ¥{total}(税込、当日の追加なし)
 > 確定するには:{期限}までに決済リンクから。問い合わせと同じ氏名・メールで。入金で予約確定。ティータイムは期限まで押さえ、過ぎると変わる可能性がある
-> 含まれるもの:ホテル往復の専用車/プレーフィ・レンタルクラブ/英語ガイド(同乗・一緒にラウンド)/クラブハウス昼食。含まれないもの:シューズ。オプション:ハイライト映像 ¥96,000(2〜3名のグループ、約1週間後)/漢字ボールマーカー 1名 ¥6,000(2週間前までの確定が条件)
+> 含まれるもの:ホテル往復の専用車/プレーフィ・レンタルクラブ/英語ガイド(同乗・チェックインと現地サポート、プレーはしない)/クラブハウス昼食。含まれないもの:シューズ。オプション:ハイライト映像 ¥96,000(2〜3名のグループ、約1週間後)/漢字ボールマーカー 1名 ¥6,000(2週間前までの確定が条件)
 > キャンセル(入金後・日本時間):7日前18時まで無料、6〜2日前50%、前日以降・無連絡100%。天候クローズは発生済み費用を除き返金
 > 入金後1営業日以内に、ロビー集合場所を記載した確定通知を送る。ガイドの名前と連絡先・車両は前日に送る
 > 返信でほしいこと(支払いの前後どちらでも):ホテル名/2名の氏名と利き手/当日の携帯

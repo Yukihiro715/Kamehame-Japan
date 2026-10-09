@@ -14,6 +14,8 @@ import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
+import { CancellationTable } from "@/components/site/cancellation-table";
+import { VariantDetail } from "@/components/site/variant-detail";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { pricingFor, yen, type PricingView } from "@/lib/pricing";
@@ -22,10 +24,10 @@ import {
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { ownAggregateFor, REVIEWS_PUBLISHED, reviewsFor, sampleReviewsFor } from "@/lib/reviews";
+import { REVIEWS_PUBLISHED, reviewsFor, sampleReviewsFor } from "@/lib/reviews";
 import { RatingSummary, ReviewSummaryPanel } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
-import { socialMeta, withAlternates } from "@/lib/seo";
+import { productJsonLd, socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string; collection: string; slug: string }> }
 
@@ -61,8 +63,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return withAlternates(
     socialMeta({
       lang,
-      title: `${item.title} | KAMEHAME JAPAN`,
-      description: exp ? exp.tagline : tour!.description,
+      title: exp?.seoTitle ?? `${item.title} | KAMEHAME JAPAN`,
+      description: exp ? exp.metaDescription ?? exp.tagline : tour!.description,
       path: `/${lang}/${collection}/${slug}/`,
       // Purpose-built 1200x630 card; the catalog photo itself is often portrait
       // and would be cropped badly by social scrapers (scripts/generate-og-cards.py).
@@ -71,40 +73,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }),
     Object.fromEntries(LANGS.map((l) => [l, `/${l}/${collection}/${slug}/`])),
   );
-}
-
-function productJsonLd(
-  title: string, description: string, img: string, url: string, price: string,
-  slug?: string,
-) {
-  // An aggregateRating is only emitted from reviews written through our own
-  // booking flow. Reviews the host venue collected are shown on the page with
-  // their provenance but are not ours to declare to search engines.
-  const agg = slug && REVIEWS_PUBLISHED ? ownAggregateFor(slug) : null;
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: title,
-    description,
-    image: `${SITE_ORIGIN}${img}`,
-    url: `${SITE_ORIGIN}${url}`,
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "JPY",
-      price: price.replace(/[^\d]/g, ""),
-      availability: "https://schema.org/PreOrder",
-    },
-    ...(agg && {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: agg.average,
-        reviewCount: agg.count,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    }),
-  };
 }
 
 /** Party-size price table with the collapsible high-season table under it. */
@@ -148,6 +116,7 @@ export default async function DetailPage({ params }: Props) {
   if (!exp && !tour) notFound();
 
   if (tour) return <TourDetail tour={tour} lang={lang} />;
+  if (exp!.variants) return <VariantDetail exp={exp!} lang={lang} />;
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }
 
@@ -519,24 +488,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
               </ol>
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
-              {exp.cancellationTiers && exp.cancellationTiers.length > 0 ? (
-                <div className="xp-cancel-table">
-                  <table>
-                    <thead><tr><th>{D.cancelWhen}</th><th>{D.cancelFee}</th></tr></thead>
-                    <tbody>
-                      {exp.cancellationTiers.map((tier, i, all) => {
-                        const prev = i > 0 ? all[i - 1].until - 1 : undefined;
-                        const when = prev === undefined ? D.cancelFreeUntil(tier.until) : tier.until > 0 ? D.cancelBetween(prev, tier.until) : D.cancelFromDays(prev);
-                        const fee = tier.rate <= 0 ? D.cancelRateFree : tier.rate >= 100 ? D.cancelRateFull : D.cancelRatePct(tier.rate);
-                        return <tr key={tier.until} className={tier.rate <= 0 ? "free" : tier.rate >= 100 ? "full" : ""}><td>{when}</td><td>{fee}</td></tr>;
-                      })}
-                    </tbody>
-                  </table>
-                  <p className="xp-cancel-note">{cancellation}</p>
-                </div>
-              ) : (
-                <p className="xp-cancel">{cancellation}</p>
-              )}
+              <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
               <h2 className="xp-sub" id="request-form">{live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
               <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>

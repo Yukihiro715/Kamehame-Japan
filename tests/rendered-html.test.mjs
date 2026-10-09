@@ -61,6 +61,19 @@ test("serves security.txt and marks confirmation pages noindex", async () => {
   assert.equal(home.headers.get("x-robots-tag"), null);
 });
 
+test("golf page sells two plans with the guide not playing", async () => {
+  const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
+
+  assert.match(html, /<title>Private Golf Day from Tokyo \| Mt\. Fuji &amp; Tokyo Area \| KAMEHAME JAPAN<\/title>/);
+  assert.ok(html.includes("¥250,000") && html.includes("¥270,000"), "both plan prices are on the page");
+  assert.doesNotMatch(html, /¥180,000|¥220,000|¥280,000/, "the old prices are gone");
+  assert.doesNotMatch(html, /plays the round|course caddie/i, "no guide-plays or caddie copy");
+  for (const field of ['name="form-variant"', 'name="form-course"', 'name="pickup"', 'name="handicap"', 'name="rental"', 'name="whatsapp"']) {
+    assert.ok(html.includes(field), `request form has ${field}`);
+  }
+  assert.ok(html.includes("Custom Quote"), "larger parties and preferred courses are quoted");
+});
+
 test("sends baseline security headers", async () => {
   const response = await render();
 

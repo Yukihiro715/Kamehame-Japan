@@ -41,3 +41,10 @@ all channels; the trial participants' agreement to appear was confirmed with the
 were supplied by the owner on 2026-10-04 to replace the earlier video stills. The swing photo was cropped to
 remove an overlaid title; the green, pond and fairway photos were supplied at about 640–700 px and upscaled 2x. The source and licence of each file is to be
 confirmed with the owner / golf partner before use in paid ads.
+
+## Golf: Tokyo-area course photos (added 2026-10-10)
+
+Wikimedia Commons, used under CC BY-SA. Example courses in the Kanto region, not the partner's courses.
+
+- `public/images/golf-tokyo-clubhouse.jpg` and `golf-tokyo-terrace.jpg` (cropped): "Central Golf Club New Course, Namegata - Jun 30, 2012 (1)" and "(3)" by Yuki Shimazu (Flickr "shimazu"), CC BY-SA 2.0 — https://commons.wikimedia.org/wiki/File:Central_Golf_Club_New_Course,_Namegata_-_Jun_30,_2012_(1).jpg
+- `public/images/golf-tokyo-tee.jpg`: "Kamakura Country Club" by LittleT889, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Kamakura_Country_Club.jpg
