@@ -35,7 +35,7 @@ export const categoriesEs: Category[] = [
     lead: "Las artistas de uñas de Tokio tratan cada uña como un lienzo. Trae a tu personaje favorito y llévate arte fan portátil pintado por una artista que vive de esto — el lado más ligero y juguetón del oficio japonés." },
   { slug: "calligraphy", title: "Caligrafía", tag: "Arte y artesanía", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "Un pincel, tinta negra y un solo carácter. Aprende los trazos con una profesora, elige kanji con el significado de tu nombre y llévate una obra hecha por ti." },
-  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-flag-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "El golf en Japón tiene sus propias costumbres y algunas de las mejores vistas del país. Un día de golf privado en la región del monte Fuji, con tu campo y tu hora de salida organizados para ti, coche privado desde tu hotel de Tokio y apoyo en inglés." },
 ];
 
@@ -132,16 +132,14 @@ export const experiencesEs: Experience[] = [
       "Tu guía de habla inglesa ayuda con el check-in, el alquiler y la comunicación en la casa club. Tu grupo juega la vuelta por su cuenta; normalmente el guía no juega ni os acompaña en el campo.",
     ],
     duration: "Día completo, de hotel a hotel", price: "¥250,000", group: "Coche privado y guía · 2–4 golfistas", ages: "Desde 18 años", area: "Zona de Tokio o región del monte Fuji (recogida en tu hotel de Tokio)",
-    img: "/images/golf-flag-fuji.jpg", alt: "Un green con su bandera, el monte Fuji alzándose tras los pinos",
+    img: "/images/golf-fuji-aerial.jpg", alt: "Calles y pinos bajo el monte Fuji, vistos desde arriba en una mañana despejada",
     gallery: [
+      { img: "/images/golf-fuji-winter.jpg", alt: "Un green y sus búnkeres en invierno, con el monte Fuji nevado detrás" },
+      { img: "/images/golf-fuji-pond.jpg", alt: "El monte Fuji reflejado en un estanque junto a la calle" },
       { img: "/images/golf-tokyo-clubhouse.jpg", alt: "Un green junto al estanque de la casa club en un campo de la región de Kanto" },
-      { img: "/images/golf-fuji-clouds.jpg", alt: "El monte Fuji sobre las nubes, visto desde el campo" },
       { img: "/images/golf-tokyo-tee.jpg", alt: "Un tee bajo un pino, con el perfil de Yokohama al fondo" },
       { img: "/images/golf-tokyo-terrace.jpg", alt: "El green y la calle vistos desde la terraza de la casa club, Kanto" },
-      { img: "/images/golf-fairway.jpg", alt: "Una calle y un búnker bajo el monte Fuji a principios de verano" },
-      { img: "/images/golf-pond.jpg", alt: "El monte Fuji reflejado en un estanque junto a la calle" },
-      { img: "/images/golf-green.jpg", alt: "Golfistas en el green, con el monte Fuji al fondo" },
-      { img: "/images/golf-swing.jpg", alt: "Un golpe de salida hacia el monte Fuji" },
+      { img: "/images/golf-lakes-aerial.jpg", alt: "Un campo trazado en torno a dos lagos, visto desde arriba" },
     ],
     variants: [
       {
@@ -150,7 +148,7 @@ export const experiencesEs: Experience[] = [
       },
       {
         id: "fuji", title: "Día de golf en el monte Fuji", short: "Zona del monte Fuji", tagline: "Golf en la región del monte Fuji",
-        tiers: [], img: "/images/golf-flag-fuji.jpg", alt: "Un green con su bandera, el monte Fuji alzándose tras los pinos",
+        tiers: [], img: "/images/golf-fuji-aerial.jpg", alt: "Calles y pinos bajo el monte Fuji, vistos desde arriba en una mañana despejada",
       },
     ],
     langTag: "Guía de golf de habla inglesa",
@@ -227,7 +225,7 @@ export const experiencesEs: Experience[] = [
       options: {
         heading: "Elige tu día de golf", golfersLegend: "Golfistas", areaLegend: "Zona", golfers: "{n} golfistas",
         from: "Desde", approx: "aprox.", perPerson: " / persona",
-        total: "{total} en total · {n} golfistas", totalShort: "{total} en total",
+        total: "{total} en total · {n} golfistas", totalShort: "{total} en total", perPersonRef: "{price} / persona",
         customQuote: "Presupuesto a medida", customQuoteLine: "Campo concreto · {n} golfistas",
         note: "Paquete con campo recomendado. Campo, hora de salida y precio final confirmados antes del pago.",
         customNote: "Un campo concreto se presupuesta de forma individual. Desmárcalo en el formulario para volver a ver el precio del paquete.",

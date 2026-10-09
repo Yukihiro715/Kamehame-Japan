@@ -12,7 +12,7 @@ import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
 import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { countOf, fromPrice, perPersonOf, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
+import { countOf, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
 import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
@@ -58,7 +58,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
     slug: exp.slug, title: exp.title,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
     startTimes: avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
-    minGuests: size.min, listedMax: size.max, maxGuests: size.max,
+    minGuests: size.min, defaultGuests: size.default, listedMax: size.max, maxGuests: size.max,
     interpreter: false,
     ctaLabel, ctaNote: exp.cta?.note, timeLabel: exp.timeLabel,
     variants: variants.map((v) => ({ id: v.id, title: v.title, short: v.short, tiers: v.tiers, defaultTime: v.defaultTime })),
@@ -120,7 +120,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </ol>
               <p className="xp-note">{vc.day.note}</p>
               {exp.schedule && (
-                <details className="vh-timings">
+                <details className="vh-timings" open>
                   <summary>{vc.day.timingsH}</summary>
                   {exp.scheduleNote && <p className="xp-note xp-note-sample">{exp.scheduleNote}</p>}
                   <ol className="xp-timeline">
@@ -156,7 +156,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                             const pp = perPersonOf(total, n);
                             return (
                               <td key={v.id} className="total" data-label={v.short}>
-                                <span><b>{yen(total)}</b><small>{fromPrice(O, pp.perPerson, pp.approximate)}{O.perPerson}</small></span>
+                                <span><b>{yen(total)}</b><small>{perPersonRefText(O, pp.perPerson, pp.approximate)}</small></span>
                               </td>
                             );
                           })}
@@ -190,7 +190,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <section className="xp-section xp-request" id="request">
               <h2 id="request-form">{H.request}</h2>
               <p className="xp-note">{exp.cta?.lead ?? D.requestLead}</p>
-              <GolfRequestForm lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} variants={variants} copy={vc} addOns={addOns} />
+              <GolfRequestForm lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} variants={variants} copy={vc} addOns={addOns} parties={parties} />
             </section>
 
             {/* 8. Terms, linked from under the form's button */}

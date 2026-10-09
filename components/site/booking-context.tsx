@@ -25,6 +25,8 @@ export interface BookingExperience {
   defaultTime?: string;
   closed?: { from: string; to: string }[];
   minGuests: number;
+  /** Pre-selected head count (default: two, the usual party). */
+  defaultGuests?: number;
   /** Largest head count the price covers; above it the group is quoted individually. */
   listedMax: number;
   /** Ceiling of the head-count control (default 15). */
@@ -134,8 +136,8 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
   const [state, setState] = useState<BookingState>({
     plan: firstPricing?.plans?.find((p) => p.recommended)?.id ?? firstPricing?.plans?.[0]?.id ?? "",
     date: "", time: pickDefault(variantTime(initialVariant)),
-    // Start at two (the usual party) even where one guest may book.
-    guests: String(Math.min(Math.max(experience.minGuests, 2), maxGuests)), addOns: [],
+    // Start at two (the usual party) even where one guest may book, unless the product says otherwise.
+    guests: String(Math.min(Math.max(experience.minGuests, experience.defaultGuests ?? 2), maxGuests)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
     variant: initialVariant, coursePref: "recommended", courseName: "", courseUrl: "",
   });

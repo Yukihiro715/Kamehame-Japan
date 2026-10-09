@@ -71,10 +71,13 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
     assert.ok(html.includes(price), `price table shows ${price}`);
   }
   assert.doesNotMatch(html, /¥180,000|¥220,000|¥280,000/, "the old prices are gone");
-  // the default selection: Mt. Fuji, two golfers, per person first, group total beside it
+  // the default selection: Mt. Fuji, four golfers, per person first, group total beside it
   const text = html.replace(/<[^>]+>/g, "");
-  assert.ok(text.includes("¥135,000") && text.includes("¥270,000 total · 2 golfers"), "Mt. Fuji per-person and total for two");
-  assert.ok(text.includes("¥125,000") && text.includes("¥250,000 total · 2 golfers"), "Tokyo per-person and total for two");
+  assert.ok(text.includes("¥87,500") && text.includes("¥350,000 total · 4 golfers"), "Mt. Fuji per-person and total for four");
+  assert.ok(text.includes("¥82,500") && text.includes("¥330,000 total · 4 golfers"), "Tokyo per-person and total for four");
+  assert.ok(html.includes('class="vh-timings" open'), "sample timings start open");
+  assert.ok(html.includes("6:00 pm JST") && !/18:00 Japan time/.test(html), "times read as 12-hour JST");
+  assert.ok(html.includes("/images/golf-fuji-aerial.jpg") && !/golf-flag-fuji|golf-swing|golf-fairway/.test(html), "new photos only");
   // one place to choose, one form, no second-choice date, no quote-by-party-size
   assert.equal(html.split('id="golf-options"').length - 1, 1, "exactly one options panel");
   assert.equal(html.split('id="request-form"').length - 1, 1, "exactly one request form anchor");

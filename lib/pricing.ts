@@ -211,3 +211,11 @@ export const perPersonOf = (total: number, n: number) => ({ perPerson: Math.roun
 
 /** The package total for a party size, or null when that size is quoted. */
 export const tierTotal = (tiers: { party: number; total: number }[], n: number) => tiers.find((t) => t.party === n)?.total ?? null;
+
+/** "¥96,667" / "approx. ¥96,667" / "約¥96,667" — the figure with the rounded-figure word when needed. */
+export const approxPrice = (copy: { approx: string }, price: number, approximate: boolean) =>
+  `${approximate ? copy.approx + (/[約约]$/.test(copy.approx) ? "" : " ") : ""}${yen(price)}`;
+
+/** "¥87,500 / person" / "1名あたり ¥87,500": the per-person figure as a reference beside a fixed total, never "From". */
+export const perPersonRefText = (copy: { approx: string; perPersonRef: string }, price: number, approximate: boolean) =>
+  copy.perPersonRef.replace("{price}", approxPrice(copy, price, approximate));

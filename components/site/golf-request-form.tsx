@@ -11,7 +11,7 @@ import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { isBookable, timesFor, useBooking } from "@/components/site/booking-context";
-import { golfPriceParts } from "@/components/site/golf-options";
+import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 type Rental = "required" | "own" | "unsure";
@@ -33,9 +33,9 @@ export const NO_PREFERENCE = "none";
  *  contact — and the package price is confirmed above the button before it is
  *  sent. The server recomputes the price from the master; what is sent from
  *  here is the choice, not the amount. */
-export function GolfRequestForm({ lang, fallbackEmail, experience, variants, copy, addOns }: {
+export function GolfRequestForm({ lang, fallbackEmail, experience, variants, copy, addOns, parties }: {
   lang: Lang; fallbackEmail: string; experience: { slug: string; title: string };
-  variants: ExperienceVariant[]; copy: VariantPageCopy; addOns: AddOn[];
+  variants: ExperienceVariant[]; copy: VariantPageCopy; addOns: AddOn[]; parties: number[];
 }) {
   const T = t(lang);
   const F = T.form;
@@ -151,14 +151,13 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
 
   return (
     <form className="enquiry-form golf-form" method="post" action="/api/contact" onSubmit={submit} onFocusCapture={markStarted} data-clarity-mask="True">
-      {/* What was chosen above, read-only; "Change" goes back to the one place that changes it */}
+      {/* The choice, repeated compactly so it can be changed here too (same state as the panel) */}
       <div className="go-summary" aria-live="polite">
         <span className="go-summary-h">{G.summaryH}</span>
-        <b className="go-summary-title">{v.short} · {countOf(O.golfers, n)}</b>
+        <GolfQuickPick variants={variants} copy={O} parties={parties} name="form" />
         {p.custom
           ? <span className="go-summary-price"><strong>{p.headline}</strong><small>{p.line}</small></span>
-          : <span className="go-summary-price"><strong>{p.totalShort}</strong><small>{p.perPersonText}{O.perPerson}</small></span>}
-        <a className="go-change" href="#golf-options">{G.change}</a>
+          : <span className="go-summary-price"><strong>{p.totalShort}</strong><small>{p.perPersonRef}</small></span>}
       </div>
 
       <fieldset className="form-step">
@@ -214,7 +213,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             </label>
           ) : <span />}
         </div>
-        <label className="form-check go-check">
+        <label className="form-check go-check one">
           <input type="checkbox" name="hotel-undecided" checked={hotelUndecided} onChange={(e) => setHotelUndecided(e.target.checked)} />
           <span><b>{G.hotelUndecided}</b></span>
         </label>
@@ -283,8 +282,8 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <textarea name="message" rows={4} maxLength={4000} placeholder={G.requestsHint} />
         </label>
         {addOns.length > 0 && (
-          <details className="go-extras">
-            <summary>{G.extras}</summary>
+          <fieldset className="go-extras">
+            <legend>{G.extras}</legend>
             <p className="form-hint">{G.extrasNote}</p>
             {addOns.map((a) => (
               <label key={a.id} className="form-check">
@@ -292,7 +291,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
                 <span><b>{a.name}</b><small>{blocked(a) ? G.notForFour : addOnPrice(a)}</small><small>{a.description}</small></span>
               </label>
             ))}
-          </details>
+          </fieldset>
         )}
       </fieldset>
 
@@ -304,7 +303,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <div><dt>{O.golfersLegend}</dt><dd>{countOf(O.golfers, n)}</dd></div>
           <div><dt>{F.preferredDate}</dt><dd>{b.date ? `${fmtDate(b.date, lang)} · ${timeLabel}` : "—"}</dd></div>
           <div><dt>{G.steps.course}</dt><dd>{specific ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
-          <div className="go-confirm-price"><dt>{G.package}</dt><dd><b>{p.custom ? p.headline : p.totalShort}</b>{!p.custom && <small>{p.perPersonText}{O.perPerson} · {G.perPersonRef}</small>}</dd></div>
+          <div className="go-confirm-price"><dt>{G.package}</dt><dd><b>{p.custom ? p.headline : p.totalShort}</b>{!p.custom && <small>{p.perPersonRef} · {G.perPersonRef}</small>}</dd></div>
           {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd>{addOnLine(a)}</dd></div>)}
         </dl>
         <small>{G.confirmNote}</small>

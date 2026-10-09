@@ -86,6 +86,8 @@ export interface VariantPageCopy {
     total: string;
     /** "{total} total" */
     totalShort: string;
+    /** "{price} / person" — the per-person figure as a reference beside a fixed total (no "From"). */
+    perPersonRef: string;
     customQuote: string;
     /** "Preferred course · {n} golfers" */
     customQuoteLine: string;
@@ -178,8 +180,8 @@ export interface Experience {
   // authored once in the English catalog and merged into every locale by
   // catalogFor(); locale files only carry text. ----------------------------
 
-  /** Smallest and largest party the venue takes. Drives the pricing table. */
-  partySize?: { min: number; max: number };
+  /** Smallest and largest party the venue takes (and the pre-selected size, default two). Drives the pricing table. */
+  partySize?: { min: number; max: number; default?: number };
   /** Party-size pricing. `tiers` are whole-group totals in yen; a per-person
    *  figure is derived for display. Absent for per-person products, where the
    *  table is derived from `price` × party. */
@@ -349,7 +351,7 @@ export const categories: Category[] = [
   { slug: "anime-nail-art", title: "Anime nail art", tag: "Pop culture", mark: "爪", img: "/images/cat-nail.jpg",
     lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },  { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-flag-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
 ];
 
@@ -450,7 +452,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes. A class for one is priced as two guests; the booking box shows the total when you choose one guest." },
       { q: "What should I wear?", a: "Clothes you don't mind getting ink on. Aprons are provided." },
-      { q: "Can we book at short notice?", a: "Yes, until 18:00 Japan time the day before. The teacher and the studio are booked when your request comes in, so we confirm once both are free for your date — for a class in the next few days, only if they still are." },
+      { q: "Can we book at short notice?", a: "Yes, until 6:00 pm JST the day before. The teacher and the studio are booked when your request comes in, so we confirm once both are free for your date — for a class in the next few days, only if they still are." },
       { q: "How does booking work?", a: "Choose a date and send a request; we reply within 24 hours with the price and conditions. Sending the request costs nothing. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
       { q: "What if we are late?", a: "The studio is booked by the hour, so the class ends on time and practice is shorter. Tell us as soon as you know you are running late." },
       { q: "Is transport included?", a: "No. You meet the teacher at the studio in Shinjuku; the address and directions come with your confirmation." },
@@ -476,18 +478,17 @@ export const experiences: Experience[] = [
       "Your English-speaking guide helps with check-in, rental arrangements and communication at the clubhouse. Your group plays the round independently; the guide does not normally play or accompany you on the course.",
     ],
     duration: "Full day, hotel to hotel", price: "¥250,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Tokyo area or Mt. Fuji region (pick-up at your Tokyo hotel)",
-    img: "/images/golf-flag-fuji.jpg", alt: "A green with its flag, Mt. Fuji rising behind the pines",
+    img: "/images/golf-fuji-aerial.jpg", alt: "Fairways and pines below Mt. Fuji, seen from above on a clear morning",
     gallery: [
+      { img: "/images/golf-fuji-winter.jpg", alt: "A green and its bunkers in winter, Mt. Fuji snow-capped behind", area: "fuji" },
+      { img: "/images/golf-fuji-pond.jpg", alt: "Mt. Fuji reflected in a pond beside the fairway", area: "fuji" },
       { img: "/images/golf-tokyo-clubhouse.jpg", alt: "A green beside the clubhouse pond at a course in the Kanto countryside", area: "tokyo" },
-      { img: "/images/golf-fuji-clouds.jpg", alt: "Mt. Fuji above the clouds, seen from the course", area: "fuji" },
       { img: "/images/golf-tokyo-tee.jpg", alt: "A tee box under a pine, the Yokohama skyline in the distance", area: "tokyo" },
       { img: "/images/golf-tokyo-terrace.jpg", alt: "The green and fairway seen from a clubhouse terrace, Kanto", area: "tokyo" },
-      { img: "/images/golf-fairway.jpg", alt: "A fairway and bunker below Mt. Fuji in early summer", area: "fuji" },
-      { img: "/images/golf-pond.jpg", alt: "Mt. Fuji reflected in a pond beside the fairway", area: "fuji" },
-      { img: "/images/golf-green.jpg", alt: "Golfers on the green, with Mt. Fuji beyond", area: "fuji" },
-      { img: "/images/golf-swing.jpg", alt: "A tee shot towards Mt. Fuji", area: "fuji" },
+      { img: "/images/golf-lakes-aerial.jpg", alt: "A course laid out around two lakes, seen from above" },
     ],
-    partySize: { min: 2, max: 4 },
+    // Four golfers pre-selected: the lowest per-person figure, with the group total beside it.
+    partySize: { min: 2, max: 4, default: 4 },
     pricing: { tiers: golfTiers("tokyo") },
     variants: [
       {
@@ -499,7 +500,7 @@ export const experiences: Experience[] = [
       {
         id: "fuji", title: "Mt. Fuji Golf Day", short: "Mt. Fuji Area", tagline: "Golf in the Mt. Fuji region",
         tiers: golfTiers("fuji"),
-        img: "/images/golf-flag-fuji.jpg", alt: "A green with its flag, Mt. Fuji rising behind the pines",
+        img: "/images/golf-fuji-aerial.jpg", alt: "Fairways and pines below Mt. Fuji, seen from above on a clear morning",
         defaultTime: "06:00",
       },
     ],
@@ -518,7 +519,7 @@ export const experiences: Experience[] = [
       lead: "Tell us your date, your hotel and your golfers. We check availability and send your proposed course, tee time and final price. No payment is required now.",
     },
     includedShort: "Private hotel transfers · 18 holes with English-speaking support · Clubs and lunch",
-    cancellation: "Days are counted to the date of your round, Japan time; free cancellation ends at 18:00 seven days before. The date can be changed up to 14 days before if another tee time is free, and the number of golfers reduced up to 7 days before. If the course closes for weather, it decides on the day and you are refunded everything except costs already incurred, such as the car if it has already set out.",
+    cancellation: "Days are counted to the date of your round, Japan time; free cancellation ends at 6:00 pm JST seven days before. The date can be changed up to 14 days before if another tee time is free, and the number of golfers reduced up to 7 days before. If the course closes for weather, it decides on the day and you are refunded everything except costs already incurred, such as the car if it has already set out.",
     cancellationTiers: [{ until: 7, rate: 0 }, { until: 2, rate: 50 }, { until: 0, rate: 100 }],
     included: [
       "Private round-trip hotel transfers",
@@ -576,7 +577,7 @@ export const experiences: Experience[] = [
       { q: "Who can join?", a: "Golfers aged 18 and over, two to four per booking, all at the published package prices." },
       { q: "What if it rains?", a: "If the course closes for weather, the course decides on the day; you are refunded everything except costs already incurred, such as the car if it has already set out." },
       { q: "What if we are late?", a: "The car waits 15 minutes at your hotel. After that we may miss the tee time and not be able to play, and the cancellation terms apply as for a no-show." },
-      { q: "How far ahead should we book?", a: "At least 30 days ahead if you can — the earlier you enquire, the wider the choice of courses and tee times. Requests close at 18:00 Japan time three days before; within seven days of the date we can confirm only if a tee time can still be found." },
+      { q: "How far ahead should we book?", a: "At least 30 days ahead if you can — the earlier you enquire, the wider the choice of courses and tee times. Requests close at 6:00 pm JST three days before; within seven days of the date we can confirm only if a tee time can still be found." },
     ],
     variantCopy: {
       sub: "Tokyo & Mt. Fuji · Private hotel transfers",
@@ -585,7 +586,7 @@ export const experiences: Experience[] = [
       options: {
         heading: "Choose your golf day", golfersLegend: "Golfers", areaLegend: "Area", golfers: "{n} golfers",
         from: "From", approx: "approx.", perPerson: " / person",
-        total: "{total} total · {n} golfers", totalShort: "{total} total",
+        total: "{total} total · {n} golfers", totalShort: "{total} total", perPersonRef: "{price} / person",
         customQuote: "Custom quote", customQuoteLine: "Specific course · {n} golfers",
         note: "Recommended-course package. Course, tee time and final price confirmed before payment.",
         customNote: "A specific course is quoted individually. Untick it in the form to see the package price again.",
@@ -809,7 +810,7 @@ export const experiences: Experience[] = [
     master: { quote: "For one evening, this room is yours. Come, let us talk.", title: "Geiko and maiko of Kyoto's hanamachi", bio: "Your evening is hosted by working geiko or maiko of Kyoto's flower-and-willow world, arranged especially for your date. The venue is a private banquet house in the Gion / Higashiyama district; its name and address are shared once your booking is confirmed." },
     itinerary: ["10 min before — Arrive at the venue with your guide (address in your confirmation)", "0:00 — Welcome to your private room; the banquet begins", "0:30 — Geiko and maiko join your table; conversation over dinner", "1:00 — Dance performance and ozashiki parlour games", "1:50 — Commemorative photos", "2:00 — End of the evening"],
     goodToKnow: [
-      "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — requests close at 5pm Japan time the day before.",
+      "Held every day except the New Year holidays, with start times from 12:00 to 20:30 — requests close at 5:00 pm JST the day before.",
       "Priced by party size: 2 guests ¥161,000, 3 guests ¥182,000, 4 guests ¥195,000, 5 guests ¥226,000; six or more on request. Live shamisen adds ¥70,000 and two performers with shamisen add ¥135,000, whatever the size of your party.",
       "Peak-season rates apply Mar 15 – May 31 and Oct 1 – Nov 30: 2 guests ¥179,000, 3 guests ¥209,000, 4 guests ¥231,000, 5 guests ¥271,000.",
       "Children: 2 and under join free without a meal, ages 3–11 half the adult rate, 12 and over the adult rate with the full course.",
@@ -866,7 +867,7 @@ export const experiences: Experience[] = [
       { q: "Will our host eat and drink with us?", a: "Usually not. Many maiko are under twenty, and by custom geiko and maiko do not eat at the table: they pour, talk, dance and play. Please do not press food or drink on them — it is the one etiquette point your guide will mention." },
       { q: "Can dietary needs and allergies be catered for?", a: "Yes. Choose from the standard kaiseki course, a vegetarian menu (fish stock can be left out), a gluten-free menu, or a wagyu steak set for guests who eat no fish (salad, steak and rice, served all at once, so its pace differs from the other courses). For allergies or religious restrictions, name the ingredients you cannot eat and the kitchen swaps them within the course; there is no certified halal or kosher menu, and cross-contamination cannot be ruled out entirely. Swaps are for allergies and religious needs, not preferences. Tell us in your request and the kitchen's answer comes back with the conditions, before you pay." },
       { q: "Can children join? What do they pay?", a: "Yes. Children aged 2 and under join free without a meal; ages 3 to 11 pay half the adult rate; 12 and over pay the adult rate. Children of 3 and over are served the same course as adults — there is no children's menu. Count everyone in the number of guests and tell us the children's ages in your request; the quote we send applies the reduction." },
-      { q: "How far ahead must we book?", a: "By 17:00 Japan time the day before at the latest. For a date in the next few days we reply as quickly as we can, and can confirm only if a geiko or maiko is free at such short notice; a booking made less than 4 days ahead cannot be refunded once paid, unless none can be secured. 10 to 14 days ahead is the comfortable window, and spring and autumn (March–April, October–November) fill first. During Miyako Odori (April) the house may only be able to confirm close to the date. The final time slot is confirmed with your availability reply." },
+      { q: "How far ahead must we book?", a: "By 5:00 pm JST the day before at the latest. For a date in the next few days we reply as quickly as we can, and can confirm only if a geiko or maiko is free at such short notice; a booking made less than 4 days ahead cannot be refunded once paid, unless none can be secured. 10 to 14 days ahead is the comfortable window, and spring and autumn (March–April, October–November) fill first. During Miyako Odori (April) the house may only be able to confirm close to the date. The final time slot is confirmed with your availability reply." },
     ],
   },
   {

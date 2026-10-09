@@ -37,10 +37,11 @@ On 2026-09-29 the host also agreed to their use in KAMEHAME JAPAN's own advertis
 `kanji-styles.jpg` is the teacher's own chart of style examples (Cute / Bold / Elegant), shown uncropped. The teacher's condition sheet allows their use on
 all channels; the trial participants' agreement to appear was confirmed with the partner on 2026-09-29.
 
-`public/images/golf-*.jpg` (6 files: `golf-flag-fuji`, `golf-fuji-clouds`, `golf-fairway`, `golf-pond`, `golf-green`, `golf-swing`)
-were supplied by the owner on 2026-10-04 to replace the earlier video stills. The swing photo was cropped to
-remove an overlaid title; the green, pond and fairway photos were supplied at about 640–700 px and upscaled 2x. The source and licence of each file is to be
-confirmed with the owner / golf partner before use in paid ads.
+`public/images/golf-fuji-aerial.jpg`, `golf-fuji-winter.jpg`, `golf-fuji-pond.jpg` and `golf-lakes-aerial.jpg` were supplied by the
+owner on 2026-10-10 (686–880 px wide, kept at that size) and replaced the six earlier golf photos (`golf-flag-fuji`, `golf-fuji-clouds`,
+`golf-fairway`, `golf-pond`, `golf-green`, `golf-swing`), which were upscaled stills and have been deleted. The source and licence of
+each supplied file is to be confirmed with the owner / golf partner before use in paid ads; `golf-lakes-aerial.jpg` shows no
+Mt. Fuji and carries no area label on the page until its course is confirmed.
 
 ## Golf: Tokyo-area course photos (added 2026-10-10)
 

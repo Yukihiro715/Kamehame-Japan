@@ -34,7 +34,7 @@ export const categoriesZh: Category[] = [
     lead: "東京的美甲師把指甲當成畫布。帶上您喜愛的角色或圖案，由每天都在畫這些的美甲師，為您完成可以戴在手上的粉絲創作——日本工藝輕鬆好玩的一面。" },
   { slug: "calligraphy", title: "書法", tag: "藝術與工藝", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "一支筆、黑墨與一個字。跟著老師學筆法，選出承載名字含義的漢字，帶回親手寫的作品。" },
-  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-flag-fuji.jpg",
+  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "日本的高爾夫有自己的規矩，也有全國數一數二的美景。在富士山地區度過私人的高爾夫一日：球場與開球時段為你安排，私人專車從東京飯店出發，並有英語協助。" },
 ];
 
@@ -131,16 +131,14 @@ export const experiencesZh: Experience[] = [
       "說英語的導遊會協助報到、租借球桿的安排，以及在會館的溝通。打球由你們自行進行；導遊通常不下場打球，也不陪同進入球場。",
     ],
     duration: "全日（飯店出發、飯店返回）", price: "¥250,000", group: "私人專車與導遊 · 2 至 4 位球友", ages: "18 歲以上", area: "東京近郊或富士山地區（於東京飯店接送）",
-    img: "/images/golf-flag-fuji.jpg", alt: "松林後方聳立著富士山的果嶺與旗桿",
+    img: "/images/golf-fuji-aerial.jpg", alt: "晴朗早晨，從高處俯瞰富士山下的球道與松林",
     gallery: [
+      { img: "/images/golf-fuji-winter.jpg", alt: "冬日的果嶺與沙坑，後方是積雪的富士山" },
+      { img: "/images/golf-fuji-pond.jpg", alt: "球道旁池塘中倒映的富士山" },
       { img: "/images/golf-tokyo-clubhouse.jpg", alt: "關東地區的球場：會館池畔的果嶺" },
-      { img: "/images/golf-fuji-clouds.jpg", alt: "從球場望去、雲層之上的富士山" },
       { img: "/images/golf-tokyo-tee.jpg", alt: "松樹下的發球台，遠處是橫濱的天際線" },
       { img: "/images/golf-tokyo-terrace.jpg", alt: "從會館露台望向果嶺與球道（關東）" },
-      { img: "/images/golf-fairway.jpg", alt: "初夏時節，富士山下的球道與沙坑" },
-      { img: "/images/golf-pond.jpg", alt: "球道旁池塘中倒映的富士山" },
-      { img: "/images/golf-green.jpg", alt: "果嶺上的球友，遠方是富士山" },
-      { img: "/images/golf-swing.jpg", alt: "朝富士山方向的開球" },
+      { img: "/images/golf-lakes-aerial.jpg", alt: "從高處俯瞰環繞兩座湖泊的球場" },
     ],
     variants: [
       {
@@ -149,7 +147,7 @@ export const experiencesZh: Experience[] = [
       },
       {
         id: "fuji", title: "富士山高爾夫日", short: "富士山地區", tagline: "富士山地區的球場",
-        tiers: [], img: "/images/golf-flag-fuji.jpg", alt: "松林後方聳立著富士山的果嶺與旗桿",
+        tiers: [], img: "/images/golf-fuji-aerial.jpg", alt: "晴朗早晨，從高處俯瞰富士山下的球道與松林",
       },
     ],
     langTag: "說英語的高爾夫導遊",
@@ -226,7 +224,7 @@ export const experiencesZh: Experience[] = [
       options: {
         heading: "選擇方案與人數", golfersLegend: "人數", areaLegend: "區域", golfers: "{n} 位球友",
         from: "每位", approx: "約", perPerson: "", fromSuffix: " 起",
-        total: "{n} 位參加／每組 {total}", totalShort: "每組 {total}",
+        total: "{n} 位參加／每組 {total}", totalShort: "每組 {total}", perPersonRef: "每位 {price}",
         customQuote: "指定球場，個別報價", customQuoteLine: "指定球場 · {n} 位球友",
         note: "推薦球場方案。球場、開球時段與最終價格於付款前確認。",
         customNote: "指定球場將個別報價。取消表單中的勾選即可恢復顯示方案價格。",

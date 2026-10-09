@@ -3,7 +3,7 @@
 import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useBooking } from "@/components/site/booking-context";
 import { RatingSummary } from "@/components/site/reviews";
-import { countOf, fromPrice, perPersonOf, tierTotal, yen } from "@/lib/pricing";
+import { countOf, fromPrice, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
 import type { Lang } from "@/lib/i18n";
 import type { ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 
@@ -19,6 +19,8 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
   }
   const { perPerson, approximate } = perPersonOf(total, n);
   return {
+    /** "¥87,500 / person" — beside a fixed total */
+    perPersonRef: perPersonRefText(copy, perPerson, approximate),
     custom: false as const,
     /** "From approx." / "1名 約" — the words before the per-person figure */
     lead: [copy.from, approximate ? copy.approx : ""].filter(Boolean).join(" "),
@@ -62,14 +64,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
 
       <fieldset className="go-size">
         <legend>{copy.golfersLegend}</legend>
-        <div className="go-seg">
-          {parties.map((k) => (
-            <label key={k} className={`go-seg-opt${n === k ? " on" : ""}`}>
-              <input type="radio" name="golfers" value={k} checked={n === k} onChange={() => b.set({ guests: String(k) })} />
-              <span>{countOf(copy.golfers, k)}</span>
-            </label>
-          ))}
-        </div>
+        <GolfersSeg parties={parties} copy={copy} name="golfers" />
       </fieldset>
 
       <fieldset className="go-areas">
@@ -93,8 +88,10 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                       <b>{yen(p.perPerson)}{copy.fromSuffix && <span className="go-suffix">{copy.fromSuffix}</span>}</b>
                       {copy.perPerson && <small className="go-unit">{copy.perPerson}</small>}
                     </span>
-                    {/* the words wrap as they like; the figure never breaks */}
-                    <span className="go-total">{p.totalLine.split(yen(p.total)).map((x, i, all) => <span key={i}>{x}{i < all.length - 1 && <span className="nw">{yen(p.total)}</span>}</span>)}</span>
+                    {/* wraps only at the " · " separator where there is one; otherwise only the figure is kept whole */}
+                    <span className="go-total">{p.totalLine.includes(" · ")
+                      ? p.totalLine.split(" · ").map((x, i, all) => <span key={i}><span className="nw">{x}</span>{i < all.length - 1 ? " · " : ""}</span>)
+                      : p.totalLine.split(yen(p.total)).map((x, i, all) => <span key={i}>{x}{i < all.length - 1 && <span className="nw">{yen(p.total)}</span>}</span>)}</span>
                   </>
                 )}
               </label>
@@ -108,5 +105,52 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
       <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>
       <a className="go-all-prices" href="#prices" onClick={showPrices}>{copy.allPrices}</a>
     </section>
+  );
+}
+
+/** The party-size control: one pill per size, the chosen one marked like the
+ *  area cards (ink border, cream fill, a check). Shared by the panel and the
+ *  form's summary; both write the same booking state. */
+function GolfersSeg({ parties, copy, name }: { parties: number[]; copy: Pick<OptionsCopy, "golfers">; name: string }) {
+  const b = useBooking();
+  if (!b) return null;
+  const n = b.guestsNumber;
+  return (
+    <div className="go-seg">
+      {parties.map((k) => (
+        <label key={k} className={`go-seg-opt${n === k ? " on" : ""}`}>
+          <input type="radio" name={name} value={k} checked={n === k} onChange={() => b.set({ guests: String(k) })} />
+          <span>{n === k && <Check size={13} aria-hidden="true" />}{countOf(copy.golfers, k)}</span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
+/** The same two choices in a compact form, for the top of the request form:
+ *  the party size, then the area as pills. Same booking state as the panel. */
+export function GolfQuickPick({ variants, copy, parties, name }: {
+  variants: ExperienceVariant[]; copy: Pick<OptionsCopy, "golfers" | "golfersLegend" | "areaLegend">; parties: number[]; name: string;
+}) {
+  const b = useBooking();
+  if (!b) return null;
+  return (
+    <div className="go-pick">
+      <fieldset className="go-size">
+        <legend>{copy.golfersLegend}</legend>
+        <GolfersSeg parties={parties} copy={copy} name={`${name}-golfers`} />
+      </fieldset>
+      <fieldset className="go-size">
+        <legend>{copy.areaLegend}</legend>
+        <div className="go-seg two">
+          {variants.map((v) => (
+            <label key={v.id} className={`go-seg-opt${b.variant === v.id ? " on" : ""}`}>
+              <input type="radio" name={`${name}-area`} value={v.id} checked={b.variant === v.id} onChange={() => b.set({ variant: v.id })} />
+              <span>{b.variant === v.id && <Check size={13} aria-hidden="true" />}{v.short}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </div>
   );
 }

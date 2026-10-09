@@ -39,7 +39,7 @@ export const categoriesJa: Category[] = [
     lead: "東京のネイリストは、爪をキャンバスとして扱います。お好きなキャラクターやデザインをお持ちいただき、毎日これを描いている作家の手で、身につけられるファンアートに。日本の手仕事の、軽やかな一面です。" },
   { slug: "calligraphy", title: "書道・筆文字", tag: "アート・クラフト", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "筆と墨と、一文字。講師から筆づかいを習い、名前の意味を持つ漢字を選んで、自分で書いた作品を持ち帰ります。" },
-  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-flag-fuji.jpg",
+  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "日本のゴルフには独自の作法があり、国内屈指の景色があります。コースとティータイムを手配し、東京のホテルから専用車で、英語サポート付きで過ごす富士山エリアのプライベートゴルフの一日。" },
 ];
 
@@ -136,16 +136,14 @@ export const experiencesJa: Experience[] = [
       "英語を話すガイドがチェックイン、レンタルの手配、クラブハウスでのやり取りをお手伝いします。ラウンドはお客様ご一行だけでお楽しみください。ガイドは通常、プレーやコースへの同行はしません。",
     ],
     duration: "1日(ホテル発着)", price: "¥250,000", group: "専用車・英語ガイド・2〜4名", ages: "18歳以上", area: "東京近郊または富士山エリア(東京のホテル発着)",
-    img: "/images/golf-flag-fuji.jpg", alt: "松林の向こうに富士山がそびえるグリーンと旗",
+    img: "/images/golf-fuji-aerial.jpg", alt: "晴れた朝、富士山を望むフェアウェイと松林を上空から",
     gallery: [
+      { img: "/images/golf-fuji-winter.jpg", alt: "冬のグリーンとバンカー。背後に雪をいただく富士山" },
+      { img: "/images/golf-fuji-pond.jpg", alt: "フェアウェイ脇の池に映る富士山" },
       { img: "/images/golf-tokyo-clubhouse.jpg", alt: "関東のコース。クラブハウスと池のそばのグリーン" },
-      { img: "/images/golf-fuji-clouds.jpg", alt: "コースから望む、雲の上にそびえる富士山" },
       { img: "/images/golf-tokyo-tee.jpg", alt: "松の木の下のティーグラウンド。遠くに横浜の街並み" },
       { img: "/images/golf-tokyo-terrace.jpg", alt: "クラブハウスのテラスから見たグリーンとフェアウェイ(関東)" },
-      { img: "/images/golf-fairway.jpg", alt: "初夏、富士山を望むフェアウェイとバンカー" },
-      { img: "/images/golf-pond.jpg", alt: "フェアウェイ脇の池に映る富士山" },
-      { img: "/images/golf-green.jpg", alt: "富士山を望むグリーンでプレーするゴルファー" },
-      { img: "/images/golf-swing.jpg", alt: "富士山に向かって放つティーショット" },
+      { img: "/images/golf-lakes-aerial.jpg", alt: "二つの池を囲むコースを上空から" },
     ],
     variants: [
       {
@@ -154,7 +152,7 @@ export const experiencesJa: Experience[] = [
       },
       {
         id: "fuji", title: "富士山ゴルフデー", short: "富士山エリア", tagline: "富士山エリアのゴルフ場で",
-        tiers: [], img: "/images/golf-flag-fuji.jpg", alt: "松林の向こうに富士山がそびえるグリーンと旗",
+        tiers: [], img: "/images/golf-fuji-aerial.jpg", alt: "晴れた朝、富士山を望むフェアウェイと松林を上空から",
       },
     ],
     langTag: "英語を話すゴルフガイド",
@@ -231,7 +229,7 @@ export const experiencesJa: Experience[] = [
       options: {
         heading: "プランと人数を選ぶ", golfersLegend: "人数", areaLegend: "エリア", golfers: "{n}名",
         from: "1名", approx: "約", perPerson: "", fromSuffix: "〜",
-        total: "{n}名参加時／1組合計 {total}", totalShort: "1組合計 {total}",
+        total: "{n}名参加時／1組合計 {total}", totalShort: "1組合計 {total}", perPersonRef: "1名あたり {price}",
         customQuote: "希望コースのため個別見積もり", customQuoteLine: "希望コース指定・{n}名",
         note: "おすすめコースのパッケージ料金です。コース・ティータイム・最終料金はお支払いの前に確定します。",
         customNote: "希望コースを指定する場合は個別にお見積もりします。フォームのチェックを外すと、パッケージ料金の表示に戻ります。",

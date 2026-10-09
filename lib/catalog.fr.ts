@@ -34,7 +34,7 @@ export const categoriesFr: Category[] = [
     lead: "Les nail artists de Tokyo traitent l'ongle comme une toile. Apportez votre personnage ou motif préféré et repartez avec un fan art à porter, réalisé par une artiste qui fait cela tous les jours — la face légère et joueuse de l'artisanat japonais." },
   { slug: "calligraphy", title: "Calligraphie", tag: "Arts et artisanat", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "Un pinceau, de l'encre noire et un seul caractère. Apprenez les traits avec une professeure, choisissez des kanji qui portent le sens de votre prénom et repartez avec une œuvre faite de vos mains." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-flag-fuji.jpg",
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "Au Japon, le golf a ses propres usages et quelques-uns des plus beaux panoramas du pays. Une journée de golf privée dans la région du mont Fuji, avec votre golf et votre heure de départ organisés pour vous, une voiture privée depuis votre hôtel à Tokyo et un accompagnement en anglais." },
 ];
 
@@ -131,16 +131,14 @@ export const experiencesFr: Experience[] = [
       "Votre guide anglophone vous aide pour l'enregistrement, la location et la communication au club-house. Votre groupe joue la partie en toute autonomie ; en principe, le guide ne joue pas et ne vous accompagne pas sur le parcours.",
     ],
     duration: "Journée complète, d'hôtel à hôtel", price: "¥250,000", group: "Voiture privée et guide · 2 à 4 golfeurs", ages: "Dès 18 ans", area: "Région de Tokyo ou du mont Fuji (prise en charge à votre hôtel de Tokyo)",
-    img: "/images/golf-flag-fuji.jpg", alt: "Un green et son drapeau, le mont Fuji dressé derrière les pins",
+    img: "/images/golf-fuji-aerial.jpg", alt: "Fairways et pins sous le mont Fuji, vus d'en haut par un matin clair",
     gallery: [
+      { img: "/images/golf-fuji-winter.jpg", alt: "Un green et ses bunkers en hiver, le mont Fuji enneigé derrière" },
+      { img: "/images/golf-fuji-pond.jpg", alt: "Le mont Fuji reflété dans un étang au bord du fairway" },
       { img: "/images/golf-tokyo-clubhouse.jpg", alt: "Un green au bord de l'étang du club-house, sur un parcours de la région du Kanto" },
-      { img: "/images/golf-fuji-clouds.jpg", alt: "Le mont Fuji au-dessus des nuages, vu du parcours" },
       { img: "/images/golf-tokyo-tee.jpg", alt: "Un départ sous un pin, la silhouette de Yokohama au loin" },
       { img: "/images/golf-tokyo-terrace.jpg", alt: "Le green et le fairway vus de la terrasse du club-house, Kanto" },
-      { img: "/images/golf-fairway.jpg", alt: "Un fairway et un bunker sous le mont Fuji au début de l'été" },
-      { img: "/images/golf-pond.jpg", alt: "Le mont Fuji reflété dans un étang au bord du fairway" },
-      { img: "/images/golf-green.jpg", alt: "Des golfeurs sur le green, le mont Fuji au loin" },
-      { img: "/images/golf-swing.jpg", alt: "Un coup de départ vers le mont Fuji" },
+      { img: "/images/golf-lakes-aerial.jpg", alt: "Un parcours dessiné autour de deux lacs, vu d'en haut" },
     ],
     variants: [
       {
@@ -149,7 +147,7 @@ export const experiencesFr: Experience[] = [
       },
       {
         id: "fuji", title: "Journée de golf au mont Fuji", short: "Région du mont Fuji", tagline: "Golf dans la région du mont Fuji",
-        tiers: [], img: "/images/golf-flag-fuji.jpg", alt: "Un green et son drapeau, le mont Fuji dressé derrière les pins",
+        tiers: [], img: "/images/golf-fuji-aerial.jpg", alt: "Fairways et pins sous le mont Fuji, vus d'en haut par un matin clair",
       },
     ],
     langTag: "Guide de golf anglophone",
@@ -226,7 +224,7 @@ export const experiencesFr: Experience[] = [
       options: {
         heading: "Choisissez votre journée de golf", golfersLegend: "Golfeurs", areaLegend: "Région", golfers: "{n} golfeurs",
         from: "Dès", approx: "env.", perPerson: " / pers.",
-        total: "{total} au total · {n} golfeurs", totalShort: "{total} au total",
+        total: "{total} au total · {n} golfeurs", totalShort: "{total} au total", perPersonRef: "{price} / pers.",
         customQuote: "Devis sur mesure", customQuoteLine: "Parcours précis · {n} golfeurs",
         note: "Formule avec parcours recommandé. Parcours, heure de départ et prix définitif confirmés avant le paiement.",
         customNote: "Un parcours précis fait l'objet d'un devis individuel. Décochez-le dans le formulaire pour revoir le prix du forfait.",
