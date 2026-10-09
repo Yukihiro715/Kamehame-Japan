@@ -181,15 +181,15 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                     <tr key={v.id}>
                       <td><b>{v.title}</b></td>
                       {parties.map((n) => n === v.basePartySize
-                        ? <td key={n} className="total">{fromPrice(vc.pricing, v.price)}<small>{yen(Math.round(v.price / n))} {vc.pricing.perGolferNote}</small></td>
-                        : <td key={n} className="quote">{vc.pricing.customQuote}</td>)}
+                        ? <td key={n} className="total" data-label={countOf(vc.pricing.golfers, n)}><span>{fromPrice(vc.pricing, v.price)}<small>{yen(Math.round(v.price / n))} {vc.pricing.perGolferNote}</small></span></td>
+                        : <td key={n} className="quote" data-label={countOf(vc.pricing.golfers, n)}><span>{vc.pricing.customQuote}</span></td>)}
                     </tr>
                   ))}
                 </tbody>
               </table>
               <ul className="vp-notes">
                 {vc.pricing.notes.map((n) => <li key={n}>{n}</li>)}
-                {exp.taxIncluded && <li>{D.taxIncluded}.</li>}
+                {exp.taxIncluded && <li>{D.taxIncluded}{lang === "ja" || lang === "zh-tw" ? "。" : "."}</li>}
               </ul>
               {addOns.length > 0 && (
                 <>
