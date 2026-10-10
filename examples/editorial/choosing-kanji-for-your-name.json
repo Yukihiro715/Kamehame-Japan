@@ -1,0 +1,390 @@
+{
+  "version": 1,
+  "slug": "choosing-kanji-for-your-name",
+  "language": "en",
+  "status": "draft",
+  "createdAt": "2026-10-10",
+  "updatedAt": "2026-10-10",
+  "publishedAt": null,
+  "product": {
+    "slug": "kanji-name-calligraphy",
+    "url": "https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/",
+    "facts": {
+      "slug": "kanji-name-calligraphy",
+      "city": "tokyo",
+      "title": "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
+      "tagline": "Create a one-of-a-kind kanji artwork inspired by your own name, in a private class in Tokyo. Before the day we ask about your name and its meaning, and the teacher prepares three kanji for you; you choose the one that feels most like you and turn it into art with brush and ink.",
+      "overview": [
+        "This is not a calligraphy class about writing perfectly or following strict rules. What matters is what your kanji means to you, and expressing it in your own way.",
+        "You start by exploring how the brush moves — lines, dry-brush texture, the moods of ink. Then you choose a style, Cute, Bold or Elegant, and develop your character with one-to-one guidance from the teacher. No experience with brushes or kanji is needed.",
+        "A red seal completes the piece, and it goes home with you: a kanji chosen for you and shaped by your own hands — a piece of art from your time in Tokyo, not just a souvenir."
+      ],
+      "duration": "About 2 hours",
+      "price": "¥19,800",
+      "priceUnit": "person",
+      "group": "Private · 1–4 guests",
+      "ages": "Ages 10+",
+      "area": "Tokyo (Shinjuku)",
+      "partySize": {
+        "min": 1,
+        "max": 4
+      },
+      "pricing": {
+        "minCharge": 2
+      },
+      "included": [
+        "A two-hour class led by the teacher in simple English",
+        "All tools for the class: brush, ink, inkstone, felt mat and practice paper — and an apron",
+        "Your finished piece on a shikishi board, with a wooden display stand to take home",
+        "The red seal on your work, and time for photos at the end",
+        "Tax included — nothing is added on the day"
+      ],
+      "notIncluded": [
+        "Transport to the studio (meet on site)",
+        "The teacher's postcards and prints, on sale at the studio if you would like one"
+      ],
+      "availability": {
+        "daily": true,
+        "startTimes": [
+          "10:30",
+          "13:30",
+          "16:00"
+        ],
+        "cutoffDays": 1,
+        "cutoffTime": "18:00"
+      },
+      "cancellation": "Days are counted to the date of the class, Japan time. Date changes follow the same scale, if another date has room. The studio is booked by the hour, so arriving late shortens practice rather than extending the class. If the teacher has to cancel, you hear by 17:00 the day before and receive a full refund.",
+      "cancellationTiers": [
+        {
+          "until": 7,
+          "rate": 0
+        },
+        {
+          "until": 3,
+          "rate": 50
+        },
+        {
+          "until": 0,
+          "rate": 100
+        }
+      ],
+      "faq": [
+        {
+          "q": "Do I need any experience?",
+          "a": "No. The class starts with the basic strokes, and the teacher adjusts the pace to your group."
+        },
+        {
+          "q": "My handwriting isn't neat. Does that matter?",
+          "a": "Not at all. The class isn't about writing perfectly: it's about what the kanji means to you and expressing it your way. You choose a style — Cute, Bold or Elegant — and the teacher guides you step by step."
+        },
+        {
+          "q": "How do you choose kanji for a name that isn't Japanese?",
+          "a": "By meaning. Before the class we ask what your name means and where it comes from, as far as you know. The teacher prepares three characters that carry that meaning or image, and explains each one on the day. If you would rather not use your name, tell us a word instead — light, dream, courage."
+        },
+        {
+          "q": "What do I take home?",
+          "a": "Your final piece on a shikishi board, sealed with a red stamp, and a wooden stand to display it."
+        },
+        {
+          "q": "Which language is the class taught in?",
+          "a": "English — the teacher runs the class herself in simple English."
+        },
+        {
+          "q": "Can children join?",
+          "a": "From age 10, because the class uses real ink. Children pay the adult price."
+        },
+        {
+          "q": "I'm travelling alone. Can I join?",
+          "a": "Yes. A class for one is priced as two guests; the booking box shows the total when you choose one guest."
+        },
+        {
+          "q": "What should I wear?",
+          "a": "Clothes you don't mind getting ink on. Aprons are provided."
+        },
+        {
+          "q": "Can we book at short notice?",
+          "a": "Yes, until 6:00 pm JST the day before. The teacher and the studio are booked when your request comes in, so we confirm once both are free for your date — for a class in the next few days, only if they still are."
+        },
+        {
+          "q": "How does booking work?",
+          "a": "Choose a date and send a request; we reply within 24 hours with the price and conditions. Sending the request costs nothing. Your booking is confirmed when you pay through the link we send, and cancellation terms start then."
+        },
+        {
+          "q": "What if we are late?",
+          "a": "The studio is booked by the hour, so the class ends on time and practice is shorter. Tell us as soon as you know you are running late."
+        },
+        {
+          "q": "Is transport included?",
+          "a": "No. You meet the teacher at the studio in Shinjuku; the address and directions come with your confirmation."
+        }
+      ],
+      "flow": [
+        {
+          "title": "Choose a date and send your request",
+          "body": "Pick a date and a start time. Add each guest's name and its meaning if you know it."
+        },
+        {
+          "title": "We reply within 24 hours",
+          "body": "With whether the class is free on that date, the price and the conditions."
+        },
+        {
+          "title": "Pay to confirm",
+          "body": "Your booking is confirmed when your payment arrives; cancellation terms start then. We then ask for what the teacher needs: every guest's name and its meaning, nationality, and a phone number for the day."
+        }
+      ]
+    },
+    "factsHash": "98136b42cc1b3cc26da35e7c4bf7608e42d37a1424e0303bca66c4f71cc7d666"
+  },
+  "image": {
+    "src": "/images/kanji-hero-results.jpg",
+    "alt": "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
+    "rightsNote": "IMAGE_CREDITS.md: teacher-provided kanji class photos, all channels including participants approved 2026-09-29. Human reviewer must confirm this journal use."
+  },
+  "sources": [
+    {
+      "id": "s0",
+      "kind": "own",
+      "url": "https://kamehame-japan.com/en/tokyo/kanji-name-calligraphy/",
+      "title": "Your Name in Kanji: Brush Calligraphy Class in Tokyo",
+      "retrievedAt": "2026-10-10",
+      "contentHash": "aad15252f0f56b924dee652bd6270317b3ba4d91b8f0041c562238c8a9c12070"
+    },
+    {
+      "id": "s1",
+      "kind": "official",
+      "url": "https://www.japan.travel/en/au/story/art-calligraphy/",
+      "title": "The Art of Calligraphy",
+      "retrievedAt": "2026-10-10",
+      "contentHash": "6b148256d5e009559ae886a5fd0a284983d7177b7a571f8fa0a5d1090a99999d"
+    }
+  ],
+  "draft": {
+    "title": "Choosing Kanji for Your Name: Preparing for a Tokyo Calligraphy Class",
+    "description": "Prepare for a meaning-based kanji calligraphy class in Tokyo: what to share about your name, how the character is chosen, and what you make to take home.",
+    "summaryJa": "名前の意味から漢字を選ぶ体験について、事前に伝える情報・当日の選び方・持ち帰る作品を説明する英語記事案です。一般的な書道史よりも、予約前の迷いを解消する内容に絞っています。",
+    "uniqueValueJa": "自社クラス特有の「講師が3つの候補を用意→自分で選ぶ」を明示。名前の由来が不明な人向けに、代わりの言葉を伝える選択肢も示します。",
+    "questionsJa": [
+      "本番のAPIによる独立レビューは未実行です。このサンプルはCodexが作成し、構造と画面の検証に使用しています。公開前に本文・根拠・写真の利用範囲を確認してください。"
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Start with what your name means to you. In KAMEHAME JAPAN’s Tokyo calligraphy class, the teacher uses the meaning or image behind a guest’s name to prepare three character choices. You choose one during the session and use it as the starting point for a brush-and-ink artwork. The useful preparation is a short explanation of your name, rather than arriving with a character already selected.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "heading",
+        "text": "What kind of name artwork will you make?",
+        "sourceIds": [],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "This class takes a meaning-based approach. The teacher asks about your name and its background, then suggests characters connected with that meaning or image. The goal described by the class is a personal artwork. Think of the session as choosing an idea you would like to express with a brush, rather than expecting it to supply a fixed, official Japanese version of your name.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "Shodo is Japanese brush-and-ink calligraphy. In JNTO’s interview with calligraphy teacher Keiko Fukumitsu, she describes how a composition depends on brush movement, ink and the space around the character. That gives a useful starting point for a beginner: the mark and its placement are part of the expression, alongside the character’s meaning.",
+        "sourceIds": [
+          "s1"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "heading",
+        "text": "What should you tell the teacher beforehand?",
+        "sourceIds": [],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "table",
+        "text": "",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [
+          "Your starting point",
+          "What to share"
+        ],
+        "rows": [
+          [
+            "You know the meaning of your name",
+            "Give your name and explain its meaning and origin as far as you know them."
+          ],
+          [
+            "You are unsure of its origin",
+            "Say what you do know; you do not need to invent a family history or an etymology."
+          ],
+          [
+            "You would prefer another theme",
+            "Ask to use a word instead of your name. The class suggests ideas such as light, dream or courage."
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep this explanation personal and clear. If you are booking for several people, collect each guest’s name and the information they want the teacher to consider. The preparation is individual: sharing only the lead guest’s details would leave the teacher without the same background for the rest of the group.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "heading",
+        "text": "How do you choose between the characters?",
+        "sourceIds": [],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "You do not need to decide from an unfamiliar symbol alone. The teacher explains the three options during the class, so you can connect a character with the idea it represents. Use that conversation to ask which option feels closest to the meaning you shared. A simple question to bring is: “What does this character suggest, and why did you choose it for me?”",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "After choosing a character, you explore the brush through lines and ink textures. The class offers Cute, Bold and Elegant as directions for your work, with individual guidance as you develop it. Prior calligraphy experience is not required. Nor does untidy everyday handwriting rule you out: the class is designed around personal expression rather than a test of perfect handwriting.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "heading",
+        "text": "Leave room in your plans for the whole session",
+        "sourceIds": [],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "The private session lasts about two hours in Shinjuku and takes one to four guests, aged ten or older. Instruction is in simple English. Tools and an apron are supplied, but choose clothing that can tolerate an accidental ink mark. Transport is not included; the studio directions arrive with the booking confirmation.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "The studio booking has a fixed end time, so arriving late reduces your practice time. Your finished character goes onto a shikishi board, is completed with a red seal, and comes with a wooden display stand. That gives you a specific object to plan for when packing after the class, rather than assuming the result is a loose practice sheet.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "heading",
+        "text": "Before sending a date request",
+        "sourceIds": [],
+        "items": [],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "list",
+        "text": "",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [
+          "Choose a date and preferred session time, and give the number of guests.",
+          "Share each person’s name and its meaning if known, or mention an alternative word.",
+          "If travelling alone, note that the minimum charge is for two guests.",
+          "Read the current product page for prices, cancellation conditions and availability. Sending a request is free; the booking is confirmed after payment through the link provided."
+        ],
+        "headers": [],
+        "rows": []
+      },
+      {
+        "type": "paragraph",
+        "text": "The related Tokyo calligraphy experience below gives the current booking details. Once you have checked them, the most useful next step is to send your date request with the background you want the teacher to work from.",
+        "sourceIds": [
+          "s0"
+        ],
+        "items": [],
+        "headers": [],
+        "rows": []
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The class prepares three character options based on the meaning or image of a guest’s name.",
+        "sourceIds": [
+          "s0"
+        ],
+        "evidence": "The catalog FAQ explains the meaning-based selection, three prepared characters, and the option to use a word instead."
+      },
+      {
+        "claim": "Brush movement, ink and the space around a character contribute to a shodo composition.",
+        "sourceIds": [
+          "s1"
+        ],
+        "evidence": "The JNTO interview discusses brush control and the artistic importance of the space around the written characters."
+      },
+      {
+        "claim": "The private class is about two hours, for 1–4 guests aged 10+, in Shinjuku, with simple-English teaching.",
+        "sourceIds": [
+          "s0"
+        ],
+        "evidence": "Catalog duration, partySize, ages, area and included fields specify these conditions."
+      },
+      {
+        "claim": "A shikishi artwork, red seal and wooden display stand are included; solo participants pay the two-person minimum.",
+        "sourceIds": [
+          "s0"
+        ],
+        "evidence": "Included items and the solo-traveller FAQ specify the take-home work and minimum charge."
+      }
+    ]
+  },
+  "review": {
+    "verdict": "revise",
+    "summaryJa": "出典を確認して作成した初期サンプルです。APIでの独立レビューと人による公開承認はまだ行っていません。",
+    "blockersJa": [
+      "初期サンプルのため、独立レビューと最終の内容確認が必要です。"
+    ],
+    "warningsJa": [
+      "検索ボリュームと検索順位の実測値は未取得です。"
+    ]
+  },
+  "approval": null,
+  "generation": {
+    "method": "codex-assisted-sample",
+    "writerModel": null,
+    "reviewerModel": null,
+    "usage": []
+  }
+}

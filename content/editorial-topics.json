@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "choosing-kanji-for-your-name",
+    "productSlug": "kanji-name-calligraphy",
+    "intent": "How can a visitor choose a meaningful kanji character inspired by their name, and what should they prepare before a Tokyo calligraphy class? Explain this class's meaning-based creative interpretation without promising an official Japanese name or literal translation.",
+    "imageRightsNote": "IMAGE_CREDITS.md: teacher-provided kanji class photos, all channels including participants approved 2026-09-29. Human reviewer must confirm this journal use.",
+    "sources": [{ "kind": "official", "url": "https://www.japan.travel/en/au/story/art-calligraphy/" }]
+  },
+  {
+    "slug": "tokyo-golf-day-what-to-arrange",
+    "productSlug": "mt-fuji-golf-day",
+    "intent": "Planning a golf day from a Tokyo hotel: what to arrange about transport, clubs, shoes, group size, course confirmation and weather. Distinguish our specific package from general Japanese golf customs.",
+    "imageRightsNote": "IMAGE_CREDITS.md: verify golf-fuji-aerial.jpg rights for a journal article before publication; do not assume paid-ad permission.",
+    "sources": [{ "kind": "own", "url": "https://kamehame-japan.com/en/tokyo/mt-fuji-golf-day/" }]
+  },
+  {
+    "slug": "kyoto-geisha-dinner-dietary-requests",
+    "productSlug": "evening-with-geiko",
+    "intent": "What to tell the organiser about dietary needs before requesting our private Kyoto geisha dinner. Distinguish vegetarian/no-fish-stock options from certified religious diets; avoid safety guarantees. Do not repeat the existing general maiko booking guide.",
+    "imageRightsNote": "IMAGE_CREDITS.md: partner photo permission exists; human reviewer must confirm journal use of geiko-photo-together.jpg.",
+    "sources": [{ "kind": "own", "url": "https://kamehame-japan.com/en/kyoto/evening-with-geiko/" }]
+  }
+]

@@ -147,6 +147,18 @@ export function buildEntries(read) {
     }
   }
 
+  // Only approved articles enter this manifest (rebuilt before the sitemap).
+  // Explicit editorial dates remain stable across unrelated deployments.
+  for (const article of JSON.parse(src("lib/journal.generated.json") || "[]")) {
+    if (!article.experiences.some((slug) => listed.has(slug))) continue;
+    const path = `/en/journal/${article.slug}/`;
+    articlePaths.en.push(path);
+    add(path, { priority: "0.6", changefreq: "monthly", alternates: { en: path }, date: article.editorial.updatedAt });
+    const related = experiences.filter((e) => article.experiences.includes(e.slug));
+    const parents = new Set(["/", "/en/experiences/", ...related.flatMap((e) => [expPath("en", e), `/en/${e.city}/`, `/en/${e.category}/`])]);
+    for (const entry of entries) if (parents.has(entry.path)) entry.deps.push(path);
+  }
+
   const staticCopy = src("lib/static-pages.ts");
   const aboutSrc = staticCopy.slice(staticCopy.indexOf("const ABOUT"), staticCopy.indexOf("const FAQ"));
   const faqSrc = staticCopy.slice(staticCopy.indexOf("const FAQ"));

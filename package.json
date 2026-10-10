@@ -14,7 +14,9 @@
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
     "deploy": "npm run build && wrangler deploy",
-    "prebuild": "node scripts/generate-sitemap.mjs"
+    "prebuild": "node scripts/editorial/cli.mjs compile && node scripts/generate-sitemap.mjs",
+    "editorial": "node scripts/editorial/cli.mjs",
+    "test:editorial": "node --test tests/editorial.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

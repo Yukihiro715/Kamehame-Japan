@@ -9,6 +9,12 @@
 
 import { catalogFor } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
+import generated from "@/lib/journal.generated.json";
+
+export interface ArticleBlock {
+  type: "heading" | "paragraph" | "list" | "table";
+  text: string; items: string[]; headers: string[]; rows: string[][]; sourceIds: string[];
+}
 
 export interface Article {
   slug: string;
@@ -26,6 +32,10 @@ export interface Article {
   alt: string;
   /** Per-locale copy. An article renders only in the locales present here. */
   copy: Partial<Record<Lang, ArticleCopy>>;
+  editorial?: {
+    updatedAt: string; author: string; imageCredit: string;
+    sources: { id: string; url: string; title: string; retrievedAt: string }[];
+  };
 }
 
 export interface ArticleCopy {
@@ -34,6 +44,7 @@ export interface ArticleCopy {
   standfirst: string;
   /** Body paragraphs. A string starting with "## " becomes a subheading. */
   body: string[];
+  blocks?: ArticleBlock[];
 }
 
 const ARTICLES: Article[] = [
@@ -327,7 +338,7 @@ const ARTICLES: Article[] = [
 
 export const articlesFor = (lang: Lang): Article[] => {
   const listed = new Set(catalogFor(lang).experiences.map((e) => e.slug));
-  return ARTICLES
+  return [...ARTICLES, ...(generated as Article[])]
     .filter((a) => a.copy[lang] && a.experiences.some((slug) => listed.has(slug)))
     .sort((a, b) => b.date.localeCompare(a.date));
 };

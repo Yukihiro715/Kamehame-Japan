@@ -1,0 +1,65 @@
+name: Editorial draft and review
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'generate = 初稿作成 / approve = 確認した下書きを公開PRへ'
+        required: true
+        type: choice
+        options: [generate, approve]
+      slug:
+        description: 'content/editorial-topics.json の slug'
+        required: true
+        type: string
+        default: choosing-kanji-for-your-name
+      reviewed_content_and_image_rights:
+        description: 'approve時のみ: 本文・商品条件・出典・画像の権利を確認した'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: editorial-${{ inputs.slug }}
+  cancel-in-progress: false
+jobs:
+  editorial:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EDITORIAL_ACTION: ${{ inputs.action }}
+      EDITORIAL_SLUG: ${{ inputs.slug }}
+      EDITORIAL_CONFIRMED: ${{ inputs.reviewed_content_and_image_rights }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Prepare isolated article branch
+        run: node scripts/editorial/github.mjs prepare
+      - name: Research, write and review
+        if: inputs.action == 'generate'
+        run: npm run editorial -- generate "$EDITORIAL_SLUG"
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+      - name: Record human approval
+        if: inputs.action == 'approve'
+        run: npm run editorial -- approve "$EDITORIAL_SLUG" --reviewer="$GITHUB_ACTOR" --confirm-content-and-image-rights
+      - name: Verify pipeline and production build
+        run: npm run test:editorial && npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: editorial-${{ inputs.slug }}
+          path: outputs/editorial/
+          retention-days: 14
+      - name: Open a draft pull request
+        run: node scripts/editorial/github.mjs pr
+        env:
+          GH_TOKEN: ${{ github.token }}
