@@ -6,6 +6,7 @@ import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
 import { golfPriceNoteJa, notificationBody, notificationSubject } from "@/lib/notification";
+import { translateForTeam, type TranslatedField } from "@/lib/translate";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -47,10 +48,12 @@ function titleFor(e: Enquiry): string | undefined {
 
 /** Both messages in one batch call. Resend rejects the whole batch if the
  *  domain is not verified, which the caller treats as "try the fallback". */
-async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void> {
+type Translations = Partial<Record<TranslatedField, string>>;
+
+async function sendViaResend(key: string, to: string, e: Enquiry, ja: Translations): Promise<void> {
   const ack = acknowledgement(e, titleFor(e));
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
-  const ja = jaTitle(e);
+  const jaName = jaTitle(e);
   const res = await fetch("https://api.resend.com/emails/batch", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
@@ -59,8 +62,8 @@ async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void>
         from: `KAMEHAME JAPAN Site <${FROM}>`,
         to: [to],
         reply_to: `${safeName} <${e.email}>`,
-        subject: notificationSubject(e, ja),
-        text: notificationBody(e, ja, ack),
+        subject: notificationSubject(e, jaName),
+        text: notificationBody(e, jaName, ack, ja),
         tags: [{ name: "kind", value: e.kind }],
       },
       {
@@ -146,10 +149,10 @@ function parse(body: Record<string, unknown>): Enquiry | null {
 
 /** Plain-text email. Headers are folded onto one line each; the body is
  *  whatever the visitor wrote, quoted as-is. */
-function raw(e: Enquiry, to: string): string {
-  const ja = jaTitle(e);
-  const subject = notificationSubject(e, ja);
-  const lines = notificationBody(e, ja, null).split("\n");
+function raw(e: Enquiry, to: string, ja: Translations): string {
+  const jaName = jaTitle(e);
+  const subject = notificationSubject(e, jaName);
+  const lines = notificationBody(e, jaName, null, ja).split("\n");
   // RFC 5322: CRLF line endings, blank line between headers and body.
   // Cloudflare rejects a message without Message-ID and Date outright.
   return [
@@ -193,12 +196,15 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ ok: false, error: "unconfigured", fallback }, { status: 503 });
   }
 
+  // What the visitor typed, in Japanese for the team (best effort, see lib/translate.ts).
+  const ja = await translateForTeam(cf.env.AI, enquiry);
+
   // The team's Slack alert, in Japanese, whatever the page language was.
   const alert = (delivered: boolean) => notifySlack(cf.env.SLACK_WEBHOOK_URL, slackMessage(enquiry, jaTitle(enquiry), delivered));
 
   if (resendKey) {
     try {
-      await sendViaResend(resendKey, to, enquiry);
+      await sendViaResend(resendKey, to, enquiry, ja);
       await alert(true);
       return Response.json({ ok: true });
     } catch (err) {
@@ -207,7 +213,7 @@ export async function POST(request: Request): Promise<Response> {
   }
   if (cf.env.EMAIL) {
     try {
-      await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to)));
+      await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to, ja)));
       await alert(true);
       return Response.json({ ok: true });
     } catch (err) {

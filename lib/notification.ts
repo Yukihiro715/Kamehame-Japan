@@ -7,6 +7,7 @@
 import { catalogFor } from "@/lib/catalog";
 import type { Enquiry } from "@/lib/contact";
 import { yen } from "@/lib/pricing";
+import type { TranslatedField } from "@/lib/translate";
 
 const LANG_JA: Record<string, string> = { en: "英語", ja: "日本語", es: "スペイン語", fr: "フランス語", "zh-tw": "繁体字中国語" };
 
@@ -55,12 +56,17 @@ export function notificationSubject(e: Enquiry, jaTitle?: string): string {
 
 /** Plain text, in Japanese. `ack` is the acknowledgement the visitor was sent
  *  in the same batch; null when delivery fell back to a route that sends none. */
-export function notificationBody(e: Enquiry, jaTitle?: string, ack?: { subject: string; text: string } | null): string {
+export function notificationBody(e: Enquiry, jaTitle?: string, ack?: { subject: string; text: string } | null, ja: Partial<Record<TranslatedField, string>> = {}): string {
   const trade = e.kind === "trade";
   const lang = `${e.lang}${LANG_JA[e.lang] ? `(${LANG_JA[e.lang]})` : ""}`;
   const course = e.courseMode && `${e.courseMode === "specific" ? "希望コース指定(個別見積もり)" : "おすすめコース(標準料金)"}${e.course ? ` — ${e.course}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}`;
   const level = e.levelKey ? levelJa(e.levelKey, e.handicap, e.areaId) ?? e.level : e.level;
   const rental = e.rentalKeys ? rentalJa(e.rentalKeys, e.areaId) ?? e.rental : e.rental;
+  // The visitor's own words, followed by their machine translation when the
+  // page was not Japanese. The original always stays: the translation is an aid.
+  const needsJa = e.lang !== "ja";
+  const t = (label: string, field: TranslatedField, value: string | undefined): [string, string | undefined][] =>
+    value ? [[label, value], ...(needsJa ? [[`${label}(日本語訳)`, ja[field] ?? "(自動翻訳できませんでした)"] as [string, string]] : [])] : [[label, undefined]];
   const rows: [string, string | undefined][] = [
     ["種別", trade ? "取引先からの問い合わせ" : "お客様からの予約リクエスト"],
     ["体験", e.experience && `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}`],
@@ -68,25 +74,27 @@ export function notificationBody(e: Enquiry, jaTitle?: string, ack?: { subject: 
     ["メール", e.email],
     ["会社名", e.company],
     ["国", e.country],
-    ["プラン", e.plan],
+    ...t("プラン", "plan", e.plan),
     ["エリア", e.area && `${e.areaId ? `${golfAreaJa(e.areaId)} — ` : ""}${e.area}${e.areaId ? ` (${e.areaId})` : ""}`],
-    ["コース", course || undefined],
-    ["日程", e.dates],
-    ["人数", e.party],
-    ["ゴルフ経験", level],
-    ["レンタルクラブ", rental],
-    ["クラブの希望", e.clubs],
-    ["お迎え場所", e.pickup],
+    ...(e.courseMode === "specific" && e.course ? t("コース", "course", course || undefined) : [["コース", course || undefined] as [string, string | undefined]]),
+    ...(trade ? t("日程", "dates", e.dates) : [["日程", e.dates] as [string, string | undefined]]),
+    ...(trade ? t("人数", "party", e.party) : [["人数", e.party] as [string, string | undefined]]),
+    ...(e.levelKey ? [["ゴルフ経験", level] as [string, string | undefined]] : t("ゴルフ経験", "level", level)),
+    ...(e.rentalKeys ? [["レンタルクラブ", rental] as [string, string | undefined]] : t("レンタルクラブ", "rental", rental)),
+    ...t("クラブの希望", "clubs", e.clubs),
+    ...t("お迎え場所", "pickup", e.pickup),
     ["WhatsApp", e.whatsapp],
-    ["通訳", e.interpreter],
-    ["オプション", e.addons],
-    ["概算", e.estimate],
+    ...t("通訳", "interpreter", e.interpreter),
+    ...t("オプション", "addons", e.addons),
+    ...(e.areaId ? [["概算", e.estimate] as [string, string | undefined]] : t("概算", "estimate", e.estimate)),
     ["料金メモ", e.priceNote],
+    ...t("備考", "message", e.message || undefined),
+    ...(e.message ? [] : [["備考", "(なし)"] as [string, string]]),
     ["言語", lang],
     ["自動返信", ack ? `送信済み(${LANG_JA[e.lang] ?? e.lang}、下に全文)` : "⚠️ 未送信 — 予備ルートで配送したため、お客様へ手動で返信してください"],
   ];
   const lines = rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`);
-  const out = [...lines, "", "備考:", e.message || "(なし)"];
+  const out = [...lines];
   if (ack) out.push("", "────────", "お客様への自動返信:", `件名: ${ack.subject}`, "", ack.text);
   return out.join("\n");
 }

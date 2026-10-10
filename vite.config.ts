@@ -17,6 +17,9 @@ const localBindingConfig = {
   // Contact-form delivery. No destination is pinned here: the route sends to
   // the CONTACT_TO secret, which must be a verified Email Routing address.
   send_email: [{ name: "EMAIL" }],
+  // Workers AI: translates what a visitor typed into Japanese for the team's
+  // notification (lib/translate.ts). No key needed; the free tier covers it.
+  ai: { binding: "AI" },
   d1_databases: d1
     ? [
         {

@@ -20,6 +20,8 @@ declare module "cloudflare:workers" {
     /** Stripe restricted key (Checkout Sessions: read) for the booked page. */
     STRIPE_READ_KEY?: string;
     DB?: unknown;
+    /** Workers AI binding (translation for the team's notification). */
+    AI?: { run(model: string, input: Record<string, unknown>): Promise<unknown> };
   };
 }
 
