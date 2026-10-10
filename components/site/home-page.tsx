@@ -11,8 +11,8 @@ import { listPrice, pricingFor, yen } from "@/lib/pricing";
 import { t, type Lang } from "@/lib/i18n";
 
 /** The manga sound effect on each city card and the place its photo shows. */
-const CITY_SFX: Record<string, { text: string; quiet?: boolean }> = { tokyo: { text: "ドドンッ" }, kyoto: { text: "しん…", quiet: true }, osaka: { text: "ワイワイ" } };
-const CITY_PLACE: Record<string, string> = { tokyo: "Sensō-ji · Asakusa", kyoto: "Yasaka-dōri · Higashiyama", osaka: "Dōtonbori · Namba" };
+const CITY_SFX: Record<string, { text: string; quiet?: boolean }> = { tokyo: { text: "ドドンッ" }, kyoto: { text: "しん…", quiet: true }, osaka: { text: "ワイワイ" }, nagoya: { text: "ドン" }, okinawa: { text: "ざざーん", quiet: true }, kanazawa: { text: "しとしと", quiet: true }, himeji: { text: "どーん" } };
+const CITY_PLACE: Record<string, string> = { tokyo: "Sensō-ji · Asakusa", kyoto: "Yasaka-dōri · Higashiyama", osaka: "Dōtonbori · Namba", nagoya: "Nagoya Castle · Naka-ku", okinawa: "Cape Manzamo · Onna", kanazawa: "Higashi Chaya · Kanazawa", himeji: "Himeji Castle · Himeji" };
 
 const COPY = {
   en: {
@@ -38,13 +38,17 @@ const COPY = {
     trustSeal: "Small groups · Local hosts · Thoughtfully selected",
     craftQuote: "Not a demonstration — this seat is yours.", craftSpeaker: "— your host",
     craftAlt: "Tea ceremony host in kimono placing a tea bowl on tatami before seated guests",
-    cityEyebrow: "Choose your city", cityTitle: ["Three cities.", "Countless stories."],
+    cityEyebrow: "Choose your city", cityTitle: (n: number) => [`${["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"][n] ?? n} cities.`, "Countless stories."],
     cityLead: "Begin with where you'll be, then discover the people and practices that give each place its character.",
-    cityTaglines: { tokyo: ["Modern rhythm.", "Enduring craft."], kyoto: ["Quiet rituals.", "Living heritage."], osaka: ["Loud kitchens.", "Open hearts."] },
+    cityTaglines: { tokyo: ["Modern rhythm.", "Enduring craft."], kyoto: ["Quiet rituals.", "Living heritage."], osaka: ["Loud kitchens.", "Open hearts."], nagoya: ["Castle town.", "Working city."], okinawa: ["Island time.", "Another Japan."], kanazawa: ["Gold leaf.", "Garden calm."], himeji: ["The white castle.", "Still standing."] },
     cityAlts: {
       tokyo: "Five-storied pagoda of Senso-ji temple illuminated at night, Asakusa, Tokyo",
       kyoto: "Lantern-lined Yasaka-dori street at dawn with the Yasaka pagoda, Higashiyama, Kyoto",
       osaka: "Dotonbori canal at night with its lanterns, boats and neon signs, Osaka",
+      nagoya: "The main keep of Nagoya Castle lit up at night",
+      okinawa: "The cliffs of Cape Manzamo above the East China Sea, Okinawa",
+      kanazawa: "Wooden teahouses along a lane in the Higashi Chaya district, Kanazawa",
+      himeji: "Himeji Castle above cherry blossoms and the red bridge over its moat",
     },
     kicker: ["Explore by interest", (n: number) => `${n} ways into Japan`], catTitle: "Follow your curiosity.",
     catTypes: { calligraphy: "Brush & ink", golf: "Sport & scenery", kendo: "Way of the sword", ramen: "Food culture", sushi: "Food culture", sumo: "Living tradition", "tea-ceremony": "Mindful ritual", kimono: "Craft & style", geisha: "Performing arts", swordsmith: "Heritage craft", "anime-nail-art": "Pop culture" } as Record<string, string>,
@@ -84,13 +88,17 @@ const COPY = {
     trustSeal: "Grupos reducidos · Anfitriones locales · Selección cuidada",
     craftQuote: "Esto no es una demostración — este asiento es tuyo.", craftSpeaker: "— tu anfitrión",
     craftAlt: "Anfitriona de la ceremonia del té dejando un cuenco sobre el tatami ante sus invitados",
-    cityEyebrow: "Elige tu ciudad", cityTitle: ["Tres ciudades.", "Historias infinitas."],
+    cityEyebrow: "Elige tu ciudad", cityTitle: (n: number) => [`${["", "Una", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez"][n] ?? n} ciudades.`, "Historias infinitas."],
     cityLead: "Empieza por donde vas a estar, y descubre a las personas y los oficios que dan carácter a cada lugar.",
-    cityTaglines: { tokyo: ["Ritmo moderno.", "Oficio eterno."], kyoto: ["Rituales serenos.", "Herencia viva."], osaka: ["Cocinas ruidosas.", "Corazones abiertos."] },
+    cityTaglines: { tokyo: ["Ritmo moderno.", "Oficio eterno."], kyoto: ["Rituales serenos.", "Herencia viva."], osaka: ["Cocinas ruidosas.", "Corazones abiertos."], nagoya: ["Ciudad castillo.", "Ciudad que trabaja."], okinawa: ["Hora isleña.", "Otro Japón."], kanazawa: ["Pan de oro.", "Calma de jardín."], himeji: ["El castillo blanco.", "Sigue en pie."] },
     cityAlts: {
       tokyo: "Pagoda de cinco pisos del templo Senso-ji iluminada de noche, Asakusa, Tokio",
       kyoto: "Calle Yasaka-dori con farolillos y la pagoda de Yasaka al amanecer, Higashiyama, Kioto",
       osaka: "Canal de Dotonbori de noche con farolillos, barcos y neones, Osaka",
+      nagoya: "El torreón del castillo de Nagoya iluminado de noche",
+      okinawa: "Los acantilados del cabo Manzamo sobre el mar de la China Oriental, Okinawa",
+      kanazawa: "Casas de té de madera en una calle del distrito de Higashi Chaya, Kanazawa",
+      himeji: "El castillo de Himeji sobre los cerezos en flor y el puente rojo del foso",
     },
     kicker: ["Explora por interés", (n: number) => `${n} puertas a Japón`], catTitle: "Sigue tu curiosidad.",
     catTypes: { calligraphy: "Pincel y tinta", golf: "Deporte y paisaje", kendo: "La vía de la espada", ramen: "Cultura gastronómica", sushi: "Cultura gastronómica", sumo: "Tradición viva", "tea-ceremony": "Ritual consciente", kimono: "Oficio y estilo", geisha: "Artes escénicas", swordsmith: "Oficio ancestral", "anime-nail-art": "Cultura pop" } as Record<string, string>,
@@ -130,13 +138,17 @@ const COPY = {
     trustSeal: "少人数 · 地元のホスト · 厳選",
     craftQuote: "これは実演ではありません。この席は、あなたのものです。", craftSpeaker: "— お迎えする側より",
     craftAlt: "客の前の畳に茶碗を置く茶道の亭主",
-    cityEyebrow: "都市を選ぶ", cityTitle: ["三つの都市。", "尽きない物語。"],
+    cityEyebrow: "都市を選ぶ", cityTitle: (n: number) => [`${["", "一つ", "二つ", "三つ", "四つ", "五つ", "六つ", "七つ", "八つ", "九つ", "十"][n] ?? n}の都市。`, "尽きない物語。"],
     cityLead: "滞在される街から始めてください。その土地の人と技が見えてきます。",
-    cityTaglines: { tokyo: ["今日の速さ。", "変わらぬ手仕事。"], kyoto: ["静かな儀礼。", "生きた継承。"], osaka: ["にぎやかな台所。", "あけっぴろげな人情。"] },
+    cityTaglines: { tokyo: ["今日の速さ。", "変わらぬ手仕事。"], kyoto: ["静かな儀礼。", "生きた継承。"], osaka: ["にぎやかな台所。", "あけっぴろげな人情。"], nagoya: ["城下町。", "ものづくりの街。"], okinawa: ["島の時間。", "もう一つの日本。"], kanazawa: ["金箔。", "庭の静けさ。"], himeji: ["白い城。", "今も立つ。"] },
     cityAlts: {
       tokyo: "夜間にライトアップされた浅草・浅草寺の五重塔",
       kyoto: "夜明けの東山、八坂通と八坂の塔",
       osaka: "夜の道頓堀。提灯と遊覧船、ネオン看板",
+      nagoya: "夜にライトアップされた名古屋城の天守",
+      okinawa: "東シナ海に突き出す万座毛の断崖、沖縄",
+      kanazawa: "金沢・ひがし茶屋街の木造の茶屋が並ぶ通り",
+      himeji: "桜と堀にかかる赤い橋の向こうにそびえる姫路城",
     },
     kicker: ["関心から探す", (n: number) => `日本への${n}つの扉`], catTitle: "気になるものから。",
     catTypes: { calligraphy: "筆と墨", golf: "スポーツと景色", kendo: "剣の道", ramen: "食文化", sushi: "食文化", sumo: "生きた伝統", "tea-ceremony": "静かな儀礼", kimono: "技と装い", geisha: "舞と芸", swordsmith: "古来の手仕事", "anime-nail-art": "ポップカルチャー" } as Record<string, string>,
@@ -176,13 +188,17 @@ const COPY = {
     trustSeal: "Petits groupes · Hôtes locaux · Sélection soignée",
     craftQuote: "Ce n'est pas une démonstration — cette place est la vôtre.", craftSpeaker: "— votre hôte",
     craftAlt: "Hôtesse de cérémonie du thé posant un bol sur le tatami devant ses invités",
-    cityEyebrow: "Choisissez votre ville", cityTitle: ["Trois villes.", "Des histoires sans fin."],
+    cityEyebrow: "Choisissez votre ville", cityTitle: (n: number) => [`${["", "Une", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix"][n] ?? n} villes.`, "Des histoires sans fin."],
     cityLead: "Partez de là où vous serez, et découvrez les personnes et les métiers qui donnent son caractère à chaque lieu.",
-    cityTaglines: { tokyo: ["Rythme moderne.", "Métier éternel."], kyoto: ["Rituels sereins.", "Héritage vivant."], osaka: ["Cuisines bruyantes.", "Cœurs ouverts."] },
+    cityTaglines: { tokyo: ["Rythme moderne.", "Métier éternel."], kyoto: ["Rituels sereins.", "Héritage vivant."], osaka: ["Cuisines bruyantes.", "Cœurs ouverts."], nagoya: ["Ville-château.", "Ville qui travaille."], okinawa: ["Heure insulaire.", "Un autre Japon."], kanazawa: ["Feuille d'or.", "Calme des jardins."], himeji: ["Le château blanc.", "Toujours debout."] },
     cityAlts: {
       tokyo: "Pagode à cinq étages du temple Senso-ji illuminée la nuit, Asakusa, Tokyo",
       kyoto: "Rue Yasaka-dori bordée de lanternes avec la pagode de Yasaka à l'aube, Higashiyama, Kyoto",
       osaka: "Canal de Dotonbori la nuit avec ses lanternes, ses bateaux et ses néons, Osaka",
+      nagoya: "Le donjon du château de Nagoya illuminé la nuit",
+      okinawa: "Les falaises du cap Manzamo au-dessus de la mer de Chine orientale, Okinawa",
+      kanazawa: "Maisons de thé en bois le long d'une ruelle du quartier Higashi Chaya, Kanazawa",
+      himeji: "Le château de Himeji au-dessus des cerisiers en fleurs et du pont rouge des douves",
     },
     kicker: ["Explorer par envie", (n: number) => `${n} portes sur le Japon`], catTitle: "Suivez votre curiosité.",
     catTypes: { calligraphy: "Pinceau et encre", golf: "Sport et paysage", kendo: "La voie du sabre", ramen: "Culture gastronomique", sushi: "Culture gastronomique", sumo: "Tradition vivante", "tea-ceremony": "Rituel attentif", kimono: "Métier et style", geisha: "Arts de la scène", swordsmith: "Métier ancestral", "anime-nail-art": "Pop culture" } as Record<string, string>,
@@ -222,13 +238,17 @@ const COPY = {
     trustSeal: "小團 · 在地接待 · 用心挑選",
     craftQuote: "這不是示範——這個位子是您的。", craftSpeaker: "— 您的東道主",
     craftAlt: "茶道主人在客人面前將茶碗放到榻榻米上",
-    cityEyebrow: "選擇城市", cityTitle: ["三座城市。", "說不完的故事。"],
+    cityEyebrow: "選擇城市", cityTitle: (n: number) => [`${["", "一", "兩", "三", "四", "五", "六", "七", "八", "九", "十"][n] ?? n}座城市。`, "說不完的故事。"],
     cityLead: "從您將停留的地方開始，認識賦予每個地方性格的人與技藝。",
-    cityTaglines: { tokyo: ["現代的節奏。", "不變的手藝。"], kyoto: ["寧靜的儀式。", "活著的傳承。"], osaka: ["熱鬧的廚房。", "敞開的心。"] },
+    cityTaglines: { tokyo: ["現代的節奏。", "不變的手藝。"], kyoto: ["寧靜的儀式。", "活著的傳承。"], osaka: ["熱鬧的廚房。", "敞開的心。"], nagoya: ["城下町。", "造物之城。"], okinawa: ["島嶼時間。", "另一個日本。"], kanazawa: ["金箔。", "庭園的靜。"], himeji: ["白色的城。", "依然矗立。"] },
     cityAlts: {
       tokyo: "夜間點燈的淺草寺五重塔，東京淺草",
       kyoto: "黎明時分掛滿燈籠的八坂通與八坂塔，京都東山",
       osaka: "夜晚的道頓堀運河，燈籠、遊船與霓虹招牌，大阪",
+      nagoya: "夜間點燈的名古屋城天守",
+      okinawa: "沖繩萬座毛的懸崖與東海",
+      kanazawa: "金澤東茶屋街巷弄裡的木造茶屋",
+      himeji: "櫻花與護城河紅橋之上的姬路城",
     },
     kicker: ["依興趣探索", (n: number) => `通往日本的 ${n} 扇門`], catTitle: "跟著好奇心走。",
     catTypes: { calligraphy: "筆與墨", golf: "運動與風景", kendo: "劍之道", ramen: "飲食文化", sushi: "飲食文化", sumo: "活的傳統", "tea-ceremony": "靜心儀式", kimono: "技藝與風格", geisha: "表演藝術", swordsmith: "古老技藝", "anime-nail-art": "流行文化" } as Record<string, string>,
@@ -372,7 +392,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         <section className="city-section" id="cities">
           <div className="section-heading">
             <p className="eyebrow dark"><span /> {C.cityEyebrow}</p>
-            <h2>{C.cityTitle[0]}<br />{C.cityTitle[1]}</h2>
+            <h2>{C.cityTitle(cities.length)[0]}<br />{C.cityTitle(cities.length)[1]}</h2>
             <p>{C.cityLead}</p>
           </div>
           <div className="city-cards">

@@ -523,7 +523,7 @@ See you tomorrow.
 
 ## K. 剣道体験ツアー(SAMURAI TRIP / 株式会社パークフォーアス)— 2026-10-10 公開(集客前)
 
-ページ:`/tokyo/tokyo-kendo-experience-tour/`、`/osaka/osaka-kendo-experience-tour/`、`/kyoto/kyoto-kendo-experience-tour/`(5言語、status "live"、オーナー指示 2026-10-10「全部公開、集客はまだ」)。名古屋・沖縄・金沢・姫路はサイトに都市ページがないため未作成(各ページのFAQで案内)。事業者名・代表名はページに出していない。写真は公式サイトのもの(メールで使用許諾あり)。価格は大人卸値 ¥18,000 税抜の税込 ¥19,800 を仮置き(子ども9〜13歳は ¥16,500 相当)。当社売値は未定。キャンセル規定はメールどおり(15日前まで無料、14〜3日前50%、2日前以降100%)。質問事項は本文末尾。
+ページ:`/tokyo/tokyo-kendo-experience-tour/`、`/osaka/osaka-kendo-experience-tour/`、`/kyoto/kyoto-kendo-experience-tour/`、`/nagoya/nagoya-kendo-experience-tour/`、`/okinawa/okinawa-kendo-experience-tour/`、`/kanazawa/kanazawa-kendo-experience-tour/`、`/himeji/himeji-kendo-experience-tour/`(5言語、status "live"、オーナー指示 2026-10-10「全部公開、集客はまだ」「名古屋、沖縄、金沢、姫路も追加」)。名古屋・沖縄・金沢・姫路は 2026-10-10 に都市ページごと新設(都市写真は Wikimedia Commons、IMAGE_CREDITS.md 参照)。名古屋は平日13:30〜、沖縄は平日13:00〜で記載。事業者名・代表名はページに出していない。写真は公式サイトのもの(メールで使用許諾あり)。価格は大人卸値 ¥18,000 税抜の税込 ¥19,800 を仮置き(子ども9〜13歳は ¥16,500 相当)。当社売値は未定。キャンセル規定はメールどおり(15日前まで無料、14〜3日前50%、2日前以降100%)。質問事項は本文末尾。
 
 ### メールの内容(2026-10-06、永松氏より)
 

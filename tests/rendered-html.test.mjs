@@ -161,6 +161,10 @@ test("kendo, bushido, tea ceremony and the kendo tours: live pages that never na
     ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800", "/en/tokyo/"],
     ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥19,800", "/en/osaka/"],
     ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥19,800", "/en/kyoto/"],
+    ["/en/nagoya/nagoya-kendo-experience-tour/", "Kendo Experience Tour in Nagoya with Dan-ranked Instructors", "¥19,800", "/en/nagoya/"],
+    ["/en/okinawa/okinawa-kendo-experience-tour/", "Kendo Experience Tour in Okinawa with Dan-ranked Instructors", "¥19,800", "/en/okinawa/"],
+    ["/en/kanazawa/kanazawa-kendo-experience-tour/", "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors", "¥19,800", "/en/kanazawa/"],
+    ["/en/himeji/himeji-kendo-experience-tour/", "Kendo Experience Tour in Himeji with Dan-ranked Instructors", "¥19,800", "/en/himeji/"],
   ];
   for (const [path, title, price, city] of pages) {
     const res = await render(path);
@@ -177,6 +181,11 @@ test("kendo, bushido, tea ceremony and the kendo tours: live pages that never na
   const osakaTour = (await (await render("/en/osaka/osaka-kendo-experience-tour/")).text()).replace(/<[^>]+>/g, " ");
   assert.ok(osakaTour.includes("Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji"), "the Osaka page lists the other cities");
   assert.ok(!osakaTour.includes("Kyoto instead of Kyoto") && !osakaTour.includes("Osaka instead of Osaka"), "clean city swap");
+  const nagoya = (await (await render("/en/nagoya/nagoya-kendo-experience-tour/")).text()).replace(/<[^>]+>/g, " ");
+  assert.ok(nagoya.includes("Weekday afternoons, usually from 13:30") && !nagoya.includes("10:00"), "Nagoya runs in the afternoon");
+  assert.ok(nagoya.includes("Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji"), "the Nagoya page lists the other cities");
+  const home = await (await render("/en/")).text();
+  assert.ok(home.includes("Seven cities.") && home.includes('href="/en/himeji/"'), "home shows seven cities");
   const category = await render("/en/kendo/");
   assert.equal(category.status, 200, "the kendo category page");
 });

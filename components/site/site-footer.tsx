@@ -35,7 +35,7 @@ export function SiteFooter({ lang = "en" }: { lang?: Lang }) {
         <summary>Photo credits</summary>
         <p>
           Photography via <a href="https://commons.wikimedia.org/" rel="noreferrer">Wikimedia Commons</a>, used under CC BY / CC BY-SA / CC0 / public-domain licenses:
-          Zairon (Sensō-ji) · Basile Morin (Yasaka-dōri, Fushimi Inari) · Sakai Yayoi (Dōtonbori) · Bobby.Creations (omakase counter) · tjabeljan (sumo stable) ·
+          Zairon (Sensō-ji) · Basile Morin (Yasaka-dōri, Fushimi Inari) · Sakai Yayoi (Dōtonbori) · ノボホショコロトソ (Nagoya Castle) · CEphoto, Uwe Aranas (Cape Manzamo) · Andrea Schaffer (Higashi Chaya) · Seattleite7 (Himeji Castle) · Bobby.Creations (omakase counter) · tjabeljan (sumo stable) ·
           Japanexperterna.se (maiko dance) · Yanay Rosen (sushi chef) · Simon Q (dohyō-iri) · Ermell (tea ceremony) · KuboBella (serving tea) ·
           Maiko &amp; Geiko (maiko) · Rama (katana) · ElHeineken (Akihabara) · Erol Ahmed (bamboo grove) · H.Hmoderato (kimono garden) ·
           The Metropolitan Museum of Art (kimono) · Yuki Shimazu (Central Golf Club, Ibaraki) · LittleT889 (Kamakura Country Club). Geiko-evening photographs courtesy of the host venue. Full attribution in IMAGE_CREDITS.md.

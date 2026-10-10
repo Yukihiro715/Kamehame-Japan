@@ -4,7 +4,7 @@
     "lastmod": "2026-09-17"
   },
   "/en/about/": {
-    "hash": "9df5cabba4e3",
+    "hash": "8adaab45d107",
     "lastmod": "2026-10-10"
   },
   "/en/calligraphy/": {
@@ -16,11 +16,11 @@
     "lastmod": "2026-09-17"
   },
   "/en/experiences/": {
-    "hash": "a913681b20fe",
+    "hash": "fb2e481f8132",
     "lastmod": "2026-10-10"
   },
   "/en/faq/": {
-    "hash": "d049bab949dd",
+    "hash": "6475e67568b3",
     "lastmod": "2026-10-10"
   },
   "/en/geisha/": {
@@ -29,6 +29,14 @@
   },
   "/en/golf/": {
     "hash": "964c1108221a",
+    "lastmod": "2026-10-10"
+  },
+  "/en/himeji/": {
+    "hash": "f0ecb8eabb41",
+    "lastmod": "2026-10-10"
+  },
+  "/en/himeji/himeji-kendo-experience-tour/": {
+    "hash": "f2d55e407daa",
     "lastmod": "2026-10-10"
   },
   "/en/journal/": {
@@ -47,8 +55,16 @@
     "hash": "eae5c4a1b162",
     "lastmod": "2026-09-17"
   },
+  "/en/kanazawa/": {
+    "hash": "b63097e8fa9a",
+    "lastmod": "2026-10-10"
+  },
+  "/en/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "233dee6891dd",
+    "lastmod": "2026-10-10"
+  },
   "/en/kendo/": {
-    "hash": "f9947c3de06b",
+    "hash": "fdd07da7dbb6",
     "lastmod": "2026-10-10"
   },
   "/en/kyoto/": {
@@ -61,6 +77,22 @@
   },
   "/en/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "8f21f311fabb",
+    "lastmod": "2026-10-10"
+  },
+  "/en/nagoya/": {
+    "hash": "767c6f40738c",
+    "lastmod": "2026-10-10"
+  },
+  "/en/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "06e2026f33c3",
+    "lastmod": "2026-10-10"
+  },
+  "/en/okinawa/": {
+    "hash": "8f516d1d90e7",
+    "lastmod": "2026-10-10"
+  },
+  "/en/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "d46276e4c4f5",
     "lastmod": "2026-10-10"
   },
   "/en/osaka/": {
@@ -116,7 +148,7 @@
     "lastmod": "2026-10-10"
   },
   "/en/trade/": {
-    "hash": "b8d481689305",
+    "hash": "bca33d71434d",
     "lastmod": "2026-10-10"
   },
   "/es/": {
@@ -124,7 +156,7 @@
     "lastmod": "2026-09-17"
   },
   "/es/about/": {
-    "hash": "8ff86b8b4d2c",
+    "hash": "95bc6f1c71b3",
     "lastmod": "2026-10-10"
   },
   "/es/calligraphy/": {
@@ -136,11 +168,11 @@
     "lastmod": "2026-09-17"
   },
   "/es/experiences/": {
-    "hash": "2d6bd73af607",
+    "hash": "1060e745d1da",
     "lastmod": "2026-10-10"
   },
   "/es/faq/": {
-    "hash": "e1145c956e6f",
+    "hash": "b30dc3dba1ad",
     "lastmod": "2026-10-10"
   },
   "/es/geisha/": {
@@ -151,12 +183,28 @@
     "hash": "770c5dd3c19c",
     "lastmod": "2026-10-10"
   },
+  "/es/himeji/": {
+    "hash": "aa1d0fd3147c",
+    "lastmod": "2026-10-10"
+  },
+  "/es/himeji/himeji-kendo-experience-tour/": {
+    "hash": "843e78b9dc01",
+    "lastmod": "2026-10-10"
+  },
   "/es/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/es/kanazawa/": {
+    "hash": "e2575e1bf1d7",
+    "lastmod": "2026-10-10"
+  },
+  "/es/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "13600205bdba",
+    "lastmod": "2026-10-10"
+  },
   "/es/kendo/": {
-    "hash": "149ddf8e0876",
+    "hash": "c7bd0e6a38e1",
     "lastmod": "2026-10-10"
   },
   "/es/kyoto/": {
@@ -169,6 +217,22 @@
   },
   "/es/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "be1e2bf1161c",
+    "lastmod": "2026-10-10"
+  },
+  "/es/nagoya/": {
+    "hash": "1a76c24820d8",
+    "lastmod": "2026-10-10"
+  },
+  "/es/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "a0d1d7cabb08",
+    "lastmod": "2026-10-10"
+  },
+  "/es/okinawa/": {
+    "hash": "655fada9fc9e",
+    "lastmod": "2026-10-10"
+  },
+  "/es/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "7afb66693399",
     "lastmod": "2026-10-10"
   },
   "/es/osaka/": {
@@ -224,7 +288,7 @@
     "lastmod": "2026-10-10"
   },
   "/es/trade/": {
-    "hash": "3c1000f37dcb",
+    "hash": "59ca02ce7072",
     "lastmod": "2026-10-10"
   },
   "/fr/": {
@@ -232,7 +296,7 @@
     "lastmod": "2026-09-17"
   },
   "/fr/about/": {
-    "hash": "e3669669ff2e",
+    "hash": "7290a6d99d90",
     "lastmod": "2026-10-10"
   },
   "/fr/calligraphy/": {
@@ -244,11 +308,11 @@
     "lastmod": "2026-09-17"
   },
   "/fr/experiences/": {
-    "hash": "9b4413fbe605",
+    "hash": "c082695a0705",
     "lastmod": "2026-10-10"
   },
   "/fr/faq/": {
-    "hash": "07d7ba4bc523",
+    "hash": "02b9560a1a76",
     "lastmod": "2026-10-10"
   },
   "/fr/geisha/": {
@@ -259,12 +323,28 @@
     "hash": "709b469101f0",
     "lastmod": "2026-10-10"
   },
+  "/fr/himeji/": {
+    "hash": "e2ebe5e71bb9",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/himeji/himeji-kendo-experience-tour/": {
+    "hash": "357393a99a05",
+    "lastmod": "2026-10-10"
+  },
   "/fr/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/fr/kanazawa/": {
+    "hash": "97ad63c91ede",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "5bca3cdabb6c",
+    "lastmod": "2026-10-10"
+  },
   "/fr/kendo/": {
-    "hash": "4a29ac376ee8",
+    "hash": "61cf5324f031",
     "lastmod": "2026-10-10"
   },
   "/fr/kyoto/": {
@@ -277,6 +357,22 @@
   },
   "/fr/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "c17e3dee0a13",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/nagoya/": {
+    "hash": "34084dd6fc9f",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "9d79615e7bc3",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/okinawa/": {
+    "hash": "c61e544d3446",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "b22c451db25f",
     "lastmod": "2026-10-10"
   },
   "/fr/osaka/": {
@@ -332,7 +428,7 @@
     "lastmod": "2026-10-10"
   },
   "/fr/trade/": {
-    "hash": "4456f6927988",
+    "hash": "49a39b3d05ef",
     "lastmod": "2026-10-10"
   },
   "/ja/": {
@@ -340,7 +436,7 @@
     "lastmod": "2026-09-17"
   },
   "/ja/about/": {
-    "hash": "ccae48b4114f",
+    "hash": "5260cfc4be30",
     "lastmod": "2026-10-10"
   },
   "/ja/calligraphy/": {
@@ -352,11 +448,11 @@
     "lastmod": "2026-09-17"
   },
   "/ja/experiences/": {
-    "hash": "c469dd7e59ab",
+    "hash": "6e694b28aa5f",
     "lastmod": "2026-10-10"
   },
   "/ja/faq/": {
-    "hash": "4c993f07f8fd",
+    "hash": "4938be2962f9",
     "lastmod": "2026-10-10"
   },
   "/ja/geisha/": {
@@ -365,6 +461,14 @@
   },
   "/ja/golf/": {
     "hash": "4c63586e7485",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/himeji/": {
+    "hash": "9d55864464f6",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/himeji/himeji-kendo-experience-tour/": {
+    "hash": "af88f4262c19",
     "lastmod": "2026-10-10"
   },
   "/ja/journal/": {
@@ -383,8 +487,16 @@
     "hash": "ddaa13aedfd5",
     "lastmod": "2026-09-17"
   },
+  "/ja/kanazawa/": {
+    "hash": "c16dacf824f2",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "8d0cceef08d7",
+    "lastmod": "2026-10-10"
+  },
   "/ja/kendo/": {
-    "hash": "d4d5c94d492c",
+    "hash": "7147c52605e4",
     "lastmod": "2026-10-10"
   },
   "/ja/kyoto/": {
@@ -397,6 +509,22 @@
   },
   "/ja/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "ad3118ab47c5",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/nagoya/": {
+    "hash": "c89050aabda0",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "de1a169d9d2f",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/okinawa/": {
+    "hash": "aa594aede755",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "65db2db18e8c",
     "lastmod": "2026-10-10"
   },
   "/ja/osaka/": {
@@ -452,7 +580,7 @@
     "lastmod": "2026-10-10"
   },
   "/ja/trade/": {
-    "hash": "1c7c256491f7",
+    "hash": "201367b89425",
     "lastmod": "2026-10-10"
   },
   "/partners/": {
@@ -464,7 +592,7 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/about/": {
-    "hash": "837817d3b62b",
+    "hash": "cb6a5c238e33",
     "lastmod": "2026-10-10"
   },
   "/zh-tw/calligraphy/": {
@@ -476,11 +604,11 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/experiences/": {
-    "hash": "f489f815ec6c",
+    "hash": "5626217f30e0",
     "lastmod": "2026-10-10"
   },
   "/zh-tw/faq/": {
-    "hash": "5c3dc62f57ea",
+    "hash": "b0daf3c1cab6",
     "lastmod": "2026-10-10"
   },
   "/zh-tw/geisha/": {
@@ -491,12 +619,28 @@
     "hash": "907ff6c6077b",
     "lastmod": "2026-10-10"
   },
+  "/zh-tw/himeji/": {
+    "hash": "0b0dcdbaf423",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/himeji/himeji-kendo-experience-tour/": {
+    "hash": "43f08dd50789",
+    "lastmod": "2026-10-10"
+  },
   "/zh-tw/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/zh-tw/kanazawa/": {
+    "hash": "50f02c1d1330",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "4dc866257f4c",
+    "lastmod": "2026-10-10"
+  },
   "/zh-tw/kendo/": {
-    "hash": "51514852db07",
+    "hash": "64d80e25491f",
     "lastmod": "2026-10-10"
   },
   "/zh-tw/kyoto/": {
@@ -509,6 +653,22 @@
   },
   "/zh-tw/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "84b72796a383",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/nagoya/": {
+    "hash": "5fa6242f9a39",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "396f7960bfa7",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/okinawa/": {
+    "hash": "956930597ecd",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "2fdfb9fb1305",
     "lastmod": "2026-10-10"
   },
   "/zh-tw/osaka/": {
@@ -564,7 +724,7 @@
     "lastmod": "2026-10-10"
   },
   "/zh-tw/trade/": {
-    "hash": "6596cbc61ed2",
+    "hash": "240733d0c108",
     "lastmod": "2026-10-10"
   }
 }

@@ -13,7 +13,11 @@ CC BY / CC BY-SA images require this attribution to be retained wherever the ima
 | `public/images/cat-sword.jpg` | [Katana blade 1505 Osofune school-MA 6943-IMG 9000-black.jpg](https://commons.wikimedia.org/wiki/File:Katana_blade_1505_Osofune_school-MA_6943-IMG_9000-black.jpg) | Rama | CC BY-SA 3.0 fr |
 | `public/images/cat-tea.jpg` | [Japan tea ceremony 1165.jpg](https://commons.wikimedia.org/wiki/File:Japan_tea_ceremony_1165.jpg) | Ermell | CC BY-SA 4.0 |
 | `public/images/cat-tours.jpg` | [Arashiyama Bamboo Grove (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Arashiyama_Bamboo_Grove_(Unsplash).jpg) | Erol Ahmed erol | CC0 |
+| `public/images/city-himeji.jpg` | [Himeji Castle with cherry blossoms from Himeji Zoo.jpg](https://commons.wikimedia.org/wiki/File:Himeji_Castle_with_cherry_blossoms_from_Himeji_Zoo.jpg) | Seattleite7 | CC BY-SA 4.0 |
+| `public/images/city-kanazawa.jpg` | [Higashi Chaya district, Kanazawa (3810720612).jpg](https://commons.wikimedia.org/wiki/File:Higashi_Chaya_district,_Kanazawa_(3810720612).jpg) | Andrea Schaffer | CC BY 2.0 |
 | `public/images/city-kyoto.jpg` | [Yasaka-dori early morning with street lanterns and the Tower of Yasaka (Hokan-ji Temple), Kyoto, Japan.jpg](https://commons.wikimedia.org/wiki/File:Yasaka-dori_early_morning_with_street_lanterns_and_the_Tower_of_Yasaka_(Hokan-ji_Temple),_Kyoto,_Japan.jpg) | Basile Morin | CC BY-SA 4.0 |
+| `public/images/city-nagoya.jpg` | [Nagoya Castle Keep Tower in Night.jpg](https://commons.wikimedia.org/wiki/File:Nagoya_Castle_Keep_Tower_in_Night.jpg) | ノボホショコロトソ | CC BY 4.0 |
+| `public/images/city-okinawa.jpg` | [Onna Okinawa Japan Cape-Manzamo-01.jpg](https://commons.wikimedia.org/wiki/File:Onna_Okinawa_Japan_Cape-Manzamo-01.jpg) | CEphoto, Uwe Aranas | CC BY-SA 3.0 |
 | `public/images/city-osaka.jpg` | [Osaka Dotonbori yoru.jpg](https://commons.wikimedia.org/wiki/File:Osaka_Dotonbori_yoru.jpg) | Sakai Yayoi | CC0 |
 | `public/images/city-tokyo.jpg` | [Tokio Tempel Senso-ji bei Nacht 1.jpg](https://commons.wikimedia.org/wiki/File:Tokio_Tempel_Senso-ji_bei_Nacht_1.jpg) | Zairon | CC BY-SA 4.0 |
 | `public/images/craft-hands.jpg` | [Japanese Tea Ceremony Serving Tea.jpg](https://commons.wikimedia.org/wiki/File:Japanese_Tea_Ceremony_Serving_Tea.jpg) | KuboBella | CC BY-SA 4.0 |

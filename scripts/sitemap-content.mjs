@@ -8,7 +8,7 @@
 import { createHash } from "node:crypto";
 
 export const LANGS = ["en", "es", "ja", "fr", "zh-tw"];
-export const CITY_SLUGS = "tokyo|kyoto|osaka";
+export const CITY_SLUGS = "tokyo|kyoto|osaka|nagoya|okinawa|kanazawa|himeji";
 const CATALOG = { en: "lib/catalog.ts", es: "lib/catalog.es.ts", ja: "lib/catalog.ja.ts", fr: "lib/catalog.fr.ts", "zh-tw": "lib/catalog.zh-tw.ts" };
 const STATIC_PAGES = ["about", "faq", "journal", "contact", "trade", "privacy", "legal", "terms"];
 

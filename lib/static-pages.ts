@@ -26,7 +26,7 @@ const ABOUT: Record<Lang, AboutCopy> = {
   en: {
     title: "Our approach",
     metaDescription:
-      "Why KAMEHAME JAPAN books small, private cultural experiences with working masters in Tokyo, Kyoto and Osaka — and how an interpreter guide changes what you take home.",
+      "Why KAMEHAME JAPAN books small, private cultural experiences with working masters in Tokyo, Kyoto, Osaka and beyond — and how an interpreter guide changes what you take home.",
     lead:
       "Most cultural experiences sold to visitors in Japan are built for volume. Ours are built around the person teaching them.",
     sections: [
@@ -80,7 +80,7 @@ const ABOUT: Record<Lang, AboutCopy> = {
   es: {
     title: "Nuestra filosofía",
     metaDescription:
-      "Por qué KAMEHAME JAPAN reserva experiencias culturales privadas con maestros en activo de Tokio, Kioto y Osaka, y qué cambia cuando te acompaña un guía intérprete.",
+      "Por qué KAMEHAME JAPAN reserva experiencias culturales privadas con maestros en activo de Tokio, Kioto, Osaka y más ciudades, y qué cambia cuando te acompaña un guía intérprete.",
     lead:
       "Casi todas las experiencias culturales que se venden a los visitantes en Japón están pensadas para el volumen. Las nuestras se construyen alrededor de quien las enseña.",
     sections: [
@@ -134,7 +134,7 @@ const ABOUT: Record<Lang, AboutCopy> = {
   ja: {
     title: "私たちの考え方",
     metaDescription:
-      "KAMEHAME JAPAN が東京・京都・大阪の現役の作り手と、少人数・貸切の文化体験だけを扱う理由と、通訳ガイドが同行することで何が変わるのかをご説明します。",
+      "KAMEHAME JAPAN が東京・京都・大阪ほかの現役の作り手と、少人数・貸切の文化体験だけを扱う理由と、通訳ガイドが同行することで何が変わるのかをご説明します。",
     lead:
       "訪日のお客様向けに売られている文化体験の多くは、人数をさばくために設計されています。私たちのものは、教える人を中心に設計しています。",
     sections: [
@@ -187,7 +187,7 @@ const ABOUT: Record<Lang, AboutCopy> = {
   },
   fr: {
     title: "Notre approche",
-    metaDescription: "Pourquoi KAMEHAME JAPAN ne propose que de petites expériences culturelles privées avec des maîtres en activité à Tokyo, Kyoto et Osaka — et ce qu'un guide-interprète change à ce que vous ramenez.",
+    metaDescription: "Pourquoi KAMEHAME JAPAN ne propose que de petites expériences culturelles privées avec des maîtres en activité à Tokyo, Kyoto, Osaka et au-delà — et ce qu'un guide-interprète change à ce que vous ramenez.",
     lead: "La plupart des expériences culturelles vendues aux visiteurs au Japon sont conçues pour le volume. Les nôtres sont construites autour de la personne qui les enseigne.",
     sections: [
       { heading: "Pourquoi nous avons commencé", body: [
@@ -213,7 +213,7 @@ const ABOUT: Record<Lang, AboutCopy> = {
   },
   "zh-tw": {
     title: "我們的理念",
-    metaDescription: "為什麼 KAMEHAME JAPAN 只安排東京、京都與大阪現役職人的小型私人文化體驗——以及口譯導遊如何改變您帶回家的東西。",
+    metaDescription: "為什麼 KAMEHAME JAPAN 只安排東京、京都、大阪等地現役職人的小型私人文化體驗——以及口譯導遊如何改變您帶回家的東西。",
     lead: "賣給日本旅客的文化體驗，多數是為了消化人數而設計。我們的體驗則是圍繞著教的人來設計。",
     sections: [
       { heading: "我們為何開始", body: [
@@ -243,7 +243,7 @@ const FAQ: Record<Lang, FaqCopy> = {
   en: {
     title: "Frequently asked questions",
     metaDescription:
-      "Booking, language, timing, dress, dietary needs and cancellation — the questions visitors ask before booking a cultural experience in Tokyo, Kyoto or Osaka.",
+      "Booking, language, timing, dress, dietary needs and cancellation — the questions visitors ask before booking a cultural experience in Tokyo, Kyoto, Osaka and beyond.",
     lead: "If your question is not here, write to us. A person answers, usually the same day.",
     groups: [
       {
@@ -340,7 +340,7 @@ const FAQ: Record<Lang, FaqCopy> = {
   es: {
     title: "Preguntas frecuentes",
     metaDescription:
-      "Reservas, idioma, horarios, vestimenta, dietas y cancelaciones: lo que preguntan los viajeros antes de reservar una experiencia cultural en Tokio, Kioto u Osaka.",
+      "Reservas, idioma, horarios, vestimenta, dietas y cancelaciones: lo que preguntan los viajeros antes de reservar una experiencia cultural en Tokio, Kioto, Osaka y más ciudades.",
     lead: "Si tu pregunta no está aquí, escríbenos. Responde una persona, normalmente el mismo día.",
     groups: [
       {
@@ -437,7 +437,7 @@ const FAQ: Record<Lang, FaqCopy> = {
   ja: {
     title: "よくあるご質問",
     metaDescription:
-      "予約、言語、時間、服装、食事制限、キャンセルについて。東京・京都・大阪の文化体験をお申し込みになる前によくいただくご質問をまとめました。",
+      "予約、言語、時間、服装、食事制限、キャンセルについて。東京・京都・大阪ほかの文化体験をお申し込みになる前によくいただくご質問をまとめました。",
     lead: "こちらにない場合はお問い合わせください。担当者が、通常は当日中にお返事します。",
     groups: [
       {
@@ -533,7 +533,7 @@ const FAQ: Record<Lang, FaqCopy> = {
   },
   fr: {
     title: "Questions fréquentes",
-    metaDescription: "Réservation, langue, horaires, tenue, régimes et annulation — les questions que se posent les voyageurs avant de réserver une expérience culturelle à Tokyo, Kyoto ou Osaka.",
+    metaDescription: "Réservation, langue, horaires, tenue, régimes et annulation — les questions que se posent les voyageurs avant de réserver une expérience culturelle à Tokyo, Kyoto, Osaka et au-delà.",
     lead: "Si votre question n'est pas ici, écrivez-nous. Une personne répond, généralement le jour même.",
     groups: [
       { heading: "Réservation", items: [
@@ -565,7 +565,7 @@ const FAQ: Record<Lang, FaqCopy> = {
   },
   "zh-tw": {
     title: "常見問題",
-    metaDescription: "預約、語言、時間、穿著、飲食與取消——旅客在預約東京、京都或大阪的文化體驗前常問的問題。",
+    metaDescription: "預約、語言、時間、穿著、飲食與取消——旅客在預約東京、京都、大阪等地的文化體驗前常問的問題。",
     lead: "如果這裡沒有您的問題，請來信。由專人回覆，通常當天就會回。",
     groups: [
       { heading: "預約", items: [

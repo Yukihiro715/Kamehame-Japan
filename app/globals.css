@@ -115,14 +115,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .section-heading h2 { margin:0; font-size:clamp(52px,6vw,88px); line-height:.94; }
 .section-heading>p { max-width:440px; margin:0 0 5px; color:var(--muted); line-height:1.8; }
 .city-section { padding:110px clamp(24px,7vw,120px) 120px; background:var(--white); }
-.city-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap:18px; margin-top:70px; }
-.city-card { min-height:540px; padding:35px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; color:var(--white); isolation:isolate; border:3px solid var(--ink); box-shadow:8px 8px 0 rgba(23,26,33,.85); }
+.city-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, max(250px, 22%)), 1fr)); gap:18px; margin-top:70px; }
+.city-card { min-height:540px; padding:35px; position:relative; overflow:hidden; container-type:inline-size; display:flex; flex-direction:column; justify-content:space-between; color:var(--white); isolation:isolate; border:3px solid var(--ink); box-shadow:8px 8px 0 rgba(23,26,33,.85); }
 .city-photo { position:absolute; inset:0; z-index:-2; width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
 .city-card.tokyo .city-photo { object-position:center 38%; }
 .city-card::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.02) 34%,rgba(0,0,0,.62)); }
 .city-card:hover .city-photo { transform:scale(1.035); }
 .city-index { font-size:11px; letter-spacing:.16em; text-shadow:0 1px 8px rgba(0,0,0,.5); }
-.city-card h3 { margin:4px 0 0; font-family:var(--font-display); font-size:clamp(58px,6.6vw,92px); font-weight:400; letter-spacing:.02em; text-transform:uppercase; text-shadow:0 2px 24px rgba(0,0,0,.45); }
+.city-card h3 { margin:4px 0 0; font-family:var(--font-display); font-size:clamp(36px,17cqw,72px); font-weight:400; letter-spacing:.02em; text-transform:uppercase; text-shadow:0 2px 24px rgba(0,0,0,.45); }
 .city-card div p { margin:0; font-size:13px; line-height:1.6; text-transform:uppercase; letter-spacing:.08em; text-shadow:0 1px 8px rgba(0,0,0,.55); }
 .city-place { display:block; margin-top:14px; color:rgba(255,253,248,.72); font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
 .circle-arrow { width:54px; height:54px; border:1px solid rgba(255,255,255,.6); border-radius:50%; display:grid; place-items:center; position:absolute; right:30px; bottom:35px; }
@@ -194,6 +194,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .photo-credits summary { cursor:pointer; width:max-content; letter-spacing:.08em; text-transform:uppercase; }
 .photo-credits p { max-width:840px; margin:12px 0 0; line-height:1.8; }
 .photo-credits a { text-decoration:underline; }
+@media(max-width:1180px){.desktop-nav{gap:12px;font-size:11px}}
+@media(max-width:1040px){.site-header{grid-template-columns:1fr auto}.desktop-nav{display:none}.menu-button{display:inline-flex}}
 @media(max-width:980px){.site-header{grid-template-columns:1fr auto}.desktop-nav,.header-cta{display:none}.menu-button{display:inline-flex}.hero{min-height:720px;flex-direction:column;justify-content:center;align-items:flex-start}.hero-copy{width:100%}.hero-note{position:static;align-self:flex-start;margin:42px 0 0;max-width:300px}.trust-strip,.section-heading,.review-layout{grid-template-columns:1fr;gap:50px}.trust-seal{grid-column:1;margin:0;justify-self:start}.category-grid{grid-template-columns:repeat(2,1fr)}.experience-grid{grid-template-columns:1fr}.experience-card{display:grid;grid-template-columns:.75fr 1fr}.tour-section{grid-template-columns:1fr}.tour-monogram{height:420px;font-size:280px}}
 @media(max-width:700px){.site-header{height:72px;padding-inline:18px}.brand-mark{width:32px;height:32px}.hero{min-height:700px;padding:110px 22px 60px;align-items:flex-start;background-position:62% center}.hero h1{font-size:clamp(50px,15vw,69px)}.hero-lede{margin:26px 0;font-size:16px}.hero-actions{align-items:flex-start;flex-direction:column;gap:22px}.hero-note{margin-top:34px;max-width:280px}.trust-strip{padding:76px 22px 70px}.trust-grid{grid-template-columns:1fr}.trust-grid article+article{padding-left:0;border-left:0}.city-section,.category-section,.experiences-section,.review-section{padding:76px 22px}.city-cards{grid-template-columns:1fr;margin-top:45px}.city-card{min-height:390px;padding:24px}.city-card h3{font-size:65px}.circle-arrow{right:22px;bottom:25px}.category-grid{grid-template-columns:1fr 1fr}.category-card{min-height:190px}.category-mark{font-size:50px}.category-card b{font-size:18px}.section-heading.horizontal{gap:30px}.underlined-link{justify-self:start}.experience-grid{margin-top:45px}.experience-card{display:block}.experience-art{height:280px}.tour-monogram{height:320px;font-size:210px}.tour-copy{padding:75px 22px}.tour-details{flex-wrap:wrap}.review-layout{gap:35px}.closing-section{padding:90px 22px}.site-footer-block{grid-template-columns:1fr;gap:40px}.footer-links{justify-content:flex-start;flex-wrap:wrap}.footer-meta{grid-column:1;flex-direction:column;gap:6px}.partner-link{grid-column:1;justify-self:start}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -463,7 +465,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 /* Japanese glyphs occupy a full em, so the Latin display sizes run long. */
 :is([lang="ja"], [lang="zh-tw"]) .hero h1 { font-size:clamp(34px,4.6vw,66px); line-height:1.18; max-width:none; }
-:is([lang="ja"], [lang="zh-tw"]) .city-card h3 { font-size:clamp(38px,4.4vw,60px); line-height:1.15; }
+:is([lang="ja"], [lang="zh-tw"]) .city-card h3 { font-size:clamp(38px,20cqw,60px); line-height:1.15; }
 :is([lang="ja"], [lang="zh-tw"]) .collection-hero-copy h1 { font-size:clamp(26px,3.2vw,44px); line-height:1.2; }
 :is([lang="ja"], [lang="zh-tw"]) .detail-main h1 { font-size:clamp(24px,2.8vw,38px); line-height:1.3; }
 :is([lang="ja"], [lang="zh-tw"]) .section-heading h2,
