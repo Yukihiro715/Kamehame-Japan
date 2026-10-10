@@ -326,7 +326,11 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     const cityLinks = [...new Set(exps.map((e) => e.city))].map((c) => ({ label: cityTitle(c), href: p(`/${c}/`) }));
     const others = categories.filter((c) => c.slug !== cat.slug).slice(0, 3)
       .map((c) => ({ label: c.title, href: p(`/${c.slug}/`) }));
-    const where = cityLinks.map((c) => c.label).join(lang === "es" ? " y " : " & ");
+    // "Tokyo, Osaka & Kyoto": commas between, the language's "and" before the last.
+    const names = cityLinks.map((c) => c.label);
+    const and = { en: " & ", es: " y ", fr: " et ", ja: "・", "zh-tw": "與" }[lang];
+    const comma = lang === "ja" ? "・" : lang === "zh-tw" ? "、" : ", ";
+    const where = names.length > 1 ? names.slice(0, -1).join(comma) + and + names[names.length - 1] : names[0] ?? "";
     return {
       slug, crumb: cat.title, h1: S.catH1(cat.title, where),
       heroImg: cat.img, heroAlt: cat.title, lead: cat.lead,
