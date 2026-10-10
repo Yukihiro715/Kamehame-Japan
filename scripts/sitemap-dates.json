@@ -1,0 +1,410 @@
+{
+  "/": {
+    "hash": "e83249bd3ba7",
+    "lastmod": "2026-09-17"
+  },
+  "/en/about/": {
+    "hash": "9df5cabba4e3",
+    "lastmod": "2026-10-10"
+  },
+  "/en/calligraphy/": {
+    "hash": "a92d5fa8fe4a",
+    "lastmod": "2026-09-24"
+  },
+  "/en/contact/": {
+    "hash": "5e4384a35194",
+    "lastmod": "2026-09-17"
+  },
+  "/en/experiences/": {
+    "hash": "2761303b3502",
+    "lastmod": "2026-10-10"
+  },
+  "/en/faq/": {
+    "hash": "d049bab949dd",
+    "lastmod": "2026-10-10"
+  },
+  "/en/geisha/": {
+    "hash": "53fcc3fe8cc9",
+    "lastmod": "2026-09-17"
+  },
+  "/en/golf/": {
+    "hash": "964c1108221a",
+    "lastmod": "2026-10-10"
+  },
+  "/en/journal/": {
+    "hash": "4954ccf587d7",
+    "lastmod": "2026-09-17"
+  },
+  "/en/journal/booking-a-maiko-evening/": {
+    "hash": "e40a2bc066d3",
+    "lastmod": "2026-10-10"
+  },
+  "/en/journal/tatami-rooms-what-to-know/": {
+    "hash": "288565aa00f8",
+    "lastmod": "2026-09-17"
+  },
+  "/en/journal/when-to-visit-seasons/": {
+    "hash": "eae5c4a1b162",
+    "lastmod": "2026-09-17"
+  },
+  "/en/kyoto/": {
+    "hash": "cebc417528cc",
+    "lastmod": "2026-09-17"
+  },
+  "/en/kyoto/evening-with-geiko/": {
+    "hash": "7d7da830f4e2",
+    "lastmod": "2026-10-10"
+  },
+  "/en/osaka/": {
+    "hash": "0bdc4076b2a5",
+    "lastmod": "2026-10-10"
+  },
+  "/en/osaka/dotonbori-ramen-class/": {
+    "hash": "0a8dc08df8c4",
+    "lastmod": "2026-10-10"
+  },
+  "/en/ramen/": {
+    "hash": "326c6b1d8336",
+    "lastmod": "2026-10-10"
+  },
+  "/en/tokyo/": {
+    "hash": "820ef80353d5",
+    "lastmod": "2026-10-10"
+  },
+  "/en/tokyo/kanji-name-calligraphy/": {
+    "hash": "f8843c6ff2d6",
+    "lastmod": "2026-10-10"
+  },
+  "/en/tokyo/mt-fuji-golf-day/": {
+    "hash": "4ce96f9d77ab",
+    "lastmod": "2026-10-10"
+  },
+  "/en/tokyo/shibuya-ramen-class/": {
+    "hash": "315bbabfde07",
+    "lastmod": "2026-10-10"
+  },
+  "/en/trade/": {
+    "hash": "b8d481689305",
+    "lastmod": "2026-10-10"
+  },
+  "/es/": {
+    "hash": "e83249bd3ba7",
+    "lastmod": "2026-09-17"
+  },
+  "/es/about/": {
+    "hash": "8ff86b8b4d2c",
+    "lastmod": "2026-10-10"
+  },
+  "/es/calligraphy/": {
+    "hash": "f3938a12bd23",
+    "lastmod": "2026-09-24"
+  },
+  "/es/contact/": {
+    "hash": "b3d9e658b598",
+    "lastmod": "2026-09-17"
+  },
+  "/es/experiences/": {
+    "hash": "ac6558bc61c3",
+    "lastmod": "2026-10-10"
+  },
+  "/es/faq/": {
+    "hash": "e1145c956e6f",
+    "lastmod": "2026-10-10"
+  },
+  "/es/geisha/": {
+    "hash": "6538d34cd364",
+    "lastmod": "2026-09-17"
+  },
+  "/es/golf/": {
+    "hash": "770c5dd3c19c",
+    "lastmod": "2026-10-10"
+  },
+  "/es/journal/": {
+    "hash": "4954ccf587d7",
+    "lastmod": "2026-09-17"
+  },
+  "/es/kyoto/": {
+    "hash": "5934e31f1f17",
+    "lastmod": "2026-09-17"
+  },
+  "/es/kyoto/evening-with-geiko/": {
+    "hash": "ac0f8a0f3cd4",
+    "lastmod": "2026-10-10"
+  },
+  "/es/osaka/": {
+    "hash": "f1598006221c",
+    "lastmod": "2026-10-10"
+  },
+  "/es/osaka/dotonbori-ramen-class/": {
+    "hash": "da9f22c9bbbd",
+    "lastmod": "2026-10-10"
+  },
+  "/es/ramen/": {
+    "hash": "2c2328c5ade6",
+    "lastmod": "2026-10-10"
+  },
+  "/es/tokyo/": {
+    "hash": "279309910722",
+    "lastmod": "2026-10-10"
+  },
+  "/es/tokyo/kanji-name-calligraphy/": {
+    "hash": "1e6cd7f63318",
+    "lastmod": "2026-10-10"
+  },
+  "/es/tokyo/mt-fuji-golf-day/": {
+    "hash": "19db2d482c9e",
+    "lastmod": "2026-10-10"
+  },
+  "/es/tokyo/shibuya-ramen-class/": {
+    "hash": "1fae0bcd171c",
+    "lastmod": "2026-10-10"
+  },
+  "/es/trade/": {
+    "hash": "3c1000f37dcb",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/": {
+    "hash": "e83249bd3ba7",
+    "lastmod": "2026-09-17"
+  },
+  "/fr/about/": {
+    "hash": "e3669669ff2e",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/calligraphy/": {
+    "hash": "4edb022984e9",
+    "lastmod": "2026-09-24"
+  },
+  "/fr/contact/": {
+    "hash": "8380f60a6dcf",
+    "lastmod": "2026-09-17"
+  },
+  "/fr/experiences/": {
+    "hash": "37d07b406d6a",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/faq/": {
+    "hash": "07d7ba4bc523",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/geisha/": {
+    "hash": "590bc0c7af27",
+    "lastmod": "2026-09-17"
+  },
+  "/fr/golf/": {
+    "hash": "709b469101f0",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/journal/": {
+    "hash": "4954ccf587d7",
+    "lastmod": "2026-09-17"
+  },
+  "/fr/kyoto/": {
+    "hash": "b69bde0cde6d",
+    "lastmod": "2026-09-17"
+  },
+  "/fr/kyoto/evening-with-geiko/": {
+    "hash": "256b3170b1f8",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/osaka/": {
+    "hash": "6b40020c656a",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/osaka/dotonbori-ramen-class/": {
+    "hash": "d56176cb1813",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/ramen/": {
+    "hash": "26dc2bd16b82",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/tokyo/": {
+    "hash": "82148890fbfc",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/tokyo/kanji-name-calligraphy/": {
+    "hash": "65f35d2d1e70",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/tokyo/mt-fuji-golf-day/": {
+    "hash": "e0fb4babb8e6",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/tokyo/shibuya-ramen-class/": {
+    "hash": "c58411547fc5",
+    "lastmod": "2026-10-10"
+  },
+  "/fr/trade/": {
+    "hash": "4456f6927988",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/": {
+    "hash": "e83249bd3ba7",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/about/": {
+    "hash": "ccae48b4114f",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/calligraphy/": {
+    "hash": "a719258c5ec6",
+    "lastmod": "2026-09-24"
+  },
+  "/ja/contact/": {
+    "hash": "2e0a459317ba",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/experiences/": {
+    "hash": "e5d52f85652d",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/faq/": {
+    "hash": "4c993f07f8fd",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/geisha/": {
+    "hash": "badfebe577fa",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/golf/": {
+    "hash": "4c63586e7485",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/journal/": {
+    "hash": "4954ccf587d7",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/journal/booking-a-maiko-evening/": {
+    "hash": "f71ac85a29ce",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/journal/tatami-rooms-what-to-know/": {
+    "hash": "fb8c6c71eaf9",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/journal/when-to-visit-seasons/": {
+    "hash": "ddaa13aedfd5",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/kyoto/": {
+    "hash": "4a984fde53f1",
+    "lastmod": "2026-09-17"
+  },
+  "/ja/kyoto/evening-with-geiko/": {
+    "hash": "047caf3f3bd3",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/osaka/": {
+    "hash": "bcb895b35075",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/osaka/dotonbori-ramen-class/": {
+    "hash": "46531750e297",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/ramen/": {
+    "hash": "b5e227ee1cd9",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/tokyo/": {
+    "hash": "b29c23144770",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/tokyo/kanji-name-calligraphy/": {
+    "hash": "999932a818a4",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/tokyo/mt-fuji-golf-day/": {
+    "hash": "b9a6235a7feb",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/tokyo/shibuya-ramen-class/": {
+    "hash": "047d00fbe65e",
+    "lastmod": "2026-10-10"
+  },
+  "/ja/trade/": {
+    "hash": "1c7c256491f7",
+    "lastmod": "2026-10-10"
+  },
+  "/partners/": {
+    "hash": "e94b2945ee23",
+    "lastmod": "2026-10-09"
+  },
+  "/zh-tw/": {
+    "hash": "e83249bd3ba7",
+    "lastmod": "2026-09-17"
+  },
+  "/zh-tw/about/": {
+    "hash": "837817d3b62b",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/calligraphy/": {
+    "hash": "7be6c654bdf5",
+    "lastmod": "2026-09-24"
+  },
+  "/zh-tw/contact/": {
+    "hash": "536c25eee7b7",
+    "lastmod": "2026-09-17"
+  },
+  "/zh-tw/experiences/": {
+    "hash": "a523edb7a891",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/faq/": {
+    "hash": "5c3dc62f57ea",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/geisha/": {
+    "hash": "08827c2e1cfa",
+    "lastmod": "2026-09-17"
+  },
+  "/zh-tw/golf/": {
+    "hash": "907ff6c6077b",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/journal/": {
+    "hash": "4954ccf587d7",
+    "lastmod": "2026-09-17"
+  },
+  "/zh-tw/kyoto/": {
+    "hash": "cecd2080a7b3",
+    "lastmod": "2026-09-17"
+  },
+  "/zh-tw/kyoto/evening-with-geiko/": {
+    "hash": "8421c6c4aeec",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/osaka/": {
+    "hash": "67428c4ded52",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/osaka/dotonbori-ramen-class/": {
+    "hash": "94732e7d0513",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/ramen/": {
+    "hash": "bcb45959e0cd",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/tokyo/": {
+    "hash": "fed9830b5960",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/tokyo/kanji-name-calligraphy/": {
+    "hash": "87e597c89688",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/tokyo/mt-fuji-golf-day/": {
+    "hash": "0bd0b84d3899",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/tokyo/shibuya-ramen-class/": {
+    "hash": "310cd7b459c7",
+    "lastmod": "2026-10-10"
+  },
+  "/zh-tw/trade/": {
+    "hash": "6596cbc61ed2",
+    "lastmod": "2026-10-10"
+  }
+}

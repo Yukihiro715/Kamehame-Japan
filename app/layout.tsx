@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
+import { headers } from "next/headers";
+import { isLang } from "@/lib/i18n";
 import { GTM_ID } from "@/lib/analytics";
 import { consentDefaultScript } from "@/lib/consent";
 import { RouteChangeEvent } from "@/components/site/route-change-event";
@@ -60,9 +62,15 @@ const organizationJsonLd = {
   sameAs: ["https://prosent.co.jp/"],
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // The document language follows the locale segment of the URL (/ja/, /fr/…).
+  // The root layout does not receive that segment's params, so the Worker
+  // passes it as a request header (worker/index.ts); pages outside a locale
+  // (the root page, the partner page, 404) stay English.
+  const fromHeader = (await headers()).get("x-kh-lang") ?? "";
+  const lang = isLang(fromHeader) ? fromHeader : "en";
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         {/* Consent Mode v2 defaults. This has to run before the container,
             or tags would load with storage already allowed. */}

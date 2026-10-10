@@ -166,6 +166,28 @@ test("group-priced page: facts under the photos, per-person headline with the gr
   assert.match(listing, /¥80,500\s+\/ person\s+Based on 2 guests · ¥161,000 per group/, "listing card per person with the party size");
 });
 
+test("the document language follows the locale segment", async () => {
+  for (const [path, lang] of [["/ja/kyoto/", "ja"], ["/fr/", "fr"], ["/zh-tw/tokyo/kanji-name-calligraphy/", "zh-tw"], ["/en/about/", "en"], ["/", "en"]]) {
+    const html = await (await render(path)).text();
+    assert.match(html, new RegExp(`<html[^>]*\\blang="${lang}"`), `${path} is ${lang}`);
+  }
+});
+
+test("sitemap dates follow the content, not the build", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { buildEntries } = await import("../scripts/sitemap-content.mjs");
+  const read = (f) => { try { return readFileSync(new URL(`../${f}`, import.meta.url), "utf8"); } catch { return null; } };
+  const { entries } = buildEntries(read);
+  const undated = entries.filter((e) => e.key == null && e.date == null);
+  assert.deepEqual(undated.map((e) => e.path), [], "every page has a content key or a declared date");
+  const xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+  const dates = [...xml.matchAll(/<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)].map((m) => m[1]);
+  assert.equal(dates.length, entries.length, "one lastmod per URL");
+  const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  assert.ok(dates.every((d) => d <= today), "no date in the future");
+  assert.ok(new Set(dates).size > 1, "unchanged pages keep their own earlier dates");
+});
+
 test("sends baseline security headers", async () => {
   const response = await render();
 

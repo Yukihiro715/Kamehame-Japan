@@ -2,135 +2,68 @@
 // Runs from `prebuild`, so a catalog change is always reflected in the
 // sitemap that ships — including in CI, where the files are regenerated
 // before the build rather than trusted from git.
+//
+// <lastmod> is the day a page's copy or conditions last changed, not the
+// build date: scripts/sitemap-content.mjs derives a content key for each
+// page, and scripts/sitemap-dates.json remembers the key's hash with the date
+// it was first seen. A page whose hash is unchanged keeps its date; a changed
+// one is dated today (Japan time) and the JSON is updated — commit it with the
+// content change, so every later build reproduces the same date. A listing
+// page (home, city, category, journal) is also at least as new as the newest
+// page it lists.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { buildEntries, hashOf } from "./sitemap-content.mjs";
 
 const ORIGIN = "https://kamehame-japan.com";
-const LANGS = ["en", "es", "ja", "fr", "zh-tw"];
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const read = (f) => (existsSync(join(root, f)) ? readFileSync(join(root, f), "utf8") : null);
 
-// Read the catalog without a TS toolchain: the slugs are plain string literals.
-const read = (f) => readFileSync(join(root, f), "utf8");
+const { entries, stats } = buildEntries(read);
 
-const catalog = read("lib/catalog.ts");
-const slugs = (re) => [...catalog.matchAll(re)].map((m) => m[1]);
+const datesFile = join(root, "scripts/sitemap-dates.json");
+const stored = existsSync(datesFile) ? JSON.parse(readFileSync(datesFile, "utf8")) : {};
+// Today in Japan: the business day the change was published.
+const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
 
-const allCities = slugs(/slug:\s*"(tokyo|kyoto|osaka)",\s*title:/g);
-const allCategories = slugs(/\{\s*slug:\s*"([a-z-]+)",\s*title:[^}]*?tag:/g);
-const allExperiences = [...catalog.matchAll(/slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto|osaka)",\s*category:\s*"([a-z-]+)"([^\n]*)/g)]
-  .map((m) => ({ slug: m[1], city: m[2], category: m[3], live: /status:\s*"live"/.test(m[4]) }));
-const tours = slugs(/slug:\s*"([a-z-]+-private-day-tour)",\s*city:/g);
-
-// Tours are withheld until the operating partner holds a 旅行業 registration
-// (lib/catalog.ts TOURS_PUBLISHED). Keep the sitemap in step with the site.
-const toursPublished = /export const TOURS_PUBLISHED = true/.test(catalog);
-
-// Placeholder experiences (no signed partner) are withheld with them the
-// cities and categories that only they populate (lib/catalog.ts
-// PLACEHOLDERS_PUBLISHED) — the same filter catalogFor() applies.
-const placeholdersPublished = /export const PLACEHOLDERS_PUBLISHED = true/.test(catalog);
-const experiences = placeholdersPublished ? allExperiences : allExperiences.filter((e) => e.live);
-const cities = allCities.filter((c) => placeholdersPublished || experiences.some((e) => e.city === c));
-const categories = allCategories.filter((c) => placeholdersPublished || experiences.some((e) => e.category === c));
-
-const collections = [...new Set([
-  ...cities, ...categories,
-  ...(toursPublished ? ["tours"] : []),
-  "experiences",
-])];
-
-/** Every indexable path, with the hreflang siblings search engines expect. */
-const entries = [];
-const add = (path, { priority = "0.7", changefreq = "weekly", alternates = null } = {}) =>
-  entries.push({ path, priority, changefreq, alternates });
-
-// English lives at the root; every other locale sits under its prefix.
-const homePath = (lang) => (lang === "en" ? "/" : `/${lang}/`);
-const homeAlternates = Object.fromEntries(LANGS.map((l) => [l, homePath(l)]));
-
-for (const lang of LANGS) {
-  add(homePath(lang), { priority: "1.0", changefreq: "daily", alternates: homeAlternates });
+const own = new Map();
+const next = {};
+let bumped = 0;
+for (const e of entries) {
+  if (e.date) { own.set(e.path, e.date); continue; }
+  if (e.key == null) continue;
+  const hash = hashOf(e.key);
+  const prev = stored[e.path];
+  const lastmod = prev && prev.hash === hash ? prev.lastmod : today;
+  if (lastmod === today && prev?.lastmod !== today) bumped++;
+  next[e.path] = { hash, lastmod };
+  own.set(e.path, lastmod);
 }
+const lastmodOf = (e) => {
+  const dates = [own.get(e.path), ...e.deps.map((p) => own.get(p))].filter(Boolean).sort();
+  return dates.length ? dates[dates.length - 1] : today;
+};
 
-for (const c of collections) {
-  for (const lang of LANGS) {
-    add(`/${lang}/${c}/`, {
-      priority: "0.8",
-      alternates: Object.fromEntries(LANGS.map((l) => [l, `/${l}/${c}/`])),
-    });
-  }
-}
+const json = JSON.stringify(Object.fromEntries(Object.keys(next).sort().map((k) => [k, next[k]])), null, 2) + "\n";
+if (!existsSync(datesFile) || readFileSync(datesFile, "utf8") !== json) writeFileSync(datesFile, json);
 
-for (const { slug, city } of experiences) {
-  for (const lang of LANGS) {
-    add(`/${lang}/${city}/${slug}/`, {
-      priority: "0.9",
-      alternates: Object.fromEntries(LANGS.map((l) => [l, `/${l}/${city}/${slug}/`])),
-    });
-  }
-}
-
-for (const slug of toursPublished ? tours : []) {
-  for (const lang of LANGS) {
-    add(`/${lang}/tours/${slug}/`, {
-      priority: "0.9",
-      alternates: Object.fromEntries(LANGS.map((l) => [l, `/${l}/tours/${slug}/`])),
-    });
-  }
-}
-
-for (const page of ["about", "faq", "journal", "contact", "trade", "privacy", "legal", "terms"]) {
-  for (const lang of LANGS) {
-    add(`/${lang}/${page}/`, {
-      priority: "0.5",
-      changefreq: "monthly",
-      alternates: Object.fromEntries(LANGS.map((l) => [l, `/${l}/${page}/`])),
-    });
-  }
-}
-
-// Articles render only in the locales they have been written for, and only
-// while one of the experiences they are tagged with is on the site
-// (lib/articles.ts articlesFor).
-const articles = read("lib/articles.ts");
-const listed = new Set(experiences.map((e) => e.slug));
-for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {
-  const slug = m[1];
-  const block = articles.slice(articles.indexOf(`slug: "${slug}"`));
-  const end = block.indexOf("\n  },\n");
-  const tags = [...(block.slice(0, end).match(/experiences:\s*\[([^\]]*)\]/)?.[1] ?? "").matchAll(/"([a-z0-9-]+)"/g)].map((t) => t[1]);
-  if (!tags.some((t) => listed.has(t))) continue;
-  // Which locales carry copy for this article
-  const langs = LANGS.filter((l) => new RegExp(`\\n\\s{6}"?${l}"?:\\s*\\{`).test(block.slice(0, end)));
-  for (const lang of langs) {
-    add(`/${lang}/journal/${slug}/`, {
-      priority: "0.6",
-      changefreq: "monthly",
-      alternates: Object.fromEntries(langs.map((l) => [l, `/${l}/journal/${slug}/`])),
-    });
-  }
-}
-
-add("/partners/", { priority: "0.4", changefreq: "monthly" });
-
-const today = new Date().toISOString().slice(0, 10);
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${entries
-  .map(({ path, priority, changefreq, alternates }) => {
-    const links = alternates
-      ? Object.entries(alternates)
+  .map((e) => {
+    const links = e.alternates
+      ? Object.entries(e.alternates)
           .map(([l, p]) => `\n    <xhtml:link rel="alternate" hreflang="${l}" href="${ORIGIN}${p}"/>`)
           .join("")
       : "";
     return `  <url>
-    <loc>${ORIGIN}${path}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>${links}
+    <loc>${ORIGIN}${e.path}</loc>
+    <lastmod>${lastmodOf(e)}</lastmod>
+    <changefreq>${e.changefreq}</changefreq>
+    <priority>${e.priority}</priority>${links}
   </url>`;
   })
   .join("\n")}
@@ -149,6 +82,6 @@ Sitemap: ${ORIGIN}/sitemap.xml
 );
 
 console.log(
-  `sitemap.xml: ${entries.length} URLs (${experiences.length} experiences, ` +
-  `${toursPublished ? tours.length : 0} tours, ${collections.length} collections)`,
+  `sitemap.xml: ${entries.length} URLs (${stats.experiences} experiences, ` +
+  `${stats.tours} tours, ${stats.collections} collections); ${bumped} dated today`,
 );
