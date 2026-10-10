@@ -126,6 +126,19 @@ test("golf request: the server validates the choice against the price master", a
   }
 });
 
+test("ramen class: a preview page, priced per person, not listed and not naming the venue", async () => {
+  const res = await render("/en/tokyo/shibuya-ramen-class/");
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  const text = html.replace(/<[^>]+>/g, "");
+  assert.ok(text.includes("Ramen Making Class near Shibuya, Tokyo"), "title");
+  assert.ok(text.includes("¥25,000"), "sale price");
+  assert.ok(text.includes("Preview — this page is not published yet"), "preview banner");
+  assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro/i, "the venue's name and address stay private");
+  const listing = await (await render("/en/tokyo/")).text();
+  assert.ok(!listing.includes("shibuya-ramen-class"), "not listed while in preview");
+});
+
 test("sends baseline security headers", async () => {
   const response = await render();
 

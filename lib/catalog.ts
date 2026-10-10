@@ -353,6 +353,8 @@ export const categories: Category[] = [
   { slug: "anime-nail-art", title: "Anime nail art", tag: "Pop culture", mark: "爪", img: "/images/cat-nail.jpg",
     lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },  { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
+  { slug: "ramen", title: "Ramen", tag: "Food", mark: "麺", img: "/images/ramen-noodle-machine.jpg",
+    lead: "Ramen is Japan's everyday comfort food, and the quickest way to understand it is to make it: noodles from scratch, the broth, the bowl. Small hands-on classes in Tokyo, taught in English." },
   { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
 ];
@@ -464,6 +466,93 @@ export const experiences: Experience[] = [
     itinerary: ["10:30 — Welcome", "10:50 — Brush practice and choosing your kanji", "11:10 — Your style: Cute, Bold or Elegant", "11:40 — Your final piece", "12:00 — Seal, sharing and photos", "12:15 — Time to spare"],
     goodToKnow: ["Ages 10 and over; children pay the adult price.", "Wear clothes you don't mind marking; aprons are provided.", "Taught in simple English."],
     story: { heading: "Why a name in kanji", body: "Kanji carry meaning, not just sound. Choosing characters for a name is how many Japanese parents name their children — and it turns a souvenir into something that is actually about you." },
+  },
+  {
+    // Ramen-making class near Shibuya, from the partner's OTA listing
+    // (2026-10-10). Sale price ¥25,000 per person set by the owner; the
+    // partner's name, address, cost, session times, party limits and
+    // cancellation terms are still to be confirmed, so the page stays in
+    // "preview" until they are. Photos are the partner's own, via its listing.
+    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "preview",
+    title: "Ramen Making Class near Shibuya, Tokyo",
+    tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen a few minutes from Shibuya.",
+    overview: [
+      "Ramen is Japan's everyday comfort food, and this is the quickest way to understand it: make it. In a small teaching kitchen near Shibuya you turn flour and water into noodles by hand, pass the dough through a noodle machine, and finish three small bowls so you can compare the three great broths in one sitting.",
+      "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. A vegan and halal-friendly version (one style of ramen) can be arranged instead of the three-bowl tasting; tell us when you request your date.",
+    ],
+    duration: "90 minutes", price: "¥25,000", priceUnit: "person", group: "Small class · from 1 guest", ages: "All ages welcome", area: "Tokyo (a few minutes from Shibuya)",
+    img: "/images/ramen-noodle-machine.jpg", alt: "Two guests feeding a sheet of dough through a hand-cranked noodle machine, fresh noodles falling into the tray",
+    gallery: [
+      { img: "/images/ramen-three-bowls.jpg", alt: "Three small bowls side by side: shoyu, tonkotsu and miso ramen with egg, chashu and nori" },
+      { img: "/images/ramen-dough.jpg", alt: "Gloved hands bringing flour and water together into a dough in a steel bowl" },
+      { img: "/images/ramen-fresh-noodles.jpg", alt: "Two guests holding handfuls of the noodles they have just cut" },
+      { img: "/images/ramen-boiling.jpg", alt: "A guest lifting freshly boiled noodles from the basket, bowls lined up behind" },
+    ],
+    galleryNote: "Photos from the partner's kitchen. The bowls you make depend on the plan you choose.",
+    partySize: { min: 1, max: 6 },
+    availability: { daily: true, startTimes: [], cutoffDays: 1, cutoffTime: "18:00" },
+    availabilityNote: "Session times vary by day — tell us your preferred time and we confirm the nearest session",
+    timeLabel: "Preferred time of day",
+    scheduleNote: "Timings counted from the start of your session; the class runs about 90 minutes.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Taught in English",
+    skipSiteFaq: true,
+    includedShort: "90-minute class · All ingredients and tools · The ramen you make",
+    highlights: [
+      { icon: "brush", title: "Noodles from scratch", body: "Flour, water and your own hands: knead the dough, roll it through the noodle machine and cut your noodles." },
+      { icon: "meal", title: "Three bowls, three styles", body: "Tonkotsu, shoyu and miso in small bowls, finished with chicken chashu and toppings, so you can taste the differences side by side." },
+      { icon: "chat", title: "Taught in English", body: "A small kitchen, an instructor who explains each step in English, and no experience needed." },
+      { icon: "group", title: "Vegan and halal-friendly option", body: "Ask for the vegan and halal-friendly plan when you request your date; it serves one style of ramen made the same way." },
+    ],
+    included: [
+      "A 90-minute hands-on class in English",
+      "All ingredients, tools and an apron",
+      "The ramen you make: three small bowls on the standard plan, one bowl on the vegan and halal-friendly plan",
+      "Tax included — nothing is added on the day",
+    ],
+    notIncluded: [
+      "Transport to the kitchen (meet on site)",
+      "Drinks beyond water, unless confirmed with your quote",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome and aprons on", body: "Meet your instructor, wash up and hear how the class runs." },
+      { time: "0:10", title: "The dough", body: "Bring flour and water together and knead until the dough comes right." },
+      { time: "0:30", title: "Roll and cut", body: "Pass the dough through the noodle machine, then cut your noodles.", img: "/images/ramen-noodle-machine.jpg" },
+      { time: "0:50", title: "Chashu and toppings", body: "Prepare chicken chashu and the toppings while the broths come up to heat." },
+      { time: "1:05", title: "Three bowls", body: "Boil your noodles and assemble tonkotsu, shoyu and miso bowls.", img: "/images/ramen-three-bowls.jpg" },
+      { time: "1:15", title: "Eat", body: "Taste the three styles side by side and compare notes with your instructor." },
+      { time: "1:30", title: "End of the class" },
+    ],
+    venue: {
+      known: ["A small ramen teaching kitchen in Tokyo, a few minutes from Shibuya — the exact address comes with your confirmation", "Wheelchair and stroller accessible; infants need their own seat", "Arrive 15 minutes before the start: guests arriving more than 5 minutes late cannot join the session", "Flour in the air and shared equipment: not recommended for anyone with coeliac disease or a severe wheat or gluten allergy"],
+      afterBooking: ["The kitchen's name, address and entrance instructions", "Directions from the nearest station", "A phone number for the day"],
+      img: "/images/ramen-fresh-noodles.jpg", alt: "Two guests holding their freshly cut noodles in the teaching kitchen",
+    },
+    notesLabel: "Plan and dietary needs (optional)",
+    notesHint: "e.g. two of us would like the vegan & halal-friendly plan; a preferred time of day; allergies we should know about",
+    flow: [
+      { title: "Choose a date and send your request", body: "Tell us your date, how many of you there are and your preferred time of day. Say if anyone would like the vegan and halal-friendly plan." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The kitchen's address and entrance instructions come with your confirmation." },
+    ],
+    faq: [
+      { q: "Do I need any cooking experience?", a: "No. The instructor shows every step, and the dough is forgiving. If you can knead, you can make noodles." },
+      { q: "What do we actually make?", a: "Fresh noodles from scratch, chicken chashu, and three small bowls — tonkotsu, shoyu and miso — finished with toppings, so you can taste the three styles side by side. The vegan and halal-friendly plan serves one style of ramen instead." },
+      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes. Ask for the vegan and halal-friendly plan when you request your date. It is made the same way and serves one bowl; contents differ from the standard plan." },
+      { q: "Which language is the class in?", a: "English. The instructor runs the class in English and Japanese." },
+      { q: "Can children join?", a: "Yes. The kitchen is stroller accessible, and infants need their own seat rather than a lap. Children pay the adult price." },
+      { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
+      { q: "I have a wheat or gluten allergy.", a: "The class is not recommended for anyone with coeliac disease or a severe wheat or gluten allergy: there is flour in the air and the equipment is shared." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes before the start. To keep every session on time, guests arriving 5 minutes or more after the start cannot join; we will try to move you to another session, which may carry a rescheduling fee." },
+      { q: "Is transport included?", a: "No. You meet at the kitchen, a few minutes from Shibuya; the address and directions come with your confirmation." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Knead, roll and cut fresh noodles", "Prepare chicken chashu and the toppings", "Finish three small bowls: tonkotsu, shoyu and miso", "Eat what you made"],
+    master: { title: "Your instructor", bio: "A ramen cook who teaches small classes in English in a dedicated kitchen near Shibuya.", quote: "" },
+    itinerary: ["0:00 — Welcome and aprons on", "0:10 — The dough", "0:30 — Roll and cut", "0:50 — Chashu and toppings", "1:05 — Three bowls", "1:15 — Eat", "1:30 — End of the class"],
+    goodToKnow: ["About 90 minutes; arrive 15 minutes early.", "All ages; infants need their own seat.", "Not recommended for coeliac disease or a severe wheat or gluten allergy.", "Taught in English."],
+    story: { heading: "Three broths, one bowl at a time", body: "Tonkotsu, shoyu and miso are the three words every ramen menu in Japan turns on. Making the noodles yourself and tasting the three side by side is the fastest way to know which one is yours." },
   },
   {
     // Golf partner's condition sheet 2026-10-06 (costs internal); v4 brief

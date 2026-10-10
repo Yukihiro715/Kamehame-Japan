@@ -52,3 +52,10 @@ Wikimedia Commons, used under CC BY-SA. Example courses in the Kanto region, not
 
 `public/images/thumbs/golf-*.jpg` (added 2026-10-10) are 480px copies of the nine golf photos above, made for the
 thumbnail strip and the all-photos sheet on the golf page; same sources and licences as the originals.
+
+## Ramen class (added 2026-10-10)
+
+`public/images/ramen-noodle-machine.jpg`, `ramen-three-bowls.jpg`, `ramen-dough.jpg`, `ramen-fresh-noodles.jpg` and
+`ramen-boiling.jpg` are the partner's own photos, taken from its listing on the OTA (viyago.jp, "Ramen Dojo in Shibuya") at the
+owner's instruction that the partner wants those used. Written permission from the partner is to be kept on file before the
+page goes live or the photos are used in ads. The three-bowls photo shows the partner's name on the bowls.
