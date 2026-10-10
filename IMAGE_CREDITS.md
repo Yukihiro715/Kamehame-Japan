@@ -55,7 +55,8 @@ thumbnail strip and the all-photos sheet on the golf page; same sources and lice
 
 ## Ramen class (added 2026-10-10)
 
-`public/images/ramen-noodle-machine.jpg`, `ramen-three-bowls.jpg`, `ramen-dough.jpg`, `ramen-fresh-noodles.jpg` and
-`ramen-boiling.jpg` are the partner's own photos, taken from its listing on the OTA (viyago.jp, "Ramen Dojo in Shibuya") at the
-owner's instruction that the partner wants those used. Written permission from the partner is to be kept on file before the
-page goes live or the photos are used in ads. The three-bowls photo shows the partner's name on the bowls.
+`public/images/ramen-noodle-machine.jpg`, `ramen-dough.jpg`, `ramen-fresh-noodles.jpg` and `ramen-boiling.jpg` are the partner's own
+photos (Cresc. Inc. / Viyago Japan), taken from its listing on viyago.jp at the owner's instruction that the partner wants those used.
+The partner's condition sheet says photo and video material is available for all media, with usage period, editing, credit and
+pre-publication review still "to be confirmed": settle that before the page goes live or the photos are used in ads. A fifth photo
+(three bowls carrying the partner's name) was dropped because the venue is not named on the page.

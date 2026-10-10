@@ -135,6 +135,9 @@ test("ramen class: a preview page, priced per person, not listed and not naming 
   assert.ok(text.includes("¥25,000"), "sale price");
   assert.ok(text.includes("Preview — this page is not published yet"), "preview banner");
   assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro/i, "the venue's name and address stay private");
+  assert.ok(text.includes("11:00") && text.includes("18:30"), "session times from the partner sheet");
+  assert.ok(text.includes("Up to 30 days before the date"), "30-day free cancellation from the partner sheet");
+  assert.ok(!html.includes("ramen-three-bowls"), "the branded photo is gone");
   const listing = await (await render("/en/tokyo/")).text();
   assert.ok(!listing.includes("shibuya-ramen-class"), "not listed while in preview");
 });
