@@ -153,11 +153,12 @@ test("ramen classes: Tokyo and Osaka live, priced per person, listed, never nami
   assert.ok(home.includes('href="/en/osaka/"') && home.includes('href="/en/ramen/"'), "home links the city and the ramen theme");
 });
 
-test("kendo, bushido and tea ceremony: preview pages that never name the partners", async () => {
+test("kendo, bushido, tea ceremony and the kendo tour: preview pages that never name the partners", async () => {
   const pages = [
     ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥20,000"],
     ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000"],
     ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥8,800"],
+    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800"],
   ];
   for (const [path, title, price] of pages) {
     const res = await render(path);
@@ -167,7 +168,7 @@ test("kendo, bushido and tea ceremony: preview pages that never name the partner
     assert.ok(text.includes(title), `title on ${path}`);
     assert.ok(text.includes(price), `placeholder price on ${path}`);
     assert.ok(text.includes("Preview — this page is not published yet"), `preview banner on ${path}`);
-    assert.doesNotMatch(html, /Kendo Spirit|Umino|海野|Kobunach|浜町|SEC Nihonbashi|Watanabe|有庵|r_cafe|Airbnb/i, `partner names stay private on ${path}`);
+    assert.doesNotMatch(html, /Kendo Spirit|Umino|海野|Kobunach|浜町|SEC Nihonbashi|Watanabe|有庵|r_cafe|Airbnb|SAMURAI TRIP|Nagamatsu|永松|パークフォーアス|Park For Us|samuraitrip/i, `partner names stay private on ${path}`);
   }
   const listing = await (await render("/en/tokyo/")).text();
   assert.ok(!listing.includes("nihonbashi-kendo-experience") && !listing.includes("yotsuya-tea-ceremony"), "not listed while in preview");

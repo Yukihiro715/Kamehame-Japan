@@ -910,6 +910,97 @@ export const experiences: Experience[] = [
     story: { heading: "One time, one meeting", body: "Ichigo ichie — this gathering, with these people, happens exactly once — is the heart of the tea ceremony. Everything in the room, from the scroll to the single flower, is chosen for this day. The bowl you whisk is part of it." },
   },
   {
+    // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
+    // Tokyo and other cities, from its e-mail of 2026-10-06 to us and its
+    // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
+    // adult rate with tax as a placeholder until ours is set; the operator
+    // is not named on the page.
+    slug: "tokyo-kendo-experience-tour", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
+    title: "Kendo Experience Tour in Tokyo with Dan-ranked Instructors",
+    tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Tokyo dojo arranged for your date; also run in Osaka, Kyoto and other cities.",
+    overview: [
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Tokyo that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
+    ],
+    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (dojo chosen for your date)",
+    img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
+    gallery: [
+      { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
+      { img: "/images/kendotour-grip.jpg", alt: "A smiling instructor correcting a guest's grip, shinai crossed overhead" },
+      { img: "/images/kendotour-sparring.jpg", alt: "Two guests in full armour sparring on the dojo floor while the group watches" },
+      { img: "/images/kendotour-laugh.jpg", alt: "A guest in armour laughing as he clashes shinai with the instructor" },
+      { img: "/images/kendotour-briefing.jpg", alt: "A group in kendo uniforms seated on the floor listening to the instructor's explanation" },
+      { img: "/images/kendotour-seiza.jpg", alt: "Guests in dark uniforms kneeling in a row with eyes closed" },
+    ],
+    galleryNote: "Photos from the operator's tours.",
+    partySize: { min: 2, max: 13 },
+    scheduleNote: "Timings counted from the start of your session; the operator sets the exact flow for your group's size.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English and Japanese",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
+    highlights: [
+      { icon: "group", title: "From two to two hundred", body: "The same session for a couple or a whole school year: every participant in armour, instructors added as the group grows." },
+      { icon: "chat", title: "Instructors of fifth to seventh dan", body: "Kendo teachers with more than thirty years of practice, explaining in English and Japanese what the samurai lived by and why the dojo bows." },
+      { icon: "brush", title: "Armour, bow, strike, match", body: "Dressing in the armour, the bowing ceremony, striking practice and a match to finish, in a working dojo." },
+      { icon: "flag", title: "Tokyo, and six other cities", body: "Weekday mornings in Tokyo; the tour also runs in Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji on request." },
+    ],
+    included: [
+      "A session of about two hours led by dan-ranked instructors, in English and Japanese",
+      "Kendo uniform, protective armour and shinai, all lent on site",
+      "The dojo or hall, arranged for your date",
+      "A tenugui towel to keep, and a bottle of water for groups of up to ten",
+      "Tax included — nothing is added on the day",
+    ],
+    notIncluded: [
+      "Transport to the venue (the meeting point comes with your confirmation)",
+      "Interpreters for languages other than English and Japanese — bring your own, or ask us",
+    ],
+    schedule: [
+      { time: "0:00", title: "Into the armour", body: "Uniform, hakama and the protective armour, fitted with the instructors' help." },
+      { time: "0:20", title: "The bowing ceremony", body: "How a dojo begins, and why." },
+      { time: "0:30", title: "What the samurai lived by", body: "A short talk on the samurai, kendo and the spirit behind the bow.", img: "/images/kendotour-briefing.jpg" },
+      { time: "0:45", title: "Striking practice", body: "Footwork, the swing and the strike, repeated until they land together." },
+      { time: "1:20", title: "The match", body: "Bouts between participants in full armour, with the instructors refereeing.", img: "/images/kendotour-sparring.jpg" },
+      { time: "1:45", title: "Closing bow, photos and changing" },
+      { time: "2:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A working kendo dojo or sports hall in Tokyo, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
+      img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
+    },
+    notesLabel: "Everyone's age, and anything the instructors should know (optional)",
+    notesHint: "e.g. two adults and two children of 10 and 12; a school group of 30; we would like Osaka instead of Tokyo",
+    flow: [
+      { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Tokyo. We check the date with the operator." },
+      { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+    ],
+    faq: [
+      { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
+      { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
+      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "Where is the venue?", a: "A kendo dojo or hall in Tokyo within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
+      { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
+      { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
+      { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
+      { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
+      { q: "Does the tour run outside Tokyo?", a: "Yes: Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
+    ],
+    whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
+    master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
+    itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
+  },
+  {
     // Golf partner's condition sheet 2026-10-06 (costs internal); v4 brief
     // 2026-10-10: one page, two areas, published prices for two to four golfers
     // (lib/golf-prices.ts), a specific course quoted individually, one request
