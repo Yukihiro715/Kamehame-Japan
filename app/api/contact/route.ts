@@ -1,11 +1,11 @@
 import { CONTACT_EMAIL, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
-import { acknowledgement } from "@/lib/mail-copy";
+import { acknowledgement, followUp, threadSubject } from "@/lib/mail-copy";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
-import { golfPriceNoteJa, notificationBody, notificationSubject } from "@/lib/notification";
+import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
@@ -46,24 +46,70 @@ function titleFor(e: Enquiry): string | undefined {
   return catalogFor(e.lang).experiences.find((x) => x.slug === e.experience)?.title;
 }
 
-/** Both messages in one batch call. Resend rejects the whole batch if the
- *  domain is not verified, which the caller treats as "try the fallback". */
 type Translations = Partial<Record<TranslatedField, string>>;
 
+/** How long after the acknowledgement the personal follow-up goes out. */
+const FOLLOW_UP_MINUTES = 15;
+
+const RESEND = "https://api.resend.com";
+const headersFor = (key: string) => ({ Authorization: `Bearer ${key}`, "Content-Type": "application/json" });
+
+/** Schedules the follow-up on Resend (it holds the message and sends it at
+ *  the time given). Returns the email id so it can be cancelled if the rest
+ *  of the delivery fails, or null when scheduling did not work. */
+async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${RESEND}/emails`, {
+      method: "POST",
+      headers: headersFor(key),
+      body: JSON.stringify({
+        from: `Yukihiro, KAMEHAME JAPAN <${REPLY}>`,
+        to: [e.email],
+        reply_to: REPLY,
+        subject,
+        text,
+        scheduled_at: new Date(Date.now() + FOLLOW_UP_MINUTES * 60_000).toISOString(),
+        tags: [{ name: "kind", value: "follow-up" }],
+      }),
+    });
+    if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    const { id } = (await res.json()) as { id?: string };
+    return id ?? null;
+  } catch (err) {
+    console.error("contact: follow-up scheduling failed", err);
+    return null;
+  }
+}
+
+async function cancelScheduled(key: string, id: string): Promise<void> {
+  try {
+    await fetch(`${RESEND}/emails/${id}/cancel`, { method: "POST", headers: headersFor(key) });
+  } catch (err) {
+    console.error("contact: could not cancel follow-up", err);
+  }
+}
+
+/** The team's copy and the acknowledgement in one batch call (Resend rejects
+ *  the whole batch if the domain is not verified, which the caller treats as
+ *  "try the fallback"), with the personal follow-up scheduled first so the
+ *  team's copy can say whether it is on its way. */
 async function sendViaResend(key: string, to: string, e: Enquiry, ja: Translations): Promise<void> {
-  const ack = acknowledgement(e, titleFor(e));
+  const title = titleFor(e);
+  const ack = acknowledgement(e, title);
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
   const jaName = jaTitle(e);
-  const res = await fetch("https://api.resend.com/emails/batch", {
+  const later = e.kind === "guest" ? followUp(e, title) : null;
+  const scheduledId = later ? await scheduleFollowUp(key, e, later.subject, later.text) : null;
+  const res = await fetch(`${RESEND}/emails/batch`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    headers: headersFor(key),
     body: JSON.stringify([
       {
         from: `KAMEHAME JAPAN Site <${FROM}>`,
         to: [to],
         reply_to: `${safeName} <${e.email}>`,
-        subject: notificationSubject(e, jaName),
-        text: notificationBody(e, jaName, ack, ja),
+        subject: threadSubject(e, title),
+        text: notificationBody(e, jaName, { ack, ja, followUp: later ? { text: later.text, scheduled: !!scheduledId, delayMinutes: FOLLOW_UP_MINUTES } : null }),
         tags: [{ name: "kind", value: e.kind }],
       },
       {
@@ -76,7 +122,11 @@ async function sendViaResend(key: string, to: string, e: Enquiry, ja: Translatio
       },
     ]),
   });
-  if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  if (!res.ok) {
+    // No acknowledgement went out, so the follow-up must not go out either.
+    if (scheduledId) await cancelScheduled(key, scheduledId);
+    throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  }
 }
 
 const MAX = {
@@ -150,9 +200,8 @@ function parse(body: Record<string, unknown>): Enquiry | null {
 /** Plain-text email. Headers are folded onto one line each; the body is
  *  whatever the visitor wrote, quoted as-is. */
 function raw(e: Enquiry, to: string, ja: Translations): string {
-  const jaName = jaTitle(e);
-  const subject = notificationSubject(e, jaName);
-  const lines = notificationBody(e, jaName, null, ja).split("\n");
+  const subject = threadSubject(e, titleFor(e));
+  const lines = notificationBody(e, jaTitle(e), { ack: null, followUp: null, ja }).split("\n");
   // RFC 5322: CRLF line endings, blank line between headers and body.
   // Cloudflare rejects a message without Message-ID and Date outright.
   return [

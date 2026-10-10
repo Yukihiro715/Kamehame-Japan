@@ -48,15 +48,20 @@ function levelJa(key: string, handicap: string | undefined, areaId?: string): st
   return [level, handicap && `${F.handicap.replace(/\s*[(（].*$/, "")}: ${handicap}`].filter(Boolean).join(" · ");
 }
 
-export function notificationSubject(e: Enquiry, jaTitle?: string): string {
-  if (e.kind === "trade") return `【取引先】${e.company ?? e.name}${e.country ? ` — ${e.country}` : ""}`;
-  const what = jaTitle ?? e.experience;
-  return `【予約リクエスト】${what ? `${what}${e.areaId ? ` · ${golfAreaJa(e.areaId)}` : ""} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
-}
-
 /** Plain text, in Japanese. `ack` is the acknowledgement the visitor was sent
  *  in the same batch; null when delivery fell back to a route that sends none. */
-export function notificationBody(e: Enquiry, jaTitle?: string, ack?: { subject: string; text: string } | null, ja: Partial<Record<TranslatedField, string>> = {}): string {
+export interface NotificationExtras {
+  /** The acknowledgement sent to the visitor in the same batch; null when
+   *  delivery fell back to a route that sends none. */
+  ack?: { subject: string; text: string } | null;
+  /** The scheduled personal follow-up: its text and whether scheduling worked. */
+  followUp?: { text: string; scheduled: boolean; delayMinutes: number } | null;
+  /** Japanese translations of what the visitor typed, by field. */
+  ja?: Partial<Record<TranslatedField, string>>;
+}
+
+export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras: NotificationExtras = {}): string {
+  const { ack = null, followUp = null, ja = {} } = extras;
   const trade = e.kind === "trade";
   const lang = `${e.lang}${LANG_JA[e.lang] ? `(${LANG_JA[e.lang]})` : ""}`;
   const course = e.courseMode && `${e.courseMode === "specific" ? "希望コース指定(個別見積もり)" : "おすすめコース(標準料金)"}${e.course ? ` — ${e.course}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}`;
@@ -68,9 +73,9 @@ export function notificationBody(e: Enquiry, jaTitle?: string, ack?: { subject: 
   const t = (label: string, field: TranslatedField, value: string | undefined): [string, string | undefined][] =>
     value ? [[label, value], ...(needsJa ? [[`${label}(日本語訳)`, ja[field] ?? "(自動翻訳できませんでした)"] as [string, string]] : [])] : [[label, undefined]];
   const rows: [string, string | undefined][] = [
+    ["お名前", e.name],
     ["種別", trade ? "取引先からの問い合わせ" : "お客様からの予約リクエスト"],
     ["体験", e.experience && `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}`],
-    ["お名前", e.name],
     ["メール", e.email],
     ["会社名", e.company],
     ["国", e.country],
@@ -92,9 +97,11 @@ export function notificationBody(e: Enquiry, jaTitle?: string, ack?: { subject: 
     ...(e.message ? [] : [["備考", "(なし)"] as [string, string]]),
     ["言語", lang],
     ["自動返信", ack ? `送信済み(${LANG_JA[e.lang] ?? e.lang}、下に全文)` : "⚠️ 未送信 — 予備ルートで配送したため、お客様へ手動で返信してください"],
+    ["フォローアップ", trade ? undefined : followUp?.scheduled ? `${followUp.delayMinutes}分後にゆきひろ名義で自動送信(予約済み、下に全文)` : "⚠️ 自動送信できていません — 担当者からの最初のメールを手動で送ってください"],
   ];
   const lines = rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`);
   const out = [...lines];
   if (ack) out.push("", "────────", "お客様への自動返信:", `件名: ${ack.subject}`, "", ack.text);
+  if (followUp?.scheduled) out.push("", "────────", `${followUp.delayMinutes}分後の自動フォローアップ(同じ件名):`, "", followUp.text);
   return out.join("\n");
 }
