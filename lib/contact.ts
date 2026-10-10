@@ -41,6 +41,11 @@ export interface Enquiry {
   pickup?: string;
   whatsapp?: string;
   priceNote?: string;
+  /** The golf form's choices as keys (level, handicap, "required:right,own" per golfer),
+   *  so the team's notification can say them in Japanese. */
+  levelKey?: string;
+  handicap?: string;
+  rentalKeys?: string;
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;

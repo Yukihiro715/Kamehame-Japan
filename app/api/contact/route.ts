@@ -5,6 +5,7 @@ import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
+import { golfPriceNoteJa, notificationBody, notificationSubject } from "@/lib/notification";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -32,40 +33,6 @@ async function bindings() {
 const FROM = "enquiries@kamehame-japan.com";
 const REPLY = "hello@kamehame-japan.com";
 
-function subjectFor(e: Enquiry): string {
-  return e.kind === "trade"
-    ? `[Trade] ${e.company ?? e.name} — ${e.country ?? ""}`.trim()
-    : `[Request] ${e.experience ? `${e.experience}${e.area ? ` · ${e.area}` : ""} — ` : ""}${e.name}${e.dates ? ` — ${e.dates}` : ""}`;
-}
-
-function bodyFor(e: Enquiry): string {
-  return [
-    `Kind:     ${e.kind}`,
-    e.experience && `Experience: ${e.experience}`,
-    `Name:     ${e.name}`,
-    `Email:    ${e.email}`,
-    e.company && `Company:  ${e.company}`,
-    e.country && `Country:  ${e.country}`,
-    e.plan && `Plan:     ${e.plan}`,
-    e.area && `Area:     ${e.area}${e.areaId ? ` (${e.areaId})` : ""}`,
-    e.courseMode && `Course:   ${e.courseMode === "specific" ? "specific course requested — custom quote" : "our recommended course (package price)"}${e.course ? ` — ${e.course}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}`,
-    e.dates && `Dates:    ${e.dates}`,
-    e.party && `Party:    ${e.party}`,
-    e.level && `Level:    ${e.level}`,
-    e.rental && `Rental:   ${e.rental}`,
-    e.clubs && `Clubs:    ${e.clubs}`,
-    e.pickup && `Pick-up:  ${e.pickup}`,
-    e.whatsapp && `WhatsApp: ${e.whatsapp}`,
-    e.interpreter && `Interp.:  ${e.interpreter}`,
-    e.addons && `Extras:   ${e.addons}`,
-    e.estimate && `Estimate: ${e.estimate}`,
-    e.priceNote && `Price:    ${e.priceNote}`,
-    `Language: ${e.lang}`,
-    "",
-    e.message,
-  ].filter((l): l is string => typeof l === "string").join("\n");
-}
-
 /** The experience's Japanese title, for the team's Slack alert. */
 function jaTitle(e: Enquiry): string | undefined {
   if (!e.experience) return undefined;
@@ -83,6 +50,7 @@ function titleFor(e: Enquiry): string | undefined {
 async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void> {
   const ack = acknowledgement(e, titleFor(e));
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
+  const ja = jaTitle(e);
   const res = await fetch("https://api.resend.com/emails/batch", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
@@ -91,8 +59,8 @@ async function sendViaResend(key: string, to: string, e: Enquiry): Promise<void>
         from: `KAMEHAME JAPAN Site <${FROM}>`,
         to: [to],
         reply_to: `${safeName} <${e.email}>`,
-        subject: subjectFor(e),
-        text: bodyFor(e),
+        subject: notificationSubject(e, ja),
+        text: notificationBody(e, ja, ack),
         tags: [{ name: "kind", value: e.kind }],
       },
       {
@@ -142,9 +110,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     golf = {
       areaId, courseMode: mode,
       estimate: price ? yen(price.groupTotal) : undefined,
-      priceNote: price
-        ? `${yen(price.groupTotal)} package for ${golfers} golfers, ${areaId}, recommended course${price.approximate ? ` (approx. ${yen(price.perPersonDisplay)} per golfer, rounded)` : ` (${yen(price.perPersonDisplay)} per golfer)`} — price list ${GOLF_PRICE_VERSION}; extras separate; the final quote is confirmed before payment`
-        : `custom quote — a specific course was requested (${golfers} golfers, ${areaId}); no package price applies — price list ${GOLF_PRICE_VERSION}`,
+      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION),
     };
   }
   return {
@@ -169,6 +135,9 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     pickup: clean(body.pickup, MAX.pickup) || undefined,
     whatsapp: clean(body.whatsapp, MAX.whatsapp) || undefined,
     priceNote: golf.priceNote,
+    levelKey: golf.areaId ? clean(body.level_key, 20) || undefined : undefined,
+    handicap: golf.areaId ? clean(body.handicap, 60) || undefined : undefined,
+    rentalKeys: golf.areaId && /^(required|own|unsure)(:(right|left|unsure))?(,(required|own|unsure)(:(right|left|unsure))?){0,3}$/.test(String(body.rental_keys ?? "")) ? String(body.rental_keys) : undefined,
     lang: clean(body.lang, 5) || "en",
     experience: clean(body.experience, MAX.experience) || undefined,
     website: clean(body.website, 200) || undefined,
@@ -178,8 +147,9 @@ function parse(body: Record<string, unknown>): Enquiry | null {
 /** Plain-text email. Headers are folded onto one line each; the body is
  *  whatever the visitor wrote, quoted as-is. */
 function raw(e: Enquiry, to: string): string {
-  const subject = subjectFor(e);
-  const lines = bodyFor(e).split("\n");
+  const ja = jaTitle(e);
+  const subject = notificationSubject(e, ja);
+  const lines = notificationBody(e, ja, null).split("\n");
   // RFC 5322: CRLF line endings, blank line between headers and body.
   // Cloudflare rejects a message without Message-ID and Date outright.
   return [

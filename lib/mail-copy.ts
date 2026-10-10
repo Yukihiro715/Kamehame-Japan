@@ -114,7 +114,7 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
     e.addons && `${c.labels.extras}: ${e.addons}`,
     e.estimate && `${c.labels.estimate}: ${e.estimate}`,
     e.message && `${c.labels.message}: ${e.message}`,
-  ].filter((l): l is string => typeof l === "string");
+  ].filter((l): l is string => typeof l === "string" && l.length > 0);
   const text = [
     c.hello(e.name),
     "",

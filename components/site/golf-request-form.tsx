@@ -90,6 +90,9 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       level: [G.experienceOpts[level], data.handicap && `${G.handicap.replace(/\s*[(（].*$/, "")}: ${data.handicap}`].filter(Boolean).join(" · "),
       rental: golfers.map((i) => `${countOf(G.golferN, i)}: ${G.rentalOpts[rentalOf(i)]}${rentalOf(i) !== "own" ? ` (${G.handedOpts[handedOf(i)]})` : ""}`).join(" · "),
       clubs: anyRental ? data.clubs : "",
+      // The same choices as keys, for the team's Japanese notification.
+      level_key: level, handicap: data.handicap,
+      rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
       addons: chosenAddOns.map(addOnLine).join(", "),
     };
     setStatus("sending");
