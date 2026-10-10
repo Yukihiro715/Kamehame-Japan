@@ -29,6 +29,9 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   const { pricing, experience: x } = b;
   const plans = pricing?.plans ?? [];
   const plan = plans.find((p) => p.id === b.plan);
+  // Group-priced products: the cheapest plan for the base party, shown per person.
+  const groupRow = pricing?.unit === "group" ? pricing.rows[0] : undefined;
+  const groupMin = plans.length ? Math.min(...plans.map((p) => p.regular)) : groupRow?.total ?? 0;
   const expand = () => {
     setOpen(true);
     // After the fields render: without a date, open the date above first;
@@ -54,10 +57,21 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   return (
     <div className={`bk-card${open ? " open" : ""}`} id="booking">
       <div className="bk-price">
-        {/* "From" only where the price varies (plans, seasons); a fixed per-person price has none. */}
-        {plans.length > 0 && D.fromPrice && <small>{D.fromPrice}</small>}
-        <b>{plans.length ? <>{yen(Math.min(...plans.map((p) => p.regular)))}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</> : headline}</b>
-        <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : pricing?.unit === "person" ? T.perPersonUnit : D.priceTotalNote}</small>
+        {groupRow ? (
+          <>
+            {/* Group-priced: the per-person figure leads, the group total it comes from sits right under it. */}
+            {D.fromPrice && <small>{D.fromPrice}</small>}
+            <b>{yen(Math.round(groupMin / groupRow.party))}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}<span className="bk-unit">{T.perPerson}</span></b>
+            <small className="bk-total">{D.totalForParty(yen(groupMin), groupRow.party)}</small>
+          </>
+        ) : (
+          <>
+            {/* "From" only where the price varies (plans, seasons); a fixed per-person price has none. */}
+            {plans.length > 0 && D.fromPrice && <small>{D.fromPrice}</small>}
+            <b>{plans.length ? <>{yen(Math.min(...plans.map((p) => p.regular)))}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</> : headline}</b>
+            <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : pricing?.unit === "person" ? T.perPersonUnit : D.priceTotalNote}</small>
+          </>
+        )}
         <RatingSummary experience={x.slug} lang={lang} href="#reviews" size={13} />
       </div>
 

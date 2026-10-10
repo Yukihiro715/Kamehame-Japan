@@ -238,5 +238,12 @@ export function listPrice(exp: Experience, lang: Lang): ListPrice {
       return { price: approxPrice(vc.options, pp.perPerson, pp.approximate), unit: "person", note: t(lang).listBasedOn(party, yen(total)), party };
     }
   }
+  if (exp.priceUnit === "group") {
+    const row = pricingFor(exp, lang).rows[0];
+    if (row) {
+      const party = t(lang).detail.estimateFor(row.party);
+      return { price: yen(row.perPerson), unit: "person", note: t(lang).listBasedOn(party, yen(row.total)), party };
+    }
+  }
   return { price: exp.price, unit: exp.priceUnit ?? "person" };
 }

@@ -142,6 +142,19 @@ test("ramen class: a preview page, priced per person, not listed and not naming 
   assert.ok(!listing.includes("shibuya-ramen-class"), "not listed while in preview");
 });
 
+test("group-priced page: facts under the photos, per-person headline with the group total", async () => {
+  const html = await (await render("/en/kyoto/evening-with-geiko/")).text();
+  const h1 = html.indexOf("<h1"), gallery = html.indexOf('class="gallery-bar"'), chips = html.indexOf('class="xp-conditions"');
+  assert.ok(h1 > 0 && gallery > h1 && chips > gallery, "title, then photos, then the facts");
+  const card = html.match(/<div class="bk-price">([\s\S]*?)<\/div>/)?.[1].replace(/<[^>]+>/g, " ") ?? "";
+  assert.match(card, /From\s+¥80,500\s+\/ person/, "per-person figure leads the booking card");
+  assert.ok(card.includes("¥161,000 total · 2 guests"), "the group total it comes from");
+  const bar = html.match(/class="sticky-price">([\s\S]*?)<\/div>/)?.[1].replace(/<[^>]+>/g, " ") ?? "";
+  assert.match(bar, /¥80,500[\s\S]*¥161,000 total · 2 guests/, "the sticky bar matches");
+  const listing = (await (await render("/en/kyoto/")).text()).replace(/<[^>]+>/g, " ");
+  assert.match(listing, /¥80,500\s+\/ person\s+Based on 2 guests · ¥161,000 per group/, "listing card per person with the party size");
+});
+
 test("sends baseline security headers", async () => {
   const response = await render();
 

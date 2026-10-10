@@ -142,8 +142,9 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const pricing = pricingFor(exp, lang);
   const perGroup = pricing.unit === "group";
   const first = pricing.rows[0];
-  const headlinePrice = perGroup ? yen(first.total) : exp.price;
-  const headlineCondition = perGroup ? `${T.perGroupUnit} · ${D.stickyGroupOf(first.party)}` : T.perPersonUnit;
+  // Group-priced products headline the per-person figure, with the group total beside it.
+  const headlinePrice = perGroup ? yen(first.perPerson) : exp.price;
+  const headlineCondition = perGroup ? D.totalForParty(yen(first.total), first.party) : T.perPersonUnit;
   const plans = pricing.plans ?? [];
   const eg = pricing.extraGuest;
   const supplementPlans = pricing.planMode === "supplement";
@@ -195,9 +196,6 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           {!live && <p className="soon-flag">{T.comingSoon}</p>}
           <h1>{exp.title}</h1>
           {hasReviews && <p className="xp-head-rating"><RatingSummary experience={exp.slug} lang={lang} href="#reviews" size={15} /></p>}
-          <ul className="xp-conditions">
-            {conditions.map(({ Icon, text }) => <li key={text}><Icon size={14} /> {text}</li>)}
-          </ul>
         </header>
 
         {/* ② Photos: grid on wide screens, swipe track on phones; both open the all-photos sheet */}
@@ -208,6 +206,10 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             </HeroCarousel>
           </div>
           <Gallery photos={photos} lang={lang} note={exp.galleryNote} />
+          {/* the facts (city, length, group, language) sit under the photos, so the title leads straight to them */}
+          <ul className="xp-conditions">
+            {conditions.map(({ Icon, text }) => <li key={text}><Icon size={14} /> {text}</li>)}
+          </ul>
         </section>
 
         <div className="xp-cols">

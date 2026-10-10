@@ -72,8 +72,11 @@ export function StickyRequestBar({
   let shownPrice = price;
   let shownCondition = condition;
   if (b && plan) {
-    shownPrice = yen(b.estimate?.total ?? plan.regular);
-    if (D) shownCondition = `${plan.label} · ${D.estimateFor(b.guestsNumber)}`;
+    // Per person, like the golf bar: exact once a party size is chosen, otherwise the base-party "from" figure.
+    const total = b.estimate?.total ?? plan.regular;
+    const n = b.estimate ? b.guestsNumber : (b.pricing?.rows[0]?.party ?? b.guestsNumber);
+    shownPrice = `${yen(Math.round(total / n))}${!b.estimate && D ? D.fromSuffix : ""}`;
+    if (D) shownCondition = `${plan.label} · ${D.totalForParty(yen(total), n)}`;
   } else if (perPerson) {
     shownPrice = yen(b!.estimate!.total);
     if (D) shownCondition = D.estimateFor(b!.guestsNumber);

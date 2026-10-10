@@ -1056,8 +1056,11 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 .xp2 .crumbs, .xp-head, .xp-mv, .xp-cols { max-width:1360px; margin-left:auto; margin-right:auto; padding-left:clamp(24px,5vw,64px); padding-right:clamp(24px,5vw,64px); }
 .xp-head { padding-top:10px; padding-bottom:22px; }
 .xp-head h1 { margin:0 0 12px; font-family:var(--font-display); font-weight:400; letter-spacing:.02em; text-transform:uppercase; font-size:clamp(30px,3.2vw,46px); line-height:1.04; }
-.xp-head .xp-conditions { margin:0; }
-.xp-head .xp-conditions li { border-radius:999px; border-color:#e6e1d6; }
+/* the facts sit under the photos as pills (the same look as the golf page's chips) */
+.xp-mv .xp-conditions { margin:12px 0 0; }
+.xp-mv .xp-conditions li { border-radius:999px; border-color:#e6e1d6; font-size:12.5px; color:#3d3a34; }
+.bk-price .bk-unit { font-family:var(--font-sans); font-size:13px; letter-spacing:.02em; color:var(--muted); margin-left:6px; }
+.bk-price .bk-total { font-size:13px; font-weight:600; color:var(--ink); }
 
 /* photos: grid on wide screens, the swipe track on phones */
 .xp-mv { padding-top:0; padding-bottom:0; }
@@ -1228,14 +1231,12 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 }
 @media(max-width:700px){
   .xp-head { padding:6px 22px 16px; }
-  .xp-head .xp-conditions { gap:2px 12px; margin-top:2px; }
-  .xp-head .xp-conditions li { border:0; background:none; padding:2px 0; font-size:12.5px; color:#4a463e; gap:5px; }
-  .xp-head .xp-conditions svg { width:13px; height:13px; }
   .xp2 .crumbs { padding-left:22px; padding-right:22px; }
   .xp-head h1 { font-size:clamp(26px,7.6vw,34px); }
   .xp-mv { padding:0; }
   .xp-mv .gallery-track { display:none; }
   .xp-mv .gallery-bar { padding:0 22px; }
+  .xp-mv .xp-conditions { padding:0 22px; margin-top:12px; }
   .xp-mv .xp-hero-photo { display:block; aspect-ratio:4/3; height:auto; border:0; box-shadow:none; }
   .xp-cols { padding:20px 22px 0; }
   .xp2 .xp-section { padding-top:34px; }
