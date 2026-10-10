@@ -175,7 +175,7 @@ const strings = {
     },
     // trade (travel agencies, DMCs, tour operators)
     tradeH: "For travel agencies and tour operators",
-    tradeLead: "We supply small-group and private cultural experiences in Tokyo and Kyoto to agencies placing clients in Japan.",
+    tradeLead: "We supply small-group and private cultural experiences in Tokyo, Kyoto and Osaka to agencies placing clients in Japan.",
     tradeWhatH: "What we supply",
     tradeWhat: [
       "Private and small-group experiences with working practitioners — no demonstration venues.",
@@ -377,7 +377,7 @@ const strings = {
       privacy: "Usamos lo que envías solo para responderte.",
     },
     tradeH: "Para agencias y turoperadores",
-    tradeLead: "Suministramos experiencias culturales privadas y de grupo reducido en Tokio y Kioto a agencias que envían clientes a Japón.",
+    tradeLead: "Suministramos experiencias culturales privadas y de grupo reducido en Tokio, Kioto y Osaka a agencias que envían clientes a Japón.",
     tradeWhatH: "Qué ofrecemos",
     tradeWhat: [
       "Experiencias privadas o en grupo reducido con profesionales en activo — sin locales de demostración.",
@@ -578,7 +578,7 @@ const strings = {
       privacy: "お送りいただいた内容は、ご返信のためにのみ使用します。",
     },
     tradeH: "旅行会社・ツアーオペレーター様へ",
-    tradeLead: "日本へお客様を送客される旅行会社様に向けて、東京・京都の少人数／貸切の文化体験をご提供しています。",
+    tradeLead: "日本へお客様を送客される旅行会社様に向けて、東京・京都・大阪の少人数／貸切の文化体験をご提供しています。",
     tradeWhatH: "ご提供する内容",
     tradeWhat: [
       "現役の作り手による貸切・少人数の体験。見学用に設えた施設ではありません。",
@@ -778,7 +778,7 @@ const strings = {
       privacy: "Nous n'utilisons ce que vous envoyez que pour vous répondre.",
     },
     tradeH: "Agences de voyages et tour-opérateurs",
-    tradeLead: "Nous fournissons des expériences culturelles privées et en petit groupe à Tokyo et Kyoto aux agences qui envoient des clients au Japon.",
+    tradeLead: "Nous fournissons des expériences culturelles privées et en petit groupe à Tokyo, Kyoto et Osaka aux agences qui envoient des clients au Japon.",
     tradeWhatH: "Ce que nous fournissons",
     tradeWhat: [
       "Des expériences privées et en petit groupe avec des praticiens en activité — pas de lieux de démonstration.",
@@ -980,7 +980,7 @@ const strings = {
       privacy: "您送出的內容僅用於回覆您。",
     },
     tradeH: "旅行社與旅遊業者",
-    tradeLead: "我們為安排客人赴日的旅行社提供東京與京都的小團與私人文化體驗。",
+    tradeLead: "我們為安排客人赴日的旅行社提供東京、京都與大阪的小團與私人文化體驗。",
     tradeWhatH: "我們提供",
     tradeWhat: [
       "與現役職人進行的私人與小團體驗——沒有示範用場地。",

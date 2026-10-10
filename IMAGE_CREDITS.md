@@ -14,6 +14,7 @@ CC BY / CC BY-SA images require this attribution to be retained wherever the ima
 | `public/images/cat-tea.jpg` | [Japan tea ceremony 1165.jpg](https://commons.wikimedia.org/wiki/File:Japan_tea_ceremony_1165.jpg) | Ermell | CC BY-SA 4.0 |
 | `public/images/cat-tours.jpg` | [Arashiyama Bamboo Grove (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Arashiyama_Bamboo_Grove_(Unsplash).jpg) | Erol Ahmed erol | CC0 |
 | `public/images/city-kyoto.jpg` | [Yasaka-dori early morning with street lanterns and the Tower of Yasaka (Hokan-ji Temple), Kyoto, Japan.jpg](https://commons.wikimedia.org/wiki/File:Yasaka-dori_early_morning_with_street_lanterns_and_the_Tower_of_Yasaka_(Hokan-ji_Temple),_Kyoto,_Japan.jpg) | Basile Morin | CC BY-SA 4.0 |
+| `public/images/city-osaka.jpg` | [Osaka Dotonbori yoru.jpg](https://commons.wikimedia.org/wiki/File:Osaka_Dotonbori_yoru.jpg) | Sakai Yayoi | CC0 |
 | `public/images/city-tokyo.jpg` | [Tokio Tempel Senso-ji bei Nacht 1.jpg](https://commons.wikimedia.org/wiki/File:Tokio_Tempel_Senso-ji_bei_Nacht_1.jpg) | Zairon | CC BY-SA 4.0 |
 | `public/images/craft-hands.jpg` | [Japanese Tea Ceremony Serving Tea.jpg](https://commons.wikimedia.org/wiki/File:Japanese_Tea_Ceremony_Serving_Tea.jpg) | KuboBella | CC BY-SA 4.0 |
 | `public/images/exp-geisha.jpg` | [Maiko dance Tomitsuyu.jpg](https://commons.wikimedia.org/wiki/File:Maiko_dance_Tomitsuyu.jpg) | Japanexperterna.se | CC BY-SA 3.0 |
@@ -55,7 +56,7 @@ thumbnail strip and the all-photos sheet on the golf page; same sources and lice
 
 ## Ramen class (added 2026-10-10)
 
-`public/images/ramen-noodle-machine.jpg`, `ramen-dough.jpg`, `ramen-fresh-noodles.jpg` and `ramen-boiling.jpg` are the partner's own
+`public/images/ramen-osaka-boiling.jpg` (cropped to leave out the branded bowls), `ramen-osaka-toppings.jpg` and `ramen-osaka-group.jpg` are the same partner's photos of its Osaka kitchen, from its OTA listing (viyago.jp/experiences/osaka-ramen-dojo), on the same terms. `public/images/ramen-noodle-machine.jpg`, `ramen-dough.jpg`, `ramen-fresh-noodles.jpg` and `ramen-boiling.jpg` are the partner's own
 photos (Cresc. Inc. / Viyago Japan), taken from its listing on viyago.jp at the owner's instruction that the partner wants those used.
 The partner's condition sheet says photo and video material is available for all media, with usage period, editing, credit and
 pre-publication review still "to be confirmed": settle that before the page goes live or the photos are used in ads. A fifth photo

@@ -10,16 +10,20 @@ import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/cata
 import { listPrice, pricingFor, yen } from "@/lib/pricing";
 import { t, type Lang } from "@/lib/i18n";
 
+/** The manga sound effect on each city card and the place its photo shows. */
+const CITY_SFX: Record<string, { text: string; quiet?: boolean }> = { tokyo: { text: "ドドンッ" }, kyoto: { text: "しん…", quiet: true }, osaka: { text: "ワイワイ" } };
+const CITY_PLACE: Record<string, string> = { tokyo: "Sensō-ji · Asakusa", kyoto: "Yasaka-dōri · Higashiyama", osaka: "Dōtonbori · Namba" };
+
 const COPY = {
   en: {
     heroEyebrow: "Curated experiences in Japan",
     themesH: "Find your Japan.",
     themes: [
-      { t: "Food & Drink", s: "Sushi / Cooking / Sake", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "Food & Drink", s: "Ramen / Sushi / Sake", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
       { t: "Arts & Crafts", s: "Calligraphy / Craftsmanship", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "Tradition & Culture", s: "Geiko / Tea Ceremony / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "Pop Culture & Beauty", s: "Character Nails / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "Sports & Outdoors", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
+      { t: "Sports & Outdoors", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
     ], comingSoon: "Coming soon",
     heroTitle: ["Don't just", "see Japan.", "Step into it."],
     heroLede: "Discover Japan through experiences you won't find on a typical itinerary. From food and craftsmanship to pop culture and private access, every experience is carefully selected.",
@@ -34,15 +38,16 @@ const COPY = {
     trustSeal: "Small groups · Local hosts · Thoughtfully selected",
     craftQuote: "Not a demonstration — this seat is yours.", craftSpeaker: "— your host",
     craftAlt: "Tea ceremony host in kimono placing a tea bowl on tatami before seated guests",
-    cityEyebrow: "Choose your city", cityTitle: ["Two cities.", "Countless stories."],
+    cityEyebrow: "Choose your city", cityTitle: ["Three cities.", "Countless stories."],
     cityLead: "Begin with where you'll be, then discover the people and practices that give each place its character.",
-    cityTaglines: { tokyo: ["Modern rhythm.", "Enduring craft."], kyoto: ["Quiet rituals.", "Living heritage."] },
+    cityTaglines: { tokyo: ["Modern rhythm.", "Enduring craft."], kyoto: ["Quiet rituals.", "Living heritage."], osaka: ["Loud kitchens.", "Open hearts."] },
     cityAlts: {
       tokyo: "Five-storied pagoda of Senso-ji temple illuminated at night, Asakusa, Tokyo",
       kyoto: "Lantern-lined Yasaka-dori street at dawn with the Yasaka pagoda, Higashiyama, Kyoto",
+      osaka: "Dotonbori canal at night with its lanterns, boats and neon signs, Osaka",
     },
     kicker: ["Explore by interest", (n: number) => `${n} ways into Japan`], catTitle: "Follow your curiosity.",
-    catTypes: { sushi: "Food culture", sumo: "Living tradition", "tea-ceremony": "Mindful ritual", kimono: "Craft & style", geisha: "Performing arts", swordsmith: "Heritage craft", "anime-nail-art": "Pop culture" } as Record<string, string>,
+    catTypes: { ramen: "Food culture", sushi: "Food culture", sumo: "Living tradition", "tea-ceremony": "Mindful ritual", kimono: "Craft & style", geisha: "Performing arts", swordsmith: "Heritage craft", "anime-nail-art": "Pop culture" } as Record<string, string>,
     toursCard: { title: "Private tours", type: "Made for you" },
     expEyebrow: "Find your Japan.", expTitle: ["Eat. Make.", "Meet. Play."], expLink: "View all experiences",
     featureEyebrow: "Now booking", featureCta: "See the experience",
@@ -60,11 +65,11 @@ const COPY = {
     heroEyebrow: "Experiencias seleccionadas en Japón",
     themesH: "Encuentra tu Japón.",
     themes: [
-      { t: "Comida y bebida", s: "Sushi / Cocina / Sake", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "Comida y bebida", s: "Ramen / Sushi / Sake", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
       { t: "Arte y oficios", s: "Caligrafía / Artesanía", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "Tradición y cultura", s: "Geiko / Ceremonia del té / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "Cultura pop y belleza", s: "Uñas de personajes / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "Deporte y aire libre", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
+      { t: "Deporte y aire libre", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
     ], comingSoon: "Próximamente",
     heroTitle: ["No te limites a ver Japón.", "Entra en él."],
     heroLede: "Descubre Japón a través de experiencias que no encontrarás en un itinerario al uso. De la comida y la artesanía a la cultura pop y los accesos privados, cada experiencia está cuidadosamente seleccionada.",
@@ -79,15 +84,16 @@ const COPY = {
     trustSeal: "Grupos reducidos · Anfitriones locales · Selección cuidada",
     craftQuote: "Esto no es una demostración — este asiento es tuyo.", craftSpeaker: "— tu anfitrión",
     craftAlt: "Anfitriona de la ceremonia del té dejando un cuenco sobre el tatami ante sus invitados",
-    cityEyebrow: "Elige tu ciudad", cityTitle: ["Dos ciudades.", "Historias infinitas."],
+    cityEyebrow: "Elige tu ciudad", cityTitle: ["Tres ciudades.", "Historias infinitas."],
     cityLead: "Empieza por donde vas a estar, y descubre a las personas y los oficios que dan carácter a cada lugar.",
-    cityTaglines: { tokyo: ["Ritmo moderno.", "Oficio eterno."], kyoto: ["Rituales serenos.", "Herencia viva."] },
+    cityTaglines: { tokyo: ["Ritmo moderno.", "Oficio eterno."], kyoto: ["Rituales serenos.", "Herencia viva."], osaka: ["Cocinas ruidosas.", "Corazones abiertos."] },
     cityAlts: {
       tokyo: "Pagoda de cinco pisos del templo Senso-ji iluminada de noche, Asakusa, Tokio",
       kyoto: "Calle Yasaka-dori con farolillos y la pagoda de Yasaka al amanecer, Higashiyama, Kioto",
+      osaka: "Canal de Dotonbori de noche con farolillos, barcos y neones, Osaka",
     },
     kicker: ["Explora por interés", (n: number) => `${n} puertas a Japón`], catTitle: "Sigue tu curiosidad.",
-    catTypes: { sushi: "Cultura gastronómica", sumo: "Tradición viva", "tea-ceremony": "Ritual consciente", kimono: "Oficio y estilo", geisha: "Artes escénicas", swordsmith: "Oficio ancestral", "anime-nail-art": "Cultura pop" } as Record<string, string>,
+    catTypes: { ramen: "Cultura gastronómica", sushi: "Cultura gastronómica", sumo: "Tradición viva", "tea-ceremony": "Ritual consciente", kimono: "Oficio y estilo", geisha: "Artes escénicas", swordsmith: "Oficio ancestral", "anime-nail-art": "Cultura pop" } as Record<string, string>,
     toursCard: { title: "Tours privados", type: "A tu medida" },
     expEyebrow: "Encuentra tu Japón.", expTitle: ["Come. Crea.", "Conoce. Juega."], expLink: "Ver todas las experiencias",
     featureEyebrow: "Reservas abiertas", featureCta: "Ver la experiencia",
@@ -105,11 +111,11 @@ const COPY = {
     heroEyebrow: "厳選した日本の体験",
     themesH: "あなたの日本を見つける。",
     themes: [
-      { t: "食と酒", s: "寿司 / 料理 / 日本酒", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "食と酒", s: "ラーメン / 寿司 / 日本酒", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
       { t: "アート・工芸", s: "書道 / 職人の技", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "伝統と文化", s: "芸妓・舞妓 / 茶道 / 着物", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "ポップカルチャー・美容", s: "キャラクターネイル / アニメ", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "スポーツ・アウトドア", s: "ゴルフ / 相撲", img: "/images/cat-sumo.jpg", mark: "武" },
+      { t: "スポーツ・アウトドア", s: "ゴルフ / 相撲", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
     ], comingSoon: "近日公開",
     heroTitle: ["日本を、見るだけで", "終わらせない。"],
     heroLede: "普通の観光では出会えない体験で、日本を知る。食、職人の技、ポップカルチャー、特別なアクセスまで、ひとつひとつ厳選しています。",
@@ -124,15 +130,16 @@ const COPY = {
     trustSeal: "少人数 · 地元のホスト · 厳選",
     craftQuote: "これは実演ではありません。この席は、あなたのものです。", craftSpeaker: "— お迎えする側より",
     craftAlt: "客の前の畳に茶碗を置く茶道の亭主",
-    cityEyebrow: "都市を選ぶ", cityTitle: ["二つの都市。", "尽きない物語。"],
+    cityEyebrow: "都市を選ぶ", cityTitle: ["三つの都市。", "尽きない物語。"],
     cityLead: "滞在される街から始めてください。その土地の人と技が見えてきます。",
-    cityTaglines: { tokyo: ["今日の速さ。", "変わらぬ手仕事。"], kyoto: ["静かな儀礼。", "生きた継承。"] },
+    cityTaglines: { tokyo: ["今日の速さ。", "変わらぬ手仕事。"], kyoto: ["静かな儀礼。", "生きた継承。"], osaka: ["にぎやかな台所。", "あけっぴろげな人情。"] },
     cityAlts: {
       tokyo: "夜間にライトアップされた浅草・浅草寺の五重塔",
       kyoto: "夜明けの東山、八坂通と八坂の塔",
+      osaka: "夜の道頓堀。提灯と遊覧船、ネオン看板",
     },
     kicker: ["関心から探す", (n: number) => `日本への${n}つの扉`], catTitle: "気になるものから。",
-    catTypes: { sushi: "食文化", sumo: "生きた伝統", "tea-ceremony": "静かな儀礼", kimono: "技と装い", geisha: "舞と芸", swordsmith: "古来の手仕事", "anime-nail-art": "ポップカルチャー" } as Record<string, string>,
+    catTypes: { ramen: "食文化", sushi: "食文化", sumo: "生きた伝統", "tea-ceremony": "静かな儀礼", kimono: "技と装い", geisha: "舞と芸", swordsmith: "古来の手仕事", "anime-nail-art": "ポップカルチャー" } as Record<string, string>,
     toursCard: { title: "プライベートツアー", type: "ご要望に合わせて" },
     expEyebrow: "あなたの日本を見つける。", expTitle: ["食べる。つくる。", "会う。遊ぶ。"], expLink: "すべての体験を見る",
     featureEyebrow: "受付中の体験", featureCta: "体験の詳細を見る",
@@ -150,11 +157,11 @@ const COPY = {
     heroEyebrow: "Expériences sélectionnées au Japon",
     themesH: "Trouvez votre Japon.",
     themes: [
-      { t: "Cuisine et boissons", s: "Sushi / Cuisine / Saké", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "Cuisine et boissons", s: "Ramen / Sushi / Saké", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
       { t: "Arts et artisanat", s: "Calligraphie / Savoir-faire", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "Tradition et culture", s: "Geiko / Cérémonie du thé / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "Pop culture et beauté", s: "Nail art de personnages / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "Sport et plein air", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武" },
+      { t: "Sport et plein air", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
     ], comingSoon: "Bientôt",
     heroTitle: ["Ne vous contentez pas de voir le Japon.", "Entrez-y."],
     heroLede: "Découvrez le Japon à travers des expériences absentes des itinéraires classiques. De la cuisine et de l'artisanat à la pop culture et aux accès privés, chaque expérience est soigneusement sélectionnée.",
@@ -169,15 +176,16 @@ const COPY = {
     trustSeal: "Petits groupes · Hôtes locaux · Sélection soignée",
     craftQuote: "Ce n'est pas une démonstration — cette place est la vôtre.", craftSpeaker: "— votre hôte",
     craftAlt: "Hôtesse de cérémonie du thé posant un bol sur le tatami devant ses invités",
-    cityEyebrow: "Choisissez votre ville", cityTitle: ["Deux villes.", "Des histoires sans fin."],
+    cityEyebrow: "Choisissez votre ville", cityTitle: ["Trois villes.", "Des histoires sans fin."],
     cityLead: "Partez de là où vous serez, et découvrez les personnes et les métiers qui donnent son caractère à chaque lieu.",
-    cityTaglines: { tokyo: ["Rythme moderne.", "Métier éternel."], kyoto: ["Rituels sereins.", "Héritage vivant."] },
+    cityTaglines: { tokyo: ["Rythme moderne.", "Métier éternel."], kyoto: ["Rituels sereins.", "Héritage vivant."], osaka: ["Cuisines bruyantes.", "Cœurs ouverts."] },
     cityAlts: {
       tokyo: "Pagode à cinq étages du temple Senso-ji illuminée la nuit, Asakusa, Tokyo",
       kyoto: "Rue Yasaka-dori bordée de lanternes avec la pagode de Yasaka à l'aube, Higashiyama, Kyoto",
+      osaka: "Canal de Dotonbori la nuit avec ses lanternes, ses bateaux et ses néons, Osaka",
     },
     kicker: ["Explorer par envie", (n: number) => `${n} portes sur le Japon`], catTitle: "Suivez votre curiosité.",
-    catTypes: { sushi: "Culture gastronomique", sumo: "Tradition vivante", "tea-ceremony": "Rituel attentif", kimono: "Métier et style", geisha: "Arts de la scène", swordsmith: "Métier ancestral", "anime-nail-art": "Pop culture" } as Record<string, string>,
+    catTypes: { ramen: "Culture gastronomique", sushi: "Culture gastronomique", sumo: "Tradition vivante", "tea-ceremony": "Rituel attentif", kimono: "Métier et style", geisha: "Arts de la scène", swordsmith: "Métier ancestral", "anime-nail-art": "Pop culture" } as Record<string, string>,
     toursCard: { title: "Journées privées", type: "Sur mesure" },
     expEyebrow: "Trouvez votre Japon.", expTitle: ["Goûter. Créer.", "Rencontrer. Jouer."], expLink: "Voir toutes les expériences",
     featureEyebrow: "Réservations ouvertes", featureCta: "Voir l'expérience",
@@ -195,11 +203,11 @@ const COPY = {
     heroEyebrow: "精選的日本體驗",
     themesH: "找到你的日本。",
     themes: [
-      { t: "美食與酒", s: "壽司 / 料理 / 日本酒", img: "/images/cat-sushi.jpg", mark: "食" },
+      { t: "美食與酒", s: "拉麵 / 壽司 / 日本酒", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
       { t: "藝術與工藝", s: "書道 / 職人技藝", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
       { t: "傳統與文化", s: "藝妓 / 茶道 / 和服", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
       { t: "流行文化與美容", s: "角色美甲 / 動漫", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "運動與戶外", s: "高爾夫 / 相撲", img: "/images/cat-sumo.jpg", mark: "武" },
+      { t: "運動與戶外", s: "高爾夫 / 相撲", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
     ], comingSoon: "即將推出",
     heroTitle: ["不只是看日本。", "走進去。"],
     heroLede: "透過一般行程找不到的體驗，認識日本。從美食、職人工藝到流行文化與私人通道，每一項體驗都經過精心挑選。",
@@ -214,15 +222,16 @@ const COPY = {
     trustSeal: "小團 · 在地接待 · 用心挑選",
     craftQuote: "這不是示範——這個位子是您的。", craftSpeaker: "— 您的東道主",
     craftAlt: "茶道主人在客人面前將茶碗放到榻榻米上",
-    cityEyebrow: "選擇城市", cityTitle: ["兩座城市。", "說不完的故事。"],
+    cityEyebrow: "選擇城市", cityTitle: ["三座城市。", "說不完的故事。"],
     cityLead: "從您將停留的地方開始，認識賦予每個地方性格的人與技藝。",
-    cityTaglines: { tokyo: ["現代的節奏。", "不變的手藝。"], kyoto: ["寧靜的儀式。", "活著的傳承。"] },
+    cityTaglines: { tokyo: ["現代的節奏。", "不變的手藝。"], kyoto: ["寧靜的儀式。", "活著的傳承。"], osaka: ["熱鬧的廚房。", "敞開的心。"] },
     cityAlts: {
       tokyo: "夜間點燈的淺草寺五重塔，東京淺草",
       kyoto: "黎明時分掛滿燈籠的八坂通與八坂塔，京都東山",
+      osaka: "夜晚的道頓堀運河，燈籠、遊船與霓虹招牌，大阪",
     },
     kicker: ["依興趣探索", (n: number) => `通往日本的 ${n} 扇門`], catTitle: "跟著好奇心走。",
-    catTypes: { sushi: "飲食文化", sumo: "活的傳統", "tea-ceremony": "靜心儀式", kimono: "技藝與風格", geisha: "表演藝術", swordsmith: "古老技藝", "anime-nail-art": "流行文化" } as Record<string, string>,
+    catTypes: { ramen: "飲食文化", sushi: "飲食文化", sumo: "活的傳統", "tea-ceremony": "靜心儀式", kimono: "技藝與風格", geisha: "表演藝術", swordsmith: "古老技藝", "anime-nail-art": "流行文化" } as Record<string, string>,
     toursCard: { title: "私人一日遊", type: "量身安排" },
     expEyebrow: "找到你的日本。", expTitle: ["吃。做。", "見。玩。"], expLink: "查看所有體驗",
     featureEyebrow: "開放預約中", featureCta: "查看體驗",
@@ -373,10 +382,10 @@ export function HomePage({ lang }: { lang: Lang }) {
                 <Link className={`city-card ${city.slug}`} href={p(`/${city.slug}/`)} key={city.slug} aria-label={city.title}>
                   <img className="city-photo" src={city.img} alt={C.cityAlts[city.slug]} loading="lazy" />
                   <span className="city-index">{String(i + 1).padStart(2, "0")} / {city.jp}</span>
-                  <span className={`sfx ${city.slug === "kyoto" ? "quiet" : ""}`} aria-hidden="true">{city.slug === "tokyo" ? "ドドンッ" : "しん…"}</span>
+                  <span className={`sfx ${CITY_SFX[city.slug].quiet ? "quiet" : ""}`} aria-hidden="true">{CITY_SFX[city.slug].text}</span>
                   <div>
                     <p>{tag[0]}<br />{tag[1]}</p><h3>{city.title}</h3>
-                    <small className="city-place">{city.slug === "tokyo" ? "Sensō-ji · Asakusa" : "Yasaka-dōri · Higashiyama"}</small>
+                    <small className="city-place">{CITY_PLACE[city.slug]}</small>
                   </div>
                   <span className="circle-arrow"><ArrowDownRight /></span>
                 </Link>

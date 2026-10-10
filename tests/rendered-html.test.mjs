@@ -126,20 +126,31 @@ test("golf request: the server validates the choice against the price master", a
   }
 });
 
-test("ramen class: a preview page, priced per person, not listed and not naming the venue", async () => {
-  const res = await render("/en/tokyo/shibuya-ramen-class/");
-  assert.equal(res.status, 200);
-  const html = await res.text();
-  const text = html.replace(/<[^>]+>/g, "");
-  assert.ok(text.includes("Ramen Making Class near Shibuya, Tokyo"), "title");
-  assert.ok(text.includes("¥25,000"), "sale price");
-  assert.ok(text.includes("Preview — this page is not published yet"), "preview banner");
-  assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro/i, "the venue's name and address stay private");
-  assert.ok(text.includes("11:00") && text.includes("18:30"), "session times from the partner sheet");
-  assert.ok(text.includes("Up to 30 days before the date"), "30-day free cancellation from the partner sheet");
-  assert.ok(!html.includes("ramen-three-bowls"), "the branded photo is gone");
-  const listing = await (await render("/en/tokyo/")).text();
-  assert.ok(!listing.includes("shibuya-ramen-class"), "not listed while in preview");
+test("ramen classes: Tokyo and Osaka live, priced per person, listed, never naming the venue", async () => {
+  const pages = [
+    ["/en/tokyo/shibuya-ramen-class/", "Ramen Making Class near Shibuya, Tokyo", "/en/tokyo/"],
+    ["/en/osaka/dotonbori-ramen-class/", "Ramen Making Class in Dotonbori, Osaka", "/en/osaka/"],
+  ];
+  for (const [path, title, city] of pages) {
+    const res = await render(path);
+    assert.equal(res.status, 200, path);
+    const html = await res.text();
+    const text = html.replace(/<[^>]+>/g, "");
+    assert.ok(text.includes(title), `title on ${path}`);
+    assert.ok(text.includes("¥25,000"), "sale price");
+    assert.ok(!text.includes("Preview — this page is not published yet"), "published");
+    assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro|Soemoncho|宗右衛門/i, "the venue's name and address stay private");
+    assert.ok(text.includes("11:00") && text.includes("18:30"), "session times from the partner sheet");
+    assert.ok(text.includes("Up to 30 days before the date"), "30-day free cancellation from the partner sheet");
+    assert.ok(!html.includes("ramen-three-bowls"), "no branded bowls");
+    const listing = await (await render(city)).text();
+    assert.ok(listing.includes(path), `listed on ${city}`);
+  }
+  const osaka = await render("/en/osaka/");
+  assert.equal(osaka.status, 200);
+  assert.ok((await osaka.text()).includes("Experiences in Osaka"), "the Osaka city page");
+  const home = await (await render("/en/")).text();
+  assert.ok(home.includes('href="/en/osaka/"') && home.includes('href="/en/ramen/"'), "home links the city and the ramen theme");
 });
 
 test("group-priced page: facts under the photos, per-person headline with the group total", async () => {

@@ -85,12 +85,12 @@ def card(photo, title, meta, out):
 catalog = (ROOT / "lib" / "catalog.ts").read_text()
 
 experiences = re.findall(
-    r'slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto)",\s*category:.*?\n\s*title:\s*"([^"]+)",'
+    r'slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto|osaka)",\s*category:.*?\n\s*title:\s*"([^"]+)",'
     r'.*?duration:\s*"([^"]+)",\s*price:\s*"([^"]+)".*?img:\s*"([^"]+)"',
     catalog, re.S)
 
 tours = re.findall(
-    r'slug:\s*"([a-z-]+-private-day-tour)",\s*city:\s*"(tokyo|kyoto)".*?title:\s*"([^"]+)",'
+    r'slug:\s*"([a-z-]+-private-day-tour)",\s*city:\s*"(tokyo|kyoto|osaka)".*?title:\s*"([^"]+)",'
     r'.*?duration:\s*"([^"]+)",\s*price:\s*"([^"]+)".*?img:\s*"([^"]+)"',
     catalog, re.S)
 

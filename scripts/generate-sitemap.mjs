@@ -17,9 +17,9 @@ const read = (f) => readFileSync(join(root, f), "utf8");
 const catalog = read("lib/catalog.ts");
 const slugs = (re) => [...catalog.matchAll(re)].map((m) => m[1]);
 
-const allCities = slugs(/slug:\s*"(tokyo|kyoto)",\s*title:/g);
+const allCities = slugs(/slug:\s*"(tokyo|kyoto|osaka)",\s*title:/g);
 const allCategories = slugs(/\{\s*slug:\s*"([a-z-]+)",\s*title:[^}]*?tag:/g);
-const allExperiences = [...catalog.matchAll(/slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto)",\s*category:\s*"([a-z-]+)"([^\n]*)/g)]
+const allExperiences = [...catalog.matchAll(/slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto|osaka)",\s*category:\s*"([a-z-]+)"([^\n]*)/g)]
   .map((m) => ({ slug: m[1], city: m[2], category: m[3], live: /status:\s*"live"/.test(m[4]) }));
 const tours = slugs(/slug:\s*"([a-z-]+-private-day-tour)",\s*city:/g);
 

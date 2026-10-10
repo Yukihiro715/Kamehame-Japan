@@ -33,7 +33,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   const groupRow = pricing?.unit === "group" ? pricing.rows[0] : undefined;
   const groupMin = plans.length ? Math.min(...plans.map((p) => p.regular)) : groupRow?.total ?? 0;
   // zh-TW's per-person label already carries the "from" marker (每位起), so the suffix is not repeated.
-  const groupSuffix = D.fromSuffix && !T.perPerson.includes(D.fromSuffix.trim()) ? D.fromSuffix : "";
+  const fromSuffix: string = D.fromSuffix;
+  const groupSuffix = fromSuffix && !T.perPerson.includes(fromSuffix.trim()) ? fromSuffix : "";
   const expand = () => {
     setOpen(true);
     // After the fields render: without a date, open the date above first;

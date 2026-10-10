@@ -3,7 +3,7 @@
 // confirmation with each partner venue (see CLAUDE_HANDOFF.md). Venue
 // names and exact addresses stay private until a booking is confirmed.
 
-export type CitySlug = "tokyo" | "kyoto";
+export type CitySlug = "tokyo" | "kyoto" | "osaka";
 
 /** How a booking is confirmed. Instant products are bookable straight from the
  *  calendar; request products are held until the venue confirms the date. */
@@ -329,11 +329,15 @@ export const CANCELLATION = "Free cancellation up to 7 days before the experienc
 export const cities: City[] = [
   {
     slug: "tokyo", title: "Tokyo", jp: "東京", img: "/images/city-tokyo.jpg",
-    lead: "Tokyo keeps its traditions close, a few streets from the neon. We start with a private brush-calligraphy class in Shinjuku: kanji chosen for the meaning of your name, taught in English by a brush-lettering teacher. From Tokyo, there is also a golf day near Mt. Fuji, with a private car from your hotel. More Tokyo experiences are on the way.",
+    lead: "Tokyo keeps its traditions close, a few streets from the neon. We start with a private brush-calligraphy class in Shinjuku: kanji chosen for the meaning of your name, taught in English by a brush-lettering teacher. From Tokyo, there is also a golf day near Mt. Fuji, with a private car from your hotel, and a hands-on ramen class a few minutes from Shibuya. More Tokyo experiences are on the way.",
   },
   {
     slug: "kyoto", title: "Kyoto", jp: "京都", img: "/images/city-kyoto.jpg",
     lead: "Discover a different side of Kyoto through its living traditions. Spend a private evening with a geiko or maiko — dinner, a dance and conversation in your own room — with more Kyoto experiences in food, craft and special access on the way.",
+  },
+  {
+    slug: "osaka", title: "Osaka", jp: "大阪", img: "/images/city-osaka.jpg",
+    lead: "Osaka is Japan's kitchen, and Dotonbori is where it cooks loudest. We start right in the middle of it with a hands-on ramen class: noodles from scratch, three broths side by side, taught in English. More Osaka experiences are on the way.",
   },
 ];
 
@@ -354,7 +358,7 @@ export const categories: Category[] = [
     lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },  { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
   { slug: "ramen", title: "Ramen", tag: "Food", mark: "麺", img: "/images/ramen-noodle-machine.jpg",
-    lead: "Ramen is Japan's everyday comfort food, and the quickest way to understand it is to make it: noodles from scratch, the broth, the bowl. Small hands-on classes in Tokyo, taught in English." },
+    lead: "Ramen is Japan's everyday comfort food, and the quickest way to understand it is to make it: noodles from scratch, the broth, the bowl. Small hands-on classes in Tokyo and Osaka, taught in English." },
   { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
 ];
@@ -473,7 +477,7 @@ export const experiences: Experience[] = [
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
-    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "preview",
+    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "live",
     title: "Ramen Making Class near Shibuya, Tokyo",
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen a few minutes from Shibuya.",
     overview: [
@@ -554,6 +558,98 @@ export const experiences: Experience[] = [
     ],
     whatYoullDo: ["Knead, roll and cut fresh noodles", "Prepare chicken chashu and the toppings", "Finish three small bowls: tonkotsu, shoyu and miso", "Eat what you made"],
     master: { title: "Your instructor", bio: "A ramen cook who teaches small classes in English in a dedicated kitchen near Shibuya.", quote: "" },
+    itinerary: ["0:00 — Welcome and aprons on", "0:10 — The dough", "0:30 — Roll and cut", "0:50 — Chashu and toppings", "1:05 — Three bowls", "1:15 — Eat", "1:30 — End of the class"],
+    goodToKnow: ["About 90 minutes; every day at 11:00, 13:30, 16:00 and 18:30; arrive 15 minutes early.", "From about age 6; younger children may watch with a parent. Children pay the adult price.", "Not recommended for coeliac disease or a severe wheat or gluten allergy.", "Taught in English."],
+    story: { heading: "Three broths, one bowl at a time", body: "Tonkotsu, shoyu and miso are the three words every ramen menu in Japan turns on. Making the noodles yourself and tasting the three side by side is the fastest way to know which one is yours." },
+  },
+  {
+    // Ramen-making class in Dotonbori, Osaka: the same operator's second kitchen, from its OTA listing; the partner sheet's conditions were written for this venue
+    // (2026-10-10). Sale price ¥25,000 per person set by the owner; the
+    // partner's name, address, cost, session times, party limits and
+    // cancellation terms are still to be confirmed, so the page stays in
+    // "preview" until they are. Photos are the partner's own, via its listing.
+    slug: "dotonbori-ramen-class", city: "osaka", category: "ramen", bookingType: "request", status: "live",
+    title: "Ramen Making Class in Dotonbori, Osaka",
+    tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen in the middle of Dotonbori.",
+    overview: [
+      "Ramen is Japan's everyday comfort food, and this is the quickest way to understand it: make it. In a small teaching kitchen in Dotonbori, Osaka's loudest food street, you turn flour and water into noodles by hand, pass the dough through a noodle machine, and finish three small bowls so you can compare the three great broths in one sitting.",
+      "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan versions can be arranged at no extra cost, and a halal-friendly broth with advance notice (a supplement is confirmed with your quote); tell us when you request your date.",
+    ],
+    duration: "90 minutes", price: "¥25,000", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Osaka (Dotonbori)",
+    img: "/images/ramen-osaka-boiling.jpg", alt: "Two guests lifting freshly boiled noodles from the baskets at the counter of the teaching kitchen",
+    gallery: [
+      { img: "/images/ramen-osaka-toppings.jpg", alt: "Trays of toppings laid out for the bowls: soft-boiled eggs, bamboo shoots, nori, sweetcorn and spring onion" },
+      { img: "/images/ramen-osaka-group.jpg", alt: "A small class holding up the sheets of dough they have just rolled, beside the noodle machines" },
+      { img: "/images/ramen-noodle-machine.jpg", alt: "Two guests feeding a sheet of dough through a hand-cranked noodle machine, fresh noodles falling into the tray" },
+      { img: "/images/ramen-dough.jpg", alt: "Gloved hands bringing flour and water together into a dough in a steel bowl" },
+    ],
+    galleryNote: "Photos from the partner's kitchens in Osaka and Tokyo.",
+    // Partner sheet 2026-10: every day at 11:00 / 13:30 / 16:00 / 18:30, up to 16 per session, booking by the day before.
+    partySize: { min: 1, max: 16 },
+    availability: { daily: true, startTimes: ["11:00", "13:30", "16:00", "18:30"], cutoffDays: 1, cutoffTime: "18:00" },
+    scheduleNote: "Timings counted from the start of your session; the class runs about 90 minutes.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Taught in English",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the class, Japan time; free cancellation ends 30 days before. The date can be changed once, free of charge, up to 14 days before if another session has room; from 14 days before, a smaller group is charged in full. If the kitchen has to cancel, you hear by the day before and receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "90-minute class · All ingredients and tools · The ramen you make",
+    highlights: [
+      { icon: "brush", title: "Noodles from scratch", body: "Flour, water and your own hands: knead the dough, roll it through the noodle machine and cut your noodles." },
+      { icon: "meal", title: "Three bowls, three styles", body: "Tonkotsu, shoyu and miso in small bowls, finished with chicken chashu and toppings, so you can taste the differences side by side." },
+      { icon: "chat", title: "Taught in English", body: "A small kitchen, an instructor who explains each step in English, and no experience needed." },
+      { icon: "group", title: "Vegetarian, vegan and halal-friendly on request", body: "Say so when you request your date: vegetarian and vegan at no extra cost, a halal-friendly broth with advance notice and a supplement confirmed with your quote." },
+    ],
+    included: [
+      "A 90-minute hands-on class in English",
+      "All ingredients, tools and an apron",
+      "The ramen you make, and a drink with it",
+      "Tax included — nothing is added on the day",
+    ],
+    notIncluded: [
+      "Transport to the kitchen (meet on site)",
+      "Additional food and drinks ordered on the day",
+      "A halal-friendly broth: a supplement, confirmed with your quote",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome and aprons on", body: "Meet your instructor, wash up and hear how the class runs." },
+      { time: "0:10", title: "The dough", body: "Bring flour and water together and knead until the dough comes right." },
+      { time: "0:30", title: "Roll and cut", body: "Pass the dough through the noodle machine, then cut your noodles.", img: "/images/ramen-noodle-machine.jpg" },
+      { time: "0:50", title: "Chashu and toppings", body: "Prepare chicken chashu and the toppings while the broths come up to heat." },
+      { time: "1:05", title: "Three bowls", body: "Boil your noodles and assemble tonkotsu, shoyu and miso bowls." },
+      { time: "1:15", title: "Eat", body: "Taste the three styles side by side and compare notes with your instructor." },
+      { time: "1:30", title: "End of the class" },
+    ],
+    venue: {
+      known: ["A small ramen teaching kitchen in Dotonbori, Osaka, a few minutes' walk from Namba station — the exact address comes with your confirmation", "Not wheelchair or stroller accessible; infants need their own seat", "Arrive 15 minutes before the start: guests arriving more than 5 minutes late cannot join the session", "Flour in the air and shared equipment: not recommended for anyone with coeliac disease or a severe wheat or gluten allergy", "Allergens handled in the kitchen: wheat, egg, milk, soy, pork, chicken, beef and gelatin — tell us about allergies when you request"],
+      afterBooking: ["The kitchen's name, address and entrance instructions", "Directions from the nearest station", "A phone number for the day"],
+      img: "/images/ramen-osaka-group.jpg", alt: "A small class with their rolled sheets of dough in the Dotonbori teaching kitchen",
+    },
+    notesLabel: "Dietary needs and requests (optional)",
+    notesHint: "e.g. one of us is vegetarian; a halal-friendly bowl for two; allergies we should know about",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date and a start time — 11:00, 13:30, 16:00 or 18:30 — and tell us how many of you there are. Say if anyone needs a vegetarian, vegan or halal-friendly bowl." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The kitchen's address and entrance instructions come with your confirmation." },
+    ],
+    faq: [
+      { q: "Do I need any cooking experience?", a: "No. The instructor shows every step, and the dough is forgiving. If you can knead, you can make noodles." },
+      { q: "What do we actually make?", a: "Fresh noodles from scratch, chicken chashu, and three small bowls — tonkotsu, shoyu and miso — finished with toppings, so you can taste the three styles side by side. Vegetarian, vegan and halal-friendly bowls differ in content." },
+      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes. Vegetarian and vegan bowls are arranged at no extra cost. A halal-friendly broth can be arranged with advance notice; the supplement is confirmed with your quote. Tell us when you request your date." },
+      { q: "Which language is the class in?", a: "English. The instructor runs the class in English and Japanese." },
+      { q: "Can children join?", a: "From about age 6. Younger children cannot take part but may watch alongside a parent; the kitchen is not stroller accessible. Children pay the adult price." },
+      { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
+      { q: "Can groups book?", a: "Up to 16 guests share a session. Larger groups and private sessions are quoted individually." },
+      { q: "Can we book at short notice?", a: "Yes, until 6:00 pm JST the day before, if the session still has room. Sessions run every day at 11:00, 13:30, 16:00 and 18:30." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before the class; from 29 to 14 days before, half the price; from 13 days before, the full price. The date can be changed once, free, up to 14 days before if another session has room." },
+      { q: "I have a wheat or gluten allergy.", a: "The class is not recommended for anyone with coeliac disease or a severe wheat or gluten allergy: there is flour in the air and the equipment is shared." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes before the start. To keep every session on time, guests arriving 5 minutes or more after the start cannot join; we will try to move you to another session, which may carry a rescheduling fee." },
+      { q: "Is transport included?", a: "No. You meet at the kitchen in Dotonbori, a few minutes' walk from Namba station; the address and directions come with your confirmation." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Knead, roll and cut fresh noodles", "Prepare chicken chashu and the toppings", "Finish three small bowls: tonkotsu, shoyu and miso", "Eat what you made"],
+    master: { title: "Your instructor", bio: "A ramen cook who teaches small classes in English in a dedicated kitchen in Dotonbori.", quote: "" },
     itinerary: ["0:00 — Welcome and aprons on", "0:10 — The dough", "0:30 — Roll and cut", "0:50 — Chashu and toppings", "1:05 — Three bowls", "1:15 — Eat", "1:30 — End of the class"],
     goodToKnow: ["About 90 minutes; every day at 11:00, 13:30, 16:00 and 18:30; arrive 15 minutes early.", "From about age 6; younger children may watch with a parent. Children pay the adult price.", "Not recommended for coeliac disease or a severe wheat or gluten allergy.", "Taught in English."],
     story: { heading: "Three broths, one bowl at a time", body: "Tonkotsu, shoyu and miso are the three words every ramen menu in Japan turns on. Making the noodles yourself and tasting the three side by side is the fastest way to know which one is yours." },
