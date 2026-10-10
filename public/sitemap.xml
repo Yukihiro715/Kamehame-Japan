@@ -222,6 +222,61 @@
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/"/>
   </url>
   <url>
+    <loc>https://kamehame-japan.com/en/tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tea-ceremony/"/>
+  </url>
+  <url>
     <loc>https://kamehame-japan.com/en/geisha/</loc>
     <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -385,6 +440,61 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/ramen/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/ramen/"/>
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/ramen/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/kendo/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kendo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/kendo/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kendo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/kendo/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kendo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kendo/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kendo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kendo/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kendo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kendo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/golf/</loc>
@@ -660,6 +770,336 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/osaka/dotonbori-ramen-class/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/osaka/dotonbori-ramen-class/"/>
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/dotonbori-ramen-class/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/tokyo/nihonbashi-kendo-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-kendo-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tokyo/nihonbashi-kendo-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-kendo-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tokyo/nihonbashi-kendo-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-kendo-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/nihonbashi-kendo-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-kendo-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-kendo-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-kendo-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-kendo-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/tokyo/nihonbashi-bushido-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-bushido-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tokyo/nihonbashi-bushido-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-bushido-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tokyo/nihonbashi-bushido-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-bushido-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/nihonbashi-bushido-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-bushido-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-bushido-experience/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/nihonbashi-bushido-experience/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/nihonbashi-bushido-experience/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/tokyo/yotsuya-tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/yotsuya-tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tokyo/yotsuya-tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/yotsuya-tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tokyo/yotsuya-tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/yotsuya-tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/yotsuya-tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/yotsuya-tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/yotsuya-tea-ceremony/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/yotsuya-tea-ceremony/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/yotsuya-tea-ceremony/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/tokyo/tokyo-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/tokyo-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tokyo/tokyo-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/tokyo-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tokyo/tokyo-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/tokyo-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tokyo/tokyo-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/tokyo-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tokyo/tokyo-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tokyo/tokyo-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tokyo/tokyo-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/osaka/osaka-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/osaka-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/osaka/osaka-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/osaka-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/osaka/osaka-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/osaka-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/osaka/osaka-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/osaka-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/osaka/osaka-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/osaka/osaka-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/osaka/osaka-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/kyoto/kyoto-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/kyoto/kyoto-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/kyoto/kyoto-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/kyoto/kyoto-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-kendo-experience-tour/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/kyoto/kyoto-kendo-experience-tour/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kyoto/kyoto-kendo-experience-tour/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kyoto/kyoto-kendo-experience-tour/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/tokyo/mt-fuji-golf-day/</loc>

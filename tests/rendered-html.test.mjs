@@ -153,25 +153,32 @@ test("ramen classes: Tokyo and Osaka live, priced per person, listed, never nami
   assert.ok(home.includes('href="/en/osaka/"') && home.includes('href="/en/ramen/"'), "home links the city and the ramen theme");
 });
 
-test("kendo, bushido, tea ceremony and the kendo tour: preview pages that never name the partners", async () => {
+test("kendo, bushido, tea ceremony and the kendo tours: live pages that never name the partners", async () => {
   const pages = [
-    ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥20,000"],
-    ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000"],
-    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥8,800"],
-    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800"],
+    ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥20,000", "/en/tokyo/"],
+    ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000", "/en/tokyo/"],
+    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥8,800", "/en/tokyo/"],
+    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800", "/en/tokyo/"],
+    ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥19,800", "/en/osaka/"],
+    ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥19,800", "/en/kyoto/"],
   ];
-  for (const [path, title, price] of pages) {
+  for (const [path, title, price, city] of pages) {
     const res = await render(path);
     assert.equal(res.status, 200, path);
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, "");
     assert.ok(text.includes(title), `title on ${path}`);
-    assert.ok(text.includes(price), `placeholder price on ${path}`);
-    assert.ok(text.includes("Preview — this page is not published yet"), `preview banner on ${path}`);
+    assert.ok(text.includes(price), `price on ${path}`);
+    assert.ok(!text.includes("Preview — this page is not published yet"), `published: ${path}`);
     assert.doesNotMatch(html, /Kendo Spirit|Umino|海野|Kobunach|浜町|SEC Nihonbashi|Watanabe|有庵|r_cafe|Airbnb|SAMURAI TRIP|Nagamatsu|永松|パークフォーアス|Park For Us|samuraitrip/i, `partner names stay private on ${path}`);
+    const listing = await (await render(city)).text();
+    assert.ok(listing.includes(path), `listed on ${city}`);
   }
-  const listing = await (await render("/en/tokyo/")).text();
-  assert.ok(!listing.includes("nihonbashi-kendo-experience") && !listing.includes("yotsuya-tea-ceremony"), "not listed while in preview");
+  const osakaTour = (await (await render("/en/osaka/osaka-kendo-experience-tour/")).text()).replace(/<[^>]+>/g, " ");
+  assert.ok(osakaTour.includes("Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji"), "the Osaka page lists the other cities");
+  assert.ok(!osakaTour.includes("Kyoto instead of Kyoto") && !osakaTour.includes("Osaka instead of Osaka"), "clean city swap");
+  const category = await render("/en/kendo/");
+  assert.equal(category.status, 200, "the kendo category page");
 });
 
 test("group-priced page: facts under the photos, per-person headline with the group total", async () => {
