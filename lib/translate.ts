@@ -1,16 +1,18 @@
 // Japanese translations of what a visitor typed, for the team's notification.
 //
-// Runs on Workers AI (the AI binding, model m2m100) inside the Worker, so no
-// key or outside service is involved and the visitor's text stays on
-// Cloudflare. Best effort: a missing binding, a timeout or an error leaves the
+// Runs on Workers AI (the AI binding) inside the Worker, so no key or outside
+// service is involved and the visitor's text stays on Cloudflare. An
+// instruction-tuned model is used rather than a plain translation model: it
+// keeps hotel and place names as they are and reads golf terms correctly. Best effort: a missing binding, a timeout or an error leaves the
 // field untranslated and the notification says so. Never translates Japanese.
 
 import type { Enquiry } from "@/lib/contact";
 
 type Ai = { run(model: string, input: Record<string, unknown>): Promise<unknown> };
 
-const MODEL = "@cf/meta/m2m100-1.2b";
-const SOURCE: Record<string, string> = { en: "english", es: "spanish", fr: "french", "zh-tw": "chinese" };
+const MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+const SOURCE: Record<string, string> = { en: "English", es: "Spanish", fr: "French", "zh-tw": "Traditional Chinese" };
+const SYSTEM = "You translate short customer messages for a Japanese travel company's staff. Translate the user's text into natural Japanese. Keep names of people, hotels, places and brands as written (Latin letters are fine). Golf terms: caddie = キャディ, cart = カート, tee time = スタート時刻, rental clubs = レンタルクラブ, stiff/regular/ladies shaft = スティッフ/レギュラー/レディースシャフト. Output only the translation, nothing else.";
 
 /** The fields whose text the visitor wrote or that the page composed in its
  *  own language. Golf choices that arrive as keys are rendered in Japanese
@@ -19,11 +21,18 @@ export const TRANSLATED_FIELDS = ["message", "clubs", "pickup", "course", "plan"
 export type TranslatedField = (typeof TRANSLATED_FIELDS)[number];
 
 async function translateOne(ai: Ai, text: string, source: string): Promise<string | undefined> {
-  const run = ai.run(MODEL, { text, source_lang: source, target_lang: "japanese" }) as Promise<{ translated_text?: string }>;
-  const timeout = new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), 8000));
+  const run = ai.run(MODEL, {
+    messages: [
+      { role: "system", content: SYSTEM },
+      { role: "user", content: `Source language: ${source}\n\n${text}` },
+    ],
+    max_tokens: 400,
+    temperature: 0.2,
+  }) as Promise<{ response?: string }>;
+  const timeout = new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), 10000));
   try {
     const out = await Promise.race([run, timeout]);
-    const ja = out?.translated_text?.trim();
+    const ja = out?.response?.trim().replace(/^["「『]|["」』]$/g, "");
     return ja && ja !== text ? ja : undefined;
   } catch (err) {
     console.error("translate: failed", err);
