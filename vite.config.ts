@@ -20,6 +20,9 @@ const localBindingConfig = {
   // Workers AI: translates what a visitor typed into Japanese for the team's
   // notification (lib/translate.ts). No key needed; the free tier covers it.
   ai: { binding: "AI" },
+  // A second copy of every team notification goes here so the enquiry record
+  // can be read without forwarding from the hello@ mailbox. Not a secret.
+  vars: { ARCHIVE_TO: "info@mimipo.jp" },
   d1_databases: d1
     ? [
         {

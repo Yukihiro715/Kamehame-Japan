@@ -1,18 +1,30 @@
 // New-enquiry alert for the team's Slack channel.
 //
 // Sent through a Slack Incoming Webhook whose URL is the SLACK_WEBHOOK_URL
-// Worker secret (never in the repo). The alert is a heads-up, not the record:
-// it carries what staff need to see at a glance — experience, dates, party,
-// estimate, first name — but not the guest's email address or free-text notes
-// (which can hold health information such as allergies). Those stay in the
-// hello@ mailbox, where the reply is written.
+// Worker secret (never in the repo). The fields at the top are the glance
+// view; below them the alert carries the same Japanese record the mailbox
+// gets (every field, the visitor's notes and their translation), so the
+// channel is a complete log of enquiries on its own. The channel is internal;
+// keep it that way, since notes can hold health information such as allergies.
 
 import type { Enquiry } from "@/lib/contact";
 
 /** Slack mrkdwn treats &, < and > as markup; escape anything a visitor typed. */
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-export function slackMessage(e: Enquiry, experienceTitle: string | undefined, delivered: boolean) {
+/** Slack allows 3000 characters per section; split the record on line breaks. */
+function chunks(text: string, max = 2900): string[] {
+  const out: string[] = [];
+  let cur = "";
+  for (const line of text.split("\n")) {
+    if (cur.length + line.length + 1 > max && cur) { out.push(cur); cur = ""; }
+    cur = cur ? `${cur}\n${line}` : line;
+  }
+  if (cur) out.push(cur);
+  return out.slice(0, 10);
+}
+
+export function slackMessage(e: Enquiry, experienceTitle: string | undefined, delivered: boolean, record?: string) {
   const trade = e.kind === "trade";
   const rows: [string, string | undefined][] = trade
     ? [["会社", e.company], ["国", e.country], ["名前", e.name], ["言語", e.lang]]
@@ -33,7 +45,7 @@ export function slackMessage(e: Enquiry, experienceTitle: string | undefined, de
     .map(([k, v]) => ({ type: "mrkdwn", text: `*${k}*\n${esc(v).slice(0, 300)}` }));
   const title = trade ? "🤝 取引先からの問い合わせ" : "🆕 新しい問い合わせ";
   const note = delivered
-    ? "メールアドレスと備考は hello@ の受信箱で確認し、そこから返信してください。"
+    ? "返信は hello@ の受信箱から(同じ件名で返信するとお客様側で1本のスレッドになります)。"
     : "⚠️ メール配送に失敗しました。お客様にはフォームでメールアドレスを案内済みです。至急 Cloudflare のログを確認してください。";
   return {
     text: `${title}: ${experienceTitle ?? e.experience ?? e.company ?? ""} — ${e.name}`,
@@ -41,6 +53,7 @@ export function slackMessage(e: Enquiry, experienceTitle: string | undefined, de
       { type: "header", text: { type: "plain_text", text: title } },
       // Slack allows at most ten fields per section.
       { type: "section", fields: fields.slice(0, 10) },
+      ...(record ? [{ type: "divider" }, ...chunks(record).map((t) => ({ type: "section", text: { type: "mrkdwn", text: esc(t) } }))] : []),
       { type: "context", elements: [{ type: "mrkdwn", text: note }] },
     ],
   };

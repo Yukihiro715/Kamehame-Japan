@@ -93,7 +93,7 @@ async function cancelScheduled(key: string, id: string): Promise<void> {
  *  the whole batch if the domain is not verified, which the caller treats as
  *  "try the fallback"), with the personal follow-up scheduled first so the
  *  team's copy can say whether it is on its way. */
-async function sendViaResend(key: string, to: string, e: Enquiry, ja: Translations): Promise<void> {
+async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translations): Promise<void> {
   const title = titleFor(e);
   const ack = acknowledgement(e, title);
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
@@ -106,7 +106,7 @@ async function sendViaResend(key: string, to: string, e: Enquiry, ja: Translatio
     body: JSON.stringify([
       {
         from: `KAMEHAME JAPAN Site <${FROM}>`,
-        to: [to],
+        to,
         reply_to: `${safeName} <${e.email}>`,
         subject: threadSubject(e, title),
         text: notificationBody(e, jaName, { ack, ja, followUp: later ? { text: later.text, scheduled: !!scheduledId, delayMinutes: FOLLOW_UP_MINUTES } : null }),
@@ -248,12 +248,15 @@ export async function POST(request: Request): Promise<Response> {
   // What the visitor typed, in Japanese for the team (best effort, see lib/translate.ts).
   const ja = await translateForTeam(cf.env.AI, enquiry);
 
-  // The team's Slack alert, in Japanese, whatever the page language was.
-  const alert = (delivered: boolean) => notifySlack(cf.env.SLACK_WEBHOOK_URL, slackMessage(enquiry, jaTitle(enquiry), delivered));
+  // The team's Slack alert, in Japanese, with the full record attached.
+  const record = notificationBody(enquiry, jaTitle(enquiry), { ack: null, followUp: null, ja }).split("\n").filter((l) => !l.startsWith("自動返信") && !l.startsWith("フォローアップ")).join("\n");
+  const alert = (delivered: boolean) => notifySlack(cf.env.SLACK_WEBHOOK_URL, slackMessage(enquiry, jaTitle(enquiry), delivered, record));
+  // The team copy goes to the mailbox and to the archive address, if any.
+  const recipients = [...new Set([to, cf.env.ARCHIVE_TO].filter((a): a is string => !!a && a.includes("@")))];
 
   if (resendKey) {
     try {
-      await sendViaResend(resendKey, to, enquiry, ja);
+      await sendViaResend(resendKey, recipients, enquiry, ja);
       await alert(true);
       return Response.json({ ok: true });
     } catch (err) {
