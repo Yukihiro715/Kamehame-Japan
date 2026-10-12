@@ -14,6 +14,8 @@ declare module "cloudflare:workers" {
     CONTACT_TO?: string;
     /** Second recipient of the team notification (a var in vite.config.ts). */
     ARCHIVE_TO?: string;
+    /** Apps Script web app that appends each enquiry to the booking ledger (var or secret). */
+    LEDGER_WEBHOOK_URL?: string;
     /** Resend API key. When present, enquiries go out through Resend (which
      *  can also write to the visitor); otherwise through the send_email binding. */
     RESEND_API_KEY?: string;

@@ -7,6 +7,7 @@ import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type G
 import { yen } from "@/lib/pricing";
 import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
+import { ledgerRecord, postToLedger } from "@/lib/ledger";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -93,7 +94,7 @@ async function cancelScheduled(key: string, id: string): Promise<void> {
  *  the whole batch if the domain is not verified, which the caller treats as
  *  "try the fallback"), with the personal follow-up scheduled first so the
  *  team's copy can say whether it is on its way. */
-async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translations): Promise<void> {
+async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translations): Promise<{ followUpScheduled: boolean }> {
   const title = titleFor(e);
   const ack = acknowledgement(e, title);
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
@@ -127,6 +128,7 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
     if (scheduledId) await cancelScheduled(key, scheduledId);
     throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
   }
+  return { followUpScheduled: !!scheduledId };
 }
 
 const MAX = {
@@ -254,10 +256,14 @@ export async function POST(request: Request): Promise<Response> {
   // The team copy goes to the mailbox and to the archive address, if any.
   const recipients = [...new Set([to, cf.env.ARCHIVE_TO].filter((a): a is string => !!a && a.includes("@")))];
 
+  // The booking ledger gets a row once delivery is settled (see lib/ledger.ts).
+  const ledger = (ackSent: boolean, followUpScheduled: boolean) =>
+    postToLedger(cf.env.LEDGER_WEBHOOK_URL, ledgerRecord(enquiry, ja, { ackSent, followUpScheduled }));
+
   if (resendKey) {
     try {
-      await sendViaResend(resendKey, recipients, enquiry, ja);
-      await alert(true);
+      const { followUpScheduled } = await sendViaResend(resendKey, recipients, enquiry, ja);
+      await Promise.all([alert(true), ledger(true, followUpScheduled)]);
       return Response.json({ ok: true });
     } catch (err) {
       console.error("contact: resend failed, trying send_email", err);
@@ -266,7 +272,7 @@ export async function POST(request: Request): Promise<Response> {
   if (cf.env.EMAIL) {
     try {
       await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to, ja)));
-      await alert(true);
+      await Promise.all([alert(true), ledger(false, false)]);
       return Response.json({ ok: true });
     } catch (err) {
       console.error("contact: send_email failed", err);
