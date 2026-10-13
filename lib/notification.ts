@@ -55,7 +55,15 @@ export interface NotificationExtras {
    *  delivery fell back to a route that sends none. */
   ack?: { subject: string; text: string } | null;
   /** The scheduled personal follow-up: its text and whether scheduling worked. */
-  followUp?: { text: string; scheduled: boolean; delayMinutes: number } | null;
+  followUp?: {
+    text: string;
+    scheduled: boolean;
+    delayMinutes: number;
+    /** Resend's scheduled email ID, never an ID supplied by the visitor. */
+    emailId?: string;
+    /** The exact scheduled_at accepted by Resend, in ISO 8601 UTC. */
+    scheduledAt?: string;
+  } | null;
   /** Japanese translations of what the visitor typed, by field. */
   ja?: Partial<Record<TranslatedField, string>>;
 }
@@ -101,6 +109,25 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
   ];
   const lines = rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`);
   const out = [...lines];
+  // An authenticated provider link, not a public cancellation endpoint. Opening
+  // it does not change the schedule (including when a mail scanner follows it).
+  // This section belongs only to the internal notification, never customer copy.
+  if (!trade && followUp?.scheduled && followUp.emailId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(followUp.emailId)) {
+    const time = followUp.scheduledAt ? new Date(followUp.scheduledAt) : null;
+    const scheduledJst = time && Number.isFinite(time.getTime())
+      ? new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }).format(time)
+      : null;
+    out.push(
+      "", "────────", "【社内用】手動でメールを送ったら、15分後メールを停止",
+      `対象: ${e.name} <${e.email}>${e.dates ? ` / ${e.dates}` : ""}`,
+      ...(scheduledJst ? [`自動フォロー送信予定: ${scheduledJst}（日本時間）※予約時点の予定`] : []),
+      `停止・状況確認: https://resend.com/emails/${followUp.emailId}`,
+      "操作: Resendにログイン → 宛先・件名を確認 → 右上の「…」(More actions) →「Cancel schedule」→ 確認画面が出たら確定。",
+      "停止後は「Canceled」の表示を確認してください。リンクを開くだけでは停止しません。",
+      "Gmailで返信しても自動停止しません。上記の送信予定時刻より前に操作してください。送信済みのメールは取り消せません。",
+      `フォローアップ管理ID: ${followUp.emailId}`,
+    );
+  }
   if (ack) out.push("", "────────", "お客様への自動返信:", `件名: ${ack.subject}`, "", ack.text);
   if (followUp?.scheduled) out.push("", "────────", `${followUp.delayMinutes}分後の自動フォローアップ(同じ件名):`, "", followUp.text);
   return out.join("\n");
