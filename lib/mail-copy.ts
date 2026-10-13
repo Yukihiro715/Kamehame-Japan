@@ -12,7 +12,7 @@ interface AckCopy {
   subject: (experience?: string, dates?: string) => string;
   subjectTrade: string;
   /** The personal follow-up sent a little after the acknowledgement. */
-  followUp: { intro: string; golf: (when: string) => string; other: (experience: string, when: string) => string; wait: string; reply: string; sign: string };
+  followUp: { intro: string; golf: () => string; other: (experience: string) => string; wait: string; reply: string; sign: string };
   hello: (name: string) => string;
   thanks: (experience?: string) => string;
   thanksTrade: string;
@@ -37,9 +37,9 @@ const COPY: Record<Lang, AckCopy> = {
     labels: { dates: "Dates", party: "Guests", company: "Company", country: "Country", message: "Notes", plan: "Plan", extras: "Extras", estimate: "Estimate", interpreter: "Interpreter", area: "Golf area", course: "Course", courseRecommended: "Our recommended course (package price)", courseSpecific: "Specific course requested (quoted individually)", level: "Golf experience", rental: "Rental clubs", clubs: "Club preferences", pickup: "Pick-up", whatsapp: "WhatsApp" },
     followUp: {
       intro: "I'm Yukihiro, support staff at KAMEHAME JAPAN, and I'll be looking after your request from here.",
-      golf: (when) => `I'm now checking availability at our partner courses${when ? ` for ${when}` : ""}. Next, I'll send you the price, the conditions and a payment link. Once your payment is in, I'll reserve your course and tee time and send you the details.`,
-      other: (x, when) => `I'm now checking the date with the host for "${x}"${when ? ` (${when})` : ""}. Next, I'll send you the price, the conditions and a payment link. Once your payment is in, I'll confirm the booking with the host and send you the details.`,
-      wait: "You'll usually hear from me within 6 to 12 hours, though it can take up to about 24 hours. Thank you for your patience. I'll do my best to make it a day you'll remember.",
+      golf: () => "Thank you for booking your golf experience with us. I'm now going through the details of your request.\n\nIn my next email I'll send you the price, the conditions and a payment link. Once your payment is in, I'll reserve your course and tee time and send you the details.",
+      other: (x) => `Thank you for booking "${x}" with us. I'm now going through the details of your request.\n\nIn my next email I'll send you the price, the conditions and a payment link. Once your payment is in, I'll confirm the booking with the host and send you the details.`,
+      wait: "I'll do my best to make it a day you'll remember. Thank you for bearing with me a little while I arrange it.",
       reply: "If anything changes on your side, or a question comes up in the meantime, just reply to this email.",
       sign: "Best regards,\nYukihiro\nKAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com",
     },
@@ -59,9 +59,9 @@ const COPY: Record<Lang, AckCopy> = {
     labels: { dates: "日程", party: "人数", company: "会社名", country: "国", message: "備考", plan: "プラン", extras: "オプション", estimate: "概算", interpreter: "通訳", area: "エリア", course: "コース", courseRecommended: "おすすめコース(標準料金)", courseSpecific: "希望コース指定(個別見積もり)", level: "ゴルフ経験", rental: "レンタルクラブ", clubs: "クラブのご希望", pickup: "お迎え場所", whatsapp: "WhatsApp" },
     followUp: {
       intro: "KAMEHAME JAPAN サポートスタッフのゆきひろと申します。このたびのご依頼を担当させていただきます。",
-      golf: (when) => `現在、${when ? `${when}の` : ""}提携ゴルフ場の空き状況を確認しております。次のご連絡で料金・条件とお支払いリンクをお送りし、お支払いの確認後にコースとスタート時刻を確保して詳細をご案内します。`,
-      other: (x, when) => `現在、「${x}」${when ? `(${when})` : ""}の日程を受け入れ先に確認しております。次のご連絡で料金・条件とお支払いリンクをお送りし、お支払いの確認後に受け入れ先と予約を確定して詳細をご案内します。`,
-      wait: "通常6〜12時間以内にご連絡しますが、24時間程度かかる場合もあります。ご満足いただける一日になるよう精一杯手配いたしますので、今しばらくお待ちください。",
+      golf: () => "この度は、ゴルフ体験アクティビティのご予約誠にありがとうございます。ご予約の詳細を確認させていただきます。\n\n次のご連絡で料金・条件とお支払いリンクをお送りし、お支払いの確認後にコースとスタート時刻を確保して詳細をご案内します。",
+      other: (x) => `この度は、「${x}」のご予約誠にありがとうございます。ご予約の詳細を確認させていただきます。\n\n次のご連絡で料金・条件とお支払いリンクをお送りし、お支払いの確認後に受け入れ先と予約を確定して詳細をご案内します。`,
+      wait: "ご満足いただける一日になるよう精一杯手配いたしますので、今しばらくお待ちください。",
       reply: "ご予定の変更やご質問がありましたら、このメールにそのまま返信してください。",
       sign: "ゆきひろ\nKAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com",
     },
@@ -81,9 +81,9 @@ const COPY: Record<Lang, AckCopy> = {
     labels: { dates: "Fechas", party: "Personas", company: "Empresa", country: "País", message: "Notas", plan: "Plan", extras: "Extras", estimate: "Estimación", interpreter: "Intérprete", area: "Zona de golf", course: "Campo", courseRecommended: "Campo recomendado por nosotros (precio del paquete)", courseSpecific: "Campo concreto solicitado (presupuesto individual)", level: "Nivel de golf", rental: "Palos de alquiler", clubs: "Preferencias de palos", pickup: "Recogida", whatsapp: "WhatsApp" },
     followUp: {
       intro: "Soy Yukihiro, del equipo de atención de KAMEHAME JAPAN, y me ocuparé de su solicitud a partir de ahora.",
-      golf: (when) => `Estoy comprobando la disponibilidad en nuestros campos asociados${when ? ` para el ${when}` : ""}. A continuación le enviaré el precio, las condiciones y un enlace de pago. En cuanto reciba su pago, reservaré el campo y la hora de salida y le enviaré los detalles.`,
-      other: (x, when) => `Estoy confirmando la fecha con el anfitrión para «${x}»${when ? ` (${when})` : ""}. A continuación le enviaré el precio, las condiciones y un enlace de pago. En cuanto reciba su pago, confirmaré la reserva con el anfitrión y le enviaré los detalles.`,
-      wait: "Normalmente tendrá noticias mías en un plazo de 6 a 12 horas, aunque puede tardar hasta unas 24 horas. Gracias por su paciencia. Haré todo lo posible para que sea un día inolvidable.",
+      golf: () => "Muchas gracias por reservar su experiencia de golf con nosotros. Estoy revisando los detalles de su solicitud.\n\nEn mi próximo correo le enviaré el precio, las condiciones y un enlace de pago. En cuanto reciba su pago, reservaré el campo y la hora de salida y le enviaré los detalles.",
+      other: (x) => `Muchas gracias por reservar «${x}» con nosotros. Estoy revisando los detalles de su solicitud.\n\nEn mi próximo correo le enviaré el precio, las condiciones y un enlace de pago. En cuanto reciba su pago, confirmaré la reserva con el anfitrión y le enviaré los detalles.`,
+      wait: "Haré todo lo posible para que sea un día inolvidable. Gracias por su paciencia mientras lo organizo.",
       reply: "Si algo cambia por su parte o le surge alguna duda, responda simplemente a este correo.",
       sign: "Un cordial saludo,\nYukihiro\nKAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com",
     },
@@ -103,9 +103,9 @@ const COPY: Record<Lang, AckCopy> = {
     labels: { dates: "Dates", party: "Personnes", company: "Société", country: "Pays", message: "Remarques", plan: "Formule", extras: "Options", estimate: "Estimation", interpreter: "Interprète", area: "Zone de golf", course: "Parcours", courseRecommended: "Parcours recommandé par nos soins (prix du forfait)", courseSpecific: "Parcours précis demandé (devis individuel)", level: "Niveau de golf", rental: "Clubs de location", clubs: "Préférences de clubs", pickup: "Prise en charge", whatsapp: "WhatsApp" },
     followUp: {
       intro: "Je suis Yukihiro, de l'équipe d'assistance de KAMEHAME JAPAN, et je m'occupe de votre demande à partir de maintenant.",
-      golf: (when) => `Je vérifie actuellement les disponibilités de nos parcours partenaires${when ? ` pour le ${when}` : ""}. Je vous enverrai ensuite le prix, les conditions et un lien de paiement. Dès réception de votre paiement, je réserverai le parcours et l'heure de départ et vous enverrai les détails.`,
-      other: (x, when) => `Je vérifie actuellement la date auprès de l'hôte pour « ${x} »${when ? ` (${when})` : ""}. Je vous enverrai ensuite le prix, les conditions et un lien de paiement. Dès réception de votre paiement, je confirmerai la réservation auprès de l'hôte et vous enverrai les détails.`,
-      wait: "Vous aurez généralement de mes nouvelles sous 6 à 12 heures, mais cela peut prendre jusqu'à 24 heures environ. Merci de votre patience. Je ferai de mon mieux pour que cette journée soit mémorable.",
+      golf: () => "Merci beaucoup d'avoir réservé votre expérience de golf avec nous. J'examine actuellement les détails de votre demande.\n\nDans mon prochain e-mail, je vous enverrai le prix, les conditions et un lien de paiement. Dès réception de votre paiement, je réserverai le parcours et l'heure de départ et vous enverrai les détails.",
+      other: (x) => `Merci beaucoup d'avoir réservé « ${x} » avec nous. J'examine actuellement les détails de votre demande.\n\nDans mon prochain e-mail, je vous enverrai le prix, les conditions et un lien de paiement. Dès réception de votre paiement, je confirmerai la réservation auprès de l'hôte et vous enverrai les détails.`,
+      wait: "Je ferai de mon mieux pour que cette journée soit mémorable. Merci de votre patience pendant que je l'organise.",
       reply: "Si quelque chose change de votre côté ou si vous avez une question entre-temps, répondez simplement à cet e-mail.",
       sign: "Bien cordialement,\nYukihiro\nKAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com",
     },
@@ -125,9 +125,9 @@ const COPY: Record<Lang, AckCopy> = {
     labels: { dates: "日期", party: "人數", company: "公司", country: "國家", message: "備註", plan: "方案", extras: "加購", estimate: "預估", interpreter: "口譯", area: "高爾夫區域", course: "球場", courseRecommended: "我們推薦的球場(套裝價格)", courseSpecific: "指定球場(個別報價)", level: "高爾夫經驗", rental: "租借球桿", clubs: "球桿需求", pickup: "接送地點", whatsapp: "WhatsApp" },
     followUp: {
       intro: "我是 KAMEHAME JAPAN 的客服人員 Yukihiro，接下來由我負責您的這次預約。",
-      golf: (when) => `我正在確認${when ? ` ${when} ` : ""}合作球場的空位。接下來會寄給您價格、條件與付款連結；收到付款後，我會為您預訂球場與開球時間，並寄送詳細資訊。`,
-      other: (x, when) => `我正在向店家確認「${x}」${when ? `(${when})` : ""}的日期。接下來會寄給您價格、條件與付款連結；收到付款後，我會向店家確認預約，並寄送詳細資訊。`,
-      wait: "通常會在 6 到 12 小時內與您聯絡，有時可能需要約 24 小時。感謝您的耐心等候。我會盡力讓這一天成為美好的回憶。",
+      golf: () => "感謝您預訂我們的高爾夫體驗。我正在確認您的預約內容。\n\n下一封郵件會寄給您價格、條件與付款連結；收到付款後，我會為您預訂球場與開球時間，並寄送詳細資訊。",
+      other: (x) => `感謝您預訂「${x}」。我正在確認您的預約內容。\n\n下一封郵件會寄給您價格、條件與付款連結；收到付款後，我會向店家確認預約，並寄送詳細資訊。`,
+      wait: "我會盡力讓這一天成為美好的回憶，安排期間請您稍候。",
       reply: "若您的計畫有變，或這段期間有任何疑問，直接回覆此郵件即可。",
       sign: "Yukihiro 敬上\nKAMEHAME JAPAN · Prosent Inc.\nhello@kamehame-japan.com",
     },
@@ -187,8 +187,7 @@ export function threadSubject(e: Enquiry, experienceTitle?: string): string {
 export function followUp(e: Enquiry, experienceTitle?: string): { subject: string; text: string } {
   const c = COPY[isLang(e.lang) ? e.lang : "en"];
   const f = c.followUp;
-  const when = e.dates ?? "";
-  const body = e.areaId ? f.golf(when) : f.other(experienceTitle ?? e.experience ?? "", when);
+  const body = e.areaId ? f.golf() : f.other(experienceTitle ?? e.experience ?? "");
   const text = [c.hello(e.name), "", f.intro, "", body, "", f.wait, "", f.reply, "", f.sign].join("\n");
   return { subject: threadSubject(e, experienceTitle), text };
 }
