@@ -13,6 +13,10 @@ export const PARTNER_EMAIL = "partners@kamehame-japan.com";
 export type EnquiryKind = "guest" | "trade";
 
 export interface Enquiry {
+  requestId?: string;
+  pickupRegion?: "tokyo" | "saitama" | "chiba" | "other";
+  caddie?: "none" | "required" | "unsure";
+  addonIds?: string[];
   kind: EnquiryKind;
   name: string;
   email: string;

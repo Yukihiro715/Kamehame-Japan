@@ -96,6 +96,8 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ...(e.rentalKeys ? [["レンタルクラブ", rental] as [string, string | undefined]] : t("レンタルクラブ", "rental", rental)),
     ...t("クラブの希望", "clubs", e.clubs),
     ...t("お迎え場所", "pickup", e.pickup),
+    ["送迎都県", e.pickupRegion],
+    ["キャディ", e.areaId ? (e.caddie === "required" ? "あり希望" : e.caddie === "none" ? "なし" : "未確認") : undefined],
     ["WhatsApp", e.whatsapp],
     ...t("通訳", "interpreter", e.interpreter),
     ...t("オプション", "addons", e.addons),

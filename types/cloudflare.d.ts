@@ -23,6 +23,10 @@ declare module "cloudflare:workers" {
     SLACK_WEBHOOK_URL?: string;
     /** Stripe restricted key (Checkout Sessions: read) for the booked page. */
     STRIPE_READ_KEY?: string;
+    GOLF_AUTOMATION_URL?: string;
+    GOLF_AUTOMATION_TOKEN?: string;
+    RESEND_WEBHOOK_SECRET?: string;
+    STRIPE_WEBHOOK_SECRET?: string;
     DB?: unknown;
     /** Workers AI binding (translation for the team's notification). */
     AI?: { run(model: string, input: Record<string, unknown>): Promise<unknown> };

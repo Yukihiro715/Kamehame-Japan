@@ -6,6 +6,7 @@
 // sheet — change both together.
 
 import type { Lang } from "@/lib/i18n";
+import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 
 export interface LegalCopy {
   title: string;
@@ -23,7 +24,7 @@ export interface TermsCopy {
   sections: { heading: string; body: string[] }[];
 }
 
-export const LEGAL_UPDATED = "2026-10-09";
+export const LEGAL_UPDATED = "2026-10-13";
 
 const OPERATOR = { ja: "Prosent Inc.", en: "Prosent Inc." };
 const ADDRESS_JA = "〒104-0054 東京都中央区勝どき1-3-1 43F";
@@ -182,10 +183,26 @@ const TITLES: Record<Lang, { legal: string; terms: string }> = {
 /** Japanese and English are written; the other locales show the English
  *  text under their own title until a native review exists. */
 export function legalFor(lang: Lang): LegalCopy {
-  if (lang === "ja") return LEGAL_JA;
-  return { ...LEGAL_EN, title: TITLES[lang].legal };
+  const base = lang === "ja" ? LEGAL_JA : LEGAL_EN;
+  const golf = golfTerms(lang);
+  return { ...base, title: TITLES[lang].legal, rows: base.rows.map(([label, body], i) => [label,
+    [11, 13, 14].includes(i) ? `${body} ${golf}` : i === 16 ? transportCopy(body, lang) : body,
+  ]) };
 }
 export function termsFor(lang: Lang): TermsCopy {
-  if (lang === "ja") return TERMS_JA;
-  return { ...TERMS_EN, title: TITLES[lang].terms };
+  const base = lang === "ja" ? TERMS_JA : TERMS_EN;
+  return { ...base, title: TITLES[lang].terms, sections: base.sections.map((s, i) => ({ ...s,
+    body: i === 0 ? s.body.map(b => transportCopy(b, lang)) : [1,2,3].includes(i) ? [...s.body, golfTerms(lang)] : s.body,
+  })) };
+}
+
+function golfTerms(lang: Lang) {
+  const c = GOLF_BOOKING_COPY[lang === "ja" ? "ja" : "en"];
+  return lang === "ja"
+    ? `プライベートゴルフは上記と異なり、次の条件が適用されます。${c.arrange} ${c.protection} お支払い時点から、ゴルフの体験ページおよび決済案内に記載した取消条件が適用されます。手配不可の場合は全額返金、天候によるコース閉鎖の場合は既発生費用を差し引いて返金します。`
+    : `For private golf, the following specific conditions apply instead: ${c.arrange} ${c.protection} The cancellation conditions on the golf page and in the payment proposal apply from payment. Failure to arrange a suitable course results in a full refund; weather-related course closure is refunded less costs already incurred.`;
+}
+function transportCopy(body: string, lang: Lang) {
+  return lang === "ja" ? body.replace(/体験はいずれも現地集合・現地解散(?:で、送迎は含まれません|です)。/, "プライベートゴルフは体験ページに記載のホテル送迎を含みます。他の体験は、個別に記載がない限り現地集合・現地解散です。")
+    : body.replace(/Every experience meets and ends on site(?:; transfers are not included)?\./, "Private golf includes the hotel transfers stated on its experience page. Other experiences meet and end on site unless specifically stated otherwise.");
 }

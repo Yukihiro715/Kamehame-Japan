@@ -4,7 +4,7 @@
 //
 // Uses the STRIPE_READ_KEY Worker secret: a *restricted* key with read access
 // to Checkout Sessions only. It cannot charge, refund or change anything.
-// Without the key the page still confirms the payment, just without the amount.
+// Without the key the page does not announce a verified payment.
 
 async function readKey(): Promise<string | undefined> {
   try {

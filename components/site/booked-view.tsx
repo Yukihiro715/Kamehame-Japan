@@ -7,6 +7,7 @@ import { track } from "@/lib/analytics";
 import { acceptedExplicitly } from "@/lib/consent";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { LANGS, t, type Lang } from "@/lib/i18n";
+import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 import { yen } from "@/lib/pricing";
 
 interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: string; email?: string; error?: string; items?: { name: string; quantity: number; amount: number }[]; reference?: string }
@@ -18,10 +19,9 @@ interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: stri
 export function BookedView({ lang }: { lang: Lang }) {
   const K = t(lang).booked;
   const [amount, setAmount] = useState<string>();
-  // Rendered as "confirmed" only once a checkout session id is seen in the
-  // browser. Without one (a crawler, a shared link, a typed URL) the page
-  // explains what it is instead of announcing a payment that did not happen.
+  // Announce receipt only after Stripe confirms that this session is paid.
   const [confirmed, setConfirmed] = useState(false);
+  const [golf, setGolf] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -44,9 +44,7 @@ export function BookedView({ lang }: { lang: Lang }) {
 
     let cancelled = false;
     (async () => {
-      // A well-formed session id is enough to show the confirmation; the
-      // lookup below only adds the amount and reports the conversion.
-      setConfirmed(true);
+
       let data: Lookup = { ok: false };
       try { data = (await (await fetch(`/api/booking?session_id=${encodeURIComponent(id)}${acceptedExplicitly() ? "&email=1" : ""}`)).json()) as Lookup; } catch { /* offline */ }
       if (cancelled) return;
@@ -54,6 +52,8 @@ export function BookedView({ lang }: { lang: Lang }) {
       // Only a payment Stripe confirms as paid counts: a made-up or mistyped
       // session_id must never become a conversion.
       if (!data.ok || !data.paid) return;
+      setConfirmed(true);
+      setGolf((data.items ?? []).some((it) => /golf|ゴルフ|高爾夫/i.test(it.name)));
       const flag = `kh-paid-${id}`;
       try { if (localStorage.getItem(flag)) return; localStorage.setItem(flag, "1"); } catch { /* private mode */ }
       const paid = {
@@ -93,14 +93,15 @@ export function BookedView({ lang }: { lang: Lang }) {
     <div className="thanks">
       <div className="thanks-head">
         <span className="thanks-check" aria-hidden="true"><Check size={34} strokeWidth={3} /></span>
-        <h1>{K.h}</h1>
-        <p>{amount ? K.leadAmount(amount) : K.lead}</p>
+        <h1>{golf ? GOLF_BOOKING_COPY[lang].paidH : K.h}</h1>
+        <p>{golf ? GOLF_BOOKING_COPY[lang].paid : amount ? K.leadAmount(amount) : K.lead}</p>
+        {golf && amount && <p>{amount}</p>}
       </div>
       <section className="thanks-card">
         <h2>{K.nextH}</h2>
         <ol className="thanks-steps">
           <li><Receipt size={18} /><span>{K.stepReceipt}</span></li>
-          <li><MapPin size={18} /><span>{K.stepConfirm}</span></li>
+          <li><MapPin size={18} /><span>{golf ? GOLF_BOOKING_COPY[lang].arrange : K.stepConfirm}</span></li>
           <li><Mail size={18} /><span>{K.stepHelp(CONTACT_EMAIL)}</span></li>
         </ol>
       </section>

@@ -19,7 +19,7 @@ export interface PrivacyCopy {
   };
 }
 
-const UPDATED = "2026-09-29";
+const UPDATED = "2026-10-13";
 
 const PRIVACY: Record<Lang, PrivacyCopy> = {
   en: {
@@ -418,5 +418,12 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
   },
 };
 
-export const privacyFor = (lang: Lang) => PRIVACY[lang];
+const BOOKING_MAIL = {
+  en: { heading: "Booking emails and payments", body: ["We use Resend to deliver booking emails, Google services to manage correspondence and booking records, and Stripe to process payments. We may record delivery errors, email-image loads and clicks on payment links, and match completed payments to your booking reference. This helps us check whether payment instructions reach you and follow up on your arrangements. Opens and clicks are approximate: email privacy features and security scanners can affect them. Our booking ledger does not store click IP addresses or browser identifiers. These records follow the enquiry retention period above. Contact hello@kamehame-japan.com with questions or to request another way to communicate."] },
+  ja: { heading: "予約メールと決済の記録", body: ["予約メールの配信にResend、メール対応・予約台帳の管理にGoogleのサービス、決済にStripeを使用します。支払い案内のお届け状況と手配を確認するため、配達エラー、メール内画像の読込、決済リンクのクリックを記録し、入金を案件番号と照合する場合があります。開封・クリックはメールアプリの保護機能やセキュリティスキャンの影響を受ける参考値です。予約台帳にはクリック時のIPアドレスやブラウザー識別情報を保存しません。保存期間は上記のお問い合わせ情報と同じです。ご質問や別の連絡方法をご希望の場合はhello@kamehame-japan.comへご連絡ください。"] },
+  es: { heading: "Correos de reserva y pagos", body: ["Utilizamos Resend para enviar correos, servicios de Google para gestionar la correspondencia y las reservas, y Stripe para los pagos. Podemos registrar errores de entrega, cargas de imágenes y clics en enlaces de pago, y asociar los pagos a su referencia de reserva para dar seguimiento a los preparativos. Las aperturas y los clics son aproximados por las funciones de privacidad y los escáneres de seguridad. El registro de reservas no guarda direcciones IP ni identificadores del navegador de los clics. Se aplica el plazo de conservación de consultas indicado arriba. Para consultas u otra forma de contacto, escriba a hello@kamehame-japan.com."] },
+  fr: { heading: "E-mails de réservation et paiements", body: ["Nous utilisons Resend pour les e-mails, les services Google pour la correspondance et les dossiers de réservation, et Stripe pour les paiements. Nous pouvons enregistrer les erreurs de distribution, les chargements d’images et les clics sur les liens de paiement, et rapprocher les paiements de votre référence de réservation afin de suivre les préparatifs. Les ouvertures et clics sont indicatifs, car les protections de confidentialité et les scanners de sécurité peuvent les modifier. Notre registre ne conserve pas les adresses IP ni les identifiants de navigateur des clics. La durée de conservation des demandes indiquée ci-dessus s’applique. Pour toute question ou un autre moyen de contact : hello@kamehame-japan.com."] },
+  "zh-tw": { heading: "預約郵件與付款紀錄", body: ["我們使用Resend寄送預約郵件、Google服務管理往來郵件與預約紀錄，並透過Stripe處理付款。為確認付款通知的寄達情況及後續安排，我們可能記錄寄送錯誤、郵件圖片載入及付款連結點擊，並以案件編號核對付款。開信與點擊僅為參考，可能受郵件隱私功能及安全掃描影響。預約台帳不儲存點擊時的IP位址或瀏覽器識別資訊。保存期限與上述詢問資料相同。如有疑問或希望改用其他聯絡方式，請聯絡hello@kamehame-japan.com。"] },
+} satisfies Record<Lang, { heading: string; body: string[] }>;
+export const privacyFor = (lang: Lang): PrivacyCopy => ({ ...PRIVACY[lang], sections: [...PRIVACY[lang].sections, BOOKING_MAIL[lang]] });
 export const privacyUpdated = UPDATED;
