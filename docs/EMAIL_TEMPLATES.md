@@ -1,6 +1,6 @@
 # 問い合わせ対応メールのテンプレート
 
-フォーム送信時の自動返信(①)はサイトが自動で送ります(`lib/mail-copy.ts`、5言語)。その15分後に、担当者(ゆきひろ)名義の自動フォローアップ(①′:「担当になりました。コース/日程を手配中、ご案内と支払い方法をお待ちください」)が同じ hello@ から同じ件名で送られます(Resend の送信予約。取引先の問い合わせには送りません)。自動返信・フォローアップ・hello@ に届く社内通知は同じ件名(お客様の言語、例: Your request — Private Golf Day from Tokyo · 2026-11-16 07:00 — KAMEHAME JAPAN)なので、社内通知にそのまま返信すればお客様側で1本のスレッドになります。件名の差し替えは不要。hello@ に届く社内通知メールは日本語で(`lib/notification.ts`)、Slack 通知にも同じ全文が付きます。記録は台帳(docs/LEDGER_SYNC.md)に自動登録されるので、他の受信箱へのコピーは送りません(ARCHIVE_TO は未設定)。お客様が入力した欄(備考・クラブの希望・お迎え場所など)は原文のすぐ下に「(日本語訳)」を付けます(Cloudflare Workers AI の自動翻訳、`lib/translate.ts`。失敗時は「自動翻訳できませんでした」と表示)。末尾にお客様へ送った自動返信の全文と送信状況(送信済み/未送信)を付けています。フォームの全項目(ゴルフ:エリア・コース・日程と出発時刻・人数・経験とハンディ・各ゴルファーのレンタルと利き手・クラブの希望・お迎え場所またはホテル未定とエリア・WhatsApp・オプション・備考/一般:プラン・日程と時間・人数・通訳・オプション・概算・備考)が通知に入ることを 2026-10-10 に確認済み。
+メールの署名は全メール共通(英語: Best regards, Yukihiro / KAMEHAME JAPAN | Prosent Inc. / hello@ / ◆About our company…。`lib/mail-copy.ts` の SIGN に5言語分)。フォーム送信時の自動返信(①)はサイトが自動で送ります(`lib/mail-copy.ts`、5言語)。その15分後に、担当者(ゆきひろ)名義の自動フォローアップ(①′:「担当になりました。コース/日程を手配中、ご案内と支払い方法をお待ちください」)が同じ hello@ から同じ件名で送られます(Resend の送信予約。取引先の問い合わせには送りません)。自動返信・フォローアップ・hello@ に届く社内通知は同じ件名(お客様の言語、例: Your request — Private Golf Day from Tokyo · 2026-11-16 07:00 — KAMEHAME JAPAN)なので、社内通知にそのまま返信すればお客様側で1本のスレッドになります。件名の差し替えは不要。hello@ に届く社内通知メールは日本語で(`lib/notification.ts`)、Slack 通知にも同じ全文が付きます。記録は台帳(docs/LEDGER_SYNC.md)に自動登録されるので、他の受信箱へのコピーは送りません(ARCHIVE_TO は未設定)。お客様が入力した欄(備考・クラブの希望・お迎え場所など)は原文のすぐ下に「(日本語訳)」を付けます(Cloudflare Workers AI の自動翻訳、`lib/translate.ts`。失敗時は「自動翻訳できませんでした」と表示)。末尾にお客様へ送った自動返信の全文と送信状況(送信済み/未送信)を付けています。フォームの全項目(ゴルフ:エリア・コース・日程と出発時刻・人数・経験とハンディ・各ゴルファーのレンタルと利き手・クラブの希望・お迎え場所またはホテル未定とエリア・WhatsApp・オプション・備考/一般:プラン・日程と時間・人数・通訳・オプション・概算・備考)が通知に入ることを 2026-10-10 に確認済み。
 ここにあるのは、担当者が hello@kamehame-japan.com から**手で送る**メールです。
 英語が本文、日本語は担当者向けの対訳です。`{ }` の箇所を置き換えて送ってください。
 
@@ -64,10 +64,18 @@ As soon as the payment is in, we arrange your evening with the house and send yo
 
 Anything we should pass on to the kitchen or the house (allergies, a birthday)? Just reply to this email.
 
-Warm regards,
-{your name}
-KAMEHAME JAPAN · Prosent Inc.
+-----
+Best regards,
+Yukihiro
+KAMEHAME JAPAN | Prosent Inc.
 hello@kamehame-japan.com
+
+◆About our company
+KAMEHAME JAPAN launched in September 2026 and is operated by Prosent Inc. We also operate Mimipo for Travel, an online medical consultation service for international visitors, in partnership with over 3,500 hotels across Japan.
+
+Our experience supporting visitors throughout Japan is at the heart of the care we bring to every KAMEHAME JAPAN experience.
+
+Mimipo for Travel: https://travel.mimipo.jp/
 ```
 
 **日本語対訳(担当者用)**
@@ -101,10 +109,18 @@ Reply with the one you prefer (or another date, and we will check it) and I will
 
 If none of these fit, I completely understand — and if you would like a hand with a different experience in Kyoto or Tokyo, just say so.
 
-Warm regards,
-{your name}
-KAMEHAME JAPAN · Prosent Inc.
+-----
+Best regards,
+Yukihiro
+KAMEHAME JAPAN | Prosent Inc.
 hello@kamehame-japan.com
+
+◆About our company
+KAMEHAME JAPAN launched in September 2026 and is operated by Prosent Inc. We also operate Mimipo for Travel, an online medical consultation service for international visitors, in partnership with over 3,500 hotels across Japan.
+
+Our experience supporting visitors throughout Japan is at the heart of the care we bring to every KAMEHAME JAPAN experience.
+
+Mimipo for Travel: https://travel.mimipo.jp/
 ```
 
 **日本語対訳**
@@ -354,10 +370,18 @@ Thank you for your request. We are now checking courses in the Mt. Fuji region f
 
 You will have the proposed course, tee time and final price {today or tomorrow / by {day}}. Nothing is charged until you have seen them and decided to go ahead.
 
-Warm regards,
-{your name}
-KAMEHAME JAPAN · Prosent Inc.
+-----
+Best regards,
+Yukihiro
+KAMEHAME JAPAN | Prosent Inc.
 hello@kamehame-japan.com
+
+◆About our company
+KAMEHAME JAPAN launched in September 2026 and is operated by Prosent Inc. We also operate Mimipo for Travel, an online medical consultation service for international visitors, in partnership with over 3,500 hotels across Japan.
+
+Our experience supporting visitors throughout Japan is at the heart of the care we bring to every KAMEHAME JAPAN experience.
+
+Mimipo for Travel: https://travel.mimipo.jp/
 ```
 
 ### G-1. 提携先への照会(日本語・担当者が送る)
@@ -402,10 +426,18 @@ Within one business day you receive your confirmation with the meeting point in 
 
 Could you also reply with your hotel's name, both golfers' full names (and whether either of you plays left-handed), and a mobile number for the day? Before or after paying — either is fine.
 
-Warm regards,
-{your name}
-KAMEHAME JAPAN · Prosent Inc.
+-----
+Best regards,
+Yukihiro
+KAMEHAME JAPAN | Prosent Inc.
 hello@kamehame-japan.com
+
+◆About our company
+KAMEHAME JAPAN launched in September 2026 and is operated by Prosent Inc. We also operate Mimipo for Travel, an online medical consultation service for international visitors, in partnership with over 3,500 hotels across Japan.
+
+Our experience supporting visitors throughout Japan is at the heart of the care we bring to every KAMEHAME JAPAN experience.
+
+Mimipo for Travel: https://travel.mimipo.jp/
 ```
 
 **日本語対訳(担当者用)**
