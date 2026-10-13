@@ -5,7 +5,7 @@
  */
 var JOB_SHEET = 'メール自動化管理';
 var LOG_SHEET = 'メール配信ログ';
-var JOB_HEADERS = ['案件ID','リクエストID','お客様名','メール','体験日','送信区分','状態','送信予定','手動判定理由','受付メールID','支払いメールID','15分メールID','手動停止','配達日時','開封日時（参考）','決済リンククリック日時（参考）','配達エラー','入金日時','入金額','最終エラー','内部データ'];
+var JOB_HEADERS = ['案件ID','リクエストID','お客様名','メール','体験日','送信区分','状態','送信予定','手動判定理由','受付メールID','支払いメールID','15分メールID','手動停止','配達日時','開封日時（参考）','決済リンククリック日時（参考）','配達エラー','入金日時','入金額','最終エラー','内部データ','割引前金額','割引額','使用プロモーションコード／ID'];
 var LOG_HEADERS = ['イベントID','案件ID','メールID','メール種別','イベント','発生日時','決済セッションID','備考'];
 function props_() { return PropertiesService.getScriptProperties(); }
 function book_() { return SpreadsheetApp.openById(props_().getProperty('SPREADSHEET_ID')); }
@@ -20,7 +20,7 @@ function sheet_(name, headers) {
 function literal_(x) { return typeof x === 'string' && /^[=+@-]/.test(x) ? "'" + x : x; }
 function saveJob_(j, row) {
   var s = sheet_(JOB_SHEET, JOB_HEADERS), a=j.audit || {};
-  var values=[j.id,j.requestId,j.enquiry.name,j.enquiry.email,j.enquiry.dates,j.mode,j.status,j.dueAt,j.reason||'',j.ackId||'',j.paymentId||'',j.introId||'',j.stop||'',a.delivered||'',a.opened||'',a.clicked||'',a.bounce||'',j.paidAt||'',j.paidAmount||'',j.error||'',JSON.stringify(j)];
+  var values=[j.id,j.requestId,j.enquiry.name,j.enquiry.email,j.enquiry.dates,j.mode,j.status,j.dueAt,j.reason||'',j.ackId||'',j.paymentId||'',j.introId||'',j.stop||'',a.delivered||'',a.opened||'',a.clicked||'',a.bounce||'',j.paidAt||'',j.paidAmount||'',j.error||'',JSON.stringify(j),j.paidSubtotal===undefined?'':j.paidSubtotal,j.paidDiscount===undefined?'':j.paidDiscount,j.paidDiscountReference||''];
   s.getRange(row,1,1,values.length).setValues([values.map(literal_)]);
   SpreadsheetApp.flush();
 }
@@ -201,9 +201,11 @@ function event_(p) {
     note='非同期決済が失敗。お客様への支払い方法確認が必要';
   } else if(provider==='stripe'&&['checkout.session.completed','checkout.session.async_payment_succeeded'].indexOf(v.type)>=0) {
     if(session.payment_status!=='paid')note='決済手続き完了・入金待ち';
-    else if(!j.paymentId||session.payment_link!==j.paymentLinkId||session.currency!=='jpy'||session.amount_total!==j.expectedAmount||session.livemode!==true){note='金額・決済リンク・モード不一致。要手動照合';}
+    else if(!j.paymentId||session.payment_link!==j.paymentLinkId||session.currency!=='jpy'||!validPaidAmount_(session,j.expectedAmount)||session.livemode!==true){note='割引前金額・割引内訳・決済リンク・モード不一致。要手動照合';}
     else if(j.paidSession&&j.paidSession!==session.id){note='重複決済の可能性・要確認';}
     else {j.paidSession=session.id;j.paidAt=j.paidAt||at;j.paidAmount=session.amount_total;j.stop='入金済み';
+      j.paidSubtotal=session.amount_subtotal;j.paidDiscount=session.total_details.amount_discount;
+      j.paidDiscountReference=discountReference_(session);
       upsert_('予約一覧',j.id,{'対応ステータス':'入金済・手配待ち','支払い状況':'入金済','入金額':j.paidAmount,'支払日':new Date(j.paidAt),'次のアクション':'入金から24時間以内にコース・スタート時刻をご案内'});
       upsert_('決済・連絡管理',j.id,{'入金確認日時':new Date(j.paidAt),'Stripe決済ID':session.id,'リマインド運用':'停止','停止・保留理由':'入金済み'});
       note='入金確認。24時間以内に手配結果を案内してください';
@@ -213,6 +215,23 @@ function event_(p) {
   if(note)notify_(j,x.row,eventId,note);
   s.appendRow([eventId,j.id,data.email_id||'',provider==='stripe'?'payment':kind,v.type,at,session.id||'',note].map(literal_));
   return {ok:true};
+}
+/** Only signed Stripe amounts reach here. Fixed JPY packages have no extra tax/shipping.
+ * Free/100%-off sessions remain manual; missing detail never means zero discount. */
+function validPaidAmount_(s,expected) {
+  var t=s.total_details;
+  return typeof s.id==='string'&&/^cs_/.test(s.id)&&t&&
+    [expected,s.amount_subtotal,s.amount_total,t.amount_discount,t.amount_tax,t.amount_shipping].every(function(n){return Number.isSafeInteger(n)&&n>=0;})&&
+    expected>0&&s.amount_subtotal===expected&&s.amount_total>0&&
+    t.amount_tax===0&&t.amount_shipping===0&&t.amount_discount<expected&&
+    s.amount_total===expected-t.amount_discount;
+}
+function discountReference_(s) {
+  var refs=(Array.isArray(s.discounts)?s.discounts:[]).map(function(d){
+    var r=d&&(d.promotion_code||d.coupon);
+    return typeof r==='string'?r:r&&(r.code?r.code+(r.id?' ('+r.id+')':''):r.id)||'';
+  }).filter(Boolean);
+  return refs.join(', ')||(s.total_details.amount_discount>0?'コード未取得（Stripe決済IDで確認）':'');
 }
 /** Run only after the documented configuration and dry-run tests. This function
  * creates the minute trigger; it does not turn live sends on automatically. */

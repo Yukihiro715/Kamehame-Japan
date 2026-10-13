@@ -56,13 +56,24 @@ test("Stripe reconciliation is amount-bound, link-bound, live-only and idempoten
   const c=runtime(), rows=[], writes=[], j={...structuredClone(p),id:"KJ-261018-G11111111",paymentId:"mail-payment",expectedAmount:270000,paymentLinkId:"plink_example",audit:{}};
   c.jobs_=()=>[{job:j,row:2}];c.saveJob_=()=>{};c.notify_=()=>{};c.upsert_=(...a)=>writes.push(a);
   c.sheet_=()=>({getLastRow:()=>rows.length+1,getRange:()=>({getValues:()=>rows.map(r=>[r[0]])}),appendRow:r=>rows.push(r)});
-  const session={id:"cs_live_example",client_reference_id:j.id,payment_status:"paid",payment_link:"plink_example",currency:"jpy",amount_total:270000,livemode:true};
+  const session={id:"cs_live_example",client_reference_id:j.id,payment_status:"paid",payment_link:"plink_example",currency:"jpy",amount_subtotal:270000,amount_total:270000,total_details:{amount_discount:0,amount_shipping:0,amount_tax:0},livemode:true};
   const event=(id,patch={})=>({provider:"stripe",eventId:id,event:{type:"checkout.session.completed",created:clock/1000,data:{object:{...session,...patch}}}});
   c.event_(event("wrong",{amount_total:1}));assert.equal(j.paidAt,undefined);
   c.event_(event("test",{livemode:false}));assert.equal(j.paidAt,undefined);
   c.event_(event("right"));assert.equal(j.paidAmount,270000);assert.equal(writes.length,2);
   assert.equal(c.event_(event("right")).duplicate,true);assert.equal(writes.length,2);
   c.event_(event("another",{id:"cs_live_second"}));assert.equal(j.paidSession,"cs_live_example");
+});
+test("discount reconciliation checks original package price and records paid residual",()=>{
+  const s={id:"cs_live_discount",amount_subtotal:270000,amount_total:243000,total_details:{amount_discount:27000,amount_shipping:0,amount_tax:0},discounts:[{promotion_code:{id:"promo_example",code:"WELCOME10"}}]};
+  assert.equal(gas.validPaidAmount_(s,270000),true);
+  assert.equal(gas.discountReference_(s),"WELCOME10 (promo_example)");
+  assert.equal(gas.discountReference_({...s,discounts:[{promotion_code:"promo_example"}]}),"promo_example");
+  for(const patch of [{amount_subtotal:250000},{amount_total:242999},{amount_total:0,total_details:{amount_discount:270000,amount_shipping:0,amount_tax:0}},{total_details:undefined},{amount_total:"243000"},{amount_total:243000.5},{total_details:{amount_discount:-1,amount_shipping:0,amount_tax:0}},{total_details:{amount_discount:27000,amount_shipping:1,amount_tax:0}},{total_details:{amount_discount:27000,amount_shipping:0,amount_tax:1}}]) assert.ok(!gas.validPaidAmount_({...s,...patch},270000));
+  const c=runtime(),rows=[],j={...structuredClone(p),id:"KJ-261018-G11111111",paymentId:"mail",expectedAmount:270000,paymentLinkId:"plink_example"};
+  c.jobs_=()=>[{job:j,row:2}];c.saveJob_=()=>{};c.notify_=()=>{};c.upsert_=()=>{};c.sheet_=()=>({getLastRow:()=>rows.length+1,getRange:()=>({getValues:()=>rows.map(r=>[r[0]])}),appendRow:r=>rows.push(r)});
+  c.event_({provider:"stripe",eventId:"discount",event:{type:"checkout.session.completed",data:{object:{...s,client_reference_id:j.id,payment_status:"paid",payment_link:j.paymentLinkId,currency:"jpy",livemode:true}}}});
+  assert.equal(j.paidAmount,243000);assert.equal(j.paidSubtotal,270000);assert.equal(j.paidDiscount,27000);assert.equal(j.paidDiscountReference,"WELCOME10 (promo_example)");
 });
 test("Gmail ignores our automated messages and drafts, but detects staff and customer replies",()=>{
   const c=runtime(), j={...p,id:"KJ-261018-G11111111",createdAt:new Date(clock-60000).toISOString()};
@@ -106,4 +117,15 @@ test("Stripe HMAC accepts valid signatures, rejects mutations and future timesta
   assert.equal(await verifyWebhook("stripe",raw+" ",h,secret,clock),false);
   assert.equal(await verifyWebhook("stripe",raw,h,secret,clock-301000),false);
   assert.equal((await receiveWebhook("stripe",new Request("https://example.com",{method:"POST",body:raw}),{})).status,503);
+});
+test("signed Stripe webhook forwards discount fields but strips unrelated customer data",async()=>{
+  const ts=String(Math.floor(Date.now()/1000)),secret="whsec_test",originalFetch=globalThis.fetch;
+  const raw=JSON.stringify({id:"evt_discount",type:"checkout.session.completed",data:{object:{id:"cs_live_discount",client_reference_id:"KJ-261018-G11111111",payment_status:"paid",currency:"jpy",livemode:true,payment_link:"plink_example",amount_subtotal:270000,amount_total:243000,total_details:{amount_discount:27000,amount_tax:0,amount_shipping:0},discounts:[{promotion_code:{id:"promo_example",code:"WELCOME10",customer:"private"}}],customer_details:{email:"private@example.com"}}}});
+  let forwarded;globalThis.fetch=async(_url,init)=>{forwarded=JSON.parse(init.body);return Response.json({ok:true});};
+  try {
+    const sig=createHmac("sha256",secret).update(`${ts}.${raw}`).digest("hex");
+    const response=await receiveWebhook("stripe",new Request("https://example.com",{method:"POST",body:raw,headers:{"stripe-signature":`t=${ts},v1=${sig}`}}),{STRIPE_WEBHOOK_SECRET:secret,GOLF_AUTOMATION_TOKEN:"test",GOLF_AUTOMATION_URL:"https://script.google.com/macros/s/test/exec"});
+    assert.equal(response.status,200);const s=forwarded.event.data.object;
+    assert.equal(s.amount_subtotal,270000);assert.equal(s.total_details.amount_discount,27000);assert.deepEqual(s.discounts,[{promotion_code:{id:"promo_example",code:"WELCOME10"}}]);assert.equal(s.customer_details,undefined);
+  }finally{globalThis.fetch=originalFetch;}
 });

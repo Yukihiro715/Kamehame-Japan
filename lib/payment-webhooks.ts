@@ -55,7 +55,19 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
       if (!["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed"].includes(event.type)) return Response.json({ ok: true, ignored: true });
       const s = event.data.object;
       if (!s || !/^KJ-\d{6}-G[0-9a-f]{8}$/i.test(s.client_reference_id ?? "")) return Response.json({ ok: true, ignored: true });
-      event.data = { object: { id: s.id, client_reference_id: s.client_reference_id, payment_status: s.payment_status, payment_link: s.payment_link, currency: s.currency, amount_total: s.amount_total, livemode: s.livemode } };
+      const discountRef = (value: unknown) => {
+        if (typeof value === "string") return { id: value };
+        if (!value || typeof value !== "object") return undefined;
+        const ref = value as { id?: unknown; code?: unknown };
+        return { id: typeof ref.id === "string" ? ref.id : undefined, code: typeof ref.code === "string" ? ref.code : undefined };
+      };
+      event.data = { object: {
+        id: s.id, client_reference_id: s.client_reference_id, payment_status: s.payment_status,
+        payment_link: s.payment_link, currency: s.currency, amount_total: s.amount_total,
+        amount_subtotal: s.amount_subtotal, livemode: s.livemode,
+        total_details: s.total_details ? { amount_discount: s.total_details.amount_discount, amount_tax: s.total_details.amount_tax, amount_shipping: s.total_details.amount_shipping } : undefined,
+        discounts: Array.isArray(s.discounts) ? s.discounts.map((d: { promotion_code?: unknown; coupon?: unknown }) => ({ promotion_code: discountRef(d?.promotion_code), coupon: discountRef(d?.coupon) })) : undefined,
+      } };
     }
     const result = await fetch(env.GOLF_AUTOMATION_URL, { method: "POST", headers: { "content-type": "application/json" }, redirect: "follow", signal: AbortSignal.timeout(25000), body: JSON.stringify({ action: "event", token: env.GOLF_AUTOMATION_TOKEN, provider, eventId: `${provider}:${eventId}`, event }) });
     const data = result.ok ? await result.json() as { ok?: boolean } : null;
