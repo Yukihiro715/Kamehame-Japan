@@ -55,10 +55,12 @@ const FOLLOW_UP_MINUTES = 15;
 const RESEND = "https://api.resend.com";
 const headersFor = (key: string) => ({ Authorization: `Bearer ${key}`, "Content-Type": "application/json" });
 
-/** Schedules the follow-up on Resend (it holds the message and sends it at
- *  the time given). Returns the email id so it can be cancelled if the rest
- *  of the delivery fails, or null when scheduling did not work. */
-async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: string): Promise<string | null> {
+type ScheduledFollowUp = { id: string; scheduledAt: string };
+
+/** Keep the exact provider ID and send time with the internal notification,
+ *  so staff can cancel this follow-up after sending their own reply. */
+async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: string): Promise<ScheduledFollowUp | null> {
+  const scheduledAt = new Date(Date.now() + FOLLOW_UP_MINUTES * 60_000).toISOString();
   try {
     const res = await fetch(`${RESEND}/emails`, {
       method: "POST",
@@ -69,13 +71,13 @@ async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: 
         reply_to: REPLY,
         subject,
         text,
-        scheduled_at: new Date(Date.now() + FOLLOW_UP_MINUTES * 60_000).toISOString(),
+        scheduled_at: scheduledAt,
         tags: [{ name: "kind", value: "follow-up" }],
       }),
     });
     if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const { id } = (await res.json()) as { id?: string };
-    return id ?? null;
+    return id ? { id, scheduledAt } : null;
   } catch (err) {
     console.error("contact: follow-up scheduling failed", err);
     return null;
@@ -100,7 +102,7 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
   const jaName = jaTitle(e);
   const later = e.kind === "guest" ? followUp(e, title) : null;
-  const scheduledId = later ? await scheduleFollowUp(key, e, later.subject, later.text) : null;
+  const scheduled = later ? await scheduleFollowUp(key, e, later.subject, later.text) : null;
   const res = await fetch(`${RESEND}/emails/batch`, {
     method: "POST",
     headers: headersFor(key),
@@ -110,7 +112,7 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
         to,
         reply_to: `${safeName} <${e.email}>`,
         subject: threadSubject(e, title),
-        text: notificationBody(e, jaName, { ack, ja, followUp: later ? { text: later.text, scheduled: !!scheduledId, delayMinutes: FOLLOW_UP_MINUTES } : null }),
+        text: notificationBody(e, jaName, { ack, ja, followUp: later ? { text: later.text, scheduled: !!scheduled, delayMinutes: FOLLOW_UP_MINUTES, emailId: scheduled?.id, scheduledAt: scheduled?.scheduledAt } : null }),
         tags: [{ name: "kind", value: e.kind }],
       },
       {
@@ -125,10 +127,10 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
   });
   if (!res.ok) {
     // No acknowledgement went out, so the follow-up must not go out either.
-    if (scheduledId) await cancelScheduled(key, scheduledId);
+    if (scheduled) await cancelScheduled(key, scheduled.id);
     throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
   }
-  return { followUpScheduled: !!scheduledId };
+  return { followUpScheduled: !!scheduled };
 }
 
 const MAX = {

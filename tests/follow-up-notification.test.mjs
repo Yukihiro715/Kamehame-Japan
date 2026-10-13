@@ -1,0 +1,99 @@
+import assert from "node:assert/strict";
+import test, { after } from "node:test";
+import { fileURLToPath } from "node:url";
+import { createServer } from "vite";
+
+const root = fileURLToPath(new URL("..", import.meta.url));
+const vite = await createServer({
+  appType: "custom",
+  configFile: false,
+  root,
+  resolve: { alias: { "@": root } },
+  plugins: [{
+    name: "mock-mail-bindings",
+    enforce: "pre",
+    resolveId(id) {
+      if (id === "cloudflare:workers" || id === "cloudflare:email") return `\0test:${id}`;
+    },
+    load(id) {
+      if (id === "\0test:cloudflare:workers") return 'export const env = { CONTACT_TO: "team@example.com", RESEND_API_KEY: "test-only-not-a-key" };';
+      if (id === "\0test:cloudflare:email") return "export class EmailMessage {}";
+    },
+  }],
+  server: { middlewareMode: true },
+});
+after(() => vite.close());
+
+const { POST } = await vite.ssrLoadModule("/app/api/contact/route.ts");
+const { notificationBody } = await vite.ssrLoadModule("/lib/notification.ts");
+const enquiry = {
+  kind: "guest", name: "Example Guest", email: "guest@example.com", lang: "en",
+  dates: "2026-11-18 07:00", party: "4", message: "Please arrange this experience.",
+};
+const emailId = "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794";
+const adminUrl = `https://resend.com/emails/${emailId}`;
+
+async function submit(t, overrides = {}, scheduleFails = false) {
+  const calls = [];
+  t.mock.method(globalThis, "fetch", async (url, init) => {
+    const body = JSON.parse(init.body);
+    calls.push({ url, body });
+    if (url === "https://api.resend.com/emails") {
+      return scheduleFails ? new Response("Scheduling unavailable", { status: 503 }) : Response.json({ id: emailId });
+    }
+    assert.equal(url, "https://api.resend.com/emails/batch");
+    return Response.json({ data: [{ id: "internal" }, { id: "ack" }] });
+  });
+  t.mock.method(console, "error", () => {});
+  const response = await POST(new Request("https://kamehame-japan.com/api/contact", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...enquiry, ...overrides }),
+  }));
+  assert.equal(response.status, 200);
+  return calls;
+}
+
+test("the internal stop link addresses exactly the scheduled follow-up; customer copy has none", async (t) => {
+  const calls = await submit(t);
+  assert.equal(calls.length, 2);
+  const scheduled = calls[0].body;
+  const [internal, ack] = calls[1].body;
+  assert.deepEqual(scheduled.to, [enquiry.email]);
+  assert.deepEqual(internal.to, ["team@example.com"]);
+  assert.ok(internal.text.includes(adminUrl));
+  assert.ok(internal.text.includes(`対象: ${enquiry.name} <${enquiry.email}> / ${enquiry.dates}`));
+  const jst = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+  }).format(new Date(scheduled.scheduled_at));
+  assert.ok(internal.text.includes(`${jst}（日本時間）`));
+  assert.match(internal.text, /Cancel schedule/);
+  assert.match(internal.text, /Gmailで返信しても自動停止しません/);
+  assert.doesNotMatch(ack.text, /resend\.com|フォローアップ管理ID|Cancel schedule/);
+  assert.doesNotMatch(scheduled.text, /resend\.com|フォローアップ管理ID|Cancel schedule/);
+});
+
+test("failed scheduling keeps the acknowledgement but does not offer a stop link", async (t) => {
+  const calls = await submit(t, {}, true);
+  const [internal] = calls[1].body;
+  assert.match(internal.text, /自動送信できていません/);
+  assert.doesNotMatch(internal.text, /停止・状況確認|フォローアップ管理ID/);
+});
+
+test("trade enquiries do not schedule a guest follow-up or show its controls", async (t) => {
+  const calls = await submit(t, { kind: "trade" });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, "https://api.resend.com/emails/batch");
+  assert.doesNotMatch(calls[0].body[0].text, /停止・状況確認|フォローアップ管理ID/);
+});
+
+test("malformed provider IDs and missing schedules do not create management links", () => {
+  for (const followUp of [
+    null,
+    { text: "follow-up", scheduled: false, delayMinutes: 15, emailId },
+    { text: "follow-up", scheduled: true, delayMinutes: 15, emailId: "../other?email=guest@example.com" },
+  ]) {
+    const text = notificationBody(enquiry, undefined, { followUp });
+    assert.doesNotMatch(text, /停止・状況確認|フォローアップ管理ID/);
+  }
+});
