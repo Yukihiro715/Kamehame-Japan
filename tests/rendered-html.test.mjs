@@ -207,6 +207,42 @@ test("kendo, bushido, tea ceremony and the kendo tours: preview pages that never
   assert.equal((await render("/en/himeji/")).status, 404, "no Himeji city page without a live experience");
 });
 
+test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages that never name the partners", async () => {
+  const pages = [
+    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥40,000"],
+    ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥33,000"],
+    ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥18,500"],
+    ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥12,000"],
+    ["/en/tokyo/tokyo-ninja-zen-meditation/", "Ninja Zen Meditation in Tokyo: Breathing, Hand Seals and Stillness", "¥30,000"],
+    ["/en/kyoto/arashiyama-ninja-experience/", "Ninja Experience in Arashiyama, Kyoto: Blowpipe, Shuriken and Hand Seals", "¥7,000"],
+    ["/en/kyoto/arashiyama-stone-mill-matcha/", "Stone-Mill Matcha Grinding in Arashiyama, Kyoto", "¥5,000"],
+    ["/en/kyoto/arashiyama-japanese-knife-workshop/", "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto", "¥15,000"],
+    ["/en/kyoto/arashiyama-shuriken-casting/", "Cast Your Own Metal Shuriken in Arashiyama, Kyoto", "¥8,000"],
+  ];
+  const partners = /Trip in real Japan|TRJK|trjk|Rojicoya|Hiryu|Musashi|Jimbo|Kikkoman|Cocoro|Kokoro Dining|Kanariya|Eiraku|Koraku|Ichirin|Shiden|Kenbukai|El Sophia|Okimoto|シーズ|ninja-idea|Tamura|田村|Ninja Sanctuary|Bamboo Sky|Arashiyama Square|Sagatenryuji|Susukinobaba|Viyago|Ramen Dojo/i;
+  for (const [path, title, price] of pages) {
+    const res = await render(path);
+    assert.equal(res.status, 200, path);
+    const html = await res.text();
+    const text = html.replace(/<[^>]+>/g, " ");
+    assert.ok(text.includes(title), `title on ${path}`);
+    assert.ok(text.includes(price), `price on ${path}`);
+    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
+    assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
+    // the Japanese page is written; the other locales fall back to the English text so the URL resolves
+    for (const lang of ["ja", "es", "fr", "zh-tw"]) {
+      const alt = await render(path.replace("/en/", `/${lang}/`));
+      assert.equal(alt.status, 200, `${lang} ${path}`);
+      const altHtml = await alt.text();
+      assert.doesNotMatch(altHtml, partners, `partner names stay private on ${lang} ${path}`);
+      if (lang === "ja") assert.ok(altHtml.includes("プレビュー — このページはまだ公開していません") && !altHtml.includes(title), `Japanese text on ${path}`);
+    }
+  }
+  const home = await (await render("/en/")).text();
+  assert.ok(!home.includes('href="/en/samurai/"') && !home.includes('href="/en/ninja/"'), "the new themes are not listed while in preview");
+  assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
+});
+
 test("group-priced page: facts under the photos, per-person headline with the group total", async () => {
   const html = await (await render("/en/kyoto/evening-with-geiko/")).text();
   const h1 = html.indexOf("<h1"), gallery = html.indexOf('class="gallery-bar"'), chips = html.indexOf('class="xp-conditions"');

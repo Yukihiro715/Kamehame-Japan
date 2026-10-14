@@ -26,6 +26,16 @@ CC BY / CC BY-SA images require this attribution to be retained wherever the ima
 | `public/images/exp-sumo.jpg` | [Sumo stable training, Tokyo 2014-08-19.jpg](https://commons.wikimedia.org/wiki/File:Sumo_stable_training,_Tokyo_2014-08-19.jpg) | tjabeljan | CC BY 2.0 |
 | `public/images/exp-sushi.jpg` | [Sushi Masa by Ki-setsu Interior Omakase Counter.jpg](https://commons.wikimedia.org/wiki/File:Sushi_Masa_by_Ki-setsu_Interior_Omakase_Counter.jpg) | Bobby.Creations | CC BY 4.0 |
 | `public/images/tour-journey.jpg` | [Torii path with lantern at Fushimi Inari Taisha Shrine, Kyoto, Japan.jpg](https://commons.wikimedia.org/wiki/File:Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg) | Basile Morin | CC BY-SA 4.0 |
+| `public/images/samurai-walk-performers.jpg` | [Nagoya Omotenashi Busho-tai 20120520.jpg](https://commons.wikimedia.org/wiki/File:Nagoya_Omotenashi_Busho-tai_20120520.jpg) | KAMUI | CC BY-SA 3.0 |
+| `public/images/samurai-senju-street.jpg` | [Senjushuku -01.jpg](https://commons.wikimedia.org/wiki/File:Senjushuku_-01.jpg) | Aimaimyi | CC BY-SA 3.0 |
+| `public/images/samurai-sword-practice.jpg` | [Yoyogi Sword Fighting 9-4-2005 3-11-37 PM (491125471).jpg](https://commons.wikimedia.org/wiki/File:Yoyogi_Sword_Fighting_9-4-2005_3-11-37_PM_(491125471).jpg) | Colin McMillen | CC BY 2.0 |
+| `public/images/tate-kata-performance.jpg` | [Kata performance.jpg](https://commons.wikimedia.org/wiki/File:Kata_performance.jpg) | Jeff Nelson (Stormwarning Photography) | CC BY-SA 2.0 |
+| `public/images/rakugo-stage.jpg` | [第6回全日本学生落語選手権「策伝大賞」 (3309679401).jpg](https://commons.wikimedia.org/wiki/File:%E7%AC%AC6%E5%9B%9E%E5%85%A8%E6%97%A5%E6%9C%AC%E5%AD%A6%E7%94%9F%E8%90%BD%E8%AA%9E%E9%81%B8%E6%89%8B%E6%A8%A9%E3%80%8C%E7%AD%96%E4%BC%9D%E5%A4%A7%E8%B3%9E%E3%80%8D_(3309679401).jpg) | Yuya Tamai | CC BY 2.0 |
+| `public/images/asakusa-kaminarimon.jpg` | [Tour group in front of Kaminarimon, Senso-ji (3812578579).jpg](https://commons.wikimedia.org/wiki/File:Tour_group_in_front_of_Kaminarimon,_Senso-ji_(3812578579).jpg) | Andrea Schaffer | CC BY 2.0 |
+| `public/images/cooking-sushi-lesson.jpg` | [US Navy 070123-N-3390M-001 … making Sushi rolls ….jpg](https://commons.wikimedia.org/wiki/File:US_Navy_070123-N-3390M-001_Naval_Station_Everett%27s_Liberty_programs_offered_cooking_lessons_to_Sailors_interested_in_the_art_of_making_Sushi_rolls_as_part_of_their_single_Sailors_program.jpg) | U.S. Navy, MC2 Douglas G. Morrison | Public domain |
+| `public/images/kichijoji-inokashira.jpg` | [Inokashira Park @ Kichijoji (9434336524).jpg](https://commons.wikimedia.org/wiki/File:Inokashira_Park_@_Kichijoji_(9434336524).jpg) | Guilhem Vellut | CC BY 2.0 |
+| `public/images/zen-meditation-hall.jpg` | [坐禅 (24328830934).jpg](https://commons.wikimedia.org/wiki/File:%E5%9D%90%E7%A6%85_(24328830934).jpg) | 極地狐 | CC BY-SA 2.0 |
+| `public/images/tokyo-tower-red.jpg` | [Red Tokyo Tower.jpg](https://commons.wikimedia.org/wiki/File:Red_Tokyo_Tower.jpg) | Syced | CC0 |
 
 The home-page hero uses `public/images/hero-sushi-counter.jpg`, a JPEG re-encode of `public/omotenashi-hero.png`, which was supplied with the original project handoff.
 
@@ -65,3 +75,11 @@ photos (Cresc. Inc. / Viyago Japan), taken from its listing on viyago.jp at the 
 The partner's condition sheet says photo and video material is available for all media, with usage period, editing, credit and
 pre-publication review still "to be confirmed": settle that before the page goes live or the photos are used in ads. A fifth photo
 (three bowls carrying the partner's name) was dropped because the venue is not named on the page.
+
+`public/images/ninja-*.jpg`, `matcha-*.jpg`, `knife-*.jpg` and `shuriken-*.jpg` (26 files, 2026-10-14) are the Kyoto
+Arashiyama partner's own photographs from its public experience pages, used for the four Arashiyama pages while they are in
+preview; the partner's permission for use on kamehame-japan.com is still to be confirmed before publication, and they are
+not under a Creative Commons license.
+
+The samurai, rakugo, cooking-class and ninja-meditation pages use the Wikimedia Commons photographs listed above as
+placeholders while in preview; the partners' own photographs replace them before publication.

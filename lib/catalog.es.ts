@@ -61,6 +61,16 @@ export const categoriesEs: Category[] = [
     lead: "El kendo es la espada del samurái convertida en disciplina: una reverencia, el juego de pies, un golpe que une espíritu, espada y cuerpo. Entrena en un dojo en activo de Tokio con un instructor que enseña en inglés, o pasa una hora más tranquila con el Nihon Kendo Kata y las palabras que dejaron los samuráis." },
   { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "El golf en Japón tiene sus propias costumbres y algunas de las mejores vistas del país. Un día de golf privado en la región del monte Fuji, con tu campo y tu hora de salida organizados para ti, coche privado desde tu hotel de Tokio y apoyo en inglés." },
+  { slug: "samurai", title: "Samurái", tag: "Tradicional", mark: "侍", img: "/images/tate-kata-performance.jpg",
+    lead: "Los samuráis dejaron a Tokio sus antiguas ciudades-posta, sus escuelas de esgrima y un código de conducta que aún marca los modales. Camina por un barrio histórico vestido de samurái o aprende tate, el combate coreografiado del teatro y el cine japoneses, con un intérprete profesional." },
+  { slug: "rakugo", title: "Rakugo", tag: "Tradicional", mark: "噺", img: "/images/rakugo-stage.jpg",
+    lead: "El rakugo es el arte cómico de contar historias en Japón: un solo narrador, un abanico y una toalla, y todo un reparto de personajes. Escúchalo en inglés en Asakusa y recorre el barrio donde nació el entretenimiento popular de Tokio." },
+  { slug: "cooking", title: "Cocina", tag: "Gastronomía", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
+    lead: "Cocina japonesa enseñada por chefs profesionales: arroz de sushi, rollos y nigiri, condimentos fermentados y los platos que se construyen con ellos. Clases pequeñas en las que cocinas y luego te sientas a comer." },
+  { slug: "ninja", title: "Ninja", tag: "Tradicional", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",
+    lead: "Los ninja eran exploradores y supervivientes, y sus habilidades iban de la cerbatana y la estrella arrojadiza a la respiración y la quietud. Prueba las herramientas en un estudio de Kioto, funde tu propio shuriken o siéntate a meditar en Tokio." },
+  { slug: "knife-making", title: "Cuchillos", tag: "Artesanía", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
+    lead: "El cuchillo de cocina japonés es el descendiente silencioso de la espada. En un taller de Arashiyama, afila una hoja en la piedra, coloca su mango y llévate a casa un cuchillo acabado por ti." },
 ];
 
 export const experiencesEs: Experience[] = [

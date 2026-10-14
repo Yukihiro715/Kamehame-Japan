@@ -380,6 +380,16 @@ export const categories: Category[] = [
     lead: "Kendo is the samurai's sword turned into a discipline: a bow, the footwork, a strike that unites spirit, sword and body. Train in a working Tokyo dojo with an instructor who teaches in English, or spend a quieter hour with the Nihon Kendo Kata and the words the samurai left behind." },
   { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
+  { slug: "samurai", title: "Samurai", tag: "Traditional", mark: "侍", img: "/images/tate-kata-performance.jpg",
+    lead: "The samurai left Tokyo its old post towns, its sword schools and a code of conduct that still shapes manners here. Walk a historic district in samurai dress, or learn tate, the choreographed sword combat of Japanese stage and film, with a professional performer." },
+  { slug: "rakugo", title: "Rakugo", tag: "Traditional", mark: "噺", img: "/images/rakugo-stage.jpg",
+    lead: "Rakugo is Japan's comic storytelling: one performer, a fan and a hand towel, and a whole cast of characters. Hear it performed in English in Asakusa, then walk the district where Tokyo's popular entertainment grew up." },
+  { slug: "cooking", title: "Cooking", tag: "Food", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
+    lead: "Japanese home and restaurant cooking, taught hands-on by professional chefs: sushi rice, rolls and nigiri, fermented seasonings and the dishes built on them. Small classes where you cook, then sit down to eat." },
+  { slug: "ninja", title: "Ninja", tag: "Traditional", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",
+    lead: "The ninja were scouts and survivors, and their skills ran from the blowpipe and the throwing star to breathing and stillness. Try the tools in a Kyoto studio, cast your own shuriken, or sit down to the meditation practice behind the legend in Tokyo." },
+  { slug: "knife-making", title: "Knife making", tag: "Arts & crafts", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
+    lead: "The Japanese kitchen knife is the sword's quieter descendant. In a workshop in Arashiyama, sharpen a blade on a whetstone, fit its handle and take home a knife you finished yourself." },
 ];
 
 export const experiences: Experience[] = [
@@ -1763,6 +1773,754 @@ export const experiences: Experience[] = [
   },
 
   {
+    // Trip in real Japan (TRJK), Tokyo: samurai street walk in Kitasenju plus
+    // a sword workshop. Built 2026-10-14 from the operator's public page; the
+    // operator's name, the venue name and the instructor's name stay off the
+    // page. Public price ¥40,000 per person (2–5), solo ¥55,000; our sale price
+    // and wholesale are not agreed, so the page stays in "preview".
+    slug: "samurai-street-walk-kitasenju", city: "tokyo", category: "samurai", bookingType: "request", status: "preview",
+    title: "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo",
+    tagline: "Dress in samurai attire, walk the old post-town streets of Kitasenju for an hour, then train with a sword-fighting instructor and learn what bushido asked of the people who lived by it. About two and a half hours, finished with Japanese tea.",
+    overview: [
+      "Kitasenju was the first post town on the road north out of Edo, and its back streets still keep the scale of that time. This experience puts you in samurai dress and walks you through them with a professional samurai performer, past the old gateway of Senju-juku, local shops and a temple, before returning to the venue for the hands-on part.",
+      "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
+    ],
+    duration: "About 2.5 hours", price: "¥40,000", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
+    img: "/images/samurai-walk-performers.jpg", alt: "Costumed samurai performers in armour and hakama performing in front of a crowd",
+    gallery: [
+      { img: "/images/samurai-senju-street.jpg", alt: "A quiet street in Senju with a sign marking the old post town and a willow tree" },
+      { img: "/images/samurai-sword-practice.jpg", alt: "People practising sword strikes with wooden swords under trees in a Tokyo park" },
+      { img: "/images/city-tokyo.jpg", alt: "The gate of Senso-ji temple lit at night" },
+    ],
+    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    partySize: { min: 1, max: 5 },
+    availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
+    availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
+    scheduleNote: "Timings counted from the 4:00 pm start; the walk is about an hour.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English guidance",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the experience, Japan time. Free cancellation ends 7 days before; from 6 to 2 days before, 30% of the price; the day before, 50%; on the day or without notice, 100%. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 2, rate: 30 }, { until: 1, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "Samurai attire and dressing · Street walk · Sword workshop · Japanese tea",
+    highlights: [
+      { icon: "flag", title: "An old post town, in costume", body: "An hour on foot through Kitasenju in samurai dress, with a performer who knows the district's Edo-period story." },
+      { icon: "spark", title: "A real sword school", body: "The workshop is taught by a performer and instructor trained in Yagyu Shinkage-ryu, one of the classical schools of swordsmanship." },
+      { icon: "group", title: "Always your own group", body: "One to five guests, never mixed with other parties. Children from six join with an adult." },
+    ],
+    included: [
+      "Samurai attire rental and help dressing",
+      "The street walk and the samurai workshop with bushido talk",
+      "Commemorative photos in costume",
+      "Japanese tea at the end",
+      "Tax included — nothing is added on the day",
+    ],
+    notIncluded: [
+      "Transport to and from the meeting point",
+      "Meals and drinks other than the tea",
+      "Personal expenses",
+    ],
+    schedule: [
+      { time: "0:00", title: "Dress as a samurai", body: "Change into samurai attire with the staff's help; about twenty minutes." },
+      { time: "0:20", title: "Street walk", body: "An hour through Kitasenju: the old gateway of Senju-juku, local shops and a historic temple.", img: "/images/samurai-senju-street.jpg" },
+      { time: "1:20", title: "Back at the venue", body: "A short break before the workshop." },
+      { time: "1:30", title: "Samurai workshop and bushido", body: "Posture, grip and basic cuts with the instructor, and the ideas behind them; about an hour." },
+      { time: "2:20", title: "Photos and tea", body: "Commemorative photos in costume, then Japanese tea." },
+      { time: "2:30", title: "Change and finish" },
+    ],
+    venue: {
+      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥55,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
+      afterBooking: ["The venue's name and address", "Directions from Kitasenju station", "A phone number for the day"],
+      img: "/images/samurai-walk-performers.jpg", alt: "Costumed samurai performers in front of a crowd",
+    },
+    notesLabel: "Anything we should know (optional)",
+    notesHint: "e.g. heights for costume sizes; a child in the group; the dates you can make",
+    flow: [
+      { title: "Choose a date and send your request", body: "The experience runs on selected dates; tell us your preferred date and how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the nearest available date, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The meeting point comes with your confirmation." },
+    ],
+    faq: [
+      { q: "What do we actually do?", a: "You dress in samurai attire, walk Kitasenju's old streets with a samurai performer for about an hour, then take a sword workshop with a bushido talk back at the venue. Photos in costume and Japanese tea close the session." },
+      { q: "Is it taught in English?", a: "The experience is run for international guests with English guidance. Tell us your language when you request and we will confirm what is available for your date." },
+      { q: "Can children join?", a: "From age 6, accompanied by an adult aged 18 or over. Children pay the same price as adults. Under 6 cannot take part." },
+      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥55,000; groups of two to five pay ¥40,000 per person." },
+      { q: "When does it run?", a: "On selected dates from August to December 2026, from 4:00 pm to about 6:30 pm. Tell us your preferred date and we confirm the nearest one that runs." },
+      { q: "What should I wear?", a: "Comfortable clothes you can change out of easily, and shoes you can walk in: the samurai attire goes on at the venue and the walk lasts about an hour." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 7 days before; from 6 to 2 days before, 30%; the day before, 50%; on the day or without notice, 100%." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the date, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Dress in samurai attire", "Walk Kitasenju's old post-town streets for an hour", "Train with a sword-fighting instructor and hear about bushido", "Photos in costume and Japanese tea"],
+    master: { title: "Your instructor", bio: "A samurai performer and sword-fighting instructor trained in Yagyu Shinkage-ryu swordsmanship, who has guided international guests through Kitasenju for years.", quote: "" },
+    itinerary: ["0:00 — Dress as a samurai", "0:20 — Street walk through Kitasenju", "1:20 — Back at the venue", "1:30 — Samurai workshop and bushido", "2:20 — Photos and tea", "2:30 — Change and finish"],
+    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥55,000; two to five pay ¥40,000 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
+    story: { heading: "The first town on the road north", body: "Travellers leaving Edo for the north spent their first night at Senju-juku. The poet Basho set off from here on his Narrow Road. Walking it in samurai dress, with someone who can read the street for you, puts you inside that story rather than in front of it." },
+  },
+  {
+    // Trip in real Japan (TRJK), Tokyo: private tate (stage sword combat) with
+    // a performer from a Tokyo sword-performance school (name off the page). Built 2026-10-14 from the public
+    // page; operator, venue and performer names stay off the page. Public "tour
+    // fee" ¥33,000 — whether per person or per group is still to confirm, as is
+    // the booking cutoff; wholesale not agreed. Preview until then.
+    slug: "tokyo-tate-samurai-sword-experience", city: "tokyo", category: "samurai", bookingType: "request", status: "preview",
+    title: "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography",
+    tagline: "Learn tate, the choreographed sword combat of Japanese stage and film, from a professional performer: costume, posture, timing and a partner duel you perform at the end. With a master's sword-dance performance, a short calligraphy session and matcha with sweets. About two hours, private.",
+    overview: [
+      "Tate is the art behind every sword fight you have seen in a Japanese film: not real combat, but precision, rhythm, posture and trust between partners. In this private session a performer from a classical sword-performance school dresses you in samurai costume, gives a short introduction to bushido, and teaches the movements and timing of a fight scene step by step.",
+      "You rehearse with a partner, then perform a short duel together. The master then performs kenbu, the sword dance, for you; you try a few characters with a brush and keep the sheet; and the session closes with matcha and traditional sweets. Groups are private, two to six guests, every day from September to November 2026.",
+    ],
+    duration: "About 2 hours", price: "¥33,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
+    img: "/images/tate-kata-performance.jpg", alt: "Two swordsmen in black hakama performing a paired sword kata before an audience",
+    gallery: [
+      { img: "/images/samurai-sword-practice.jpg", alt: "People practising sword strikes with wooden swords in a Tokyo park" },
+      { img: "/images/cat-tea.jpg", alt: "A bowl of matcha being prepared" },
+      { img: "/images/cat-sword.jpg", alt: "A katana blade against a dark background" },
+    ],
+    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    partySize: { min: 2, max: 6 },
+    availability: { daily: true, startTimes: ["10:00", "13:00", "15:00"], cutoffDays: 3, cutoffTime: "18:00" },
+    availabilityNote: "Every day from 1 September to 30 November 2026; sessions start at 10:00, 13:00 or 15:00.",
+    scheduleNote: "Timings counted from the meeting time; the workshop itself is up to 90 minutes.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Basic English guidance",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the experience, Japan time. Free cancellation ends 7 days before; from 6 to 2 days before, 30% of the price; the day before, 50%; on the day or without notice, 100%. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 2, rate: 30 }, { until: 1, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "Costume · Tate workshop · Kenbu performance · Calligraphy · Matcha and sweets",
+    highlights: [
+      { icon: "spark", title: "Taught by a professional performer", body: "Your instructor performs and teaches tate with a classical sword-performance school and has guided many international guests." },
+      { icon: "dance", title: "You perform the scene", body: "After the workshop you and your partner perform the duel you learned, then watch the master's kenbu sword dance." },
+      { icon: "meal", title: "Brush, matcha and sweets", body: "A short calligraphy session, with the sheet to keep, and matcha with traditional sweets to finish." },
+    ],
+    included: [
+      "Samurai costume dressing",
+      "The tate workshop with partner practice and the final duel scene",
+      "The master's kenbu (sword dance) performance",
+      "A short calligraphy session; you keep your work",
+      "Matcha and traditional sweets",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the meeting point",
+      "Drinks and personal expenses",
+      "A professional English interpreter (optional, quoted on request)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Meet at the station", body: "Your host meets you at the station named in your confirmation and walks you to the venue." },
+      { time: "0:15", title: "Costume", body: "Dress in samurai costume with help from the staff." },
+      { time: "0:30", title: "Bushido in five minutes", body: "A short introduction to the code before the swords come out." },
+      { time: "0:35", title: "Tate workshop", body: "Movement, timing and partner choreography, built up step by step.", img: "/images/samurai-sword-practice.jpg" },
+      { time: "1:20", title: "The duel", body: "Perform the scene you learned with your partner or group." },
+      { time: "1:30", title: "Kenbu performance", body: "The master performs the sword dance." },
+      { time: "1:40", title: "Calligraphy, matcha and sweets", body: "Try a few characters with a brush, then sit down to matcha and traditional sweets." },
+      { time: "2:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["One of three venues in Adachi, Tokyo, each a short walk or bus ride from a Tobu line station — the venue and meeting point for your date come with your confirmation", "Private groups only, two to six guests; never mixed with other parties", "Basic English guidance is provided; a professional interpreter can be added for a fee"],
+      afterBooking: ["Which venue, and the meeting station (Umejima or Daishi-mae)", "Walking directions from the station", "A phone number for the day"],
+      img: "/images/tate-kata-performance.jpg", alt: "A paired sword kata performed before an audience",
+    },
+    notesLabel: "Anything we should know (optional)",
+    notesHint: "e.g. heights for costume sizes; a child in the group; whether you would like a professional interpreter",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date between 1 September and 30 November 2026 and a start time — 10:00, 13:00 or 15:00 — and tell us how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the venue, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The meeting station and directions come with your confirmation." },
+    ],
+    faq: [
+      { q: "What is tate?", a: "The choreographed sword combat of Japanese theatre and film. It is a performing art, not a fighting one: the point is precision, rhythm, posture and trust between partners." },
+      { q: "Do I need any experience?", a: "No. The movements are built up slowly and everyone performs at the end, whatever their level." },
+      { q: "Is it taught in English?", a: "Basic English guidance is provided, with translation tools where needed. A professional English interpreter can be added for a fee; ask when you request." },
+      { q: "Can children join?", a: "From age 6. Younger children may be possible on request; tell us their ages." },
+      { q: "How many of us can come?", a: "Two to six guests, as a private group. Larger groups are quoted individually." },
+      { q: "When does it run?", a: "Every day from 1 September to 30 November 2026, meeting at 10:00 am, 1:00 pm or 3:00 pm." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 7 days before; from 6 to 2 days before, 30%; the day before, 50%; on the day or without notice, 100%." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the venue, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Dress in samurai costume", "Learn the movements and timing of a sword fight scene", "Perform a duel with your partner", "Watch a kenbu sword-dance performance", "Try calligraphy, then matcha and sweets"],
+    master: { title: "Your instructor", bio: "A professional performer and instructor of tate with a classical sword-performance school, who specialises in authentic samurai sword choreography and has taught many guests from abroad.", quote: "" },
+    itinerary: ["0:00 — Meet at the station", "0:15 — Costume", "0:30 — Bushido in five minutes", "0:35 — Tate workshop", "1:20 — The duel", "1:30 — Kenbu performance", "1:40 — Calligraphy, matcha and sweets", "2:00 — End of the session"],
+    goodToKnow: ["About 2 hours including the walk from the station; the workshop is up to 90 minutes.", "Every day from 1 September to 30 November 2026, at 10:00, 13:00 or 15:00.", "Private, 2–6 guests. From age 6.", "Basic English guidance; a professional interpreter can be added for a fee."],
+    story: { heading: "Every sword fight you have ever seen", body: "The duels in Japanese film and on the kabuki stage are tate, and the people who perform them train for years. Learning one scene, slowly, with one of them, shows you how much of a fight is really a conversation." },
+  },
+  {
+    // Trip in real Japan (TRJK), Tokyo: a two-hour Japanese cuisine seminar
+    // with a professional chef in a cooking studio in Kichijoji. Built
+    // 2026-10-14 from the operator's public page; the operator, the venue's
+    // name (a soy-sauce maker's dining brand) and the chef's name stay off the
+    // page. Public price ¥18,500 per person; a seminar of 8, on announced
+    // dates. Wholesale not agreed. Preview until then.
+    slug: "kichijoji-japanese-cuisine-class", city: "tokyo", category: "cooking", bookingType: "request", status: "preview",
+    title: "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo",
+    tagline: "A two-hour seminar with a chef who has cooked Japanese food on both sides of the Pacific: sushi rice from scratch, rolls and nigiri, a dish built on fermented seasonings, a wagyu roast-beef roll, then a meal of chef-made chirashi sushi. In a cooking studio five minutes from Kichijoji station.",
+    overview: [
+      "This is a small cooking seminar, not a show: a professional chef demonstrates, then you cook. You start with sushi rice — washing, cooking and seasoning it properly — and go on to a dish using shibazuke pickles and crunchy soy-sauce almonds, a roll with Japanese wagyu roast beef, and nigiri with a chef's demonstration alongside.",
+      "Then you sit down to eat: premium chirashi sushi with seasonal fish prepared by the chef, and a soft-serve dessert made with moromi, the soy-sauce mash. The chef began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills before coming home to teach. The seminar is designed for international visitors and runs for eight guests on announced dates.",
+    ],
+    duration: "2 hours", price: "¥18,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
+    img: "/images/cooking-sushi-lesson.jpg", alt: "A chef in whites demonstrating sushi preparation to a group gathered around the counter",
+    gallery: [
+      { img: "/images/exp-sushi.jpg", alt: "A sushi counter with seats and a chef's station" },
+      { img: "/images/kichijoji-inokashira.jpg", alt: "Greenery and a path in Inokashira Park, a few minutes from Kichijoji station" },
+    ],
+    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    partySize: { min: 1, max: 8 },
+    availability: { daily: false, startTimes: ["13:00"], cutoffDays: 14, cutoffTime: "18:00", dates: [
+      { date: "2026-11-21", times: ["13:00"] }, { date: "2026-12-10", times: ["13:00"] }, { date: "2027-01-14", times: ["13:00"] }, { date: "2027-02-14", times: ["13:00"] },
+    ] },
+    availabilityNote: "Announced dates only; meet at 12:30 pm for a 1:00 pm start.",
+    scheduleNote: "Timings counted from the 1:00 pm start; meet at 12:30 pm.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "For international guests",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the seminar, Japan time. Free cancellation ends 10 days before; from 9 days before, the full price. The seminar needs eight guests to run: if that number is not reached 14 days before the date, it is cancelled and you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 10, rate: 0 }, { until: 0, rate: 100 }],
+    includedShort: "2-hour seminar · Ingredients · The meal · A gift to take home",
+    highlights: [
+      { icon: "meal", title: "Cook, then eat", body: "Sushi rice, rolls and nigiri you make yourself, then a chef-made chirashi of seasonal fish and a moromi soft-serve to finish." },
+      { icon: "chat", title: "A chef who has taught abroad", body: "Years of restaurants and catering in the United States, and of teaching sushi to everyone from beginners to professional cooks." },
+      { icon: "spark", title: "Fermentation, explained", body: "Soy sauce, shibazuke and moromi: the seasonings that make Japanese food taste Japanese, used in dishes you can repeat at home." },
+    ],
+    included: [
+      "The two-hour seminar with the chef",
+      "All ingredients for the hands-on cooking",
+      "The meal after the seminar: chirashi sushi and dessert",
+      "One product from the venue's soy-sauce snack range to take home",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the studio (meet on site)",
+      "Drinks",
+      "Personal expenses",
+    ],
+    schedule: [
+      { time: "-0:30", title: "Meet at the studio", body: "Check in and wash up; the chef introduces the menu." },
+      { time: "0:00", title: "Sushi rice", body: "Washing, cooking and seasoning the rice: the base of everything that follows." },
+      { time: "0:25", title: "A fermented-seasoning dish", body: "A quick dish with shibazuke pickles and crunchy soy-sauce almonds." },
+      { time: "0:45", title: "Rolls", body: "Roll sushi, including a wagyu roast-beef roll, with the chef showing each step.", img: "/images/cooking-sushi-lesson.jpg" },
+      { time: "1:10", title: "Nigiri", body: "Press nigiri yourself as the chef demonstrates the professional hand." },
+      { time: "1:30", title: "The meal", body: "Premium chirashi sushi with seasonal fish, prepared by the chef, and a moromi soft-serve dessert." },
+      { time: "2:00", title: "End of the seminar" },
+    ],
+    venue: {
+      known: ["A cooking studio in Kichijoji, about five minutes on foot from Kichijoji station (JR Chuo Line and Keio Inokashira Line) — the exact address comes with your confirmation", "Knives and cooking equipment are used: guests follow the chef's safety instructions", "Food allergies: tell us when you request; some cannot be accommodated. Halal menus are not available"],
+      afterBooking: ["The studio's name and address", "Directions from Kichijoji station", "A phone number for the day"],
+      img: "/images/kichijoji-inokashira.jpg", alt: "Inokashira Park, a few minutes from the studio",
+    },
+    notesLabel: "Allergies and requests (optional)",
+    notesHint: "e.g. a shellfish allergy; vegetarian in the group",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick one of the announced dates and tell us how many of you there are and any allergies." },
+      { title: "We reply within 24 hours", body: "With the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The studio's address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "What do we cook?", a: "Sushi rice from scratch, a dish with shibazuke pickles and crunchy soy-sauce almonds, roll sushi including a wagyu roast-beef roll, and nigiri. The chef then serves premium chirashi sushi with seasonal fish and a moromi soft-serve dessert." },
+      { q: "Is it in English?", a: "The seminar is designed for international visitors and foreign residents. Tell us your language when you request and we will confirm what is available for your date." },
+      { q: "Can children join?", a: "From age 10." },
+      { q: "I have a food allergy.", a: "Tell us when you request. Some allergies can be accommodated and some cannot; we confirm before you pay. Halal menus are not available." },
+      { q: "How many people take part?", a: "The seminar runs for eight guests. If fewer than eight have booked 14 days before the date, it is cancelled with a full refund." },
+      { q: "When does it run?", a: "On announced dates: 21 November and 10 December 2026, 14 January and 14 February 2027. Meet at 12:30 pm; the seminar runs from 1:00 pm to 3:00 pm." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 10 days before the seminar; from 9 days before, the full price is charged." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Wash, cook and season sushi rice", "Make a dish with fermented Japanese seasonings", "Roll sushi, including a wagyu roast-beef roll, and press nigiri", "Eat chef-made chirashi sushi and a moromi soft-serve"],
+    master: { title: "Your chef", bio: "Born in Tokyo, he began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills. He now teaches sushi and Japanese cuisine in Tokyo and around the country.", quote: "" },
+    itinerary: ["12:30 — Meet at the studio", "13:00 — Sushi rice", "13:25 — A fermented-seasoning dish", "13:45 — Rolls", "14:10 — Nigiri", "14:30 — The meal", "15:00 — End of the seminar"],
+    goodToKnow: ["2 hours, 1:00 pm to 3:00 pm, on announced dates; meet at 12:30 pm.", "A seminar of 8 guests; cancelled with a full refund if the minimum is not reached 14 days before.", "From age 10. Tell us about allergies when you request; no halal menu.", "For international guests."],
+    story: { heading: "The rice first", body: "Ask any sushi chef and the answer is the same: the rice matters more than the fish. Two hours with someone who has cooked it for American diners and Japanese ones alike is the fastest way to find out why." },
+  },
+  {
+    // Trip in real Japan (TRJK) with the English Rakugo Association, Tokyo:
+    // an English rakugo performance in Asakusa plus a guided walk. Built
+    // 2026-10-14 from the public page; operator and performer names stay off
+    // the page. Public price ¥12,000; second and fourth Sundays, Oct–Dec 2026.
+    // Wholesale not agreed. Preview until then.
+    slug: "asakusa-english-rakugo-walk", city: "tokyo", category: "rakugo", bookingType: "request", status: "preview",
+    title: "English Rakugo & Asakusa Cultural Walk, Tokyo",
+    tagline: "A live rakugo performance in English — Japan's comic storytelling, one performer and a whole cast of characters — with traditional variety acts, followed by an hour's guided walk through Asakusa. About four hours on a Sunday afternoon.",
+    overview: [
+      "Rakugo is one of Japan's oldest living performing arts: a storyteller on a cushion, a fan and a hand towel for props, and every character played by the same voice. In Asakusa, the district where Tokyo's popular entertainment grew up, an association of performers presents it entirely in English, together with traditional variety entertainment, at a public venue a few steps from the Kaminarimon gate.",
+      "After the performance, an English-speaking guide walks you through Asakusa for an hour: the well-known landmarks, and the streets linked to the theatres and entertainers of old Tokyo. The afternoon ends near the stations. It runs on the second and fourth Sundays from October to December 2026, for two to ten guests.",
+    ],
+    duration: "About 4 hours", price: "¥12,000", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
+    img: "/images/rakugo-stage.jpg", alt: "A rakugo performer in a dark kimono kneeling on a cushion on stage, gesturing to the audience",
+    gallery: [
+      { img: "/images/asakusa-kaminarimon.jpg", alt: "Crowds in front of the Kaminarimon gate and its great red lantern" },
+      { img: "/images/city-tokyo.jpg", alt: "Senso-ji temple in Asakusa lit at night" },
+    ],
+    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    partySize: { min: 2, max: 10 },
+    availability: { daily: false, startTimes: ["13:30"], cutoffDays: 7, cutoffTime: "18:00", dates: [
+      { date: "2026-10-25", times: ["13:30"] }, { date: "2026-11-08", times: ["13:30"] }, { date: "2026-11-22", times: ["13:30"] }, { date: "2026-12-13", times: ["13:30"] }, { date: "2026-12-27", times: ["13:30"] },
+    ] },
+    availabilityNote: "Second and fourth Sundays, October to December 2026; meet at 1:30 pm.",
+    scheduleNote: "Timings for the 1:30 pm meeting; the performance begins at 2:00 pm.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Performed and guided in English",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the experience, Japan time. Free cancellation ends 7 days before; from 6 to 2 days before, 30% of the price; the day before, 50%; on the day or without notice, 100%. The walk goes ahead in light rain; in severe weather it may be changed or cancelled, and if the operator has to cancel you receive a full refund.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 2, rate: 30 }, { until: 1, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "Rakugo performance in English · Variety acts · Guided Asakusa walk",
+    highlights: [
+      { icon: "chat", title: "Rakugo you can actually follow", body: "A regular public performance by an association of rakugo performers who work in English, with traditional variety acts between the stories." },
+      { icon: "flag", title: "Asakusa with a guide", body: "An hour on foot through the landmarks and the back streets where Tokyo's theatres and entertainers made their living." },
+      { icon: "group", title: "Small and easy", body: "Two to ten guests, from age 6, on Sunday afternoons. Comfortable shoes are the only equipment." },
+    ],
+    included: [
+      "Admission (unreserved seating) to the association's regular English rakugo performance",
+      "The English-guided cultural walk through Asakusa",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to and from Asakusa",
+      "Food and drinks",
+      "Shopping and personal expenses",
+    ],
+    schedule: [
+      { time: "0:00", title: "Meet in Asakusa", body: "Check in at the tourist information centre's ground-floor lobby, opposite the Kaminarimon gate." },
+      { time: "0:30", title: "English rakugo", body: "Two hours of stories and traditional variety entertainment, performed entirely in English.", img: "/images/rakugo-stage.jpg" },
+      { time: "2:30", title: "Break", body: "Half an hour before the walk." },
+      { time: "3:00", title: "Asakusa walk", body: "An hour with your guide: the famous sights and the streets of old Tokyo's entertainment district." },
+      { time: "4:00", title: "End near the stations" },
+    ],
+    venue: {
+      known: ["The performance is at the Asakusa Culture Tourist Information Center, across from the Kaminarimon gate; the walk is on public streets nearby", "Late arrivals may not be admitted to the performance: please be at the meeting point by 1:30 pm", "The walk goes ahead in light rain; the route may change with the weather or local conditions"],
+      afterBooking: ["Exactly where to meet in the lobby", "A phone number for the day"],
+      img: "/images/asakusa-kaminarimon.jpg", alt: "The Kaminarimon gate, across from the meeting point",
+    },
+    notesLabel: "Anything we should know (optional)",
+    notesHint: "e.g. children in the group; mobility needs for the walk",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick one of the Sunday dates and tell us how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The meeting details come with your confirmation." },
+    ],
+    faq: [
+      { q: "What is rakugo?", a: "Comic storytelling, performed solo: the storyteller kneels on a cushion and plays every character with voice, a fan and a hand towel. It has been performed for more than three hundred years." },
+      { q: "Will I understand it?", a: "Yes: the whole performance is in English, by performers who specialise in English rakugo. Performers vary from one date to another." },
+      { q: "Can children join?", a: "From age 6. Under 6 cannot take part." },
+      { q: "When does it run?", a: "Second and fourth Sundays from October to December 2026, meeting at 1:30 pm and ending around 5:30 pm." },
+      { q: "What should I bring?", a: "Comfortable walking shoes; the walk lasts about an hour." },
+      { q: "What if it rains?", a: "The walk goes ahead in light rain. In severe weather it may be changed or cancelled; the performance is indoors." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 7 days before; from 6 to 2 days before, 30%; the day before, 50%; on the day or without notice, 100%." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Watch a two-hour rakugo performance in English, with variety acts", "Walk Asakusa for an hour with an English-speaking guide", "See the Kaminarimon gate, the five-storey pagoda and Denboin-dori"],
+    master: { title: "The performers", bio: "An association of rakugo performers who present the art entirely in English at regular public performances in Asakusa, joined by performers of traditional variety entertainment. The line-up changes from date to date.", quote: "" },
+    itinerary: ["13:30 — Meet in Asakusa", "14:00 — English rakugo and variety acts", "16:00 — Break", "16:30 — Asakusa walk", "17:30 — End near the stations"],
+    goodToKnow: ["About 4 hours, 1:30 pm to 5:30 pm, on the second and fourth Sundays from October to December 2026.", "2–10 guests, from age 6.", "Comfortable walking shoes. Light rain does not stop the walk.", "Performed and guided in English."],
+    story: { heading: "One voice, a whole town", body: "A rakugo story has no set, no costume change and no second actor. A fan becomes chopsticks, a towel a purse, and the same voice plays the merchant, his wife and the fool who outwits them both. Hearing it in English, in the district that made it popular, is the easiest way into the form." },
+  },
+  {
+    // Partner: a Tokyo company offering ninja-style meditation (hand seals,
+    // breathing, body work), condition sheet 2026-10 (basic information only;
+    // product conditions still to come). Public price ¥30,000 per person, a
+    // three-hour afternoon session for up to 15, from November 2026; English
+    // with interpretation; meeting near Tokyo Tower. Company, instructor and
+    // brand names stay off the page. Preview until the conditions are agreed.
+    slug: "tokyo-ninja-zen-meditation", city: "tokyo", category: "ninja", bookingType: "request", status: "preview",
+    title: "Ninja Zen Meditation in Tokyo: Breathing, Hand Seals and Stillness",
+    tagline: "Three hours with a master of ninjutsu on the mental side of the art: the nine hand seals, the breathing that steadies the body, the silent step, and a meditation built on the five elements. Taught in Japanese with English interpretation, near Tokyo Tower.",
+    overview: [
+      "The ninja were not acrobats; they were people who had to stay calm, decide fast and keep going. The practice behind that has three parts — hand seals, breathing and body work — organised around the five elements of earth, water, fire, wind and void. This afternoon session teaches it as a meditation method, with no religious content, led by a ninjutsu master with more than ten years of teaching, in Japan and abroad.",
+      "You learn the nine seals of the kuji in order, from preparing to face yourself to finding a wider awareness; practise yin and yang breathing and the ninja's silent footwork; and sit — on a cushion or a chair — through a meditation on the elements. Sessions run from 1:30 pm to 4:30 pm for up to fifteen guests aged sixteen and over, in Japanese with English interpretation.",
+    ],
+    duration: "3 hours", price: "¥30,000", priceUnit: "person", group: "Up to 15 guests", ages: "Ages 16+", area: "Tokyo (near Tokyo Tower, Minato)",
+    img: "/images/zen-meditation-hall.jpg", alt: "The entrance of a temple meditation hall with a black curtain bearing the characters for zazen",
+    gallery: [
+      { img: "/images/tokyo-tower-red.jpg", alt: "Tokyo Tower lit red above the night skyline" },
+    ],
+    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    partySize: { min: 1, max: 15 },
+    availability: { daily: false, startTimes: ["13:30"], cutoffDays: 3, cutoffTime: "18:00" },
+    availabilityNote: "Afternoon sessions from November 2026, 1:30 pm to 4:30 pm; tell us your dates and we confirm the nearest session.",
+    scheduleNote: "Timings counted from the 1:30 pm start.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Japanese with English interpretation",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 30 days before; from 29 to 2 days before, 30% of the price; the day before, 50%; on the day or without notice, 100%. If a session does not reach its minimum number of guests, or the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 30, rate: 0 }, { until: 2, rate: 30 }, { until: 1, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "3-hour session · English interpretation",
+    highlights: [
+      { icon: "spark", title: "The nine seals", body: "Kuji-in, the hand seals of the ninja, taught in order and explained: what each one is for and how to use it when you need it." },
+      { icon: "chat", title: "A teacher, interpreted", body: "Led in Japanese by a ninjutsu master with a decade of teaching, with simultaneous interpretation into English." },
+      { icon: "group", title: "No religion, no gymnastics", body: "A method for the mind and the breath. Sit cross-legged, on a cushion or on a chair; comfortable clothes are all you need." },
+    ],
+    included: [
+      "The three-hour session with the master",
+      "English interpretation",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the meeting point",
+      "Meals and drinks",
+    ],
+    schedule: [
+      { time: "0:00", title: "Meet and begin", body: "An introduction to the practice: seals, breath and body, and the five elements." },
+      { time: "0:20", title: "Breathing", body: "Yin and yang breathing, and the breath that steadies the body." },
+      { time: "0:50", title: "The nine seals", body: "Kuji-in, learned one by one, with their meaning and their use.", img: "/images/zen-meditation-hall.jpg" },
+      { time: "1:50", title: "Body work", body: "The ninja's silent step and the postures that hold the mind still." },
+      { time: "2:20", title: "Meditation on the elements", body: "Earth, water, fire, wind and void: stability, flexibility, energy, breath and calm." },
+      { time: "3:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["The meeting point is near Tokyo Tower in Minato, Tokyo — the exact place comes with your confirmation", "Wear comfortable clothes; if sitting cross-legged is difficult, a chair or a floor chair is fine", "Participants should be sixteen or over, interested in the ninja's inner culture, and able to follow a lecture"],
+      afterBooking: ["The meeting point and the room", "Directions from the nearest station", "A phone number for the day"],
+      img: "/images/tokyo-tower-red.jpg", alt: "Tokyo Tower, near the meeting point",
+    },
+    notesLabel: "Anything we should know (optional)",
+    notesHint: "e.g. a knee that makes sitting on the floor hard; the dates you can make",
+    flow: [
+      { title: "Choose a date and send your request", body: "Tell us your dates in Tokyo and how many of you there are; sessions run in the afternoon from November 2026." },
+      { title: "We reply within 24 hours", body: "With the nearest session, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The meeting point comes with your confirmation." },
+    ],
+    faq: [
+      { q: "Is this a martial arts class?", a: "No. There are no acrobatics and no fighting techniques. It is the mental side of ninjutsu — hand seals, breathing, body awareness and meditation — taught as a method for calm and focus." },
+      { q: "Is it religious?", a: "No. Some elements echo Buddhist thought, but the practice has no religious content." },
+      { q: "Which language is it in?", a: "The master teaches in Japanese, with simultaneous interpretation into English." },
+      { q: "Do I need to sit cross-legged?", a: "No. If it is difficult, you can sit on a chair or a floor chair." },
+      { q: "Can children join?", a: "The session is for ages 16 and over." },
+      { q: "How many people take part?", a: "Up to fifteen. If a session does not reach its minimum, it is cancelled with a full refund." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before; from 29 to 2 days before, 30%; the day before, 50%; on the day or without notice, 100%." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Learn the nine hand seals of the kuji and what each is for", "Practise yin and yang breathing", "Try the ninja's silent step and the postures of stillness", "Sit through a meditation on the five elements"],
+    master: { title: "Your teacher", bio: "A ninjutsu practitioner based near Tokyo who has studied martial arts since childhood, teaches at culture centres and has taught abroad, and was certified as a master instructor in 2019. He also trains in mountains and under waterfalls.", quote: "" },
+    itinerary: ["0:00 — Meet and begin", "0:20 — Breathing", "0:50 — The nine seals", "1:50 — Body work", "2:20 — Meditation on the elements", "3:00 — End of the session"],
+    goodToKnow: ["3 hours, 1:30 pm to 4:30 pm, from November 2026.", "Ages 16+. Up to 15 guests.", "Comfortable clothes; a chair is fine if sitting on the floor is difficult.", "Japanese with English interpretation."],
+    story: { heading: "What the ninja practised when no one was watching", body: "The throwing stars are the famous part. The breathing, the seals and the stillness are the part that kept them alive, and the part you can take home." },
+  },
+  {
+    // Viyago Japan (the ramen partner), Kyoto: a 60-minute ninja experience in
+    // its Arashiyama studio. Built 2026-10-14 from the partner's public page;
+    // the studio's name and address stay off the page (owner policy, as for
+    // the ramen classes). Public prices are set in the booking calendar and
+    // were not available; ¥7,000 (costume plan, from a listing) is a
+    // placeholder. Cancellation terms and wholesale not agreed. Preview.
+    slug: "arashiyama-ninja-experience", city: "kyoto", category: "ninja", bookingType: "request", status: "preview",
+    title: "Ninja Experience in Arashiyama, Kyoto: Blowpipe, Shuriken and Hand Seals",
+    tagline: "An hour in a ninja training room in Arashiyama: the blowpipe, throwing stars at the targets, and the hand seals of the ninja, taught by an instructor in English or Japanese. Change into a ninja costume for the photos if you like.",
+    overview: [
+      "A few minutes from the bamboo grove, up a flight of stairs, is a room built for this: a row of targets along one wall, blowpipes and throwing stars in their boxes, and an instructor who teaches in English and Japanese. In an hour you try the blowpipe, learn to throw shuriken so they stick, and are taught the hand seals — the in-musubi — that the ninja used to steady themselves.",
+      "The costume plan adds a ninja outfit to change into, worn through the session and the photos. Nothing is needed beyond comfortable clothes and closed shoes, and children are welcome with an adult.",
+    ],
+    duration: "60 minutes", price: "¥7,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "Children welcome with an adult (ask about younger children)", area: "Kyoto (Arashiyama)",
+    img: "/images/ninja-arashiyama-hero.jpg", alt: "Three guests in black ninja costumes striking poses in a wood-panelled training room",
+    gallery: [
+      { img: "/images/ninja-blowgun.jpg", alt: "A guest in a ninja costume aiming a blowpipe at the targets" },
+      { img: "/images/ninja-shuriken-throw.jpg", alt: "A guest laughing as she pulls a throwing star from the target" },
+      { img: "/images/ninja-pose.jpg", alt: "Three guests in ninja costume making hand seals in front of the targets" },
+      { img: "/images/ninja-shuriken-box.jpg", alt: "A wooden box of black throwing stars on a table" },
+    ],
+    galleryNote: "Photos from the partner's studio.",
+    partySize: { min: 1, max: 10 },
+    availability: { daily: true, startTimes: ["10:00", "11:30", "13:00", "14:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00" },
+    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
+    scheduleNote: "Timings counted from the start of your session.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English or Japanese",
+    skipSiteFaq: true,
+    includedShort: "60-minute session · Blowpipe, shuriken and hand seals · Photos",
+    highlights: [
+      { icon: "spark", title: "Real tools, real targets", body: "Blowpipes and throwing stars, with an instructor who shows you how to hit the target." },
+      { icon: "photo", title: "Costume for the photos", body: "The costume plan dresses you as a ninja for the session and the photos; the outfit is returned the same day." },
+      { icon: "chat", title: "English or Japanese", body: "Instructors teach in both, so families and mixed groups follow easily." },
+    ],
+    included: [
+      "The 60-minute session: blowpipe, throwing stars and hand-seal training",
+      "An instructor who teaches in English and Japanese",
+      "Photographs during the session",
+      "Ninja costume rental on the costume plan",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the studio (meet on site)",
+      "Ninja costume on the basic plan",
+    ],
+    schedule: [
+      { time: "-0:15", title: "Arrive and check in", body: "Change into your costume if you chose the costume plan." },
+      { time: "0:00", title: "Blowpipe", body: "Aim and breath: the blowpipe at the targets." },
+      { time: "0:20", title: "Shuriken", body: "How to hold and throw a shuriken so it sticks.", img: "/images/ninja-shuriken-throw.jpg" },
+      { time: "0:40", title: "Hand seals", body: "The in-musubi, the ninja's hand seals, with the instructor." },
+      { time: "0:50", title: "Photos", body: "Photos in the training room, in costume if you are wearing one." },
+      { time: "1:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A ninja training studio on an upper floor of a building in central Arashiyama, Kyoto, a short walk from the station and the bamboo grove — the exact address and entrance come with your confirmation", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee", "Not accessible for wheelchairs or strollers", "Comfortable clothes and closed-toe shoes"],
+      afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
+      img: "/images/ninja-target-room.jpg", alt: "The training room with its row of targets",
+    },
+    notesLabel: "Requests (optional)",
+    notesHint: "e.g. costume plan for all of us; children's ages",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date and tell us how many of you there are and whether you would like the costume plan." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The studio's address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "What do we do?", a: "The blowpipe, throwing stars at the targets, and the hand seals of the ninja, with an instructor. The session lasts about an hour, with photos at the end." },
+      { q: "Is the costume included?", a: "On the costume plan, yes: you change into a ninja outfit for the session and the photos and return it the same day. The basic plan is without costume." },
+      { q: "Which language is it in?", a: "English or Japanese; the instructors teach in both." },
+      { q: "Can children join?", a: "Yes, with an adult. Tell us their ages when you request and we confirm what suits them." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session; the studio will try to move you to another slot, which may carry a fee." },
+      { q: "Is the studio accessible?", a: "No: it is up a flight of stairs and cannot take wheelchairs or strollers." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Try the blowpipe at the targets", "Learn to throw shuriken so they stick", "Learn the ninja's hand seals", "Photos in the training room, in costume if you like"],
+    master: { title: "Your instructor", bio: "Instructors at the studio teach the blowpipe, shuriken and hand seals in English and Japanese to guests of all ages.", quote: "" },
+    itinerary: ["-0:15 — Arrive and check in", "0:00 — Blowpipe", "0:20 — Shuriken", "0:40 — Hand seals", "0:50 — Photos", "1:00 — End of the session"],
+    goodToKnow: ["About 60 minutes; arrive 15 minutes early. More than 5 minutes late and you cannot join.", "Children welcome with an adult.", "Not accessible for wheelchairs or strollers.", "English or Japanese."],
+    story: { heading: "Up the stairs in Arashiyama", body: "Most visitors to Arashiyama see the bamboo and the river. A few know about the room upstairs with the targets on the wall. An hour there is the most fun you will have in Kyoto with a throwing star." },
+  },
+  {
+    // Viyago Japan, Kyoto: 45-minute stone-mill matcha grinding on a covered
+    // terrace in Arashiyama. Built 2026-10-14 from the partner's public page
+    // (which currently shows booking suspended); public price ¥5,000. Venue
+    // name off the page. Cancellation and wholesale not agreed. Preview.
+    slug: "arashiyama-stone-mill-matcha", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    title: "Stone-Mill Matcha Grinding in Arashiyama, Kyoto",
+    tagline: "Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five minutes, in English or Japanese.",
+    overview: [
+      "Matcha is tea leaf ground to a powder fine enough to drink, and the grinding is the slow part. On a covered terrace in Arashiyama you turn a traditional stone mill yourself, feel how little comes out of each turn, and understand why good matcha costs what it does.",
+      "Then you whisk the powder you made into a bowl with a bamboo chasen and drink it, looking out over the street. The session takes about forty-five minutes and is taught in English or Japanese; the tencha, the mill and the utensils are provided.",
+    ],
+    duration: "45 minutes", price: "¥5,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
+    img: "/images/matcha-stone-mill.jpg", alt: "Hands turning a granite stone mill with bright green matcha powder gathering in the groove",
+    gallery: [
+      { img: "/images/matcha-whisk.jpg", alt: "Whisking matcha in a bowl with a bamboo chasen" },
+      { img: "/images/matcha-powder.jpg", alt: "Freshly ground matcha powder falling from a stone mill" },
+      { img: "/images/matcha-sweets.jpg", alt: "A bowl of matcha and a plate of seasonal Japanese sweets by a window" },
+    ],
+    galleryNote: "Photos from the partner's terrace.",
+    partySize: { min: 1, max: 10 },
+    availability: { daily: true, startTimes: ["10:00", "11:00", "13:00", "14:00", "15:00"], cutoffDays: 1, cutoffTime: "18:00" },
+    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
+    scheduleNote: "Timings counted from the start of your session.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English or Japanese",
+    skipSiteFaq: true,
+    includedShort: "45-minute session · Tencha and utensils · The bowl you make",
+    highlights: [
+      { icon: "brush", title: "Grind it yourself", body: "A traditional granite mill, turned by hand: the slow, satisfying part of matcha that nobody shows you." },
+      { icon: "meal", title: "Drink what you made", body: "Whisk your own powder with a bamboo chasen and drink it on the terrace." },
+      { icon: "chat", title: "English or Japanese", body: "Instruction in both languages, in a small group." },
+    ],
+    included: [
+      "The 45-minute session with instruction",
+      "Use of the stone mill and tea utensils",
+      "Tencha leaves and the bowl of matcha you make",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the terrace (meet on site)",
+      "Sweets and other food and drinks (available on the day)",
+    ],
+    schedule: [
+      { time: "-0:15", title: "Arrive and check in" },
+      { time: "0:00", title: "The mill", body: "How the stone mill works and how to turn it; then grind your tencha.", img: "/images/matcha-powder.jpg" },
+      { time: "0:25", title: "Whisk", body: "Sift the powder, add hot water and whisk with the chasen." },
+      { time: "0:35", title: "Drink", body: "Your bowl of matcha on the terrace." },
+      { time: "0:45", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A café terrace on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "The terrace is covered but semi-outdoor: dress for the weather", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session", "Not accessible for wheelchairs or strollers"],
+      afterBooking: ["The venue's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
+      img: "/images/matcha-sweets.jpg", alt: "Matcha and sweets on the terrace",
+    },
+    notesLabel: "Requests (optional)",
+    notesHint: "e.g. children's ages; a preferred time of day",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date and tell us how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "What is tencha?", a: "The shade-grown tea leaf that becomes matcha once it is ground. You grind it yourself in the session." },
+      { q: "How long does the grinding take?", a: "About twenty minutes of turning for one bowl: the mill is slow by design, which is why matcha is precious." },
+      { q: "Can children join?", a: "Yes, with an adult; the mill is easy to turn and the bowl is small." },
+      { q: "Which language is it in?", a: "English or Japanese." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee." },
+      { q: "Is the terrace accessible?", a: "No: it is up a flight of stairs and cannot take wheelchairs or strollers." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Grind tencha into matcha on a stone mill", "Whisk it with a bamboo chasen", "Drink your bowl on a covered terrace"],
+    master: { title: "Your instructor", bio: "The terrace's staff teach the mill and the whisk in English and Japanese.", quote: "" },
+    itinerary: ["-0:15 — Arrive and check in", "0:00 — The mill", "0:25 — Whisk", "0:35 — Drink", "0:45 — End of the session"],
+    goodToKnow: ["About 45 minutes; arrive 15 minutes early.", "All ages with an adult.", "Semi-outdoor terrace; not accessible for wheelchairs or strollers.", "English or Japanese."],
+    story: { heading: "Why matcha is slow", body: "A stone mill turning at the right speed gives a few grams of powder in twenty minutes. Once you have turned it yourself, every bowl of matcha you drink afterwards tastes of that time." },
+  },
+  {
+    // Viyago Japan, Kyoto: a 60-minute Japanese knife workshop in Arashiyama,
+    // two plans (custom knife making: choose a blade, sharpen it, fit the
+    // handle; beginner sharpening). Built 2026-10-14 from the partner's public
+    // page; prices are set in the booking calendar and were not available, so
+    // ¥15,000 is a placeholder. Venue name off the page. Cancellation and
+    // wholesale not agreed. Preview.
+    slug: "arashiyama-japanese-knife-workshop", city: "kyoto", category: "knife-making", bookingType: "request", status: "preview",
+    title: "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto",
+    tagline: "Choose a blade, sharpen it on a whetstone and fit its handle, then take home a Japanese kitchen knife you finished yourself. Or learn to sharpen properly on a knife that is already handled. An hour in a workshop in Arashiyama, in English or Japanese.",
+    overview: [
+      "A Japanese kitchen knife is made in stages by different hands, and the last of them — sharpening and fitting the handle — is the one you can do yourself. In a workshop in Arashiyama you choose from several blades, learn the angle and the rhythm on the whetstone, attach a prepared handle and leave with the knife.",
+      "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Engraving can be added on the custom plan for a fee.",
+    ],
+    duration: "60 minutes", price: "¥15,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
+    img: "/images/knife-arashiyama-hero.jpg", alt: "An instructor in an apron smiling behind a table of Japanese kitchen knives and wooden handles",
+    gallery: [
+      { img: "/images/knife-sharpening.jpg", alt: "Hands sharpening a blade on a wet whetstone" },
+      { img: "/images/knife-paper-test.jpg", alt: "The instructor testing an edge on a sheet of paper" },
+      { img: "/images/knife-tomato.jpg", alt: "A finished knife slicing cleanly through a tomato" },
+    ],
+    galleryNote: "Photos from the partner's workshop.",
+    partySize: { min: 1, max: 8 },
+    availability: { daily: true, startTimes: ["10:00", "11:30", "13:00", "14:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00" },
+    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
+    scheduleNote: "Timings counted from the start of your session (custom plan).",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English or Japanese",
+    skipSiteFaq: true,
+    includedShort: "60-minute workshop · Tools · The knife you take home",
+    highlights: [
+      { icon: "brush", title: "Your own knife to keep", body: "On the custom plan you choose the blade, sharpen it and fit the handle; the knife goes home with you." },
+      { icon: "spark", title: "Or just learn to sharpen", body: "The beginner plan teaches the whetstone properly on a handled knife — the skill most home cooks never learn." },
+      { icon: "chat", title: "English or Japanese", body: "Instruction in both, with no experience needed; follow the instructor's safety guidance with the blades." },
+    ],
+    included: [
+      "The 60-minute workshop with instruction",
+      "Use of whetstones and tools",
+      "The knife: your chosen blade with a prepared handle (custom plan) or the handled knife you sharpened (beginner plan)",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the workshop (meet on site)",
+      "Engraving (custom plan only; a paid option)",
+      "Choice of handle (handles are prepared in advance)",
+    ],
+    schedule: [
+      { time: "-0:15", title: "Arrive and check in" },
+      { time: "0:00", title: "Choose your blade", body: "Several blade shapes to pick from; the instructor explains what each is for." },
+      { time: "0:10", title: "Sharpen", body: "The angle, the pressure and the rhythm on the whetstone, with the instructor beside you.", img: "/images/knife-sharpening.jpg" },
+      { time: "0:40", title: "Fit the handle", body: "Attach the prepared handle and finish the knife." },
+      { time: "0:55", title: "Test the edge", body: "Paper, then a tomato." },
+      { time: "1:00", title: "End of the workshop" },
+    ],
+    venue: {
+      known: ["A workshop on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Knives are sharp: follow the instructor's safety instructions; from age 6", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session", "Not accessible for wheelchairs or strollers"],
+      afterBooking: ["The workshop's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the knife home in checked luggage"],
+      img: "/images/knife-craftsman.jpg", alt: "A craftsman inspecting a blade",
+    },
+    notesLabel: "Requests (optional)",
+    notesHint: "e.g. custom plan for two, beginner plan for one; left-handed",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, tell us how many of you there are, and which plan each of you would like: custom knife making or beginner sharpening." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "What is the difference between the two plans?", a: "Custom knife making: choose a blade from several, sharpen it and fit a prepared handle; you take that knife home. Beginner sharpening: learn to sharpen on a knife that already has its handle; you take that knife home. Blade and handle choice, handle replacement and engraving are not part of the beginner plan." },
+      { q: "Can I choose the handle?", a: "No: handles are prepared in advance. The blade is your choice on the custom plan." },
+      { q: "Can I have it engraved?", a: "On the custom plan, as a paid option; ask when you request." },
+      { q: "Can I take the knife on the plane?", a: "In checked luggage, yes. We send advice on packing it with your confirmation." },
+      { q: "Can children join?", a: "From age 6, following the instructor's safety instructions." },
+      { q: "Which language is it in?", a: "English or Japanese." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Choose a blade (custom plan)", "Sharpen it on a whetstone with the instructor", "Fit the prepared handle and finish the knife", "Take the knife home"],
+    master: { title: "Your instructor", bio: "The workshop's instructors teach sharpening and knife finishing in English and Japanese to beginners and cooks alike.", quote: "" },
+    itinerary: ["-0:15 — Arrive and check in", "0:00 — Choose your blade", "0:10 — Sharpen", "0:40 — Fit the handle", "0:55 — Test the edge", "1:00 — End of the workshop"],
+    goodToKnow: ["About 60 minutes; arrive 15 minutes early.", "From age 6. Two plans: custom knife making or beginner sharpening.", "Not accessible for wheelchairs or strollers. Pack the knife in checked luggage.", "English or Japanese."],
+    story: { heading: "The last pair of hands", body: "A Japanese knife passes through a forger, a grinder and a handle-maker before it reaches a kitchen. Doing the final sharpening yourself, and fitting the handle, makes it yours in a way no shop can." },
+  },
+  {
+    // Viyago Japan, Kyoto: cast your own metal shuriken (standard or mini) in
+    // 60 minutes in the Arashiyama studio. Built 2026-10-14 from the partner's
+    // public page; prices are set in the booking calendar and were not
+    // available, so ¥8,000 is a placeholder. Venue name off the page.
+    // Cancellation and wholesale not agreed. Preview.
+    slug: "arashiyama-shuriken-casting", city: "kyoto", category: "ninja", bookingType: "request", status: "preview",
+    title: "Cast Your Own Metal Shuriken in Arashiyama, Kyoto",
+    tagline: "Design the shape, prepare the mould, pour the metal and polish the result: a throwing star you made yourself, standard size or a mini version to carry. An hour in a ninja studio in Arashiyama, in English or Japanese.",
+    overview: [
+      "The shuriken is the ninja's most famous tool, and it is cast, not forged. In an hour in a studio in Arashiyama you design the shape of yours, prepare the mould in casting sand, watch the metal poured, quench it and polish it until it shines. You leave with it in your hand.",
+      "Choose the standard size or a mini shuriken about half as large, small enough to carry. On some days other weapon shapes or a necklace finish are available; ask the staff on the day. The session is taught in English or Japanese.",
+    ],
+    duration: "60 minutes", price: "¥8,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "Ask about children when you request", area: "Kyoto (Arashiyama)",
+    img: "/images/shuriken-arashiyama-hero.jpg", alt: "A guest in a leather apron holding up a freshly cast metal shuriken in front of the targets",
+    gallery: [
+      { img: "/images/shuriken-pour.jpg", alt: "Molten metal poured from a ladle into a sand mould" },
+      { img: "/images/shuriken-quench.jpg", alt: "Hands quenching a cast shuriken in a wooden tub of water" },
+      { img: "/images/shuriken-finished.jpg", alt: "A finished four-pointed shuriken on an anvil" },
+    ],
+    galleryNote: "Photos from the partner's studio.",
+    partySize: { min: 1, max: 8 },
+    availability: { daily: true, startTimes: ["10:00", "11:30", "13:00", "14:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00" },
+    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
+    scheduleNote: "Timings counted from the start of your session.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English or Japanese",
+    skipSiteFaq: true,
+    includedShort: "60-minute session · Materials · The shuriken you cast",
+    highlights: [
+      { icon: "spark", title: "Molten metal, your design", body: "Shape the mould yourself, then watch the pour: the part of the ninja's craft nobody else offers." },
+      { icon: "brush", title: "Polish it to a shine", body: "Quench, file and polish until the star is finished and yours to keep." },
+      { icon: "chat", title: "English or Japanese", body: "Instruction in both; aprons and gloves provided." },
+    ],
+    included: [
+      "The 60-minute casting session with instruction",
+      "Materials, mould, apron and gloves",
+      "The finished shuriken (standard or mini) to take home",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the studio (meet on site)",
+      "Necklace finish or other shapes, where offered on the day (paid options)",
+    ],
+    schedule: [
+      { time: "-0:15", title: "Arrive and check in" },
+      { time: "0:00", title: "Design and mould", body: "Choose standard or mini, shape the design and prepare the sand mould." },
+      { time: "0:20", title: "The pour", body: "The instructor pours the molten metal into your mould.", img: "/images/shuriken-pour.jpg" },
+      { time: "0:30", title: "Quench and polish", body: "Cool the star in water, then file and polish it.", img: "/images/shuriken-quench.jpg" },
+      { time: "1:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A ninja studio on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Hot metal is handled by the instructor; guests wear aprons and gloves and follow the safety instructions", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session", "Not accessible for wheelchairs or strollers"],
+      afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the shuriken home in checked luggage"],
+      img: "/images/ninja-target-room.jpg", alt: "The studio's training room",
+    },
+    notesLabel: "Requests (optional)",
+    notesHint: "e.g. two standard, one mini; children's ages",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date and tell us how many of you there are and whether you would like standard or mini shuriken." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "Do I handle the molten metal?", a: "No: the instructor pours. You design the shape, prepare the mould, quench the cast star and polish it, with an apron and gloves." },
+      { q: "Standard or mini?", a: "The standard shuriken is about twice the size of the mini. The mini is small enough to carry." },
+      { q: "Can I take it home on the plane?", a: "In checked luggage, yes. We send advice on packing it with your confirmation." },
+      { q: "Can children join?", a: "Tell us their ages when you request and we confirm with the studio." },
+      { q: "Which language is it in?", a: "English or Japanese." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+    ],
+    whatYoullDo: ["Design your shuriken and prepare the mould", "Watch the metal poured", "Quench, file and polish the star", "Take it home"],
+    master: { title: "Your instructor", bio: "The studio's instructors teach the casting process in English and Japanese and handle the hot metal themselves.", quote: "" },
+    itinerary: ["-0:15 — Arrive and check in", "0:00 — Design and mould", "0:20 — The pour", "0:30 — Quench and polish", "1:00 — End of the session"],
+    goodToKnow: ["About 60 minutes; arrive 15 minutes early.", "Standard or mini shuriken; aprons and gloves provided.", "Not accessible for wheelchairs or strollers. Pack the star in checked luggage.", "English or Japanese."],
+    story: { heading: "Cast, not thrown", body: "Every ninja film shows the throw. Almost none shows the making: the sand, the pour, the hiss of the quench. An hour in Arashiyama gives you the part the films leave out, and the star to prove it." },
+  },
+  {
     slug: "sushi-masterclass", city: "tokyo", category: "sushi",
     partySize: { min: 1, max: 6 },
     map: { lat: 35.6654, lng: 139.7707, zoom: 14 },
@@ -2091,12 +2849,20 @@ function withStructure(localized: Experience[]): Experience[] {
   });
 }
 
+/** A page in preview that has no text in a locale yet shows the English text
+ *  there, so every preview URL resolves in every language for sign-off. Live
+ *  pages are translated before publication, so nothing live falls through. */
+function withFallback(localized: Experience[]): Experience[] {
+  const missing = experiences.filter((e) => isPreview(e) && !localized.some((l) => l.slug === e.slug));
+  return [...withStructure(localized), ...missing];
+}
+
 function fullCatalog(lang: Lang) {
   const published = <T,>(list: T[]) => (TOURS_PUBLISHED ? list : []);
-  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: withStructure(experiencesEs), tours: published(toursEs) };
-  if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: withStructure(experiencesJa), tours: published(toursJa) };
-  if (lang === "fr") return { cities: citiesFr, categories: categoriesFr, experiences: withStructure(experiencesFr), tours: published(toursFr) };
-  if (lang === "zh-tw") return { cities: citiesZh, categories: categoriesZh, experiences: withStructure(experiencesZh), tours: published(toursZh) };
+  if (lang === "es") return { cities: citiesEs, categories: categoriesEs, experiences: withFallback(experiencesEs), tours: published(toursEs) };
+  if (lang === "ja") return { cities: citiesJa, categories: categoriesJa, experiences: withFallback(experiencesJa), tours: published(toursJa) };
+  if (lang === "fr") return { cities: citiesFr, categories: categoriesFr, experiences: withFallback(experiencesFr), tours: published(toursFr) };
+  if (lang === "zh-tw") return { cities: citiesZh, categories: categoriesZh, experiences: withFallback(experiencesZh), tours: published(toursZh) };
   return { cities, categories, experiences, tours: published(tours) };
 }
 

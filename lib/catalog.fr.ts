@@ -60,6 +60,16 @@ export const categoriesFr: Category[] = [
     lead: "Le kendo, c'est le sabre du samouraï devenu discipline : un salut, les déplacements, une frappe qui unit l'esprit, le sabre et le corps. Entraînez-vous dans un dojo en activité de Tokyo avec un instructeur qui enseigne en anglais, ou passez une heure plus calme avec le Nihon Kendo Kata et les mots laissés par les samouraïs." },
   { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-fuji-aerial.jpg",
     lead: "Au Japon, le golf a ses propres usages et quelques-uns des plus beaux panoramas du pays. Une journée de golf privée dans la région du mont Fuji, avec votre golf et votre heure de départ organisés pour vous, une voiture privée depuis votre hôtel à Tokyo et un accompagnement en anglais." },
+  { slug: "samurai", title: "Samouraï", tag: "Tradition", mark: "侍", img: "/images/tate-kata-performance.jpg",
+    lead: "Les samouraïs ont laissé à Tokyo ses anciennes villes-relais, ses écoles de sabre et un code de conduite qui façonne encore les manières. Parcourez un quartier historique en tenue de samouraï, ou apprenez le tate, le combat au sabre chorégraphié de la scène et du cinéma japonais, avec un interprète professionnel." },
+  { slug: "rakugo", title: "Rakugo", tag: "Tradition", mark: "噺", img: "/images/rakugo-stage.jpg",
+    lead: "Le rakugo est l'art comique du récit au Japon : un seul conteur, un éventail et une serviette, et toute une galerie de personnages. Écoutez-le en anglais à Asakusa, puis parcourez le quartier où est né le divertissement populaire de Tokyo." },
+  { slug: "cooking", title: "Cuisine", tag: "Gastronomie", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
+    lead: "La cuisine japonaise enseignée par des chefs professionnels : riz à sushi, rouleaux et nigiri, condiments fermentés et les plats qui en découlent. De petites classes où l'on cuisine, puis passe à table." },
+  { slug: "ninja", title: "Ninja", tag: "Tradition", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",
+    lead: "Les ninjas étaient des éclaireurs et des survivants ; leurs techniques allaient de la sarbacane et de l'étoile de jet à la respiration et à l'immobilité. Essayez les outils dans un studio de Kyoto, coulez votre propre shuriken, ou asseyez-vous pour méditer à Tokyo." },
+  { slug: "knife-making", title: "Couteaux", tag: "Arts et artisanat", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
+    lead: "Le couteau de cuisine japonais est le descendant discret du sabre. Dans un atelier d'Arashiyama, affûtez une lame sur la pierre, fixez son manche et repartez avec un couteau fini de vos mains." },
 ];
 
 export const experiencesFr: Experience[] = [
