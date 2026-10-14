@@ -496,7 +496,7 @@ export const experiences: Experience[] = [
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
-    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "live",
+    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "preview",
     title: "Ramen Making Class near Shibuya, Tokyo",
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen a few minutes from Shibuya.",
     overview: [
@@ -519,7 +519,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Taught in English",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the class, Japan time; free cancellation ends 30 days before. The date can be changed once, free of charge, up to 14 days before if another session has room; from 14 days before, a smaller group is charged in full. If the kitchen has to cancel, you hear by the day before and receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the class, Japan time; free cancellation ends 30 days before. The date can be changed once, free of charge, up to 14 days before if another session has room; from 14 days before, a smaller group is charged in full. Private sessions and groups of 20 or more: free cancellation ends 45 days before, half the price from 44 to 29 days before, the full price from 28 days before. If the kitchen has to cancel, you hear by the day before and receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "90-minute class · All ingredients and tools · The ramen you make",
     highlights: [
@@ -549,7 +549,7 @@ export const experiences: Experience[] = [
       { time: "1:30", title: "End of the class" },
     ],
     venue: {
-      known: ["A small ramen teaching kitchen in Tokyo, a few minutes from Shibuya — the exact address comes with your confirmation", "Wheelchair and stroller accessible; infants need their own seat", "Arrive 15 minutes before the start: guests arriving more than 5 minutes late cannot join the session", "Flour in the air and shared equipment: not recommended for anyone with coeliac disease or a severe wheat or gluten allergy", "Allergens handled in the kitchen: wheat, egg, milk, soy, pork, chicken, beef and gelatin — tell us about allergies when you request"],
+      known: ["A small ramen teaching kitchen in Tokyo, a few minutes from Shibuya — the exact address comes with your confirmation", "Wheelchair and stroller accessible; infants need their own seat", "Arrive 15 minutes before the start: the kitchen can wait at most 5 to 10 minutes after the start, so later arrivals cannot join the session", "Flour in the air and shared equipment: not recommended for anyone with coeliac disease or a severe wheat or gluten allergy", "Allergens handled in the kitchen: wheat, egg, milk, soy, pork, chicken, beef and gelatin — tell us about allergies when you request"],
       afterBooking: ["The kitchen's name, address and entrance instructions", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/ramen-fresh-noodles.jpg", alt: "Two guests holding their freshly cut noodles in the teaching kitchen",
     },
@@ -569,9 +569,9 @@ export const experiences: Experience[] = [
       { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
       { q: "Can groups book?", a: "Up to 16 guests share a session. Larger groups and private sessions are quoted individually." },
       { q: "Can we book at short notice?", a: "Yes, until 6:00 pm JST the day before, if the session still has room. Sessions run every day at 11:00, 13:30, 16:00 and 18:30." },
-      { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before the class; from 29 to 14 days before, half the price; from 13 days before, the full price. The date can be changed once, free, up to 14 days before if another session has room." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before the class; from 29 to 14 days before, half the price; from 13 days before, the full price. The date can be changed once, free, up to 14 days before if another session has room. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price, with one free date change up to 29 days before." },
       { q: "I have a wheat or gluten allergy.", a: "The class is not recommended for anyone with coeliac disease or a severe wheat or gluten allergy: there is flour in the air and the equipment is shared." },
-      { q: "What if we are late?", a: "Please arrive 15 minutes before the start. To keep every session on time, guests arriving 5 minutes or more after the start cannot join; we will try to move you to another session, which may carry a rescheduling fee." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes before the start. To keep every session on time, the kitchen can wait at most 5 to 10 minutes after the start, after which you cannot join; we will try to move you to another session, which may carry a rescheduling fee." },
       { q: "Is transport included?", a: "No. You meet at the kitchen, a few minutes from Shibuya; the address and directions come with your confirmation." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
@@ -587,7 +587,7 @@ export const experiences: Experience[] = [
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
-    slug: "dotonbori-ramen-class", city: "osaka", category: "ramen", bookingType: "request", status: "live",
+    slug: "dotonbori-ramen-class", city: "osaka", category: "ramen", bookingType: "request", status: "preview",
     title: "Ramen Making Class in Dotonbori, Osaka",
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen in the middle of Dotonbori.",
     overview: [
@@ -611,7 +611,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Taught in English",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the class, Japan time; free cancellation ends 30 days before. The date can be changed once, free of charge, up to 14 days before if another session has room; from 14 days before, a smaller group is charged in full. If the kitchen has to cancel, you hear by the day before and receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the class, Japan time; free cancellation ends 30 days before. The date can be changed once, free of charge, up to 14 days before if another session has room; from 14 days before, a smaller group is charged in full. Private sessions and groups of 20 or more: free cancellation ends 45 days before, half the price from 44 to 29 days before, the full price from 28 days before. If the kitchen has to cancel, you hear by the day before and receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "90-minute class · All ingredients and tools · The ramen you make",
     highlights: [
@@ -641,7 +641,7 @@ export const experiences: Experience[] = [
       { time: "1:30", title: "End of the class" },
     ],
     venue: {
-      known: ["A small ramen teaching kitchen in Dotonbori, Osaka, a few minutes' walk from Namba station — the exact address comes with your confirmation", "Not wheelchair or stroller accessible; infants need their own seat", "Arrive 15 minutes before the start: guests arriving more than 5 minutes late cannot join the session", "Flour in the air and shared equipment: not recommended for anyone with coeliac disease or a severe wheat or gluten allergy", "Allergens handled in the kitchen: wheat, egg, milk, soy, pork, chicken, beef and gelatin — tell us about allergies when you request"],
+      known: ["A small ramen teaching kitchen in Dotonbori, Osaka, a few minutes' walk from Namba station — the exact address comes with your confirmation", "Not wheelchair or stroller accessible; infants need their own seat", "Arrive 15 minutes before the start: the kitchen can wait at most 5 to 10 minutes after the start, so later arrivals cannot join the session", "Flour in the air and shared equipment: not recommended for anyone with coeliac disease or a severe wheat or gluten allergy", "Allergens handled in the kitchen: wheat, egg, milk, soy, pork, chicken, beef and gelatin — tell us about allergies when you request"],
       afterBooking: ["The kitchen's name, address and entrance instructions", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/ramen-osaka-group.jpg", alt: "A small class with their rolled sheets of dough in the Dotonbori teaching kitchen",
     },
@@ -661,9 +661,9 @@ export const experiences: Experience[] = [
       { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
       { q: "Can groups book?", a: "Up to 16 guests share a session. Larger groups and private sessions are quoted individually." },
       { q: "Can we book at short notice?", a: "Yes, until 6:00 pm JST the day before, if the session still has room. Sessions run every day at 11:00, 13:30, 16:00 and 18:30." },
-      { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before the class; from 29 to 14 days before, half the price; from 13 days before, the full price. The date can be changed once, free, up to 14 days before if another session has room." },
+      { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before the class; from 29 to 14 days before, half the price; from 13 days before, the full price. The date can be changed once, free, up to 14 days before if another session has room. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price, with one free date change up to 29 days before." },
       { q: "I have a wheat or gluten allergy.", a: "The class is not recommended for anyone with coeliac disease or a severe wheat or gluten allergy: there is flour in the air and the equipment is shared." },
-      { q: "What if we are late?", a: "Please arrive 15 minutes before the start. To keep every session on time, guests arriving 5 minutes or more after the start cannot join; we will try to move you to another session, which may carry a rescheduling fee." },
+      { q: "What if we are late?", a: "Please arrive 15 minutes before the start. To keep every session on time, the kitchen can wait at most 5 to 10 minutes after the start, after which you cannot join; we will try to move you to another session, which may carry a rescheduling fee." },
       { q: "Is transport included?", a: "No. You meet at the kitchen in Dotonbori, a few minutes' walk from Namba station; the address and directions come with your confirmation." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
@@ -678,7 +678,7 @@ export const experiences: Experience[] = [
     // condition sheet yet: the sale price, start times and wholesale terms are
     // placeholders (docs/EMAIL_TEMPLATES.md §I). The partner's brand and the
     // founder's name stay off the page so guests cannot book around us.
-    slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "live",
+    slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience in a Nihonbashi Dojo, Tokyo",
     tagline: "Put on the armour, take up the shinai and train in a working Tokyo dojo: the history and etiquette of kendo, footwork, the swing, striking practice and a match to finish — against the other guests, then the instructor. Two hours, taught in English, from age six.",
     overview: [
@@ -767,7 +767,7 @@ export const experiences: Experience[] = [
   {
     // Kendo Spirit's second programme in the same dojo: the Nihon Kendo Kata
     // and the words of the samurai, one hour, no sparring. Same placeholders.
-    slug: "nihonbashi-bushido-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "live",
+    slug: "nihonbashi-bushido-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
     title: "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata",
     tagline: "An hour in a working Nihonbashi dojo with the Nihon Kendo Kata — the forms that preserve the samurai's sword — and the words the samurai left behind. No armour, no sparring, no single right answer: a quiet hour to find your own.",
     overview: [
@@ -853,7 +853,7 @@ export const experiences: Experience[] = [
     // agreement, prices or photos from the host yet: price and photos are
     // placeholders (docs/EMAIL_TEMPLATES.md §J); the host and the gallery are
     // not named on the page.
-    slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "live",
+    slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
     title: "Tea Ceremony in a Yotsuya Tearoom, Tokyo",
     tagline: "Ninety minutes with a tea teacher of the Sōhen school in a small Yotsuya tearoom: the history and etiquette, entering the room the traditional way, a full tea performance, then a bowl of matcha you whisk yourself and a few minutes of quiet. Taught in English, from age five.",
     overview: [
@@ -931,14 +931,14 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "tokyo-kendo-experience-tour", city: "tokyo", category: "kendo", bookingType: "request", status: "live",
+    slug: "tokyo-kendo-experience-tour", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Tokyo with Dan-ranked Instructors",
-    tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Tokyo dojo arranged for your date; also run in Osaka, Kyoto and other cities.",
+    tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a working dojo in Arakawa, Tokyo; also run in Osaka, Kyoto and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
-      "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Tokyo that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "Sessions run on weekday mornings, usually from 10:00, in a working kendo dojo in Higashi-Nippori, Arakawa, about ten to twelve minutes on foot from JR Uguisudani station. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (Arakawa, near Uguisudani station)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -955,7 +955,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -967,7 +967,7 @@ export const experiences: Experience[] = [
     included: [
       "A session of about two hours led by dan-ranked instructors, in English and Japanese",
       "Kendo uniform, protective armour and shinai, all lent on site",
-      "The dojo or hall, arranged for your date",
+      "The dojo in Arakawa",
       "A tenugui towel to keep, and a bottle of water for groups of up to ten",
       "Tax included — nothing is added on the day",
     ],
@@ -985,7 +985,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Tokyo, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo in Higashi-Nippori, Arakawa, about 10–12 minutes on foot from the north exit of JR Uguisudani station — the dojo's name and exact meeting point come with your confirmation", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -999,21 +999,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
-      { q: "Where is the venue?", a: "A kendo dojo or hall in Tokyo within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
+      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "Where is the venue?", a: "A working kendo dojo in Higashi-Nippori, Arakawa, about 10–12 minutes on foot from JR Uguisudani station (north exit). The dojo's name and the meeting point come with your confirmation." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Tokyo?", a: "Yes: Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays), in a dojo in Arakawa near Uguisudani station.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -1022,11 +1023,11 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "osaka-kendo-experience-tour", city: "osaka", category: "kendo", bookingType: "request", status: "live",
+    slug: "osaka-kendo-experience-tour", city: "osaka", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Osaka with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Osaka dojo arranged for your date; also run in Tokyo, Kyoto and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Osaka that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
     duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Osaka (dojo chosen for your date)",
@@ -1046,7 +1047,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -1076,7 +1077,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Osaka, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Osaka, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1090,21 +1091,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
       { q: "Where is the venue?", a: "A kendo dojo or hall in Osaka within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Osaka?", a: "Yes: Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -1113,11 +1115,11 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "kyoto-kendo-experience-tour", city: "kyoto", category: "kendo", bookingType: "request", status: "live",
+    slug: "kyoto-kendo-experience-tour", city: "kyoto", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Kyoto with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Kyoto dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Kyoto that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
     duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kyoto (dojo chosen for your date)",
@@ -1137,7 +1139,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -1167,7 +1169,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Kyoto, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Kyoto, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1181,21 +1183,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
       { q: "Where is the venue?", a: "A kendo dojo or hall in Kyoto within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Kyoto?", a: "Yes: Tokyo, Osaka, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -1204,11 +1207,11 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "nagoya-kendo-experience-tour", city: "nagoya", category: "kendo", bookingType: "request", status: "live",
+    slug: "nagoya-kendo-experience-tour", city: "nagoya", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Nagoya with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday afternoons in a Nagoya dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday afternoons, usually from 13:30, in a working dojo or hall in Nagoya that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
     duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Nagoya (dojo chosen for your date)",
@@ -1228,7 +1231,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -1258,7 +1261,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Nagoya, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:30; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Nagoya, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:30; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1272,21 +1275,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday afternoons, usually from 13:30. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "When does it run?", a: "Weekday afternoons, usually from 13:30. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
       { q: "Where is the venue?", a: "A kendo dojo or hall in Nagoya within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Nagoya?", a: "Yes: Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Okinawa also starts in the early afternoon; the other cities run in the morning." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -1295,11 +1299,11 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "okinawa-kendo-experience-tour", city: "okinawa", category: "kendo", bookingType: "request", status: "live",
+    slug: "okinawa-kendo-experience-tour", city: "okinawa", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Okinawa with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday afternoons in a Okinawa dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday afternoons, usually from 13:00, in a working dojo or hall in Okinawa that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Kanazawa and Himeji — tell us where you will be.",
     ],
     duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Okinawa (dojo chosen for your date)",
@@ -1319,7 +1323,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -1349,7 +1353,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Okinawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Okinawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1363,21 +1367,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday afternoons, usually from 13:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "When does it run?", a: "Weekday afternoons, usually from 13:00. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
       { q: "Where is the venue?", a: "A kendo dojo or hall in Okinawa within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Okinawa?", a: "Yes: Tokyo, Osaka, Kyoto, Nagoya, Kanazawa and Himeji. Tell us the city in your request; Nagoya also starts in the early afternoon; the other cities run in the morning." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -1386,11 +1391,11 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "kanazawa-kendo-experience-tour", city: "kanazawa", category: "kendo", bookingType: "request", status: "live",
+    slug: "kanazawa-kendo-experience-tour", city: "kanazawa", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Kanazawa dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Kanazawa that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Himeji — tell us where you will be.",
     ],
     duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kanazawa (dojo chosen for your date)",
@@ -1410,7 +1415,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -1440,7 +1445,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Kanazawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Kanazawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1454,21 +1459,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
       { q: "Where is the venue?", a: "A kendo dojo or hall in Kanazawa within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Kanazawa?", a: "Yes: Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -1477,11 +1483,11 @@ export const experiences: Experience[] = [
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
     // adult rate with tax as a placeholder until ours is set; the operator
     // is not named on the page.
-    slug: "himeji-kendo-experience-tour", city: "himeji", category: "kendo", bookingType: "request", status: "live",
+    slug: "himeji-kendo-experience-tour", city: "himeji", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience Tour in Himeji with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Himeji dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
-      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
+      "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Himeji that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Kanazawa — tell us where you will be.",
     ],
     duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Himeji (dojo chosen for your date)",
@@ -1501,7 +1507,7 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English and Japanese",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more have longer notice periods, set out in your quote. If the operator has to cancel, you receive a full refund to your original payment method.",
+    cancellation: "Days are counted to the date of the session, Japan time. Free cancellation ends 15 days before; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment has been ordered for your group, the number of participants cannot be reduced for a refund. Groups of 70 or more book at least a month ahead, and their free cancellation ends a month before the date. If the operator has to cancel, you receive a full refund to your original payment method.",
     cancellationTiers: [{ until: 15, rate: 0 }, { until: 3, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Full armour and shinai · Dan-ranked instructor · Tenugui to keep",
     highlights: [
@@ -1531,7 +1537,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Himeji, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; weekends are rarely possible", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Himeji, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1545,21 +1551,22 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
       { q: "What do we actually do?", a: "Put on the uniform and armour, take part in the bowing ceremony, hear what the samurai lived by, practise strikes, and finish with a match between participants." },
-      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. Weekend dates are rarely possible, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
+      { q: "When does it run?", a: "Weekday mornings, usually from 10:00. The tour does not run on weekends or Japanese public holidays, so plan for a weekday. The exact start time follows the venue and is confirmed with your quote." },
       { q: "Where is the venue?", a: "A kendo dojo or hall in Himeji within thirty to fifty minutes of the city centre, chosen by the operator for your date; the meeting point comes with your confirmation. The venue cannot be chosen." },
       { q: "Can children join?", a: "From age 9. Children aged 9 to 13 pay a reduced rate; from 14, the adult rate. Tell us everyone's age in your request and the quote applies it." },
       { q: "How large can the group be?", a: "From two to two hundred. Groups of 14 or more are quoted individually, with lighter equipment options (uniform and shinai without armour, or shinai only) and more instructors." },
       { q: "Can we have the session to ourselves?", a: "Yes, for six adults or more, or for the price of six adults." },
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Himeji?", a: "Yes: Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Kanazawa. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
+      { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
       { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
-      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 3 days before, half the price; from 2 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings; the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
