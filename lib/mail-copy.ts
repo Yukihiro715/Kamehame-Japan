@@ -3,6 +3,7 @@
 // it reads as a person's note rather than a marketing template.
 
 import type { Lang } from "@/lib/i18n";
+import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 import type { Enquiry } from "@/lib/contact";
 
 interface AckCopy {
@@ -24,7 +25,7 @@ interface AckCopy {
 }
 
 /** One signature for every email the site sends, in the visitor's language. */
-const SIGN: Record<Lang, string> = {
+export const SIGN: Record<Lang, string> = {
   en: [
     "-----",
     "Best regards,",
@@ -235,9 +236,9 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
   const text = [
     c.hello(e.name),
     "",
-    trade ? c.thanksTrade : c.thanks(experienceTitle),
+    trade ? c.thanksTrade : e.areaId ? GOLF_BOOKING_COPY[isLang(e.lang) ? e.lang : "en"].received : c.thanks(experienceTitle),
     "",
-    ...(trade ? [] : [c.notYet, ""]),
+    ...(trade ? [] : [e.areaId ? [GOLF_BOOKING_COPY[isLang(e.lang) ? e.lang : "en"].arrange, GOLF_BOOKING_COPY[isLang(e.lang) ? e.lang : "en"].protection].join("\n\n") : c.notYet, ""]),
     ...(echo.length ? [c.echoH, ...echo.map((l) => `  ${l}`), ""] : []),
     c.addMore,
     "",

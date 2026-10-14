@@ -2066,6 +2066,7 @@ import { CANCELLATION_FR, categoriesFr, citiesFr, experiencesFr, toursFr } from 
 import { CANCELLATION_ZH, categoriesZh, citiesZh, experiencesZh, toursZh } from "@/lib/catalog.zh-tw";
 import type { Lang } from "@/lib/i18n";
 import { golfTiers } from "@/lib/golf-prices";
+import { applyGolfBookingCopy } from "@/lib/golf-booking-copy";
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
@@ -2102,7 +2103,8 @@ function fullCatalog(lang: Lang) {
 /** The catalog as the site shows it. With PLACEHOLDERS_PUBLISHED off this is
  *  the signed experiences only, plus the cities and categories they belong to. */
 export function catalogFor(lang: Lang) {
-  const full = fullCatalog(lang);
+  const base = fullCatalog(lang);
+  const full = { ...base, experiences: base.experiences.map((e) => applyGolfBookingCopy(e, lang)) };
   if (PLACEHOLDERS_PUBLISHED) return full;
   const experiences = full.experiences.filter(isLive);
   return {
@@ -2115,7 +2117,8 @@ export function catalogFor(lang: Lang) {
 
 /** Experiences in "preview": built, reachable by URL for sign-off, never listed. */
 export function previewsFor(lang: Lang) {
-  const full = fullCatalog(lang);
+  const base = fullCatalog(lang);
+  const full = { ...base, experiences: base.experiences.map((e) => applyGolfBookingCopy(e, lang)) };
   return { experiences: full.experiences.filter(isPreview), cities: full.cities };
 }
 

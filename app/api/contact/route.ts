@@ -7,6 +7,7 @@ import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type G
 import { yen } from "@/lib/pricing";
 import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
+import { automationConfigured, submitGolfAutomation } from "@/lib/golf-automation";
 import { ledgerRecord, postToLedger } from "@/lib/ledger";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
@@ -161,7 +162,8 @@ function parse(body: Record<string, unknown>): Enquiry | null {
   if (area || body.area_id !== undefined) {
     const areaId = body.area_id;
     const golfers = Number(party);
-    const mode: GolfCourseMode = body.course_mode === "specific" ? "specific" : "recommended";
+    if (body.course_mode !== "specific" && body.course_mode !== "recommended") return null;
+    const mode: GolfCourseMode = body.course_mode;
     if (!isGolfArea(areaId) || !isGolfGolfers(golfers)) return null;
     const price = golfPackagePrice(areaId, golfers, mode);
     golf = {
@@ -171,6 +173,10 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     };
   }
   return {
+    requestId: typeof body.request_id === "string" && /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(body.request_id) ? body.request_id : crypto.randomUUID(),
+    pickupRegion: ["tokyo", "saitama", "chiba", "other"].includes(String(body.pickup_region)) ? body.pickup_region as Enquiry["pickupRegion"] : undefined,
+    caddie: ["none", "required", "unsure"].includes(String(body.caddie)) ? body.caddie as Enquiry["caddie"] : undefined,
+    addonIds: Array.isArray(body.addon_ids) ? body.addon_ids.filter((x): x is string => typeof x === "string").slice(0, 10) : undefined,
     kind, name, email, message,
     company: clean(body.company, MAX.company) || undefined,
     country: clean(body.country, MAX.country) || undefined,
@@ -261,6 +267,21 @@ export async function POST(request: Request): Promise<Response> {
   // The booking ledger gets a row once delivery is settled (see lib/ledger.ts).
   const ledger = (ackSent: boolean, followUpScheduled: boolean) =>
     postToLedger(cf.env.LEDGER_WEBHOOK_URL, ledgerRecord(enquiry, ja, { ackSent, followUpScheduled }));
+
+  if (enquiry.kind === "guest" && enquiry.experience === "mt-fuji-golf-day" && automationConfigured(cf.env)) {
+    try {
+      const result = await submitGolfAutomation(cf.env, enquiry, titleFor(enquiry), record,
+        ledgerRecord(enquiry, ja, { ackSent: false, followUpScheduled: false }));
+      await alert(!!result.ackSent);
+      return Response.json({ ok: true, reference: result.id });
+    } catch {
+      // The queue may have accepted the request before a network timeout. The
+      // same request ID safely retries; NEVER fall back to a second sender.
+      console.error("contact: golf automation unavailable; retry with same request ID");
+      await alert(false);
+      return Response.json({ ok: false, error: "automation_unavailable", fallback }, { status: 503 });
+    }
+  }
 
   if (resendKey) {
     try {

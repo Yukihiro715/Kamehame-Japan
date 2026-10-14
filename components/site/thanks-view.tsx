@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Clock3, CreditCard, Mail } from "lucide-react";
 import { track } from "@/lib/analytics";
+import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 
@@ -47,6 +48,8 @@ export function ThanksView({ lang }: { lang: Lang }) {
   }, []);
 
   const trade = sent?.kind === "trade";
+  const golf = sent?.event?.experience === "mt-fuji-golf-day";
+  const G = GOLF_BOOKING_COPY[lang];
   const rows = sent ? [
     [K.experience, sent.experienceTitle],
     [K.dates, sent.dates],
@@ -73,8 +76,8 @@ export function ThanksView({ lang }: { lang: Lang }) {
       <section className="thanks-card">
         <h2>{K.nextH}</h2>
         <ol className="thanks-steps">
-          <li><Clock3 size={18} /><span>{trade ? K.stepReplyTrade : K.stepReply}</span></li>
-          {!trade && <li><CreditCard size={18} /><span>{K.stepPay}</span></li>}
+          <li><Clock3 size={18} /><span>{trade ? K.stepReplyTrade : golf ? G.proposal : K.stepReply}</span></li>
+          {!trade && <li><CreditCard size={18} /><span>{golf ? `${G.arrange} ${G.protection}` : K.stepPay}</span></li>}
           <li><Mail size={18} /><span>{K.stepSpam(CONTACT_EMAIL)}</span></li>
         </ol>
       </section>

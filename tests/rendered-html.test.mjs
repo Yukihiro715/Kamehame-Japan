@@ -99,6 +99,9 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.ok(html.includes("Send Golf Day Request"), "the submit button has its own label");
   assert.ok(html.includes("Check Availability"), "the page CTA is Check Availability");
   assert.ok(html.includes("Custom quote"), "a specific course is quoted");
+  assert.ok(html.includes('name="pickup_region"') && html.includes('name="caddie"'), "automation choices are explicit");
+  assert.ok(text.includes("our team takes care of your course reservation") && text.includes("within 24 hours of payment"));
+  assert.doesNotMatch(text, /course (is )?confirmed before payment|course name and tee time before payment/);
   assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"250000"') && html.includes('"highPrice":"350000"'), "structured data carries the price range");
 });
 

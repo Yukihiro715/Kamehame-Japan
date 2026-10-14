@@ -11,6 +11,7 @@ import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { isBookable, timesFor, useBooking } from "@/components/site/booking-context";
+import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -47,6 +48,8 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const [rental, setRental] = useState<Record<number, Rental>>({});
   const [handed, setHanded] = useState<Record<number, Handed>>({});
   const started = useRef(false);
+  const requestId = useRef({ key: "", id: "" });
+  const processCopy = GOLF_BOOKING_COPY[lang];
   if (!b) return null;
   const x = b.experience;
   const v = b.variantView ?? variants[0];
@@ -80,6 +83,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     const level = data.level as keyof typeof G.experienceOpts;
     const payload = {
+      pickup_region: data.pickup_region, caddie: data.caddie, addon_ids: chosenAddOns.map((a) => a.id),
       kind: "guest", lang, experience: experience.slug,
       name: data.name, email: data.email, whatsapp: data.whatsapp, message: data.message, website: data.website,
       area: v.title, area_id: v.id, party: String(n),
@@ -95,9 +99,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
       addons: chosenAddOns.map(addOnLine).join(", "),
     };
+    const key = JSON.stringify(payload);
+    if (requestId.current.key !== key) requestId.current = { key, id: crypto.randomUUID() };
     setStatus("sending");
     try {
-      const res = await fetch("/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+      const res = await fetch("/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: requestId.current.id }) });
       const json = (await res.json()) as { ok: boolean };
       if (!json.ok) { setStatus("failed"); return; }
       // GTM turns this into the GA4 / Ads conversion once the confirmation page
@@ -204,6 +210,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
 
       <fieldset className="form-step">
         <legend>{G.steps.hotel}</legend>
+        <label><span>{processCopy.region}</span>
+          <select name="pickup_region" required defaultValue="">
+            {["", "tokyo", "saitama", "chiba", "other"].map((value, i) => <option key={value} value={value} disabled={!value}>{processCopy.regions[i]}</option>)}
+          </select>
+        </label>
         <div className="form-row two">
           <label>
             <span>{G.pickup}</span>
@@ -283,6 +294,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         <label className="form-row">
           <span>{G.requests}</span>
           <textarea name="message" rows={4} maxLength={4000} placeholder={G.requestsHint} />
+        </label>
+        <label><span>{processCopy.caddie}</span>
+          <select name="caddie" defaultValue="none">
+            {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.caddies[i]}</option>)}
+          </select><small>{processCopy.caddieNote}</small>
         </label>
         {addOns.length > 0 && (
           <fieldset className="go-extras">
