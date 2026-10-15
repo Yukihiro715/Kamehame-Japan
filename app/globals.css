@@ -1479,14 +1479,20 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-seg-opt input, .go-area input { position:absolute; left:0; top:0; width:1px; height:1px; min-height:0; opacity:0; margin:0; padding:0; border:0; pointer-events:none; }
 .go-seg-opt.on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; color:var(--ink); font-weight:700; }
 .go-seg-opt:focus-within, .go-area:focus-within { outline:2px solid var(--kame); outline-offset:2px; }
-.go-area-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
-.go-area { position:relative; min-width:0; display:grid; gap:4px; align-content:start; padding:14px 12px 12px; border:1px solid #d9d3c7; border-radius:12px; background:var(--white); cursor:pointer; transition:border-color .15s, box-shadow .15s, background .15s; }
+.go-area-grid { display:grid; grid-template-columns:1fr; gap:8px; }
+.go-area { position:relative; min-width:0; display:grid; grid-template-columns:auto minmax(0,1fr); gap:4px 12px; align-content:start; padding:14px 14px 12px; border:1px solid #d9d3c7; border-radius:12px; background:var(--white); cursor:pointer; transition:border-color .15s, box-shadow .15s, background .15s; }
 .go-area.on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; }
 .go-area .vp-check { top:10px; right:10px; }
 .go-area.on .vp-check { background:var(--ink); border-color:var(--ink); color:var(--white); }
 .go-card .go-area > span { font-size:inherit; letter-spacing:inherit; color:inherit; }
 .go-card .go-title { font-family:var(--font-display); font-weight:400; font-size:14.5px; letter-spacing:.05em; text-transform:uppercase; line-height:1.2; padding-right:26px; }
-.go-card .go-line { font-size:12px; line-height:1.45; color:#5c584f; min-height:2.9em; }
+.go-card .go-line { font-size:12px; line-height:1.45; color:#5c584f; }
+/* one card per row: the title and line across the card, the total at the left, the per-person figure at the right on the same baseline */
+.go-area .go-title, .go-area .go-line { grid-column:1 / -1; }
+.go-card .go-price { grid-column:1; }
+.go-card .go-price.quote { grid-column:1 / -1; }
+.go-card .go-pp { grid-column:2; justify-self:end; align-self:end; text-align:right; }
+.go-card .go-price .go-unit, .go-card .go-price .go-lead { white-space:nowrap; }
 .go-card .go-price { display:flex; flex-direction:column; margin-top:4px; line-height:1.1; }
 .go-card .go-price .go-lead { font-size:11px; letter-spacing:.04em; color:var(--muted); }
 .go-card .go-price b { font-family:var(--font-display); font-weight:400; font-size:24px; letter-spacing:.02em; line-height:1.1; color:var(--ink); white-space:nowrap; }
@@ -1659,7 +1665,6 @@ body[data-kh-modal] .sticky-request { display:none; }
 @media(max-width:900px){ .gt { grid-template-columns:1fr; } .gt-media img { aspect-ratio:3 / 2; } .gt-media .gt-photo2 { width:40%; margin-top:-16%; } }
 @media(max-width:700px){ .gt-media img { border-radius:12px; } .gt-lede { font-size:15px; } }
 
-@media(max-width:360px){ .go-area-grid { grid-template-columns:1fr; } }
 @media(max-width:480px){ .go-confirm dl > div { grid-template-columns:1fr; gap:2px; } }
 :is([lang="ja"], [lang="zh-tw"]) .go-h, :is([lang="ja"], [lang="zh-tw"]) .go-title, :is([lang="ja"], [lang="zh-tw"]) .golf-form .form-step > legend, :is([lang="ja"], [lang="zh-tw"]) .xp-sub-h { letter-spacing:.04em; }
 /* CJK title: never break inside a word ("プライベートゴルフ"), and a size that keeps it to two lines on a phone */
