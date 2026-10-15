@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url));
 const vite = await createServer({ appType: "custom", configFile: false, root, resolve: { alias: { "@": root } }, server: { middlewareMode: true } });
 after(() => vite.close());
-const { usdOf, usd, approxUsd, fxText, hasYen, isPlausibleRate } = await vite.ssrLoadModule("/lib/currency.ts");
+const { usdOf, usd, approxUsd, fxText, hasYen, isPlausibleRate, validateRate, cacheIsFresh, MAX_RATE_AGE_DAYS } = await vite.ssrLoadModule("/lib/currency.ts");
 
 const RATE = 150; // the fixed test rate: 1 USD = 150 JPY
 
@@ -38,4 +38,31 @@ test("formatted price strings keep their words and gain a dollar estimate per ye
 test("only plausible yen-per-dollar rates are accepted", () => {
   for (const ok of [100, 149.37, 199]) assert.equal(isPlausibleRate(ok), true);
   for (const bad of [0, -1, 1, 49, 401, NaN, Infinity, "150", null, undefined]) assert.equal(isPlausibleRate(bad), false, String(bad));
+});
+
+test("a rate is accepted only with the right currencies, a plausible figure and a recent, real date", () => {
+  const now = Date.parse("2026-10-15T09:00:00Z");
+  const good = { base: "USD", quote: "JPY", rate: 158.45, date: "2026-10-14", fetchedAt: "2026-10-15T08:00:00Z" };
+  assert.deepEqual(validateRate(good, now), good);
+  assert.equal(validateRate({ ...good, stale: true }, now).stale, true, "the stale flag survives");
+  assert.equal(validateRate({ ...good, base: "EUR" }, now), null, "wrong base");
+  assert.equal(validateRate({ ...good, quote: "USD" }, now), null, "wrong quote");
+  assert.equal(validateRate({ ...good, rate: 15.8 }, now), null, "implausible figure");
+  assert.equal(validateRate({ ...good, rate: "158" }, now), null, "a string is not a rate");
+  assert.equal(validateRate({ ...good, date: "14/10/2026" }, now), null, "malformed date");
+  assert.equal(validateRate({ ...good, date: "2026-10-18" }, now), null, "a date days in the future");
+  assert.ok(validateRate({ ...good, date: "2026-10-16" }, now), "tomorrow's date (time zones) is tolerated");
+  assert.equal(validateRate({ ...good, date: "2026-10-01" }, now), null, `older than ${MAX_RATE_AGE_DAYS} days`);
+  assert.ok(validateRate({ ...good, date: "2026-10-09" }, now), "a long weekend's age is fine");
+  for (const bad of [null, undefined, "158", 158, [], {}]) assert.equal(validateRate(bad, now), null, String(bad));
+});
+
+test("a cached copy must have been taken in the past and within the TTL", () => {
+  const now = Date.parse("2026-10-15T09:00:00Z");
+  const ttl = 12 * 60 * 60 * 1000;
+  assert.equal(cacheIsFresh("2026-10-15T08:00:00Z", ttl, now), true);
+  assert.equal(cacheIsFresh("2026-10-14T20:00:00Z", ttl, now), false, "older than the TTL");
+  assert.equal(cacheIsFresh("2026-10-15T10:00:00Z", ttl, now), false, "a future timestamp (clock skew or tampering) is not fresh");
+  assert.equal(cacheIsFresh("not a date", ttl, now), false);
+  assert.equal(cacheIsFresh(undefined, ttl, now), false);
 });

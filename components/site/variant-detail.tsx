@@ -38,7 +38,8 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
-  const photos: GolfPhoto[] = [{ img: exp.img, alt: exp.alt, area: variants.find((v) => v.img === exp.img)?.id }, ...exp.gallery];
+  // The hero photo leads and the gallery follows, one fixed order for both areas; `gallery` never repeats the hero.
+  const photos: GolfPhoto[] = [{ img: exp.img, alt: exp.alt }, ...exp.gallery.filter((g) => g.img !== exp.img)];
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
   const pricings = Object.fromEntries(variants.map((v) => [v.id, pricingForVariant(exp, v, lang)]));
@@ -83,7 +84,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
         <div className="xp-cols vh-cols">
           <section className="xp-mv vh-mv" aria-label={D.gallery}>
-            <GolfGallery photos={photos} variants={variants} lang={lang} />
+            <GolfGallery photos={photos} lang={lang} />
             <ul className="vh-benefits">
               {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
             </ul>

@@ -1,4 +1,4 @@
-import { isPlausibleRate, type FxRate } from "@/lib/currency";
+import { isPlausibleRate, validateRate, type FxRate } from "@/lib/currency";
 
 // The day's USD→JPY reference rate, for the dollar estimates shown beside
 // yen prices. Source: Frankfurter (European Central Bank reference rates,
@@ -35,7 +35,8 @@ async function fetchSource(): Promise<FxRate | null> {
     const data = (await res.json()) as { date?: string; rates?: { JPY?: number } };
     const rate = data.rates?.JPY;
     if (!isPlausibleRate(rate) || typeof data.date !== "string") return null;
-    return { base: "USD", quote: "JPY", rate: Math.round(rate * 10000) / 10000, date: data.date, fetchedAt: new Date().toISOString() };
+    // The same checks the browser applies: currencies, a plausible figure, a real date that is neither in the future nor too old.
+    return validateRate({ base: "USD", quote: "JPY", rate: Math.round(rate * 10000) / 10000, date: data.date, fetchedAt: new Date().toISOString() });
   } catch {
     return null;
   }

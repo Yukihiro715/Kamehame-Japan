@@ -87,7 +87,8 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                 ) : (
                   <>
                     <span className="go-price">
-                      {p.lead && <small className="go-lead">{p.lead}</small>}
+                      {/* "≈" already says approximate in USD, so the lead keeps only "From" there */}
+                      {(usdActive ? copy.from : p.lead) && <small className="go-lead">{usdActive ? copy.from : p.lead}</small>}
                       <b><Yen n={p.perPerson} />{copy.fromSuffix && <span className="go-suffix">{copy.fromSuffix}</span>}</b>
                       {copy.perPerson && <small className="go-unit">{copy.perPerson}</small>}
                       <JpyRef n={p.perPerson} unit={copy.perPerson} lang={lang} />

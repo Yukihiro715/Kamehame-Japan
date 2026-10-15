@@ -52,21 +52,25 @@ On 2026-09-29 the host also agreed to their use in KAMEHAME JAPAN's own advertis
 `kanji-styles.jpg` is the teacher's own chart of style examples (Cute / Bold / Elegant), shown uncropped. The teacher's condition sheet allows their use on
 all channels; the trial participants' agreement to appear was confirmed with the partner on 2026-09-29.
 
-`public/images/golf-fuji-aerial.jpg`, `golf-fuji-winter.jpg`, `golf-fuji-pond.jpg` and `golf-lakes-aerial.jpg` were supplied by the
-owner on 2026-10-10 (686–880 px wide, kept at that size) and replaced the six earlier golf photos (`golf-flag-fuji`, `golf-fuji-clouds`,
-`golf-fairway`, `golf-pond`, `golf-green`, `golf-swing`), which were upscaled stills and have been deleted. The source and licence of
-each supplied file is to be confirmed with the owner / golf partner before use in paid ads; `golf-lakes-aerial.jpg` shows no
-Mt. Fuji and carries no area label on the page until its course is confirmed.
+## Golf: the shared ten-photo gallery (2026-10-15)
 
-## Golf: Tokyo-area course photos (added 2026-10-10)
+`public/images/golf-gallery-01-fuji-aerial.webp` … `golf-gallery-10-golf-course.webp` and their 480px copies in
+`public/images/thumbs/` are the ten photographs the owner supplied on 2026-10-15 (handoff package, `source_originals/`:
+IMG_9628, 37D3D051…, IMG_9620, IMG_9622, IMG_9621, 29C7375D…, IMG_9633, IMG_9624, IMG_9630, IMG_9627). They replaced the
+earlier golf photos (`golf-fuji-aerial`, `golf-fuji-winter`, `golf-fuji-pond`, `golf-lakes-aerial`, `golf-tokyo-clubhouse`,
+`golf-tokyo-tee`, `golf-tokyo-terrace`), which have been deleted.
 
-Wikimedia Commons, used under CC BY-SA. Example courses in the Kanto region, not the partner's courses.
+The published files are the owner's originals with non-generative adjustments only: a global tone curve to lift the
+shadows on 01, 03, 04 and 05, a slight reduction of the yellow cast on 03, and the top 22% (sky) cropped from 10;
+02, 06, 07, 08 and 09 are unchanged apart from resizing to 1600px wide and WebP encoding. The AI-edited references in the
+handoff package were not used (they redraw details: different mountains and sky on 10, altered furniture and plants on 08,
+and so on). Thumbnails are made from the same adjusted files.
 
-- `public/images/golf-tokyo-clubhouse.jpg` and `golf-tokyo-terrace.jpg` (cropped): "Central Golf Club New Course, Namegata - Jun 30, 2012 (1)" and "(3)" by Yuki Shimazu (Flickr "shimazu"), CC BY-SA 2.0 — https://commons.wikimedia.org/wiki/File:Central_Golf_Club_New_Course,_Namegata_-_Jun_30,_2012_(1).jpg
-- `public/images/golf-tokyo-tee.jpg`: "Kamakura Country Club" by LittleT889, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Kamakura_Country_Club.jpg
-
-`public/images/thumbs/golf-*.jpg` (added 2026-10-10) are 480px copies of the nine golf photos above, made for the
-thumbnail strip and the all-photos sheet on the golf page; same sources and licences as the originals.
+The photos show courses, clubhouses, meals and facilities at several different clubs (some were originally taken from
+club websites or stock sources, per the owner). Ownership and permission for commercial use on kamehame-japan.com,
+including identifiable people in 02 and 06, are **to be confirmed by the owner / golf partner** and are not evidenced in
+the package; the page says the photos are examples and that Mt. Fuji views exist only at some courses in the Mt. Fuji
+area. Do not reuse in paid advertising before that confirmation.
 
 ## Ramen class (added 2026-10-10)
 

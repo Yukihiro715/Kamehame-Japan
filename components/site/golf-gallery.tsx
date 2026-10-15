@@ -1,40 +1,33 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, Images, X } from "lucide-react";
-import { useBooking } from "@/components/site/booking-context";
 import { t, type Lang } from "@/lib/i18n";
-import type { ExperienceVariant } from "@/lib/catalog";
 
-export interface GolfPhoto { img: string; alt: string; area?: string; caption?: string }
+export interface GolfPhoto { img: string; alt: string; caption?: string }
 
 /** Small copies (480px) of the same files, for the thumbnail strip and the all-photos sheet. */
 const thumb = (img: string) => img.replace(/^\/images\//, "/images/thumbs/");
 
 /** The golf page's photos: a swipe track with a counter and a thumbnail
  *  strip on phones, a one-big-four-small grid on wide screens, and the same
- *  lightbox (close, previous, next, Escape, focus returned) from both. The
- *  chosen area's photo comes first and its other photos follow; the rest of
- *  the set stays viewable so both areas can be compared. No autoplay, and
- *  switching area never scrolls the page. */
-export function GolfGallery({ photos, variants, lang }: {
-  photos: GolfPhoto[]; variants: ExperienceVariant[]; lang: Lang;
-}) {
-  const b = useBooking();
-  const chosen = variants.find((v) => v.id === b?.variant) ?? variants[0];
-  const ordered = useMemo(() => {
-    const first = photos.filter((p) => p.img === chosen.img);
-    const same = photos.filter((p) => p.img !== chosen.img && p.area === chosen.id);
-    const rest = photos.filter((p) => p.img !== chosen.img && p.area !== chosen.id);
-    return [...first, ...same, ...rest];
-  }, [photos, chosen]);
-  // Remount on an area switch: the track starts again at the new first photo.
-  return <GalleryView key={chosen.id} photos={ordered} variants={variants} lang={lang} />;
+ *  lightbox (close, previous, next, Escape, focus returned) from both. One
+ *  fixed set in one fixed order, whatever area or party size is chosen:
+ *  changing a choice never reorders, remounts or scrolls the photos. No
+ *  autoplay. */
+export function GolfGallery({ photos, lang }: { photos: GolfPhoto[]; lang: Lang }) {
+  return <GalleryView photos={dedupe(photos)} lang={lang} />;
+}
+
+/** The same file never appears twice (the hero is also the first photo). */
+function dedupe(photos: GolfPhoto[]): GolfPhoto[] {
+  const seen = new Set<string>();
+  return photos.filter((p) => (seen.has(p.img) ? false : (seen.add(p.img), true)));
 }
 
 type View = { mode: "sheet" } | { mode: "single"; index: number; fromSheet: boolean };
 
-function GalleryView({ photos, variants, lang }: { photos: GolfPhoto[]; variants: ExperienceVariant[]; lang: Lang }) {
+function GalleryView({ photos, lang }: { photos: GolfPhoto[]; lang: Lang }) {
   const D = t(lang).detail;
   const track = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
@@ -42,8 +35,7 @@ function GalleryView({ photos, variants, lang }: { photos: GolfPhoto[]; variants
   const [wide, setWide] = useState(false);
   const [view, setView] = useState<View | null>(null);
   const n = photos.length;
-  const areaLabel = (area?: string) => variants.find((v) => v.id === area)?.short;
-  const captionOf = (p: GolfPhoto) => [areaLabel(p.area), p.caption ?? p.alt].filter(Boolean).join(" · ");
+  const captionOf = (p: GolfPhoto) => p.caption ?? p.alt;
 
   const open = (v: View) => {
     opener.current = document.activeElement as HTMLElement | null;
@@ -114,7 +106,6 @@ function GalleryView({ photos, variants, lang }: { photos: GolfPhoto[]; variants
               <button type="button" onClick={() => open({ mode: "single", index: i, fromSheet: false })} aria-label={`${captionOf(p)} — ${D.viewAllPhotos}`}>
                 <img src={i <= loadUpTo ? p.img : undefined} data-src={p.img} alt={p.alt} width={1600} height={1200} fetchPriority={i === 0 ? "high" : undefined} decoding="async" />
               </button>
-              {areaLabel(p.area) && <span className="gg-area" aria-hidden="true">{areaLabel(p.area)}</span>}
             </figure>
           ))}
         </div>
@@ -147,8 +138,7 @@ function GalleryView({ photos, variants, lang }: { photos: GolfPhoto[]; variants
             {photos.map((p, i) => (
               <button type="button" key={p.img} onClick={() => setView({ mode: "single", index: i, fromSheet: true })} aria-label={captionOf(p)}>
                 <img src={thumb(p.img)} alt={p.alt} loading={i < 9 ? "eager" : "lazy"} />
-                {areaLabel(p.area) && <span className="gg-area" aria-hidden="true">{areaLabel(p.area)}</span>}
-              </button>
+                </button>
             ))}
           </div>
         </div>

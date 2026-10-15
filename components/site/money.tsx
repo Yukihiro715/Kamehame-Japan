@@ -46,8 +46,13 @@ export function JpyRefText({ text, unit, lang, className = "fx-jpy" }: { text: s
 /** The estimate notice beside a USD price, with the rate it was made at.
  *  Renders nothing in yen mode. */
 export function FxNote({ lang, short = false, className = "fx-note" }: { lang: Lang; short?: boolean; className?: string }) {
-  const { usdActive, rate } = useCurrency();
-  if (!usdActive || !rate) return null;
+  const { usdActive, rate, currency, status } = useCurrency();
   const F = t(lang).fx;
-  return <p className={className}>{short ? F.estimateShort : F.note} <span className="fx-rate">{F.rateAsOf(rate.rate, rate.date)}</span></p>;
+  // USD chosen but no usable rate: say so, and that the figures are yen meanwhile.
+  if (currency === "USD" && !usdActive) {
+    if (status === "loading" || status === "idle") return <p className={className} role="status">{F.loading}</p>;
+    return <p className={className} role="status">{F.unavailable}</p>;
+  }
+  if (!usdActive || !rate) return null;
+  return <p className={className}>{short ? F.estimateShort : F.note} <span className="fx-rate">{F.rateAsOf(rate.rate, rate.date)}{rate.stale ? ` ${F.staleNote}` : ""}</span></p>;
 }

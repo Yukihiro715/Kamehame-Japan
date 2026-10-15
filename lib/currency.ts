@@ -29,6 +29,42 @@ export interface FxRate {
 /** Sanity bounds: anything outside is treated as a bad response, not a rate. */
 export const isPlausibleRate = (r: unknown): r is number => typeof r === "number" && Number.isFinite(r) && r > 50 && r < 400;
 
+/** How old a published rate may be before dollars are no longer shown. The
+ *  source publishes on working days, so a long weekend or a holiday run is
+ *  a few days; a week means the feed has been failing and the estimate would
+ *  mislead. Past this, the site shows yen only until a fresh rate arrives. */
+export const MAX_RATE_AGE_DAYS = 7;
+/** A published date may run a little ahead of the visitor's clock (time zones). */
+const FUTURE_TOLERANCE_MS = 36 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Age of a published rate in days at `now`, from its ISO date (UTC midnight). */
+export const rateAgeDays = (date: string, now = Date.now()) => (now - Date.parse(`${date}T00:00:00Z`)) / DAY_MS;
+
+/** The rate as a verified value, or null for anything that cannot be trusted:
+ *  wrong currencies, an implausible figure, a malformed or future date, or a
+ *  date older than MAX_RATE_AGE_DAYS. Accepts any parsed JSON. */
+export function validateRate(input: unknown, now = Date.now()): FxRate | null {
+  if (!input || typeof input !== "object") return null;
+  const fx = input as Partial<FxRate>;
+  if (fx.base !== "USD" || fx.quote !== "JPY" || !isPlausibleRate(fx.rate)) return null;
+  if (typeof fx.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(fx.date)) return null;
+  const published = Date.parse(`${fx.date}T00:00:00Z`);
+  if (!Number.isFinite(published)) return null;
+  if (published - now > FUTURE_TOLERANCE_MS) return null;
+  if (rateAgeDays(fx.date, now) > MAX_RATE_AGE_DAYS) return null;
+  const fetchedAt = typeof fx.fetchedAt === "string" && Number.isFinite(Date.parse(fx.fetchedAt)) ? fx.fetchedAt : new Date(now).toISOString();
+  return { base: "USD", quote: "JPY", rate: fx.rate, date: fx.date, fetchedAt, ...(fx.stale ? { stale: true } : {}) };
+}
+
+/** True when a cached copy taken at `cachedAt` is still within `ttlMs` of
+ *  `now`. A missing, unparsable or future timestamp counts as expired. */
+export function cacheIsFresh(cachedAt: unknown, ttlMs: number, now = Date.now()): boolean {
+  if (typeof cachedAt !== "string") return false;
+  const age = now - Date.parse(cachedAt);
+  return Number.isFinite(age) && age >= 0 && age < ttlMs;
+}
+
 const usdFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 
 /** Whole dollars for a yen amount at the given rate (yen per dollar). */

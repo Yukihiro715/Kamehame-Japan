@@ -77,7 +77,7 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.ok(text.includes("¥82,500") && text.includes("¥330,000 total · 4 golfers"), "Tokyo per-person and total for four");
   assert.ok(html.includes('class="vh-timings" open'), "sample timings start open");
   assert.ok(html.includes("6:00 pm JST") && !/18:00 Japan time/.test(html), "times read as 12-hour JST");
-  assert.ok(html.includes("/images/golf-fuji-aerial.jpg") && !/golf-flag-fuji|golf-swing|golf-fairway/.test(html), "new photos only");
+  assert.ok(html.includes("/images/golf-gallery-01-fuji-aerial.webp") && !/golf-fuji-aerial\.jpg|golf-tokyo-|golf-lakes-aerial|golf-flag-fuji/.test(html), "the shared ten-photo set only");
   assert.ok(text.includes("Includes private transfers, 18 holes, rental clubs, English-speaking assistance and lunch."), "shared includes line");
   assert.ok(text.includes("Private hotel transfers") && !text.includes("Tokyo & Mt. Fuji · Private hotel transfers"), "benefit chips, no subtitle");
   // the listing card opens on the same numbers as the page
@@ -103,6 +103,32 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.ok(text.includes("our team takes care of your course reservation") && text.includes("within 24 hours of payment"));
   assert.doesNotMatch(text, /course (is )?confirmed before payment|course name and tee time before payment/);
   assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"250000"') && html.includes('"highPrice":"350000"'), "structured data carries the price range");
+});
+
+test("golf gallery: one fixed set of ten photos for both areas, in every language, with thumbnails on disk", async () => {
+  const { existsSync } = await import("node:fs");
+  const expected = Array.from({ length: 10 }, (_, i) => i + 1);
+  // the photo each gallery item shows, in track order (preloads and meta tags come before the track)
+  const seq = (html) => [...html.matchAll(/<figure class="gg-item">[\s\S]*?\/images\/golf-gallery-(\d\d)-[a-z-]+\.webp/g)].map((m) => Number(m[1]));
+  let first = null;
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const html = await (await render(`/${lang}/tokyo/mt-fuji-golf-day/`)).text();
+    const main = seq(html);
+    // ten items in the fixed order, with no repeat of the hero
+    assert.deepEqual(main, expected, `gallery order in ${lang}`);
+    assert.ok(!html.includes('class="gg-area"'), `no area badge on the photos (${lang})`);
+    const files = [...new Set(html.match(/\/images\/golf-gallery-[a-z0-9-]+\.webp/g))].sort();
+    if (first) assert.deepEqual(files, first, `same files in ${lang}`); else first = files;
+    assert.ok(html.includes("Mt. Fuji") || lang !== "en", "photo note present");
+  }
+  assert.equal(first.length, 10, "ten distinct files");
+  for (const f of first) {
+    assert.ok(existsSync(new URL(`../public${f}`, import.meta.url)), `${f} exists`);
+    assert.ok(existsSync(new URL(`../public${f.replace("/images/", "/images/thumbs/")}`, import.meta.url)), `thumbnail for ${f} exists`);
+  }
+  // the hero photo appears once in the gallery track: the catalog gallery never repeats exp.img
+  const en = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
+  assert.equal((en.match(/<figure class="gg-item">/g) ?? []).length, 10, "ten gallery items");
 });
 
 test("golf request: the server validates the choice against the price master", async () => {

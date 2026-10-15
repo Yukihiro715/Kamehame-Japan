@@ -36,6 +36,17 @@ JPY") and an estimate notice. Nothing else changes:
   endpoint answers 503 and the site stays in yen even if USD is selected. The browser also caches
   the rate in localStorage (`kh-fx`) for 12 hours.
 
+## Validation and staleness
+
+A rate is used only if it passes `validateRate()` in `lib/currency.ts`: base USD, quote JPY, a figure between 50
+and 400 yen per dollar, an ISO date that is not more than 36 hours in the future and not more than
+`MAX_RATE_AGE_DAYS` (7) days old. The browser cache (`kh-fx`) also needs a `cachedAt` within the last 12 hours
+and not in the future; broken JSON or a wrong-currency cache is ignored. An open page re-checks every 10 minutes
+and when its tab becomes visible again, drops a rate whose copy has aged past 12 hours or whose published date
+has passed the 7-day limit, and fetches again (after a failure, not more often than every 5 minutes). The
+server marks a last-known rate `stale: true` when the source is down; the page says so under the rate line. With
+USD chosen and no usable rate, prices stay in yen and a notice says the rate is loading or unavailable.
+
 ## Rounding
 
 USD figures are whole dollars, rounded from the yen figure they sit beside. Per-person dollar

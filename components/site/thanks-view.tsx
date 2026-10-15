@@ -7,6 +7,7 @@ import { track } from "@/lib/analytics";
 import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
+import { Fx } from "@/components/site/money";
 
 /** What the request form hands over to this page (sessionStorage, one read). */
 export interface SentEnquiry {
@@ -69,7 +70,7 @@ export function ThanksView({ lang }: { lang: Lang }) {
       {rows.length > 0 && (
         <section className="thanks-card">
           <h2>{K.summaryH}</h2>
-          <dl data-clarity-mask="True">{rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+          <dl data-clarity-mask="True">{rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd><Fx>{v}</Fx></dd></div>)}</dl>
         </section>
       )}
 
