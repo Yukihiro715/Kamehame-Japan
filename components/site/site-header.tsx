@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Brand } from "@/components/site/brand";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
+import { CurrencySwitcher } from "@/components/site/currency-switcher";
 import { catalogFor, TOURS_PUBLISHED } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 
@@ -25,6 +26,7 @@ export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "ov
       </nav>
       <div className="header-tools">
         <LanguageSwitcher lang={lang} />
+        <CurrencySwitcher lang={lang} />
         <Button asChild className="header-cta"><Link href={`/${lang}/experiences/`}>{T.findExperience}</Link></Button>
         <Sheet>
           <SheetTrigger asChild>

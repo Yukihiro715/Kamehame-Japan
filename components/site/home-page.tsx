@@ -8,6 +8,7 @@ import { featuredReviews } from "@/lib/reviews";
 import { RatingSummary, Stars } from "@/components/site/reviews";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
 import { listPrice, pricingFor, yen } from "@/lib/pricing";
+import { Fx } from "@/components/site/money";
 import { t, type Lang } from "@/lib/i18n";
 
 /** The manga sound effect on each city card and the place its photo shows. */
@@ -300,11 +301,11 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
         </ul>
         <div className="feature-price">
           {perGroup ? (
-            <b><small>{D.priceHeadline(first.party)[0]}</small>{yen(first.total)}<small>{D.priceHeadline(first.party)[1]}</small></b>
+            <b><small>{D.priceHeadline(first.party)[0]}</small><Fx>{yen(first.total)}</Fx><small>{D.priceHeadline(first.party)[1]}</small></b>
           ) : (
-            <b><small>{T.from} </small>{lp.price}<small> {T.perPerson}</small></b>
+            <b><small>{T.from} </small><Fx>{lp.price}</Fx><small> {T.perPerson}</small></b>
           )}
-          <p>{lp.note ? `${lp.note} · ` : ""}{exp.includedShort ?? D.priceTotalNote}{exp.taxIncluded && ` · ${D.taxIncluded}`}</p>
+          <p>{lp.note ? <><Fx>{lp.note}</Fx> · </> : ""}{exp.includedShort ?? D.priceTotalNote}{exp.taxIncluded && ` · ${D.taxIncluded}`}</p>
         </div>
         <span className="feature-cta">{cta} <ArrowRight size={15} /></span>
       </div>
@@ -463,7 +464,7 @@ export function HomePage({ lang }: { lang: Lang }) {
                   <p className="experience-city"><MapPin size={14} /> {cityTitle(item.city)} · {item.langTag ?? T.interpreterIncluded}</p>
                   <h3>{item.title}</h3>
                   <p>{item.tagline}</p>
-                  <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span className="listing-price"><span>{T.from} <b>{listPrice(item, lang).price}</b> {listPrice(item, lang).unit === "group" ? T.perGroupShort : T.perPerson}</span>{listPrice(item, lang).note && <small>{listPrice(item, lang).note}</small>}</span></div>
+                  <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span className="listing-price"><span>{T.from} <b><Fx>{listPrice(item, lang).price}</Fx></b> {listPrice(item, lang).unit === "group" ? T.perGroupShort : T.perPerson}</span>{listPrice(item, lang).note && <small><Fx>{listPrice(item, lang).note}</Fx></small>}</span></div>
                 </div>
               </Link>
             ))}

@@ -6,6 +6,7 @@ import { DatePicker } from "@/components/site/date-picker";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
 import { yen } from "@/lib/pricing";
+import { Fx, FxNote, JpyRef, JpyRefText, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
@@ -64,14 +65,16 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
           <>
             {/* Group-priced: the per-person figure leads, the group total it comes from sits right under it. */}
             {D.fromPrice && <small>{D.fromPrice}</small>}
-            <b>{yen(Math.round(groupMin / groupRow.party))}{groupSuffix && <span className="from-suffix">{groupSuffix}</span>}<span className="bk-unit">{T.perPerson}</span></b>
-            <small className="bk-total">{D.totalForParty(yen(groupMin), groupRow.party)}</small>
+            <b><Yen n={Math.round(groupMin / groupRow.party)} />{groupSuffix && <span className="from-suffix">{groupSuffix}</span>}<span className="bk-unit">{T.perPerson}</span></b>
+            <JpyRef n={Math.round(groupMin / groupRow.party)} unit={T.perPerson} lang={lang} />
+            <small className="bk-total"><Fx>{D.totalForParty(yen(groupMin), groupRow.party)}</Fx></small>
           </>
         ) : (
           <>
             {/* "From" only where the price varies (plans, seasons); a fixed per-person price has none. */}
             {plans.length > 0 && D.fromPrice && <small>{D.fromPrice}</small>}
-            <b>{plans.length ? <>{yen(Math.min(...plans.map((p) => p.regular)))}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</> : headline}</b>
+            <b>{plans.length ? <><Yen n={Math.min(...plans.map((p) => p.regular))} />{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</> : <Fx brief>{headline}</Fx>}</b>
+            {plans.length ? <JpyRef n={Math.min(...plans.map((p) => p.regular))} lang={lang} /> : <JpyRefText text={headline} unit={pricing?.unit === "person" ? T.perPersonUnit : undefined} lang={lang} />}
             <small>{pricing?.extraGuest ? D.minPriceNote(pricing.extraGuest.included) : pricing?.unit === "person" ? T.perPersonUnit : D.priceTotalNote}</small>
           </>
         )}
@@ -86,7 +89,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
               <input type="radio" name="bk-plan" value={p.id} checked={b.plan === p.id} onChange={() => b.set({ plan: p.id })} />
               <span className="bk-plan-check"><Check size={12} /></span>
               <span className="bk-plan-copy"><b>{p.label}</b><small>{p.performers}</small></span>
-              <span className="bk-plan-price">{pricing?.planMode === "supplement" ? (p.supplement ? `+${yen(p.supplement)}` : D.planBaseShort) : yen(p.regular)}</span>
+              <span className="bk-plan-price"><Fx>{pricing?.planMode === "supplement" ? (p.supplement ? `+${yen(p.supplement)}` : D.planBaseShort) : yen(p.regular)}</Fx></span>
             </label>
           ))}
         </fieldset>
@@ -115,7 +118,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         {b.estimate ? (
           <>
             <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
-            <b>{yen(b.estimate.total)}</b>
+            <b><Yen n={b.estimate.total} /></b>
+            <JpyRef n={b.estimate.total} lang={lang} />
             <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>
           </>
         ) : (
@@ -124,6 +128,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
             <small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small>
           </>
         )}
+        <FxNote lang={lang} />
       </div>
 
       {open ? (

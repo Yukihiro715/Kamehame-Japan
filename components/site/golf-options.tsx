@@ -2,6 +2,8 @@
 
 import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useBooking } from "@/components/site/booking-context";
+import { useCurrency } from "@/components/site/currency-context";
+import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
 import { countOf, fromPrice, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
 import type { Lang } from "@/lib/i18n";
@@ -43,6 +45,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
   variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[];
 }) {
   const b = useBooking();
+  const { usdActive } = useCurrency();
   if (!b) return null;
   const n = b.guestsNumber;
   const custom = b.customQuote;
@@ -85,11 +88,12 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                   <>
                     <span className="go-price">
                       {p.lead && <small className="go-lead">{p.lead}</small>}
-                      <b>{yen(p.perPerson)}{copy.fromSuffix && <span className="go-suffix">{copy.fromSuffix}</span>}</b>
+                      <b><Yen n={p.perPerson} />{copy.fromSuffix && <span className="go-suffix">{copy.fromSuffix}</span>}</b>
                       {copy.perPerson && <small className="go-unit">{copy.perPerson}</small>}
+                      <JpyRef n={p.perPerson} unit={copy.perPerson} lang={lang} />
                     </span>
                     {/* wraps only at the " · " separator where there is one; otherwise only the figure is kept whole */}
-                    <span className="go-total">{p.totalLine.includes(" · ")
+                    <span className="go-total">{usdActive ? <Fx>{p.totalLine}</Fx> : p.totalLine.includes(" · ")
                       ? p.totalLine.split(" · ").map((x, i, all) => <span key={i}><span className="nw">{x}</span>{i < all.length - 1 ? " · " : ""}</span>)
                       : p.totalLine.split(yen(p.total)).map((x, i, all) => <span key={i}>{x}{i < all.length - 1 && <span className="nw">{yen(p.total)}</span>}</span>)}</span>
                   </>
@@ -102,6 +106,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
 
       <p className="go-includes">{copy.includes}</p>
       <p className="go-note">{custom ? copy.customNote : copy.note}</p>
+      <FxNote lang={lang} short />
       <a className="bk-cta" href="#request-form" onClick={jump}>{ctaLabel} <ArrowRight size={16} /></a>
       <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>
       <a className="go-all-prices" href="#prices" onClick={showPrices}>{copy.allPrices}</a>

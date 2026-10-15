@@ -8,6 +8,7 @@ import { eventId, track } from "@/lib/analytics";
 import { acceptedExplicitly } from "@/lib/consent";
 import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
 import { yen } from "@/lib/pricing";
+import { Fx, JpyRef, Yen } from "@/components/site/money";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
@@ -202,7 +203,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
                 {addOns.map((a) => (
                   <label key={a.id} className="form-check">
                     <input type="checkbox" checked={b.addOns.includes(a.id)} onChange={() => b.toggleAddOn(a.id)} />
-                    <span><b>{a.name}</b><small>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</small></span>
+                    <span><b>{a.name}</b><small><Fx>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</Fx></small></span>
                   </label>
                 ))}
               </fieldset>
@@ -210,7 +211,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           </div>
           {!card && <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b>{yen(b.estimate.total)}</b><small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
+              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} /><small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}

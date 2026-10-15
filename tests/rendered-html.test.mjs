@@ -243,6 +243,29 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
   assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
 });
 
+test("display currency: the header offers USD/JPY, the HTML is always yen, and /api/fx is a JSON endpoint", async () => {
+  const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
+  // The switcher sits in the header beside the language menu, on yen by default.
+  assert.ok(html.includes('aria-label="Currency: Japanese Yen. Change display currency"'), "currency switcher in the header");
+  assert.ok(html.includes("JPY ¥"), "the button shows the default currency");
+  // Server HTML never carries a dollar figure: the choice and the rate are applied after mount.
+  assert.doesNotMatch(html, /US\$|≈ /, "no dollar estimates in the server HTML");
+  assert.ok(html.includes('"priceCurrency":"JPY"'), "structured data stays in yen");
+  const ja = await (await render("/ja/tokyo/mt-fuji-golf-day/")).text();
+  assert.ok(ja.includes('aria-label="通貨: 日本円. 表示通貨を変更"'), "localised switcher label");
+  // The rate endpoint answers JSON (a rate, or 503 when the source cannot be reached from here).
+  const fx = await render("/api/fx");
+  assert.match(fx.headers.get("content-type") ?? "", /application\/json/);
+  const body = await fx.json();
+  if (fx.status === 200) {
+    assert.equal(body.base, "USD"); assert.equal(body.quote, "JPY");
+    assert.ok(body.rate > 50 && body.rate < 400, "a plausible yen-per-dollar rate");
+    assert.match(body.date, /^\d{4}-\d{2}-\d{2}$/);
+  } else {
+    assert.equal(fx.status, 503);
+  }
+});
+
 test("group-priced page: facts under the photos, per-person headline with the group total", async () => {
   const html = await (await render("/en/kyoto/evening-with-geiko/")).text();
   const h1 = html.indexOf("<h1"), gallery = html.indexOf('class="gallery-bar"'), chips = html.indexOf('class="xp-conditions"');

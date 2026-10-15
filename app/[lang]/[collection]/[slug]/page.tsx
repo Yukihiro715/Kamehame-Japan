@@ -19,6 +19,7 @@ import { VariantDetail } from "@/components/site/variant-detail";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { pricingFor, yen, type PricingView, listPrice } from "@/lib/pricing";
+import { Fx, FxNote } from "@/components/site/money";
 import {
   cancellationFor, catalogFor, cityBySlug, isLive, isPreview, previewsFor, SITE_ORIGIN,
   type Experience, type Tour,
@@ -76,18 +77,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /** Party-size price table with the collapsible high-season table under it. */
-function PriceTable({ pricing, D, perGroup }: { pricing: PricingView; D: ReturnType<typeof t>["detail"]; perGroup: boolean }) {
+function PriceTable({ pricing, D, perGroup, lang }: { pricing: PricingView; D: ReturnType<typeof t>["detail"]; perGroup: boolean; lang: Lang }) {
   return (
     <>
       <table className="xp-pricing">
         <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
         <tbody>
           {pricing.rows.map((r) => (
-            <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
+            <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total"><Fx>{yen(r.total)}</Fx></td><td><Fx>{yen(r.perPerson)}</Fx></td></tr>
           ))}
         </tbody>
       </table>
       <p className="xp-pricing-note">{perGroup ? D.pricingGroupNote : D.pricingPerPersonNote}{pricing.moreOnRequest && ` ${D.largerParties}`}</p>
+      <FxNote lang={lang} />
       {pricing.highSeason && (
         <details className="xp-high-season">
           <summary>
@@ -98,7 +100,7 @@ function PriceTable({ pricing, D, perGroup }: { pricing: PricingView; D: ReturnT
             <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
             <tbody>
               {pricing.highSeason.rows.map((r) => (
-                <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total">{yen(r.total)}</td><td>{yen(r.perPerson)}</td></tr>
+                <tr key={r.party}><td>{D.stickyGroupOf(r.party)}</td><td className="total"><Fx>{yen(r.total)}</Fx></td><td><Fx>{yen(r.perPerson)}</Fx></td></tr>
               ))}
             </tbody>
           </table>
@@ -249,20 +251,20 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                 <h2>{D.plansH}</h2>
                 <p className="plan-compare-lead">{supplementPlans ? D.plansLeadSupplement : D.plansLead}</p>
                 {/* Supplement plans: the party-size table is the price; plans add a flat amount. */}
-                {supplementPlans && <PriceTable pricing={pricing} D={D} perGroup={perGroup} />}
+                {supplementPlans && <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />}
                 <ul className="plan-compare">
                   {plans.map((p) => (
                     <li key={p.id} className={p.recommended ? "rec" : ""}>
                       <span className="plan-compare-label">{p.label}{p.recommended && <em>{D.recommended}</em>}</span>
                       <span className="plan-compare-what"><b>{p.performers}</b><small>{p.blurb}</small></span>
                       <span className="plan-compare-price">{supplementPlans
-                        ? (p.supplement ? <span>+{yen(p.supplement)}</span> : <small>{D.planBase}</small>)
-                        : <>{D.fromPrice && <small>{D.fromPrice}</small>}<span>{yen(p.regular)}{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</span></>}</span>
+                        ? (p.supplement ? <span><Fx>{`+${yen(p.supplement)}`}</Fx></span> : <small>{D.planBase}</small>)
+                        : <>{D.fromPrice && <small>{D.fromPrice}</small>}<span><Fx>{yen(p.regular)}</Fx>{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</span></>}</span>
                     </li>
                   ))}
                 </ul>
                 <div className="plan-notes">
-                  {eg && <p>{D.extraGuestNote(yen(eg.regular), yen(eg.peak), eg.upTo)}{pricing.highSeason ? ` · ${D.highSeasonH}: ${pricing.highSeason.window}` : ""}</p>}
+                  {eg && <p><Fx>{D.extraGuestNote(yen(eg.regular), yen(eg.peak), eg.upTo)}</Fx>{pricing.highSeason ? ` · ${D.highSeasonH}: ${pricing.highSeason.window}` : ""}</p>}
                   {supplementPlans && <p>{D.planSupplementNote}</p>}
                   {pricing.moreOnRequest && <p>{D.sixPlus((eg?.upTo ?? Math.max(...pricing.rows.map((r) => r.party))) + 1)}</p>}
                   {exp.taxIncluded && <p>{D.taxIncluded}. {D.noPayment}</p>}
@@ -276,7 +278,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                         <div>
                           <b>{a.name}</b>
                           <p>{a.description}</p>
-                          <small>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</small>
+                          <small><Fx>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</Fx></small>
                         </div>
                       </div>
                     ))}
@@ -289,7 +291,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             {plans.length === 0 && (
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
-                <PriceTable pricing={pricing} D={D} perGroup={perGroup} />
+                <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />
               </section>
             )}
 
@@ -527,7 +529,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
                 <img src={e.img} alt={e.alt} loading="lazy" />
                 <b>{e.title}</b>
-                <small>{e.duration} · {T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
+                <small>{e.duration} · {T.from} <Fx>{listPrice(e, lang).price}</Fx> {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
               </Link>
             ))}
           </div>
@@ -582,7 +584,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
             <h2>{T.buildAround}</h2>
             <p>{T.buildBody(city.title)}</p>
             <ul className="know-list">
-              {inCity.map((e) => <li key={e.slug}><Link href={`/${lang}/${e.city}/${e.slug}/`}>{e.title}</Link> — {e.duration}, {T.from} {e.price}</li>)}
+              {inCity.map((e) => <li key={e.slug}><Link href={`/${lang}/${e.city}/${e.slug}/`}>{e.title}</Link> — {e.duration}, {T.from} <Fx>{e.price}</Fx></li>)}
             </ul>
           </section>
 
@@ -608,7 +610,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
             <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
               <img src={e.img} alt={e.alt} loading="lazy" />
               <b>{e.title}</b>
-              <small>{e.duration} · {T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
+              <small>{e.duration} · {T.from} <Fx>{listPrice(e, lang).price}</Fx> {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
             </Link>
           ))}
         </div>

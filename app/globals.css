@@ -194,6 +194,22 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .photo-credits summary { cursor:pointer; width:max-content; letter-spacing:.08em; text-transform:uppercase; }
 .photo-credits p { max-width:840px; margin:12px 0 0; line-height:1.8; }
 .photo-credits a { text-decoration:underline; }
+/* Display currency: the switcher beside the language menu, and the dollar
+   estimate lines beside yen prices (components/site/money.tsx). */
+.currency-button { white-space:nowrap; font-variant-numeric:tabular-nums; }
+.currency-menu { min-width:220px; }
+.currency-menu .currency-code { font-weight:700; letter-spacing:.06em; min-width:34px; }
+.currency-menu .currency-name { color:var(--muted); }
+.fx-jpy { display:block; font-family:Arial,Helvetica,sans-serif; font-weight:400; font-size:12.5px; letter-spacing:0; line-height:1.5; color:var(--muted); font-variant-numeric:tabular-nums; }
+.fx-note { margin:10px 0 0; font-size:11.5px; line-height:1.6; color:var(--muted); }
+.fx-note .fx-rate { display:block; opacity:.85; }
+.bk-price .fx-jpy { margin-top:2px; }
+.feature-price .fx-jpy { color:#c8c5ba; }
+.sticky-request .fx-jpy, .sticky-golf .sticky-price .fx-jpy { display:inline; color:#aaa89e; font-size:11px; }
+.go-card .go-price .fx-jpy { font-size:11.5px; }
+.go-card .fx-note { margin-top:8px; }
+.go-summary-price .fx-jpy, .go-confirm-price .fx-jpy { font-size:12px; color:#4a463e; }
+@media(max-width:700px){ .header-tools { gap:8px; } .language-button { gap:4px; font-size:11.5px; } .currency-button { padding-inline:2px; } .lang-menu { right:-8px; } }
 @media(max-width:1180px){.desktop-nav{gap:12px;font-size:11px}}
 @media(max-width:1040px){.site-header{grid-template-columns:1fr auto}.desktop-nav{display:none}.menu-button{display:inline-flex}}
 @media(max-width:980px){.site-header{grid-template-columns:1fr auto}.desktop-nav,.header-cta{display:none}.menu-button{display:inline-flex}.hero{min-height:720px;flex-direction:column;justify-content:center;align-items:flex-start}.hero-copy{width:100%}.hero-note{position:static;align-self:flex-start;margin:42px 0 0;max-width:300px}.trust-strip,.section-heading,.review-layout{grid-template-columns:1fr;gap:50px}.trust-seal{grid-column:1;margin:0;justify-self:start}.category-grid{grid-template-columns:repeat(2,1fr)}.experience-grid{grid-template-columns:1fr}.experience-card{display:grid;grid-template-columns:.75fr 1fr}.tour-section{grid-template-columns:1fr}.tour-monogram{height:420px;font-size:280px}}

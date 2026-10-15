@@ -3,6 +3,7 @@ import { Clock3 } from "lucide-react";
 import type { ListingItem } from "@/lib/collections";
 import { RatingSummary } from "@/components/site/reviews";
 import { t, type Lang } from "@/lib/i18n";
+import { Fx } from "@/components/site/money";
 
 export function ListingCard({ item, lang = "en" }: { item: ListingItem; lang?: Lang }) {
   const T = t(lang);
@@ -20,8 +21,8 @@ export function ListingCard({ item, lang = "en" }: { item: ListingItem; lang?: L
         <div className="listing-meta">
           <span><Clock3 size={14} /> {item.meta}</span>
           <span className={item.priceNote ? "listing-price has-note" : "listing-price"}>
-            <span>{T.from} <b>{item.price}</b>{item.kind === "experience" ? ` ${item.unit === "group" ? T.perGroupShort : T.perPerson}` : ""}</span>
-            {item.priceNote && <small>{item.priceNote}</small>}
+            <span>{T.from} <b><Fx>{item.price}</Fx></b>{item.kind === "experience" ? ` ${item.unit === "group" ? T.perGroupShort : T.perPerson}` : ""}</span>
+            {item.priceNote && <small><Fx>{item.priceNote}</Fx></small>}
           </span>
         </div>
       </div>

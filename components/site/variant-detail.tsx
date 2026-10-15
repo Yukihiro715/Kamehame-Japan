@@ -13,6 +13,7 @@ import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
+import { Fx, FxNote } from "@/components/site/money";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
 import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
@@ -159,7 +160,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                             const pp = perPersonOf(total, n);
                             return (
                               <td key={v.id} className="total" data-label={v.short}>
-                                <span><b>{yen(total)}</b><small>{perPersonRefText(O, pp.perPerson, pp.approximate)}</small></span>
+                                <span><b><Fx>{yen(total)}</Fx></b><small><Fx>{perPersonRefText(O, pp.perPerson, pp.approximate)}</Fx></small></span>
                               </td>
                             );
                           })}
@@ -172,6 +173,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                     {vc.prices.notes.map((x) => <li key={x}>{x}</li>)}
                     {exp.taxIncluded && <li>{D.taxIncluded}{stop}</li>}
                   </ul>
+                  <FxNote lang={lang} />
                   {addOns.length > 0 && (
                     <>
                       <h3 className="xp-sub-h">{D.addOnsH}</h3>
@@ -179,7 +181,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                         {addOns.map((a) => (
                           <div className="addon" key={a.id}>
                             <Wine size={18} />
-                            <div><b>{a.name}</b><p>{a.description}</p><small>{a.price ? yen(a.price) : D.priceOnRequest}</small></div>
+                            <div><b>{a.name}</b><p>{a.description}</p><small><Fx>{a.price ? yen(a.price) : D.priceOnRequest}</Fx></small></div>
                           </div>
                         ))}
                       </div>
@@ -229,7 +231,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <Link key={e.slug} href={`/${lang}/${e.city}/${e.slug}/`}>
                 <img src={e.img} alt={e.alt} loading="lazy" />
                 <b>{e.title}</b>
-                <small>{e.duration} · {T.from} {listPrice(e, lang).price} {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
+                <small>{e.duration} · {T.from} <Fx>{listPrice(e, lang).price}</Fx> {listPrice(e, lang).unit === "group" ? T.perGroupShort : T.perPerson}{listPrice(e, lang).party ? ` · ${listPrice(e, lang).party}` : ""}</small>
               </Link>
             ))}
           </div>

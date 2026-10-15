@@ -4,6 +4,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { Experience, ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
+import { Fx, FxNote } from "@/components/site/money";
 import { eventId, track } from "@/lib/analytics";
 import { acceptedExplicitly } from "@/lib/consent";
 import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
@@ -166,7 +167,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         <GolfQuickPick variants={variants} copy={O} parties={parties} name="form" />
         {p.custom
           ? <span className="go-summary-price"><strong>{p.headline}</strong><small>{p.line}</small></span>
-          : <span className="go-summary-price"><strong>{p.totalShort}</strong><small>{p.perPersonRef}</small></span>}
+          : <span className="go-summary-price"><strong><Fx brief>{p.totalShort}</Fx></strong><small><Fx>{p.perPersonRef}</Fx></small></span>}
       </div>
 
       <fieldset className="form-step">
@@ -307,7 +308,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             {addOns.map((a) => (
               <label key={a.id} className="form-check">
                 <input type="checkbox" disabled={blocked(a)} checked={!blocked(a) && b.addOns.includes(a.id)} onChange={() => b.toggleAddOn(a.id)} />
-                <span><b>{a.name}</b><small>{blocked(a) ? G.notForFour : addOnPrice(a)}</small><small>{a.description}</small></span>
+                <span><b>{a.name}</b><small><Fx>{blocked(a) ? G.notForFour : addOnPrice(a)}</Fx></small><small>{a.description}</small></span>
               </label>
             ))}
           </fieldset>
@@ -322,10 +323,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <div><dt>{O.golfersLegend}</dt><dd>{countOf(O.golfers, n)}</dd></div>
           <div><dt>{F.preferredDate}</dt><dd>{b.date ? `${fmtDate(b.date, lang)} · ${timeLabel}` : "—"}</dd></div>
           <div><dt>{G.steps.course}</dt><dd>{specific ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
-          <div className="go-confirm-price"><dt>{G.package}</dt><dd><b>{p.custom ? p.headline : p.totalShort}</b>{!p.custom && <small>{p.perPersonRef} · {G.perPersonRef}</small>}</dd></div>
-          {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd>{addOnLine(a)}</dd></div>)}
+          <div className="go-confirm-price"><dt>{G.package}</dt><dd><b><Fx brief>{p.custom ? p.headline : p.totalShort}</Fx></b>{!p.custom && <small><Fx>{p.perPersonRef}</Fx> · {G.perPersonRef}</small>}</dd></div>
+          {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd><Fx>{addOnLine(a)}</Fx></dd></div>)}
         </dl>
         <small>{G.confirmNote}</small>
+        <FxNote lang={lang} />
       </div>
 
       {/* Honeypot: hidden from people, filled by bots. */}

@@ -1,6 +1,7 @@
 import { CalendarDays, ShieldCheck } from "lucide-react";
 import type { BookingType } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
+import { Fx } from "@/components/site/money";
 
 // Reserved mount for the Bókun booking widget. Once the Bókun account and
 // product IDs are confirmed, the widget script replaces the contents of
@@ -18,7 +19,7 @@ export function BookingBox({
   return (
     <div className="booking-box" id="booking">
       <p className="booking-price">
-        {T.from} <b>{price}</b> <span>{unit} · {T.bookingUnitNote}</span>
+        {T.from} <b><Fx>{price}</Fx></b> <span>{unit} · {T.bookingUnitNote}</span>
         {onRequest && <em className="request-badge">{T.requestBadge}</em>}
       </p>
 
@@ -58,7 +59,7 @@ export function MobileBookingBar({
   const T = t(lang);
   return (
     <a className="booking-bar" href="#booking">
-      <span>{T.from} <b>{price}</b></span>
+      <span>{T.from} <b><Fx>{price}</Fx></b></span>
       <span className="booking-bar-cta">{bookingType === "request" ? T.requestBook : T.bookNow}</span>
     </a>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useBooking } from "@/components/site/booking-context";
 import { golfPriceParts } from "@/components/site/golf-options";
 import { countOf, tierTotal, yen } from "@/lib/pricing";
+import { Fx, Yen } from "@/components/site/money";
 import { t, type Lang } from "@/lib/i18n";
 import type { VariantPageCopy } from "@/lib/catalog";
 
@@ -59,8 +60,8 @@ export function StickyRequestBar({
           <small>{variant.short} · {countOf(golf.golfers, n)}</small>
           {p.custom ? <b>{p.headline}</b> : (
             <>
-              <b>{yen(p.perPerson)}<em>{golf.fromSuffix}{golf.perPerson}{p.approximate ? ` · ${golf.approx}` : ""}</em></b>
-              <small>{p.totalShort}</small>
+              <b><Yen n={p.perPerson} /><em>{golf.fromSuffix}{golf.perPerson}{p.approximate ? ` · ${golf.approx}` : ""}</em></b>
+              <small><Fx>{p.totalShort}</Fx></small>
             </>
           )}
         </div>
@@ -85,8 +86,8 @@ export function StickyRequestBar({
   return (
     <div className={`sticky-request ${show ? "show" : ""}`} aria-hidden={!show}>
       <div className="sticky-price">
-        <b>{shownPrice}</b>
-        <small>{shownCondition}</small>
+        <b><Fx brief>{shownPrice}</Fx></b>
+        <small><Fx>{shownCondition}</Fx></small>
       </div>
       <a className="booking-cta as-link" href={watchTarget} tabIndex={show ? 0 : -1}>{label}</a>
     </div>

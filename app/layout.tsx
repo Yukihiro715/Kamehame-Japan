@@ -5,6 +5,7 @@ import { isLang } from "@/lib/i18n";
 import { GTM_ID } from "@/lib/analytics";
 import { consentDefaultScript } from "@/lib/consent";
 import { RouteChangeEvent } from "@/components/site/route-change-event";
+import { CurrencyProvider } from "@/components/site/currency-context";
 import { socialMeta, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 
@@ -89,7 +90,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             title="Google Tag Manager"
           />
         </noscript>
-        {children}
+        <CurrencyProvider>{children}</CurrencyProvider>
       </body>
     </html>
   );
