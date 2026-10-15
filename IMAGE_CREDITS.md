@@ -72,14 +72,17 @@ including identifiable people in 02 and 06, are **to be confirmed by the owner /
 the package; the page says the photos are examples and that Mt. Fuji views exist only at some courses in the Mt. Fuji
 area. Do not reuse in paid advertising before that confirmation.
 
-### Golf: the transfer vehicle (2026-10-15)
+### Golf: the transfer vehicle (2026-10-15, replaced the same day)
 
-`public/images/golf-gallery-11-transfer-minivan.webp` (and its thumbnail) is a **licensed placeholder**, not the partner's
-car: "Toyota ALPHARD Z (3BA-AGH40W-PFXLK).jpg" by Tokumeigakarinoaoshima, Wikimedia Commons, CC BY-SA 4.0
-(https://commons.wikimedia.org/wiki/File:Toyota_ALPHARD_Z_(3BA-AGH40W-PFXLK).jpg), cropped to 16:10 with a slight
-reduction of the dusk colour cast. It stands in on the gallery and the "Travel in Comfort" section until the golf partner
-supplies photos of its own vehicle and driver; the page says the model on the day may vary. Replace both files with the
-partner's photos (same names) and delete this note when they arrive. No driver photo is published yet.
+`public/images/golf-gallery-11-transfer-minivan.webp` (and its thumbnail) and `golf-transfer-interior.webp` are
+**licensed placeholders**, not the partner's car: a black Toyota Alphard, "Toyota Alphard (AH30) 3.5 V6 2022 (1).jpg"
+by Ethan Llamas, Wikimedia Commons, CC BY-SA 4.0
+(https://commons.wikimedia.org/wiki/File:Toyota_Alphard_(AH30)_3.5_V6_2022_(1).jpg; cropped to 16:10, number plate
+blurred, slight contrast lift — a derivative under the same licence),
+and the interior "Toyota ALPHARD HYBRID Executive Lounge (AYH30W) interior.JPG" by Tokumeigakarinoaoshima, Wikimedia
+Commons, CC0 1.0 (cropped to 16:10). They stand in on the gallery and the "Travel in Comfort" section until the golf
+partner supplies photos of its own vehicle and driver; the page says the model on the day may vary. Replace the files
+(same names) and delete this note when they arrive. No driver photo is published yet.
 
 ## Ramen class (added 2026-10-10)
 

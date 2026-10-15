@@ -40,6 +40,7 @@ export interface LedgerRecord {
   pickupJa?: string;
   level?: string;
   rental?: string;
+  shoes?: string;
   clubs?: string;
   clubsJa?: string;
   addons?: string;
@@ -100,6 +101,7 @@ export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, str
     pickupJa: ja.pickup,
     level: e.level,
     rental: e.rental,
+    shoes: e.shoes,
     clubs: e.clubs,
     clubsJa: ja.clubs,
     addons: e.addons,

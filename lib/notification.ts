@@ -41,6 +41,12 @@ function rentalJa(keys: string, areaId?: string): string | undefined {
   }).join(" · ");
 }
 
+function shoesJa(keys: string, areaId?: string): string | undefined {
+  const F = golfCopyJa(areaId).form;
+  if (!F) return undefined;
+  return keys.split(",").map((k, i) => `${F.golferN.replace("{n}", String(i + 1))}: ${k === "own" ? F.shoeOpts.own : k === "unsure" ? F.shoeOpts.unsure : F.shoeSize.replace("{n}", k)}`).join(" · ");
+}
+
 function levelJa(key: string, handicap: string | undefined, areaId?: string): string | undefined {
   const F = golfCopyJa(areaId).form;
   if (!F) return undefined;
@@ -94,6 +100,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ...(trade ? t("人数", "party", e.party) : [["人数", e.party] as [string, string | undefined]]),
     ...(e.levelKey ? [["ゴルフ経験", level] as [string, string | undefined]] : t("ゴルフ経験", "level", level)),
     ...(e.rentalKeys ? [["レンタルクラブ", rental] as [string, string | undefined]] : t("レンタルクラブ", "rental", rental)),
+    ["レンタルシューズ", e.shoeKeys ? shoesJa(e.shoeKeys, e.areaId) ?? e.shoes : e.shoes],
     ...t("クラブの希望", "clubs", e.clubs),
     ...t("お迎え場所", "pickup", e.pickup),
     ["送迎都県", e.pickupRegion],

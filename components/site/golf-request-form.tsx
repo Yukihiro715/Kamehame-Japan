@@ -18,6 +18,8 @@ import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
 type Status = "idle" | "sending" | "sent" | "failed";
 type Rental = "required" | "own" | "unsure";
 type Handed = "right" | "left" | "unsure";
+/** Shoe sizes offered, in cm (Japanese courses size rental shoes in cm). */
+const SHOE_SIZES = Array.from({ length: 19 }, (_, i) => (22 + i * 0.5).toFixed(1).replace(/\.0$/, ""));
 type AddOn = NonNullable<Experience["addOns"]>[number];
 
 const DATE_LOCALE: Record<Lang, string> = { en: "en-GB", es: "es-ES", ja: "ja-JP", fr: "fr-FR", "zh-tw": "zh-TW" };
@@ -48,6 +50,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const [hotelUndecided, setHotelUndecided] = useState(false);
   const [rental, setRental] = useState<Record<number, Rental>>({});
   const [handed, setHanded] = useState<Record<number, Handed>>({});
+  const [shoes, setShoes] = useState<Record<number, string>>({});
   const started = useRef(false);
   const requestId = useRef({ key: "", id: "" });
   const processCopy = GOLF_BOOKING_COPY[lang];
@@ -61,6 +64,8 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const p = golfPriceParts(O, total, n);
   const rentalOf = (i: number): Rental => rental[i] ?? "required";
   const handedOf = (i: number): Handed => handed[i] ?? "right";
+  const shoeOf = (i: number): string => shoes[i] ?? "";
+  const shoeText = (i: number) => { const k = shoeOf(i); return k === "own" ? G.shoeOpts.own : !k || k === "unsure" ? G.shoeOpts.unsure : G.shoeSize.replace("{n}", k); };
   const anyRental = golfers.some((i) => rentalOf(i) !== "own");
   const blocked = (a: AddOn) => !!a.maxParty && n > a.maxParty;
   const chosenAddOns = addOns.filter((a) => b.addOns.includes(a.id) && !blocked(a));
@@ -95,9 +100,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       level: [G.experienceOpts[level], data.handicap && `${G.handicap.replace(/\s*[(（].*$/, "")}: ${data.handicap}`].filter(Boolean).join(" · "),
       rental: golfers.map((i) => `${countOf(G.golferN, i)}: ${G.rentalOpts[rentalOf(i)]}${rentalOf(i) !== "own" ? ` (${G.handedOpts[handedOf(i)]})` : ""}`).join(" · "),
       clubs: anyRental ? data.clubs : "",
+      shoes: golfers.map((i) => `${countOf(G.golferN, i)}: ${shoeText(i)}`).join(" · "),
       // The same choices as keys, for the team's Japanese notification.
       level_key: level, handicap: data.handicap,
       rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
+      shoe_keys: golfers.map((i) => shoeOf(i) || "unsure").join(","),
       addons: chosenAddOns.map(addOnLine).join(", "),
     };
     const key = JSON.stringify(payload);
@@ -250,7 +257,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           </label>
         </div>
         <div className="go-rental" role="group" aria-label={G.rental}>
-          <span className="go-rental-h">{G.rental}</span>
+          <span className="go-rental-h">{G.rentalH}</span>
           {golfers.map((i) => (
             <div className="go-rental-row" key={i}>
               <b>{countOf(G.golferN, i)}</b>
@@ -262,6 +269,12 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
                   {(Object.keys(G.handedOpts) as Handed[]).map((k) => <option key={k} value={k}>{G.handedOpts[k]}</option>)}
                 </select>
               ) : <span />}
+              <select name={`shoes-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.shoes}`} value={shoeOf(i)} onChange={(e) => setShoes((s) => ({ ...s, [i]: e.target.value }))}>
+                <option value="" disabled>{G.shoes}</option>
+                {SHOE_SIZES.map((k) => <option key={k} value={k}>{G.shoeSize.replace("{n}", k)}</option>)}
+                <option value="own">{G.shoeOpts.own}</option>
+                <option value="unsure">{G.shoeOpts.unsure}</option>
+              </select>
             </div>
           ))}
         </div>

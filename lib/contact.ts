@@ -50,6 +50,9 @@ export interface Enquiry {
   levelKey?: string;
   handicap?: string;
   rentalKeys?: string;
+  /** "Golfer 1: 26.5 cm · Golfer 2: Own shoes" and the keys ("26.5,own") behind it. */
+  shoes?: string;
+  shoeKeys?: string;
   message: string;
   /** Page language, so the confirmation can be answered in it. */
   lang: string;

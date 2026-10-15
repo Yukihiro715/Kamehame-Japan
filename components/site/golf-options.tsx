@@ -110,7 +110,9 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
       </fieldset>
 
       <p className="go-includes">{copy.includes}</p>
-      <p className="go-note">{custom ? copy.customNote : copy.note}</p>
+      {custom ? <p className="go-note">{copy.customNote}</p> : (
+        <div className="go-assure"><ShieldCheck size={16} aria-hidden="true" /><div><b>{copy.assure.heading}</b><p>{copy.assure.body}</p></div></div>
+      )}
       <FxNote lang={lang} short />
       <a className="bk-cta" href="#request-form" onClick={jump}>{ctaLabel} <ArrowRight size={16} /></a>
       <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>

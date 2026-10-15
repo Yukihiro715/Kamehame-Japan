@@ -414,7 +414,7 @@ Please use the same name and email as in your request. Your booking is confirmed
 WHAT'S INCLUDED
 - Private car from your hotel to the course and back
 - Green fee, golf cart, rental clubs {for both of you (ladies' and men's sets)} and rental shoes
-- English-speaking golf guide who rides with you and helps with check-in, rental clubs and the clubhouse (the guide does not play)
+- English-speaking assistant who rides with you and helps with check-in, rental clubs and shoes and the clubhouse (the assistant does not play)
 - Lunch at the clubhouse
 Included as well: golf cart, rental golf shoes, locker room and bath at the clubhouse. Not included: golf wear and gloves (bring your own). Optional: a highlight film of your day (¥96,000 per group of two or three, delivered about a week later) and ball markers with your names in kanji (¥6,000 per golfer, confirmed two weeks ahead).
 

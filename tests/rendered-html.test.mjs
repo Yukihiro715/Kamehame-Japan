@@ -97,6 +97,14 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.ok(text.includes("The cart fee is included"), "cart FAQ");
   // the transfer section, after the inclusions and before the reviews
   assert.ok(text.includes("Travel in Comfort, From Door to Door"), "transfer section heading");
+  assert.ok(text.includes("Know Your Golf Course Before You Pay"), "the reassurance under the options");
+  // one word for the person who rides along: assistant, never guide (except the playing guide that is not included)
+  {
+    // the page's own copy (not the guests' reviews, which are quoted as written, and not the RSC payload after the document)
+    const own = html.slice(0, html.indexOf("</main>")).replace(/<section class="xp-section" id="reviews">[\s\S]*?<\/section>/, "").replace(/<[^>]+>/g, "");
+    assert.doesNotMatch(own.replace(/playing guide/g, ""), /\bguide\b/i, "no 'guide' wording left in the page's own copy");
+  }
+  assert.ok(html.includes("golf-transfer-interior.webp"), "the interior photo supports the transfer section");
   assert.ok(html.indexOf('id="included"') < html.indexOf('id="transfer"') && html.indexOf('id="transfer"') < html.indexOf('id="reviews"'), "section order");
   assert.match(html, /id="transfer"[\s\S]*?<img src="\/images\/golf-gallery-11-transfer-minivan\.webp" alt="[^"]+" width="1600" height="1000" loading="lazy"/, "transfer photo lazy with dimensions");
   assert.doesNotMatch(html, /Alphard guaranteed|guaranteed Alphard/i);
@@ -113,7 +121,7 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   // the guide assists; nobody promises a playing guide or a caddie
   assert.ok(html.includes("does not normally play"), "guide does not play");
   assert.doesNotMatch(html, /caddie (is )?included|guide plays the round with you/i);
-  for (const field of ['name="golfers"', 'name="area"', 'name="specific-course"', 'name="pickup"', 'name="hotel-undecided"', 'name="level"', 'name="rental-1"', 'name="handed-1"', 'name="whatsapp"']) {
+  for (const field of ['name="golfers"', 'name="area"', 'name="specific-course"', 'name="pickup"', 'name="hotel-undecided"', 'name="level"', 'name="rental-1"', 'name="handed-1"', 'name="shoes-1"', 'name="whatsapp"']) {
     assert.ok(html.includes(field), `request form has ${field}`);
   }
   assert.ok(html.includes("Send Golf Day Request"), "the submit button has its own label");

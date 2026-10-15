@@ -120,6 +120,8 @@ export interface VariantPageCopy {
     includes: string;
     /** Under the cards: recommended-course package, confirmed before payment. */
     note: string;
+    /** The reassurance under the cards: the course, tee time and total are proposed for approval before payment. */
+    assure: { heading: string; body: string };
     /** Replaces it while a specific course is requested in the form. */
     customNote: string;
     /** Under the button: no payment required to enquire. */
@@ -138,7 +140,11 @@ export interface VariantPageCopy {
     pickup: string; pickupHint: string; hotelUndecided: string; hotelArea: string; hotelAreaHint: string;
     experience: string; experienceSelect: string; experienceOpts: { casual: string; regular: string; experienced: string; unsure: string };
     handicap: string; handicapHint: string;
+    /** "Rental clubs & shoes" — the heading of the per-golfer rows. */
+    rentalH: string;
     rental: string; rentalOpts: { required: string; own: string; unsure: string };
+    /** Shoe size per golfer: a size in cm, own shoes, or "later". */
+    shoes: string; shoeOpts: { own: string; unsure: string }; /** "{n} cm" */ shoeSize: string;
     handed: string; handedOpts: { right: string; left: string; unsure: string };
     /** "Golfer {n}" */
     golferN: string;
@@ -1616,14 +1622,14 @@ export const experiences: Experience[] = [
     tagline: "Play 18 holes near Tokyo or in the Mt. Fuji region, with private hotel transfers, green fees, golf cart, rental clubs and shoes, lunch and English-speaking assistance arranged for you.",
     overview: [
       "Play 18 holes near Tokyo or in the Mt. Fuji region. We arrange your course, a premium private car with its own driver, the golf cart, rental clubs and shoes, with English-speaking assistance for a smooth start to your round.",
-      "Your English-speaking guide helps with check-in, rental arrangements and communication at the clubhouse. Your group plays the round independently; the guide does not normally play or accompany you on the course.",
+      "Your English-speaking assistant helps with check-in, rental arrangements and communication at the clubhouse. Your group plays the round independently; the assistant does not normally play or accompany you on the course.",
     ],
-    duration: "Full day, hotel to hotel", price: "¥250,000", priceUnit: "group", group: "Private car and guide · 2–4 golfers", ages: "Ages 18+", area: "Tokyo area or Mt. Fuji region (pick-up at your Tokyo hotel)",
+    duration: "Full day, hotel to hotel", price: "¥250,000", priceUnit: "group", group: "Private car and assistant · 2–4 golfers", ages: "Ages 18+", area: "Tokyo area or Mt. Fuji region (pick-up at your Tokyo hotel)",
     img: "/images/golf-gallery-01-fuji-aerial.webp", alt: "Snow-capped Mt. Fuji above a sweeping mountain golf course, seen from the air",
     // Ten photos supplied by the owner (2026-10-15): one fixed set for both areas, the hero first; the operator confirms the actual course, meals and facilities with each proposal.
     // 11 (2026-10-15): the transfer vehicle, a licensed placeholder (IMAGE_CREDITS.md) until the partner's own car and driver photos arrive; shown second so the private car is seen early.
     gallery: [
-      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A white premium minivan of the kind used for the private hotel transfers" },
+      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A black premium minivan of the kind used for the private hotel transfers" },
       { img: "/images/golf-gallery-02-golf-swing.webp", alt: "A golfer in a blue shirt finishing a tee shot on a tree-lined course" },
       { img: "/images/golf-gallery-03-clubhouse-lobby.webp", alt: "A clubhouse lobby with a timber ceiling and a reception desk" },
       { img: "/images/golf-gallery-04-japanese-lunch.webp", alt: "A Japanese golf-club lunch: sushi, grilled fish and side dishes" },
@@ -1655,7 +1661,7 @@ export const experiences: Experience[] = [
     availability: { daily: true, startTimes: ["05:00", "05:30", "06:00", "06:30", "07:00", "07:30", "08:00"], defaultTime: "06:00", cutoffDays: 3, cutoffTime: "18:00" },
     taxIncluded: true,
     interpreter: false,
-    langTag: "English-speaking golf guide",
+    langTag: "English-speaking golf assistant",
     skipSiteFaq: true,
     timeLabel: "Preferred departure time",
     scheduleNote: "Sample timings for a 6:00 departure to the Mt. Fuji region; a course near Tokyo is usually nearer. Choose any departure between 5:00 and 8:00 when you enquire; we propose a tee time to match, and the rest of the day moves with the confirmed course, tee time and traffic.",
@@ -1663,7 +1669,7 @@ export const experiences: Experience[] = [
       label: "Check Availability",
       note: "No payment required to enquire.",
       heading: "Request Availability",
-      lead: "Tell us your date, your hotel and your golfers. We check availability and send your proposed course, tee time and final price. No payment is required now.",
+      lead: "Tell us your date, your hotel and your golfers. No payment is required now.",
     },
     includedShort: "Private transfers with driver · 18 holes, cart, clubs and shoes · Lunch and English-speaking support",
     cancellation: "Days are counted to the date of your round, Japan time; free cancellation ends at 6:00 pm JST seven days before. The date can be changed up to 14 days before if another tee time is free, and the number of golfers reduced up to 7 days before. If the course closes for weather, it decides on the day and you are refunded everything except costs already incurred, such as the car if it has already set out.",
@@ -1691,9 +1697,9 @@ export const experiences: Experience[] = [
       { id: "kanji-marker", name: "Ball marker with your name in kanji", description: "Handed to you on the day. ¥6,000 per golfer. Order it when you book — it needs your booking confirmed at least two weeks before your date.", price: 6000, perGuest: true },
     ],
     schedule: [
-      { time: "05:55", title: "Meet in your hotel lobby", body: "Your guide and driver meet you five minutes before the departure time you chose." },
+      { time: "05:55", title: "Meet in your hotel lobby", body: "Your assistant and driver meet you five minutes before the departure time you chose." },
       { time: "06:00", title: "Leave Tokyo", body: "Typically one to one and a half hours by private car to a course near Tokyo; about two hours to the Mt. Fuji region, depending on the course and traffic." },
-      { time: "07:30–08:00", title: "Arrive and check in", body: "Your guide checks you in, sorts the rental clubs and shoes and explains the course and the clubhouse customs." },
+      { time: "07:30–08:00", title: "Arrive and check in", body: "Your assistant checks you in, sorts the rental clubs and shoes and explains the course and the clubhouse customs." },
       { time: "Tee off", title: "Your round", body: "Your group plays the 18 holes at its own pace, with a golf cart." },
       { time: "Lunch", title: "Clubhouse lunch", body: "Included within the package allowance. Depending on the course, lunch comes between the two nines or after the round." },
       { time: "Afternoon", title: "Back to your hotel", body: "A bath at the clubhouse if you like, then the car takes you back to Tokyo." },
@@ -1702,12 +1708,12 @@ export const experiences: Experience[] = [
       heading: "Your course, personally arranged",
       knownHeading: "Before you pay", afterHeading: "After you book",
       known: ["The proposed course and its tee time, sent with your quote", "The final price for your party", "Pick-up and drop-off at your hotel in Tokyo, departing at the time you choose between 5:00 and 8:00"],
-      afterBooking: ["Where to meet in your hotel lobby — with your confirmation", "Your guide's name and phone number, and the car and driver details — the day before your round"],
+      afterBooking: ["Where to meet in your hotel lobby — with your confirmation", "Your assistant's name and phone number, and the car and driver details — the day before your round"],
     },
     flow: [
       { title: "Send your request", body: "Choose your area and group size, then tell us your date, hotel and golfers in the form. Sending the request costs nothing and books nothing." },
       { title: "Review your proposal", body: "We confirm your request within 24 hours. The proposed course, tee time, included services and final price usually follow within one business day; for requests sent at the weekend, the tee time may be confirmed on Monday." },
-      { title: "Pay to confirm the arrangements", body: "Accept the proposal and pay through the link we send. Your booking is confirmed once your payment and the arrangements are in place, and cancellation terms start then." },
+      { title: "Pay to confirm the arrangements", body: "Accept the proposal and pay through the link we send; cancellation terms start then." },
     ],
     faq: [
       { q: "Which course will we play?", a: "For our recommended-course package, we select a suitable course in your chosen area for your date and group size. You will receive the course name and tee time before payment." },
@@ -1716,13 +1722,13 @@ export const experiences: Experience[] = [
       { q: "Is the price per person or per group?", a: "The main price is shown per person for your selected group size. The full group total appears directly below it. For three golfers, the per-person amount is rounded for reference; the group total is the amount used for the package price." },
       { q: "Are weekend green fees included?", a: "The standard starting prices apply to recommended-course packages on regular weekdays and weekends. If no suitable course is available at that rate, we will propose alternatives and confirm any revised price before payment." },
       { q: "Is payment required when I send the form?", a: "No. We first check availability and share the course, tee time, included services and final price. Payment is requested only after you accept the proposal." },
-      { q: "Will the guide play with us?", a: "No. Your guide assists with local arrangements and clubhouse procedures. Your group plays independently. A playing guide or course caddie is not included in the standard package." },
+      { q: "Will the assistant play with us?", a: "No. Your assistant assists with local arrangements and clubhouse procedures. Your group plays independently. A playing guide or course caddie is not included in the standard package." },
       { q: "Will we see Mt. Fuji?", a: "Mt. Fuji views depend on the selected course and the weather and cannot be guaranteed. The Tokyo Area package does not include a promise of Mt. Fuji views." },
       { q: "When and where do you pick us up?", a: "At your hotel in Tokyo, at the departure time you choose between 5:00 and 8:00. A course near Tokyo is typically one to one and a half hours away; the Mt. Fuji region about two hours, depending on the course and traffic. Tell us the hotel in your request; if it is not decided yet, give us the approximate area and confirm the name later." },
       { q: "Which departure time should we choose?", a: "An earlier departure means an earlier tee time and more of the afternoon free; a later departure means a later tee off and a later return. If you have no preference, choose “No preference” and we propose a tee time to match the course." },
       { q: "Can we play as a group of two?", a: "Yes — two golfers is the standard package. We prioritise courses that accept two golfers; any pairing requirements are explained before you confirm." },
-      { q: "Is there a dress code?", a: "Most Japanese clubs ask for smart clothing on arrival — a jacket is still customary at many — and a collared shirt on the course. We tell you the confirmed course's rules with your proposal, and your guide explains the rest on the day." },
-      { q: "Are clubs and shoes included? What about gloves?", a: "Yes. A standard set of rental clubs and rental golf shoes are included: tell us each golfer's handedness and any preferences in the form, and your shoe sizes in the requests field or when we confirm your proposal. Golf wear and gloves are not provided, so bring your own." },
+      { q: "Is there a dress code?", a: "Most Japanese clubs ask for smart clothing on arrival — a jacket is still customary at many — and a collared shirt on the course. We tell you the confirmed course's rules with your proposal, and your assistant explains the rest on the day." },
+      { q: "Are clubs and shoes included? What about gloves?", a: "Yes. A standard set of rental clubs and rental golf shoes are included: tell us each golfer's handedness and any preferences in the form, and each golfer's shoe size in the same step. Golf wear and gloves are not provided, so bring your own." },
       { q: "Is a golf cart included? What about the clubhouse facilities?", a: "Yes. The cart fee is included, as are the locker room and bath at the clubhouse. Cart type and whether carts may drive on the fairway vary by course; we confirm the details of your course with your proposal." },
       { q: "Who can join?", a: "Golfers aged 18 and over, two to four per booking, all at the published package prices." },
       { q: "What if it rains?", a: "If the course closes for weather, the course decides on the day; you are refunded everything except costs already incurred, such as the car if it has already set out." },
@@ -1746,7 +1752,7 @@ export const experiences: Experience[] = [
           { id: "assistant", label: "English Assistant", note: "Transfers, check-in and rentals" },
           { id: "cart", label: "Golf Cart", note: "Cart fee included" },
           { id: "locker", label: "Locker Room", note: "At the clubhouse" },
-          { id: "bath", label: "Bath", note: "Clubhouse bath after your round" },
+          { id: "bath", label: "Bath", note: "At clubhouses that have one; confirmed with your course" },
           { id: "lunch", label: "Lunch", note: "At the clubhouse, within the allowance" },
           { id: "taxes", label: "Taxes & Service Fees", note: "No surprises at the clubhouse" },
           { id: "wear", label: "Golf Wear Rental", note: "Bring your own wear and gloves" },
@@ -1758,7 +1764,8 @@ export const experiences: Experience[] = [
       transfer: {
         heading: "Travel in Comfort, From Door to Door",
         body: "Enjoy private round-trip transfers between your hotel and the golf course in a premium vehicle, with a dedicated driver and English-speaking assistance. Relax and enjoy the journey while we take care of the details.",
-        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A white premium minivan of the kind used for the private hotel transfers" },
+        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A black premium minivan of the kind used for the private hotel transfers" },
+        photo2: { img: "/images/golf-transfer-interior.webp", alt: "The leather and wood interior of a premium minivan" },
         points: [
           { title: "Hotel pick-up and drop-off", body: "Round trip between your Tokyo hotel and the course, departing at the time you choose between 5:00 and 8:00." },
           { title: "Your own driver", body: "A dedicated driver for the day. The car stays at the course while you play and takes you straight back afterwards." },
@@ -1773,17 +1780,18 @@ export const experiences: Experience[] = [
         customQuote: "Custom quote", customQuoteLine: "Specific course · {n} golfers",
         includes: "Includes private transfers with driver, 18 holes, golf cart, rental clubs and shoes, English-speaking assistance, locker room, bath and lunch.",
         note: "Recommended-course package. Course, tee time and final price confirmed before payment.",
+        assure: { heading: "Know Your Golf Course Before You Pay", body: "We'll propose a suitable golf course, available tee time and total price for your approval before payment. Your tee time will be secured once your booking is confirmed, subject to availability." },
         customNote: "A specific course is quoted individually. Untick it in the form to see the package price again.",
         ctaNote: "No payment required to enquire.",
         allPrices: "View all group prices",
       },
       intro: {
         heading: "Your private golf day, arranged.",
-        guideNote: "Your English-speaking guide helps with check-in, rental arrangements and communication at the clubhouse. Your group plays the round independently; the guide does not normally play or accompany you on the course.",
+        guideNote: "Your English-speaking assistant helps with check-in, rental arrangements and communication at the clubhouse. Your group plays the round independently; the assistant does not normally play or accompany you on the course.",
       },
       day: {
         steps: [
-          { title: "Hotel pick-up", body: "Your guide and driver meet you in the lobby at the departure time you chose, and the private car takes you to the course." },
+          { title: "Hotel pick-up", body: "Your assistant and driver meet you in the lobby at the departure time you chose, and the private car takes you to the course." },
           { title: "Check-in, clubs & shoes", body: "Your assistant handles check-in, sorts your rental clubs and shoes, and explains the clubhouse customs." },
           { title: "18 holes & clubhouse lunch", body: "Your group plays at its own pace, with a golf cart. Lunch is included within the allowance — between the nines or after the round, depending on the course." },
           { title: "Bath & return to your hotel", body: "Freshen up in the clubhouse bath, then the private car brings you back to your hotel in Tokyo." },
@@ -1816,24 +1824,26 @@ export const experiences: Experience[] = [
         experience: "Golf experience", experienceSelect: "Select…",
         experienceOpts: { casual: "Casual", regular: "Regular", experienced: "Experienced", unsure: "Not sure" },
         handicap: "Handicap (optional)", handicapHint: "e.g. 12 and 20, or none",
+        rentalH: "Rental clubs & shoes",
         rental: "Rental clubs", rentalOpts: { required: "Required", own: "Bringing own", unsure: "Not sure" },
+        shoes: "Shoe size", shoeOpts: { own: "Own shoes", unsure: "Size later" }, shoeSize: "{n} cm",
         handed: "Handedness", handedOpts: { right: "Right-handed", left: "Left-handed", unsure: "Not sure" },
         golferN: "Golfer {n}",
         clubSpecs: "Preferred club specifications (optional)", clubSpecsHint: "e.g. regular flex, a ladies' set — or decide later",
         whatsapp: "WhatsApp number (optional)", whatsappHint: "With country code, e.g. +44 7700 900123",
-        requests: "Special requests (optional)", requestsHint: "Shoe sizes for rental shoes, dietary needs for lunch, transfer or playing requests, anything else we should know",
+        requests: "Special requests (optional)", requestsHint: "Dietary needs for lunch, transfer or playing requests, anything else we should know",
         extras: "Optional extras", extrasNote: "Added to the package price and confirmed with your proposal.", notForFour: "Not available for parties of four",
-        confirmH: "Before you send", confirmNote: "Package price for our recommended course; extras shown separately. The final price is confirmed before payment.",
+        confirmH: "Before you send", confirmNote: "Package price for our recommended course; extras shown separately.",
         perPersonRef: "reference", package: "Package", recommendedCourse: "Our recommended course",
         cta: "Send Golf Day Request",
-        note: "No payment now. We will check availability and send your proposed course, tee time and final price.",
+        note: "No payment now.",
         terms: "Booking & cancellation terms",
         sentNote: "Your booking is not confirmed yet. We will contact you with the proposed arrangements and payment instructions.",
       },
       headings: { about: "Your private golf day, arranged.", included: "What's included", day: "A day on the course", faq: "Frequently asked questions", terms: "Booking & cancellation terms", request: "Request Availability" },
     },
     whatYoullDo: ["Ride from your hotel to the course in a private car", "Play 18 holes near Tokyo or in the Mt. Fuji region, the day's details arranged for you", "Lunch at the clubhouse", "Ride back to Tokyo"],
-    master: { title: "Your golf guide", bio: "An English-speaking guide from our golf partner who rides with you, handles check-in, rental clubs and shoes and the clubhouse procedures, and is on hand while you play. The guide does not play the round.", quote: "" },
+    master: { title: "Your English-speaking assistant", bio: "An English-speaking assistant from our golf partner who rides with you, handles check-in, rental clubs and shoes and the clubhouse procedures, and is on hand while you play. The assistant does not play the round.", quote: "" },
     itinerary: ["05:55 — Meet in your hotel lobby (five minutes before your departure)", "06:00 — Leave Tokyo", "07:30–08:00 — Arrive and check in", "Tee off — Your round", "Lunch — At the clubhouse", "Afternoon — Back to your hotel"],
     goodToKnow: ["Ages 18 and over; two to four golfers per booking, all at published package prices.", "Pick-up from your Tokyo hotel at the departure time you choose, between 5:00 and 8:00.", "Clubhouse dress: smart clothing on arrival, a collared shirt on the course; the confirmed course's rules come with your proposal.", "Rental clubs, golf shoes and the cart are included; bring your own golf wear and gloves.", "A specific course requested by you is quoted individually."],
     story: { heading: "Golf, the Japanese way", body: "In Japan golf comes with its own rituals: the jacket on arrival, the care taken of the course, the unhurried lunch. Near Tokyo or in sight of Mt. Fuji on a clear morning, it is a different game." },

@@ -201,6 +201,8 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     levelKey: golf.areaId ? clean(body.level_key, 20) || undefined : undefined,
     handicap: golf.areaId ? clean(body.handicap, 60) || undefined : undefined,
     rentalKeys: golf.areaId && /^(required|own|unsure)(:(right|left|unsure))?(,(required|own|unsure)(:(right|left|unsure))?){0,3}$/.test(String(body.rental_keys ?? "")) ? String(body.rental_keys) : undefined,
+    shoes: golf.areaId ? clean(body.shoes, 240) || undefined : undefined,
+    shoeKeys: golf.areaId && /^(own|unsure|\d{2}(\.5)?)(,(own|unsure|\d{2}(\.5)?)){0,3}$/.test(String(body.shoe_keys ?? "")) ? String(body.shoe_keys) : undefined,
     lang: clean(body.lang, 5) || "en",
     experience: clean(body.experience, MAX.experience) || undefined,
     website: clean(body.website, 200) || undefined,
