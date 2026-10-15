@@ -2,7 +2,6 @@
 
 import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useBooking } from "@/components/site/booking-context";
-import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
 import { countOf, fromPrice, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
@@ -13,13 +12,16 @@ type OptionsCopy = VariantPageCopy["options"];
 
 /** The words and figures every price display on the golf page shares — the
  *  options panel, the sticky bar, the form summary and its confirmation —
- *  so they can never disagree. `total` is the package price for `n`
+ *  so they can never disagree. Each leads with the group total; the
+ *  per-person figure is the small line under it. `total` is the package price for `n`
  *  golfers; null means the request is quoted individually. */
 export function golfPriceParts(copy: OptionsCopy, total: number | null, n: number) {
   if (total === null) {
     return { custom: true as const, headline: copy.customQuote, line: countOf(copy.customQuoteLine, n) };
   }
   const { perPerson, approximate } = perPersonOf(total, n);
+  const totalWords = copy.total.replace("{n}", String(n)).split("{total}").map((x) => x.trim());
+  const shortWords = copy.totalShort.split("{total}").map((x) => x.trim());
   return {
     /** "¥87,500 / person" — beside a fixed total */
     perPersonRef: perPersonRefText(copy, perPerson, approximate),
@@ -29,8 +31,14 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
     perPerson, approximate,
     /** "From approx. ¥96,667" as one string */
     perPersonText: fromPrice(copy, perPerson, approximate),
+    /** "From approx. ¥96,667 / person" — the per-person line under the total */
+    perPersonLine: fromPrice(copy, perPerson, approximate) + copy.perPerson,
     /** "¥290,000 total · 3 golfers" */
     totalLine: copy.total.replace("{total}", yen(total)).replace("{n}", String(n)),
+    /** The words of `totalLine` before the figure ("3名参加時／1組合計") and after it ("total · 3 golfers") */
+    totalLead: totalWords[0], totalUnit: totalWords[1],
+    /** The word of `totalShort` ("total" / "1組合計") and whether it follows the figure */
+    totalWord: shortWords[1] || shortWords[0], totalWordAfter: !!shortWords[1],
     /** "¥290,000 total" */
     totalShort: copy.totalShort.replace("{total}", yen(total)),
     total,
@@ -45,7 +53,6 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
   variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[];
 }) {
   const b = useBooking();
-  const { usdActive } = useCurrency();
   if (!b) return null;
   const n = b.guestsNumber;
   const custom = b.customQuote;
@@ -87,16 +94,13 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                 ) : (
                   <>
                     <span className="go-price">
-                      {/* "≈" already says approximate in USD, so the lead keeps only "From" there */}
-                      {(usdActive ? copy.from : p.lead) && <small className="go-lead">{usdActive ? copy.from : p.lead}</small>}
-                      <b><Yen n={p.perPerson} />{copy.fromSuffix && <span className="go-suffix">{copy.fromSuffix}</span>}</b>
-                      {copy.perPerson && <small className="go-unit">{copy.perPerson}</small>}
-                      <JpyRef n={p.perPerson} unit={copy.perPerson} lang={lang} />
+                      {p.totalLead && <small className="go-lead">{p.totalLead}</small>}
+                      <b><Yen n={p.total} /></b>
+                      {p.totalUnit && <small className="go-unit">{p.totalUnit}</small>}
+                      <JpyRef n={p.total} unit={p.totalWordAfter ? p.totalWord : undefined} lang={lang} />
                     </span>
-                    {/* wraps only at the " · " separator where there is one; otherwise only the figure is kept whole */}
-                    <span className="go-total">{usdActive ? <Fx>{p.totalLine}</Fx> : p.totalLine.includes(" · ")
-                      ? p.totalLine.split(" · ").map((x, i, all) => <span key={i}><span className="nw">{x}</span>{i < all.length - 1 ? " · " : ""}</span>)
-                      : p.totalLine.split(yen(p.total)).map((x, i, all) => <span key={i}>{x}{i < all.length - 1 && <span className="nw">{yen(p.total)}</span>}</span>)}</span>
+                    {/* the per-person figure, small, under the group total */}
+                    <span className="go-pp"><Fx brief>{p.perPersonLine}</Fx></span>
                   </>
                 )}
               </label>
