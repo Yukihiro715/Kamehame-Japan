@@ -31,8 +31,9 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
     perPerson, approximate,
     /** "From approx. ¥96,667" as one string */
     perPersonText: fromPrice(copy, perPerson, approximate),
-    /** "From approx. ¥96,667 / person" — the per-person line under the total */
-    perPersonLine: fromPrice(copy, perPerson, approximate) + copy.perPerson,
+    /** "¥125,000 / person" / "approx. ¥96,667 / person" — the per-person line beside the total. The package
+     *  price is fixed for the chosen area and party, so there is no "From". */
+    perPersonLine: perPersonRefText(copy, perPerson, approximate),
     /** "¥290,000 total · 3 golfers" */
     totalLine: copy.total.replace("{total}", yen(total)).replace("{n}", String(n)),
     /** The words of `totalLine` before the figure ("3名参加時／1組合計") and after it ("total · 3 golfers") */

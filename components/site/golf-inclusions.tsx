@@ -1,4 +1,4 @@
-import { Bath, CircleCheck, CircleX, Footprints, LandPlot, LockKeyhole, Receipt, Shirt, Utensils, type LucideIcon } from "lucide-react";
+import { Bath, CircleCheck, CircleX, Footprints, LandPlot, Receipt, Shirt, Utensils, type LucideIcon } from "lucide-react";
 import type { GolfInclusionId, VariantPageCopy } from "@/lib/catalog";
 
 type Copy = VariantPageCopy["inclusions"];
@@ -26,12 +26,23 @@ function Minivan({ size = 22 }: IconProps) {
   );
 }
 
-/** A person at a steering wheel. */
+/** A steering wheel: the private driver. */
 function Driver({ size = 22 }: IconProps) {
   return (
     <svg {...svgProps(size)}>
-      <circle cx="12" cy="5.5" r="3" /><path d="M4 21v-1c0-2.8 2.2-5 5-5.5" /><path d="M20 21v-1c0-2.8-2.2-5-5-5.5" />
-      <circle cx="12" cy="17" r="3.5" /><path d="M8.5 17h7" /><path d="M12 17v3.5" />
+      <circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="2.5" />
+      <path d="M3 12h6.5" /><path d="M14.5 12H21" /><path d="M12 14.5V21" />
+    </svg>
+  );
+}
+
+/** Two lockers side by side, with vents and handles. */
+function Locker({ size = 22 }: IconProps) {
+  return (
+    <svg {...svgProps(size)}>
+      <rect x="3.5" y="3" width="7.5" height="18" rx="1" /><rect x="13" y="3" width="7.5" height="18" rx="1" />
+      <path d="M6 7h2.5" /><path d="M6 10h2.5" /><path d="M15.5 7H18" /><path d="M15.5 10H18" />
+      <path d="M9 14.5v2" /><path d="M18.5 14.5v2" />
     </svg>
   );
 }
@@ -66,7 +77,7 @@ const ITEMS: Record<GolfInclusionId, { Icon: LucideIcon | ((p: IconProps) => Rea
   driver: { Icon: Driver, included: true },
   assistant: { Icon: Assistant, included: true },
   cart: { Icon: GolfCart, included: true },
-  locker: { Icon: LockKeyhole, included: true },
+  locker: { Icon: Locker, included: true },
   bath: { Icon: Bath, included: true },
   lunch: { Icon: Utensils, included: true },
   taxes: { Icon: Receipt, included: true },
