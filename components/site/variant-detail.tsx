@@ -11,6 +11,8 @@ import { CancellationTable } from "@/components/site/cancellation-table";
 import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
 import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
+import { GolfInclusions } from "@/components/site/golf-inclusions";
+import { GolfTransfer } from "@/components/site/golf-transfer";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { Fx, FxNote } from "@/components/site/money";
@@ -22,7 +24,8 @@ import { productJsonLd } from "@/lib/seo";
 
 /** The golf page (one URL, two areas, three party sizes). In order: a short
  *  title block, the photos, the one options panel (beside the photos on wide
- *  screens, under them on phones), what the day is and includes, reviews,
+ *  screens, under them on phones), what the day is, the inclusion grid, the
+ *  transfer section, reviews,
  *  how the day goes, FAQ with the read-only price table, the single request
  *  form, the terms. The panel, the sticky bar and the form share one booking
  *  state, so the area and the party size are chosen once. */
@@ -97,16 +100,18 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           </aside>
 
           <div className="xp-main">
-            {/* 3. What the day is, what it includes, what the guide does */}
+            {/* 3. What the day is and what the guide does */}
             <section className="xp-section" id="about">
               <h2>{H.about}</h2>
               {exp.overview?.[0] && <p className="xp-lede">{exp.overview[0]}</p>}
-              <div className="xp-included vh-included">
-                {exp.included && <div><h3>{H.included}</h3><ul className="check-list">{exp.included.map((i) => <li key={i}><span className="tick">✓</span><span>{i}</span></li>)}</ul></div>}
-                {exp.notIncluded && <div><h3>{D.notIncludedH}</h3><ul className="check-list muted">{exp.notIncluded.map((i) => <li key={i}><span className="tick">—</span><span>{i}</span></li>)}</ul></div>}
-              </div>
               <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>
             </section>
+
+            {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}
+            <GolfInclusions copy={vc.inclusions} />
+
+            {/* 3b. The private car, the driver and the assistant */}
+            <GolfTransfer copy={vc.transfer} />
 
             {/* 4. Reviews (as supplied; not rewritten for the new packages) */}
             {hasReviews && (

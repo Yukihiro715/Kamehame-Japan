@@ -1620,6 +1620,40 @@ body[data-kh-modal] .sticky-request { display:none; }
   .go-pick { grid-template-columns:1fr; }
   .xp-variant .xp-included { grid-template-columns:1fr; gap:22px; }
 }
+/* What's included: icon cards, four across, two on phones */
+.gi-sub { margin:-8px 0 22px; font-size:16px; line-height:1.6; color:#4a463e; }
+.gi-grid { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
+.gi-card { display:flex; flex-direction:column; gap:6px; min-width:0; padding:18px 16px 16px; border:1px solid #e6e1d6; border-radius:14px; background:var(--white); }
+.gi-icon { width:40px; height:40px; border-radius:12px; display:grid; place-items:center; background:#faf8f3; color:var(--ink); margin-bottom:4px; }
+.gi-label { font-size:14px; line-height:1.35; color:var(--ink); font-weight:600; }
+.gi-note { font-size:12px; line-height:1.5; color:var(--muted); }
+.gi-status { display:inline-flex; align-items:center; gap:5px; margin-top:auto; padding-top:8px; font-size:12px; font-weight:600; letter-spacing:.02em; color:#1f7a3a; }
+.gi-status svg { flex:none; }
+.gi-no { background:#fbf9f6; border-style:dashed; }
+.gi-no .gi-icon { color:#8a857a; }
+.gi-no .gi-label { color:#5c584f; }
+.gi-no .gi-status { color:#b3261e; }
+.gi-foot { margin:20px 0 0; font-size:14px; line-height:1.7; color:var(--ink); font-weight:600; }
+.gi-fine { margin:8px 0 0; font-size:12.5px; line-height:1.7; color:var(--muted); }
+@media(max-width:1100px){ .gi-grid { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+@media(max-width:700px){ .gi-grid { grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; } .gi-card { padding:14px 12px 12px; } .gi-label { font-size:13.5px; } .gi-sub { font-size:15px; } }
+
+/* The transfer section: the car large beside short text, stacked on phones */
+.gt { display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:clamp(20px,3vw,40px); align-items:center; }
+.gt-media { display:grid; gap:10px; min-width:0; }
+.gt-media img { display:block; width:100%; height:auto; aspect-ratio:16 / 10; object-fit:cover; border-radius:16px; background:#e9e4da; }
+.gt-media .gt-photo2 { aspect-ratio:4 / 3; width:46%; justify-self:end; margin-top:-18%; margin-right:14px; border:4px solid var(--white); box-shadow:0 10px 30px rgba(0,0,0,.14); }
+.gt-text h2 { margin-bottom:14px; }
+.gt-lede { margin:0 0 18px; font-size:16px; line-height:1.7; color:#3d3a34; }
+.gt-points { list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+.gt-points li { display:flex; gap:12px; align-items:flex-start; }
+.gt-points b { display:block; font-size:14px; line-height:1.4; color:var(--ink); }
+.gt-points p { margin:2px 0 0; font-size:13.5px; line-height:1.6; color:#4a463e; }
+.gt-pt-icon { flex:none; width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:#faf8f3; color:var(--kame); }
+.gt-note { margin:16px 0 0; font-size:12px; line-height:1.6; color:var(--muted); }
+@media(max-width:900px){ .gt { grid-template-columns:1fr; } .gt-media img { aspect-ratio:3 / 2; } .gt-media .gt-photo2 { width:40%; margin-top:-16%; } }
+@media(max-width:700px){ .gt-media img { border-radius:12px; } .gt-lede { font-size:15px; } }
+
 @media(max-width:360px){ .go-area-grid { grid-template-columns:1fr; } }
 @media(max-width:480px){ .go-confirm dl > div { grid-template-columns:1fr; gap:2px; } }
 :is([lang="ja"], [lang="zh-tw"]) .go-h, :is([lang="ja"], [lang="zh-tw"]) .go-title, :is([lang="ja"], [lang="zh-tw"]) .golf-form .form-step > legend, :is([lang="ja"], [lang="zh-tw"]) .xp-sub-h { letter-spacing:.04em; }

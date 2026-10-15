@@ -72,6 +72,15 @@ including identifiable people in 02 and 06, are **to be confirmed by the owner /
 the package; the page says the photos are examples and that Mt. Fuji views exist only at some courses in the Mt. Fuji
 area. Do not reuse in paid advertising before that confirmation.
 
+### Golf: the transfer vehicle (2026-10-15)
+
+`public/images/golf-gallery-11-transfer-minivan.webp` (and its thumbnail) is a **licensed placeholder**, not the partner's
+car: "Toyota ALPHARD Z (3BA-AGH40W-PFXLK).jpg" by Tokumeigakarinoaoshima, Wikimedia Commons, CC BY-SA 4.0
+(https://commons.wikimedia.org/wiki/File:Toyota_ALPHARD_Z_(3BA-AGH40W-PFXLK).jpg), cropped to 16:10 with a slight
+reduction of the dusk colour cast. It stands in on the gallery and the "Travel in Comfort" section until the golf partner
+supplies photos of its own vehicle and driver; the page says the model on the day may vary. Replace both files with the
+partner's photos (same names) and delete this note when they arrive. No driver photo is published yet.
+
 ## Ramen class (added 2026-10-10)
 
 `public/images/kendotour-*.jpg` are the kendo tour operator's own photos from its official site (samuraitrip07.com), which its e-mail of 2026-10-06 lets us use freely, resized to 1600px; frames with legible name tags or award watermarks were left out. `public/images/kendo-*.jpg` and `bushido-*.jpg` are the kendo dojo partner's own PR photos, from the "PR写真" Drive folder it shared with us (owner info@kendospirit.jp), resized to 1600px; frames showing the partner's name were left out. The tea ceremony preview reuses the site's existing Wikimedia tea photos (`craft-hands.jpg`, `cat-tea.jpg`) as placeholders until the host supplies her own. `public/images/ramen-osaka-boiling.jpg` (cropped to leave out the branded bowls), `ramen-osaka-toppings.jpg` and `ramen-osaka-group.jpg` are the same partner's photos of its Osaka kitchen, from its OTA listing (viyago.jp/experiences/osaka-ramen-dojo), on the same terms. `public/images/ramen-noodle-machine.jpg`, `ramen-dough.jpg`, `ramen-fresh-noodles.jpg` and `ramen-boiling.jpg` are the partner's own

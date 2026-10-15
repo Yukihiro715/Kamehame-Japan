@@ -335,7 +335,7 @@ WHAT WE HAVE ARRANGED
 - {Ball markers with your names in kanji — yes, handed to you on the day / no}
 
 WHAT TO BRING
-- Golf shoes {or: rental shoes in sizes … are reserved for you}
+- Golf wear and gloves (rental shoes in sizes … are reserved for you; clubs are at the course)
 - A jacket to wear on arrival at the clubhouse, and a collared shirt for the course
 - Glove, sunscreen or a layer for the morning — it is cooler near Mt. Fuji than in Tokyo
 
@@ -413,10 +413,10 @@ Please use the same name and email as in your request. Your booking is confirmed
 
 WHAT'S INCLUDED
 - Private car from your hotel to the course and back
-- Green fee, rental clubs {for both of you (ladies' and men's sets)}
+- Green fee, golf cart, rental clubs {for both of you (ladies' and men's sets)} and rental shoes
 - English-speaking golf guide who rides with you and helps with check-in, rental clubs and the clubhouse (the guide does not play)
 - Lunch at the clubhouse
-Not included: golf shoes (bring your own, or ask us about rental). Optional: a highlight film of your day (¥96,000 per group of two or three, delivered about a week later) and ball markers with your names in kanji (¥6,000 per golfer, confirmed two weeks ahead).
+Included as well: golf cart, rental golf shoes, locker room and bath at the clubhouse. Not included: golf wear and gloves (bring your own). Optional: a highlight film of your day (¥96,000 per group of two or three, delivered about a week later) and ball markers with your names in kanji (¥6,000 per golfer, confirmed two weeks ahead).
 
 CANCELLATION (from payment, Japan time)
 Free until 18:00 on {date − 7}; 50% from {date − 6} to {date − 2}; 100% from {date − 1} and no-shows. Weather closure: full refund except costs already incurred.

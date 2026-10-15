@@ -79,9 +79,27 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.doesNotMatch(html, /<b>¥87,500<\/b>|<b>¥82,500<\/b>/, "the per-person figure is no longer a headline");
   assert.ok(html.includes('class="vh-timings" open'), "sample timings start open");
   assert.ok(html.includes("6:00 pm JST") && !/18:00 Japan time/.test(html), "times read as 12-hour JST");
-  assert.ok(html.includes("/images/golf-gallery-01-fuji-aerial.webp") && !/golf-fuji-aerial\.jpg|golf-tokyo-|golf-lakes-aerial|golf-flag-fuji/.test(html), "the shared ten-photo set only");
-  assert.ok(text.includes("Includes private transfers, 18 holes, rental clubs, English-speaking assistance and lunch."), "shared includes line");
-  assert.ok(text.includes("Private hotel transfers") && !text.includes("Tokyo & Mt. Fuji · Private hotel transfers"), "benefit chips, no subtitle");
+  assert.ok(html.includes("/images/golf-gallery-01-fuji-aerial.webp") && !/golf-fuji-aerial\.jpg|golf-tokyo-|golf-lakes-aerial|golf-flag-fuji/.test(html), "the shared photo set only");
+  assert.ok(text.includes("Includes private transfers with driver, 18 holes, golf cart, rental clubs and shoes, English-speaking assistance, locker room, bath and lunch."), "shared includes line");
+  assert.ok(text.includes("Private transfers with driver") && !text.includes("Tokyo & Mt. Fuji · Private hotel transfers"), "benefit chips, no subtitle");
+  // what's included: twelve icon cards, eleven covered and only golf wear not, once on the page, no text list beside it
+  assert.equal(html.split('class="gi-card"').length - 1, 11, "eleven included cards");
+  assert.equal(html.split('class="gi-card gi-no"').length - 1, 1, "one not-included card");
+  assert.match(html, /gi-card gi-no"[\s\S]{0,900}Golf Wear Rental/, "the one × is golf wear");
+  for (const item of ["18-Hole Golf Round", "Golf Club Rental", "Golf Shoe Rental", "Premium Private Transfer", "Private Driver", "English Assistant", "Golf Cart", "Locker Room", "Bath", "Lunch", "Taxes &amp; Service Fees"]) {
+    assert.match(html, new RegExp(`gi-card"[\\s\\S]{0,900}${item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), `${item} is an included card`);
+  }
+  assert.ok(text.includes("What's Included in Your Golf Day") && text.includes("Please bring your own golf wear and gloves. Golf shoes and clubs are provided."), "grid heading and wear note");
+  assert.equal(html.split('id="included"').length - 1, 1, "one included section");
+  assert.ok(!html.includes('class="check-list'), "no text inclusion list beside the grid");
+  // the old shoe wording is gone everywhere on the page
+  assert.doesNotMatch(html, /Bring your own golf shoes|Golf shoes and gloves|bring golf shoes/i, "no old shoe wording");
+  assert.ok(text.includes("The cart fee is included"), "cart FAQ");
+  // the transfer section, after the inclusions and before the reviews
+  assert.ok(text.includes("Travel in Comfort, From Door to Door"), "transfer section heading");
+  assert.ok(html.indexOf('id="included"') < html.indexOf('id="transfer"') && html.indexOf('id="transfer"') < html.indexOf('id="reviews"'), "section order");
+  assert.match(html, /id="transfer"[\s\S]*?<img src="\/images\/golf-gallery-11-transfer-minivan\.webp" alt="[^"]+" width="1600" height="1000" loading="lazy"/, "transfer photo lazy with dimensions");
+  assert.doesNotMatch(html, /Alphard guaranteed|guaranteed Alphard/i);
   // the listing card opens on the same numbers as the page
   const list = (await (await render("/en/golf/")).text()).replace(/<[^>]+>/g, "");
   assert.ok(list.includes("¥82,500") && list.includes("Based on 4 golfers · ¥330,000 per group"), "listing card shows the per-person figure with its party size and group total");
@@ -107,30 +125,31 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"250000"') && html.includes('"highPrice":"350000"'), "structured data carries the price range");
 });
 
-test("golf gallery: one fixed set of ten photos for both areas, in every language, with thumbnails on disk", async () => {
+test("golf gallery: one fixed set of eleven photos for both areas, in every language, with thumbnails on disk", async () => {
   const { existsSync } = await import("node:fs");
-  const expected = Array.from({ length: 10 }, (_, i) => i + 1);
+  // the hero, then the transfer vehicle, then the rest of the owner's set in order
+  const expected = [1, 11, ...Array.from({ length: 9 }, (_, i) => i + 2)];
   // the photo each gallery item shows, in track order (preloads and meta tags come before the track)
   const seq = (html) => [...html.matchAll(/<figure class="gg-item">[\s\S]*?\/images\/golf-gallery-(\d\d)-[a-z-]+\.webp/g)].map((m) => Number(m[1]));
   let first = null;
   for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
     const html = await (await render(`/${lang}/tokyo/mt-fuji-golf-day/`)).text();
     const main = seq(html);
-    // ten items in the fixed order, with no repeat of the hero
+    // eleven items in the fixed order, with no repeat of the hero
     assert.deepEqual(main, expected, `gallery order in ${lang}`);
     assert.ok(!html.includes('class="gg-area"'), `no area badge on the photos (${lang})`);
     const files = [...new Set(html.match(/\/images\/golf-gallery-[a-z0-9-]+\.webp/g))].sort();
     if (first) assert.deepEqual(files, first, `same files in ${lang}`); else first = files;
     assert.ok(html.includes("Mt. Fuji") || lang !== "en", "photo note present");
   }
-  assert.equal(first.length, 10, "ten distinct files");
+  assert.equal(first.length, 11, "eleven distinct files");
   for (const f of first) {
     assert.ok(existsSync(new URL(`../public${f}`, import.meta.url)), `${f} exists`);
     assert.ok(existsSync(new URL(`../public${f.replace("/images/", "/images/thumbs/")}`, import.meta.url)), `thumbnail for ${f} exists`);
   }
   // the hero photo appears once in the gallery track: the catalog gallery never repeats exp.img
   const en = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
-  assert.equal((en.match(/<figure class="gg-item">/g) ?? []).length, 10, "ten gallery items");
+  assert.equal((en.match(/<figure class="gg-item">/g) ?? []).length, 11, "eleven gallery items");
 });
 
 test("golf request: the server validates the choice against the price master", async () => {
