@@ -1,36 +1,70 @@
-import { Bath, CarFront, CircleCheck, CircleX, Footprints, LandPlot, Languages, LockKeyhole, Receipt, Shirt, UserRound, Utensils, type LucideIcon } from "lucide-react";
+import { Bath, CircleCheck, CircleX, Footprints, LandPlot, LockKeyhole, Receipt, Shirt, Utensils, type LucideIcon } from "lucide-react";
 import type { GolfInclusionId, VariantPageCopy } from "@/lib/catalog";
 
 type Copy = VariantPageCopy["inclusions"];
 
-/** Two golf clubs, crossed — Lucide has no golf club, so this one is drawn in the same stroke style. */
-function GolfClubs({ size = 22 }: { size?: number }) {
+type IconProps = { size?: number };
+const svgProps = (size: number) => ({ width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true });
+
+/** A golf club with a ball on the tee, drawn in Lucide's stroke style (Lucide has no golf club). */
+function GolfClub({ size = 22 }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M5 3l12 15" /><path d="M17 18c1.5 1.4 3.5 1.6 4.5.5L19 15" />
-      <path d="M19 3L7 18" /><path d="M7 18c-1.5 1.4-3.5 1.6-4.5.5L5 15" />
+    <svg {...svgProps(size)}>
+      <path d="M17 3 9.5 14.5" /><path d="M9.5 14.5c-1.3 2.3-4.3 3.2-5.8 1.8-1.2-1.2-.3-3 1.6-3.6" /><path d="M5.3 12.7c1.5-.5 3.1 0 4.2 1.8" />
+      <circle cx="18" cy="18" r="2" /><path d="M16.5 21.5h3" />
     </svg>
   );
 }
 
-/** A golf cart, in the same stroke style. */
-function GolfCart({ size = 22 }: { size?: number }) {
+/** A minivan seen from the side: one-box body, sliding-door window line, two wheels. */
+function Minivan({ size = 22 }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M4 17V11a2 2 0 0 1 2-2h8l3 5h3v3" /><path d="M6 9V5h10" /><path d="M14 5v4" />
-      <circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" />
+    <svg {...svgProps(size)}>
+      <path d="M3 16v-4l2.6-4.2A2 2 0 0 1 7.3 7H19a2 2 0 0 1 2 2v7" /><path d="M3 12h18" /><path d="M12 7v5" /><path d="M6 7.5V12" />
+      <circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /><path d="M9 17h6" />
+    </svg>
+  );
+}
+
+/** A person at a steering wheel. */
+function Driver({ size = 22 }: IconProps) {
+  return (
+    <svg {...svgProps(size)}>
+      <circle cx="12" cy="5.5" r="3" /><path d="M4 21v-1c0-2.8 2.2-5 5-5.5" /><path d="M20 21v-1c0-2.8-2.2-5-5-5.5" />
+      <circle cx="12" cy="17" r="3.5" /><path d="M8.5 17h7" /><path d="M12 17v3.5" />
+    </svg>
+  );
+}
+
+/** A person with a speech bubble: the English-speaking assistant. */
+function Assistant({ size = 22 }: IconProps) {
+  return (
+    <svg {...svgProps(size)}>
+      <circle cx="9" cy="8" r="3.5" /><path d="M3 21v-1a6 6 0 0 1 12 0v1" />
+      <path d="M15.5 3H21v4.5h-3.2L15.5 9.5z" />
+    </svg>
+  );
+}
+
+/** A golf cart: canopy on posts, open body, two wheels. */
+function GolfCart({ size = 22 }: IconProps) {
+  return (
+    <svg {...svgProps(size)}>
+      <path d="M5 6h12" /><path d="M6.5 6v5.5" /><path d="M15.5 6v5" />
+      <path d="M3 17v-4.5a1 1 0 0 1 1-1h10.5l2.5 3H20a1 1 0 0 1 1 1V17" /><path d="M9 11.5V9.5h3.5v2" />
+      <circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /><path d="M9 18h6" />
     </svg>
   );
 }
 
 /** Which icon each item shows and whether the package covers it: structure, the same in every language. */
-const ITEMS: Record<GolfInclusionId, { Icon: LucideIcon | ((p: { size?: number }) => React.ReactElement); included: boolean }> = {
+const ITEMS: Record<GolfInclusionId, { Icon: LucideIcon | ((p: IconProps) => React.ReactElement); included: boolean }> = {
   round: { Icon: LandPlot, included: true },
-  clubs: { Icon: GolfClubs, included: true },
+  clubs: { Icon: GolfClub, included: true },
   shoes: { Icon: Footprints, included: true },
-  transfer: { Icon: CarFront, included: true },
-  driver: { Icon: UserRound, included: true },
-  assistant: { Icon: Languages, included: true },
+  transfer: { Icon: Minivan, included: true },
+  driver: { Icon: Driver, included: true },
+  assistant: { Icon: Assistant, included: true },
   cart: { Icon: GolfCart, included: true },
   locker: { Icon: LockKeyhole, included: true },
   bath: { Icon: Bath, included: true },
