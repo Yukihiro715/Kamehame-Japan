@@ -104,9 +104,9 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
     const own = html.slice(0, html.indexOf("</main>")).replace(/<section class="xp-section" id="reviews">[\s\S]*?<\/section>/, "").replace(/<[^>]+>/g, "");
     assert.doesNotMatch(own.replace(/playing guide/g, ""), /\bguide\b/i, "no 'guide' wording left in the page's own copy");
   }
-  assert.ok(html.includes("golf-transfer-interior.webp"), "the interior photo supports the transfer section");
+  assert.ok(!html.includes("golf-transfer-interior.webp"), "no inset photo over the transfer picture");
   assert.ok(html.indexOf('id="included"') < html.indexOf('id="transfer"') && html.indexOf('id="transfer"') < html.indexOf('id="reviews"'), "section order");
-  assert.match(html, /id="transfer"[\s\S]*?<img src="\/images\/golf-gallery-11-transfer-minivan\.webp" alt="[^"]+" width="1600" height="1000" loading="lazy"/, "transfer photo lazy with dimensions");
+  assert.match(html, /id="transfer"[\s\S]*?<img src="\/images\/golf-transfer-car\.webp" alt="[^"]+" width="1600" height="900" loading="lazy"/, "transfer photo lazy with dimensions");
   assert.doesNotMatch(html, /Alphard guaranteed|guaranteed Alphard/i);
   // the listing card opens on the same numbers as the page
   const list = (await (await render("/en/golf/")).text()).replace(/<[^>]+>/g, "");
@@ -135,8 +135,8 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
 
 test("golf gallery: one fixed set of eleven photos for both areas, in every language, with thumbnails on disk", async () => {
   const { existsSync } = await import("node:fs");
-  // the hero, then the transfer vehicle, then the rest of the owner's set in order
-  const expected = [1, 11, ...Array.from({ length: 9 }, (_, i) => i + 2)];
+  // the hero and the owner's set in order, the transfer car last
+  const expected = Array.from({ length: 11 }, (_, i) => i + 1);
   // the photo each gallery item shows, in track order (preloads and meta tags come before the track)
   const seq = (html) => [...html.matchAll(/<figure class="gg-item">[\s\S]*?\/images\/golf-gallery-(\d\d)-[a-z-]+\.webp/g)].map((m) => Number(m[1]));
   let first = null;

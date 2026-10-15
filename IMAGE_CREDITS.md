@@ -72,17 +72,15 @@ including identifiable people in 02 and 06, are **to be confirmed by the owner /
 the package; the page says the photos are examples and that Mt. Fuji views exist only at some courses in the Mt. Fuji
 area. Do not reuse in paid advertising before that confirmation.
 
-### Golf: the transfer vehicle (2026-10-15, replaced the same day)
+### Golf: the transfer car (2026-10-15)
 
-`public/images/golf-gallery-11-transfer-minivan.webp` (and its thumbnail) and `golf-transfer-interior.webp` are
-**licensed placeholders**, not the partner's car: a black Toyota Alphard, "Toyota Alphard (AH30) 3.5 V6 2022 (1).jpg"
-by Ethan Llamas, Wikimedia Commons, CC BY-SA 4.0
-(https://commons.wikimedia.org/wiki/File:Toyota_Alphard_(AH30)_3.5_V6_2022_(1).jpg; cropped to 16:10, number plate
-blurred, slight contrast lift — a derivative under the same licence),
-and the interior "Toyota ALPHARD HYBRID Executive Lounge (AYH30W) interior.JPG" by Tokumeigakarinoaoshima, Wikimedia
-Commons, CC0 1.0 (cropped to 16:10). They stand in on the gallery and the "Travel in Comfort" section until the golf
-partner supplies photos of its own vehicle and driver; the page says the model on the day may vary. Replace the files
-(same names) and delete this note when they arrive. No driver photo is published yet.
+`public/images/golf-transfer-car.webp` (the "Travel in Comfort" section, 16:9) and `golf-gallery-11-transfer-minivan.webp`
+(the last gallery photo, a 4:3 window of the same picture, with its thumbnail) are the image the owner supplied on
+2026-10-15: a black premium minivan with a chauffeur holding the door at a clubhouse entrance, golf bags beside it. It
+looks like a rendered/AI-generated image rather than a photograph of the partner's own car and driver; the page says
+the model on the day may vary. Its origin and the right to use it commercially are **to be confirmed by the owner**.
+The earlier Wikimedia Commons placeholders (the Alphard exterior by Ethan Llamas and the Executive Lounge interior)
+have been removed.
 
 ## Ramen class (added 2026-10-10)
 

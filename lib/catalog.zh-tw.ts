@@ -1128,7 +1128,6 @@ export const experiencesZh: Experience[] = [
     img: "/images/golf-gallery-01-fuji-aerial.webp", alt: "從空中俯瞰積雪的富士山與遼闊的山岳球場",
     // Ten photos supplied by the owner (2026-10-15): one fixed set for both areas, the hero first; the operator confirms the actual course, meals and facilities with each proposal.
     gallery: [
-      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "飯店私人接送所使用類型的黑色高級休旅車" },
       { img: "/images/golf-gallery-02-golf-swing.webp", alt: "身穿藍色上衣的球手在林蔭球場完成開球" },
       { img: "/images/golf-gallery-03-clubhouse-lobby.webp", alt: "木質天花板與櫃台的會館大廳" },
       { img: "/images/golf-gallery-04-japanese-lunch.webp", alt: "高爾夫球場的日式午餐：壽司、烤魚與小菜" },
@@ -1138,6 +1137,7 @@ export const experiencesZh: Experience[] = [
       { img: "/images/golf-gallery-08-lounge.webp", alt: "面向球場、大面落地窗的明亮休息廳" },
       { img: "/images/golf-gallery-09-tonkatsu-lunch.webp", alt: "會館餐廳的炸豬排定食" },
       { img: "/images/golf-gallery-10-golf-course.webp", alt: "晴空下有沙坑與遠山的球場" },
+      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "穿著西裝的司機在會館門前為黑色高級休旅車開門，旁邊放著高爾夫球袋" },
     ],
     variants: [
       {
@@ -1248,8 +1248,7 @@ export const experiencesZh: Experience[] = [
       transfer: {
         heading: "從飯店到球場，舒適直達",
         body: "搭乘高級專車，在飯店與球場之間享受私人來回接送，並有專屬司機與英語協助。細節交給我們，你只需放鬆享受旅程。",
-        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "飯店私人接送所使用類型的黑色高級休旅車" },
-        photo2: { img: "/images/golf-transfer-interior.webp", alt: "高級休旅車的真皮與木紋內裝" },
+        photo: { img: "/images/golf-transfer-car.webp", alt: "司機在會館門前為黑色高級休旅車開門，高爾夫球袋已備妥在旁" },
         points: [
           { title: "飯店接送", body: "東京飯店與球場之間來回，於你在 5:00 至 8:00 之間選擇的時間出發。" },
           { title: "專屬司機", body: "全天由專屬司機負責。打球期間車輛在球場等候，結束後直接送你回飯店。" },

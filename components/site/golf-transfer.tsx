@@ -12,7 +12,7 @@ export function GolfTransfer({ copy }: { copy: Copy }) {
   return (
     <section className="xp-section gt" id="transfer" aria-labelledby="gt-heading">
       <div className="gt-media">
-        <img src={copy.photo.img} alt={copy.photo.alt} width={1600} height={1000} loading="lazy" decoding="async" />
+        <img src={copy.photo.img} alt={copy.photo.alt} width={1600} height={900} loading="lazy" decoding="async" />
         {copy.photo2 && <img className="gt-photo2" src={copy.photo2.img} alt={copy.photo2.alt} width={800} height={600} loading="lazy" decoding="async" />}
       </div>
       <div className="gt-text">

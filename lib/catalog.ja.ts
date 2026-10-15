@@ -1133,7 +1133,6 @@ export const experiencesJa: Experience[] = [
     img: "/images/golf-gallery-01-fuji-aerial.webp", alt: "上空から見た、雪をいただく富士山と広がる山岳コース",
     // Ten photos supplied by the owner (2026-10-15): one fixed set for both areas, the hero first; the operator confirms the actual course, meals and facilities with each proposal.
     gallery: [
-      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "ホテル送迎に使用するタイプの黒いプレミアムミニバン" },
       { img: "/images/golf-gallery-02-golf-swing.webp", alt: "青いウェアのゴルファーが木立に囲まれたコースでティーショット" },
       { img: "/images/golf-gallery-03-clubhouse-lobby.webp", alt: "木の天井とフロントのあるクラブハウスのロビー" },
       { img: "/images/golf-gallery-04-japanese-lunch.webp", alt: "ゴルフ場の和食ランチ:寿司、焼き魚、小鉢" },
@@ -1143,6 +1142,7 @@ export const experiencesJa: Experience[] = [
       { img: "/images/golf-gallery-08-lounge.webp", alt: "コースに面した大きな窓の明るいラウンジ" },
       { img: "/images/golf-gallery-09-tonkatsu-lunch.webp", alt: "クラブハウスのレストランのとんかつ定食" },
       { img: "/images/golf-gallery-10-golf-course.webp", alt: "晴れた空の下、バンカーと遠くの山並みを望むコース" },
+      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "クラブハウスの車寄せで、黒いプレミアムミニバンのドアを開けて待つスーツ姿のドライバーとゴルフバッグ" },
     ],
     variants: [
       {
@@ -1253,8 +1253,7 @@ export const experiencesJa: Experience[] = [
       transfer: {
         heading: "ドア・ツー・ドアで、快適な移動を",
         body: "ホテルとゴルフ場の間は、専任ドライバーと英語アシスタントが付いたプレミアム専用車で往復します。細かな手配は当社にお任せいただき、道中もゆったりとお過ごしください。",
-        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "ホテル送迎に使用するタイプの黒いプレミアムミニバン" },
-        photo2: { img: "/images/golf-transfer-interior.webp", alt: "プレミアムミニバンのレザーとウッドの車内" },
+        photo: { img: "/images/golf-transfer-car.webp", alt: "クラブハウスの車寄せで、黒いプレミアムミニバンのドアを開けて待つドライバーと、並べられたゴルフバッグ" },
         points: [
           { title: "ホテル発着", body: "東京のホテルとゴルフ場の往復。5時から8時の間でお選びいただいた時刻に出発します。" },
           { title: "専任ドライバー", body: "一日を通して専属のドライバーが担当。プレー中は車がゴルフ場で待機し、終了後はそのままホテルへお送りします。" },

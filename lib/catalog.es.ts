@@ -1129,7 +1129,6 @@ export const experiencesEs: Experience[] = [
     img: "/images/golf-gallery-01-fuji-aerial.webp", alt: "El monte Fuji nevado sobre un amplio campo de golf de montaña, visto desde el aire",
     // Ten photos supplied by the owner (2026-10-15): one fixed set for both areas, the hero first; the operator confirms the actual course, meals and facilities with each proposal.
     gallery: [
-      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "Un monovolumen premium negro del tipo usado para los traslados privados desde el hotel" },
       { img: "/images/golf-gallery-02-golf-swing.webp", alt: "Un golfista de camisa azul termina su salida en un campo bordeado de árboles" },
       { img: "/images/golf-gallery-03-clubhouse-lobby.webp", alt: "El vestíbulo de una casa club con techo de madera y recepción" },
       { img: "/images/golf-gallery-04-japanese-lunch.webp", alt: "Almuerzo de club de golf japonés: sushi, pescado a la parrilla y guarniciones" },
@@ -1139,6 +1138,7 @@ export const experiencesEs: Experience[] = [
       { img: "/images/golf-gallery-08-lounge.webp", alt: "Un salón luminoso de la casa club con grandes ventanales al campo" },
       { img: "/images/golf-gallery-09-tonkatsu-lunch.webp", alt: "Un menú de tonkatsu en el restaurante de la casa club" },
       { img: "/images/golf-gallery-10-golf-course.webp", alt: "Un campo con búnkeres y colinas al fondo bajo un cielo despejado" },
+      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "Un chófer de traje sujetando la puerta de un monovolumen premium negro en la entrada de una casa club, con bolsas de golf al lado" },
     ],
     variants: [
       {
@@ -1249,8 +1249,7 @@ export const experiencesEs: Experience[] = [
       transfer: {
         heading: "Viaja con comodidad, de puerta a puerta",
         body: "Disfruta de traslados privados de ida y vuelta entre tu hotel y el campo de golf en un vehículo premium, con conductor dedicado y asistencia en inglés. Relájate y disfruta del trayecto mientras nosotros nos ocupamos de los detalles.",
-        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "Un monovolumen premium negro del tipo usado para los traslados privados desde el hotel" },
-        photo2: { img: "/images/golf-transfer-interior.webp", alt: "El interior de cuero y madera de un monovolumen premium" },
+        photo: { img: "/images/golf-transfer-car.webp", alt: "Un chófer sujetando la puerta de un monovolumen premium negro en la entrada de una casa club, con las bolsas de golf preparadas" },
         points: [
           { title: "Recogida y regreso al hotel", body: "Ida y vuelta entre tu hotel de Tokio y el campo, saliendo a la hora que elijas entre las 5:00 y las 8:00." },
           { title: "Tu propio conductor", body: "Un conductor dedicado durante todo el día. El coche se queda en el campo mientras juegas y te lleva directamente de vuelta." },

@@ -1627,9 +1627,8 @@ export const experiences: Experience[] = [
     duration: "Full day, hotel to hotel", price: "¥250,000", priceUnit: "group", group: "Private car and assistant · 2–4 golfers", ages: "Ages 18+", area: "Tokyo area or Mt. Fuji region (pick-up at your Tokyo hotel)",
     img: "/images/golf-gallery-01-fuji-aerial.webp", alt: "Snow-capped Mt. Fuji above a sweeping mountain golf course, seen from the air",
     // Ten photos supplied by the owner (2026-10-15): one fixed set for both areas, the hero first; the operator confirms the actual course, meals and facilities with each proposal.
-    // 11 (2026-10-15): the transfer vehicle, a licensed placeholder (IMAGE_CREDITS.md) until the partner's own car and driver photos arrive; shown second so the private car is seen early.
+    // 11 (2026-10-15): the transfer car with its chauffeur, supplied by the owner (IMAGE_CREDITS.md), last in the set.
     gallery: [
-      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A black premium minivan of the kind used for the private hotel transfers" },
       { img: "/images/golf-gallery-02-golf-swing.webp", alt: "A golfer in a blue shirt finishing a tee shot on a tree-lined course" },
       { img: "/images/golf-gallery-03-clubhouse-lobby.webp", alt: "A clubhouse lobby with a timber ceiling and a reception desk" },
       { img: "/images/golf-gallery-04-japanese-lunch.webp", alt: "A Japanese golf-club lunch: sushi, grilled fish and side dishes" },
@@ -1639,6 +1638,7 @@ export const experiences: Experience[] = [
       { img: "/images/golf-gallery-08-lounge.webp", alt: "A bright clubhouse lounge with tall windows onto the course" },
       { img: "/images/golf-gallery-09-tonkatsu-lunch.webp", alt: "A tonkatsu lunch set at a clubhouse restaurant" },
       { img: "/images/golf-gallery-10-golf-course.webp", alt: "A course with bunkers and distant hills under a clear sky" },
+      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A chauffeur in a dark suit holding the door of a black premium minivan at a clubhouse entrance, golf bags beside it" },
     ],
     // Four golfers pre-selected: the lowest per-person figure, with the group total beside it.
     partySize: { min: 2, max: 4, default: 4 },
@@ -1764,8 +1764,7 @@ export const experiences: Experience[] = [
       transfer: {
         heading: "Travel in Comfort, From Door to Door",
         body: "Enjoy private round-trip transfers between your hotel and the golf course in a premium vehicle, with a dedicated driver and English-speaking assistance. Relax and enjoy the journey while we take care of the details.",
-        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A black premium minivan of the kind used for the private hotel transfers" },
-        photo2: { img: "/images/golf-transfer-interior.webp", alt: "The leather and wood interior of a premium minivan" },
+        photo: { img: "/images/golf-transfer-car.webp", alt: "A chauffeur holding the door of a black premium minivan at a clubhouse entrance, golf bags ready beside it" },
         points: [
           { title: "Hotel pick-up and drop-off", body: "Round trip between your Tokyo hotel and the course, departing at the time you choose between 5:00 and 8:00." },
           { title: "Your own driver", body: "A dedicated driver for the day. The car stays at the course while you play and takes you straight back afterwards." },

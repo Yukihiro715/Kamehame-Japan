@@ -1128,7 +1128,6 @@ export const experiencesFr: Experience[] = [
     img: "/images/golf-gallery-01-fuji-aerial.webp", alt: "Le mont Fuji enneigé au-dessus d'un vaste parcours de montagne, vu du ciel",
     // Ten photos supplied by the owner (2026-10-15): one fixed set for both areas, the hero first; the operator confirms the actual course, meals and facilities with each proposal.
     gallery: [
-      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "Un monospace haut de gamme noir, du type utilisé pour les transferts privés depuis l'hôtel" },
       { img: "/images/golf-gallery-02-golf-swing.webp", alt: "Un golfeur en polo bleu termine son drive sur un parcours bordé d'arbres" },
       { img: "/images/golf-gallery-03-clubhouse-lobby.webp", alt: "Le hall d'un club-house au plafond de bois, avec sa réception" },
       { img: "/images/golf-gallery-04-japanese-lunch.webp", alt: "Déjeuner d'un club de golf japonais : sushi, poisson grillé et accompagnements" },
@@ -1138,6 +1137,7 @@ export const experiencesFr: Experience[] = [
       { img: "/images/golf-gallery-08-lounge.webp", alt: "Un salon lumineux du club-house aux grandes baies sur le parcours" },
       { img: "/images/golf-gallery-09-tonkatsu-lunch.webp", alt: "Un déjeuner tonkatsu au restaurant du club-house" },
       { img: "/images/golf-gallery-10-golf-course.webp", alt: "Un parcours avec ses bunkers et des collines au loin sous un ciel clair" },
+      { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "Un chauffeur en costume tenant la porte d'un monospace haut de gamme noir devant un club-house, sacs de golf à côté" },
     ],
     variants: [
       {
@@ -1248,8 +1248,7 @@ export const experiencesFr: Experience[] = [
       transfer: {
         heading: "Voyagez confortablement, de porte à porte",
         body: "Profitez de transferts privés aller-retour entre votre hôtel et le parcours de golf dans un véhicule haut de gamme, avec un chauffeur dédié et un accompagnement en anglais. Détendez-vous et profitez du trajet pendant que nous nous occupons des détails.",
-        photo: { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "Un monospace haut de gamme noir, du type utilisé pour les transferts privés depuis l'hôtel" },
-        photo2: { img: "/images/golf-transfer-interior.webp", alt: "L'intérieur cuir et bois d'un monospace haut de gamme" },
+        photo: { img: "/images/golf-transfer-car.webp", alt: "Un chauffeur tenant la porte d'un monospace haut de gamme noir devant un club-house, les sacs de golf prêts à côté" },
         points: [
           { title: "Prise en charge et retour à l'hôtel", body: "Aller-retour entre votre hôtel de Tokyo et le parcours, au départ de l'heure de votre choix entre 5 h et 8 h." },
           { title: "Votre propre chauffeur", body: "Un chauffeur dédié pour la journée. La voiture reste au golf pendant que vous jouez et vous ramène directement ensuite." },
