@@ -271,7 +271,7 @@ function reconcileMailQueue() {
     if (!(pending && age >= 2 * 3600000) && !(needId && age >= 120000)) return;
     try {
       var res = UrlFetchApp.fetch(url + '?id=' + encodeURIComponent(r[QC.resendId]), { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, followRedirects: false });
-      var d0 = data_(r); d0.reconcileAt = new Date().toISOString(); d0.reconcileHttp = res.getResponseCode(); setData_(r, d0);
+      var d0 = data_(r); d0.reconcileAt = new Date().toISOString(); d0.reconcileHttp = res.getResponseCode(); delete d0.reconcileBody; delete d0.reconcileError; setData_(r, d0);
       if (res.getResponseCode() !== 200) { d0.reconcileBody = String(res.getContentText()).slice(0, 200); setData_(r, d0); qsave_(x.row, r); return; }
       var body = JSON.parse(res.getContentText()), ev = String(body.lastEvent || '');
       if (pending && age >= 2 * 3600000) {
