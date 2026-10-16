@@ -147,7 +147,7 @@ test("photo payment HTML is dynamic, shoes inclusive, escaped, with both CTAs be
     assert.ok(t.html.indexOf("Proceed to payment")<t.html.indexOf('<img src="https://'));
     assert.ok(t.html.lastIndexOf("Proceed to payment")>t.html.lastIndexOf('<img src="https://'));
     assert.match(t.html,new RegExp(areaId==="fuji"?"fuji-oyama.jpg":"chiba-isumi.jpg"));
-    const rendered=gas.fillPayment_(t.html,{TOTAL:"270,000",PER_PERSON:"135,000",PAYMENT_URL:"https://book.stripe.com/TEST?client_reference_id=CASE",CADDIE_LINE:"No caddie"},true);
+    const rendered=gas.fillPayment_(t.html,{TOTAL:"270,000",PER_PERSON:"135,000",PAYMENT_URL:"https://book.stripe.com/TEST?client_reference_id=CASE",CADDIE_LINE:"No caddie",CLUB_DISCOUNT_LINE:"Standard rental clubs included"},true);
     assert.equal((rendered.match(/href="https:\/\/book.stripe.com/g)||[]).length,3);
     assert.doesNotMatch(rendered,/\{\{[A-Z_]+\}\}/);
   }
@@ -176,4 +176,34 @@ test("manual queue approvals and sent/uncertain mail suppress automation without
   for(const r of [[p.enquiry.email,"CASE","draft",new Date(clock+1)],["other@example.com","CASE","sent",new Date(clock+1)],[p.enquiry.email,"OLD","sent",new Date(clock-1)]]){
     c.qrows_=()=>[{r}];assert.equal(c.manualQueueActivity_(j),"");
   }
+});
+
+
+test("own-club discounts select exact approved count and price across both areas",()=>{
+  for(const areaId of ["tokyo","fuji"]) for(const n of [2,3,4]) for(let own=0;own<=n;own++) {
+    const base=(areaId==="fuji"?270000:250000)+(n-2)*40000;
+    const enquiry={...p.enquiry,areaId,party:String(n),rentalKeys:[...Array(own).fill("own"),...Array(n-own).fill("required:right")].join(",")};
+    for(const caddie of ["none","required"]) {
+      const extra=caddie==="required"?11000:0, total=base+extra-own*5000;
+      const req={...p,baseTotal:base,enquiry:{...enquiry,caddie}};
+      const row={...link,エリア:areaId==="fuji"?"富士山エリア":"東京近郊",人数:n,キャディ:extra?"あり":"なし",クラブ不要人数:own,"キャディ追加料金（税込）":extra,"決済総額（税込）":total};
+      const others=Array.from({length:n+1},(_,k)=>({...row,クラブ不要人数:k,"決済総額（税込）":base+extra-k*5000}));
+      const result=gas.decision_(req,others,clock);
+      assert.equal(result.mode,"payment");assert.equal(result.link["決済総額（税込）"],total);assert.equal(result.clubDiscount,own*5000);
+      assert.equal(gas.decision_(req,[{...row,"決済総額（税込）":total-10000}],clock).mode,"manual","campaign is not automatic");
+      assert.equal(gas.decision_(req,[row,row],clock).mode,"manual");
+      assert.equal(gas.decision_(req,[{...row,自動送信可:"不可"}],clock).mode,"manual");
+      if(own) assert.equal(gas.decision_(req,[{...row,クラブ不要人数:""}],clock).mode,"manual");
+    }
+  }
+  for(const count of [-1,3,1.5,"NaN",true]) assert.equal(decide({}, {...link,クラブ不要人数:count}).mode,"manual");
+});
+test("discounted queue sends and reconciles discounted amount, holds if matching link disappears",()=>{
+  const q=queue("payment"), discounted={...link,クラブ不要人数:1,"決済総額（税込）":265000};
+  q.j.enquiry.rentalKeys="own,required:right";
+  q.j.payment=paymentTemplate({...q.j.enquiry,name:"Example Guest"});q.c.master_=()=>[discounted];
+  q.c.processGolfQueue();assert.equal(q.calls.length,1);assert.equal(q.j.expectedAmount,265000);
+  for(const content of [q.calls[0].text,q.calls[0].html]) {assert.match(content,/265,000/);assert.match(content,/5,000 discount/);assert.doesNotMatch(content,/\{\{/);}
+  assert.equal(gas.validPaidAmount_({id:"cs_live_example",amount_subtotal:265000,amount_total:265000,total_details:{amount_discount:0,amount_tax:0,amount_shipping:0}},265000),true);
+  const held=queue("payment");held.j.enquiry.rentalKeys="own,required:right";held.c.processGolfQueue();assert.equal(held.calls.length,0);assert.equal(held.j.mode,"manual");
 });
