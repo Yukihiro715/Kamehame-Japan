@@ -48,8 +48,16 @@ function doPost(e) {
 function master_() {
   var s=book_().getSheetByName('Stripe決済リンク管理');
   if(!s)throw new Error('決済リンク管理がありません');
-  var h=s.getRange(4,1,1,24).getValues()[0], n=Math.max(s.getLastRow()-4,1);
-  return s.getRange(5,1,n,24).getValues().filter(function(r){return r[0];}).map(function(r){var o={};h.forEach(function(k,i){o[k]=r[i];});return o;});
+  var width=s.getLastColumn(), h=s.getRange(4,1,1,width).getValues()[0], n=Math.max(s.getLastRow()-4,1);
+  return s.getRange(5,1,n,width).getValues().filter(function(r){return r[0];}).map(function(r){var o={};h.forEach(function(k,i){o[k]=r[i];});return o;});
+}
+// Existing standard rows with a blank count mean all golfers need rental clubs.
+// Discount rows require an explicit integer count; price alone is not an identity.
+function masterOwnCount_(row,n) {
+  var value=row['クラブ不要人数'];
+  if(value===undefined||value===null||String(value).trim()==='')return 0;
+  if(!/^\d+$/.test(String(value)))return -1;
+  var count=Number(value);return Number.isSafeInteger(count)&&count>=0&&count<=n?count:-1;
 }
 function decision_(p, rows, now) {
   var e=p.enquiry, reasons=[], n=Number(e.party), date=String(e.dates||'').slice(0,10);
@@ -61,22 +69,24 @@ function decision_(p, rows, now) {
   if(['tokyo','saitama','chiba'].indexOf(e.pickupRegion)<0||!e.pickup)reasons.push('送迎場所の個別確認');
   if([2,3,4].indexOf(n)<0||['tokyo','fuji'].indexOf(e.areaId)<0)reasons.push('エリア・人数の確認');
   var rentals=String(e.rentalKeys||'').split(',');
-  if(rentals.length!==n||rentals.some(function(k){return !/^required:(right|left)$/.test(k);}))reasons.push(rentals.indexOf('own')>=0?'クラブ持参割引（1名5,000円）・専用決済リンクを確認':'レンタル情報の確認');
+  var rentalValid=rentals.length===n&&rentals.every(function(k){return k==='own'||/^required:(right|left)$/.test(k);});
+  var ownCount=rentals.filter(function(k){return k==='own';}).length, clubDiscount=ownCount*5000;
+  if(!rentalValid)reasons.push('レンタル情報の確認');
   if(e.clubs&&e.clubs.trim())reasons.push('クラブ仕様の個別確認');
   if(e.caddie!=='none'&&e.caddie!=='required')reasons.push('キャディ希望の確認');
   if(e.addons||(e.addonIds&&e.addonIds.length))reasons.push('追加オプション');
   if(e.message&&!/^(none|no|n\/a|thanks|thank you|なし|特になし)[.!。！\s]*$/i.test(e.message.trim()))reasons.push('備考の個別確認');
   if(e.lang!=='en'||!p.payment)reasons.push('支払い案内テンプレートの確認');
   var caddie=e.caddie==='required'?'あり':'なし', area=e.areaId==='fuji'?'富士山エリア':'東京近郊';
-  var candidates=rows.filter(function(r){return r['区分']==='標準プラン'&&r['体験カテゴリ']==='プライベートゴルフ'&&r['エリア']===area&&Number(r['人数'])===n&&r['キャディ']===caddie&&String(r['料金版'])===p.priceVersion&&r['自動送信可']==='可';});
+  var candidates=rows.filter(function(r){return r['区分']==='標準プラン'&&r['体験カテゴリ']==='プライベートゴルフ'&&r['エリア']===area&&Number(r['人数'])===n&&r['キャディ']===caddie&&masterOwnCount_(r,n)===ownCount&&String(r['料金版'])===p.priceVersion&&r['自動送信可']==='可';});
   var link=candidates.length===1?candidates[0]:null;
   if(!link)reasons.push(candidates.length>1?'決済リンクが複数登録':'確認済み決済リンクなし');
   else {
     var extra=Number(link['キャディ追加料金（税込）']), total=Number(link['決済総額（税込）']);
     if(!/^https:\/\/(book|buy)\.stripe\.com\/[A-Za-z0-9]+$/.test(String(link['顧客用決済URL']))||link['Stripeリンク状態']!=='有効'||link['通貨']!=='JPY'||!/^plink_[A-Za-z0-9]+$/.test(String(link['Payment Link ID（plink_）'])))reasons.push('Stripe設定未確認');
-    if(String(link['キャディ追加料金（税込）']).trim()===''||!Number.isSafeInteger(total)||total<=0||!Number.isSafeInteger(extra)||extra<0||!Number.isSafeInteger(p.baseTotal)||p.baseTotal<=0||total!==p.baseTotal+extra||(caddie==='なし'&&extra!==0))reasons.push('料金不一致');
+    if(String(link['キャディ追加料金（税込）']).trim()===''||!Number.isSafeInteger(total)||total<=0||!Number.isSafeInteger(extra)||extra<0||!Number.isSafeInteger(p.baseTotal)||p.baseTotal<=0||total!==p.baseTotal+extra-clubDiscount||(caddie==='なし'&&extra!==0))reasons.push('料金不一致');
   }
-  return {mode:reasons.length?'manual':'payment',reason:reasons.join('／'),link:reasons.length?null:link};
+  return {mode:reasons.length?'manual':'payment',reason:reasons.join('／'),link:reasons.length?null:link,ownCount:ownCount,clubDiscount:clubDiscount};
 }
 function enqueue_(p) {
   if(!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(p.requestId||'')||!p.enquiry||!p.ack||!p.followUp||!p.ledger)throw new Error('invalid request');
@@ -172,10 +182,12 @@ function processGolfQueue() {
           var link=choice.link, total=Number(link['決済総額（税込）']);
           if(j.pendingMessage && (j.expectedAmount!==total || j.paymentLinkId!==link['Payment Link ID（plink_）'] || j.paymentUrl.split('?')[0]!==link['顧客用決済URL']))throw new Error('送信再開前に決済条件が変更・手動確認');
           j.paymentUrl=link['顧客用決済URL']+'?client_reference_id='+encodeURIComponent(j.id);
+          j.clubDiscount=choice.clubDiscount;j.ownClubCount=choice.ownCount;
           j.expectedAmount=total;j.paymentLinkId=link['Payment Link ID（plink_）'];
           if(!j.pendingMessage) {
             if(!j.payment.html || j.payment.version!=='photo-2026-10-16')throw new Error('写真付きテンプレート未確認・手動対応');
-            var values={TOTAL:total.toLocaleString('en-US'),PER_PERSON:Math.round(total/Number(j.enquiry.party)).toLocaleString('en-US'),PAYMENT_URL:j.paymentUrl,CADDIE_LINE:j.enquiry.caddie==='required'?'• Course caddie: included in the price below':'• Course caddie: not included (standard package)'};
+            if(choice.ownCount && (j.payment.text.indexOf('{{CLUB_DISCOUNT_LINE}}')<0 || j.payment.html.indexOf('{{CLUB_DISCOUNT_LINE}}')<0))throw new Error('クラブ割引テンプレート未確認・手動対応');
+            var values={TOTAL:total.toLocaleString('en-US'),PER_PERSON:Math.round(total/Number(j.enquiry.party)).toLocaleString('en-US'),PAYMENT_URL:j.paymentUrl,CLUB_DISCOUNT_LINE:choice.ownCount?'This total includes a ¥5,000 discount for each golfer who does not need rental clubs ('+choice.ownCount+' golfer(s), ¥'+choice.clubDiscount.toLocaleString('en-US')+' off in total). Rental clubs are included only for the remaining '+(Number(j.enquiry.party)-choice.ownCount)+' golfer(s).':'Standard rental clubs are included for all golfers.',CADDIE_LINE:j.enquiry.caddie==='required'?'• Course caddie: included in the price below':'• Course caddie: not included (standard package)'};
             j.pendingMessage={kind:'payment',text:fillPayment_(j.payment.text,values,false),html:fillPayment_(j.payment.html,values,true)};
           }
         }
