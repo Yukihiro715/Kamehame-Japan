@@ -155,7 +155,25 @@ function humanActivity_(j) {
   if(threads.length>=100)return 'メール照合件数上限・手動確認';
   var result='';threads.forEach(function(t){var msgs=t.getMessages(), exact=msgs.some(function(m){return m.getSubject().indexOf('['+j.id+']')>=0;});
     msgs.forEach(function(m){
-      if(m.getDat…419 tokens truncated…ow,'自動停止',human);return;}
+      if(m.getDate().getTime()<fromTime||m.isDraft()||m.getHeader('X-KJ-Automation')==='1')return;
+      var from=address_(m.getFrom()), tos=(m.getTo()+' '+m.getCc()).toLowerCase();
+      if(from===email)result=exact?'お客様から返信':'お客様の別件メールの可能性・手動確認';
+      if(staff.indexOf(from)>=0&&tos.indexOf(email)>=0)result=exact?'担当者が返信済み':'同じ宛先への手動送信あり・案件を確認';
+    });
+  });return result;
+}
+function address_(s){var m=String(s).toLowerCase().match(/<([^>]+)>/);return (m?m[1]:String(s)).trim().toLowerCase();}
+function processGolfQueue() {
+  var lock=LockService.getScriptLock();if(!lock.tryLock(1000))return;
+  try {
+    var start=Date.now();
+    jobs_().forEach(function(x){
+      if(Date.now()-start>240000)return;
+      var j=x.job;Object.keys(j.pendingNotifications||{}).forEach(function(k){notify_(j,x.row,k,j.pendingNotifications[k]);});if(j.status!=='queued'&&j.status!=='sending')return;
+      try {
+        if(j.stop||j.paidAt||j.audit.bounce){j.status='held';j.reason=j.stop||'入金済み・配達エラー';saveJob_(j,x.row);return;}
+        if(Date.now()-Date.parse(j.dueAt)>60*60000){j.status='held';j.reason='送信予定から1時間超過・手動確認';saveJob_(j,x.row);notify_(j,x.row,'要確認',j.reason);return;}
+        var human=humanActivity_(j);if(human){j.status='held';j.reason=human;saveJob_(j,x.row);notify_(j,x.row,'自動停止',human);return;}
         if(Date.now()<Date.parse(j.dueAt))return;
         // Re-read the approved link and all eligibility rules immediately before send.
         if(j.mode==='payment'){
