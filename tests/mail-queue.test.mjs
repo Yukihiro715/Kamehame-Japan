@@ -292,3 +292,21 @@ test("GAS: doPost authorises mail_event with MAIL_QUEUE_TOKEN only, and the golf
   delete props.MAIL_QUEUE_TOKEN;
   assert.equal(post({ action: "mail_event", token: TOKEN, eventId: "resend:6" }), '{"ok":false,"error":"unauthorized"}', "no token configured, nothing accepted");
 });
+
+test("GAS: the hourly reconciliation fills a missing Message-ID after two minutes and only asks about delivery after two hours", () => {
+  const now = Date.parse("2026-10-16T09:00:00Z");
+  const sent = (minutesAgo, over = {}) => draft({ 0: `KJ-261019-01-M0${minutesAgo}`, 13: "送信済み", 14: new Date(now - minutesAgo * 60000).toISOString(), 15: "01a143a5-71de-76eb-a218-61e4197418a5", 17: new Date(now - minutesAgo * 60000 + 2000).toISOString(), ...over });
+  const asked = [];
+  const rt = gasRuntime({
+    rows: [sent(1), sent(5), sent(5, { 16: "<already@kamehame-japan.com>" }), sent(5, { 17: "" }), sent(150, { 17: "" })],
+    props: { ...live, MAIL_STATUS_URL: "https://kamehame-japan.com/api/mail/status" }, now,
+    fetch: (url) => { asked.push(url); return { code: 200, body: { ok: true, id: "x", lastEvent: "delivered", messageId: "<01a143a5@kamehame-japan.com>" } }; },
+  });
+  rt.c.reconcileMailQueue();
+  assert.equal(asked.length, 3, "one minute old: too early; already has an ID and delivered: nothing to ask");
+  assert.equal(rt.state[0][rt.Q.messageId], "", "not yet");
+  assert.equal(rt.state[1][rt.Q.messageId], "<01a143a5@kamehame-japan.com>", "ID filled on a delivered mail");
+  assert.equal(rt.state[2][rt.Q.messageId], "<already@kamehame-japan.com>", "existing ID kept");
+  assert.equal(rt.state[3][rt.Q.messageId], "<01a143a5@kamehame-japan.com>"); assert.equal(rt.state[3][rt.Q.delivered], "", "delivery is not reconciled before two hours");
+  assert.equal(rt.state[4][rt.Q.delivered], "配達済み（照合）", "after two hours the provider's last event stands in for the missing webhook");
+});

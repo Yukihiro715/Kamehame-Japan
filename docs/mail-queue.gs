@@ -263,16 +263,22 @@ function reconcileMailQueue() {
   var url = props_().getProperty('MAIL_STATUS_URL'), token = props_().getProperty('MAIL_QUEUE_TOKEN'); if (!url || !token) return;
   var now = Date.now();
   qrows_().forEach(function (x) {
-    var r = x.r; if (String(r[QC.status]) !== QS.sent || !r[QC.resendId] || r[QC.delivered] || r[QC.bounce]) return;
-    var sent = new Date(r[QC.sentAt]).getTime(); if (!(sent > 0) || now - sent < 2 * 3600000 || now - sent > 7 * 86400000) return;
+    var r = x.r; if (String(r[QC.status]) !== QS.sent || !r[QC.resendId]) return;
+    // Two reasons to ask the provider: no delivery event after 2 hours, or a Message-ID the
+    // provider had not assigned yet when the send was acknowledged (it is needed to thread replies).
+    var pending = !r[QC.delivered] && !r[QC.bounce], needId = !String(r[QC.messageId] || '').trim();
+    var sent = new Date(r[QC.sentAt]).getTime(), age = now - sent; if (!(sent > 0) || age > 7 * 86400000) return;
+    if (!(pending && age >= 2 * 3600000) && !(needId && age >= 120000)) return;
     try {
       var res = UrlFetchApp.fetch(url + '?id=' + encodeURIComponent(r[QC.resendId]), { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, followRedirects: false });
       if (res.getResponseCode() !== 200) return;
       var body = JSON.parse(res.getContentText()), ev = String(body.lastEvent || '');
-      if (['delivered', 'opened', 'clicked'].indexOf(ev) >= 0) r[QC.delivered] = DELIVERED_RECONCILED;
-      else if (['bounced', 'failed', 'suppressed', 'complained'].indexOf(ev) >= 0) { r[QC.bounce] = ev + '（照合）'; teamNote_('【配達エラー（照合）】' + r[QC.caseId] + ' ' + r[QC.id], ev + '\n宛先: ' + r[QC.to]); }
-      else if (now - sent > 24 * 3600000) r[QC.error] = '送信から24時間以上、配達イベントなし（最終イベント: ' + (ev || '不明') + '）';
-      if (!body.messageId || r[QC.messageId]) {} else r[QC.messageId] = body.messageId;
+      if (pending && age >= 2 * 3600000) {
+        if (['delivered', 'opened', 'clicked'].indexOf(ev) >= 0) r[QC.delivered] = DELIVERED_RECONCILED;
+        else if (['bounced', 'failed', 'suppressed', 'complained'].indexOf(ev) >= 0) { r[QC.bounce] = ev + '（照合）'; teamNote_('【配達エラー（照合）】' + r[QC.caseId] + ' ' + r[QC.id], ev + '\n宛先: ' + r[QC.to]); }
+        else if (age > 24 * 3600000) r[QC.error] = '送信から24時間以上、配達イベントなし（最終イベント: ' + (ev || '不明') + '）';
+      }
+      if (needId && MSGID_RE.test(String(body.messageId || '').trim())) r[QC.messageId] = String(body.messageId).trim();
       var d = data_(r); d.reconciledAt = new Date().toISOString(); d.lastEvent = ev; setData_(r, d); qsave_(x.row, r);
     } catch (err) { console.error('reconcile: ' + String(err)); }
   });
