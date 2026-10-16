@@ -1,4 +1,4 @@
-import { authorized, mailStatus, type MailQueueEnv } from "@/lib/mail-queue";
+import { authorized, mailStatus, readKeyOf, type MailQueueEnv } from "@/lib/mail-queue";
 
 /** The provider's last event for one sent mail (`?id=<resend id>`), for the
  *  queue's reconciliation. Same shared secret as the send endpoint. */
@@ -13,8 +13,8 @@ export async function handleStatus(request: Request, env: MailQueueEnv, fetchImp
   if (!await authorized(request.headers, env.MAIL_QUEUE_TOKEN)) return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
   const id = new URL(request.url).searchParams.get("id") ?? "";
   try {
-    const result = await mailStatus(env.RESEND_API_KEY, id, fetchImpl);
-    if (!result.ok) return Response.json({ ok: false, error: result.status === 404 ? "not_found" : "lookup_failed" }, { status: result.status });
+    const result = await mailStatus(readKeyOf(env), id, fetchImpl);
+    if (!result.ok) return Response.json({ ok: false, error: result.status === 404 ? "not_found" : "lookup_failed", upstream: result.upstream ?? null }, { status: result.status });
     return Response.json({ ok: true, id, lastEvent: result.lastEvent, messageId: result.messageId ?? null, createdAt: result.createdAt ?? null });
   } catch { return Response.json({ ok: false, error: "lookup_errored" }, { status: 502 }); }
 }

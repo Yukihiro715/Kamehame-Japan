@@ -310,3 +310,21 @@ test("GAS: the hourly reconciliation fills a missing Message-ID after two minute
   assert.equal(rt.state[3][rt.Q.messageId], "<01a143a5@kamehame-japan.com>"); assert.equal(rt.state[3][rt.Q.delivered], "", "delivery is not reconciled before two hours");
   assert.equal(rt.state[4][rt.Q.delivered], "配達済み（照合）", "after two hours the provider's last event stands in for the missing webhook");
 });
+
+test("a read-only key, when set, is used for lookups while the sending key still sends; a refused lookup names the provider's status", async () => {
+  const seen = [];
+  const fetchImpl = async (url, init) => {
+    seen.push([init?.method ?? "GET", init.headers.Authorization]);
+    if ((init?.method ?? "GET") === "POST") return Response.json({ id: "01a143a5-71de-76eb-a218-61e4197418a5" });
+    return init.headers.Authorization === "Bearer re_read_full" ? Response.json({ last_event: "delivered", message_id: "<abc@kamehame-japan.com>" }) : new Response("restricted", { status: 401 });
+  };
+  const two = { ...env, RESEND_READ_KEY: "re_read_full" };
+  const body = { mailId: "KJ-261019-01-M01", caseId: "KJ-261019-01", to: "guest@example.com", subject: "[KJ-261019-01] Hi", text: "Hello", idempotencyKey: "manual/KJ-261019-01-M01/abcdef0123456789" };
+  const sent = await (await handleSend(new Request("https://x/api/mail/send", { method: "POST", headers: { authorization: `Bearer ${TOKEN}`, "content-type": "application/json" }, body: JSON.stringify(body) }), two, fetchImpl)).json();
+  assert.equal(sent.messageId, "<abc@kamehame-japan.com>");
+  assert.deepEqual(seen, [["POST", "Bearer re_test_only"], ["GET", "Bearer re_read_full"]]);
+  const refused = await handleStatus(new Request("https://x/api/mail/status?id=01a143a5-71de-76eb-a218-61e4197418a5", { headers: { authorization: `Bearer ${TOKEN}` } }), env, fetchImpl);
+  assert.equal(refused.status, 502); assert.deepEqual(await refused.json(), { ok: false, error: "lookup_failed", upstream: 401 });
+  const okRes = await handleStatus(new Request("https://x/api/mail/status?id=01a143a5-71de-76eb-a218-61e4197418a5", { headers: { authorization: `Bearer ${TOKEN}` } }), two, fetchImpl);
+  assert.equal((await okRes.json()).messageId, "<abc@kamehame-japan.com>");
+});

@@ -82,6 +82,9 @@ Apps Script reconcileMailQueue (1時間毎) ──GET /api/mail/status──▶ 
    - `MAIL_QUEUE_TOKEN`（Apps Script と同じ値）、`MAIL_QUEUE_URL`（上の `/exec` URL）、`RESEND_WEBHOOK_SECRET`（Resend の署名秘密値）。
    - `GOLF_AUTOMATION_URL` / `GOLF_AUTOMATION_TOKEN` は **設定しない**（設定するとゴルフ自動受付が有効になります）。
    - `RESEND_API_KEY` は既存のまま。送信は Worker が行うので、Apps Script に Resend キーは不要です。
+   - `RESEND_READ_KEY`（任意）: 既存キーが Resend の「Sending access」限定だと、送信後の Message-ID 取得と毎時の照合（Retrieve Email）が
+     401/403 で失敗します（キューの内部データに `reconcileHttp: 502` と `upstream` が残ります）。その場合は Resend → API Keys で
+     「Full access」のキーを追加し、この名前で Secret に入れます。読み取りにだけ使い、送信は従来のキーのままです。
 3. **Resend**
    - Webhooks に `https://kamehame-japan.com/api/webhooks/resend` を登録。購読: sent, delivered, delivery_delayed, bounced, failed, suppressed, complained, opened, clicked。
    - 送信ドメインの Open tracking / Click tracking を有効化（開封は HTML の画像、クリックはリンクのリダイレクトで計測）。

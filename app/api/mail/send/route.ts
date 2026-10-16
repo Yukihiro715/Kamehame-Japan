@@ -1,4 +1,4 @@
-import { authorized, parseSendRequest, sendQueuedMail, type MailQueueEnv } from "@/lib/mail-queue";
+import { authorized, parseSendRequest, readKeyOf, sendQueuedMail, type MailQueueEnv } from "@/lib/mail-queue";
 
 /** Called only by the ledger's Apps Script queue (shared secret MAIL_QUEUE_TOKEN)
  *  with one approved mail. Unconfigured → 503; wrong token → 401; the same
@@ -17,7 +17,7 @@ export async function handleSend(request: Request, env: MailQueueEnv, fetchImpl:
   const parsed = parseSendRequest(body);
   if (!parsed.ok) return Response.json({ ok: false, error: `invalid:${parsed.error}` }, { status: 400 });
   try {
-    const result = await sendQueuedMail(env.RESEND_API_KEY, parsed.req, fetchImpl);
+    const result = await sendQueuedMail(env.RESEND_API_KEY, parsed.req, fetchImpl, readKeyOf(env));
     if (!result.ok) { console.error("mail: send failed", result.error); return Response.json({ ok: false, error: "send_failed", detail: result.error }, { status: 502 }); }
     return Response.json({ ok: true, id: result.id, messageId: result.messageId ?? null });
   } catch (err) {

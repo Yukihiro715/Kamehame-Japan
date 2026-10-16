@@ -5,7 +5,10 @@
 // events back to that queue row. Nothing here enqueues an acknowledgement,
 // a follow-up or a payment mail, and nothing here creates a ledger case.
 
-export interface MailQueueEnv { MAIL_QUEUE_TOKEN?: string; MAIL_QUEUE_URL?: string; RESEND_API_KEY?: string }
+/** RESEND_READ_KEY is optional: a key allowed to read emails (Resend "full access"),
+ *  used only for lookups when the sending key is restricted to sending. */
+export interface MailQueueEnv { MAIL_QUEUE_TOKEN?: string; MAIL_QUEUE_URL?: string; RESEND_API_KEY?: string; RESEND_READ_KEY?: string }
+export const readKeyOf = (env: MailQueueEnv) => env.RESEND_READ_KEY || env.RESEND_API_KEY || "";
 
 export const MAIL_FROM = "Yukihiro, KAMEHAME JAPAN <hello@kamehame-japan.com>";
 export const MAIL_REPLY_TO = "hello@kamehame-japan.com";
@@ -77,7 +80,7 @@ export type SendResult = { ok: true; id: string; messageId?: string } | { ok: fa
 
 /** Sends once per idempotency key (Resend keeps keys for 24 hours), then reads the
  *  Message-ID back so later replies can thread onto this mail. */
-export async function sendQueuedMail(key: string, req: SendRequest, fetchImpl: typeof fetch = fetch): Promise<SendResult> {
+export async function sendQueuedMail(key: string, req: SendRequest, fetchImpl: typeof fetch = fetch, readKey = key): Promise<SendResult> {
   const res = await fetchImpl(`${RESEND}/emails`, {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "Idempotency-Key": req.idempotencyKey },
@@ -87,7 +90,7 @@ export async function sendQueuedMail(key: string, req: SendRequest, fetchImpl: t
   if (!res.ok) return { ok: false, status: res.status, error: `resend ${res.status}: ${(await res.text()).slice(0, 200)}` };
   const { id } = (await res.json()) as { id?: string };
   if (!id) return { ok: false, status: 502, error: "resend answered without an id" };
-  return { ok: true, id, messageId: await messageIdOf(key, id, fetchImpl) };
+  return { ok: true, id, messageId: await messageIdOf(readKey, id, fetchImpl) };
 }
 
 /** The sent mail's Message-ID header, for threading; best effort. */
@@ -102,10 +105,11 @@ async function messageIdOf(key: string, id: string, fetchImpl: typeof fetch): Pr
 
 /** The provider's view of one mail (its last event), for the queue's hourly
  *  reconciliation when a webhook never arrived. */
-export async function mailStatus(key: string, id: string, fetchImpl: typeof fetch = fetch): Promise<{ ok: true; lastEvent: string; messageId?: string; createdAt?: string } | { ok: false; status: number }> {
+export async function mailStatus(key: string, id: string, fetchImpl: typeof fetch = fetch): Promise<{ ok: true; lastEvent: string; messageId?: string; createdAt?: string } | { ok: false; status: number; upstream?: number }> {
   if (!/^[A-Za-z0-9-]{10,80}$/.test(id)) return { ok: false, status: 400 };
   const res = await fetchImpl(`${RESEND}/emails/${encodeURIComponent(id)}`, { headers: { Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(10_000) });
-  if (!res.ok) return { ok: false, status: res.status === 404 ? 404 : 502 };
+  // The provider's status is passed on so the ledger can tell a restricted key (401/403) from an outage.
+  if (!res.ok) return { ok: false, status: res.status === 404 ? 404 : 502, upstream: res.status };
   const data = (await res.json()) as { last_event?: string; message_id?: string; created_at?: string };
   return { ok: true, lastEvent: String(data.last_event ?? ""), messageId: data.message_id, createdAt: data.created_at };
 }
