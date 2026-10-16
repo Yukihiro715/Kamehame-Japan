@@ -271,7 +271,8 @@ function reconcileMailQueue() {
     if (!(pending && age >= 2 * 3600000) && !(needId && age >= 120000)) return;
     try {
       var res = UrlFetchApp.fetch(url + '?id=' + encodeURIComponent(r[QC.resendId]), { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, followRedirects: false });
-      if (res.getResponseCode() !== 200) return;
+      var d0 = data_(r); d0.reconcileAt = new Date().toISOString(); d0.reconcileHttp = res.getResponseCode(); setData_(r, d0);
+      if (res.getResponseCode() !== 200) { d0.reconcileBody = String(res.getContentText()).slice(0, 200); setData_(r, d0); qsave_(x.row, r); return; }
       var body = JSON.parse(res.getContentText()), ev = String(body.lastEvent || '');
       if (pending && age >= 2 * 3600000) {
         if (['delivered', 'opened', 'clicked'].indexOf(ev) >= 0) r[QC.delivered] = DELIVERED_RECONCILED;
@@ -280,8 +281,9 @@ function reconcileMailQueue() {
       }
       if (needId && MSGID_RE.test(String(body.messageId || '').trim())) r[QC.messageId] = String(body.messageId).trim();
       var d = data_(r); d.reconciledAt = new Date().toISOString(); d.lastEvent = ev; setData_(r, d); qsave_(x.row, r);
-    } catch (err) { console.error('reconcile: ' + String(err)); }
+    } catch (err) { console.error('reconcile: ' + String(err)); try { var d1 = data_(r); d1.reconcileAt = new Date().toISOString(); d1.reconcileError = String(err).slice(0, 200); setData_(r, d1); qsave_(x.row, r); } catch (e2) {} }
   });
+  props_().setProperty('LAST_RECONCILE_RUN', new Date().toISOString());
 }
 
 /** Run once after the properties are set. Creates the triggers; does not switch sending on. */
