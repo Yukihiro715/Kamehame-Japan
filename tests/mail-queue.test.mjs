@@ -269,3 +269,26 @@ test("GAS: events land on the right mail, deduplicate, keep the earliest stamp, 
   assert.equal(JSON.stringify(rt.c.mailEvent_({ eventId: "e8", event: { type: "email.delivered", created_at: new Date().toISOString(), data: { email_id: "re-id-9", tags: { kind: "manual", booking: "KJ-261019-01", mail: "KJ-261019-01-M09" } } } })), '{"ok":false,"error":"unmatched_event"}');
   assert.equal(rt.log.length, 7);
 });
+
+test("GAS: doPost authorises mail_event with MAIL_QUEUE_TOKEN only, and the golf actions with AUTOMATION_TOKEN only", () => {
+  const props = { AUTOMATION_TOKEN: "golf-token-abcdefghijklmnopqrstuvwxyz", MAIL_QUEUE_TOKEN: TOKEN };
+  const c = vm.createContext({ console: { error() {} }, Date, Number, String, JSON, Math, RegExp, Array, Object, encodeURIComponent, isFinite, parseInt });
+  c.PropertiesService = { getScriptProperties: () => ({ getProperty: (k) => props[k] ?? null, setProperty() {} }) };
+  c.LockService = { getScriptLock: () => ({ tryLock: () => true, waitLock() {}, hasLock: () => false, releaseLock() {} }) };
+  c.ContentService = { MimeType: { JSON: "json" }, createTextOutput: (s) => ({ setMimeType: () => JSON.parse(s) }) };
+  vm.runInContext(gasSource, c);
+  const calls = [];
+  c.mailEvent_ = (p) => { calls.push(["mail", p.eventId]); return { ok: true }; };
+  c.event_ = (p) => { calls.push(["golf", p.eventId]); return { ok: true }; };
+  c.enqueue_ = () => { calls.push(["enqueue"]); return { ok: true, id: "x" }; };
+  const post = (body) => JSON.stringify(c.doPost({ postData: { contents: JSON.stringify(body) } }));
+  assert.equal(post({ action: "mail_event", token: TOKEN, eventId: "resend:1" }), '{"ok":true}');
+  assert.equal(post({ action: "mail_event", token: "golf-token-abcdefghijklmnopqrstuvwxyz", eventId: "resend:2" }), '{"ok":false,"error":"unauthorized"}', "the golf token does not open the mail queue");
+  assert.equal(post({ action: "event", token: TOKEN, eventId: "resend:3" }), '{"ok":false,"error":"unauthorized"}', "the mail token does not open the golf queue");
+  assert.equal(post({ action: "enqueue", token: TOKEN }), '{"ok":false,"error":"unauthorized"}', "the mail token can never enqueue a booking");
+  assert.equal(post({ action: "event", token: "golf-token-abcdefghijklmnopqrstuvwxyz", eventId: "resend:4" }), '{"ok":true}');
+  assert.equal(post({ action: "mail_event", token: { length: 0 }, eventId: "resend:5" }), '{"ok":false,"error":"unauthorized"}');
+  assert.deepEqual(calls, [["mail", "resend:1"], ["golf", "resend:4"]]);
+  delete props.MAIL_QUEUE_TOKEN;
+  assert.equal(post({ action: "mail_event", token: TOKEN, eventId: "resend:6" }), '{"ok":false,"error":"unauthorized"}', "no token configured, nothing accepted");
+});

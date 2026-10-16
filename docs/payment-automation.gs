@@ -33,8 +33,10 @@ function jobs_() {
 function doPost(e) {
   var lock=LockService.getScriptLock();
   try {
-    var p=JSON.parse(e.postData.contents), secret=props_().getProperty('AUTOMATION_TOKEN');
-    if(!secret || p.token!==secret)return json_({ok:false,error:'unauthorized'});
+    var p=JSON.parse(e.postData.contents);
+    // mail_event (manual-mail queue) is authorised by MAIL_QUEUE_TOKEN, everything else by AUTOMATION_TOKEN.
+    var secret=props_().getProperty(p.action==='mail_event'?'MAIL_QUEUE_TOKEN':'AUTOMATION_TOKEN');
+    if(!secret || typeof p.token!=='string' || p.token!==secret)return json_({ok:false,error:'unauthorized'});
     lock.waitLock(20000);
     if(p.action==='enqueue')return json_(enqueue_(p));
     if(p.action==='event')return json_(event_(p));
