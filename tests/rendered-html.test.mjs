@@ -285,6 +285,14 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     assert.ok(text.includes(price), `price on ${path}`);
     assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
     assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
+    const arashiyama = path.includes("/kyoto/arashiyama-");
+    if (arashiyama) {
+      // The partner's own scale (regular vs private/20+), never the site-wide 7-day default, and no fixed-slot or "15 minutes early" promises.
+      assert.ok(text.includes("Up to 30 days before the date") && text.includes("29 to 14 days before") && text.includes("13 days before or later"), `tiered cancellation table on ${path}`);
+      assert.ok(text.includes("Private sessions and groups of 20 or more: free cancellation ends 45 days before"), `private/20+ terms on ${path}`);
+      assert.doesNotMatch(text, /Free cancellation up to 7 days|arrive 15 minutes|Arrive 15 minutes|more than 5 minutes late/i, `no stale promises on ${path}`);
+      assert.ok(text.includes("the start time is arranged around your day"), `start time wording on ${path}`);
+    }
     // the Japanese page is written; the other locales fall back to the English text so the URL resolves
     for (const lang of ["ja", "es", "fr", "zh-tw"]) {
       const alt = await render(path.replace("/en/", `/${lang}/`));
@@ -292,6 +300,7 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
       const altHtml = await alt.text();
       assert.doesNotMatch(altHtml, partners, `partner names stay private on ${lang} ${path}`);
       if (lang === "ja") assert.ok(altHtml.includes("プレビュー — このページはまだ公開していません") && !altHtml.includes(title), `Japanese text on ${path}`);
+      if (lang === "ja" && arashiyama) assert.ok(altHtml.includes("開催30日前まで") && altHtml.includes("貸切または20名以上") && !altHtml.includes("15分前にお越しください"), `Japanese cancellation terms on ${path}`);
     }
   }
   const home = await (await render("/en/")).text();

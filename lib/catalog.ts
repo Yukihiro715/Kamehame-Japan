@@ -2279,15 +2279,21 @@ export const experiences: Experience[] = [
     // the studio's name and address stay off the page (owner policy, as for
     // the ramen classes). Public prices are set in the booking calendar and
     // were not available; ¥7,000 (costume plan, from a listing) is a
-    // placeholder. Cancellation terms and wholesale not agreed. Preview.
+    // placeholder, to be replaced once the selling price is decided.
+    // 2026-10-16: facts aligned with the partner's condition sheet (45–60 min,
+    // all ages, 1–12 per regular session / up to 16 private, daily, requests
+    // close the day before, start time arranged around the group's day) and
+    // the partner's cancellation scale (regular vs private/20+). The sheet's
+    // "costume included" answer against the basic/costume plans is still
+    // unconfirmed, so both plans stay. Preview.
     slug: "arashiyama-ninja-experience", city: "kyoto", category: "ninja", bookingType: "request", status: "preview",
     title: "Ninja Experience in Arashiyama, Kyoto: Blowpipe, Shuriken and Hand Seals",
-    tagline: "An hour in a ninja training room in Arashiyama: the blowpipe, throwing stars at the targets, and the hand seals of the ninja, taught by an instructor in English or Japanese. Change into a ninja costume for the photos if you like.",
+    tagline: "Forty-five to sixty minutes in a ninja training room in Arashiyama: the blowpipe, throwing stars at the targets, and the hand seals of the ninja, taught by an instructor in English or Japanese. Change into a ninja costume for the photos if you like.",
     overview: [
-      "A few minutes from the bamboo grove, up a flight of stairs, is a room built for this: a row of targets along one wall, blowpipes and throwing stars in their boxes, and an instructor who teaches in English and Japanese. In an hour you try the blowpipe, learn to throw shuriken so they stick, and are taught the hand seals — the in-musubi — that the ninja used to steady themselves.",
+      "A few minutes from the bamboo grove, up a flight of stairs, is a room built for this: a row of targets along one wall, blowpipes and throwing stars in their boxes, and an instructor who teaches in English and Japanese. In 45 to 60 minutes you try the blowpipe, learn to throw shuriken so they stick, and are taught the hand seals — the in-musubi — that the ninja used to steady themselves.",
       "The costume plan adds a ninja outfit to change into, worn through the session and the photos. Nothing is needed beyond comfortable clothes and closed shoes, and children are welcome with an adult.",
     ],
-    duration: "60 minutes", price: "¥7,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "Children welcome with an adult (ask about younger children)", area: "Kyoto (Arashiyama)",
+    duration: "45–60 minutes", price: "¥7,000", priceUnit: "person", group: "1 to 12 per session · private sessions up to 16", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
     img: "/images/ninja-arashiyama-hero.jpg", alt: "Three guests in black ninja costumes striking poses in a wood-panelled training room",
     gallery: [
       { img: "/images/ninja-blowgun.jpg", alt: "A guest in a ninja costume aiming a blowpipe at the targets" },
@@ -2296,22 +2302,25 @@ export const experiences: Experience[] = [
       { img: "/images/ninja-shuriken-box.jpg", alt: "A wooden box of black throwing stars on a table" },
     ],
     galleryNote: "Photos from the partner's studio.",
-    partySize: { min: 1, max: 10 },
+    partySize: { min: 1, max: 16 },
     availability: { daily: true, startTimes: ["10:00", "11:30", "13:00", "14:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00" },
-    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
-    scheduleNote: "Timings counted from the start of your session.",
+    timeLabel: "Preferred start time",
+    availabilityNote: "Runs every day; the start time is arranged around your day and confirmed with your date. Requests close the day before. Please be at the studio by your start time.",
+    scheduleNote: "Timings counted from the start of your session; sessions run 45 to 60 minutes.",
     taxIncluded: true,
     interpreter: false,
     langTag: "English or Japanese",
     skipSiteFaq: true,
-    includedShort: "60-minute session · Blowpipe, shuriken and hand seals · Photos",
+    cancellation: "Days are counted to the date of your session, Japan time. Regular sessions of up to 19 guests: free cancellation ends 30 days before; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price. The date can be changed once, free of charge, up to 14 days before (29 days before for private sessions and groups of 20 or more) if another time has room. Final numbers are due 14 days before; a smaller group after that is charged in full. If the studio has to cancel, you hear by the day before, by phone or email, and are refunded to your original payment method.",
+    cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "45–60-minute session · Blowpipe, shuriken and hand seals · Photos",
     highlights: [
       { icon: "spark", title: "Real tools, real targets", body: "Blowpipes and throwing stars, with an instructor who shows you how to hit the target." },
       { icon: "photo", title: "Costume for the photos", body: "The costume plan dresses you as a ninja for the session and the photos; the outfit is returned the same day." },
       { icon: "chat", title: "English or Japanese", body: "Instructors teach in both, so families and mixed groups follow easily." },
     ],
     included: [
-      "The 60-minute session: blowpipe, throwing stars and hand-seal training",
+      "The session (45 to 60 minutes): blowpipe, throwing stars and hand-seal training",
       "An instructor who teaches in English and Japanese",
       "Photographs during the session",
       "Ninja costume rental on the costume plan",
@@ -2330,7 +2339,7 @@ export const experiences: Experience[] = [
       { time: "1:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A ninja training studio on an upper floor of a building in central Arashiyama, Kyoto, a short walk from the station and the bamboo grove — the exact address and entrance come with your confirmation", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee", "Not accessible for wheelchairs or strollers", "Comfortable clothes and closed-toe shoes"],
+      known: ["A ninja training studio on an upper floor of a building in central Arashiyama, Kyoto, a short walk from the station and the bamboo grove — the exact address and entrance come with your confirmation", "Please be at the studio by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "Regular sessions may include other guests; a private session takes your group only (up to 16)", "Not accessible for wheelchairs or strollers", "Comfortable clothes and closed-toe shoes"],
       afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
       img: "/images/ninja-target-room.jpg", alt: "The training room with its row of targets",
     },
@@ -2342,33 +2351,38 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The studio's address comes with your confirmation." },
     ],
     faq: [
-      { q: "What do we do?", a: "The blowpipe, throwing stars at the targets, and the hand seals of the ninja, with an instructor. The session lasts about an hour, with photos at the end." },
+      { q: "What do we do?", a: "The blowpipe, throwing stars at the targets, and the hand seals of the ninja, with an instructor. The session lasts 45 to 60 minutes, with photos at the end." },
       { q: "Is the costume included?", a: "On the costume plan, yes: you change into a ninja outfit for the session and the photos and return it the same day. The basic plan is without costume." },
       { q: "Which language is it in?", a: "English or Japanese; the instructors teach in both." },
-      { q: "Can children join?", a: "Yes, with an adult. Tell us their ages when you request and we confirm what suits them." },
-      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session; the studio will try to move you to another slot, which may carry a fee." },
+      { q: "Can children join?", a: "Yes, all ages with an adult. Tell us their ages when you request and we confirm what suits them." },
+      { q: "Can we have a private session?", a: "Yes, on request. Regular sessions take up to 12 and may include other guests; a private session takes your group only, up to 16, and is quoted when you request. Private sessions follow the second set of cancellation terms below." },
+      { q: "What if we are late?", a: "Please be there by your start time. The instructor can wait about 5 to 10 minutes; after that you may not be able to join, so call the number on your confirmation if you are delayed." },
       { q: "Is the studio accessible?", a: "No: it is up a flight of stairs and cannot take wheelchairs or strollers." },
-      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+      { q: "What is the cancellation policy?", a: "Regular sessions of up to 19 guests: free until 30 days before the date; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free until 45 days before; from 44 to 29 days before, half; from 28 days before, the full price. One free date change up to 14 days before (29 days before for private sessions and groups of 20 or more), if another time has room. Days are counted in Japan time." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Try the blowpipe at the targets", "Learn to throw shuriken so they stick", "Learn the ninja's hand seals", "Photos in the training room, in costume if you like"],
     master: { title: "Your instructor", bio: "Instructors at the studio teach the blowpipe, shuriken and hand seals in English and Japanese to guests of all ages.", quote: "" },
     itinerary: ["-0:15 — Arrive and check in", "0:00 — Blowpipe", "0:20 — Shuriken", "0:40 — Hand seals", "0:50 — Photos", "1:00 — End of the session"],
-    goodToKnow: ["About 60 minutes; arrive 15 minutes early. More than 5 minutes late and you cannot join.", "Children welcome with an adult.", "Not accessible for wheelchairs or strollers.", "English or Japanese."],
+    goodToKnow: ["45 to 60 minutes, every day; the start time is arranged with your date. Be there by your start time (the instructor can wait about 5 to 10 minutes).", "All ages, children with an adult. Regular sessions may include other guests; private sessions up to 16 on request.", "Not accessible for wheelchairs or strollers.", "English or Japanese."],
     story: { heading: "Up the stairs in Arashiyama", body: "Most visitors to Arashiyama see the bamboo and the river. A few know about the room upstairs with the targets on the wall. An hour there is the most fun you will have in Kyoto with a throwing star." },
   },
   {
     // Viyago Japan, Kyoto: 45-minute stone-mill matcha grinding on a covered
-    // terrace in Arashiyama. Built 2026-10-14 from the partner's public page
-    // (which currently shows booking suspended); public price ¥5,000. Venue
-    // name off the page. Cancellation and wholesale not agreed. Preview.
+    // terrace in Arashiyama. Built 2026-10-14 from the partner's public page;
+    // ¥5,000 is a placeholder until the selling price is decided.
+    // 2026-10-16: the partner's condition sheet lists the product as on sale
+    // and accepting guests (45–60 min, all ages, 1–40, daily, requests close
+    // the day before, start time arranged around the group's day) with the
+    // partner's cancellation scale. Venue name stays off the page. Preview.
     slug: "arashiyama-stone-mill-matcha", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
     title: "Stone-Mill Matcha Grinding in Arashiyama, Kyoto",
-    tagline: "Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five minutes, in English or Japanese.",
+    tagline: "Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five to sixty minutes, in English or Japanese.",
     overview: [
       "Matcha is tea leaf ground to a powder fine enough to drink, and the grinding is the slow part. On a covered terrace in Arashiyama you turn a traditional stone mill yourself, feel how little comes out of each turn, and understand why good matcha costs what it does.",
-      "Then you whisk the powder you made into a bowl with a bamboo chasen and drink it, looking out over the street. The session takes about forty-five minutes and is taught in English or Japanese; the tencha, the mill and the utensils are provided.",
+      "Then you whisk the powder you made into a bowl with a bamboo chasen and drink it, looking out over the street. The session takes 45 to 60 minutes and is taught in English or Japanese; the tencha, the mill and the utensils are provided.",
     ],
-    duration: "45 minutes", price: "¥5,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
+    duration: "45–60 minutes", price: "¥5,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
     img: "/images/matcha-stone-mill.jpg", alt: "Hands turning a granite stone mill with bright green matcha powder gathering in the groove",
     gallery: [
       { img: "/images/matcha-whisk.jpg", alt: "Whisking matcha in a bowl with a bamboo chasen" },
@@ -2376,22 +2390,25 @@ export const experiences: Experience[] = [
       { img: "/images/matcha-sweets.jpg", alt: "A bowl of matcha and a plate of seasonal Japanese sweets by a window" },
     ],
     galleryNote: "Photos from the partner's terrace.",
-    partySize: { min: 1, max: 10 },
+    partySize: { min: 1, max: 40 },
     availability: { daily: true, startTimes: ["10:00", "11:00", "13:00", "14:00", "15:00"], cutoffDays: 1, cutoffTime: "18:00" },
-    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
-    scheduleNote: "Timings counted from the start of your session.",
+    timeLabel: "Preferred start time",
+    availabilityNote: "Runs every day; the start time is arranged around your day and confirmed with your date. Requests close the day before. Please be at the terrace by your start time.",
+    scheduleNote: "Timings counted from the start of your session; sessions run 45 to 60 minutes.",
     taxIncluded: true,
     interpreter: false,
     langTag: "English or Japanese",
     skipSiteFaq: true,
-    includedShort: "45-minute session · Tencha and utensils · The bowl you make",
+    cancellation: "Days are counted to the date of your session, Japan time. Regular sessions of up to 19 guests: free cancellation ends 30 days before; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price. The date can be changed once, free of charge, up to 14 days before (29 days before for private sessions and groups of 20 or more) if another time has room. Final numbers are due 14 days before; a smaller group after that is charged in full. If the venue has to cancel, you hear by the day before, by phone or email, and are refunded to your original payment method.",
+    cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "45–60-minute session · Tencha and utensils · The bowl you make",
     highlights: [
       { icon: "brush", title: "Grind it yourself", body: "A traditional granite mill, turned by hand: the slow, satisfying part of matcha that nobody shows you." },
       { icon: "meal", title: "Drink what you made", body: "Whisk your own powder with a bamboo chasen and drink it on the terrace." },
       { icon: "chat", title: "English or Japanese", body: "Instruction in both languages, in a small group." },
     ],
     included: [
-      "The 45-minute session with instruction",
+      "The session (45 to 60 minutes) with instruction",
       "Use of the stone mill and tea utensils",
       "Tencha leaves and the bowl of matcha you make",
       "Tax included",
@@ -2408,7 +2425,7 @@ export const experiences: Experience[] = [
       { time: "0:45", title: "End of the session" },
     ],
     venue: {
-      known: ["A café terrace on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "The terrace is covered but semi-outdoor: dress for the weather", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session", "Not accessible for wheelchairs or strollers"],
+      known: ["A café terrace on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "The terrace is covered but semi-outdoor: dress for the weather", "Please be at the terrace by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The venue's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
       img: "/images/matcha-sweets.jpg", alt: "Matcha and sweets on the terrace",
     },
@@ -2424,14 +2441,16 @@ export const experiences: Experience[] = [
       { q: "How long does the grinding take?", a: "About twenty minutes of turning for one bowl: the mill is slow by design, which is why matcha is precious." },
       { q: "Can children join?", a: "Yes, with an adult; the mill is easy to turn and the bowl is small." },
       { q: "Which language is it in?", a: "English or Japanese." },
-      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee." },
+      { q: "Can we have a private session?", a: "Yes, on request: a private session takes your group only and is quoted when you request. Private sessions and groups of 20 or more follow the second set of cancellation terms below." },
+      { q: "What if we are late?", a: "Please be there by your start time. The instructor can wait about 5 to 10 minutes; after that you may not be able to join, so call the number on your confirmation if you are delayed." },
       { q: "Is the terrace accessible?", a: "No: it is up a flight of stairs and cannot take wheelchairs or strollers." },
-      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+      { q: "What is the cancellation policy?", a: "Regular sessions of up to 19 guests: free until 30 days before the date; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free until 45 days before; from 44 to 29 days before, half; from 28 days before, the full price. One free date change up to 14 days before (29 days before for private sessions and groups of 20 or more), if another time has room. Days are counted in Japan time." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Grind tencha into matcha on a stone mill", "Whisk it with a bamboo chasen", "Drink your bowl on a covered terrace"],
     master: { title: "Your instructor", bio: "The terrace's staff teach the mill and the whisk in English and Japanese.", quote: "" },
     itinerary: ["-0:15 — Arrive and check in", "0:00 — The mill", "0:25 — Whisk", "0:35 — Drink", "0:45 — End of the session"],
-    goodToKnow: ["About 45 minutes; arrive 15 minutes early.", "All ages with an adult.", "Semi-outdoor terrace; not accessible for wheelchairs or strollers.", "English or Japanese."],
+    goodToKnow: ["45 to 60 minutes, every day; the start time is arranged with your date. Be there by your start time.", "All ages with an adult. Groups of 1 to 40; private sessions on request.", "Semi-outdoor terrace; not accessible for wheelchairs or strollers.", "English or Japanese."],
     story: { heading: "Why matcha is slow", body: "A stone mill turning at the right speed gives a few grams of powder in twenty minutes. Once you have turned it yourself, every bowl of matcha you drink afterwards tastes of that time." },
   },
   {
@@ -2439,8 +2458,13 @@ export const experiences: Experience[] = [
     // two plans (custom knife making: choose a blade, sharpen it, fit the
     // handle; beginner sharpening). Built 2026-10-14 from the partner's public
     // page; prices are set in the booking calendar and were not available, so
-    // ¥15,000 is a placeholder. Venue name off the page. Cancellation and
-    // wholesale not agreed. Preview.
+    // ¥15,000 is a placeholder until the selling price is decided.
+    // 2026-10-16: facts aligned with the partner's condition sheet (about 60
+    // min, ages 6+, 1–40, daily, requests close the day before, start time
+    // arranged around the group's day, finished knife taken home the same
+    // day, not in cabin baggage) and the partner's cancellation scale. How the
+    // custom/beginner plans and engraving map to the sheet is unconfirmed, so
+    // the existing wording stays. Venue name off the page. Preview.
     slug: "arashiyama-japanese-knife-workshop", city: "kyoto", category: "knife-making", bookingType: "request", status: "preview",
     title: "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto",
     tagline: "Choose a blade, sharpen it on a whetstone and fit its handle, then take home a Japanese kitchen knife you finished yourself. Or learn to sharpen properly on a knife that is already handled. An hour in a workshop in Arashiyama, in English or Japanese.",
@@ -2448,7 +2472,7 @@ export const experiences: Experience[] = [
       "A Japanese kitchen knife is made in stages by different hands, and the last of them — sharpening and fitting the handle — is the one you can do yourself. In a workshop in Arashiyama you choose from several blades, learn the angle and the rhythm on the whetstone, attach a prepared handle and leave with the knife.",
       "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Engraving can be added on the custom plan for a fee.",
     ],
-    duration: "60 minutes", price: "¥15,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
+    duration: "About 60 minutes", price: "¥15,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
     img: "/images/knife-arashiyama-hero.jpg", alt: "An instructor in an apron smiling behind a table of Japanese kitchen knives and wooden handles",
     gallery: [
       { img: "/images/knife-sharpening.jpg", alt: "Hands sharpening a blade on a wet whetstone" },
@@ -2456,14 +2480,17 @@ export const experiences: Experience[] = [
       { img: "/images/knife-tomato.jpg", alt: "A finished knife slicing cleanly through a tomato" },
     ],
     galleryNote: "Photos from the partner's workshop.",
-    partySize: { min: 1, max: 8 },
+    partySize: { min: 1, max: 40 },
     availability: { daily: true, startTimes: ["10:00", "11:30", "13:00", "14:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00" },
-    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
+    timeLabel: "Preferred start time",
+    availabilityNote: "Runs every day; the start time is arranged around your day and confirmed with your date. Requests close the day before. Please be at the workshop by your start time.",
     scheduleNote: "Timings counted from the start of your session (custom plan).",
     taxIncluded: true,
     interpreter: false,
     langTag: "English or Japanese",
     skipSiteFaq: true,
+    cancellation: "Days are counted to the date of your session, Japan time. Regular sessions of up to 19 guests: free cancellation ends 30 days before; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price. The date can be changed once, free of charge, up to 14 days before (29 days before for private sessions and groups of 20 or more) if another time has room. Final numbers are due 14 days before; a smaller group after that is charged in full. If the workshop has to cancel, you hear by the day before, by phone or email, and are refunded to your original payment method.",
+    cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "60-minute workshop · Tools · The knife you take home",
     highlights: [
       { icon: "brush", title: "Your own knife to keep", body: "On the custom plan you choose the blade, sharpen it and fit the handle; the knife goes home with you." },
@@ -2490,8 +2517,8 @@ export const experiences: Experience[] = [
       { time: "1:00", title: "End of the workshop" },
     ],
     venue: {
-      known: ["A workshop on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Knives are sharp: follow the instructor's safety instructions; from age 6", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session", "Not accessible for wheelchairs or strollers"],
-      afterBooking: ["The workshop's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the knife home in checked luggage"],
+      known: ["A workshop on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Knives are sharp: follow the instructor's safety instructions; from age 6", "Please be at the workshop by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "You take the finished knife home the same day; it cannot go in cabin baggage", "Not accessible for wheelchairs or strollers"],
+      afterBooking: ["The workshop's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on packing the knife in checked luggage"],
       img: "/images/knife-craftsman.jpg", alt: "A craftsman inspecting a blade",
     },
     notesLabel: "Requests (optional)",
@@ -2505,24 +2532,31 @@ export const experiences: Experience[] = [
       { q: "What is the difference between the two plans?", a: "Custom knife making: choose a blade from several, sharpen it and fit a prepared handle; you take that knife home. Beginner sharpening: learn to sharpen on a knife that already has its handle; you take that knife home. Blade and handle choice, handle replacement and engraving are not part of the beginner plan." },
       { q: "Can I choose the handle?", a: "No: handles are prepared in advance. The blade is your choice on the custom plan." },
       { q: "Can I have it engraved?", a: "On the custom plan, as a paid option; ask when you request." },
-      { q: "Can I take the knife on the plane?", a: "In checked luggage, yes. We send advice on packing it with your confirmation." },
+      { q: "Can I take the knife on the plane?", a: "Not in cabin baggage: pack it in your checked luggage. We send packing advice with your confirmation. Rules on bringing a knife into your home country are yours to check." },
       { q: "Can children join?", a: "From age 6, following the instructor's safety instructions." },
       { q: "Which language is it in?", a: "English or Japanese." },
-      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee." },
-      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+      { q: "Can we have a private session?", a: "Yes, on request: a private session takes your group only and is quoted when you request. Private sessions and groups of 20 or more follow the second set of cancellation terms below." },
+      { q: "What if we are late?", a: "Please be there by your start time. The instructor can wait about 5 to 10 minutes; after that you may not be able to join, so call the number on your confirmation if you are delayed." },
+      { q: "What is the cancellation policy?", a: "Regular sessions of up to 19 guests: free until 30 days before the date; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free until 45 days before; from 44 to 29 days before, half; from 28 days before, the full price. One free date change up to 14 days before (29 days before for private sessions and groups of 20 or more), if another time has room. Days are counted in Japan time." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Choose a blade (custom plan)", "Sharpen it on a whetstone with the instructor", "Fit the prepared handle and finish the knife", "Take the knife home"],
     master: { title: "Your instructor", bio: "The workshop's instructors teach sharpening and knife finishing in English and Japanese to beginners and cooks alike.", quote: "" },
     itinerary: ["-0:15 — Arrive and check in", "0:00 — Choose your blade", "0:10 — Sharpen", "0:40 — Fit the handle", "0:55 — Test the edge", "1:00 — End of the workshop"],
-    goodToKnow: ["About 60 minutes; arrive 15 minutes early.", "From age 6. Two plans: custom knife making or beginner sharpening.", "Not accessible for wheelchairs or strollers. Pack the knife in checked luggage.", "English or Japanese."],
+    goodToKnow: ["About 60 minutes, every day; the start time is arranged with your date. Be there by your start time.", "From age 6. Groups of 1 to 40; private sessions on request. Two plans: custom knife making or beginner sharpening.", "Not accessible for wheelchairs or strollers. The knife goes home with you the same day, in checked luggage.", "English or Japanese."],
     story: { heading: "The last pair of hands", body: "A Japanese knife passes through a forger, a grinder and a handle-maker before it reaches a kitchen. Doing the final sharpening yourself, and fitting the handle, makes it yours in a way no shop can." },
   },
   {
     // Viyago Japan, Kyoto: cast your own metal shuriken (standard or mini) in
     // 60 minutes in the Arashiyama studio. Built 2026-10-14 from the partner's
     // public page; prices are set in the booking calendar and were not
-    // available, so ¥8,000 is a placeholder. Venue name off the page.
-    // Cancellation and wholesale not agreed. Preview.
+    // available, so ¥8,000 is a placeholder until the selling price is decided.
+    // 2026-10-16: facts aligned with the partner's condition sheet (about 60
+    // min, ages 6+ because of the hot metal, 1–12, daily, requests close the
+    // day before, start time arranged around the group's day, finished piece
+    // taken home the same day) and the partner's cancellation scale. How the
+    // standard/mini plans map to the sheet, and how the piece travels, are
+    // unconfirmed. Venue name off the page. Preview.
     slug: "arashiyama-shuriken-casting", city: "kyoto", category: "ninja", bookingType: "request", status: "preview",
     title: "Cast Your Own Metal Shuriken in Arashiyama, Kyoto",
     tagline: "Design the shape, prepare the mould, pour the metal and polish the result: a throwing star you made yourself, standard size or a mini version to carry. An hour in a ninja studio in Arashiyama, in English or Japanese.",
@@ -2530,7 +2564,7 @@ export const experiences: Experience[] = [
       "The shuriken is the ninja's most famous tool, and it is cast, not forged. In an hour in a studio in Arashiyama you design the shape of yours, prepare the mould in casting sand, watch the metal poured, quench it and polish it until it shines. You leave with it in your hand.",
       "Choose the standard size or a mini shuriken about half as large, small enough to carry. On some days other weapon shapes or a necklace finish are available; ask the staff on the day. The session is taught in English or Japanese.",
     ],
-    duration: "60 minutes", price: "¥8,000", priceUnit: "person", group: "Small groups · from 1 guest", ages: "Ask about children when you request", area: "Kyoto (Arashiyama)",
+    duration: "About 60 minutes", price: "¥8,000", priceUnit: "person", group: "1 to 12 guests · private sessions on request", ages: "Ages 6+ (hot metal is handled by the instructor)", area: "Kyoto (Arashiyama)",
     img: "/images/shuriken-arashiyama-hero.jpg", alt: "A guest in a leather apron holding up a freshly cast metal shuriken in front of the targets",
     gallery: [
       { img: "/images/shuriken-pour.jpg", alt: "Molten metal poured from a ladle into a sand mould" },
@@ -2538,14 +2572,17 @@ export const experiences: Experience[] = [
       { img: "/images/shuriken-finished.jpg", alt: "A finished four-pointed shuriken on an anvil" },
     ],
     galleryNote: "Photos from the partner's studio.",
-    partySize: { min: 1, max: 8 },
+    partySize: { min: 1, max: 12 },
     availability: { daily: true, startTimes: ["10:00", "11:30", "13:00", "14:30", "16:00"], cutoffDays: 1, cutoffTime: "18:00" },
-    availabilityNote: "Session times are confirmed with your date; arrive 15 minutes before the start.",
+    timeLabel: "Preferred start time",
+    availabilityNote: "Runs every day; the start time is arranged around your day and confirmed with your date. Requests close the day before. Please be at the studio by your start time.",
     scheduleNote: "Timings counted from the start of your session.",
     taxIncluded: true,
     interpreter: false,
     langTag: "English or Japanese",
     skipSiteFaq: true,
+    cancellation: "Days are counted to the date of your session, Japan time. Regular sessions of up to 19 guests: free cancellation ends 30 days before; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price. The date can be changed once, free of charge, up to 14 days before (29 days before for private sessions and groups of 20 or more) if another time has room. Final numbers are due 14 days before; a smaller group after that is charged in full. If the studio has to cancel, you hear by the day before, by phone or email, and are refunded to your original payment method.",
+    cancellationTiers: [{ until: 30, rate: 0 }, { until: 14, rate: 50 }, { until: 0, rate: 100 }],
     includedShort: "60-minute session · Materials · The shuriken you cast",
     highlights: [
       { icon: "spark", title: "Molten metal, your design", body: "Shape the mould yourself, then watch the pour: the part of the ninja's craft nobody else offers." },
@@ -2570,8 +2607,8 @@ export const experiences: Experience[] = [
       { time: "1:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A ninja studio on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Hot metal is handled by the instructor; guests wear aprons and gloves and follow the safety instructions", "Arrive 15 minutes before the start: guests more than 5 minutes late cannot join their session", "Not accessible for wheelchairs or strollers"],
-      afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the shuriken home in checked luggage"],
+      known: ["A ninja studio on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Hot metal is handled by the instructor; guests wear aprons and gloves and follow the safety instructions; from age 6", "Please be at the studio by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "You take the finished shuriken home the same day", "Not accessible for wheelchairs or strollers"],
+      afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the shuriken home, confirmed with the studio"],
       img: "/images/ninja-target-room.jpg", alt: "The studio's training room",
     },
     notesLabel: "Requests (optional)",
@@ -2584,16 +2621,18 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I handle the molten metal?", a: "No: the instructor pours. You design the shape, prepare the mould, quench the cast star and polish it, with an apron and gloves." },
       { q: "Standard or mini?", a: "The standard shuriken is about twice the size of the mini. The mini is small enough to carry." },
-      { q: "Can I take it home on the plane?", a: "In checked luggage, yes. We send advice on packing it with your confirmation." },
-      { q: "Can children join?", a: "Tell us their ages when you request and we confirm with the studio." },
+      { q: "Can I take it home on the plane?", a: "You take it with you the same day. A metal blade does not belong in cabin baggage; we confirm the packing advice for your shuriken with the studio and send it with your confirmation. Rules in your home country are yours to check." },
+      { q: "Can children join?", a: "From age 6. The instructor handles the hot metal; guests wear aprons and gloves and follow the safety instructions." },
       { q: "Which language is it in?", a: "English or Japanese." },
-      { q: "What if we are late?", a: "Please arrive 15 minutes early. Guests more than 5 minutes late cannot join their session and may be moved to another slot for a fee." },
-      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session time, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
+      { q: "Can we have a private session?", a: "Yes, on request: a private session takes your group only and is quoted when you request. Private sessions and groups of 20 or more follow the second set of cancellation terms below." },
+      { q: "What if we are late?", a: "Please be there by your start time. The instructor can wait about 5 to 10 minutes; after that you may not be able to join, so call the number on your confirmation if you are delayed." },
+      { q: "What is the cancellation policy?", a: "Regular sessions of up to 19 guests: free until 30 days before the date; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free until 45 days before; from 44 to 29 days before, half; from 28 days before, the full price. One free date change up to 14 days before (29 days before for private sessions and groups of 20 or more), if another time has room. Days are counted in Japan time." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Design your shuriken and prepare the mould", "Watch the metal poured", "Quench, file and polish the star", "Take it home"],
     master: { title: "Your instructor", bio: "The studio's instructors teach the casting process in English and Japanese and handle the hot metal themselves.", quote: "" },
     itinerary: ["-0:15 — Arrive and check in", "0:00 — Design and mould", "0:20 — The pour", "0:30 — Quench and polish", "1:00 — End of the session"],
-    goodToKnow: ["About 60 minutes; arrive 15 minutes early.", "Standard or mini shuriken; aprons and gloves provided.", "Not accessible for wheelchairs or strollers. Pack the star in checked luggage.", "English or Japanese."],
+    goodToKnow: ["About 60 minutes, every day; the start time is arranged with your date. Be there by your start time.", "From age 6. Groups of 1 to 12; private sessions on request. Standard or mini shuriken; aprons and gloves provided.", "Not accessible for wheelchairs or strollers. You take the star home the same day; ask us about carrying it.", "English or Japanese."],
     story: { heading: "Cast, not thrown", body: "Every ninja film shows the throw. Almost none shows the making: the sand, the pour, the hiss of the quench. An hour in Arashiyama gives you the part the films leave out, and the star to prove it." },
   },
   {
