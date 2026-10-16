@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import test, { after } from "node:test";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
-import { createHmac } from "node:crypto";
+import { createHmac, randomBytes } from "node:crypto";
 import { createServer } from "vite";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const source = readFileSync(new URL("../docs/payment-automation.gs", import.meta.url), "utf8");
 const clock = Date.parse("2026-10-13T14:59:00Z"); // 23:59 JST
-const p = { requestId: "11111111-2222-4333-8444-555555555555", priceVersion: "2026-10-10", baseTotal: 270000, payment: {text:"¥{{TOTAL}} {{PER_PERSON}} {{PAYMENT_URL}} {{CADDIE_LINE}}"}, followUp: {text:"intro"}, enquiry: { experience:"mt-fuji-golf-day", dates:"2026-10-18 07:00", courseMode:"recommended", pickupRegion:"tokyo", pickup:"Example Hotel", party:"2", areaId:"fuji", caddie:"none", lang:"en", email:"guest@example.com", rental:"Left handed requested" }};
+const p = { requestId: "11111111-2222-4333-8444-555555555555", priceVersion: "2026-10-10", baseTotal: 270000, payment: {version:"photo-2026-10-16",html:'<a href="{{PAYMENT_URL}}">¥{{TOTAL}}</a><a href="{{PAYMENT_URL}}">¥{{TOTAL}}</a>',text:"¥{{TOTAL}} {{PER_PERSON}} {{PAYMENT_URL}} {{CADDIE_LINE}}"}, followUp: {text:"intro"}, enquiry: { experience:"mt-fuji-golf-day", dates:"2026-10-18 07:00", courseMode:"recommended", pickupRegion:"tokyo", pickup:"Example Hotel", party:"2", areaId:"fuji", caddie:"none", lang:"en", email:"guest@example.com", rentalKeys:"required:left,required:right", rental:"Left handed requested" }};
 const link = { 区分:"標準プラン", 体験カテゴリ:"プライベートゴルフ", エリア:"富士山エリア", 人数:2, キャディ:"なし", 料金版:"2026-10-10", 自動送信可:"可", 顧客用決済URL:"https://book.stripe.com/EXAMPLE123", Stripeリンク状態:"有効", 通貨:"JPY", "Payment Link ID（plink_）":"plink_example", "キャディ追加料金（税込）":0, "決済総額（税込）":270000 };
 function runtime() { const c=vm.createContext({ console, Date, Number, String, JSON, encodeURIComponent, isFinite }); vm.runInContext(source,c); return c; }
 const gas=runtime();
@@ -20,7 +20,8 @@ test("eligibility: prefectures, rental and inclusive four-day JST boundary",()=>
   assert.equal(decide({pickupRegion:"other"}).mode,"manual");
   assert.equal(decide({dates:"2026-10-17 07:00"}).mode,"manual");
   assert.equal(decide({},link,clock+60000).mode,"manual","midnight advances Japan calendar day");
-  for(const rental of ["own","required:left","unsure"]) assert.equal(decide({rental}).mode,"payment");
+  for(const rentalKeys of ["own,own","required:right,own","unsure,required:left", "", "required:right"]) assert.equal(decide({rentalKeys}).mode,"manual");
+  assert.equal(decide({clubs:"Extra-long shaft"}).mode,"manual");
   for(const e of [{courseMode:"specific"},{caddie:"unsure"},{message:"Need a child seat"},{addons:"film"},{addonIds:["film"]},{lang:"fr"},{dates:"2026-02-30 07:00"}]) assert.equal(decide(e).mode,"manual");
   assert.equal(decide({message:"Thank you!"}).mode,"payment");
 });
@@ -38,7 +39,7 @@ function queue(mode, human="", now=clock) {
   const j={...structuredClone(p),id:"KJ-261018-G11111111",mode,status:"queued",audit:{},ackAt:new Date(clock-10*60000).toISOString(),dueAt:new Date(clock+(mode==="payment"?0:5*60000)).toISOString()};
   c.LockService={getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})};
   c.jobs_=()=>[{job:j,row:2}];c.saveJob_=()=>{};c.master_=()=>[link];c.humanActivity_=()=>human;
-  c.send_=(j,kind,text)=>{calls.push({kind,text});return "email-id";};c.notify_=(_j,_r,key)=>notices.push(key);c.updatePaymentLedger_=()=>{};c.props_=()=>({setProperty(){}});
+  c.send_=(j,kind,text,to,html)=>{calls.push({kind,text,html});return "email-id";};c.notify_=(_j,_r,key)=>notices.push(key);c.updatePaymentLedger_=()=>{};c.props_=()=>({setProperty(){}});
   return {c,j,calls,notices};
 }
 test("10-minute path sends only payment; manual waits for 15; replies suppress both",()=>{
@@ -99,19 +100,23 @@ test("payment-click metrics exclude company-signature clicks and deduplicate eve
 });
 
 const vite=await createServer({appType:"custom",configFile:false,root,resolve:{alias:{"@":root}},server:{middlewareMode:true}});
+const {paymentTemplate,photoFollowUp}=await vite.ssrLoadModule("/lib/golf-automation.ts");
 after(()=>vite.close());
 const {verifyWebhook,receiveWebhook}=await vite.ssrLoadModule("/lib/payment-webhooks.ts");
-test("official Svix test vector, tampering, expired timestamp and rotation",async()=>{
-  const secret="whsec_plJ3nmyCDGBKInavdOK15jsl", raw='{"event_type":"ping","data":{"success":true}}';
-  const h=new Headers({"svix-id":"msg_loFOjxBNrRLzqYUf","svix-timestamp":"1731705121","svix-signature":"v1,rAvfW3dJ/X/qxhsaXPOyyCGmRKsaKWcsNccKXlIktD0="});
+test("Svix signature, tampering, expired timestamp and rotation with ephemeral test keys",async()=>{
+  // Generate a fresh test key in memory. No deployed credential or private email fixture.
+  const key=randomBytes(32), secret="whsec_"+key.toString("base64"), raw=JSON.stringify({event_type:"ping",data:{success:true}});
+  const id="test-message",timestamp="1731705121";
+  const signature=createHmac("sha256",key).update(`${id}.${timestamp}.${raw}`).digest("base64");
+  const h=new Headers({"svix-id":id,"svix-timestamp":timestamp,"svix-signature":`v1,${signature}`});
   assert.equal(await verifyWebhook("resend",raw,h,secret,1731705121000),true);
   assert.equal(await verifyWebhook("resend",raw+" ",h,secret,1731705121000),false);
   assert.equal(await verifyWebhook("resend",raw,h,secret,1731705521000),false);
-  h.set("svix-signature","v1,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA= "+h.get("svix-signature"));
+  h.set("svix-signature",`v1,${randomBytes(32).toString("base64")} `+h.get("svix-signature"));
   assert.equal(await verifyWebhook("resend",raw,h,secret,1731705121000),true);
 });
 test("Stripe HMAC accepts valid signatures, rejects mutations and future timestamps",async()=>{
-  const raw='{"id":"evt_test","data":{}}',secret="whsec_test",ts=String(Math.floor(clock/1000));
+  const raw='{"id":"evt_test","data":{}}',secret=randomBytes(32).toString("hex"),ts=String(Math.floor(clock/1000));
   const sig=createHmac("sha256",secret).update(`${ts}.${raw}`).digest("hex"),h=new Headers({"stripe-signature":`t=${ts},v1=${sig}`});
   assert.equal(await verifyWebhook("stripe",raw,h,secret,clock),true);
   assert.equal(await verifyWebhook("stripe",raw+" ",h,secret,clock),false);
@@ -119,13 +124,56 @@ test("Stripe HMAC accepts valid signatures, rejects mutations and future timesta
   assert.equal((await receiveWebhook("stripe",new Request("https://example.com",{method:"POST",body:raw}),{})).status,503);
 });
 test("signed Stripe webhook forwards discount fields but strips unrelated customer data",async()=>{
-  const ts=String(Math.floor(Date.now()/1000)),secret="whsec_test",originalFetch=globalThis.fetch;
-  const raw=JSON.stringify({id:"evt_discount",type:"checkout.session.completed",data:{object:{id:"cs_live_discount",client_reference_id:"KJ-261018-G11111111",payment_status:"paid",currency:"jpy",livemode:true,payment_link:"plink_example",amount_subtotal:270000,amount_total:243000,total_details:{amount_discount:27000,amount_tax:0,amount_shipping:0},discounts:[{promotion_code:{id:"promo_example",code:"WELCOME10",customer:"private"}}],customer_details:{email:"private@example.com"}}}});
+  const ts=String(Math.floor(Date.now()/1000)),secret=randomBytes(32).toString("hex"),originalFetch=globalThis.fetch;
+  const raw=JSON.stringify({id:"evt_discount",type:"checkout.session.completed",data:{object:{id:"cs_live_discount",client_reference_id:"KJ-261018-G11111111",payment_status:"paid",currency:"jpy",livemode:true,payment_link:"plink_example",amount_subtotal:270000,amount_total:243000,total_details:{amount_discount:27000,amount_tax:0,amount_shipping:0},discounts:[{promotion_code:{id:"promo_example",code:"WELCOME10",customer:"redaction-fixture"}}],customer_details:{email:"redaction-fixture@example.invalid"}}}});
   let forwarded;globalThis.fetch=async(_url,init)=>{forwarded=JSON.parse(init.body);return Response.json({ok:true});};
   try {
     const sig=createHmac("sha256",secret).update(`${ts}.${raw}`).digest("hex");
-    const response=await receiveWebhook("stripe",new Request("https://example.com",{method:"POST",body:raw,headers:{"stripe-signature":`t=${ts},v1=${sig}`}}),{STRIPE_WEBHOOK_SECRET:secret,GOLF_AUTOMATION_TOKEN:"test",GOLF_AUTOMATION_URL:"https://script.google.com/macros/s/test/exec"});
+    const response=await receiveWebhook("stripe",new Request("https://example.com",{method:"POST",body:raw,headers:{"stripe-signature":`t=${ts},v1=${sig}`}}),{STRIPE_WEBHOOK_SECRET:secret,GOLF_AUTOMATION_TOKEN:randomBytes(32).toString("hex"),GOLF_AUTOMATION_URL:"https://script.google.com/macros/s/test/exec"});
     assert.equal(response.status,200);const s=forwarded.event.data.object;
     assert.equal(s.amount_subtotal,270000);assert.equal(s.total_details.amount_discount,27000);assert.deepEqual(s.discounts,[{promotion_code:{id:"promo_example",code:"WELCOME10"}}]);assert.equal(s.customer_details,undefined);
   }finally{globalThis.fetch=originalFetch;}
+});
+
+
+test("photo payment HTML is dynamic, shoes inclusive, escaped, with both CTAs before and after photos",()=>{
+  for(const areaId of ["tokyo","fuji"]) for(const party of ["2","3","4"]) {
+    const t=paymentTemplate({...p.enquiry,areaId,party,name:'<img src=x> {{PAYMENT_URL}}'});
+    assert.equal(t.version,"photo-2026-10-16");
+    assert.match(t.text,/Rental golf shoes are included/);
+    assert.doesNotMatch(t.text,/shoes and gloves are not included/);
+    assert.match(t.html,/&lt;img src=x&gt;/);
+    assert.equal((t.html.match(/Proceed to payment/g)||[]).length,2);
+    assert.ok(t.html.indexOf("Proceed to payment")<t.html.indexOf('<img src="https://'));
+    assert.ok(t.html.lastIndexOf("Proceed to payment")>t.html.lastIndexOf('<img src="https://'));
+    assert.match(t.html,new RegExp(areaId==="fuji"?"fuji-oyama.jpg":"chiba-isumi.jpg"));
+    const rendered=gas.fillPayment_(t.html,{TOTAL:"270,000",PER_PERSON:"135,000",PAYMENT_URL:"https://book.stripe.com/TEST?client_reference_id=CASE",CADDIE_LINE:"No caddie"},true);
+    assert.equal((rendered.match(/href="https:\/\/book.stripe.com/g)||[]).length,3);
+    assert.doesNotMatch(rendered,/\{\{[A-Z_]+\}\}/);
+  }
+  assert.equal(photoFollowUp({...p.enquiry,name:"Test",lang:"ja"}).html,undefined);
+});
+test("queued HTML survives retry unchanged and sends exact approved amount and all payment links",()=>{
+  const q=queue("payment");q.c.processGolfQueue();assert.equal(q.calls.length,1);
+  assert.equal((q.calls[0].html.match(/270,000/g)||[]).length,2);
+  assert.equal((q.calls[0].html.match(/client_reference_id=/g)||[]).length,2);
+  const saved=JSON.stringify(q.j.pendingMessage);q.j.status="sending";
+  q.j.payment.html="CHANGED TEMPLATE";q.c.processGolfQueue();
+  assert.equal(JSON.stringify(q.j.pendingMessage),saved);
+});
+test("a reply arriving while the payload is saved suppresses transmission",()=>{
+  const q=queue("payment");let checks=0;q.c.humanActivity_=()=>++checks===1?"":"担当者が返信済み";
+  q.c.processGolfQueue();assert.equal(q.calls.length,0);assert.equal(q.j.status,"held");
+});
+test("manual queue approvals and sent/uncertain mail suppress automation without Gmail Sent",()=>{
+  const c=runtime(), j={...p,id:"CASE",createdAt:new Date(clock).toISOString()};
+  c.QC={to:0,caseId:1,status:2,sentAt:3,approvedAt:4,createdAt:5};
+  c.QS={approved:"approved",sending:"sending",sent:"sent",check:"check",error:"error"};
+  for(const status of ["approved","sending","sent","check","error"]){
+    c.qrows_=()=>[{r:[p.enquiry.email,"OTHER",status,new Date(clock+1)]}];
+    assert.ok(c.manualQueueActivity_(j));
+  }
+  for(const r of [[p.enquiry.email,"CASE","draft",new Date(clock+1)],["other@example.com","CASE","sent",new Date(clock+1)],[p.enquiry.email,"OLD","sent",new Date(clock-1)]]){
+    c.qrows_=()=>[{r}];assert.equal(c.manualQueueActivity_(j),"");
+  }
 });
