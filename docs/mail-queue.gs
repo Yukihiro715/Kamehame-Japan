@@ -22,7 +22,7 @@ var QUEUE_SHEET = 'メール送信キュー';
 var QUEUE_HEADERS = ['メールID','案件ID','種別','宛先','件名','本文（英語・テキスト）','本文HTML（任意）','日本語訳（確認用）','返信元Message-ID（任意）','承認','承認日時','承認者','承認ハッシュ','状態','送信日時','ResendメールID','Message-ID','配達日時','開封（参考）','決済リンククリック（参考）','その他リンククリック（参考）','配達エラー','最終エラー','作成日時','作成経路','内部データ'];
 var QC = {id:0,caseId:1,kind:2,to:3,subject:4,text:5,html:6,ja:7,inReplyTo:8,approved:9,approvedAt:10,approver:11,hash:12,status:13,sentAt:14,resendId:15,messageId:16,delivered:17,opened:18,payClick:19,otherClick:20,bounce:21,error:22,createdAt:23,source:24,data:25};
 var QS = {draft:'下書き',approved:'承認済み',sending:'送信中',sent:'送信済み',error:'エラー',check:'要確認',cancelled:'取消'};
-var OPEN_NA = '計測対象外（テキストのみ）', OPEN_NONE = '未検知', DELIVERED_RECONCILED = '配達済み（照合）';
+var OPEN_NONE = '未検知', DELIVERED_RECONCILED = '配達済み（照合）';
 var CASE_RE = /^KJ-[A-Z0-9-]{6,40}$/, EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/, MSGID_RE = /^<[^\s<>]+@[^\s<>]+>$/;
 var PAY_LINK = /^https:\/\/(book|buy|checkout)\.stripe\.com\//;
 var LINK_HEADERS = {sentAt:'最終個別メール送信日時',subject:'最終個別メール件名',opened:'最終開封（参考）',payClick:'最終決済リンククリック（参考）',count:'個別メール送信件数'};
@@ -133,10 +133,21 @@ function processMailQueue() {
 function unapprove_(x, reason, status) { var r = x.r; r[QC.approved] = false; r[QC.hash] = ''; r[QC.approvedAt] = ''; r[QC.status] = status || QS.check; r[QC.error] = reason; qsave_(x.row, r); }
 function payload_(r, key) {
   var p = { mailId: String(r[QC.id]), caseId: String(r[QC.caseId]).trim(), to: String(r[QC.to]).trim(), subject: String(r[QC.subject]).trim(), text: String(r[QC.text]), idempotencyKey: key };
-  if (String(r[QC.html] || '').trim()) p.html = String(r[QC.html]);
+  // Every mail goes out with an HTML part so opens and clicks are measurable: the column's
+  // own HTML when given, otherwise a faithful rendering of the text (escaped, links clickable).
+  p.html = String(r[QC.html] || '').trim() ? String(r[QC.html]) : textHtml_(String(r[QC.text]));
   if (String(r[QC.inReplyTo] || '').trim()) p.inReplyTo = String(r[QC.inReplyTo]).trim();
   var bcc = props_().getProperty('ARCHIVE_BCC'); if (bcc && EMAIL_RE.test(bcc) && bcc.toLowerCase() !== p.to.toLowerCase()) p.bcc = bcc;
   return p;
+}
+/** Plain text as HTML: escaped, paragraphs on blank lines, line breaks kept, URLs clickable. */
+function textHtml_(text) {
+  var esc = function (t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var paras = String(text).replace(/\r\n?/g, '\n').split(/\n{2,}/).map(function (para) {
+    var html = esc(para).replace(/https?:\/\/[^\s<>"]+[^\s<>".,;:!?)\]]/g, function (u) { return '<a href="' + u + '">' + u + '</a>'; });
+    return '<p style="margin:0 0 1em">' + html.replace(/\n/g, '<br>') + '</p>';
+  });
+  return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#222">' + paras.join('') + '</div>';
 }
 function sendApproved_(x) {
   var r = x.r, caseId = String(r[QC.caseId]).trim();
@@ -172,7 +183,7 @@ function deliver_(x) {
   var code = res.getResponseCode(), body = {}; try { body = JSON.parse(res.getContentText()); } catch (e) {}
   if (code >= 200 && code < 300 && body.ok && body.id) {
     r[QC.status] = QS.sent; r[QC.sentAt] = new Date(); r[QC.resendId] = body.id; r[QC.messageId] = body.messageId || '';
-    r[QC.opened] = String(r[QC.html] || '').trim() ? OPEN_NONE : OPEN_NA; r[QC.error] = '';
+    r[QC.opened] = OPEN_NONE; r[QC.error] = '';
     d.sentVia = 'worker'; d.copy = archiveCopy_(r); setData_(r, d); qsave_(x.row, r); linkLedger_(r); return;
   }
   if (code === 400) { r[QC.status] = QS.error; r[QC.error] = '送信先が内容を拒否: ' + (body.error || code); }
@@ -212,7 +223,7 @@ function mailEvent_(p) {
   if (!x) return Date.now() - Date.parse(v.created_at || 0) > 2 * 86400000 ? { ok: true, ignored: true } : { ok: false, error: 'unmatched_event' };
   var r = x.r, at = v.created_at || new Date().toISOString(), note = '', caseId = String(r[QC.caseId]).trim();
   if (v.type === 'email.delivered') r[QC.delivered] = earliest_(r[QC.delivered], at);
-  else if (v.type === 'email.opened') { if (String(r[QC.html] || '').trim()) r[QC.opened] = earliest_(r[QC.opened], at); else note = 'テキストのみのメールに開封イベント（参考記録のみ）'; }
+  else if (v.type === 'email.opened') r[QC.opened] = earliest_(r[QC.opened], at);
   else if (v.type === 'email.clicked') {
     var link = data.click && data.click.link, when = (data.click && data.click.timestamp) || at;
     if (isPaymentLink_(link, caseLinks_(caseId))) r[QC.payClick] = earliest_(r[QC.payClick], when); else r[QC.otherClick] = earliest_(r[QC.otherClick], when);

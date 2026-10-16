@@ -179,10 +179,10 @@ test("GAS: an approved row is sent exactly once with the bound idempotency key; 
   const call = rt.fetches[0];
   assert.equal(call.init.headers.Authorization, `Bearer ${TOKEN}`);
   assert.equal(call.body.idempotencyKey, "manual/KJ-261019-01-M01/" + rt.state[0][rt.Q.hash].slice(0, 16));
-  assert.equal(call.body.to, "guest@example.com"); assert.equal(call.body.html, undefined, "text-only mail carries no html");
+  assert.equal(call.body.to, "guest@example.com"); assert.match(call.body.html, /^<div[^>]*><p[^>]*>Hello Ricardo<\/p><\/div>$/, "a text-only row still goes out with an HTML part so it can be measured");
   const r = rt.state[0];
   assert.equal(r[rt.Q.status], "送信済み"); assert.equal(r[rt.Q.resendId], "re-id-1"); assert.equal(r[rt.Q.messageId], "<re-id-1@kamehame-japan.com>");
-  assert.equal(r[rt.Q.opened], "計測対象外（テキストのみ）");
+  assert.equal(r[rt.Q.opened], "未検知");
   assert.equal(rt.state[1][rt.Q.status], "下書き", "the unapproved draft is untouched");
   rt.c.processMailQueue(); rt.c.processMailQueue();
   assert.equal(rt.fetches.length, 1, "no second send");
@@ -243,7 +243,7 @@ test("GAS: an interrupted send resumes with the same key within an hour and stop
 
 test("GAS: events land on the right mail, deduplicate, keep the earliest stamp, and separate payment clicks from other links", () => {
   const sentRow = draft({ 0: "KJ-261019-01-M01", 6: "<p>Hello</p>", 13: "送信済み", 15: "re-id-1", 18: "未検知" });
-  const otherMail = draft({ 0: "KJ-261019-01-M02", 13: "送信済み", 15: "re-id-2", 18: "計測対象外（テキストのみ）" });
+  const otherMail = draft({ 0: "KJ-261019-01-M02", 13: "送信済み", 15: "re-id-2", 18: "未検知" });
   const rt = gasRuntime({ rows: [sentRow, otherMail], props: live, caseRow: ledgerCase });
   const ev = (id, type, at, data = {}) => rt.c.mailEvent_({ eventId: id, event: { type, created_at: at, data: { email_id: "re-id-1", tags: { kind: "manual", booking: "KJ-261019-01", mail: "KJ-261019-01-M01" }, ...data } } });
   // results come from the sandbox realm, so compare their JSON
@@ -260,9 +260,10 @@ test("GAS: events land on the right mail, deduplicate, keep the earliest stamp, 
   ev("e5", "email.opened", "2026-10-16T01:02:00.000Z");
   assert.equal(rt.state[0][rt.Q.opened].toISOString(), "2026-10-16T01:02:00.000Z");
   assert.equal(rt.state[1][rt.Q.delivered], "", "the other mail of the same case is untouched");
-  // A text-only mail keeps its "not measured" marker even if an open event arrives.
-  rt.c.mailEvent_({ eventId: "e6", event: { type: "email.opened", created_at: "2026-10-16T01:02:00.000Z", data: { email_id: "re-id-2", tags: { kind: "manual", booking: "KJ-261019-01", mail: "KJ-261019-01-M02" } } } });
-  assert.equal(rt.state[1][rt.Q.opened], "計測対象外（テキストのみ）");
+  // The other mail of the same case records its own open, on its own row.
+  rt.c.mailEvent_({ eventId: "e6", event: { type: "email.opened", created_at: "2026-10-16T01:09:00.000Z", data: { email_id: "re-id-2", tags: { kind: "manual", booking: "KJ-261019-01", mail: "KJ-261019-01-M02" } } } });
+  assert.equal(rt.state[1][rt.Q.opened].toISOString(), "2026-10-16T01:09:00.000Z");
+  assert.equal(rt.state[0][rt.Q.opened].toISOString(), "2026-10-16T01:02:00.000Z", "the first mail's open is unchanged");
   // Bounces are recorded and the team is told; unmatched events are left for the provider to retry.
   rt.c.mailEvent_({ eventId: "e7", event: { type: "email.bounced", created_at: "2026-10-16T01:07:00.000Z", data: { email_id: "re-id-2", tags: { kind: "manual", booking: "KJ-261019-01", mail: "KJ-261019-01-M02" } } } });
   assert.match(rt.state[1][rt.Q.bounce], /^bounced/); assert.equal(rt.team.length, 1);
@@ -327,4 +328,10 @@ test("a read-only key, when set, is used for lookups while the sending key still
   assert.equal(refused.status, 502); assert.deepEqual(await refused.json(), { ok: false, error: "lookup_failed", upstream: 401 });
   const okRes = await handleStatus(new Request("https://x/api/mail/status?id=01a143a5-71de-76eb-a218-61e4197418a5", { headers: { authorization: `Bearer ${TOKEN}` } }), two, fetchImpl);
   assert.equal((await okRes.json()).messageId, "<abc@kamehame-japan.com>");
+});
+
+test("GAS: text is rendered to HTML faithfully: escaped, paragraphs and line breaks kept, URLs clickable", () => {
+  const rt = gasRuntime();
+  const html = rt.c.textHtml_("Hello <Ricardo> & team,\nLine two\n\nPay here: https://book.stripe.com/abc?client_reference_id=KJ-1.\nSite: https://kamehame-japan.com/");
+  assert.equal(html, '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#222"><p style="margin:0 0 1em">Hello &lt;Ricardo&gt; &amp; team,<br>Line two</p><p style="margin:0 0 1em">Pay here: <a href="https://book.stripe.com/abc?client_reference_id=KJ-1">https://book.stripe.com/abc?client_reference_id=KJ-1</a>.<br>Site: <a href="https://kamehame-japan.com/">https://kamehame-japan.com/</a></p></div>');
 });
