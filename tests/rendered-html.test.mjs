@@ -198,7 +198,7 @@ test("ramen classes: Tokyo and Osaka in preview, priced per person, unlisted, ne
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
-    assert.ok(text.includes("¥25,000"), "sale price");
+    assert.ok(text.includes("¥26,500"), "sale price");
     assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
     assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro|Soemoncho|宗右衛門/i, "the venue's name and address stay private");
     assert.ok(text.includes("11:00") && text.includes("18:30"), "session times from the partner sheet");

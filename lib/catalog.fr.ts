@@ -162,7 +162,7 @@ export const experiencesFr: Experience[] = [
       "Le ramen est le plat réconfortant du quotidien au Japon, et le plus court chemin pour le comprendre est de le faire. Dans une petite cuisine-atelier près de Shibuya, vous transformez farine et eau en nouilles à la main, passez la pâte dans la machine à nouilles et finissez trois petits bols pour comparer les trois grands bouillons en une seule séance.",
       "L'atelier se déroule en anglais et dure environ 90 minutes. Tout est fourni — ingrédients, tabliers, ustensiles — et vous mangez ce que vous avez préparé. Des versions végétarienne et végane peuvent être préparées sans supplément, et un bouillon compatible halal sur préavis (le supplément est confirmé avec votre devis) : dites-le-nous lors de votre demande.",
     ],
-    duration: "90 minutes", price: "¥25,000", group: "Petit groupe · 1 à 16 personnes", ages: "Dès 6 ans (les plus jeunes peuvent regarder avec un parent)", area: "Tokyo (à quelques minutes de Shibuya)",
+    duration: "90 minutes", price: "¥26,500", group: "Petit groupe · 1 à 16 personnes", ages: "Dès 6 ans (les plus jeunes peuvent regarder avec un parent)", area: "Tokyo (à quelques minutes de Shibuya)",
     img: "/images/ramen-noodle-machine.jpg", alt: "Deux participants passant une feuille de pâte dans une machine à nouilles manuelle, les nouilles fraîches tombant dans le bac",
     gallery: [
       { img: "/images/ramen-dough.jpg", alt: "Des mains gantées rassemblant farine et eau en une pâte dans un saladier en inox" },
@@ -241,7 +241,7 @@ export const experiencesFr: Experience[] = [
       "Le ramen est le plat réconfortant du quotidien au Japon, et le plus court chemin pour le comprendre est de le faire. Dans une petite cuisine-atelier de Dotonbori, la rue gourmande la plus animée d'Osaka, vous transformez farine et eau en nouilles à la main, passez la pâte dans la machine à nouilles et finissez trois petits bols pour comparer les trois grands bouillons en une seule séance.",
       "L'atelier se déroule en anglais et dure environ 90 minutes. Tout est fourni — ingrédients, tabliers, ustensiles — et vous mangez ce que vous avez préparé. Des versions végétarienne et végane peuvent être préparées sans supplément, et un bouillon compatible halal sur préavis (le supplément est confirmé avec votre devis) : dites-le-nous lors de votre demande.",
     ],
-    duration: "90 minutes", price: "¥25,000", group: "Petit groupe · 1 à 16 personnes", ages: "Dès 6 ans (les plus jeunes peuvent regarder avec un parent)", area: "Osaka (Dotonbori)",
+    duration: "90 minutes", price: "¥26,500", group: "Petit groupe · 1 à 16 personnes", ages: "Dès 6 ans (les plus jeunes peuvent regarder avec un parent)", area: "Osaka (Dotonbori)",
     img: "/images/ramen-osaka-boiling.jpg", alt: "Deux participants soulevant des nouilles tout juste cuites hors des paniers, au comptoir de la cuisine-atelier",
     gallery: [
       { img: "/images/ramen-osaka-toppings.jpg", alt: "Des plateaux de garnitures prêts pour les bols : œufs mollets, pousses de bambou, nori, maïs et ciboule" },

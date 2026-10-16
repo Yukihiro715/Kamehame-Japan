@@ -533,7 +533,7 @@ export const experiences: Experience[] = [
   },
   {
     // Ramen-making class near Shibuya, from the partner's OTA listing
-    // (2026-10-10). Sale price ¥25,000 per person set by the owner; the
+    // (2026-10-10). Sale price ¥26,500 per person set by the owner (2026-10-16, was ¥25,000); the
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
@@ -544,7 +544,7 @@ export const experiences: Experience[] = [
       "Ramen is Japan's everyday comfort food, and this is the quickest way to understand it: make it. In a small teaching kitchen near Shibuya you turn flour and water into noodles by hand, pass the dough through a noodle machine, and finish three small bowls so you can compare the three great broths in one sitting.",
       "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan versions can be arranged at no extra cost, and a halal-friendly broth with advance notice (a supplement is confirmed with your quote); tell us when you request your date.",
     ],
-    duration: "90 minutes", price: "¥25,000", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Tokyo (a few minutes from Shibuya)",
+    duration: "90 minutes", price: "¥26,500", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Tokyo (a few minutes from Shibuya)",
     img: "/images/ramen-noodle-machine.jpg", alt: "Two guests feeding a sheet of dough through a hand-cranked noodle machine, fresh noodles falling into the tray",
     gallery: [
       { img: "/images/ramen-dough.jpg", alt: "Gloved hands bringing flour and water together into a dough in a steel bowl" },
@@ -624,7 +624,7 @@ export const experiences: Experience[] = [
   },
   {
     // Ramen-making class in Dotonbori, Osaka: the same operator's second kitchen, from its OTA listing; the partner sheet's conditions were written for this venue
-    // (2026-10-10). Sale price ¥25,000 per person set by the owner; the
+    // (2026-10-10). Sale price ¥26,500 per person set by the owner (2026-10-16, was ¥25,000); the
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
@@ -635,7 +635,7 @@ export const experiences: Experience[] = [
       "Ramen is Japan's everyday comfort food, and this is the quickest way to understand it: make it. In a small teaching kitchen in Dotonbori, Osaka's loudest food street, you turn flour and water into noodles by hand, pass the dough through a noodle machine, and finish three small bowls so you can compare the three great broths in one sitting.",
       "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan versions can be arranged at no extra cost, and a halal-friendly broth with advance notice (a supplement is confirmed with your quote); tell us when you request your date.",
     ],
-    duration: "90 minutes", price: "¥25,000", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Osaka (Dotonbori)",
+    duration: "90 minutes", price: "¥26,500", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Osaka (Dotonbori)",
     img: "/images/ramen-osaka-boiling.jpg", alt: "Two guests lifting freshly boiled noodles from the baskets at the counter of the teaching kitchen",
     gallery: [
       { img: "/images/ramen-osaka-toppings.jpg", alt: "Trays of toppings laid out for the bowls: soft-boiled eggs, bamboo shoots, nori, sweetcorn and spring onion" },

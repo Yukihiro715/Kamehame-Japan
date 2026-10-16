@@ -163,7 +163,7 @@ export const experiencesEs: Experience[] = [
       "El ramen es la comida reconfortante de cada día en Japón, y la forma más rápida de entenderlo es hacerlo. En una pequeña cocina-escuela cerca de Shibuya conviertes harina y agua en fideos con tus manos, pasas la masa por la máquina de fideos y terminas tres cuencos pequeños para comparar los tres grandes caldos de una sentada.",
       "La clase es en inglés y dura unos 90 minutos. Todo está incluido — ingredientes, delantales, utensilios — y al final te comes lo que has hecho. Pueden organizarse versiones vegetariana y vegana sin coste adicional, y un caldo apto para halal con aviso previo (el suplemento se confirma con tu presupuesto); dínoslo al solicitar tu fecha.",
     ],
-    duration: "90 minutos", price: "¥25,000", group: "Clase reducida · 1–16 personas", ages: "Desde 6 años (los más pequeños pueden mirar con un adulto)", area: "Tokio (a pocos minutos de Shibuya)",
+    duration: "90 minutos", price: "¥26,500", group: "Clase reducida · 1–16 personas", ages: "Desde 6 años (los más pequeños pueden mirar con un adulto)", area: "Tokio (a pocos minutos de Shibuya)",
     img: "/images/ramen-noodle-machine.jpg", alt: "Dos participantes pasando una lámina de masa por una máquina de fideos manual, con los fideos frescos cayendo en la bandeja",
     gallery: [
       { img: "/images/ramen-dough.jpg", alt: "Manos con guantes uniendo harina y agua en una masa dentro de un bol de acero" },
@@ -242,7 +242,7 @@ export const experiencesEs: Experience[] = [
       "El ramen es la comida reconfortante de cada día en Japón, y la forma más rápida de entenderlo es hacerlo. En una pequeña cocina-escuela de Dotonbori, la calle gastronómica más bulliciosa de Osaka, conviertes harina y agua en fideos con tus manos, pasas la masa por la máquina de fideos y terminas tres cuencos pequeños para comparar los tres grandes caldos de una sentada.",
       "La clase es en inglés y dura unos 90 minutos. Todo está incluido — ingredientes, delantales, utensilios — y al final te comes lo que has hecho. Pueden organizarse versiones vegetariana y vegana sin coste adicional, y un caldo apto para halal con aviso previo (el suplemento se confirma con tu presupuesto); dínoslo al solicitar tu fecha.",
     ],
-    duration: "90 minutos", price: "¥25,000", group: "Clase reducida · 1–16 personas", ages: "Desde 6 años (los más pequeños pueden mirar con un adulto)", area: "Osaka (Dotonbori)",
+    duration: "90 minutos", price: "¥26,500", group: "Clase reducida · 1–16 personas", ages: "Desde 6 años (los más pequeños pueden mirar con un adulto)", area: "Osaka (Dotonbori)",
     img: "/images/ramen-osaka-boiling.jpg", alt: "Dos participantes levantando fideos recién hervidos de los cestillos en el mostrador de la cocina-escuela",
     gallery: [
       { img: "/images/ramen-osaka-toppings.jpg", alt: "Bandejas de toppings listas para los cuencos: huevos a baja temperatura, brotes de bambú, nori, maíz y cebolleta" },
