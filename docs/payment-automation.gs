@@ -93,8 +93,8 @@ function enqueue_(p) {
   var old=jobs_().filter(function(x){return x.job.requestId===p.requestId;})[0];
   if(old)return {ok:true,id:old.job.id,ackSent:!!old.job.ackId};
   var now=Date.now(), choice=decision_(p,master_(),now);
-  // UUID suffix avoids races with the legacy ledger's separate script lock.
-  var id='KJ-'+String(p.enquiry.dates).slice(2,10).replace(/-/g,'')+'-G'+p.requestId.slice(0,8);
+  // This route returns before the legacy notification/ledger writers run.
+  var id=allocateCaseId_(p,now);
   var j=Object.assign({},p,{id:id,createdAt:new Date(now).toISOString(),mode:choice.mode,reason:choice.reason,status:'received',dueAt:'',audit:{},attempts:{}});delete j.token;delete j.action;
   var row=sheet_(JOB_SHEET,JOB_HEADERS).getLastRow()+1;saveJob_(j,row);
   try {
@@ -205,22 +205,77 @@ function processGolfQueue() {
     props_().setProperty('LAST_QUEUE_RUN',new Date().toISOString());
   } finally {lock.releaseLock();}
 }
-function upsert_(sheetName,id,fields) {
-  var s=book_().getSheetByName(sheetName);if(!s)throw new Error(sheetName+'なし');
-  var h=s.getRange(1,1,1,s.getLastColumn()).getValues()[0], ids=s.getRange(2,1,Math.max(s.getLastRow()-1,1),1).getValues().map(function(r){return String(r[0]);});
-  var at=ids.indexOf(id), row=at<0?(ids.findIndex(function(v){return !v;})+2):at+2;if(row<2)row=s.getLastRow()+1;
-  if(row>s.getMaxRows())s.insertRowsAfter(s.getMaxRows(),1);
-  s.getRange(row,1).setValue(id);
-  Object.keys(fields).forEach(function(k){var c=h.indexOf(k);if(c>=0)s.getRange(row,c+1).setValue(literal_(fields[k]));});return row;
+var LEDGER_SHEETS=['予約一覧','手配・体験詳細','決済・連絡管理'];
+function ledgerSnapshot_(name) {
+  var s=book_().getSheetByName(name);if(!s)throw new Error(name+'なし');
+  var w=s.getLastColumn(), n=Math.max(s.getLastRow(),2), range=s.getRange(1,1,n,w);
+  var values=range.getValues(), formulas=range.getFormulas();
+  if(values[0][0]!=='予約・案件ID')throw new Error(name+'のID見出しが変更されています');
+  return {sheet:s,headers:values[0],values:values,formulas:formulas,width:w};
+}
+function ledgerDate_(value) {
+  if(value instanceof Date&&!isNaN(value.getTime()))return Utilities.formatDate(value,'Asia/Tokyo','yyyy-MM-dd');
+  return String(value||'').slice(0,10);
+}
+function allocateCaseId_(p,now) {
+  var snapshots=LEDGER_SHEETS.map(ledgerSnapshot_), ids=[], matches=[];
+  snapshots.forEach(function(t){t.values.slice(1).forEach(function(r){
+    if(r[0])ids.push(String(r[0]));
+    if(r[0]&&r.some(function(v){return typeof v==='string'&&v.indexOf('自動化ID: '+p.requestId)>=0;}))matches.push(String(r[0]));
+  });});
+  matches=matches.filter(function(id,i){return matches.indexOf(id)===i;});
+  if(matches.length>1)throw new Error('同じリクエストIDの案件が複数・要確認');
+  if(matches.length===1)return matches[0];
+  var date=String(p.ledger.experienceDate||''), valid=/^\d{4}-\d{2}-\d{2}$/.test(date)&&!isNaN(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date;
+  var t=snapshots[0], h=t.headers, e=p.enquiry;
+  var duplicate=t.values.slice(1).some(function(r){return r[0]&&String(r[h.indexOf('メール')]).trim().toLowerCase()===String(e.email).trim().toLowerCase()&&r[h.indexOf('体験カテゴリ')]==='プライベートゴルフ'&&Number(r[h.indexOf('人数')])===Number(e.party)&&ledgerDate_(r[h.indexOf('体験日')])===(valid?date:'');});
+  if(duplicate)throw new Error('同じ顧客・日付・人数の申込あり・重複を手動確認');
+  jobs_().forEach(function(x){ids.push(x.job.id);});
+  var prefix=valid?'KJ-'+date.slice(2).replace(/-/g,'')+'-':'KJ-INQ-'+Utilities.formatDate(new Date(now),'Asia/Tokyo','yyMMdd')+'-';
+  var max=0;ids.forEach(function(id){if(id.indexOf(prefix)!==0)return;var suffix=id.slice(prefix.length);if(/^\d+$/.test(suffix))max=Math.max(max,Number(suffix));});
+  return prefix+String(max+1).padStart(2,'0');
+}
+// Formula-only template rows are vacant; any manual input reserves the row.
+function ledgerSlot_(t,id,fields) {
+  Object.keys(fields).forEach(function(k){if(t.headers.indexOf(k)<0)throw new Error('台帳の見出しがありません: '+k);});
+  var matches=[];t.values.forEach(function(r,i){if(i&&String(r[0])===id)matches.push(i+1);});
+  if(matches.length>1)throw new Error('台帳の案件IDが重複しています');
+  if(matches.length)return matches[0];
+  for(var i=1;i<t.values.length;i++)if(t.values[i].every(function(v,c){return !!t.formulas[i][c]||v===''||v===null;}))return i+1;
+  return t.values.length+1;
+}
+// New/retried registration fills empty inputs only. Explicit state transitions
+// supply expected previous values; staff edits and formulas are never replaced.
+function upsert_(sheetName,id,fields,expected) {
+  var t=ledgerSnapshot_(sheetName), s=t.sheet, row=ledgerSlot_(t,id,fields);
+  if(row>s.getMaxRows()) {
+    var prev=s.getMaxRows();s.insertRowsAfter(prev,1);
+    var src=s.getRange(prev,1,1,t.width), dest=s.getRange(row,1,1,t.width);
+    src.copyTo(dest,SpreadsheetApp.CopyPasteType.PASTE_FORMAT,false);
+    src.copyTo(dest,SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION,false);
+    src.getFormulasR1C1()[0].forEach(function(f,c){if(f)s.getRange(row,c+1).setFormulaR1C1(f);});
+  }
+  // Re-read immediately before writing; don't use a stale row snapshot.
+  var range=s.getRange(row,1,1,t.width), current=range.getValues()[0], formulas=range.getFormulas()[0];
+  if(current[0]&&String(current[0])!==id)throw new Error('台帳行が変更されました');
+  if(!current[0]&&current.some(function(v,c){return !formulas[c]&&v!==''&&v!==null;}))throw new Error('空き行に手動入力があります');
+  if(!current[0])s.getRange(row,1).setValue(id);
+  Object.keys(fields).forEach(function(k){
+    var c=t.headers.indexOf(k), allow=expected&&expected[k];
+    if(formulas[c])return;
+    if(current[c]===''||current[c]===null||(allow&&allow.indexOf(current[c])>=0))s.getRange(row,c+1).setValue(literal_(fields[k]));
+  });
+  range.setWrap(true);s.setRowHeight(row,72);return row;
 }
 function writeLedger_(j) {
   var r=j.ledger,e=j.enquiry;
-  upsert_('予約一覧',j.id,{'お客様名／窓口':e.name,'体験カテゴリ':'プライベートゴルフ','対応ステータス':'仮予約受領','体験日':r.experienceDate?new Date(r.experienceDate+'T00:00:00+09:00'):'','人数':Number(e.party),'支払い状況':'入金未確認','次のアクション':j.mode==='payment'?'10分後に支払い案内予定':'要手動対応: '+j.reason,'担当':'ゆきひろ','受付日':new Date(r.receivedAt.replace(' ','T')+':00+09:00'),'受付経路':'Webフォーム','対応言語':e.lang==='en'?'英語':e.lang,'顧客の無料取消期限':r.freeCancelUntil?new Date(r.freeCancelUntil.replace(' ','T')+':00+09:00'):'','メール':e.email,'電話／WhatsApp':e.whatsapp||'','サイト概算（税込）':j.baseTotal||'','確認メモ':'自動化ID: '+j.requestId});
-  upsert_('手配・体験詳細',j.id,{'エリア':r.area||'','体験名／プラン内容':r.experienceTitle||'','集合・出発時刻':r.departure||'','集合・送迎場所':e.pickup||'','人数内訳':e.party+'名','参加者氏名・国籍':e.name,'希望・アレルギー等':e.message||'','レンタル・持参品':[e.rental,e.clubs].filter(Boolean).join('／'),'追加オプション':(e.addons||'')+'／キャディ: '+e.caddie,'手配状況':'未着手','手配メモ・未確認事項':j.reason});
-  upsert_('決済・連絡管理',j.id,{'運用区分':j.mode==='payment'?'通常':'直前・個別対応','リマインド運用':'一時停止','運用メモ':'メール自動化管理参照: '+j.requestId});
+  LEDGER_SHEETS.forEach(ledgerSnapshot_);
+  upsert_('予約一覧',j.id,{'お客様名／窓口':e.name,'体験カテゴリ':'プライベートゴルフ','対応ステータス':'仮予約受領','体験日':r.experienceDate?new Date(r.experienceDate+'T00:00:00+09:00'):'','人数':Number(e.party),'支払い状況':'未請求','次のアクション':j.mode==='payment'?'10分後に支払い案内予定':'要手動対応: '+j.reason,'担当':'ゆきひろ','受付日':new Date(r.receivedAt.replace(' ','T')+':00+09:00'),'受付経路':'Webフォーム','対応言語':e.lang==='en'?'英語':e.lang,'メール':e.email,'電話／WhatsApp':e.whatsapp||'','サイト概算（税込）':j.baseTotal||'','確認メモ':'自動化ID: '+j.requestId+'／受付日時JST: '+r.receivedAt+'／GAS直接登録。Gmail通知起点の再登録は不要。'});
+  upsert_('手配・体験詳細',j.id,{'エリア':r.area||'','体験名／プラン内容':r.experienceTitle||'','集合・出発時刻':r.departure||'','集合・送迎場所':e.pickup||'','人数内訳':e.party+'名','希望・アレルギー等':e.message||'','レンタル・持参品':[e.rental,e.clubs].filter(Boolean).join('／'),'追加オプション':(e.addons||'')+'／キャディ: '+e.caddie,'手配状況':'未着手','手配メモ・未確認事項':j.reason});
+  upsert_('決済・連絡管理',j.id,{'運用区分':!r.experienceDate||Date.parse(r.experienceDate+'T00:00:00+09:00')-Date.parse(j.createdAt)<=7*86400000?'直前・個別対応':'通常','リマインド運用':'手動','送迎手配状況':'未確認','ガイド手配状況':'未確認','運用メモ':'メール自動化管理参照: '+j.requestId});
 }
 function updatePaymentLedger_(j) {
-  upsert_('予約一覧',j.id,{'対応ステータス':'支払待ち','提示額（税込）':j.expectedAmount,'次のアクション':'入金確認後、コース・送迎・レンタル手配'});
+  upsert_('予約一覧',j.id,{'対応ステータス':'支払待ち','支払い状況':'入金未確認','提示額（税込）':j.expectedAmount},{'対応ステータス':['仮予約受領','決済案内準備'],'支払い状況':['未請求']});
   upsert_('手配・体験詳細',j.id,{'決済リンク':j.paymentUrl});
   upsert_('決済・連絡管理',j.id,{'決済案内送信日時':new Date(j.paymentSentAt),'運用メモ':'支払い案内メールID: '+j.paymentId});
 }
@@ -250,8 +305,8 @@ function event_(p) {
     else {j.paidSession=session.id;j.paidAt=j.paidAt||at;j.paidAmount=session.amount_total;j.stop='入金済み';
       j.paidSubtotal=session.amount_subtotal;j.paidDiscount=session.total_details.amount_discount;
       j.paidDiscountReference=discountReference_(session);
-      upsert_('予約一覧',j.id,{'対応ステータス':'入金済・手配待ち','支払い状況':'入金済','入金額':j.paidAmount,'支払日':new Date(j.paidAt),'次のアクション':'入金から24時間以内にコース・スタート時刻をご案内'});
-      upsert_('決済・連絡管理',j.id,{'入金確認日時':new Date(j.paidAt),'Stripe決済ID':session.id,'リマインド運用':'停止','停止・保留理由':'入金済み'});
+      upsert_('予約一覧',j.id,{'対応ステータス':'入金済・手配待ち','支払い状況':'入金済','入金額':j.paidAmount,'支払日':new Date(j.paidAt),'次のアクション':'入金から24時間以内にコース・スタート時刻をご案内'},{'対応ステータス':['仮予約受領','決済案内準備','支払待ち'],'支払い状況':['未請求','入金未確認','一部入金']});
+      upsert_('決済・連絡管理',j.id,{'入金確認日時':new Date(j.paidAt),'Stripe決済ID':session.id,'リマインド運用':'停止','停止・保留理由':'入金済み'},{'リマインド運用':['手動','自動送信','一時停止']});
       note='入金確認。24時間以内に手配結果を案内してください';
     }
   }
@@ -283,4 +338,14 @@ function installGolfQueue() {
   ['SPREADSHEET_ID','AUTOMATION_TOKEN','RESEND_API_KEY','TEAM_EMAIL','STAFF_EMAILS'].forEach(function(k){if(!props_().getProperty(k))throw new Error(k+'が未設定');});
   sheet_(JOB_SHEET,JOB_HEADERS);sheet_(LOG_SHEET,LOG_HEADERS);master_();GmailApp.getAliases();
   if(!ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='processGolfQueue';}))ScriptApp.newTrigger('processGolfQueue').timeBased().everyMinutes(1).create();
+}
+
+/** Read-only readiness report. Never prints tokens, keys or customer records. */
+function golfAutomationPreflight() {
+  var required=['SPREADSHEET_ID','AUTOMATION_TOKEN','RESEND_API_KEY','TEAM_EMAIL','STAFF_EMAILS'];
+  var missing=required.filter(function(k){return !props_().getProperty(k);});
+  var report={missingProperties:missing,liveSendEnabled:props_().getProperty('LIVE_SEND_ENABLED')==='true',approvedLinks:master_().filter(function(r){return r['自動送信可']==='可';}).length,minuteTrigger:ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='processGolfQueue';}),gmailReadable:false};
+  LEDGER_SHEETS.forEach(ledgerSnapshot_);sheet_(JOB_SHEET,JOB_HEADERS);sheet_(LOG_SHEET,LOG_HEADERS);
+  try { GmailApp.getAliases();GmailApp.search('in:sent newer_than:1d',0,1);report.gmailReadable=true; } catch(err) {report.gmailReadable=false;}
+  console.log(JSON.stringify(report));return report;
 }
