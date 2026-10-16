@@ -8,7 +8,11 @@
  *   MAIL_STATUS_URL      https://kamehame-japan.com/api/mail/status
  *   MANUAL_SEND_ENABLED  'true' to send approved mails (independent of LIVE_SEND_ENABLED)
  *   MAIL_THREAD_LOOKUP   'true' to look up the original Message-ID in Gmail for replies/reminders
- *   ARCHIVE_BCC          optional address that receives a copy of every sent mail (for Gmail history)
+ *   ARCHIVE_COPY_TO      optional address (e.g. the hello@ group) that receives an UNTRACKED copy of every
+ *                        sent mail from the script's Gmail, for history. Staff opening it leaves the
+ *                        customer's open/click columns untouched.
+ *   ARCHIVE_BCC          optional Resend BCC. Not recommended: the copy shares the customer's tracking,
+ *                        so a staff member opening it is recorded as the customer's open/click.
  *
  * Triggers (installMailQueue): processMailQueue every minute, reconcileMailQueue hourly,
  * onQueueEdit on edit. Nothing in this file enqueues acknowledgements, follow-ups or
@@ -169,7 +173,7 @@ function deliver_(x) {
   if (code >= 200 && code < 300 && body.ok && body.id) {
     r[QC.status] = QS.sent; r[QC.sentAt] = new Date(); r[QC.resendId] = body.id; r[QC.messageId] = body.messageId || '';
     r[QC.opened] = String(r[QC.html] || '').trim() ? OPEN_NONE : OPEN_NA; r[QC.error] = '';
-    d.sentVia = 'worker'; setData_(r, d); qsave_(x.row, r); linkLedger_(r); return;
+    d.sentVia = 'worker'; d.copy = archiveCopy_(r); setData_(r, d); qsave_(x.row, r); linkLedger_(r); return;
   }
   if (code === 400) { r[QC.status] = QS.error; r[QC.error] = '送信先が内容を拒否: ' + (body.error || code); }
   else if (code === 401 || code === 503) { r[QC.status] = QS.error; r[QC.error] = 'Worker設定エラー（' + code + '）: トークン／RESEND_API_KEY／MAIL_QUEUE_TOKENを確認'; }
@@ -177,6 +181,16 @@ function deliver_(x) {
   qsave_(x.row, r);
 }
 /** Latest message in the customer's thread for this case (the Gmail account running this script). */
+/** Untracked copy of a sent mail to ARCHIVE_COPY_TO (a group address works): sent by GmailApp,
+ *  so it carries no Resend pixel or redirect links and cannot pollute the customer's open/click. */
+function archiveCopy_(r) {
+  var to = String(props_().getProperty('ARCHIVE_COPY_TO') || '').trim();
+  if (!to) return ''; if (!EMAIL_RE.test(to) || to.toLowerCase() === String(r[QC.to]).trim().toLowerCase()) return 'copy_skipped';
+  var subject = '[控え ' + String(r[QC.caseId]).trim() + ' ' + r[QC.id] + '] ' + String(r[QC.subject]).trim();
+  var head = ['送信控え（計測なし。お客様への送信は Resend 経由）', '宛先: ' + String(r[QC.to]).trim(), '件名: ' + String(r[QC.subject]).trim(), '種別: ' + String(r[QC.kind] || '').trim(), 'ResendメールID: ' + r[QC.resendId], 'Message-ID: ' + (r[QC.messageId] || '（未取得）'), '返信元: ' + (String(r[QC.inReplyTo] || '').trim() || 'なし'), '', '-----', ''].join('\n');
+  try { GmailApp.sendEmail(to, subject, head + String(r[QC.text]), { name: 'KAMEHAME JAPAN 送信控え', noReply: true }); return 'copy_sent'; }
+  catch (err) { console.error('archive copy: ' + String(err)); return 'copy_failed: ' + String(err).slice(0, 200); }
+}
 function gmailMessageId_(caseId, to) {
   var threads = GmailApp.search('{from:' + to + ' to:' + to + '}', 0, 20), best = null;
   threads.forEach(function (t) { t.getMessages().forEach(function (m) {

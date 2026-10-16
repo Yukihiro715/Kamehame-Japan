@@ -188,6 +188,27 @@ test("GAS: an approved row is sent exactly once with the bound idempotency key; 
   assert.equal(rt.fetches.length, 1, "no second send");
 });
 
+test("GAS: after a successful send an untracked copy goes to ARCHIVE_COPY_TO through Gmail, never through Resend", () => {
+  const rt = gasRuntime({ rows: [draft()], props: { ...live, ARCHIVE_COPY_TO: "hello@kamehame-japan.com" }, caseRow: ledgerCase });
+  rt.state[0][rt.Q.approved] = true; approve(rt);
+  rt.c.processMailQueue();
+  assert.equal(rt.fetches.length, 1); assert.equal(rt.fetches[0].body.bcc, undefined, "the copy is not a Resend BCC");
+  assert.equal(rt.team.length, 1);
+  assert.equal(rt.team[0].to, "hello@kamehame-japan.com");
+  assert.equal(rt.team[0].subject, "[控え KJ-261019-01 KJ-261019-01-M01] [KJ-261019-01] Your tee time");
+  assert.match(rt.team[0].body, /宛先: guest@example.com[\s\S]*ResendメールID: re-id-1[\s\S]*Hello Ricardo$/);
+  assert.equal(rt.state[0][rt.Q.status], "送信済み");
+  assert.equal(JSON.parse(rt.state[0][rt.Q.data]).copy, "copy_sent");
+  const quiet = gasRuntime({ rows: [draft()], props: live, caseRow: ledgerCase });
+  quiet.state[0][quiet.Q.approved] = true; approve(quiet); quiet.c.processMailQueue();
+  assert.equal(quiet.team.length, 0, "no copy without ARCHIVE_COPY_TO");
+  const failing = gasRuntime({ rows: [draft()], props: { ...live, ARCHIVE_COPY_TO: "hello@kamehame-japan.com" }, caseRow: ledgerCase });
+  failing.c.GmailApp.sendEmail = () => { throw new Error("quota"); };
+  failing.state[0][failing.Q.approved] = true; approve(failing); failing.c.processMailQueue();
+  assert.equal(failing.state[0][failing.Q.status], "送信済み", "a failed copy never changes the send result");
+  assert.match(JSON.parse(failing.state[0][failing.Q.data]).copy, /^copy_failed/);
+});
+
 test("GAS: sending is held when the switch is off, the hash no longer matches, the case is unknown or the recipient differs from the ledger", () => {
   const off = gasRuntime({ rows: [draft()], props: { ...live, MANUAL_SEND_ENABLED: "false" }, caseRow: ledgerCase });
   off.state[0][off.Q.approved] = true; approve(off); off.c.processMailQueue();

@@ -73,7 +73,8 @@ Apps Script reconcileMailQueue (1時間毎) ──GET /api/mail/status──▶ 
    - スクリプトのプロパティ: `SPREADSHEET_ID`、`AUTOMATION_TOKEN`（ゴルフ用。未使用でも可）、`TEAM_EMAIL`、
      `MAIL_QUEUE_TOKEN`（24文字以上のランダム値）、`MAIL_SEND_URL=https://kamehame-japan.com/api/mail/send`、
      `MAIL_STATUS_URL=https://kamehame-japan.com/api/mail/status`、`MANUAL_SEND_ENABLED=false`（最初は false）、
-     `MAIL_THREAD_LOOKUP=true`（返信の Gmail 照合を使う場合）、`ARCHIVE_BCC`（任意: 送信控えを受け取る自社アドレス）。
+     `MAIL_THREAD_LOOKUP=true`（返信の Gmail 照合を使う場合）、`ARCHIVE_COPY_TO=hello@kamehame-japan.com`（任意: 送信控えの宛先。グループ可）。
+     `ARCHIVE_BCC` は設定しないでください（控えを開いたスタッフの操作がお客様の開封・クリックとして記録されます）。
      `LIVE_SEND_ENABLED` はゴルフ自動化のスイッチで、このキューには影響しません。
    - 「ウェブアプリ」としてデプロイ（自分として実行、全員がアクセス可）。`/exec` URL を控える。
    - `installMailQueue()` を実行して権限を許可し、トリガー3つ（processMailQueue 毎分、reconcileMailQueue 毎時、onQueueEdit 編集時）を作成。
@@ -114,8 +115,11 @@ ChatGPT 用プロンプト（例）:
 
 ## Gmail での履歴確認
 
-- Resend 経由の送信は Gmail の「送信済み」には残りません。`ARCHIVE_BCC` に自社アドレス（例 hello@ が届く受信箱）を
-  設定すると控えが届き、`In-Reply-To` が付いた返信はお客様とのスレッドにまとまります。
+- Resend 経由の送信は Gmail の「送信済み」には残りません。`ARCHIVE_COPY_TO` にグループ（hello@）を設定すると、送信成功の直後に
+  スクリプト実行アカウントの Gmail から件名 `[控え 案件ID メールID] 元の件名` の控えがメンバー全員へ届きます。
+  控えは Resend を通らないため、開いてもリンクを押しても計測に影響しません。控えの送信に失敗しても送信済み判定は変わらず、内部データに記録されます。
+- hello@ が Google グループの場合、Apps Script は人のアカウント（グループのメンバー）で動かします。差出人 hello@ は Resend のドメイン認証で成立し、
+  Google アカウントは不要です。お客様の返信はグループ経由で実行アカウントの受信箱に届くので、配信設定を「毎回メール」にしておくと Gmail 照合が使えます。
 - 件名の `[案件ID]` と、台帳の ResendメールID／Message-ID で突き合わせます。Resend の管理画面（Emails）でも本文・配信状況を確認できます。
 - 返信関係（スレッド化）は、受信側メールアプリが `In-Reply-To`/`References` を見て決めます。Resend の API 仕様上
   カスタムヘッダーは送れますが、**本番での実機確認は未実施**です。テスト送信で、Gmail・Apple Mail・Outlook でスレッド化されるか確認してください。
