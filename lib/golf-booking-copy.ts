@@ -13,6 +13,7 @@ export const GOLF_BOOKING_COPY = {
     area: "Tokyo area or Mt. Fuji region; hotel transfers from Tokyo, Saitama or Chiba. Other pick-up locations are reviewed individually.",
     pickup: "Hotel / pick-up location", region: "Pick-up prefecture", regions: ["Select…", "Tokyo", "Saitama", "Chiba", "Other / not decided"],
     caddie: "Course caddie", caddies: ["No caddie (standard package)", "Caddie requested (additional charge)", "Please advise"],
+    clubs: "Rental clubs (¥5,000 per golfer) are included in every package. Golfers who bring their own clubs pay ¥5,000 less each; choose it in the form and the total updates.",
     caddieNote: "If requested, we will include the caddie arrangement and total price in your payment proposal.",
     paidH: "Payment received", paid: "Thank you. We have received your payment and our team will take care of the arrangements. We will email your booking confirmation once the arrangements are secured.",
   },
@@ -26,6 +27,7 @@ export const GOLF_BOOKING_COPY = {
     area: "東京近郊または富士山エリア。東京・埼玉・千葉のホテル送迎に対応し、その他の場所は個別にご相談を承ります。",
     pickup: "ホテル名・お迎え場所", region: "お迎え場所の都県", regions: ["選択してください", "東京都", "埼玉県", "千葉県", "その他・未定"],
     caddie: "コースキャディ", caddies: ["なし（標準プラン）", "ありを希望（追加料金）", "相談したい"],
+    clubs: "レンタルクラブ(1名¥5,000)は全パッケージに含まれています。クラブをご持参の方は1名につき¥5,000引きです。フォームで選ぶと合計に反映されます。",
     caddieNote: "ご希望の場合は、キャディの手配内容と総額をお支払いのご案内に記載します。",
     paidH: "お支払いを受け付けました", paid: "お支払いありがとうございます。当社が手配を進め、手配完了後に予約確定のご案内をメールでお送りします。",
   },
@@ -39,6 +41,7 @@ export const GOLF_BOOKING_COPY = {
     area: "Zona de Tokio o Monte Fuji; traslados desde hoteles de Tokio, Saitama o Chiba. Otros puntos se consultan individualmente.",
     pickup: "Hotel / lugar de recogida", region: "Prefectura de recogida", regions: ["Seleccione…", "Tokio", "Saitama", "Chiba", "Otra / por decidir"],
     caddie: "Caddie del campo", caddies: ["Sin caddie (paquete estándar)", "Con caddie (suplemento)", "Quisiera asesoramiento"],
+    clubs: "Los palos de alquiler (¥5,000 por golfista) están incluidos en todos los paquetes. Quien traiga sus propios palos paga ¥5,000 menos; elígelo en el formulario y el total se actualiza.",
     caddieNote: "Si lo solicita, incluiremos el caddie y el precio total en la propuesta de pago.",
     paidH: "Pago recibido", paid: "Gracias. Hemos recibido su pago y nos encargaremos de los preparativos. Enviaremos la confirmación por correo una vez aseguradas las reservas.",
   },
@@ -52,6 +55,7 @@ export const GOLF_BOOKING_COPY = {
     area: "Région de Tokyo ou du mont Fuji ; transferts depuis les hôtels de Tokyo, Saitama ou Chiba. Autres lieux étudiés individuellement.",
     pickup: "Hôtel / lieu de prise en charge", region: "Préfecture de prise en charge", regions: ["Sélectionnez…", "Tokyo", "Saitama", "Chiba", "Autre / à décider"],
     caddie: "Caddie du parcours", caddies: ["Sans caddie (forfait standard)", "Avec caddie (supplément)", "Je souhaite un conseil"],
+    clubs: "Les clubs de location (¥5,000 par golfeur) sont compris dans chaque forfait. Les golfeurs qui apportent leurs clubs paient ¥5,000 de moins chacun ; choisissez-le dans le formulaire et le total se met à jour.",
     caddieNote: "Sur demande, nous préciserons le caddie et le prix total dans la proposition de paiement.",
     paidH: "Paiement reçu", paid: "Merci. Nous avons reçu votre paiement et prenons en charge les préparatifs. Nous enverrons la confirmation par e-mail une fois les réservations assurées.",
   },
@@ -65,10 +69,11 @@ export const GOLF_BOOKING_COPY = {
     area: "東京近郊或富士山地區；提供東京、埼玉、千葉飯店接送。其他地點另行確認。",
     pickup: "飯店名稱／接送地點", region: "接送都縣", regions: ["請選擇", "東京都", "埼玉縣", "千葉縣", "其他／未定"],
     caddie: "球場球僮", caddies: ["不需要（標準方案）", "需要（追加費用）", "希望諮詢"],
+    clubs: "租借球桿（每位 ¥5,000）已含在所有方案中。自備球桿者每位減 ¥5,000；在表單中選擇即可，總價會隨之更新。",
     caddieNote: "如有需求，我們將於付款方案中列明球僮安排及總價。",
     paidH: "已收到付款", paid: "感謝您的付款。我們將進行安排，並在完成手配後以電子郵件寄送預約確認。",
   },
-} satisfies Record<Lang, { received: string; proposal: string; arrange: string; protection: string; steps: string[]; photo: string; area: string; pickup: string; region: string; regions: string[]; caddie: string; caddies: string[]; caddieNote: string; paidH: string; paid: string }>;
+} satisfies Record<Lang, { received: string; proposal: string; arrange: string; protection: string; steps: string[]; photo: string; area: string; pickup: string; region: string; regions: string[]; caddie: string; caddies: string[]; clubs: string; caddieNote: string; paidH: string; paid: string }>;
 
 export function applyGolfBookingCopy(e: Experience, lang: Lang): Experience {
   if (e.slug !== "mt-fuji-golf-day" || !e.variantCopy) return e;
@@ -86,7 +91,7 @@ export function applyGolfBookingCopy(e: Experience, lang: Lang): Experience {
     faq: e.faq?.map((f, i) => ({ ...f, a: ({ 0: `${c.arrange} ${c.protection}`, 4: weekend, 5: `${c.proposal} ${c.arrange}`, 8: c.area, 11: dress } as Record<number, string>)[i] ?? f.a })),
     variantCopy: { ...v, photoNote: c.photo,
       options: { ...v.options, note: `${c.proposal} ${c.arrange}` },
-      prices: { ...v.prices, notes: [c.proposal, c.arrange, c.protection] },
+      prices: { ...v.prices, notes: [c.clubs, c.proposal, c.arrange, c.protection] },
       form: { ...v.form, pickup: c.pickup, note: c.proposal, sentNote: `${c.received} ${c.arrange} ${c.protection}` },
     },
   };

@@ -143,6 +143,10 @@ export interface VariantPageCopy {
     /** "Rental clubs & shoes" — the heading of the per-golfer rows. */
     rentalH: string;
     rental: string; rentalOpts: { required: string; own: string; unsure: string };
+    /** Under the rental heading: clubs are ¥5,000 per golfer and included; own clubs deduct that much. */
+    rentalNote: string;
+    /** "Own clubs × {n}: −{amount}" and the label of the deducted total, in the form summary. */
+    ownClubsLine: string; ownClubsTotal: string;
     /** Shoe size per golfer: a size in cm, own shoes, or "later". */
     shoes: string; shoeOpts: { own: string; unsure: string }; /** "{n} cm" */ shoeSize: string;
     handed: string; handedOpts: { right: string; left: string; unsure: string };
@@ -537,7 +541,7 @@ export const experiences: Experience[] = [
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
-    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "preview",
+    slug: "shibuya-ramen-class", city: "tokyo", category: "ramen", bookingType: "request", status: "live",
     title: "Ramen Making Class near Shibuya, Tokyo",
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen a few minutes from Shibuya.",
     overview: [
@@ -628,7 +632,7 @@ export const experiences: Experience[] = [
     // partner's name, address, cost, session times, party limits and
     // cancellation terms are still to be confirmed, so the page stays in
     // "preview" until they are. Photos are the partner's own, via its listing.
-    slug: "dotonbori-ramen-class", city: "osaka", category: "ramen", bookingType: "request", status: "preview",
+    slug: "dotonbori-ramen-class", city: "osaka", category: "ramen", bookingType: "request", status: "live",
     title: "Ramen Making Class in Dotonbori, Osaka",
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen in the middle of Dotonbori.",
     overview: [
@@ -1728,7 +1732,7 @@ export const experiences: Experience[] = [
       { q: "Which departure time should we choose?", a: "An earlier departure means an earlier tee time and more of the afternoon free; a later departure means a later tee off and a later return. If you have no preference, choose “No preference” and we propose a tee time to match the course." },
       { q: "Can we play as a group of two?", a: "Yes — two golfers is the standard package. We prioritise courses that accept two golfers; any pairing requirements are explained before you confirm." },
       { q: "Is there a dress code?", a: "Most Japanese clubs ask for smart clothing on arrival — a jacket is still customary at many — and a collared shirt on the course. We tell you the confirmed course's rules with your proposal, and your assistant explains the rest on the day." },
-      { q: "Are clubs and shoes included? What about gloves?", a: "Yes. A standard set of rental clubs and rental golf shoes are included: tell us each golfer's handedness and any preferences in the form, and each golfer's shoe size in the same step. Golf wear and gloves are not provided, so bring your own." },
+      { q: "Are clubs and shoes included? What about gloves?", a: "Yes. A standard set of rental clubs and rental golf shoes are included: tell us each golfer's handedness and any preferences in the form, and each golfer's shoe size in the same step. Rental clubs are ¥5,000 per golfer and already in the price; a golfer who brings their own clubs pays ¥5,000 less. Golf wear and gloves are not provided, so bring your own." },
       { q: "Is a golf cart included? What about the clubhouse facilities?", a: "Yes. The cart fee is included, as are the locker room and bath at the clubhouse. Cart type and whether carts may drive on the fairway vary by course; we confirm the details of your course with your proposal." },
       { q: "Who can join?", a: "Golfers aged 18 and over, two to four per booking, all at the published package prices." },
       { q: "What if it rains?", a: "If the course closes for weather, the course decides on the day; you are refunded everything except costs already incurred, such as the car if it has already set out." },
@@ -1745,7 +1749,7 @@ export const experiences: Experience[] = [
         includedLabel: "Included", notIncludedLabel: "Not included",
         items: [
           { id: "round", label: "18-Hole Golf Round", note: "Green fees at our recommended course" },
-          { id: "clubs", label: "Golf Club Rental", note: "Standard set, right- or left-handed" },
+          { id: "clubs", label: "Golf Club Rental", note: "Standard set, right- or left-handed · ¥5,000 per golfer, included · −¥5,000 per golfer if you bring your own" },
           { id: "shoes", label: "Golf Shoe Rental", note: "Tell us your sizes" },
           { id: "transfer", label: "Premium Private Transfer", note: "Round trip, your hotel to the course and back" },
           { id: "driver", label: "Private Driver", note: "With you for the whole day" },
@@ -1757,7 +1761,7 @@ export const experiences: Experience[] = [
           { id: "taxes", label: "Taxes & Service Fees", note: "No surprises at the clubhouse" },
           { id: "wear", label: "Golf Wear Rental", note: "Bring your own wear and gloves" },
         ],
-        footnote: "Please bring your own golf wear and gloves. Golf shoes and clubs are provided.",
+        footnote: "Please bring your own golf wear and gloves. Golf shoes and clubs are provided. Bringing your own clubs? We deduct ¥5,000 per golfer from the price.",
         courseNote: "Cart type, cart rules and clubhouse facilities vary by course; the details of your confirmed course come with your proposal.",
         alsoNot: "Not included: food and drinks beyond lunch, personal purchases, and a playing guide or course caddie (available on request).",
       },
@@ -1806,6 +1810,7 @@ export const experiences: Experience[] = [
         approxNote: "Per-person amounts are for reference and rounded for three golfers; the group total is the package price.",
         notes: [
           "Standard starting prices apply on regular weekdays and weekends. If no suitable course is available at that rate, we propose alternatives and confirm any revised price before payment.",
+          "Rental clubs (¥5,000 per golfer) are included in every package. Golfers who bring their own clubs pay ¥5,000 less each; tell us in the form and the total updates.",
           "A specific course requested by you is quoted individually.",
           "Nothing is paid when you request availability. You pay only after accepting the proposed course, tee time and final price.",
         ],
@@ -1824,7 +1829,9 @@ export const experiences: Experience[] = [
         experienceOpts: { casual: "Casual", regular: "Regular", experienced: "Experienced", unsure: "Not sure" },
         handicap: "Handicap (optional)", handicapHint: "e.g. 12 and 20, or none",
         rentalH: "Rental clubs & shoes",
-        rental: "Rental clubs", rentalOpts: { required: "Required", own: "Bringing own", unsure: "Not sure" },
+        rental: "Rental clubs", rentalOpts: { required: "Required", own: "Bringing own (−¥5,000)", unsure: "Not sure" },
+        rentalNote: "Rental clubs are ¥5,000 per golfer and included in the price. Bring your own and we deduct ¥5,000 per golfer.",
+        ownClubsLine: "Own clubs × {n}: −{amount}", ownClubsTotal: "Total with your own clubs",
         shoes: "Shoe size", shoeOpts: { own: "Own shoes", unsure: "Size later" }, shoeSize: "{n} cm",
         handed: "Handedness", handedOpts: { right: "Right-handed", left: "Left-handed", unsure: "Not sure" },
         golferN: "Golfer {n}",

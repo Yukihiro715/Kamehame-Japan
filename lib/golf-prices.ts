@@ -40,5 +40,18 @@ export function golfPackagePrice(area: GolfArea, golfers: GolfGolfers, mode: Gol
   return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };
 }
 
+/** Rental clubs are priced into every package at this amount per golfer; a golfer who
+ *  brings their own clubs pays this much less (owner's rule, 2026-10-16). The same figure
+ *  is applied by the payment-link master in the ledger, so the two must move together. */
+export const GOLF_OWN_CLUBS_DISCOUNT_JPY = 5000;
+
+/** How many golfers bring their own clubs, from the form's `rental_keys` ("own,required:right,…"). */
+export const ownClubsCount = (rentalKeys: string | undefined, golfers: number) =>
+  Math.min(golfers, (rentalKeys ?? "").split(",").filter((k) => k.trim() === "own").length);
+
+/** The package price less the own-clubs deduction; never below zero. */
+export const golfTotalWithOwnClubs = (groupTotal: number, ownClubs: number) =>
+  Math.max(0, groupTotal - GOLF_OWN_CLUBS_DISCOUNT_JPY * Math.max(0, ownClubs));
+
 /** The area's table in the catalog's tier shape. */
 export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_PRICES_JPY[area][party] }));

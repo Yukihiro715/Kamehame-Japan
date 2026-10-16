@@ -525,7 +525,7 @@ See you tomorrow.
 
 ---
 
-## H. ラーメン作り教室(東京・渋谷 / 大阪・道頓堀)— 2026-10-14 非公開(確認中、status "preview")
+## H. ラーメン作り教室(東京・渋谷 / 大阪・道頓堀)— 2026-10-16 公開(status "live"、売値 ¥26,500)
 
 提携先:クレッシェンド株式会社(Cresc. Inc.、Viyago Japan)。連絡先 trade@viyago.jp / 080-2565-9506。店名・住所はサイトに出さない(オーナー指示)。2ページ構成:東京(`/tokyo/shibuya-ramen-class/`、Ramen Dojo Tokyo、1F 2-16-29 Ohashi, Meguro-ku)と大阪(`/osaka/dotonbori-ramen-class/`、Ramen Dojo Osaka、大阪市中央区宗右衛門町7-9 地下1階)。条件確認シートは大阪店名義で記入されたもので、オーナー判断(2026-10-10)で東京にも同条件を適用。2026-10-14 に条件確認シートと突き合わせて再点検し、下記の取消規定(貸切・20名以上)と遅刻の待機時間をページに反映。掲載前の確認事項はオーナーの「掲載前確認チェックリスト」(スプレッドシート)に集約。確認用URL: `/en/tokyo/shibuya-ramen-class/`、`/en/osaka/dotonbori-ramen-class/`(各言語同様)。大阪店は車椅子・ベビーカー不可(東京店は可)。大阪店の写真はOTA掲載分のうち店名ロゴが写っていない3点(＋東京店の工程写真2点)を使用。
 

@@ -14,6 +14,7 @@ import { EmailInput } from "@/components/site/email-input";
 import { isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
+import { GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs } from "@/lib/golf-prices";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 type Rental = "required" | "own" | "unsure";
@@ -67,6 +68,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const shoeOf = (i: number): string => shoes[i] ?? "";
   const shoeText = (i: number) => { const k = shoeOf(i); return k === "own" ? G.shoeOpts.own : !k || k === "unsure" ? G.shoeOpts.unsure : G.shoeSize.replace("{n}", k); };
   const anyRental = golfers.some((i) => rentalOf(i) !== "own");
+  // Own clubs: ¥5,000 less per golfer, shown as soon as a golfer picks it (the server recomputes the same figure).
+  const ownCount = golfers.filter((i) => rentalOf(i) === "own").length;
+  const clubDiscount = total !== null && ownCount > 0 ? GOLF_OWN_CLUBS_DISCOUNT_JPY * ownCount : 0;
+  const totalWithClubs = total !== null ? golfTotalWithOwnClubs(total, ownCount) : null;
+  const ownClubsLine = G.ownClubsLine.replace("{n}", String(ownCount)).replace("{amount}", yen(clubDiscount));
   const blocked = (a: AddOn) => !!a.maxParty && n > a.maxParty;
   const chosenAddOns = addOns.filter((a) => b.addOns.includes(a.id) && !blocked(a));
   const addOnPrice = (a: AddOn) => (a.price ? yen(a.perGuest ? a.price * n : a.price) : T.detail.priceOnRequest);
@@ -104,6 +110,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       // The same choices as keys, for the team's Japanese notification.
       level_key: level, handicap: data.handicap,
       rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
+      own_clubs: String(ownCount),
       shoe_keys: golfers.map((i) => shoeOf(i) || "unsure").join(","),
       addons: chosenAddOns.map(addOnLine).join(", "),
     };
@@ -175,6 +182,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         {p.custom
           ? <span className="go-summary-price"><strong>{p.headline}</strong><small>{p.line}</small></span>
           : <span className="go-summary-price"><strong><Fx brief>{p.perPersonRef}</Fx></strong><small><Fx>{p.totalShort}</Fx></small></span>}
+        {clubDiscount > 0 && totalWithClubs !== null && <span className="go-summary-discount"><Fx>{ownClubsLine}</Fx> → <b><Fx brief>{yen(totalWithClubs)}</Fx></b> <small>{G.ownClubsTotal}</small></span>}
       </div>
 
       <fieldset className="form-step">
@@ -258,6 +266,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         </div>
         <div className="go-rental" role="group" aria-label={G.rental}>
           <span className="go-rental-h">{G.rentalH}</span>
+          <small className="form-hint go-rental-note">{G.rentalNote}</small>
           {golfers.map((i) => (
             <div className="go-rental-row" key={i}>
               <b>{countOf(G.golferN, i)}</b>
@@ -337,6 +346,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <div><dt>{F.preferredDate}</dt><dd>{b.date ? `${fmtDate(b.date, lang)} · ${timeLabel}` : "—"}</dd></div>
           <div><dt>{G.steps.course}</dt><dd>{specific ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
           <div className="go-confirm-price"><dt>{G.package}</dt><dd><b><Fx brief>{p.custom ? p.headline : p.totalShort}</Fx></b>{!p.custom && <small><Fx>{p.perPersonRef}</Fx> · {G.perPersonRef}</small>}</dd></div>
+          {clubDiscount > 0 && totalWithClubs !== null && <div className="go-confirm-discount"><dt>{G.ownClubsTotal}</dt><dd><b><Fx brief>{yen(totalWithClubs)}</Fx></b><small><Fx>{ownClubsLine}</Fx></small></dd></div>}
           {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd><Fx>{addOnLine(a)}</Fx></dd></div>)}
         </dl>
         <small>{G.confirmNote}</small>

@@ -3,7 +3,7 @@ import { acknowledgement, followUp, threadSubject } from "@/lib/mail-copy";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
-import { GOLF_PRICE_VERSION, golfPackagePrice, isGolfArea, isGolfGolfers, type GolfCourseMode } from "@/lib/golf-prices";
+import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
 import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
@@ -166,10 +166,13 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     const mode: GolfCourseMode = body.course_mode;
     if (!isGolfArea(areaId) || !isGolfGolfers(golfers)) return null;
     const price = golfPackagePrice(areaId, golfers, mode);
+    // Golfers bringing their own clubs pay ¥5,000 less each; the keys are validated below, the count is read here.
+    const own = /^(required|own|unsure)(:(right|left|unsure))?(,(required|own|unsure)(:(right|left|unsure))?){0,3}$/.test(String(body.rental_keys ?? "")) ? ownClubsCount(String(body.rental_keys), golfers) : 0;
+    const estimateTotal = price ? golfTotalWithOwnClubs(price.groupTotal, own) : null;
     golf = {
       areaId, courseMode: mode,
-      estimate: price ? yen(price.groupTotal) : undefined,
-      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION),
+      estimate: estimateTotal !== null ? yen(estimateTotal) : undefined,
+      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (price && own > 0 ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : ""),
     };
   }
   return {

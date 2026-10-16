@@ -91,6 +91,11 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
     assert.match(html, new RegExp(`gi-card"[\\s\\S]{0,900}${item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), `${item} is an included card`);
   }
   assert.ok(text.includes("What's Included in Your Golf Day") && text.includes("Please bring your own golf wear and gloves. Golf shoes and clubs are provided."), "grid heading and wear note");
+  // own clubs: ¥5,000 per golfer is priced in and deducted when a golfer brings their own (owner's rule, 2026-10-16)
+  assert.ok(text.includes("¥5,000 per golfer, included") && text.includes("−¥5,000 per golfer if you bring your own"), "club rental price and deduction on the grid card");
+  assert.ok(text.includes("Bringing your own clubs? We deduct ¥5,000 per golfer from the price."), "deduction in the grid footnote");
+  assert.ok(text.includes("Rental clubs (¥5,000 per golfer) are included in every package."), "deduction in the price notes");
+  assert.ok(text.includes("Bringing own (−¥5,000)") && text.includes("Rental clubs are ¥5,000 per golfer and included in the price."), "deduction in the form");
   assert.equal(html.split('id="included"').length - 1, 1, "one included section");
   assert.ok(!html.includes('class="check-list'), "no text inclusion list beside the grid");
   // the old shoe wording is gone everywhere on the page
@@ -187,7 +192,7 @@ test("golf request: the server validates the choice against the price master", a
 
 const PREVIEW_BANNER = "Preview — this page is not published yet";
 
-test("ramen classes: Tokyo and Osaka in preview, priced per person, unlisted, never naming the venue", async () => {
+test("ramen classes: Tokyo and Osaka published, priced per person, listed, never naming the venue", async () => {
   const pages = [
     ["/en/tokyo/shibuya-ramen-class/", "Ramen Making Class near Shibuya, Tokyo", "/en/tokyo/"],
     ["/en/osaka/dotonbori-ramen-class/", "Ramen Making Class in Dotonbori, Osaka", "/en/osaka/"],
@@ -199,7 +204,7 @@ test("ramen classes: Tokyo and Osaka in preview, priced per person, unlisted, ne
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     assert.ok(text.includes("¥26,500"), "sale price");
-    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
+    assert.ok(!text.includes(PREVIEW_BANNER), `no preview banner on ${path} (published 2026-10-16)`);
     assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro|Soemoncho|宗右衛門/i, "the venue's name and address stay private");
     assert.ok(text.includes("11:00") && text.includes("18:30"), "session times from the partner sheet");
     assert.ok(text.includes("Up to 30 days before the date"), "30-day free cancellation from the partner sheet");
@@ -207,13 +212,16 @@ test("ramen classes: Tokyo and Osaka in preview, priced per person, unlisted, ne
     assert.ok(text.includes("5 to 10 minutes"), "late tolerance from the partner sheet");
     assert.ok(!html.includes("ramen-three-bowls"), "no branded bowls");
     const listing = await render(city);
-    if (listing.status === 200) assert.ok(!(await listing.text()).includes(path), `not listed on ${city}`);
+    assert.equal(listing.status, 200, city);
+    assert.ok((await listing.text()).includes(path), `listed on ${city}`);
   }
-  // Osaka has no live experience while the class is in preview, so the city and theme pages are gone
-  assert.equal((await render("/en/osaka/")).status, 404, "no Osaka city page without a live experience");
-  assert.equal((await render("/en/ramen/")).status, 404, "no ramen theme page without a live experience");
+  // With the Osaka class live, the city and the ramen theme pages exist and are linked
+  assert.equal((await render("/en/osaka/")).status, 200, "Osaka city page with a live experience");
+  const theme = await render("/en/ramen/");
+  assert.equal(theme.status, 200, "ramen theme page with live experiences");
+  assert.doesNotMatch(await theme.text(), /Ramen Dojo|Ohashi|Meguro|Soemoncho|宗右衛門|Viyago/i, "partner names stay private on the theme page");
   const home = await (await render("/en/")).text();
-  assert.ok(!home.includes('href="/en/osaka/"') && !home.includes('href="/en/ramen/"'), "home does not link the city or the ramen theme");
+  assert.ok(home.includes('href="/en/osaka/"') || home.includes('href="/en/osaka/dotonbori-ramen-class/"'), "home reaches Osaka");
 });
 
 test("kendo, bushido, tea ceremony and the kendo tours: preview pages that never name the partners", async () => {
@@ -256,9 +264,9 @@ test("kendo, bushido, tea ceremony and the kendo tours: preview pages that never
   const nagoya = (await (await render("/en/nagoya/nagoya-kendo-experience-tour/")).text()).replace(/<[^>]+>/g, " ");
   assert.ok(nagoya.includes("Weekday afternoons, usually from 13:30") && !nagoya.includes("10:00"), "Nagoya runs in the afternoon");
   assert.ok(nagoya.includes("Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji"), "the Nagoya page lists the other cities");
-  // with only calligraphy, golf and the geiko evening live, the site shows two cities and no kendo theme
+  // with calligraphy, golf, the geiko evening and the ramen classes live, the site shows three cities and no kendo theme
   const home = await (await render("/en/")).text();
-  assert.ok(home.includes("Two cities.") && !home.includes('href="/en/himeji/"') && !home.includes('href="/en/kendo/"'), "home shows two cities and no kendo theme");
+  assert.ok(home.includes("Three cities.") && !home.includes('href="/en/himeji/"') && !home.includes('href="/en/kendo/"'), "home shows three cities and no kendo theme");
   assert.equal((await render("/en/kendo/")).status, 404, "no kendo theme page without a live experience");
   assert.equal((await render("/en/himeji/")).status, 404, "no Himeji city page without a live experience");
 });
