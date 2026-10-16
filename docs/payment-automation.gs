@@ -38,6 +38,7 @@ function doPost(e) {
     lock.waitLock(20000);
     if(p.action==='enqueue')return json_(enqueue_(p));
     if(p.action==='event')return json_(event_(p));
+    if(p.action==='mail_event')return json_(mailEvent_(p)); // mail-queue.gs (same project)
     return json_({ok:false,error:'unknown_action'});
   } catch(err) { console.error(String(err)); return json_({ok:false,error:'operation_failed'}); }
   finally { if(lock.hasLock())lock.releaseLock(); }

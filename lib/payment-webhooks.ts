@@ -1,7 +1,25 @@
 import type { GolfAutomationEnv } from "@/lib/golf-automation";
+import type { MailQueueEnv } from "@/lib/mail-queue";
 
 type Provider = "resend" | "stripe";
-type Env = GolfAutomationEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string };
+type Env = GolfAutomationEnv & MailQueueEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string };
+const RESEND_EVENTS = ["email.sent", "email.delivered", "email.delivery_delayed", "email.bounced", "email.failed", "email.suppressed", "email.complained", "email.opened", "email.clicked"];
+const gasUrl = (url: string | undefined) => !!url?.startsWith("https://script.google.com/macros/s/");
+
+/** Where a Resend event goes: the golf queue for its own ack/payment/intro mails,
+ *  the manual-mail queue for approved individual mails (`kind=manual`), nowhere
+ *  for anything else. Each queue is switched on by its own URL and token, so the
+ *  manual queue can run while the golf automation stays off, and vice versa. */
+export function resendTarget(env: Env, tags: Record<string, unknown>): { url: string; token: string; action: "event" | "mail_event" } | "ignore" | "unconfigured" {
+  const kind = String(tags.kind ?? ""), booking = String(tags.booking ?? "");
+  if (!booking.startsWith("KJ-")) return "ignore";
+  if (kind === "manual") {
+    if (!/^[A-Za-z0-9-]{3,60}$/.test(String(tags.mail ?? ""))) return "ignore";
+    return gasUrl(env.MAIL_QUEUE_URL) && env.MAIL_QUEUE_TOKEN ? { url: env.MAIL_QUEUE_URL!, token: env.MAIL_QUEUE_TOKEN, action: "mail_event" } : "unconfigured";
+  }
+  if (/^(ack|payment|intro)$/.test(kind)) return gasUrl(env.GOLF_AUTOMATION_URL) && env.GOLF_AUTOMATION_TOKEN ? { url: env.GOLF_AUTOMATION_URL!, token: env.GOLF_AUTOMATION_TOKEN, action: "event" } : "unconfigured";
+  return "ignore";
+}
 const encoder = new TextEncoder();
 const fresh = (timestamp: string, now: number) => /^\d+$/.test(timestamp) && Math.abs(now / 1000 - Number(timestamp)) <= 300;
 const fromBase64 = (s: string) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -36,7 +54,8 @@ export async function verifyWebhook(provider: Provider, raw: string, headers: He
 
 export async function receiveWebhook(provider: Provider, request: Request, env: Env): Promise<Response> {
   const secret = provider === "resend" ? env.RESEND_WEBHOOK_SECRET : env.STRIPE_WEBHOOK_SECRET;
-  if (!secret || !env.GOLF_AUTOMATION_TOKEN || !env.GOLF_AUTOMATION_URL?.startsWith("https://script.google.com/macros/s/")) return Response.json({ ok: false }, { status: 503 });
+  if (!secret) return Response.json({ ok: false }, { status: 503 });
+  if (provider === "stripe" && (!env.GOLF_AUTOMATION_TOKEN || !gasUrl(env.GOLF_AUTOMATION_URL))) return Response.json({ ok: false }, { status: 503 });
   const raw = await request.text();
   if (raw.length > 512_000) return new Response(null, { status: 413 });
   if (!await verifyWebhook(provider, raw, request.headers, secret)) return Response.json({ ok: false }, { status: 400 });
@@ -44,13 +63,22 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
     const event = JSON.parse(raw);
     const eventId = provider === "resend" ? request.headers.get("svix-id") : event.id;
     if (!eventId || !event.data) return Response.json({ ok: false }, { status: 400 });
+    let url = env.GOLF_AUTOMATION_URL!, token = env.GOLF_AUTOMATION_TOKEN!, action: "event" | "mail_event" = "event";
     if (provider === "resend") {
-      const tags = event.data.tags ?? {};
-      // Existing/operations emails do not belong to this queue.
-      if (!/^(ack|payment|intro)$/.test(tags.kind ?? "") || !String(tags.booking ?? "").startsWith("KJ-")) return Response.json({ ok: true, ignored: true });
-      if (!["email.sent", "email.delivered", "email.delivery_delayed", "email.bounced", "email.failed", "email.suppressed", "email.complained", "email.opened", "email.clicked"].includes(event.type)) return Response.json({ ok: true, ignored: true });
+      const tags = (event.data.tags && typeof event.data.tags === "object" ? event.data.tags : {}) as Record<string, unknown>;
+      // Existing/operations emails do not belong to either queue.
+      const target = resendTarget(env, tags);
+      if (target === "ignore" || !RESEND_EVENTS.includes(event.type)) return Response.json({ ok: true, ignored: true });
+      // A queue that is not configured yet: answer 503 so the provider retries later
+      // rather than acknowledging an event the ledger never saw.
+      if (target === "unconfigured") return Response.json({ ok: false }, { status: 503 });
+      ({ url, token, action } = target);
       // IP addresses, user agents and mail contents are unnecessary in the ledger.
-      event.data = { email_id: event.data.email_id, click: event.data.click ? { link: event.data.click.link } : undefined };
+      event.data = {
+        email_id: event.data.email_id,
+        tags: { kind: String(tags.kind), booking: String(tags.booking), ...(tags.mail ? { mail: String(tags.mail) } : {}) },
+        click: event.data.click ? { link: event.data.click.link, timestamp: event.data.click.timestamp } : undefined,
+      };
     } else {
       if (!["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed"].includes(event.type)) return Response.json({ ok: true, ignored: true });
       const s = event.data.object;
@@ -69,7 +97,7 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
         discounts: Array.isArray(s.discounts) ? s.discounts.map((d: { promotion_code?: unknown; coupon?: unknown }) => ({ promotion_code: discountRef(d?.promotion_code), coupon: discountRef(d?.coupon) })) : undefined,
       } };
     }
-    const result = await fetch(env.GOLF_AUTOMATION_URL, { method: "POST", headers: { "content-type": "application/json" }, redirect: "follow", signal: AbortSignal.timeout(25000), body: JSON.stringify({ action: "event", token: env.GOLF_AUTOMATION_TOKEN, provider, eventId: `${provider}:${eventId}`, event }) });
+    const result = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, redirect: "follow", signal: AbortSignal.timeout(25000), body: JSON.stringify({ action, token, provider, eventId: `${provider}:${eventId}`, event }) });
     const data = result.ok ? await result.json() as { ok?: boolean } : null;
     return Response.json({ ok: !!data?.ok }, { status: data?.ok ? 200 : 503 });
   } catch { return Response.json({ ok: false }, { status: 503 }); }
