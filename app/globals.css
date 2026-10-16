@@ -1491,7 +1491,7 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-area .go-title, .go-area .go-line { grid-column:1 / -1; }
 .go-card .go-price { grid-column:1; }
 .go-card .go-price.quote { grid-column:1 / -1; }
-.go-card .go-pp { grid-column:2; justify-self:end; align-self:end; text-align:right; }
+.go-card .go-tt { grid-column:2; justify-self:end; align-self:end; text-align:right; }
 .go-card .go-price .go-unit, .go-card .go-price .go-lead { white-space:nowrap; }
 .go-card .go-price { display:flex; flex-direction:column; margin-top:4px; line-height:1.1; }
 .go-card .go-price .go-lead { font-size:11px; letter-spacing:.04em; color:var(--muted); }
@@ -1500,7 +1500,7 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-card .go-price .go-suffix { font-size:15px; letter-spacing:0; }
 .go-card .go-price.quote b { font-size:16px; line-height:1.3; }
 .go-card .go-price.quote small { font-size:11.5px; color:var(--muted); line-height:1.4; }
-.go-card .go-pp { font-size:15px; font-weight:600; color:var(--ink); line-height:1.4; }
+.go-card .go-tt { font-size:14px; font-weight:600; color:#3d3a34; line-height:1.4; }
 .go-assure { display:flex; gap:10px; align-items:flex-start; margin-top:-2px; padding:12px 14px; border:1px solid #d9e6d6; border-radius:12px; background:#f3f7f2; }
 .go-assure svg { flex:none; margin-top:2px; color:#1f7a3a; }
 .go-assure b { display:block; font-size:13.5px; line-height:1.4; color:var(--ink); }

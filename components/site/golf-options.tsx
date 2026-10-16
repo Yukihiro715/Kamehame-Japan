@@ -2,6 +2,7 @@
 
 import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useBooking } from "@/components/site/booking-context";
+import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
 import { countOf, fromPrice, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
@@ -22,7 +23,10 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
   const { perPerson, approximate } = perPersonOf(total, n);
   const totalWords = copy.total.replace("{n}", String(n)).split("{total}").map((x) => x.trim());
   const shortWords = copy.totalShort.split("{total}").map((x) => x.trim());
+  const ppWords = copy.perPersonRef.split("{price}").map((x) => x.trim());
   return {
+    /** The words of `perPersonRef` before the figure ("1名あたり", "每位") and after it ("/ person") */
+    ppPrefix: ppWords[0], ppUnit: ppWords[1],
     /** "¥87,500 / person" — beside a fixed total */
     perPersonRef: perPersonRefText(copy, perPerson, approximate),
     custom: false as const,
@@ -54,6 +58,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
   variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[];
 }) {
   const b = useBooking();
+  const { usdActive } = useCurrency();
   if (!b) return null;
   const n = b.guestsNumber;
   const custom = b.customQuote;
@@ -95,13 +100,13 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                 ) : (
                   <>
                     <span className="go-price">
-                      {p.totalLead && <small className="go-lead">{p.totalLead}</small>}
-                      <b><Yen n={p.total} /></b>
-                      {p.totalUnit && <small className="go-unit">{p.totalUnit}</small>}
-                      <JpyRef n={p.total} unit={p.totalWordAfter ? p.totalWord : undefined} lang={lang} />
+                      {/* the per-person figure leads, as on the rest of the market; the group total follows */}
+                      {(p.ppPrefix || (p.approximate && !usdActive)) && <small className="go-lead">{[p.ppPrefix, p.approximate && !usdActive ? copy.approx : ""].filter(Boolean).join(" ")}</small>}
+                      <b><Yen n={p.perPerson} /></b>
+                      {p.ppUnit && <small className="go-unit">{p.ppUnit}</small>}
+                      <JpyRef n={p.perPerson} unit={p.ppUnit || undefined} lang={lang} />
                     </span>
-                    {/* the per-person figure, small, under the group total */}
-                    <span className="go-pp"><Fx brief>{p.perPersonLine}</Fx></span>
+                    <span className="go-tt"><Fx>{p.totalLine}</Fx></span>
                   </>
                 )}
               </label>

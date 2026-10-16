@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useBooking } from "@/components/site/booking-context";
+import { useCurrency } from "@/components/site/currency-context";
 import { golfPriceParts } from "@/components/site/golf-options";
 import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { Fx, Yen } from "@/components/site/money";
@@ -22,6 +23,7 @@ export function StickyRequestBar({
   const [targetVisible, setTargetVisible] = useState(false);
   const [typing, setTyping] = useState(false);
   const b = useBooking();
+  const { usdActive } = useCurrency();
   const D = lang ? t(lang).detail : undefined;
 
   useEffect(() => {
@@ -60,8 +62,8 @@ export function StickyRequestBar({
           <small>{variant.short} · {countOf(golf.golfers, n)}</small>
           {p.custom ? <b>{p.headline}</b> : (
             <>
-              <b>{!p.totalWordAfter && <em>{p.totalWord}</em>}<Yen n={p.total} />{p.totalWordAfter && <em>{p.totalWord}</em>}</b>
-              <small><Fx>{p.perPersonLine}</Fx></small>
+              <b>{p.ppPrefix && <em>{p.ppPrefix}</em>}<Yen n={p.perPerson} /><em>{p.ppUnit}{p.approximate && !usdActive ? ` · ${golf.approx}` : ""}</em></b>
+              <small><Fx>{p.totalShort}</Fx></small>
             </>
           )}
         </div>

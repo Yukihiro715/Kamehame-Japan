@@ -174,7 +174,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         <GolfQuickPick variants={variants} copy={O} parties={parties} name="form" />
         {p.custom
           ? <span className="go-summary-price"><strong>{p.headline}</strong><small>{p.line}</small></span>
-          : <span className="go-summary-price"><strong><Fx brief>{p.totalShort}</Fx></strong><small><Fx>{p.perPersonRef}</Fx></small></span>}
+          : <span className="go-summary-price"><strong><Fx brief>{p.perPersonRef}</Fx></strong><small><Fx>{p.totalShort}</Fx></small></span>}
       </div>
 
       <fieldset className="form-step">

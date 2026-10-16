@@ -73,11 +73,11 @@ test("golf page: two areas, published prices for 2–4 golfers, one options pane
   assert.doesNotMatch(html, /¥180,000|¥220,000|¥280,000/, "the old prices are gone");
   // the default selection: Mt. Fuji, four golfers, the group total first, the per-person figure small under it
   const text = html.replace(/<[^>]+>/g, "");
-  assert.match(text, /¥350,000\s*total · 4 golfers\s*¥87,500 \/ person/, "Mt. Fuji total for four, then per person");
-  assert.match(text, /¥330,000\s*total · 4 golfers\s*¥82,500 \/ person/, "Tokyo total for four, then per person");
+  assert.match(text, /¥87,500\s*\/ person\s*¥350,000 total · 4 golfers/, "Mt. Fuji per person for four, then the group total");
+  assert.match(text, /¥82,500\s*\/ person\s*¥330,000 total · 4 golfers/, "Tokyo per person for four, then the group total");
   assert.doesNotMatch(html, /From ¥8[27],500|From approx\./, "the package price is fixed: no 'From' on the area cards");
-  assert.match(html, /<span class="go-price">(?:(?!<\/span>).)*<b>¥350,000<\/b>/, "the group total is the card's headline figure");
-  assert.doesNotMatch(html, /<b>¥87,500<\/b>|<b>¥82,500<\/b>/, "the per-person figure is no longer a headline");
+  assert.match(html, /<span class="go-price">(?:(?!<\/span>).)*<b>¥87,500<\/b>/, "the per-person figure is the card's headline");
+  assert.doesNotMatch(html, /<span class="go-price">(?:(?!<\/span>).)*<b>¥350,000<\/b>/, "the group total is not the headline");
   assert.ok(html.includes('class="vh-timings" open'), "sample timings start open");
   assert.ok(html.includes("6:00 pm JST") && !/18:00 Japan time/.test(html), "times read as 12-hour JST");
   assert.ok(html.includes("/images/golf-gallery-01-fuji-aerial.webp") && !/golf-fuji-aerial\.jpg|golf-tokyo-|golf-lakes-aerial|golf-flag-fuji/.test(html), "the shared photo set only");
