@@ -207,3 +207,38 @@ test("discounted queue sends and reconciles discounted amount, holds if matching
   assert.equal(gas.validPaidAmount_({id:"cs_live_example",amount_subtotal:265000,amount_total:265000,total_details:{amount_discount:0,amount_tax:0,amount_shipping:0}},265000),true);
   const held=queue("payment");held.j.enquiry.rentalKeys="own,required:right";held.c.processGolfQueue();assert.equal(held.calls.length,0);assert.equal(held.j.mode,"manual");
 });
+
+test('ledger ID allocation reuses request references and checks all tabs plus queued IDs',()=>{
+  const c=runtime();c.Utilities={formatDate:()=> '261016'};
+  const h=['予約・案件ID','メール','体験カテゴリ','人数','体験日','確認メモ'];
+  let rows=[h,['KJ-261018-01','other@example.com','プライベートゴルフ',2,'2026-10-18','']];
+  c.ledgerSnapshot_=()=>({headers:h,values:rows});c.jobs_=()=>[{job:{id:'KJ-261018-03'}}];
+  const payload={...p,ledger:{experienceDate:'2026-10-18'}};
+  assert.equal(c.allocateCaseId_(payload,clock),'KJ-261018-04');
+  rows.push(['KJ-261018-02',p.enquiry.email,'プライベートゴルフ',2,'2026-10-18','']);
+  assert.throws(()=>c.allocateCaseId_(payload,clock),/重複/);
+  rows[2][5]='自動化ID: '+p.requestId;
+  assert.equal(c.allocateCaseId_(payload,clock),'KJ-261018-02');
+  rows=[h];c.jobs_=()=>[];
+  assert.equal(c.allocateCaseId_({...payload,ledger:{}},clock),'KJ-INQ-261016-01');
+});
+test('ledger vacancies respect manual input, preserve formulas and reject duplicate IDs',()=>{
+  const c=runtime();
+  const t={headers:['予約・案件ID','名前','計算'],values:[['予約・案件ID','名前','計算'],['','手入力あり',''],['','','']],formulas:[['','',''],['','',''],['','','=A3']]};
+  assert.equal(c.ledgerSlot_(t,'KJ-261018-01',{'名前':'Test'}),3);
+  assert.throws(()=>c.ledgerSlot_(t,'x',{'不明列':1}),/見出し/);
+  t.values[1][0]='same';t.values[2][0]='same';
+  assert.throws(()=>c.ledgerSlot_(t,'same',{}),/重複/);
+});
+test('ledger registration fills empty inputs only and state changes require expected values',()=>{
+  const c=runtime(), written=[];
+  const headers=['予約・案件ID','名前','対応ステータス','計算','金額'];
+  const row=['KJ-261018-01','Staff edited','キャンセル手続き中',123,''];
+  const formulas=['','','','=SUM(A1)', ''];
+  const sheet={getMaxRows:()=>10,setRowHeight(){},getRange:(r,col,n,w)=>({getValues:()=>[row],getFormulas:()=>[formulas],setWrap(){},setValue(v){written.push([col,v]);row[col-1]=v;}})};
+  c.ledgerSnapshot_=()=>({sheet,headers,values:[headers,row],formulas:[[],formulas],width:5});
+  c.upsert_('予約一覧',row[0],{'名前':'Replacement','対応ステータス':'支払待ち','計算':0,'金額':250000},{'対応ステータス':['仮予約受領']});
+  assert.deepEqual(written,[[5,250000]]);
+  row[2]='仮予約受領';c.upsert_('予約一覧',row[0],{'対応ステータス':'支払待ち'},{'対応ステータス':['仮予約受領']});
+  assert.equal(row[2],'支払待ち');
+});
