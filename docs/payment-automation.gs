@@ -60,6 +60,9 @@ function decision_(p, rows, now) {
   if(e.experience!=='mt-fuji-golf-day'||e.courseMode!=='recommended')reasons.push('指定コース・対象外プラン');
   if(['tokyo','saitama','chiba'].indexOf(e.pickupRegion)<0||!e.pickup)reasons.push('送迎場所の個別確認');
   if([2,3,4].indexOf(n)<0||['tokyo','fuji'].indexOf(e.areaId)<0)reasons.push('エリア・人数の確認');
+  var rentals=String(e.rentalKeys||'').split(',');
+  if(rentals.length!==n||rentals.some(function(k){return !/^required:(right|left)$/.test(k);}))reasons.push(rentals.indexOf('own')>=0?'クラブ持参割引（1名5,000円）・専用決済リンクを確認':'レンタル情報の確認');
+  if(e.clubs&&e.clubs.trim())reasons.push('クラブ仕様の個別確認');
   if(e.caddie!=='none'&&e.caddie!=='required')reasons.push('キャディ希望の確認');
   if(e.addons||(e.addonIds&&e.addonIds.length))reasons.push('追加オプション');
   if(e.message&&!/^(none|no|n\/a|thanks|thank you|なし|特になし)[.!。！\s]*$/i.test(e.message.trim()))reasons.push('備考の個別確認');
@@ -92,11 +95,11 @@ function enqueue_(p) {
   notify_(j,row,'受付', (j.mode==='manual'?'【要手動対応】'+j.reason:'【10分後に支払い案内予定】')+'\nキャディ: '+j.enquiry.caddie+'\n'+j.teamText);
   return {ok:true,id:j.id,ackSent:!!j.ackId};
 }
-function send_(j, kind, text, recipient) {
+function send_(j, kind, text, recipient, html) {
   if(props_().getProperty('LIVE_SEND_ENABLED')!=='true')throw new Error('自動送信は未有効化');
   var key=props_().getProperty('RESEND_API_KEY');if(!key)throw new Error('Resend未設定');
   var idempotency='golf/'+j.requestId+'/'+kind;
-  var payload={from:'Yukihiro, KAMEHAME JAPAN <hello@kamehame-japan.com>',to:[recipient],reply_to:kind.indexOf('ops-')===0?j.enquiry.email:'hello@kamehame-japan.com',subject:'['+j.id+'] '+j.subject,text:text,html:html_(text),headers:{'X-KJ-Automation':'1','X-KJ-Reference':j.id},tags:[{name:'kind',value:kind},{name:'booking',value:j.id}]};
+  var payload={from:'Yukihiro, KAMEHAME JAPAN <hello@kamehame-japan.com>',to:[recipient],reply_to:kind.indexOf('ops-')===0?j.enquiry.email:'hello@kamehame-japan.com',subject:'['+j.id+'] '+j.subject,text:text,html:html||html_(text),headers:{'X-KJ-Automation':'1','X-KJ-Reference':j.id},tags:[{name:'kind',value:kind},{name:'booking',value:j.id}]};
   var res=UrlFetchApp.fetch('https://api.resend.com/emails',{method:'post',contentType:'application/json',headers:{Authorization:'Bearer '+key,'Idempotency-Key':idempotency},payload:JSON.stringify(payload),muteHttpExceptions:true});
   if(res.getResponseCode()<200||res.getResponseCode()>=300)throw new Error('Resend送信失敗 '+res.getResponseCode());
   var body=JSON.parse(res.getContentText());if(!body.id)throw new Error('送信ID未確認');return body.id;
@@ -113,8 +116,29 @@ function notify_(j,row,key,body) {
     j.notifications[key]=id;delete j.pendingNotifications[key];saveJob_(j,row);
   } catch(err) {j.error=String(err);saveJob_(j,row);}
 }
+function fillPayment_(template,values,html) {
+  var result=String(template).replace(/\{\{([A-Z_]+)\}\}/g,function(_,key){
+    if(!Object.prototype.hasOwnProperty.call(values,key))throw new Error('未置換のメール項目');
+    var v=String(values[key]);return html?v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'):v;
+  });
+  return result;
+}
+/** Manual Resend mail isn't in Gmail's Sent folder. Use the approved queue too.
+ * Sending/uncertain outcomes also hold, to avoid a second customer email. */
+function manualQueueActivity_(j) {
+  if(typeof qrows_!=='function')return '';
+  var fromTime=Date.parse(j.createdAt), email=String(j.enquiry.email).trim().toLowerCase();
+  return qrows_().some(function(x){
+    var r=x.r, same=String(r[QC.to]).trim().toLowerCase()===email;
+    var status=String(r[QC.status]), exact=String(r[QC.caseId]).trim()===j.id;
+    var at=new Date(r[QC.sentAt]||r[QC.approvedAt]||r[QC.createdAt]).getTime();
+    return same&&(exact||at>=fromTime)&&[QS.approved,QS.sending,QS.sent,QS.check,QS.error].indexOf(status)>=0;
+  })?'個別メール送信・承認済み（要確認を含む）':'';
+}
 function humanActivity_(j) {
+  var manual=manualQueueActivity_(j);if(manual)return manual;
   var email=j.enquiry.email.toLowerCase(), staff=(props_().getProperty('STAFF_EMAILS')||'').toLowerCase().split(',').map(function(x){return x.trim();});
+  staff.push('hello@kamehame-japan.com');
   staff.push(Session.getEffectiveUser().getEmail().toLowerCase());staff=staff.concat(GmailApp.getAliases().map(function(x){return x.toLowerCase();}));
   var fromTime=Date.parse(j.createdAt), after=Math.floor(fromTime/1000)-1;
   var threads=GmailApp.search('after:'+after+' {from:'+email+' to:'+email+'}',0,100);
@@ -149,14 +173,19 @@ function processGolfQueue() {
           if(j.pendingMessage && (j.expectedAmount!==total || j.paymentLinkId!==link['Payment Link ID（plink_）'] || j.paymentUrl.split('?')[0]!==link['顧客用決済URL']))throw new Error('送信再開前に決済条件が変更・手動確認');
           j.paymentUrl=link['顧客用決済URL']+'?client_reference_id='+encodeURIComponent(j.id);
           j.expectedAmount=total;j.paymentLinkId=link['Payment Link ID（plink_）'];
-          var text=j.payment.text.replace('{{TOTAL}}',total.toLocaleString('en-US')).replace('{{PER_PERSON}}',Math.round(total/Number(j.enquiry.party)).toLocaleString('en-US')).replace('{{PAYMENT_URL}}',j.paymentUrl).replace('{{CADDIE_LINE}}',j.enquiry.caddie==='required'?'• Course caddie: included in the price below':'• Course caddie: not included (standard package)');
-          if(/\{\{[A-Z_]+\}\}/.test(text))throw new Error('未置換のメール項目');j.pendingMessage={kind:'payment',text:text};
+          if(!j.pendingMessage) {
+            if(!j.payment.html || j.payment.version!=='photo-2026-10-16')throw new Error('写真付きテンプレート未確認・手動対応');
+            var values={TOTAL:total.toLocaleString('en-US'),PER_PERSON:Math.round(total/Number(j.enquiry.party)).toLocaleString('en-US'),PAYMENT_URL:j.paymentUrl,CADDIE_LINE:j.enquiry.caddie==='required'?'• Course caddie: included in the price below':'• Course caddie: not included (standard package)'};
+            j.pendingMessage={kind:'payment',text:fillPayment_(j.payment.text,values,false),html:fillPayment_(j.payment.html,values,true)};
+          }
         }
-        if(!j.pendingMessage)j.pendingMessage={kind:'intro',text:j.followUp.text};
+        if(!j.pendingMessage)j.pendingMessage={kind:'intro',text:j.followUp.text,html:j.followUp.html||html_(j.followUp.text)};
         // Persist exact payload before I/O. Retry only this same payload/key, within
         // Resend's 24h idempotency window (our recovery limit is one hour).
         j.status='sending';saveJob_(j,x.row);
-        var mid=send_(j,j.pendingMessage.kind,j.pendingMessage.text,j.enquiry.email);
+        // Recheck after persistence, as a staff reply may arrive during preparation.
+        var finalHuman=humanActivity_(j);if(finalHuman){j.status='held';j.reason=finalHuman;saveJob_(j,x.row);notify_(j,x.row,'自動停止',finalHuman);return;}
+        var mid=send_(j,j.pendingMessage.kind,j.pendingMessage.text,j.enquiry.email,j.pendingMessage.html);
         if(j.pendingMessage.kind==='payment'){j.paymentId=mid;j.paymentSentAt=new Date().toISOString();updatePaymentLedger_(j);}else j.introId=mid;
         j.status='sent';saveJob_(j,x.row);notify_(j,x.row,'送信済み',j.pendingMessage.kind==='payment'?'支払い案内を送信しました':'未対応のため15分フォローを送信しました');
       } catch(err) {j.status='error';j.error=String(err);saveJob_(j,x.row);notify_(j,x.row,'処理エラー',j.error+'\n送信済みの可能性もあるため、確認前に再送しないでください。');}
