@@ -2285,8 +2285,9 @@ export const experiences: Experience[] = [
     // its Arashiyama studio. Built 2026-10-14 from the partner's public page;
     // the studio's name and address stay off the page (owner policy, as for
     // the ramen classes). Public prices are set in the booking calendar and
-    // were not available; ¥7,000 (costume plan, from a listing) is a
-    // placeholder, to be replaced once the selling price is decided.
+    // were not available. 2026-10-17: selling price ¥17,500 per person, tax
+    // included (owner's rule: wholesale + ¥4,500 ad cost, 20% margin, rounded
+    // up to ¥500 incl. tax; the ledger's 料金マスタ holds the figures).
     // 2026-10-16: facts aligned with the partner's condition sheet (45–60 min,
     // all ages, 1–12 per regular session / up to 16 private, daily, requests
     // close the day before, start time arranged around the group's day) and
@@ -2300,7 +2301,7 @@ export const experiences: Experience[] = [
       "A few minutes from the bamboo grove, up a flight of stairs, is a room built for this: a row of targets along one wall, blowpipes and throwing stars in their boxes, and an instructor who teaches in English and Japanese. In 45 to 60 minutes you try the blowpipe, learn to throw shuriken so they stick, and are taught the hand seals — the in-musubi — that the ninja used to steady themselves.",
       "The costume plan adds a ninja outfit to change into, worn through the session and the photos. Nothing is needed beyond comfortable clothes and closed shoes, and children are welcome with an adult.",
     ],
-    duration: "45–60 minutes", price: "¥7,000", priceUnit: "person", group: "1 to 12 per session · private sessions up to 16", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
+    duration: "45–60 minutes", price: "¥17,500", priceUnit: "person", group: "1 to 12 per session · private sessions up to 16", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
     img: "/images/ninja-arashiyama-hero.jpg", alt: "Three guests in black ninja costumes striking poses in a wood-panelled training room",
     gallery: [
       { img: "/images/ninja-blowgun.jpg", alt: "A guest in a ninja costume aiming a blowpipe at the targets" },
@@ -2376,8 +2377,9 @@ export const experiences: Experience[] = [
   },
   {
     // Viyago Japan, Kyoto: 45-minute stone-mill matcha grinding on a covered
-    // terrace in Arashiyama. Built 2026-10-14 from the partner's public page;
-    // ¥5,000 is a placeholder until the selling price is decided.
+    // terrace in Arashiyama. Built 2026-10-14 from the partner's public page.
+    // 2026-10-17: selling price ¥13,500 per person, tax included (owner's rule:
+    // wholesale + ¥4,500 ad cost, 20% margin, rounded up to ¥500 incl. tax).
     // 2026-10-16: the partner's condition sheet lists the product as on sale
     // and accepting guests (45–60 min, all ages, 1–40, daily, requests close
     // the day before, start time arranged around the group's day) with the
@@ -2389,7 +2391,7 @@ export const experiences: Experience[] = [
       "Matcha is tea leaf ground to a powder fine enough to drink, and the grinding is the slow part. On a covered terrace in Arashiyama you turn a traditional stone mill yourself, feel how little comes out of each turn, and understand why good matcha costs what it does.",
       "Then you whisk the powder you made into a bowl with a bamboo chasen and drink it, looking out over the street. The session takes 45 to 60 minutes and is taught in English or Japanese; the tencha, the mill and the utensils are provided.",
     ],
-    duration: "45–60 minutes", price: "¥5,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
+    duration: "45–60 minutes", price: "¥13,500", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
     img: "/images/matcha-stone-mill.jpg", alt: "Hands turning a granite stone mill with bright green matcha powder gathering in the groove",
     gallery: [
       { img: "/images/matcha-whisk.jpg", alt: "Whisking matcha in a bowl with a bamboo chasen" },
@@ -2464,8 +2466,9 @@ export const experiences: Experience[] = [
     // Viyago Japan, Kyoto: a 60-minute Japanese knife workshop in Arashiyama,
     // two plans (custom knife making: choose a blade, sharpen it, fit the
     // handle; beginner sharpening). Built 2026-10-14 from the partner's public
-    // page; prices are set in the booking calendar and were not available, so
-    // ¥15,000 is a placeholder until the selling price is decided.
+    // page; prices are set in the booking calendar and were not available.
+    // 2026-10-17: selling price ¥27,000 per person, tax included (owner's rule:
+    // wholesale + ¥4,500 ad cost, 20% margin, rounded up to ¥500 incl. tax).
     // 2026-10-16: facts aligned with the partner's condition sheet (about 60
     // min, ages 6+, 1–40, daily, requests close the day before, start time
     // arranged around the group's day, finished knife taken home the same
@@ -2479,7 +2482,7 @@ export const experiences: Experience[] = [
       "A Japanese kitchen knife is made in stages by different hands, and the last of them — sharpening and fitting the handle — is the one you can do yourself. In a workshop in Arashiyama you choose from several blades, learn the angle and the rhythm on the whetstone, attach a prepared handle and leave with the knife.",
       "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Engraving can be added on the custom plan for a fee.",
     ],
-    duration: "About 60 minutes", price: "¥15,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
+    duration: "About 60 minutes", price: "¥27,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
     img: "/images/knife-arashiyama-hero.jpg", alt: "An instructor in an apron smiling behind a table of Japanese kitchen knives and wooden handles",
     gallery: [
       { img: "/images/knife-sharpening.jpg", alt: "Hands sharpening a blade on a wet whetstone" },
@@ -2557,7 +2560,8 @@ export const experiences: Experience[] = [
     // Viyago Japan, Kyoto: cast your own metal shuriken (standard or mini) in
     // 60 minutes in the Arashiyama studio. Built 2026-10-14 from the partner's
     // public page; prices are set in the booking calendar and were not
-    // available, so ¥8,000 is a placeholder until the selling price is decided.
+    // available. 2026-10-17: selling price ¥20,000 per person, tax included
+    // (owner's rule: wholesale + ¥4,500 ad cost, 20% margin, rounded up to ¥500).
     // 2026-10-16: facts aligned with the partner's condition sheet (about 60
     // min, ages 6+ because of the hot metal, 1–12, daily, requests close the
     // day before, start time arranged around the group's day, finished piece
@@ -2571,7 +2575,7 @@ export const experiences: Experience[] = [
       "The shuriken is the ninja's most famous tool, and it is cast, not forged. In an hour in a studio in Arashiyama you design the shape of yours, prepare the mould in casting sand, watch the metal poured, quench it and polish it until it shines. You leave with it in your hand.",
       "Choose the standard size or a mini shuriken about half as large, small enough to carry. On some days other weapon shapes or a necklace finish are available; ask the staff on the day. The session is taught in English or Japanese.",
     ],
-    duration: "About 60 minutes", price: "¥8,000", priceUnit: "person", group: "1 to 12 guests · private sessions on request", ages: "Ages 6+ (hot metal is handled by the instructor)", area: "Kyoto (Arashiyama)",
+    duration: "About 60 minutes", price: "¥20,000", priceUnit: "person", group: "1 to 12 guests · private sessions on request", ages: "Ages 6+ (hot metal is handled by the instructor)", area: "Kyoto (Arashiyama)",
     img: "/images/shuriken-arashiyama-hero.jpg", alt: "A guest in a leather apron holding up a freshly cast metal shuriken in front of the targets",
     gallery: [
       { img: "/images/shuriken-pour.jpg", alt: "Molten metal poured from a ladle into a sand mould" },
