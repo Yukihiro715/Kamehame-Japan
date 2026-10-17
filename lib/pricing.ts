@@ -41,7 +41,8 @@ const yenFormat = new Intl.NumberFormat("en-US");
 export const yen = (n: number) => `¥${yenFormat.format(n)}`;
 
 /** "{n} golfers" → "2 golfers" (two-plan page copy). */
-export const countOf = (template: string, n: number) => template.replace("{n}", String(n));
+export const countOf = (template: string, n: number) =>
+  (n === 1 ? template.replace(/\{n\}(\s+)([A-Za-zÀ-ÿ]+)s\b/, "{n}$1$2") : template).replace("{n}", String(n));
 
 /** "From ¥125,000" / "1名 ¥125,000〜", as the language puts it; `approx`
  *  adds the rounded-figure word ("From approx. ¥96,667", "1名 約¥96,667〜"). */

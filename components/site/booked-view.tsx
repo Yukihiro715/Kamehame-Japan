@@ -7,7 +7,7 @@ import { track } from "@/lib/analytics";
 import { acceptedExplicitly } from "@/lib/consent";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { LANGS, t, type Lang } from "@/lib/i18n";
-import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
+import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { yen } from "@/lib/pricing";
 
 interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: string; email?: string; error?: string; items?: { name: string; quantity: number; amount: number }[]; reference?: string }
@@ -93,15 +93,15 @@ export function BookedView({ lang }: { lang: Lang }) {
     <div className="thanks">
       <div className="thanks-head">
         <span className="thanks-check" aria-hidden="true"><Check size={34} strokeWidth={3} /></span>
-        <h1>{golf ? GOLF_BOOKING_COPY[lang].paidH : K.h}</h1>
-        <p>{golf ? GOLF_BOOKING_COPY[lang].paid : amount ? K.leadAmount(amount) : K.lead}</p>
+        <h1>{golf ? golfProcessCopy(lang).paidH : K.h}</h1>
+        <p>{golf ? golfProcessCopy(lang).paid : amount ? K.leadAmount(amount) : K.lead}</p>
         {golf && amount && <p>{amount}</p>}
       </div>
       <section className="thanks-card">
         <h2>{K.nextH}</h2>
         <ol className="thanks-steps">
           <li><Receipt size={18} /><span>{K.stepReceipt}</span></li>
-          <li><MapPin size={18} /><span>{golf ? GOLF_BOOKING_COPY[lang].arrange : K.stepConfirm}</span></li>
+          <li><MapPin size={18} /><span>{golf ? golfProcessCopy(lang).arrange : K.stepConfirm}</span></li>
           <li><Mail size={18} /><span>{K.stepHelp(CONTACT_EMAIL)}</span></li>
         </ol>
       </section>

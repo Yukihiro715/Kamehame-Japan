@@ -16,6 +16,8 @@ export interface Enquiry {
   requestId?: string;
   pickupRegion?: "tokyo" | "saitama" | "chiba" | "other";
   caddie?: "none" | "required" | "unsure";
+  /** Booking service: an English-speaking assistant for the day, quoted separately. */
+  assistant?: "none" | "required" | "unsure";
   addonIds?: string[];
   kind: EnquiryKind;
   name: string;

@@ -1,5 +1,6 @@
 import { Bath, CircleCheck, CircleX, Footprints, LandPlot, Receipt, Shirt, Utensils, type LucideIcon } from "lucide-react";
 import type { GolfInclusionId, VariantPageCopy } from "@/lib/catalog";
+import { isArrangement } from "@/lib/golf-prices";
 
 type Copy = VariantPageCopy["inclusions"];
 
@@ -84,6 +85,10 @@ const ITEMS: Record<GolfInclusionId, { Icon: LucideIcon | ((p: IconProps) => Rea
   wear: { Icon: Shirt, included: false },
 };
 
+/** The booking service (GOLF_MODE "arrangement"): we arrange the tee time, the rentals, the cart and
+ *  the clubhouse side with the club; transfers, a driver, an assistant, lunch and wear are not part of it. */
+const ARRANGED: Record<GolfInclusionId, boolean> = { round: true, clubs: true, shoes: true, transfer: false, driver: false, assistant: false, cart: true, locker: true, bath: true, lunch: false, taxes: true, wear: false };
+
 /** "What's Included in Your Golf Day": the twelve items as icon cards, four across
  *  on wide screens and two on phones, each with a green check or a red cross. The
  *  one list of inclusions on the page; the text lists are not rendered beside it. */
@@ -94,7 +99,8 @@ export function GolfInclusions({ copy }: { copy: Copy }) {
       <p className="gi-sub">{copy.sub}</p>
       <ul className="gi-grid">
         {copy.items.map((it) => {
-          const { Icon, included } = ITEMS[it.id];
+          const { Icon } = ITEMS[it.id];
+          const included = isArrangement() ? ARRANGED[it.id] : ITEMS[it.id].included;
           return (
             <li key={it.id} className={`gi-card${included ? "" : " gi-no"}`}>
               <span className="gi-icon" aria-hidden="true"><Icon size={22} /></span>

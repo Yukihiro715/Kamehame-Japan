@@ -7,21 +7,36 @@
 // course requested by the guest is quoted individually and has no price here.
 
 export type GolfArea = "tokyo" | "fuji";
-export type GolfGolfers = 2 | 3 | 4;
+export type GolfGolfers = 1 | 2 | 3 | 4;
 export type GolfCourseMode = "recommended" | "specific";
+
+/** How the golf page sells, 2026-10-17 (owner's decision, temporary):
+ *  - "package": the private golf day — transfers, green fees, cart, rentals, lunch and
+ *    an assistant in one group price (GOLF_PRICES_JPY). The full implementation stays
+ *    in the code and in git (tag golf-package-2026-10-16).
+ *  - "arrangement": a course-booking service — a flat fee per golfer
+ *    (GOLF_ARRANGEMENT_FEE_JPY); green fees and everything at the club are paid there,
+ *    transfers through a partner contracted directly, an assistant quoted separately.
+ *  Switch back to "package" to restore the previous page; nothing else needs to change. */
+export type GolfMode = "package" | "arrangement";
+export const GOLF_MODE: GolfMode = "arrangement";
+export const GOLF_ARRANGEMENT_FEE_JPY = 15000;
+export const isArrangement = () => GOLF_MODE === "arrangement";
 
 /** Version stamped on every request, so a stored reference price can be read against the list it came from. */
 export const GOLF_PRICE_VERSION = "2026-10-10";
 
-export const GOLF_GOLFERS: GolfGolfers[] = [2, 3, 4];
+/** Party sizes offered: the package needs a car-load of two to four; the booking service takes a single golfer too. */
+export const GOLF_GOLFERS: GolfGolfers[] = GOLF_MODE === "arrangement" ? [1, 2, 3, 4] : [2, 3, 4];
+export const golfPartySize = () => GOLF_MODE === "arrangement" ? { min: 1, max: 4, default: 2 } : { min: 2, max: 4, default: 4 };
 
-export const GOLF_PRICES_JPY: Record<GolfArea, Record<GolfGolfers, number>> = {
+export const GOLF_PRICES_JPY: Record<GolfArea, Record<2 | 3 | 4, number>> = {
   tokyo: { 2: 250000, 3: 290000, 4: 330000 },
   fuji: { 2: 270000, 3: 310000, 4: 350000 },
 };
 
 export const isGolfArea = (s: unknown): s is GolfArea => s === "tokyo" || s === "fuji";
-export const isGolfGolfers = (n: unknown): n is GolfGolfers => n === 2 || n === 3 || n === 4;
+export const isGolfGolfers = (n: unknown): n is GolfGolfers => (GOLF_GOLFERS as unknown[]).includes(n);
 
 export interface GolfPackagePrice {
   currency: "JPY";
@@ -35,8 +50,10 @@ export interface GolfPackagePrice {
 
 /** Null means "quoted individually" (a specific course), never free. */
 export function golfPackagePrice(area: GolfArea, golfers: GolfGolfers, mode: GolfCourseMode = "recommended"): GolfPackagePrice | null {
+  // The booking service charges the same flat fee whichever course is played, so a named course is not a custom quote.
+  if (GOLF_MODE === "arrangement") return { currency: "JPY", groupTotal: GOLF_ARRANGEMENT_FEE_JPY * golfers, perPersonDisplay: GOLF_ARRANGEMENT_FEE_JPY, approximate: false };
   if (mode === "specific") return null;
-  const groupTotal = GOLF_PRICES_JPY[area][golfers];
+  const groupTotal = GOLF_PRICES_JPY[area][golfers as 2 | 3 | 4];
   return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };
 }
 
@@ -51,7 +68,7 @@ export const ownClubsCount = (rentalKeys: string | undefined, golfers: number) =
 
 /** The package price less the own-clubs deduction; never below zero. */
 export const golfTotalWithOwnClubs = (groupTotal: number, ownClubs: number) =>
-  Math.max(0, groupTotal - GOLF_OWN_CLUBS_DISCOUNT_JPY * Math.max(0, ownClubs));
+  GOLF_MODE === "arrangement" ? groupTotal : Math.max(0, groupTotal - GOLF_OWN_CLUBS_DISCOUNT_JPY * Math.max(0, ownClubs));
 
 /** The area's table in the catalog's tier shape. */
-export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_PRICES_JPY[area][party] }));
+export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_MODE === "arrangement" ? GOLF_ARRANGEMENT_FEE_JPY * party : GOLF_PRICES_JPY[area][party as 2 | 3 | 4] }));

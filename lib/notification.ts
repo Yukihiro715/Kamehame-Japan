@@ -7,6 +7,7 @@
 import { catalogFor } from "@/lib/catalog";
 import type { Enquiry } from "@/lib/contact";
 import { yen } from "@/lib/pricing";
+import { isArrangement } from "@/lib/golf-prices";
 import type { TranslatedField } from "@/lib/translate";
 
 const LANG_JA: Record<string, string> = { en: "英語", ja: "日本語", es: "スペイン語", fr: "フランス語", "zh-tw": "繁体字中国語" };
@@ -26,7 +27,9 @@ export function golfAreaJa(areaId: string): string {
 export function golfPriceNoteJa(areaId: string, golfers: number, price: { groupTotal: number; perPersonDisplay: number; approximate: boolean } | null, version: string): string {
   const area = golfAreaJa(areaId);
   return price
-    ? `${yen(price.groupTotal)} — ${golfers}名パッケージ(${area}・おすすめコース)。1名あたり${price.approximate ? `約${yen(price.perPersonDisplay)}(端数処理)` : yen(price.perPersonDisplay)}。価格表 ${version}。オプションは別途、最終金額はお支払い前に確定。`
+    ? isArrangement()
+      ? `${yen(price.groupTotal)} — ${golfers}名の手配料(${area}・1名${yen(price.perPersonDisplay)}、税込)。プレー代・カート・レンタル・昼食は現地精算、送迎は提携会社と直接契約、アシスタント同行は別途見積。価格表 ${version}。`
+      : `${yen(price.groupTotal)} — ${golfers}名パッケージ(${area}・おすすめコース)。1名あたり${price.approximate ? `約${yen(price.perPersonDisplay)}(端数処理)` : yen(price.perPersonDisplay)}。価格表 ${version}。オプションは別途、最終金額はお支払い前に確定。`
     : `個別見積もり — 希望コース指定(${golfers}名・${area})。パッケージ料金は適用なし。価格表 ${version}。`;
 }
 
@@ -105,6 +108,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ...t("お迎え場所", "pickup", e.pickup),
     ["送迎都県", e.pickupRegion],
     ["キャディ", e.areaId ? (e.caddie === "required" ? "あり希望" : e.caddie === "none" ? "なし" : "未確認") : undefined],
+    ["アシスタント同行", e.assistant ? (e.assistant === "required" ? "希望あり(別途見積)" : e.assistant === "none" ? "不要" : "相談したい") : undefined],
     ["WhatsApp", e.whatsapp],
     ...t("通訳", "interpreter", e.interpreter),
     ...t("オプション", "addons", e.addons),

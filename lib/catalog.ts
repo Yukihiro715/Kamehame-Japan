@@ -1645,7 +1645,7 @@ export const experiences: Experience[] = [
       { img: "/images/golf-gallery-11-transfer-minivan.webp", alt: "A chauffeur in a dark suit holding the door of a black premium minivan at a clubhouse entrance, golf bags beside it" },
     ],
     // Four golfers pre-selected: the lowest per-person figure, with the group total beside it.
-    partySize: { min: 2, max: 4, default: 4 },
+    partySize: golfPartySize(),
     pricing: { tiers: golfTiers("tokyo") },
     variants: [
       {
@@ -2945,8 +2945,12 @@ import { CANCELLATION_JA, categoriesJa, citiesJa, experiencesJa, toursJa } from 
 import { CANCELLATION_FR, categoriesFr, citiesFr, experiencesFr, toursFr } from "@/lib/catalog.fr";
 import { CANCELLATION_ZH, categoriesZh, citiesZh, experiencesZh, toursZh } from "@/lib/catalog.zh-tw";
 import type { Lang } from "@/lib/i18n";
-import { golfTiers } from "@/lib/golf-prices";
+import { golfPartySize, golfTiers, isArrangement } from "@/lib/golf-prices";
 import { applyGolfBookingCopy } from "@/lib/golf-booking-copy";
+import { applyGolfArrangement } from "@/lib/golf-arrangement-copy";
+
+/** The golf page in its current mode (lib/golf-prices.ts GOLF_MODE). */
+const golfPage = (e: Experience, lang: Lang) => isArrangement() ? applyGolfArrangement(applyGolfBookingCopy(e, lang), lang) : applyGolfBookingCopy(e, lang);
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
@@ -2992,7 +2996,7 @@ function fullCatalog(lang: Lang) {
  *  the signed experiences only, plus the cities and categories they belong to. */
 export function catalogFor(lang: Lang) {
   const base = fullCatalog(lang);
-  const full = { ...base, experiences: base.experiences.map((e) => applyGolfBookingCopy(e, lang)) };
+  const full = { ...base, experiences: base.experiences.map((e) => golfPage(e, lang)) };
   if (PLACEHOLDERS_PUBLISHED) return full;
   const experiences = full.experiences.filter(isLive);
   return {
@@ -3006,7 +3010,7 @@ export function catalogFor(lang: Lang) {
 /** Experiences in "preview": built, reachable by URL for sign-off, never listed. */
 export function previewsFor(lang: Lang) {
   const base = fullCatalog(lang);
-  const full = { ...base, experiences: base.experiences.map((e) => applyGolfBookingCopy(e, lang)) };
+  const full = { ...base, experiences: base.experiences.map((e) => golfPage(e, lang)) };
   return { experiences: full.experiences.filter(isPreview), cities: full.cities };
 }
 

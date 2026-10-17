@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Clock3, CreditCard, Mail } from "lucide-react";
 import { track } from "@/lib/analytics";
-import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
+import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
 import { Fx } from "@/components/site/money";
@@ -50,7 +50,7 @@ export function ThanksView({ lang }: { lang: Lang }) {
 
   const trade = sent?.kind === "trade";
   const golf = sent?.event?.experience === "mt-fuji-golf-day";
-  const G = GOLF_BOOKING_COPY[lang];
+  const G = golfProcessCopy(lang);
   const rows = sent ? [
     [K.experience, sent.experienceTitle],
     [K.dates, sent.dates],

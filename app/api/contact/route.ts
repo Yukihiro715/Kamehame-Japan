@@ -3,7 +3,7 @@ import { acknowledgement, followUp, threadSubject } from "@/lib/mail-copy";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
-import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
+import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isArrangement, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
 import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
@@ -172,13 +172,14 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     golf = {
       areaId, courseMode: mode,
       estimate: estimateTotal !== null ? yen(estimateTotal) : undefined,
-      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (price && own > 0 ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : ""),
+      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (price && own > 0 && !isArrangement() ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : ""),
     };
   }
   return {
     requestId: typeof body.request_id === "string" && /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(body.request_id) ? body.request_id : crypto.randomUUID(),
     pickupRegion: ["tokyo", "saitama", "chiba", "other"].includes(String(body.pickup_region)) ? body.pickup_region as Enquiry["pickupRegion"] : undefined,
     caddie: ["none", "required", "unsure"].includes(String(body.caddie)) ? body.caddie as Enquiry["caddie"] : undefined,
+    assistant: ["none", "required", "unsure"].includes(String(body.assistant)) ? body.assistant as Enquiry["assistant"] : undefined,
     addonIds: Array.isArray(body.addon_ids) ? body.addon_ids.filter((x): x is string => typeof x === "string").slice(0, 10) : undefined,
     kind, name, email, message,
     company: clean(body.company, MAX.company) || undefined,
@@ -193,8 +194,9 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     area,
     areaId: golf.areaId,
     courseMode: golf.courseMode,
-    course: golf.courseMode === "specific" ? clean(body.course, MAX.course) || undefined : undefined,
-    courseUrl: golf.courseMode === "specific" ? clean(body.course_url, MAX.courseUrl) || undefined : undefined,
+    // A named course: the package quotes it individually; the booking service takes it as a preference at the same fee.
+    course: golf.courseMode === "specific" || isArrangement() ? clean(body.course, MAX.course) || undefined : undefined,
+    courseUrl: golf.courseMode === "specific" || isArrangement() ? clean(body.course_url, MAX.courseUrl) || undefined : undefined,
     level: clean(body.level, MAX.level) || undefined,
     rental: clean(body.rental, MAX.rental) || undefined,
     clubs: clean(body.clubs, MAX.clubs) || undefined,

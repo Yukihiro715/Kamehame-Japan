@@ -6,7 +6,7 @@
 // sheet — change both together.
 
 import type { Lang } from "@/lib/i18n";
-import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
+import { golfProcessCopy } from "@/lib/golf-booking-copy";
 
 export interface LegalCopy {
   title: string;
@@ -197,7 +197,7 @@ export function termsFor(lang: Lang): TermsCopy {
 }
 
 function golfTerms(lang: Lang) {
-  const c = GOLF_BOOKING_COPY[lang === "ja" ? "ja" : "en"];
+  const c = golfProcessCopy(lang === "ja" ? "ja" : "en");
   return lang === "ja"
     ? `プライベートゴルフは上記と異なり、次の条件が適用されます。${c.arrange} ${c.protection} お支払い時点から、ゴルフの体験ページおよび決済案内に記載した取消条件が適用されます。手配不可の場合は全額返金、天候によるコース閉鎖の場合は既発生費用を差し引いて返金します。`
     : `For private golf, the following specific conditions apply instead: ${c.arrange} ${c.protection} The cancellation conditions on the golf page and in the payment proposal apply from payment. Failure to arrange a suitable course results in a full refund; weather-related course closure is refunded less costs already incurred.`;

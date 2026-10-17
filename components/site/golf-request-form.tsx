@@ -12,9 +12,9 @@ import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { isBookable, timesFor, useBooking } from "@/components/site/booking-context";
-import { GOLF_BOOKING_COPY } from "@/lib/golf-booking-copy";
+import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
-import { GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs } from "@/lib/golf-prices";
+import { GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs, isArrangement } from "@/lib/golf-prices";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 type Rental = "required" | "own" | "unsure";
@@ -49,18 +49,22 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const b = useBooking();
   const [status, setStatus] = useState<Status>("idle");
   const [hotelUndecided, setHotelUndecided] = useState(false);
+  // Booking service: a named course is a preference at the same fee, never a custom quote.
+  const arrangement = isArrangement();
+  const [wantCourse, setWantCourse] = useState(false);
   const [rental, setRental] = useState<Record<number, Rental>>({});
   const [handed, setHanded] = useState<Record<number, Handed>>({});
   const [shoes, setShoes] = useState<Record<number, string>>({});
   const started = useRef(false);
   const requestId = useRef({ key: "", id: "" });
-  const processCopy = GOLF_BOOKING_COPY[lang];
+  const processCopy = golfProcessCopy(lang);
   if (!b) return null;
   const x = b.experience;
   const v = b.variantView ?? variants[0];
   const n = b.guestsNumber;
   const golfers = Array.from({ length: n }, (_, i) => i + 1);
-  const specific = b.coursePref === "preferred";
+  const specific = !arrangement && b.coursePref === "preferred";
+  const namedCourse = arrangement ? wantCourse : specific;
   const total = specific ? null : tierTotal(v.tiers, n);
   const p = golfPriceParts(O, total, n);
   const rentalOf = (i: number): Rental => rental[i] ?? "required";
@@ -70,7 +74,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const anyRental = golfers.some((i) => rentalOf(i) !== "own");
   // Own clubs: ¥5,000 less per golfer, shown as soon as a golfer picks it (the server recomputes the same figure).
   const ownCount = golfers.filter((i) => rentalOf(i) === "own").length;
-  const clubDiscount = total !== null && ownCount > 0 ? GOLF_OWN_CLUBS_DISCOUNT_JPY * ownCount : 0;
+  const clubDiscount = !arrangement && total !== null && ownCount > 0 ? GOLF_OWN_CLUBS_DISCOUNT_JPY * ownCount : 0;
   const totalWithClubs = total !== null ? golfTotalWithOwnClubs(total, ownCount) : null;
   const ownClubsLine = G.ownClubsLine.replace("{n}", String(ownCount)).replace("{amount}", yen(clubDiscount));
   const blocked = (a: AddOn) => !!a.maxParty && n > a.maxParty;
@@ -100,7 +104,8 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       name: data.name, email: data.email, whatsapp: data.whatsapp, message: data.message, website: data.website,
       area: v.title, area_id: v.id, party: String(n),
       course_mode: specific ? "specific" : "recommended",
-      course: specific ? b.courseName : "", course_url: specific ? b.courseUrl : "",
+      course: namedCourse ? b.courseName : "", course_url: namedCourse ? b.courseUrl : "",
+      assistant: data.assistant,
       dates: `${b.date} ${timeLabel}`,
       pickup: hotelUndecided ? [G.hotelUndecided, data["hotel-area"]].filter(Boolean).join(" — ") : data.pickup,
       level: [G.experienceOpts[level], data.handicap && `${G.handicap.replace(/\s*[(（].*$/, "")}: ${data.handicap}`].filter(Boolean).join(" · "),
@@ -206,10 +211,10 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       <fieldset className="form-step">
         <legend>{G.steps.course}</legend>
         <label className="form-check go-check">
-          <input type="checkbox" name="specific-course" checked={specific} onChange={(e) => b.set({ coursePref: e.target.checked ? "preferred" : "recommended" })} />
+          <input type="checkbox" name="specific-course" checked={namedCourse} onChange={(e) => arrangement ? setWantCourse(e.target.checked) : b.set({ coursePref: e.target.checked ? "preferred" : "recommended" })} />
           <span><b>{G.specificCourse}</b><small>{G.specificCourseNote}</small></span>
         </label>
-        {specific && (
+        {namedCourse && (
           <div className="form-row two">
             <label>
               <span>{G.courseName}</span>
@@ -226,27 +231,37 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
 
       <fieldset className="form-step">
         <legend>{G.steps.hotel}</legend>
-        <label><span>{processCopy.region}</span>
-          <select name="pickup_region" required defaultValue="">
-            {["", "tokyo", "saitama", "chiba", "other"].map((value, i) => <option key={value} value={value} disabled={!value}>{processCopy.regions[i]}</option>)}
-          </select>
-        </label>
-        <div className="form-row two">
-          <label>
+        {arrangement ? (
+          // Meet at the course: where the guest stays only helps us suggest courses and, if wanted, the transfer partner.
+          <label className="form-row">
             <span>{G.pickup}</span>
-            <input name="pickup" type="text" required={!hotelUndecided} disabled={hotelUndecided} maxLength={200} placeholder={G.pickupHint} />
+            <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
           </label>
-          {hotelUndecided ? (
-            <label>
-              <span>{G.hotelArea}</span>
-              <input name="hotel-area" type="text" maxLength={120} placeholder={G.hotelAreaHint} />
+        ) : (
+          <>
+            <label><span>{processCopy.region}</span>
+              <select name="pickup_region" required defaultValue="">
+                {["", "tokyo", "saitama", "chiba", "other"].map((value, i) => <option key={value} value={value} disabled={!value}>{processCopy.regions[i]}</option>)}
+              </select>
             </label>
-          ) : <span />}
-        </div>
-        <label className="form-check go-check one">
-          <input type="checkbox" name="hotel-undecided" checked={hotelUndecided} onChange={(e) => setHotelUndecided(e.target.checked)} />
-          <span><b>{G.hotelUndecided}</b></span>
-        </label>
+            <div className="form-row two">
+              <label>
+                <span>{G.pickup}</span>
+                <input name="pickup" type="text" required={!hotelUndecided} disabled={hotelUndecided} maxLength={200} placeholder={G.pickupHint} />
+              </label>
+              {hotelUndecided ? (
+                <label>
+                  <span>{G.hotelArea}</span>
+                  <input name="hotel-area" type="text" maxLength={120} placeholder={G.hotelAreaHint} />
+                </label>
+              ) : <span />}
+            </div>
+            <label className="form-check go-check one">
+              <input type="checkbox" name="hotel-undecided" checked={hotelUndecided} onChange={(e) => setHotelUndecided(e.target.checked)} />
+              <span><b>{G.hotelUndecided}</b></span>
+            </label>
+          </>
+        )}
       </fieldset>
 
       <fieldset className="form-step">
@@ -323,6 +338,13 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.caddies[i]}</option>)}
           </select><small>{processCopy.caddieNote}</small>
         </label>
+        {arrangement && processCopy.assistant && processCopy.assistants && (
+          <label><span>{processCopy.assistant}</span>
+            <select name="assistant" defaultValue="none">
+              {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.assistants![i]}</option>)}
+            </select><small>{processCopy.assistantNote}</small>
+          </label>
+        )}
         {addOns.length > 0 && (
           <fieldset className="go-extras">
             <legend>{G.extras}</legend>

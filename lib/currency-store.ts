@@ -71,6 +71,21 @@ function currentRate(now = Date.now()): FxRate | null {
   return rate;
 }
 
+/** True when the visitor picked a currency themselves (stored); false for the default. */
+function hasStoredChoice(): boolean {
+  try { return isCurrency(localStorage.getItem(CURRENCY_KEY)); } catch { return false; }
+}
+
+/** A page's preferred display currency (the golf booking service shows dollars first): applied
+ *  only while the visitor has not chosen one, never stored, so their own choice always wins. */
+export function preferCurrency(c: Currency) {
+  load();
+  if (hasStoredChoice() || currency === c) return;
+  currency = c;
+  emit();
+  if (c === "USD") void ensureRate();
+}
+
 export const getCurrency = (): Currency => { load(); return currency; };
 export const getRate = (): FxRate | null => { load(); return currentRate(); };
 export const getStatus = (): FxStatus => { load(); currentRate(); return status; };

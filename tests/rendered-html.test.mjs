@@ -61,7 +61,45 @@ test("serves security.txt and marks confirmation pages noindex", async () => {
   assert.equal(home.headers.get("x-robots-tag"), null);
 });
 
-test("golf page: two areas, published prices for 2–4 golfers, one options panel, one form", async () => {
+/** Mirrors GOLF_MODE in lib/golf-prices.ts: "arrangement" (the booking service, 2026-10-17) or "package" (the private golf day). */
+const GOLF_MODE = "arrangement";
+
+test("golf page (booking service): flat fee per golfer from one golfer, meet at the course, no transfers in the fee", { skip: GOLF_MODE !== "arrangement" }, async () => {
+  const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
+  const text = html.replace(/<[^>]+>/g, "");
+  assert.match(html, /<title>Japan Golf Course Booking Service \| Tokyo Area &amp; Mt\. Fuji \| KAMEHAME JAPAN<\/title>/);
+  assert.match(html, /<h1>Japan Golf Course Booking Service<\/h1>/);
+  // the fee, per golfer, with the group figure beside it; the package prices are gone
+  assert.match(text, /¥15,000\s*\/ golfer\s*¥30,000 fee · 2 golfers/, "Mt. Fuji card: fee per golfer, then the fee for two");
+  for (const price of ["¥15,000", "¥30,000", "¥45,000", "¥60,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
+  assert.doesNotMatch(html, /¥250,000|¥270,000|¥290,000|¥310,000|¥330,000|¥350,000/, "no package prices");
+  assert.ok(text.includes("1 golfer") && !text.includes("1 golfers"), "a single golfer, in the singular");
+  assert.doesNotMatch(text, /−¥5,000|Bringing own \(/, "no own-clubs deduction in the booking service");
+  // what we arrange vs what is not part of the service
+  assert.ok(text.includes("What the Arrangement Fee Covers"), "inclusions heading");
+  assert.equal(html.split('class="gi-card"').length - 1, 7, "seven arranged items");
+  assert.equal(html.split('class="gi-card gi-no"').length - 1, 5, "five items outside the service");
+  assert.match(html, /gi-card gi-no"[\s\S]{0,900}Private Transfer/, "transfers are outside the service");
+  assert.ok(text.includes("Getting There: Your Choice") && !text.includes("Travel in Comfort"), "the getting-there section replaces the transfer section");
+  assert.ok(text.includes("we introduce a licensed private transfer partner"), "the partner is introduced, not named");
+  assert.doesNotMatch(html, /Rion/i, "the transfer partner is never named");
+  assert.ok(text.includes("Know your course and tee time before you pay"), "reassurance under the options");
+  // the form: tee time, optional base, no pick-up prefecture, an assistant choice
+  assert.ok(html.includes("Preferred tee time") && html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
+  assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");
+  assert.ok(html.includes("Send Tee-Time Request") && html.includes("Check Tee Times"), "CTAs");
+  assert.equal(html.split("<form ").length - 1, 1, "exactly one form");
+  // terms and structured data follow the fee
+  assert.ok(text.includes("Up to 7 days before the date") && text.includes("The arrangement fee is refundable in full"), "fee cancellation terms");
+  assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"15000"') && html.includes('"highPrice":"60000"'), "structured data carries the fee range");
+  // the Japanese page and the listing card follow
+  const ja = (await (await render("/ja/tokyo/mt-fuji-golf-day/")).text()).replace(/<[^>]+>/g, "");
+  assert.ok(ja.includes("日本のゴルフ場予約手配サービス") && ja.includes("手配料") && ja.includes("ゴルフ場に集合"), "Japanese booking-service copy");
+  const list = (await (await render("/en/golf/")).text()).replace(/<[^>]+>/g, "");
+  assert.ok(list.includes("¥15,000") && !list.includes("¥330,000"), "listing card shows the fee");
+});
+
+test("golf page (package): two areas, published prices for 2–4 golfers, one options panel, one form", { skip: GOLF_MODE !== "package" }, async () => {
   const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
 
   assert.match(html, /<title>Private Golf Day from Tokyo \| Mt\. Fuji &amp; Tokyo Area \| KAMEHAME JAPAN<\/title>/);

@@ -13,6 +13,8 @@ import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { GolfInclusions } from "@/components/site/golf-inclusions";
 import { GolfTransfer } from "@/components/site/golf-transfer";
+import { PreferCurrency } from "@/components/site/prefer-currency";
+import { isArrangement } from "@/lib/golf-prices";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { Fx, FxNote } from "@/components/site/money";
@@ -80,6 +82,8 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       ]} />
 
       <BookingProvider experience={booking} pricings={pricings} lang={lang}>
+        {/* The booking service shows dollars first (owner's decision, 2026-10-17); the visitor's own choice still wins. */}
+        {isArrangement() && <PreferCurrency currency="USD" />}
         {/* 1. Title block: a short H1 and one line, then straight to the photos */}
         <header className="xp-head vh-head">
           <h1>{exp.title}</h1>

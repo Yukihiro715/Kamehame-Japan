@@ -1,4 +1,6 @@
 import type { Lang } from "@/lib/i18n";
+import { isArrangement } from "@/lib/golf-prices";
+import { GOLF_ARRANGEMENT_COPY, type ArrangementProcess } from "@/lib/golf-arrangement-copy";
 import type { Experience } from "@/lib/catalog";
 
 // One description of the golf booking process, shared by all customer surfaces.
@@ -75,9 +77,19 @@ export const GOLF_BOOKING_COPY = {
   },
 } satisfies Record<Lang, { received: string; proposal: string; arrange: string; protection: string; steps: string[]; photo: string; area: string; pickup: string; region: string; regions: string[]; caddie: string; caddies: string[]; clubs: string; caddieNote: string; paidH: string; paid: string }>;
 
+/** The process copy for the current golf mode: the package's lines, or the booking service's
+ *  (lib/golf-arrangement-copy.ts) while GOLF_MODE is "arrangement". Every consumer reads this. */
+export type GolfProcessCopy = (typeof GOLF_BOOKING_COPY)[Lang] & Partial<Pick<ArrangementProcess, "assistant" | "assistants" | "assistantNote">>;
+export function golfProcessCopy(lang: Lang): GolfProcessCopy {
+  const base = GOLF_BOOKING_COPY[lang];
+  if (!isArrangement()) return base;
+  const a = GOLF_ARRANGEMENT_COPY[lang].process;
+  return { ...base, ...a };
+}
+
 export function applyGolfBookingCopy(e: Experience, lang: Lang): Experience {
   if (e.slug !== "mt-fuji-golf-day" || !e.variantCopy) return e;
-  const c = GOLF_BOOKING_COPY[lang];
+  const c = golfProcessCopy(lang);
   const v = e.variantCopy;
   const dress = {en: "Most Japanese clubs ask for smart clothing on arrival and a collared shirt on the course. We send the confirmed course’s rules with your booking details.", ja: "来場時は清潔感のある服装、プレー中は襟付きシャツが基本です。確定したコースの服装規定は予約詳細と一緒にご案内します。", es: "Se recomienda ropa elegante al llegar y una camisa con cuello para jugar. Enviaremos las normas del campo con los detalles confirmados.", fr: "Une tenue soignée à l’arrivée et un polo à col pour jouer sont recommandés. Les règles du parcours accompagneront la confirmation.", "zh-tw": "抵達時請穿著整齊，打球時穿有領上衣。確定球場的服裝規定將隨預約詳情一併寄送。"}[lang];
   const weekend = {en: "Standard prices include regular weekday and weekend green fees at a recommended course. If no suitable course can be arranged at the agreed price, we will discuss an alternative or provide a full refund.", ja: "標準料金には、おすすめコースの通常の平日・週末のプレー料金を含みます。合意した料金で適切なコースを手配できない場合は、代替案をご相談するか全額返金します。", es: "El precio estándar incluye green fees habituales entre semana y fines de semana. Si no podemos reservar una opción adecuada al precio acordado, consultaremos una alternativa o reembolsaremos el importe completo.", fr: "Le tarif standard comprend les green fees habituels en semaine et le week-end. Si aucun parcours adapté n’est disponible au prix convenu, nous proposons une alternative ou un remboursement intégral.", "zh-tw": "標準價格包含推薦球場平日及一般週末的果嶺費。若無法以約定價格安排適合球場，我們將商討替代方案或全額退款。"}[lang];
