@@ -30,8 +30,8 @@
 
 ## 変わらないもの・注意
 
-- ゴルフ自動化（Apps Script の決済案内）は本番で無効のまま。手配モードでは `golfPackagePrice` が手配料を返すため、
-  このモードのまま `GOLF_AUTOMATION_URL` を設定しないこと（パッケージ前提のテンプレートと金額が合わない）。
+- 手配モードでは旧パッケージのApps Script自動化をWorker側で遮断する（URL・TOKENが設定済みでも対象外）。
+  新しい写真付き決済案内はコース提案を確認して個別に作成する。運用・切戻し手順は `GOLF_MAIL_MODES.md`。
 - 手配料のキャンセル規定はパッケージと同じ段階（7日前18時まで無料／6〜3日前 50%／2日前以降 100%）を
   手配料に適用する文言にしている。変更する場合は `lib/golf-arrangement-copy.ts` の `cancellation` と FAQ。
 - `tests/rendered-html.test.mjs` のゴルフのテストはモードごとに分かれている。

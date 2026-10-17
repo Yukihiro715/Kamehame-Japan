@@ -12,11 +12,14 @@ const vite = await createServer({
   plugins: [{
     name: "mock-mail-bindings",
     enforce: "pre",
+    transform(code, id) {
+      if (id.endsWith("/lib/golf-prices.ts")) return code.replace(/GOLF_MODE: GolfMode = "(arrangement|package)"/, 'GOLF_MODE: GolfMode = "arrangement"');
+    },
     resolveId(id) {
       if (id === "cloudflare:workers" || id === "cloudflare:email") return `\0test:${id}`;
     },
     load(id) {
-      if (id === "\0test:cloudflare:workers") return 'export const env = { CONTACT_TO: "team@example.com", RESEND_API_KEY: "test-only-not-a-key" };';
+      if (id === "\0test:cloudflare:workers") return 'export const env = { CONTACT_TO: "team@example.com", RESEND_API_KEY: "test-only-not-a-key", GOLF_AUTOMATION_URL: "https://script.google.com/macros/s/test/exec", GOLF_AUTOMATION_TOKEN: "test-only" };';
       if (id === "\0test:cloudflare:email") return "export class EmailMessage {}";
     },
   }],
@@ -96,4 +99,18 @@ test("malformed provider IDs and missing schedules do not create management link
     const text = notificationBody(enquiry, undefined, { followUp });
     assert.doesNotMatch(text, /停止・状況確認|フォローアップ管理ID/);
   }
+});
+
+
+test("arrangement enquiries send new HTML through Resend even when package automation is configured", async (t) => {
+  const calls = await submit(t, { experience: "mt-fuji-golf-day", area: "Mt. Fuji", area_id: "fuji", course_mode: "recommended", party: "2", assistant: "required", caddie: "none", estimate: "¥270,000", rental_keys: "own,own" });
+  assert.equal(calls.length, 2);
+  const follow = calls[0].body, [internal, ack] = calls[1].body;
+  assert.match(ack.text, /30,000/);
+  assert.doesNotMatch(ack.text, /270,000/);
+  assert.match(ack.html, /paid directly to the club/);
+  assert.match(follow.html, /fuji-oyama.jpg/);
+  assert.match(internal.text, /arrangement-2026-10-17/);
+  assert.doesNotMatch(follow.text, /Thank you for booking/);
+  assert.doesNotMatch(ack.html + follow.html, /book\.stripe\.com|Proceed to payment/);
 });

@@ -1,0 +1,32 @@
+// Preserved package payment copy from 008c688 (2026-10-17).
+// Only the package mode may select this template.
+import type { Enquiry } from "@/lib/contact";
+import { SIGN, threadSubject } from "@/lib/mail-copy";
+import { GOLF_EMAIL_VERSION, golfEmailHtml } from "@/lib/golf-email-html";
+
+export function packagePaymentTemplate(e: Enquiry, title?: string) {
+  // Customer text must never create trusted queue substitution tokens.
+  e = Object.fromEntries(Object.entries(e).map(([key, value]) => [key,
+    typeof value === "string" ? value.replace(/\{\{/g, "{ {") : value])) as unknown as Enquiry;
+  const day = e.dates?.slice(0, 10) ?? "";
+  const date = new Date(`${day}T00:00:00Z`);
+  if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== day) return null;
+  const fmt = (d: Date) => d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  const before = (days: number) => fmt(new Date(date.getTime() - days * 86400000));
+  const courses = e.areaId === "fuji" ? ["Fuji Oyama Golf Club", "Asagiri Country Club", "Sanko Golf Club, Fuji Course", "Fuji Heigen Golf Club", "Fuji Country Club"] : ["Chiba Isumi Golf Club", "Anegasaki Country Club", "PGM Sohsei Golf Club", "Bristol Hill Golf Club", "Narita Hills Country Club", "Tateno Classic Golf Club"];
+  const text = [
+    `Hello ${e.name},`, "", `Thank you for your request. We would be happy to arrange a private golf day in the ${e.areaId === "fuji" ? "Mt. Fuji area" : "Tokyo area"} on ${fmt(date)} for ${e.party} golfers.`, "",
+    "Your golf day", `• Pick-up and return: ${e.pickup || "Please confirm your hotel"}`, `• Preferred departure: ${e.dates?.slice(11) || "To be arranged"}. We will confirm the final pick-up time with your course and tee time.`, `• Players: ${e.party}`, `• Rental clubs: ${e.rental || "Please confirm each golfer's requirements"}`, `• Rental shoes: ${e.shoes || "Please confirm each golfer's shoe size"}`, ...(e.clubs ? [`• Club preferences: ${e.clubs}`] : []), "• Clubhouse lunch: included", "{{CADDIE_LINE}}", "",
+    "Your course, arranged by our team", "We will select and reserve a suitable course from the following options, depending on availability:", ...courses.map(c => `• ${c}`), "",
+    "Once you approve the package and complete payment, our team takes care of your course reservation, tee time, private transfers and rental arrangements. We will send your confirmed course and tee time within 24 hours of payment.",
+    "Your booking is confirmed when we send those details. If we cannot arrange a suitable course, we will discuss an alternative with you or provide a full refund. We will not make changes or add charges without your agreement.", "",
+    "Price", "The total is ¥{{TOTAL}}, including tax — approximately ¥{{PER_PERSON}} per golfer.", "This includes private return hotel transfers, green fees, a golf cart, rental clubs as requested and golf shoes, clubhouse lunch and English-speaking assistance. Your English-speaking assistant helps with transfers and clubhouse arrangements; your group plays independently.",
+    "{{CLUB_DISCOUNT_LINE}}", "Rental golf shoes are included, subject to size availability. Please send each golfer’s shoe size. Golf wear and gloves are not included; please bring your own.", "",
+    "Payment", "To proceed with these arrangements, please use our secure Stripe payment link:", "{{PAYMENT_URL}}", "",
+    "An example day", "06:30 — Pick-up from your Tokyo hotel", "09:00 — Arrive, check in and collect your rental equipment", "09:30 — First nine holes", "12:00 — Clubhouse lunch", "13:00 — Second nine holes", "15:30 — Finish and change", "16:00 — Leave the course", "18:30 — Return to your hotel", "This is an example, not a confirmed schedule. Your requested departure, hotel, course availability, traffic and pace of play determine the final timings.", "",
+    "Cancellation — all dates and times are Japan time", `• Free cancellation until 6:00 pm on ${before(7)}.`, `• After that deadline through ${before(3)}: 50% of the total price.`, `• From ${before(2)}: 100% of the total price.`,
+    "If the free-cancellation deadline has already passed, please review the applicable cancellation charge before paying.", "If the course closes because of weather, the club makes the closure decision, sometimes on the day. You will be refunded the amount paid less any costs already incurred.", "",
+    "A few details to complete your arrangements", "Please confirm your hotel's full name and address, all golfers' full names, and whether each rental set should be men's or women's, with any shaft-flex preference. If you have already provided these details, there is no need to send them again.", "Driver and guide contact details will follow the day before your golf day.", "", "I look forward to arranging an enjoyable day for your group.", "", SIGN.en.replace(/^-----\n/, ""),
+  ].join("\n");
+  return { subject: threadSubject(e, title), text, html: golfEmailHtml(text, e.areaId, true), version: GOLF_EMAIL_VERSION };
+}

@@ -1,5 +1,6 @@
 import { CONTACT_EMAIL, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
-import { acknowledgement, followUp, threadSubject } from "@/lib/mail-copy";
+import { threadSubject } from "@/lib/mail-copy";
+import { golfCustomerEmail } from "@/lib/golf-customer-email";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
@@ -60,7 +61,7 @@ type ScheduledFollowUp = { id: string; scheduledAt: string };
 
 /** Keep the exact provider ID and send time with the internal notification,
  *  so staff can cancel this follow-up after sending their own reply. */
-async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: string): Promise<ScheduledFollowUp | null> {
+async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: string, html?: string): Promise<ScheduledFollowUp | null> {
   const scheduledAt = new Date(Date.now() + FOLLOW_UP_MINUTES * 60_000).toISOString();
   try {
     const res = await fetch(`${RESEND}/emails`, {
@@ -72,6 +73,7 @@ async function scheduleFollowUp(key: string, e: Enquiry, subject: string, text: 
         reply_to: REPLY,
         subject,
         text,
+        ...(html ? { html } : {}),
         scheduled_at: scheduledAt,
         tags: [{ name: "kind", value: "follow-up" }],
       }),
@@ -99,11 +101,11 @@ async function cancelScheduled(key: string, id: string): Promise<void> {
  *  team's copy can say whether it is on its way. */
 async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translations): Promise<{ followUpScheduled: boolean }> {
   const title = titleFor(e);
-  const ack = acknowledgement(e, title);
+  const ack = golfCustomerEmail("ack", e, title);
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
   const jaName = jaTitle(e);
-  const later = e.kind === "guest" ? followUp(e, title) : null;
-  const scheduled = later ? await scheduleFollowUp(key, e, later.subject, later.text) : null;
+  const later = e.kind === "guest" ? golfCustomerEmail("follow-up", e, title) : null;
+  const scheduled = later ? await scheduleFollowUp(key, e, later.subject, later.text, later.html) : null;
   const res = await fetch(`${RESEND}/emails/batch`, {
     method: "POST",
     headers: headersFor(key),
@@ -122,6 +124,7 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
         reply_to: REPLY,
         subject: ack.subject,
         text: ack.text,
+        ...(ack.html ? { html: ack.html } : {}),
         tags: [{ name: "kind", value: "ack" }],
       },
     ]),

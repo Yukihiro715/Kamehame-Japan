@@ -6,6 +6,7 @@
 // sheet — change both together.
 
 import type { Lang } from "@/lib/i18n";
+import { isArrangement } from "@/lib/golf-prices";
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
 
 export interface LegalCopy {
@@ -24,7 +25,7 @@ export interface TermsCopy {
   sections: { heading: string; body: string[] }[];
 }
 
-export const LEGAL_UPDATED = "2026-10-13";
+export const LEGAL_UPDATED = isArrangement() ? "2026-10-17" : "2026-10-13";
 
 const OPERATOR = { ja: "Prosent Inc.", en: "Prosent Inc." };
 const ADDRESS_JA = "〒104-0054 東京都中央区勝どき1-3-1 43F";
@@ -198,11 +199,17 @@ export function termsFor(lang: Lang): TermsCopy {
 
 function golfTerms(lang: Lang) {
   const c = golfProcessCopy(lang === "ja" ? "ja" : "en");
+  if (isArrangement()) return lang === "ja"
+    ? `ゴルフ予約手配サービスには、上記に優先して次の条件が適用されます。${c.arrange} ${c.protection} 当社への支払いは予約手配料のみです。プレー代・カート・レンタル・昼食・キャディ代等はゴルフ場に直接お支払いいただきます。現地の英語アシスタントは任意で、別見積もりです。手配料の取消条件はお支払い時点から適用され、体験ページ・決済案内に記載します。ゴルフ場独自の取消条件と現地費用はお支払い前にご案内します。手配不可、または天候によるコース閉鎖の場合は、当社の予約手配料を全額返金します。ゴルフ場や送迎会社への支払い・取消料は、それぞれの条件に従います。`
+    : `For the golf course booking service, these specific conditions take precedence: ${c.arrange} ${c.protection} Payment to us covers the booking service fee only. Green fees, cart, rentals, lunch and any course caddie are paid directly to the club. An English-speaking assistant at the course is optional and quoted separately. Our fee's cancellation conditions apply from payment and are stated on the golf page and in the payment proposal. Club charges and the club's separate cancellation terms are disclosed before payment. If we cannot arrange the booking or the club closes the course due to weather, our booking service fee is refunded in full. Payments and cancellation charges owed to the club or transport provider follow their respective conditions.`;
   return lang === "ja"
     ? `プライベートゴルフは上記と異なり、次の条件が適用されます。${c.arrange} ${c.protection} お支払い時点から、ゴルフの体験ページおよび決済案内に記載した取消条件が適用されます。手配不可の場合は全額返金、天候によるコース閉鎖の場合は既発生費用を差し引いて返金します。`
     : `For private golf, the following specific conditions apply instead: ${c.arrange} ${c.protection} The cancellation conditions on the golf page and in the payment proposal apply from payment. Failure to arrange a suitable course results in a full refund; weather-related course closure is refunded less costs already incurred.`;
 }
 function transportCopy(body: string, lang: Lang) {
+  if (isArrangement() && body.includes("ELNX TRAVEL")) return lang === "ja"
+    ? "ゴルフ予約手配サービスは現地集合・現地解散で、送迎・宿泊は含みません。送迎をご希望の場合は許可を持つ運送会社をご紹介し、お客様がその会社と直接予約・契約・お支払いします。当社は送迎の予約・契約の代理や料金の回収を行いません。他の体験も、個別に記載がない限り現地集合・現地解散です。"
+    : "The golf course booking service meets and ends at the course; transport and accommodation are not included. If requested, we introduce a licensed transport provider for you to book, contract and pay directly. We do not act as agent for the transport reservation or contract, or collect its fare. Other experiences meet and end on site unless specifically stated otherwise.";
   return lang === "ja" ? body.replace(/体験はいずれも現地集合・現地解散(?:で、送迎は含まれません|です)。/, "プライベートゴルフは体験ページに記載のホテル送迎を含みます。他の体験は、個別に記載がない限り現地集合・現地解散です。")
     : body.replace(/Every experience meets and ends on site(?:; transfers are not included)?\./, "Private golf includes the hotel transfers stated on its experience page. Other experiences meet and end on site unless specifically stated otherwise.");
 }

@@ -24,7 +24,9 @@ export const GOLF_ARRANGEMENT_FEE_JPY = 15000;
 export const isArrangement = () => GOLF_MODE === "arrangement";
 
 /** Version stamped on every request, so a stored reference price can be read against the list it came from. */
-export const GOLF_PRICE_VERSION = "2026-10-10";
+export const GOLF_PACKAGE_PRICE_VERSION = "2026-10-10";
+export const GOLF_ARRANGEMENT_PRICE_VERSION = "arrangement-2026-10-17";
+export const GOLF_PRICE_VERSION = isArrangement() ? GOLF_ARRANGEMENT_PRICE_VERSION : GOLF_PACKAGE_PRICE_VERSION;
 
 /** Party sizes offered: the package needs a car-load of two to four; the booking service takes a single golfer too. */
 export const GOLF_GOLFERS: GolfGolfers[] = GOLF_MODE === "arrangement" ? [1, 2, 3, 4] : [2, 3, 4];
