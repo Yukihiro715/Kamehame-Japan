@@ -64,6 +64,8 @@ export const categoriesFr: Category[] = [
     lead: "Les samouraïs ont laissé à Tokyo ses anciennes villes-relais, ses écoles de sabre et un code de conduite qui façonne encore les manières. Parcourez un quartier historique en tenue de samouraï, ou apprenez le tate, le combat au sabre chorégraphié de la scène et du cinéma japonais, avec un interprète professionnel." },
   { slug: "rakugo", title: "Rakugo", tag: "Tradition", mark: "噺", img: "/images/rakugo-stage.jpg",
     lead: "Le rakugo est l'art comique du récit au Japon : un seul conteur, un éventail et une serviette, et toute une galerie de personnages. Écoutez-le en anglais à Asakusa, puis parcourez le quartier où est né le divertissement populaire de Tokyo." },
+  { slug: "performing-arts", title: "Arts de la scène", tag: "Tradition", mark: "舞", img: "/images/ajl-dance-hero.jpg",
+    lead: "Les arts de la scène japonais sont nés dans de petites salles avant les théâtres. Ces séances de salon à Tokyo placent un danseur ou un musicien professionnel à quelques mètres de votre siège, avec le temps de parler, d'essayer et de faire une photo ensemble." },
   { slug: "cooking", title: "Cuisine", tag: "Gastronomie", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
     lead: "La cuisine japonaise enseignée par des chefs professionnels : riz à sushi, rouleaux et nigiri, condiments fermentés et les plats qui en découlent. De petites classes où l'on cuisine, puis passe à table." },
   { slug: "ninja", title: "Ninja", tag: "Tradition", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",

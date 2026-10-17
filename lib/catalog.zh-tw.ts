@@ -64,6 +64,8 @@ export const categoriesZh: Category[] = [
     lead: "武士留給東京的，是舊宿場町的風貌、劍術流派，以及至今仍影響禮儀的行為準則。穿上武士裝束走訪歷史街區，或向專業演員學習日本舞台與電影中的「殺陣」劍術。" },
   { slug: "rakugo", title: "落語", tag: "傳統", mark: "噺", img: "/images/rakugo-stage.jpg",
     lead: "落語是日本的單口喜劇說書：一位表演者、一把扇子與一條手巾，演活所有角色。在淺草聽英語落語，再走訪東京大眾娛樂發源的街區。" },
+  { slug: "performing-arts", title: "傳統藝能", tag: "傳統", mark: "舞", img: "/images/ajl-dance-hero.jpg",
+    lead: "日本的舞台藝術先在小房間裡成長，才走上劇場。東京的沙龍場次讓專業舞者或演奏家就在你座位幾公尺外，有時間交談、親身嘗試，並合影留念。" },
   { slug: "cooking", title: "料理教室", tag: "美食", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
     lead: "由專業廚師親手教授的日本料理：醋飯、壽司卷與握壽司、發酵調味料與以此而成的菜餚。小班制，親手做完就上桌享用。" },
   { slug: "ninja", title: "忍者", tag: "傳統", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",

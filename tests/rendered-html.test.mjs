@@ -322,8 +322,11 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     ["/en/kyoto/arashiyama-stone-mill-matcha/", "Stone-Mill Matcha Grinding in Arashiyama, Kyoto", "¥13,500"],
     ["/en/kyoto/arashiyama-japanese-knife-workshop/", "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto", "¥27,000"],
     ["/en/kyoto/arashiyama-shuriken-casting/", "Cast Your Own Metal Shuriken in Arashiyama, Kyoto", "¥20,000"],
+    ["/en/tokyo/nihonbashi-japanese-dance-salon/", "Japanese Classical Dance Up Close in Nihonbashi, Tokyo: A Kabuki-Style Dance Salon", "¥21,500"],
+    ["/en/tokyo/nihonbashi-english-rakugo-salon/", "English Rakugo in a Nihonbashi Salon, Tokyo: Comic Storytelling Up Close", "¥21,500"],
+    ["/en/tokyo/nihonbashi-shamisen-salon/", "Shamisen Up Close in Nihonbashi, Tokyo: Live Performance and a Hands-On Try", "¥21,500"],
   ];
-  const partners = /Trip in real Japan|TRJK|trjk|Rojicoya|Hiryu|Musashi|Jimbo|Kikkoman|Cocoro|Kokoro Dining|Kanariya|Eiraku|Koraku|Ichirin|Shiden|Kenbukai|El Sophia|Okimoto|シーズ|ninja-idea|Tamura|田村|Ninja Sanctuary|Bamboo Sky|Arashiyama Square|Sagatenryuji|Susukinobaba|Viyago|Ramen Dojo/i;
+  const partners = /Trip in real Japan|TRJK|trjk|Rojicoya|Hiryu|Musashi|Jimbo|Kikkoman|Cocoro|Kokoro Dining|Kanariya|Eiraku|Koraku|Ichirin|Shiden|Kenbukai|El Sophia|Okimoto|シーズ|ninja-idea|Tamura|田村|Ninja Sanctuary|Bamboo Sky|Arashiyama Square|Sagatenryuji|Susukinobaba|Viyago|Ramen Dojo|Amazing Japan Lounge|amazingjapanlounge|綾音|Ayane|ayanestage|Takahashi|高橋|浜町|Hamacho|Hamachō|Keisho|Ohno/i;
   for (const [path, title, price] of pages) {
     const res = await render(path);
     assert.equal(res.status, 200, path);
@@ -333,6 +336,13 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     assert.ok(text.includes(price), `price on ${path}`);
     assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
     assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
+    if (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/")) {
+      // The salon's own terms: free until two days before, then 100%; a minimum of three guests; socks.
+      assert.ok(text.includes("Up to 2 days before the date") && text.includes("1 days before or later, including no-shows"), `salon cancellation table on ${path}`);
+      assert.ok(text.includes("6 pm Japan time two days before"), `salon cut-off time on ${path}`);
+      assert.ok(text.includes("at least three guests in total") && text.includes("wear or bring socks"), `salon minimum and socks on ${path}`);
+      assert.doesNotMatch(text, /Free cancellation up to 7 days/i, `no site default on ${path}`);
+    }
     const arashiyama = path.includes("/kyoto/arashiyama-");
     if (arashiyama) {
       // The partner's own scale (regular vs private/20+), never the site-wide 7-day default, and no fixed-slot or "15 minutes early" promises.

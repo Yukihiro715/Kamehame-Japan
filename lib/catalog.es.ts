@@ -65,6 +65,8 @@ export const categoriesEs: Category[] = [
     lead: "Los samuráis dejaron a Tokio sus antiguas ciudades-posta, sus escuelas de esgrima y un código de conducta que aún marca los modales. Camina por un barrio histórico vestido de samurái o aprende tate, el combate coreografiado del teatro y el cine japoneses, con un intérprete profesional." },
   { slug: "rakugo", title: "Rakugo", tag: "Tradicional", mark: "噺", img: "/images/rakugo-stage.jpg",
     lead: "El rakugo es el arte cómico de contar historias en Japón: un solo narrador, un abanico y una toalla, y todo un reparto de personajes. Escúchalo en inglés en Asakusa y recorre el barrio donde nació el entretenimiento popular de Tokio." },
+  { slug: "performing-arts", title: "Artes escénicas", tag: "Tradicional", mark: "舞", img: "/images/ajl-dance-hero.jpg",
+    lead: "Las artes escénicas de Japón nacieron en salas pequeñas antes que en teatros. Estas sesiones de salón en Tokio ponen a un bailarín o músico profesional a pocos metros de tu asiento, con tiempo para conversar, probar y hacerse una foto juntos." },
   { slug: "cooking", title: "Cocina", tag: "Gastronomía", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
     lead: "Cocina japonesa enseñada por chefs profesionales: arroz de sushi, rollos y nigiri, condimentos fermentados y los platos que se construyen con ellos. Clases pequeñas en las que cocinas y luego te sientas a comer." },
   { slug: "ninja", title: "Ninja", tag: "Tradicional", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",
