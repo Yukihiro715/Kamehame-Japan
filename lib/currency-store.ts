@@ -76,15 +76,23 @@ function hasStoredChoice(): boolean {
   try { return isCurrency(localStorage.getItem(CURRENCY_KEY)); } catch { return false; }
 }
 
-/** A page's preferred display currency (the golf booking service shows dollars first): applied
- *  only while the visitor has not chosen one, never stored, so their own choice always wins. */
+/** A page's display currency (the golf booking service opens in dollars for every visitor,
+ *  owner's decision 2026-10-17): applied in memory while that page is open, never stored.
+ *  The toggle still works on the page, and other pages return to the visitor's stored choice. */
+let preferred: Currency | null = null;
 export function preferCurrency(c: Currency) {
   load();
-  if (hasStoredChoice() || currency === c) return;
-  currency = c;
-  emit();
+  preferred = c;
+  if (currency !== c) { currency = c; emit(); }
   if (c === "USD") void ensureRate();
 }
+export function releasePreferredCurrency() {
+  if (!preferred) return;
+  preferred = null;
+  const stored = readStoredCurrency();
+  if (currency !== stored) { currency = stored; emit(); }
+}
+void hasStoredChoice;
 
 export const getCurrency = (): Currency => { load(); return currency; };
 export const getRate = (): FxRate | null => { load(); return currentRate(); };

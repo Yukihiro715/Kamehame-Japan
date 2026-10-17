@@ -77,9 +77,11 @@ test("golf page (booking service): flat fee per golfer from one golfer, meet at 
   assert.doesNotMatch(text, /−¥5,000|Bringing own \(/, "no own-clubs deduction in the booking service");
   // what we arrange vs what is not part of the service
   assert.ok(text.includes("What the Arrangement Fee Covers"), "inclusions heading");
-  assert.equal(html.split('class="gi-card"').length - 1, 7, "seven arranged items");
-  assert.equal(html.split('class="gi-card gi-no"').length - 1, 5, "five items outside the service");
-  assert.match(html, /gi-card gi-no"[\s\S]{0,900}Private Transfer/, "transfers are outside the service");
+  assert.equal(html.split('class="gi-card"').length - 1, 9, "nine arranged items (ten cards: no driver or lunch card)");
+  assert.equal(html.split('class="gi-card gi-no"').length - 1, 1, "only golf wear is outside the service");
+  assert.match(html, /gi-card"[\s\S]{0,900}Private Transfer[\s\S]{0,300}We introduce a licensed transfer company/, "the transfer partner is something we arrange");
+  assert.match(html, /gi-card"[\s\S]{0,900}English Assistant[\s\S]{0,200}Optional/, "the assistant is an option");
+  assert.ok(!/gi-label">(Driver|Lunch)</.test(html), "no driver or lunch card");
   assert.ok(text.includes("Getting There: Your Choice") && !text.includes("Travel in Comfort"), "the getting-there section replaces the transfer section");
   assert.ok(text.includes("we introduce a licensed private transfer partner"), "the partner is introduced, not named");
   assert.doesNotMatch(html, /Rion/i, "the transfer partner is never named");

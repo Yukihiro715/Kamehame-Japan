@@ -87,7 +87,7 @@ const ITEMS: Record<GolfInclusionId, { Icon: LucideIcon | ((p: IconProps) => Rea
 
 /** The booking service (GOLF_MODE "arrangement"): we arrange the tee time, the rentals, the cart and
  *  the clubhouse side with the club; transfers, a driver, an assistant, lunch and wear are not part of it. */
-const ARRANGED: Record<GolfInclusionId, boolean> = { round: true, clubs: true, shoes: true, transfer: false, driver: false, assistant: false, cart: true, locker: true, bath: true, lunch: false, taxes: true, wear: false };
+const ARRANGED: Record<GolfInclusionId, boolean> = { round: true, clubs: true, shoes: true, transfer: true, driver: false, assistant: true, cart: true, locker: true, bath: true, lunch: false, taxes: true, wear: false };
 
 /** "What's Included in Your Golf Day": the twelve items as icon cards, four across
  *  on wide screens and two on phones, each with a green check or a red cross. The

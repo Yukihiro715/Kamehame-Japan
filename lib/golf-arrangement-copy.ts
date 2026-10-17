@@ -42,7 +42,8 @@ interface ArrangementCopy {
 }
 
 const FEE = yen(GOLF_ARRANGEMENT_FEE_JPY);
-const ITEM_ORDER: GolfInclusionId[] = ["round", "clubs", "shoes", "transfer", "driver", "assistant", "cart", "locker", "bath", "lunch", "taxes", "wear"];
+/** Ten cards: the driver (part of the partner's car) and lunch (ordered at the club) are not listed (owner, 2026-10-17). */
+const ITEM_ORDER: GolfInclusionId[] = ["round", "clubs", "shoes", "transfer", "assistant", "cart", "locker", "bath", "taxes", "wear"];
 
 const en: ArrangementCopy = {
   title: "Japan Golf Course Booking Service",
@@ -111,9 +112,9 @@ const en: ArrangementCopy = {
       round: { label: "Tee-Time Booking", note: "Course chosen and reserved in your name; green fees paid at the club" },
       clubs: { label: "Rental Clubs", note: "Reserved on request; paid at the club" },
       shoes: { label: "Rental Shoes", note: "Reserved on request; paid at the club" },
-      transfer: { label: "Private Transfer", note: "Through our partner, contracted directly with them" },
+      transfer: { label: "Private Transfer", note: "We introduce a licensed transfer company; you book and pay them directly" },
       driver: { label: "Driver", note: "Comes with the partner's car" },
-      assistant: { label: "English Assistant", note: "Optional for the day; quoted separately" },
+      assistant: { label: "English Assistant", note: "Optional: with you at the club on the day, quoted separately" },
       cart: { label: "Golf Cart", note: "Requested with your booking; paid at the club" },
       locker: { label: "Locker Room", note: "Clubhouse facility, with your green fee" },
       bath: { label: "Bath", note: "At clubhouses that have one" },
@@ -123,7 +124,7 @@ const en: ArrangementCopy = {
     },
     footnote: "The fee covers the arrangement and the liaison. Green fees, cart, rentals, lunch and any caddie are paid directly at the club on the day; we tell you the amounts in advance.",
     courseNote: "Cart rules, rental availability and clubhouse facilities vary by course; the details of your confirmed course come with your reservation.",
-    alsoNot: "Not part of the service: transfers (see below), an assistant for the day (quoted separately), food and drinks, personal purchases.",
+    alsoNot: "Also settled at the club: a course caddie where offered, food and drinks, personal purchases. Golf wear and gloves are yours to bring.",
   },
   transfer: {
     heading: "Getting There: Your Choice",
@@ -269,9 +270,9 @@ const ja: ArrangementCopy = {
       round: { label: "ティータイム予約", note: "コースを選定し、お名前で予約。プレー代はゴルフ場払い" },
       clubs: { label: "レンタルクラブ", note: "ご希望で予約。料金はゴルフ場払い" },
       shoes: { label: "レンタルシューズ", note: "ご希望で予約。料金はゴルフ場払い" },
-      transfer: { label: "専用車送迎", note: "提携会社をご紹介。契約は直接" },
+      transfer: { label: "専用車送迎", note: "対応できる送迎会社をご紹介。予約とお支払いは直接" },
       driver: { label: "ドライバー", note: "提携会社の車両に付帯" },
-      assistant: { label: "英語アシスタント", note: "当日の同行はオプション・別途見積" },
+      assistant: { label: "英語アシスタント", note: "オプション:当日ゴルフ場で同行、別途見積" },
       cart: { label: "ゴルフカート", note: "予約時に依頼。料金はゴルフ場払い" },
       locker: { label: "ロッカールーム", note: "クラブハウスの設備(プレー代に含む)" },
       bath: { label: "お風呂", note: "設備のあるクラブハウスで" },
@@ -281,7 +282,7 @@ const ja: ArrangementCopy = {
     },
     footnote: "手配料は予約と調整に対するものです。プレー代、カート、レンタル、昼食、キャディ料は当日ゴルフ場で直接お支払いください。金額は事前にお知らせします。",
     courseNote: "カートのルール、レンタルの有無、クラブハウスの設備はコースによって異なります。確定したコースの詳細は予約確定時にお知らせします。",
-    alsoNot: "サービス対象外:送迎(下記参照)、当日のアシスタント(別途見積)、飲食、個人的な購入品。",
+    alsoNot: "そのほかゴルフ場で精算するもの:キャディ(制度がある場合)、飲食、個人的な購入品。ウェアとグローブはご持参ください。",
   },
   transfer: {
     heading: "行き方は、お好みで",
@@ -427,9 +428,9 @@ const es: ArrangementCopy = {
       round: { label: "Reserva de la salida", note: "Campo elegido y reservado a tu nombre; green fees pagados en el club" },
       clubs: { label: "Palos de alquiler", note: "Reservados a petición; se pagan en el club" },
       shoes: { label: "Zapatos de alquiler", note: "Reservados a petición; se pagan en el club" },
-      transfer: { label: "Traslado privado", note: "A través de nuestro socio, contratado directamente" },
+      transfer: { label: "Traslado privado", note: "Te presentamos una empresa de traslados con licencia; reservas y pagas con ella directamente" },
       driver: { label: "Conductor", note: "Incluido con el coche del socio" },
-      assistant: { label: "Asistente en inglés", note: "Opcional para el día; presupuestado aparte" },
+      assistant: { label: "Asistente en inglés", note: "Opcional: contigo en el club ese día, presupuestado aparte" },
       cart: { label: "Carrito de golf", note: "Se pide con la reserva; se paga en el club" },
       locker: { label: "Vestuario", note: "Instalación de la casa club, con tu green fee" },
       bath: { label: "Baño", note: "En las casas club que lo tienen" },
@@ -439,7 +440,7 @@ const es: ArrangementCopy = {
     },
     footnote: "La tarifa cubre la gestión y la coordinación. Green fees, carrito, alquileres, almuerzo y caddie se pagan directamente en el club ese día; te decimos los importes de antemano.",
     courseNote: "Las normas del carrito, la disponibilidad de alquileres y las instalaciones varían según el campo; los detalles de tu campo confirmado llegan con tu reserva.",
-    alsoNot: "No forma parte del servicio: traslados (ver abajo), un asistente para el día (presupuesto aparte), comida y bebida, compras personales.",
+    alsoNot: "También se paga en el club: el caddie donde lo haya, comida y bebida, compras personales. La ropa y los guantes los traes tú.",
   },
   transfer: {
     heading: "Cómo llegar: tú eliges",
@@ -585,9 +586,9 @@ const fr: ArrangementCopy = {
       round: { label: "Réservation du départ", note: "Parcours choisi et réservé à votre nom ; green fees réglés au club" },
       clubs: { label: "Clubs de location", note: "Réservés sur demande ; réglés au club" },
       shoes: { label: "Chaussures de location", note: "Réservées sur demande ; réglées au club" },
-      transfer: { label: "Transfert privé", note: "Via notre partenaire, contrat direct avec lui" },
+      transfer: { label: "Transfert privé", note: "Nous vous présentons une société de transfert agréée ; réservation et paiement directement auprès d'elle" },
       driver: { label: "Chauffeur", note: "Compris avec la voiture du partenaire" },
-      assistant: { label: "Assistant anglophone", note: "En option pour la journée ; devis séparé" },
+      assistant: { label: "Assistant anglophone", note: "En option : avec vous au club ce jour-là, devis séparé" },
       cart: { label: "Voiturette", note: "Demandée avec la réservation ; réglée au club" },
       locker: { label: "Vestiaire", note: "Équipement du club-house, avec votre green fee" },
       bath: { label: "Bain", note: "Dans les club-houses qui en ont un" },
@@ -597,7 +598,7 @@ const fr: ArrangementCopy = {
     },
     footnote: "Les frais couvrent l'organisation et la coordination. Green fees, voiturette, locations, déjeuner et caddie se règlent directement au club le jour même ; nous vous indiquons les montants à l'avance.",
     courseNote: "Règles de voiturette, disponibilité des locations et équipements varient selon le parcours ; les détails de votre parcours confirmé accompagnent votre réservation.",
-    alsoNot: "Hors service : transferts (voir ci-dessous), assistant pour la journée (devis séparé), boissons et repas, achats personnels.",
+    alsoNot: "Également réglés au club : le caddie lorsqu'il est proposé, boissons et repas, achats personnels. Tenue et gants sont à apporter.",
   },
   transfer: {
     heading: "Pour y aller : à vous de choisir",
@@ -743,9 +744,9 @@ const zh: ArrangementCopy = {
       round: { label: "開球時間預約", note: "挑選球場並以你的名字預約；果嶺費於球場支付" },
       clubs: { label: "租借球桿", note: "依需求預約；費用於球場支付" },
       shoes: { label: "租借球鞋", note: "依需求預約；費用於球場支付" },
-      transfer: { label: "私人接送", note: "透過合作夥伴，直接與對方簽約" },
+      transfer: { label: "私人接送", note: "介紹可承接的持照接送公司；由你直接預約與付款" },
       driver: { label: "司機", note: "隨合作夥伴的車輛" },
-      assistant: { label: "英文助理", note: "當天隨行為選購；另行報價" },
+      assistant: { label: "英文助理", note: "選購：當天在球場隨行，另行報價" },
       cart: { label: "高爾夫球車", note: "預約時一併申請；費用於球場支付" },
       locker: { label: "置物櫃", note: "會館設施，含在果嶺費內" },
       bath: { label: "浴場", note: "於設有浴場的會館" },
@@ -755,7 +756,7 @@ const zh: ArrangementCopy = {
     },
     footnote: "代辦費涵蓋預約與協調。果嶺費、球車、租借、午餐與桿弟費當天在球場直接支付；金額會事先告知。",
     courseNote: "球車規定、租借供應與會館設施依球場而異；確定球場的細節隨預約確認一併提供。",
-    alsoNot: "不在服務範圍：接送（見下方）、當天助理（另行報價）、餐飲、個人消費。",
+    alsoNot: "同樣於球場結算：桿弟（有提供時）、餐飲、個人消費。服裝與手套請自備。",
   },
   transfer: {
     heading: "前往球場：由你決定",
