@@ -1,0 +1,20 @@
+{
+  "caseId": "KJ-261101-01",
+  "enquiry": {
+    "kind": "guest", "experience": "mt-fuji-golf-day", "lang": "en",
+    "name": "Example Guest", "email": "guest@example.invalid", "message": "",
+    "areaId": "fuji", "party": "2", "dates": "2026-11-18 09:00", "assistant": "none"
+  },
+  "proposal": {
+    "courseName": "REPLACE with the proposed course",
+    "date": "2026-11-18", "teeTime": "09:00",
+    "courseCharges": "REPLACE with the club-confirmed itemised charges, rental availability and total payable at the club.",
+    "courseCancellation": "REPLACE with the club-confirmed deadlines and cancellation charges, including weather closure conditions.",
+    "validUntil": "2026-11-10T18:00:00+09:00",
+    "payment": {
+      "url": "https://book.stripe.com/REPLACE",
+      "amount": 30000, "currency": "JPY", "priceVersion": "arrangement-2026-10-17",
+      "verified": false
+    }
+  }
+}

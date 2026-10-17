@@ -100,7 +100,8 @@ test("payment-click metrics exclude company-signature clicks and deduplicate eve
 });
 
 const vite=await createServer({appType:"custom",configFile:false,root,resolve:{alias:{"@":root}},server:{middlewareMode:true}});
-const {paymentTemplate,photoFollowUp}=await vite.ssrLoadModule("/lib/golf-automation.ts");
+const {photoFollowUp}=await vite.ssrLoadModule("/lib/golf-automation.ts");
+const {packagePaymentTemplate: paymentTemplate}=await vite.ssrLoadModule("/lib/golf-package-email.ts");
 after(()=>vite.close());
 const {verifyWebhook,receiveWebhook}=await vite.ssrLoadModule("/lib/payment-webhooks.ts");
 test("Svix signature, tampering, expired timestamp and rotation with ephemeral test keys",async()=>{
