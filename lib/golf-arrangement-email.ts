@@ -3,12 +3,13 @@ import { GOLF_ARRANGEMENT_FEE_JPY, GOLF_ARRANGEMENT_PRICE_VERSION, isGolfArea } 
 import { escapeEmailHtml, golfEmailHtml } from "@/lib/golf-email-html";
 import { SIGN, threadSubject } from "@/lib/mail-copy";
 import { arrangementMailCopy } from "@/lib/golf-arrangement-mail-copy";
+import { golfArrangementPayment } from "@/lib/golf-arrangement-payments";
 
 export const ARRANGEMENT_EMAIL_VERSION = "arrangement-photo-2026-10-17";
 
-/** Staff-reviewed proposal, never populated from the public enquiry form.
- * Verification means checking the actual Stripe link in the merchant dashboard;
- * this renderer does not have a Stripe API key and cannot verify it remotely. */
+/** Staff-reviewed course proposal, never populated from the public enquiry form.
+ * The payment link is selected from the owner's fixed-price master by party size.
+ * This renderer does not query Stripe; subsequent Stripe-side changes need review. */
 export interface ArrangementProposal {
   courseName: string;
   date: string;
@@ -16,7 +17,8 @@ export interface ArrangementProposal {
   courseCharges: string;
   courseCancellation: string;
   validUntil: string;
-  payment: {
+  /** Optional compatibility check for saved input. Never overrides the master. */
+  payment?: {
     url: string;
     amount: number;
     currency: "JPY";
@@ -42,11 +44,10 @@ export function arrangementPaymentTemplate(e: Enquiry, p: ArrangementProposal, t
   const expires = Date.parse(p.validUntil), teeAt = Date.parse(`${p.date}T${p.teeTime}:00+09:00`);
   if (!/(Z|[+-]\d{2}:\d{2})$/.test(p.validUntil) || !Number.isFinite(expires) || expires <= now || expires >= teeAt)
     throw new Error("A future proposal deadline with a timezone, before tee-off, is required");
-  const total = GOLF_ARRANGEMENT_FEE_JPY * n;
-  if (!p.payment || p.payment.verified !== true || p.payment.priceVersion !== GOLF_ARRANGEMENT_PRICE_VERSION || p.payment.currency !== "JPY" || p.payment.amount !== total)
-    throw new Error("Verify a booking-service-only Stripe link for the exact fee and currency; package links cannot be used");
-  if (!/^https:\/\/(book|buy)\.stripe\.com\/[A-Za-z0-9]+$/.test(p.payment.url))
-    throw new Error("A verified live Stripe Payment Link without query parameters is required");
+  const payment = golfArrangementPayment(n);
+  const total = payment.amount;
+  if (p.payment !== undefined && (!p.payment || p.payment.verified !== true || p.payment.priceVersion !== payment.priceVersion || p.payment.currency !== payment.currency || p.payment.amount !== total || p.payment.url !== payment.url))
+    throw new Error("Saved payment details do not match this party's approved booking-service link; package and other-party links cannot be used");
   const fmt = (date: Date) => date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
   const before = (days: number) => fmt(new Date(day.getTime() - days * 86400000));
   const deadline = new Date(expires).toLocaleString("en-GB", { timeZone: "Asia/Tokyo", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
@@ -73,7 +74,7 @@ export function arrangementPaymentTemplate(e: Enquiry, p: ArrangementProposal, t
     SIGN.en,
   ].join("\n");
   const html = golfEmailHtml(text, e.areaId, true, "Pay booking service fee");
-  const values: Record<string, string> = { TOTAL: total.toLocaleString("en-US"), PAYMENT_URL: p.payment.url };
+  const values: Record<string, string> = { TOTAL: total.toLocaleString("en-US"), PAYMENT_URL: payment.url };
   const fill = (value: string, html: boolean) => value.replace(/\{\{(TOTAL|PAYMENT_URL)\}\}/g, (_, key: string) => html ? escapeEmailHtml(values[key]) : values[key]);
-  return { subject: threadSubject(e, title ?? "Japan Golf Course Booking Service"), text: fill(text, false), html: fill(html, true), version: ARRANGEMENT_EMAIL_VERSION, golfMode: "arrangement" as const, priceVersion: GOLF_ARRANGEMENT_PRICE_VERSION, amount: total };
+  return { subject: threadSubject(e, title ?? "Japan Golf Course Booking Service"), text: fill(text, false), html: fill(html, true), version: ARRANGEMENT_EMAIL_VERSION, golfMode: "arrangement" as const, priceVersion: GOLF_ARRANGEMENT_PRICE_VERSION, amount: total, paymentUrl: payment.url };
 }
