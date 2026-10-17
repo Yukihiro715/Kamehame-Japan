@@ -60,6 +60,9 @@ function masterOwnCount_(row,n) {
   var count=Number(value);return Number.isSafeInteger(count)&&count>=0&&count<=n?count:-1;
 }
 function decision_(p, rows, now) {
+  // Preserve legacy package jobs without a mode, but never price a booking fee as a package.
+  if((p.golfMode && p.golfMode!=='package') || p.priceVersion!=='2026-10-10')
+    return {mode:'manual',reason:'手配料方式はコース提案を確認して個別案内',link:null,ownCount:0,clubDiscount:0};
   var e=p.enquiry, reasons=[], n=Number(e.party), date=String(e.dates||'').slice(0,10);
   var d=new Date(date+'T00:00:00Z'), today=new Date(now+9*3600000).toISOString().slice(0,10);
   var validDate=/^\d{4}-\d{2}-\d{2}$/.test(date)&&isFinite(d.getTime())&&d.toISOString().slice(0,10)===date;

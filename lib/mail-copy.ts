@@ -1,9 +1,11 @@
 // Copy for the automatic acknowledgement a visitor receives right after
-// sending an enquiry. Plain text on purpose: it lands in every client, and
-// it reads as a person's note rather than a marketing template.
+// sending an enquiry. Text is the source for both text and HTML alternatives.
 
 import type { Lang } from "@/lib/i18n";
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
+import { GOLF_ARRANGEMENT_COPY } from "@/lib/golf-arrangement-copy";
+import { isArrangement } from "@/lib/golf-prices";
+import { arrangementMailCopy } from "@/lib/golf-arrangement-mail-copy";
 import type { Enquiry } from "@/lib/contact";
 
 interface AckCopy {
@@ -213,7 +215,14 @@ const isLang = (l: string): l is Lang => l in COPY;
 
 /** Subject and plain-text body of the acknowledgement, in the visitor's language. */
 export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject: string; text: string } {
-  const c = COPY[isLang(e.lang) ? e.lang : "en"];
+  const lang = isLang(e.lang) ? e.lang : "en";
+  const original = COPY[lang];
+  const arrangement = e.kind === "guest" && e.experience === "mt-fuji-golf-day" && isArrangement();
+  const a = GOLF_ARRANGEMENT_COPY[lang];
+  const c = arrangement ? { ...original, labels: { ...original.labels,
+    dates: arrangementMailCopy[lang].dates, estimate: a.form.package, pickup: a.form.pickup,
+    courseRecommended: a.form.recommendedCourse, courseSpecific: a.form.specificCourse,
+  } } : original;
   const trade = e.kind === "trade";
   const echo = [
     e.company && `${c.labels.company}: ${e.company}`,
@@ -228,6 +237,8 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
     e.shoes && `${c.labels.shoes}: ${e.shoes}`,
     e.clubs && `${c.labels.clubs}: ${e.clubs}`,
     e.pickup && `${c.labels.pickup}: ${e.pickup}`,
+    arrangement && e.assistant && `${a.process.assistant}: ${a.process.assistants[e.assistant === "required" ? 1 : e.assistant === "unsure" ? 2 : 0]}`,
+    arrangement && e.caddie && `${a.process.caddie}: ${a.process.caddies[e.caddie === "required" ? 1 : e.caddie === "unsure" ? 2 : 0]}`,
     e.whatsapp && `${c.labels.whatsapp}: ${e.whatsapp}`,
     e.interpreter && `${c.labels.interpreter}: ${e.interpreter}`,
     e.addons && `${c.labels.extras}: ${e.addons}`,
@@ -240,6 +251,7 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
     trade ? c.thanksTrade : e.areaId ? golfProcessCopy(isLang(e.lang) ? e.lang : "en").received : c.thanks(experienceTitle),
     "",
     ...(trade ? [] : [e.areaId ? [golfProcessCopy(isLang(e.lang) ? e.lang : "en").arrange, golfProcessCopy(isLang(e.lang) ? e.lang : "en").protection].join("\n\n") : c.notYet, ""]),
+    ...(arrangement ? [arrangementMailCopy[lang].paymentSplit, ""] : []),
     ...(echo.length ? [c.echoH, ...echo.map((l) => `  ${l}`), ""] : []),
     c.addMore,
     "",
@@ -260,7 +272,9 @@ export function threadSubject(e: Enquiry, experienceTitle?: string): string {
 export function followUp(e: Enquiry, experienceTitle?: string): { subject: string; text: string } {
   const c = COPY[isLang(e.lang) ? e.lang : "en"];
   const f = c.followUp;
-  const body = e.areaId ? f.golf() : f.other(experienceTitle ?? e.experience ?? "");
+  const arrangement = e.kind === "guest" && e.experience === "mt-fuji-golf-day" && isArrangement();
+  const a = arrangementMailCopy[isLang(e.lang) ? e.lang : "en"];
+  const body = arrangement ? `${a.followUp}\n\n${a.paymentSplit}` : e.areaId ? f.golf() : f.other(experienceTitle ?? e.experience ?? "");
   const text = [c.hello(e.name), "", f.intro, "", body, "", f.wait, "", f.reply, "", f.sign].join("\n");
   return { subject: threadSubject(e, experienceTitle), text };
 }
