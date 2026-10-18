@@ -18,6 +18,8 @@ export interface ArrangementProcess {
   area: string; caddie: string; caddies: string[]; caddieNote: string; paidH: string; paid: string;
   /** The assistant-for-the-day choice in the form. */
   assistant: string; assistants: string[]; assistantNote: string;
+  /** The transfer choice in the form: not part of the service; on request we introduce the transfer partner. */
+  transfer: string; transfers: string[]; transferNote: string;
 }
 
 interface ArrangementCopy {
@@ -200,6 +202,8 @@ const en: ArrangementCopy = {
     paidH: "Payment received", paid: "Thank you. We have received your arrangement fee and will reserve your tee time; the written confirmation and your briefing follow by email.",
     assistant: "English-speaking assistant on the day", assistants: ["Not needed", "Requested (quoted separately)", "Please advise"],
     assistantNote: "If requested, we quote the assistant separately with your proposal.",
+    transfer: "Transfer to the course", transfers: ["Not needed — we make our own way", "Yes — please introduce the transfer partner", "Please advise"],
+    transferNote: "Transfers are not part of our service. If you would like one, we connect you directly with our partner transfer company; you book and pay them directly.",
   },
 };
 
@@ -358,6 +362,8 @@ const ja: ArrangementCopy = {
     paidH: "お支払いを受け付けました", paid: "ありがとうございます。手配料のお支払いを確認し、ティータイムを確保します。書面の確定通知と事前案内をメールでお送りします。",
     assistant: "当日の英語対応アシスタント", assistants: ["不要", "希望する(別途見積)", "相談したい"],
     assistantNote: "ご希望の場合はご提案時にアシスタント料を別途お見積もりします。",
+    transfer: "ゴルフ場までの送迎", transfers: ["不要(自分で移動する)", "希望する(提携会社の紹介を希望)", "相談したい"],
+    transferNote: "送迎は当社のサービスには含まれません。ご希望の場合は提携の送迎会社に直接おつなぎします(ご契約・お支払いは送迎会社と直接)。",
   },
 };
 
@@ -516,6 +522,8 @@ const es: ArrangementCopy = {
     paidH: "Pago recibido", paid: "Gracias. Hemos recibido tu tarifa de gestión y reservaremos tu hora de salida; la confirmación escrita y tu guía llegan por correo.",
     assistant: "Asistente de habla inglesa para el día", assistants: ["No necesario", "Solicitado (presupuesto aparte)", "Prefiero consultar"],
     assistantNote: "Si lo solicitas, presupuestamos el asistente aparte con la propuesta.",
+    transfer: "Traslado al campo", transfers: ["No necesario: vamos por nuestra cuenta", "Sí: preséntennos a la empresa de traslados asociada", "Prefiero consultar"],
+    transferNote: "El traslado no forma parte de nuestro servicio. Si lo deseas, te ponemos en contacto directo con nuestra empresa de traslados asociada; reservas y pagas directamente con ella.",
   },
 };
 
@@ -674,6 +682,8 @@ const fr: ArrangementCopy = {
     paidH: "Paiement reçu", paid: "Merci. Nous avons reçu vos frais d'organisation et réservons votre départ ; la confirmation écrite et votre briefing suivent par e-mail.",
     assistant: "Assistant anglophone pour la journée", assistants: ["Pas nécessaire", "Demandé (devis séparé)", "À discuter"],
     assistantNote: "Sur demande, nous chiffrons l'assistant séparément avec la proposition.",
+    transfer: "Transfert vers le parcours", transfers: ["Pas nécessaire : nous nous déplaçons par nos propres moyens", "Oui : présentez-nous le partenaire de transfert", "À discuter"],
+    transferNote: "Le transfert ne fait pas partie de notre service. Si vous le souhaitez, nous vous mettons directement en relation avec notre société de transfert partenaire ; vous réservez et réglez directement auprès d'elle.",
   },
 };
 
@@ -832,6 +842,8 @@ const zh: ArrangementCopy = {
     paidH: "已收到付款", paid: "感謝你。我們已收到代辦費，將為你確保開球時間；書面確認與行前說明將以電子郵件寄送。",
     assistant: "當天的英文助理", assistants: ["不需要", "需要（另行報價）", "希望諮詢"],
     assistantNote: "如有需求，我們會在提案時另行報價助理費用。",
+    transfer: "前往球場的接送", transfers: ["不需要（自行前往）", "需要（請介紹合作接送公司）", "希望諮詢"],
+    transferNote: "接送不屬於本服務範圍。如有需求，我們會直接為您介紹合作的接送公司，由您與其直接預約與付款。",
   },
 };
 

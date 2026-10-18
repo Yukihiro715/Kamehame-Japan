@@ -152,7 +152,10 @@ export function buildEntries(read) {
   const faqSrc = staticCopy.slice(staticCopy.indexOf("const FAQ"));
   const i18n = src("lib/i18n.ts");
   const privacyDate = src("lib/privacy.ts").match(/const UPDATED = "(\d{4}-\d{2}-\d{2})"/)?.[1] ?? null;
-  const legalDate = src("lib/legal.ts").match(/LEGAL_UPDATED = "(\d{4}-\d{2}-\d{2})"/)?.[1] ?? null;
+  // LEGAL_UPDATED may be a plain date or a mode-dependent expression (the golf booking
+  // service changed the terms); the newest date on that line is the page's date.
+  const legalLine = src("lib/legal.ts").match(/LEGAL_UPDATED = [^\n]*/)?.[0] ?? "";
+  const legalDate = [...legalLine.matchAll(/"(\d{4}-\d{2}-\d{2})"/g)].map((m) => m[1]).sort().pop() ?? null;
   const pageKeys = { contact: keysUsed(src("app/[lang]/contact/page.tsx")), trade: keysUsed(src("app/[lang]/trade/page.tsx")) };
   for (const page of STATIC_PAGES) {
     for (const lang of LANGS) {

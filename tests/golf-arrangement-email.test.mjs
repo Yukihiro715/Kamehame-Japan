@@ -19,7 +19,7 @@ const { golfCustomerEmail } = await vite.ssrLoadModule("/lib/golf-customer-email
 const prices = await vite.ssrLoadModule("/lib/golf-prices.ts");
 const { arrangementPaymentTemplate } = await vite.ssrLoadModule("/lib/golf-arrangement-email.ts");
 const { golfArrangementPayment } = await vite.ssrLoadModule("/lib/golf-arrangement-payments.ts");
-const e = { kind: "guest", experience: "mt-fuji-golf-day", name: '<img src=x> {{TOTAL}}', email: "guest@example.invalid", lang: "en", areaId: "fuji", area: "Mt. Fuji", dates: "2099-11-18 09:00", party: "2", message: "", courseMode: "recommended", pickup: "Example Hotel", assistant: "required", caddie: "required", rentalKeys: "own,own", estimate: "¥30,000" };
+const e = { kind: "guest", experience: "mt-fuji-golf-day", name: '<img src=x> {{TOTAL}}', email: "guest@example.invalid", lang: "en", areaId: "fuji", area: "Mt. Fuji", dates: "2099-11-18 09:00", party: "2", message: "", courseMode: "recommended", pickup: "Example Hotel", assistant: "required", transfer: "introduce", caddie: "required", rentalKeys: "own,own", estimate: "¥30,000" };
 const proposal = { courseName: "Example & Club", date: "2099-11-18", teeTime: "09:00", courseCharges: "¥18,000 per golfer including cart; rentals extra, payable to club.", courseCancellation: "From 15 November: ¥3,000 per golfer payable to club.", validUntil: "2099-11-10T18:00:00+09:00", payment: { url: "https://book.stripe.com/8x2bJ16rT2AHbD19V83Je0m", amount: 30000, currency: "JPY", verified: true, priceVersion: "arrangement-2026-10-17" } };
 const env = { GOLF_AUTOMATION_URL: "https://script.google.com/macros/s/example/exec", GOLF_AUTOMATION_TOKEN: "test-only" };
 
@@ -42,6 +42,7 @@ test("all five acknowledgement/follow-up languages add safe HTML, fee split and 
   }
   const ack = golfCustomerEmail("ack", e);
   assert.match(ack.text, /Requested \(quoted separately\)/);
+  assert.match(ack.text, /Transfer to the course: Yes — please introduce the transfer partner/);
   assert.match(ack.text, /Date and preferred tee time/);
   const follow = golfCustomerEmail("follow-up", e);
   assert.match(follow.html, /fuji-oyama.jpg/);

@@ -18,6 +18,8 @@ export interface Enquiry {
   caddie?: "none" | "required" | "unsure";
   /** Booking service: an English-speaking assistant for the day, quoted separately. */
   assistant?: "none" | "required" | "unsure";
+  /** Booking service: a transfer is not ours to sell; "introduce" means the guest wants the transfer partner's contact. */
+  transfer?: "none" | "introduce" | "unsure";
   addonIds?: string[];
   kind: EnquiryKind;
   name: string;

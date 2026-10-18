@@ -109,6 +109,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ["送迎都県", e.pickupRegion],
     ["キャディ", e.areaId ? (e.caddie === "required" ? "あり希望" : e.caddie === "none" ? "なし" : "未確認") : undefined],
     ["アシスタント同行", e.assistant ? (e.assistant === "required" ? "希望あり(別途見積)" : e.assistant === "none" ? "不要" : "相談したい") : undefined],
+    ["送迎(提携会社紹介)", e.transfer ? (e.transfer === "introduce" ? "紹介を希望 → 提携会社へ直接つなぐ" : e.transfer === "none" ? "不要(自力で移動)" : "相談したい") : undefined],
     ["WhatsApp", e.whatsapp],
     ...t("通訳", "interpreter", e.interpreter),
     ...t("オプション", "addons", e.addons),

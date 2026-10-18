@@ -79,7 +79,7 @@ export const GOLF_BOOKING_COPY = {
 
 /** The process copy for the current golf mode: the package's lines, or the booking service's
  *  (lib/golf-arrangement-copy.ts) while GOLF_MODE is "arrangement". Every consumer reads this. */
-export type GolfProcessCopy = (typeof GOLF_BOOKING_COPY)[Lang] & Partial<Pick<ArrangementProcess, "assistant" | "assistants" | "assistantNote">>;
+export type GolfProcessCopy = (typeof GOLF_BOOKING_COPY)[Lang] & Partial<Pick<ArrangementProcess, "assistant" | "assistants" | "assistantNote" | "transfer" | "transfers" | "transferNote">>;
 export function golfProcessCopy(lang: Lang): GolfProcessCopy {
   const base = GOLF_BOOKING_COPY[lang];
   if (!isArrangement()) return base;

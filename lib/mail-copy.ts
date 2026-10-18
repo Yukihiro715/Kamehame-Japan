@@ -238,6 +238,7 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
     e.clubs && `${c.labels.clubs}: ${e.clubs}`,
     e.pickup && `${c.labels.pickup}: ${e.pickup}`,
     arrangement && e.assistant && `${a.process.assistant}: ${a.process.assistants[e.assistant === "required" ? 1 : e.assistant === "unsure" ? 2 : 0]}`,
+    arrangement && e.transfer && `${a.process.transfer}: ${a.process.transfers[e.transfer === "introduce" ? 1 : e.transfer === "unsure" ? 2 : 0]}`,
     arrangement && e.caddie && `${a.process.caddie}: ${a.process.caddies[e.caddie === "required" ? 1 : e.caddie === "unsure" ? 2 : 0]}`,
     e.whatsapp && `${c.labels.whatsapp}: ${e.whatsapp}`,
     e.interpreter && `${c.labels.interpreter}: ${e.interpreter}`,

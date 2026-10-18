@@ -105,7 +105,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       area: v.title, area_id: v.id, party: String(n),
       course_mode: specific ? "specific" : "recommended",
       course: namedCourse ? b.courseName : "", course_url: namedCourse ? b.courseUrl : "",
-      assistant: data.assistant,
+      assistant: data.assistant, transfer: data.transfer,
       dates: `${b.date} ${timeLabel}`,
       pickup: hotelUndecided ? [G.hotelUndecided, data["hotel-area"]].filter(Boolean).join(" — ") : data.pickup,
       level: [G.experienceOpts[level], data.handicap && `${G.handicap.replace(/\s*[(（].*$/, "")}: ${data.handicap}`].filter(Boolean).join(" · "),
@@ -233,10 +233,19 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         <legend>{G.steps.hotel}</legend>
         {arrangement ? (
           // Meet at the course: where the guest stays only helps us suggest courses and, if wanted, the transfer partner.
-          <label className="form-row">
-            <span>{G.pickup}</span>
-            <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
-          </label>
+          <>
+            <label className="form-row">
+              <span>{G.pickup}</span>
+              <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
+            </label>
+            {processCopy.transfer && processCopy.transfers && (
+              <label><span>{processCopy.transfer}</span>
+                <select name="transfer" defaultValue="none">
+                  {["none", "introduce", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.transfers![i]}</option>)}
+                </select><small>{processCopy.transferNote}</small>
+              </label>
+            )}
+          </>
         ) : (
           <>
             <label><span>{processCopy.region}</span>

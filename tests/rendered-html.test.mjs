@@ -88,6 +88,8 @@ test("golf page (booking service): flat fee per golfer from one golfer, meet at 
   assert.ok(text.includes("Know your course and tee time before you pay"), "reassurance under the options");
   // the form: tee time, optional base, no pick-up prefecture, an assistant choice
   assert.ok(html.includes("Preferred tee time") && html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
+  // the transfer choice: not ours to sell, the partner introduced on request
+  assert.ok(html.includes('name="transfer"') && html.includes("please introduce the transfer partner") && html.includes("we connect you directly with our partner transfer company"), "transfer choice with the partner note");
   assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");
   assert.ok(html.includes("Send Tee-Time Request") && html.includes("Check Tee Times"), "CTAs");
   assert.equal(html.split("<form ").length - 1, 1, "exactly one form");

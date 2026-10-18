@@ -183,6 +183,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     pickupRegion: ["tokyo", "saitama", "chiba", "other"].includes(String(body.pickup_region)) ? body.pickup_region as Enquiry["pickupRegion"] : undefined,
     caddie: ["none", "required", "unsure"].includes(String(body.caddie)) ? body.caddie as Enquiry["caddie"] : undefined,
     assistant: ["none", "required", "unsure"].includes(String(body.assistant)) ? body.assistant as Enquiry["assistant"] : undefined,
+    transfer: ["none", "introduce", "unsure"].includes(String(body.transfer)) ? body.transfer as Enquiry["transfer"] : undefined,
     addonIds: Array.isArray(body.addon_ids) ? body.addon_ids.filter((x): x is string => typeof x === "string").slice(0, 10) : undefined,
     kind, name, email, message,
     company: clean(body.company, MAX.company) || undefined,
