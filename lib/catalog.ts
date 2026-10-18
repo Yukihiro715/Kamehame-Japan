@@ -725,6 +725,8 @@ export const experiences: Experience[] = [
     // condition sheet yet: the sale price, start times and wholesale terms are
     // placeholders (docs/EMAIL_TEMPLATES.md §I). The partner's brand and the
     // founder's name stay off the page so guests cannot book around us.
+    // 2026-10-18: re-checked against the partner's public pages; the child
+    // (6–15: ¥15,000) and senior (65+: ¥18,000) public rates are now in the FAQ.
     slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
     title: "Kendo Experience in a Nihonbashi Dojo, Tokyo",
     tagline: "Put on the armour, take up the shinai and train in a working Tokyo dojo: the history and etiquette of kendo, footwork, the swing, striking practice and a match to finish — against the other guests, then the instructor. Two hours, taught in English, from age six.",
@@ -796,7 +798,7 @@ export const experiences: Experience[] = [
       { q: "Is everything provided?", a: "Yes. Uniform, protective armour and shinai are lent at no extra cost. Come in everyday clothes; there are changing rooms and lockers." },
       { q: "Which language is the session in?", a: "English. The instructor teaches in English and Japanese." },
       { q: "Can I join alone?", a: "Yes, from one guest. Many guests come on their own." },
-      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; children aged 6 to 15 pay a reduced rate, and so do guests aged 65 and over — tell us everyone's age in your request and the quote applies it. Younger children cannot join a shared session; a private session can be arranged instead." },
+      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; children aged 6 to 15 pay ¥15,000 and guests aged 65 and over ¥18,000 (adults ¥20,000) — tell us everyone's age in your request and the quote applies it. Younger children cannot join a shared session; a private session can be arranged instead." },
       { q: "Is this a samurai show?", a: "No. It is not a costume or role-play experience. You train in a real dojo, in the kendo that is practised in Japan today, and learn where its traditions come from." },
       { q: "How large is the class?", a: "Up to eight guests share a session. Larger groups, and a private session for your party only, are quoted individually." },
       { q: "I am not sporty. Can I keep up?", a: "Yes. The session is adjusted to each person's age and fitness, and there is no need to perform every movement perfectly. Older guests join regularly; where the etiquette involves kneeling, a chair is provided." },
