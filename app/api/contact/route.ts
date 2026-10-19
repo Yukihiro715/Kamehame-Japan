@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
+import { CONTACT_EMAIL, FOLLOW_UP_ENABLED, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
 import { threadSubject } from "@/lib/mail-copy";
 import { golfCustomerEmail } from "@/lib/golf-customer-email";
 import { catalogFor } from "@/lib/catalog";
@@ -104,7 +104,9 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
   const ack = golfCustomerEmail("ack", e, title);
   const safeName = e.name.replace(/[<>"\r\n]/g, "");
   const jaName = jaTitle(e);
-  const later = e.kind === "guest" ? golfCustomerEmail("follow-up", e, title) : null;
+  const later = FOLLOW_UP_ENABLED && e.kind === "guest" ? golfCustomerEmail("follow-up", e, title) : null;
+  // While the follow-up is paused, the team notification says so instead of reporting a scheduling failure.
+  const paused = !FOLLOW_UP_ENABLED && e.kind === "guest" ? { text: "", scheduled: false, delayMinutes: FOLLOW_UP_MINUTES, paused: true } : null;
   const scheduled = later ? await scheduleFollowUp(key, e, later.subject, later.text, later.html) : null;
   const res = await fetch(`${RESEND}/emails/batch`, {
     method: "POST",
@@ -115,7 +117,7 @@ async function sendViaResend(key: string, to: string[], e: Enquiry, ja: Translat
         to,
         reply_to: `${safeName} <${e.email}>`,
         subject: threadSubject(e, title),
-        text: notificationBody(e, jaName, { ack, ja, followUp: later ? { text: later.text, scheduled: !!scheduled, delayMinutes: FOLLOW_UP_MINUTES, emailId: scheduled?.id, scheduledAt: scheduled?.scheduledAt } : null }),
+        text: notificationBody(e, jaName, { ack, ja, followUp: later ? { text: later.text, scheduled: !!scheduled, delayMinutes: FOLLOW_UP_MINUTES, emailId: scheduled?.id, scheduledAt: scheduled?.scheduledAt } : paused }),
         tags: [{ name: "kind", value: e.kind }],
       },
       {

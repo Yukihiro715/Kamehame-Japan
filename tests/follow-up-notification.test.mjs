@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const vite = await createServer({
+const makeServer = (followUpOn) => createServer({
   appType: "custom",
   configFile: false,
   root,
@@ -14,6 +14,8 @@ const vite = await createServer({
     enforce: "pre",
     transform(code, id) {
       if (id.endsWith("/lib/golf-prices.ts")) return code.replace(/GOLF_MODE: GolfMode = "(arrangement|package)"/, 'GOLF_MODE: GolfMode = "arrangement"');
+      // The follow-up tests cover the scheduling path even while the switch is off in production.
+      if (id.endsWith("/lib/contact.ts") && followUpOn) return code.replace(/FOLLOW_UP_ENABLED = (true|false)/, "FOLLOW_UP_ENABLED = true");
     },
     resolveId(id) {
       if (id === "cloudflare:workers" || id === "cloudflare:email") return `\0test:${id}`;
@@ -25,7 +27,9 @@ const vite = await createServer({
   }],
   server: { middlewareMode: true },
 });
-after(() => vite.close());
+const vite = await makeServer(true);
+const asShipped = await makeServer(false);
+after(async () => { await vite.close(); await asShipped.close(); });
 
 const { POST } = await vite.ssrLoadModule("/app/api/contact/route.ts");
 const { notificationBody } = await vite.ssrLoadModule("/lib/notification.ts");
@@ -113,4 +117,27 @@ test("arrangement enquiries send new HTML through Resend even when package autom
   assert.match(internal.text, /arrangement-2026-10-17/);
   assert.doesNotMatch(follow.text, /Thank you for booking/);
   assert.doesNotMatch(ack.html + follow.html, /book\.stripe\.com|Proceed to payment/);
+});
+
+test("as shipped, the follow-up is paused: no scheduling call, and the team notification says so", async (t) => {
+  const { POST: postShipped } = await asShipped.ssrLoadModule("/app/api/contact/route.ts");
+  const { FOLLOW_UP_ENABLED } = await asShipped.ssrLoadModule("/lib/contact.ts");
+  assert.equal(FOLLOW_UP_ENABLED, false, "the switch is off while the wording is reworked");
+  const calls = [];
+  t.mock.method(globalThis, "fetch", async (url, init) => {
+    calls.push({ url, body: JSON.parse(init.body) });
+    assert.equal(url, "https://api.resend.com/emails/batch", "only the acknowledgement batch goes out");
+    return Response.json({ data: [{ id: "internal" }, { id: "ack" }] });
+  });
+  t.mock.method(console, "error", () => {});
+  const response = await postShipped(new Request("https://kamehame-japan.com/api/contact", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...enquiry, experience: "mt-fuji-golf-day", area: "Mt. Fuji", area_id: "fuji", course_mode: "recommended", party: "2", rental_keys: "own,own" }),
+  }));
+  assert.equal(response.status, 200);
+  assert.equal(calls.length, 1);
+  const [internal, ack] = calls[0].body;
+  assert.match(internal.text, /フォローアップ: 一時停止中/);
+  assert.doesNotMatch(internal.text, /自動送信できていません|停止・状況確認/);
+  assert.match(ack.text, /30,000/, "the acknowledgement still goes out");
 });

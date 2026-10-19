@@ -68,6 +68,8 @@ export interface NotificationExtras {
     text: string;
     scheduled: boolean;
     delayMinutes: number;
+    /** True while the follow-up is switched off (lib/contact.ts FOLLOW_UP_ENABLED): nothing was scheduled on purpose. */
+    paused?: boolean;
     /** Resend's scheduled email ID, never an ID supplied by the visitor. */
     emailId?: string;
     /** The exact scheduled_at accepted by Resend, in ISO 8601 UTC. */
@@ -119,7 +121,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ...(e.message ? [] : [["備考", "(なし)"] as [string, string]]),
     ["言語", lang],
     ["自動返信", ack ? `送信済み(${LANG_JA[e.lang] ?? e.lang}、下に全文)` : "⚠️ 未送信 — 予備ルートで配送したため、お客様へ手動で返信してください"],
-    ["フォローアップ", trade ? undefined : followUp?.scheduled ? `${followUp.delayMinutes}分後にゆきひろ名義で自動送信(予約済み、下に全文)` : "⚠️ 自動送信できていません — 担当者からの最初のメールを手動で送ってください"],
+    ["フォローアップ", trade ? undefined : followUp?.paused ? "一時停止中(文面を改善中のため自動送信なし) — 担当者からの最初のメールを手動で送ってください" : followUp?.scheduled ? `${followUp.delayMinutes}分後にゆきひろ名義で自動送信(予約済み、下に全文)` : "⚠️ 自動送信できていません — 担当者からの最初のメールを手動で送ってください"],
   ];
   const lines = rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`);
   const out = [...lines];

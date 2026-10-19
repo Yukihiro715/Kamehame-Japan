@@ -10,6 +10,12 @@ export const CONTACT_EMAIL = "hello@kamehame-japan.com";
 export const TRADE_EMAIL = "trade@kamehame-japan.com";
 export const PARTNER_EMAIL = "partners@kamehame-japan.com";
 
+/** The personal follow-up e-mail scheduled 15 minutes after the acknowledgement.
+ *  2026-10-19: paused by the owner while its wording is reworked — no follow-up
+ *  is scheduled and the team notification says so. Set true to resume; the
+ *  cancellation link and the ledger's stop control are unchanged either way. */
+export const FOLLOW_UP_ENABLED = false;
+
 export type EnquiryKind = "guest" | "trade";
 
 export interface Enquiry {
