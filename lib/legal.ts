@@ -1,3 +1,4 @@
+import { arrangementPolicy } from "@/lib/golf-arrangement-policy";
 // Legal notice (特定商取引法に基づく表記) and terms of service. The legal notice
 // is a Japanese-law disclosure, so Japanese is its binding text; the terms
 // bind English-reading guests, so English is theirs. Other locales show the
@@ -200,8 +201,8 @@ export function termsFor(lang: Lang): TermsCopy {
 function golfTerms(lang: Lang) {
   const c = golfProcessCopy(lang === "ja" ? "ja" : "en");
   if (isArrangement()) return lang === "ja"
-    ? `ゴルフ予約手配サービスには、上記に優先して次の条件が適用されます。${c.arrange} ${c.protection} 当社への支払いは予約手配料のみです。プレー代・カート・レンタル・昼食・キャディ代等はゴルフ場に直接お支払いいただきます。現地の英語アシスタントは任意で、別見積もりです。手配料の取消条件はお支払い時点から適用され、体験ページ・決済案内に記載します。ゴルフ場独自の取消条件と現地費用はお支払い前にご案内します。手配不可、または天候によるコース閉鎖の場合は、当社の予約手配料を全額返金します。ゴルフ場や送迎会社への支払い・取消料は、それぞれの条件に従います。`
-    : `For the golf course booking service, these specific conditions take precedence: ${c.arrange} ${c.protection} Payment to us covers the booking service fee only. Green fees, cart, rentals, lunch and any course caddie are paid directly to the club. An English-speaking assistant at the course is optional and quoted separately. Our fee's cancellation conditions apply from payment and are stated on the golf page and in the payment proposal. Club charges and the club's separate cancellation terms are disclosed before payment. If we cannot arrange the booking or the club closes the course due to weather, our booking service fee is refunded in full. Payments and cancellation charges owed to the club or transport provider follow their respective conditions.`;
+    ? `ゴルフ予約手配サービスには、上記に優先して次の条件が適用されます。${c.proposal} ${c.arrange} ${arrangementPolicy.ja.terms} 当社への支払いは予約手配料のみです。プレー代・カート・レンタル・昼食・キャディ代等はゴルフ場に直接お支払いいただきます。任意の英語アシスタントは別見積もりです。`
+    : `For the golf course booking service, these specific conditions take precedence: ${c.proposal} ${c.arrange} ${arrangementPolicy.en.terms} Payment to us covers the booking service fee only. Green fees, cart, rentals, lunch and any course caddie are paid directly to the club. An optional English-speaking assistant is quoted separately.`;
   return lang === "ja"
     ? `プライベートゴルフは上記と異なり、次の条件が適用されます。${c.arrange} ${c.protection} お支払い時点から、ゴルフの体験ページおよび決済案内に記載した取消条件が適用されます。手配不可の場合は全額返金、天候によるコース閉鎖の場合は既発生費用を差し引いて返金します。`
     : `For private golf, the following specific conditions apply instead: ${c.arrange} ${c.protection} The cancellation conditions on the golf page and in the payment proposal apply from payment. Failure to arrange a suitable course results in a full refund; weather-related course closure is refunded less costs already incurred.`;

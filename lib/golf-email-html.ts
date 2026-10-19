@@ -27,11 +27,11 @@ export function golfEmailHtml(text: string, area: string | undefined, payment = 
   let galleryAdded = false;
   let body = sections.map(section => {
     const lines = section.split("\n");
-    const title = /^(Your golf day|Your course, arranged by our team|Price|Payment|Cancellation — all dates and times are Japan time|A few details to complete your arrangements|An example day)$/.test(lines[0]);
+    const title = /^(Your golf day|Your course, arranged by our team|Price|Payment|Cancellation — all dates and times are Japan time|A few details to complete your arrangements|An example day|Your request|How we proceed|Booking-service fee and refunds|Your agreement and payment|Illustrative courses|Golf course booking service|Option 1 — Golf course booking service|Option 2 — Private golf day with premium hotel transfers and an English-speaking assistant)$/.test(lines[0]);
     let result = title ? heading(escapeEmailHtml(lines.shift()!)) : "";
     result += `<p style="margin:0 0 18px">${lines.map(line => line === "{{PAYMENT_URL}}" ? '<a href="{{PAYMENT_URL}}">{{PAYMENT_URL}}</a>' : escapeEmailHtml(line)).join("<br>")}</p>`;
-    if (payment && section.startsWith("Payment\n")) result += button(paymentLabel);
-    if (section.startsWith("Your course, arranged by our team\n")) result += gallery;
+    if (payment && (section.startsWith("Payment\n") || section.startsWith("Your agreement and payment\n"))) result += button(paymentLabel);
+    if (section.startsWith("Your course, arranged by our team\n") || section.startsWith("Illustrative courses\n")) result += gallery;
     if (payment && section.startsWith("Cancellation —")) result += button(paymentLabel);
     if (!payment && !galleryAdded && /^(-----|Best regards|Kind regards)/.test(section)) {
       galleryAdded = true; result = gallery + result;
