@@ -1,3 +1,4 @@
+import { GOLF_ARRANGEMENT_POLICY_VERSION } from "@/lib/golf-arrangement-policy";
 import { CONTACT_EMAIL, FOLLOW_UP_ENABLED, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
 import { threadSubject } from "@/lib/mail-copy";
 import { golfCustomerEmail } from "@/lib/golf-customer-email";
@@ -177,7 +178,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     golf = {
       areaId, courseMode: mode,
       estimate: estimateTotal !== null ? yen(estimateTotal) : undefined,
-      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (price && own > 0 && !isArrangement() ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : ""),
+      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (isArrangement() ? ` 表示返金規定: ${GOLF_ARRANGEMENT_POLICY_VERSION}（申込送信は有料調査の同意ではありません。決済前に書面合意を確認）。` : "") + (price && own > 0 && !isArrangement() ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : ""),
     };
   }
   return {

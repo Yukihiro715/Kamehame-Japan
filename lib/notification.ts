@@ -117,6 +117,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ...t("オプション", "addons", e.addons),
     ...(e.areaId ? [["概算", e.estimate] as [string, string | undefined]] : t("概算", "estimate", e.estimate)),
     ["料金メモ", e.priceNote],
+    ["個別提案方針", !trade && isArrangement() && e.experience === "mt-fuji-golf-day" && Number(e.party) >= 2 ? "手配のみ／プレミアム車両往復送迎・英語アシスタント付きの2案を個別メールで提案。送迎不要の意向は尊重。後者はサイト掲載・自動決済案内の対象外。日程・人数・ホテル・レンタル・契約先・決済先・総額・取消条件を確認して個別見積もり。既存のキャンペーン額は自動適用しない。" : undefined],
     ...t("備考", "message", e.message || undefined),
     ...(e.message ? [] : [["備考", "(なし)"] as [string, string]]),
     ["言語", lang],

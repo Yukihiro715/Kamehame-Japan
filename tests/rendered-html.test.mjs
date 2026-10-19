@@ -85,7 +85,7 @@ test("golf page (booking service): flat fee per golfer from one golfer, meet at 
   assert.ok(text.includes("Getting There: Your Choice") && !text.includes("Travel in Comfort"), "the getting-there section replaces the transfer section");
   assert.ok(text.includes("we introduce a licensed private transfer partner"), "the partner is introduced, not named");
   assert.doesNotMatch(html, /Rion/i, "the transfer partner is never named");
-  assert.ok(text.includes("Know your course and tee time before you pay"), "reassurance under the options");
+  assert.ok(text.includes("Agree requirements and pay for research"), "reassurance under the options");
   // the form: tee time, optional base, no pick-up prefecture, an assistant choice
   assert.ok(html.includes("Preferred tee time") && html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
   // the transfer choice: not ours to sell, the partner introduced on request
@@ -94,7 +94,7 @@ test("golf page (booking service): flat fee per golfer from one golfer, meet at 
   assert.ok(html.includes("Send Tee-Time Request") && html.includes("Check Tee Times"), "CTAs");
   assert.equal(html.split("<form ").length - 1, 1, "exactly one form");
   // terms and structured data follow the fee
-  assert.ok(text.includes("Up to 7 days before the date") && text.includes("The arrangement fee is refundable in full"), "fee cancellation terms");
+  assert.ok(!text.includes("Up to 7 days before the date") && text.includes("¥5,000 for research and a suitable proposal") && text.includes("¥10,000 for booking and coordination"), "fee cancellation terms");
   assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"15000"') && html.includes('"highPrice":"60000"'), "structured data carries the fee range");
   // the Japanese page and the listing card follow
   const ja = (await (await render("/ja/tokyo/mt-fuji-golf-day/")).text()).replace(/<[^>]+>/g, "");

@@ -21,7 +21,7 @@ try {
     "案件ID": data.caseId, "種別": "決済案内", "宛先": data.enquiry.email,
     "件名": message.subject, "本文（英語・テキスト）": message.text, "本文HTML（任意）": message.html,
     "承認": "", "状態": "下書き", "作成経路": message.version,
-    "日本語訳（確認用）": `手配料のみ ${message.amount.toLocaleString("ja-JP")} 円。現地費用はゴルフ場払い。送迎は別契約・別払い。英語アシスタントは別見積。コース・時刻・現地料金・取消条件・決済リンクを本文と照合してから承認してください。`,
+    "日本語訳（確認用）": `手配料のみ ${message.amount.toLocaleString("ja-JP")} 円。返金規定 ${message.policyVersion}／適用確認 ${message.eligibility}。条件・予算・返金規定の書面同意と入金が揃ってから調査開始。提案前は全額、適合提案後は1名10,000円返金、承認済み予約確定＋書面通知後はお客様都合の手配料返金なし。既存の個別合意を必ず確認。2名以上は個別メールで送迎・アシスタント付き案も提案（このリンクは手配料のみ）。私設プランは契約先・決済先・含有費用を案件ごとに確認。`,
   };
   await mkdir(resolve(output), { recursive: true, mode: 0o700 });
   // Refuse to overwrite a prior approved draft or its review files.
