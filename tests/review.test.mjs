@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import test, { after } from 'node:test';
+import { createServer } from 'vite';
+import { fileURLToPath } from 'node:url';
+const root = fileURLToPath(new URL('..', import.meta.url));
+const messages = [];
+globalThis.__reviewTest = { env: { CONTACT_TO: 'team@example.com', EMAIL: { async send(message) { messages.push(message); } } } };
+const vite = await createServer({ configFile: false, appType: 'custom', root, resolve: { alias: { '@': root } }, server: { middlewareMode: true }, plugins: [{ name: 'mock-review-mail', resolveId(id) { if (id.startsWith('cloudflare:')) return '\0test:' + id; }, load(id) { if (id === '\0test:cloudflare:workers') return 'export const env = globalThis.__reviewTest.env'; if (id === '\0test:cloudflare:email') return 'export class EmailMessage { constructor(from,to,raw) { this.raw = raw; } }'; } }] });
+after(async () => { await vite.close(); delete globalThis.__reviewTest; });
+const { POST } = await vite.ssrLoadModule('/app/api/review/route.ts');
+const valid = { experience: 'mt-fuji-golf-day', rating: 3, body: 'Test feedback', name: 'Test Guest', consent: 'yes', ref: 'TEST-ONLY', photos: [{ name: 'test.jpg', type: 'image/jpeg', data: '/9j/2Q==' }] };
+const submit = (body) => POST(new Request('https://example.com/api/review', { method: 'POST', body: JSON.stringify(body) }));
+test('fallback preserves attachment and booking reference', async () => { messages.length = 0; const res = await submit(valid); assert.equal(res.status, 200); assert.equal(messages.length, 1); assert.match(messages[0].raw, /multipart\/mixed/); assert.match(messages[0].raw, /filename="photo-1.jpg"/); assert.match(messages[0].raw, /\/9j\/2Q==/); const part = messages[0].raw.split('Content-Transfer-Encoding: base64\r\n\r\n')[1].split('\r\n--')[0]; assert.match(Buffer.from(part, 'base64').toString(), /Booking:    TEST-ONLY/); });
+test('rejects missing consent, fractional ratings, invalid and too many photos without sending', async () => { messages.length=0; for (const body of [null, {...valid,consent:false}, {...valid,rating:2.5}, {...valid,photos:[{data:'!invalid'}]}, {...valid,photos:Array(4).fill(valid.photos[0])}]) assert.equal((await submit(body)).status,400); assert.equal(messages.length,0); });
+test('Resend preserves attachments', async (t) => { globalThis.__reviewTest.env.RESEND_API_KEY='test-only'; t.mock.method(globalThis,'fetch',async (_url, init) => { const body=JSON.parse(init.body); assert.equal(body.attachments[0].content, valid.photos[0].data); return Response.json({id:'test'}); }); assert.equal((await submit(valid)).status,200); delete globalThis.__reviewTest.env.RESEND_API_KEY; });

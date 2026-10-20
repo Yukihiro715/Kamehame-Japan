@@ -27,18 +27,21 @@ interface ReviewSubmission {
 const clean = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/[\r\n]+/g, " ").trim().slice(0, max) : "");
 
 function parse(b: Record<string, unknown>): ReviewSubmission | null {
+  if (!b || typeof b !== "object") return null;
   const rating = Number(b.rating);
   const body = typeof b.body === "string" ? b.body.trim().slice(0, MAX.body) : "";
   const name = clean(b.name, MAX.name); const email = clean(b.email, MAX.email); const country = clean(b.country, MAX.country);
-  if (!(rating >= 1 && rating <= 5) || !body || !name) return null;
+  if (!Number.isInteger(rating) || !(rating >= 1 && rating <= 5) || !body || !name || !(b.consent === "yes" || b.consent === true)) return null;
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
-  const photosIn = Array.isArray(b.photos) ? (b.photos as unknown[]).slice(0, MAX_PHOTOS) : [];
+  if (b.photos !== undefined && (!Array.isArray(b.photos) || b.photos.length > MAX_PHOTOS)) return null;
+  const photosIn = Array.isArray(b.photos) ? b.photos as unknown[] : [];
   const photos = photosIn.flatMap((p) => {
     if (!p || typeof p !== "object") return [];
     const { name: n, type, data } = p as Record<string, unknown>;
     if (typeof data !== "string" || data.length > MAX_PHOTO_BYTES || !/^[A-Za-z0-9+/=]+$/.test(data)) return [];
     return [{ name: clean(n, 80) || "photo.jpg", type: type === "image/png" ? "image/png" : "image/jpeg", data }];
   });
+  if (photos.length !== photosIn.length) return null;
   return {
     experience: clean(b.experience, MAX.experience), rating, title: clean(b.title, MAX.title) || undefined, body, name, email, country,
     party: clean(b.party, MAX.party) || undefined, date: clean(b.date, MAX.date) || undefined, ref: clean(b.ref, MAX.ref) || undefined,
@@ -97,15 +100,25 @@ export async function POST(request: Request): Promise<Response> {
     if (!cf.env.EMAIL) return Response.json({ ok: false, error: "send_failed", fallback: CONTACT_EMAIL }, { status: 502 });
   }
 
-  // Fallback: Cloudflare send_email, text only (photos are dropped; the reply-to still reaches the guest).
+  // Preserve photos on the fallback transport as MIME attachments too.
   if (!cf.env.EMAIL) return Response.json({ ok: false, error: "send_failed", fallback: CONTACT_EMAIL }, { status: 502 });
   try {
+    const boundary = `review-${crypto.randomUUID()}`;
+    const encode = (value: string) => btoa(unescape(encodeURIComponent(value)));
+    const wrap = (value: string) => value.match(/.{1,76}/g)?.join("\r\n") ?? "";
     const raw = [
       `Message-ID: <${crypto.randomUUID()}@kamehame-japan.com>`, `Date: ${new Date().toUTCString()}`,
       `From: KAMEHAME JAPAN <${FROM}>`, `To: ${to}`, ...(r.email ? [`Reply-To: ${r.email}`] : []),
       `Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,
-      `MIME-Version: 1.0`, `Content-Type: text/plain; charset=UTF-8`, `Content-Transfer-Encoding: 8bit`, "",
-      ...text(r).split("\n"),
+      `MIME-Version: 1.0`, `Content-Type: multipart/mixed; boundary="${boundary}"`, "",
+      `--${boundary}`, `Content-Type: text/plain; charset=UTF-8`, `Content-Transfer-Encoding: base64`, "",
+      wrap(encode(text(r))),
+      ...r.photos.flatMap((p, i) => [
+        `--${boundary}`, `Content-Type: ${p.type}`,
+        `Content-Disposition: attachment; filename="photo-${i + 1}.${p.type === "image/png" ? "png" : "jpg"}"`,
+        `Content-Transfer-Encoding: base64`, "", wrap(p.data),
+      ]),
+      `--${boundary}--`, "",
     ].join("\r\n");
     await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw));
     return Response.json({ ok: true });

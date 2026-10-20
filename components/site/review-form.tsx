@@ -17,7 +17,10 @@ async function shrink(file: File): Promise<{ name: string; type: string; data: s
   const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(bitmap.width * scale); canvas.height = Math.round(bitmap.height * scale);
-  canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) { bitmap.close(); return null; }
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
   const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
   return { name: file.name.replace(/\.[^.]+$/, "") + ".jpg", type: "image/jpeg", data: dataUrl.split(",")[1] };
 }
@@ -48,15 +51,20 @@ export function ReviewForm({ lang, experiences, fallbackEmail }: { lang: Lang; e
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     setStatus("sending");
     try {
-      const photos = (await Promise.all(files.slice(0, MAX_PHOTOS).map(shrink))).filter((p): p is NonNullable<typeof p> => !!p);
+      const converted = await Promise.all(files.slice(0, MAX_PHOTOS).map(shrink));
+      if (converted.some((p) => !p || p.data.length > 2_500_000)) {
+        setStatus("failed");
+        return;
+      }
+      const photos = converted.filter((p): p is NonNullable<typeof p> => !!p);
       const res = await fetch("/api/review", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ ...data, rating, experience, ref, lang, photos }),
       });
       const json = (await res.json()) as { ok: boolean };
-      setStatus(json.ok ? "sent" : "failed");
-      if (json.ok) track("review_sent", { experience, rating, language: lang });
+      setStatus(res.ok && json.ok ? "sent" : "failed");
+      if (res.ok && json.ok) track("review_sent", { experience, rating, language: lang });
     } catch {
       setStatus("failed");
     }
