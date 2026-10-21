@@ -266,7 +266,7 @@ test("ramen classes: Tokyo and Osaka published, priced per person, listed, never
   assert.ok(home.includes('href="/en/osaka/"') || home.includes('href="/en/osaka/dotonbori-ramen-class/"'), "home reaches Osaka");
 });
 
-test("kendo, bushido, tea ceremony and the kendo tours: preview pages that never name the partners", async () => {
+test("kendo tours are published after approval; unapproved partners remain in preview", async () => {
   const pages = [
     ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥20,000", "/en/tokyo/"],
     ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000", "/en/tokyo/"],
@@ -286,14 +286,19 @@ test("kendo, bushido, tea ceremony and the kendo tours: preview pages that never
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     assert.ok(text.includes(price), `price on ${path}`);
-    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
+    const approved = path.includes("-kendo-experience-tour/");
+    assert.equal(text.includes(PREVIEW_BANNER), !approved, `publication status on ${path}`);
+    if (approved) {
+      assert.ok(text.includes("for groups of up to five, two days before is accepted"));
+      assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    }
     assert.doesNotMatch(html, /Kendo Spirit|Umino|海野|Kobunach|浜町|SEC Nihonbashi|Watanabe|有庵|r_cafe|Airbnb|SAMURAI TRIP|Nagamatsu|永松|パークフォーアス|Park For Us|samuraitrip|誠道館|Seidokan|4-7-2/i, `partner names stay private on ${path}`);
     const listing = await render(city);
-    if (listing.status === 200) assert.ok(!(await listing.text()).includes(path), `not listed on ${city}`);
+    if (listing.status === 200) assert.equal((await listing.text()).includes(path), approved, `listing status on ${city}`);
   }
   // the Japanese pages carry the same banner in Japanese
   const ja = (await (await render("/ja/tokyo/tokyo-kendo-experience-tour/")).text()).replace(/<[^>]+>/g, " ");
-  assert.ok(ja.includes("プレビュー — このページはまだ公開していません"), "Japanese preview banner");
+  assert.ok(!ja.includes("プレビュー — このページはまだ公開していません") && ja.includes("5名以内は2日前まで"), "Japanese publication and sizing deadline");
   // the tour pages carry the partner's answers: a weekday-only tour, the Tokyo venue by district, the other cities
   const tokyoTour = (await (await render("/en/tokyo/tokyo-kendo-experience-tour/")).text()).replace(/<[^>]+>/g, " ");
   assert.ok(tokyoTour.includes("Higashi-Nippori") && tokyoTour.includes("Uguisudani"), "the Tokyo venue is given by district and station only");
@@ -308,9 +313,9 @@ test("kendo, bushido, tea ceremony and the kendo tours: preview pages that never
   assert.ok(nagoya.includes("Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji"), "the Nagoya page lists the other cities");
   // with calligraphy, golf, the geiko evening and the ramen classes live, the site shows three cities and no kendo theme
   const home = await (await render("/en/")).text();
-  assert.ok(home.includes("Three cities.") && !home.includes('href="/en/himeji/"') && !home.includes('href="/en/kendo/"'), "home shows three cities and no kendo theme");
-  assert.equal((await render("/en/kendo/")).status, 404, "no kendo theme page without a live experience");
-  assert.equal((await render("/en/himeji/")).status, 404, "no Himeji city page without a live experience");
+  assert.ok(home.includes('href="/en/himeji/"') && home.includes('href="/en/kendo/"'), "new cities and kendo theme are listed");
+  assert.equal((await render("/en/kendo/")).status, 200, "published kendo category");
+  assert.equal((await render("/en/himeji/")).status, 200, "published Himeji city");
 });
 
 test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages that never name the partners", async () => {
@@ -324,7 +329,7 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     ["/en/kyoto/arashiyama-stone-mill-matcha/", "Stone-Mill Matcha Grinding in Arashiyama, Kyoto", "¥13,500"],
     ["/en/kyoto/arashiyama-japanese-knife-workshop/", "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto", "¥27,000"],
     ["/en/kyoto/arashiyama-shuriken-casting/", "Cast Your Own Metal Shuriken in Arashiyama, Kyoto", "¥20,000"],
-    ["/en/tokyo/nihonbashi-japanese-dance-salon/", "Japanese Classical Dance Up Close in Nihonbashi, Tokyo: A Kabuki-Style Dance Salon", "¥21,500"],
+    ["/en/tokyo/nihonbashi-japanese-dance-salon/", "Kabuki Dance in Nihonbashi, Tokyo: Performance and Hands-On Experience", "¥21,500"],
     ["/en/tokyo/nihonbashi-english-rakugo-salon/", "English Rakugo in a Nihonbashi Salon, Tokyo: Comic Storytelling Up Close", "¥21,500"],
     ["/en/tokyo/nihonbashi-shamisen-salon/", "Shamisen Up Close in Nihonbashi, Tokyo: Live Performance and a Hands-On Try", "¥21,500"],
   ];
@@ -340,9 +345,9 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
     if (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/")) {
       // The salon's own terms: free until two days before, then 100%; a minimum of three guests; socks.
-      assert.ok(text.includes("Up to 2 days before the date") && text.includes("1 days before or later, including no-shows"), `salon cancellation table on ${path}`);
+      assert.ok(text.includes("Until 18:00 Japan time 2 days before") && text.includes("After that deadline, including no-shows"), `salon cancellation table on ${path}`);
       assert.ok(text.includes("6 pm Japan time two days before"), `salon cut-off time on ${path}`);
-      assert.ok(text.includes("at least three guests in total") && text.includes("wear or bring socks"), `salon minimum and socks on ${path}`);
+      assert.ok(text.includes("three guests per day") && text.includes("decides whether the day will run two days before") && text.includes("wear or bring socks"), `salon minimum and socks on ${path}`);
       assert.doesNotMatch(text, /Free cancellation up to 7 days/i, `no site default on ${path}`);
     }
     const arashiyama = path.includes("/kyoto/arashiyama-");
@@ -434,4 +439,19 @@ test("sends baseline security headers", async () => {
   assert.match(response.headers.get("strict-transport-security") ?? "", /max-age=\d+/);
   assert.match(response.headers.get("content-security-policy") ?? "", /frame-ancestors 'self'/);
   assert.equal(response.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
+});
+
+
+test("private spa preview has no invented price or public address", async () => {
+  for (const lang of ["en", "ja"]) {
+    const res = await render(`/${lang}/tokyo/nerima-herbal-bath-private-spa/`);
+    assert.equal(res.status, 200);
+    const html = await res.text();
+    assert.match(html, /noindex/);
+    assert.doesNotMatch(html, /¥0/);
+    assert.doesNotMatch(html, /class="xp-pricing"/);
+    assert.ok(html.includes(lang === "en" ? "camera-based monitoring" : "カメラ"));
+  }
+  const listing = await (await render("/en/tokyo/")).text();
+  assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));
 });

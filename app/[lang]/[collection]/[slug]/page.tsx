@@ -132,7 +132,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const preview = isPreview(exp);
   // A page in preview shows the full booking flow so it can be checked end to end.
-  const live = isLive(exp) || preview;
+  const live = (isLive(exp) || preview) && !exp.pricePending;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
@@ -218,9 +218,9 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           <aside className="xp-side">
             {live ? <BookingCard lang={lang} headline={headlinePrice} /> : (
               <div className="bk-card">
-                <p className="soon-flag">{T.comingSoon}</p>
+                <p className="soon-flag">{exp.pricePending ? exp.price : T.comingSoon}</p>
                 <p className="xp-note">{T.comingSoonBody}</p>
-                <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>
+                {!exp.pricePending && <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>}
               </div>
             )}
           </aside>
@@ -288,7 +288,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             )}
 
             {/* ④′ Flat pricing table (products without plans) */}
-            {plans.length === 0 && (
+            {plans.length === 0 && !exp.pricePending && (
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
                 <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />
@@ -496,7 +496,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
               <h2 className="xp-sub" id="request-form">{live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
               <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>
-              <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />
+              {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
             </section>
 
             {reading.length > 0 && (
@@ -518,7 +518,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           </div>
 
         </div>
-        <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />
+        {!exp.pricePending && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
       </BookingProvider>
 
       {moreInCity.length > 0 && (
@@ -536,9 +536,9 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
         </section>
       )}
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{
+      {!exp.pricePending && <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
-      }} />
+      }} />}
       <SiteFooter lang={lang} />
     </main>
   );
