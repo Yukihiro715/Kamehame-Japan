@@ -39,6 +39,7 @@ export const citiesEs: City[] = [
 ];
 
 export const categoriesEs: Category[] = [
+  { slug: "wellness", title: "Bienestar", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "Bienestar" },
   { slug: "sushi", title: "Sushi", tag: "Gastronomía", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "En Japón, el sushi es un oficio que se mide en décadas, no en recetas. Estas clases magistrales en grupos reducidos te ponen detrás de la barra con chefs en activo de Tokio y Kioto — moldeando, sazonando y probando como ellos, con un guía intérprete a tu lado." },
   { slug: "sumo", title: "Sumo", tag: "Tradicional", mark: "相", img: "/images/cat-sumo.jpg",
@@ -593,7 +594,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo en activo en Higashi-Nippori, Arakawa, a unos 10–12 minutos a pie de la salida norte de la estación JR de Uguisudani — el nombre del dojo y el punto de encuentro exacto llegan con tu confirmación", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo en activo en Higashi-Nippori, Arakawa, a unos 10–12 minutos a pie de la salida norte de la estación JR de Uguisudani — el nombre del dojo y el punto de encuentro exacto llegan con tu confirmación", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -602,7 +603,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Tokio. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -622,7 +623,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {
@@ -675,7 +676,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo o pabellón deportivo en activo en Osaka, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo o pabellón deportivo en activo en Osaka, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -684,7 +685,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Osaka. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -704,7 +705,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {
@@ -757,7 +758,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo o pabellón deportivo en activo en Kioto, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo o pabellón deportivo en activo en Kioto, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -766,7 +767,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Kioto. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -786,7 +787,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {
@@ -839,7 +840,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo o pabellón deportivo en activo en Nagoya, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Tardes entre semana, normalmente desde las 13:30; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo o pabellón deportivo en activo en Nagoya, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Tardes entre semana, normalmente desde las 13:30; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -848,7 +849,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Nagoya. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -868,7 +869,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, tardes entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, tardes entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {
@@ -921,7 +922,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo o pabellón deportivo en activo en Okinawa, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Tardes entre semana, normalmente desde las 13:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo o pabellón deportivo en activo en Okinawa, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Tardes entre semana, normalmente desde las 13:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -930,7 +931,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Okinawa. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -950,7 +951,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, tardes entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, tardes entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {
@@ -1003,7 +1004,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo o pabellón deportivo en activo en Kanazawa, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo o pabellón deportivo en activo en Kanazawa, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -1012,7 +1013,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Kanazawa. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -1032,7 +1033,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {
@@ -1085,7 +1086,7 @@ export const experiencesEs: Experience[] = [
       { time: "2:00", title: "Fin de la sesión" },
     ],
     venue: {
-      known: ["Un dojo de kendo o pabellón deportivo en activo en Himeji, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Dos semanas antes de la fecha el operador necesita el sexo y la estatura aproximada de todos, para preparar la armadura", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
+      known: ["Un dojo de kendo o pabellón deportivo en activo en Himeji, elegido por el operador para tu fecha entre lugares a treinta o cincuenta minutos del centro — el punto de encuentro llega con tu confirmación; el lugar no puede elegirse", "Mañanas entre semana, normalmente desde las 10:00; no hay sesiones en fin de semana ni en festivos japoneses", "Espacio para cambiarse; ven con ropa de calle, el uniforme se presta", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Sesiones privadas para seis adultos o más, o por el precio de seis adultos"],
       afterBooking: ["El nombre, la dirección y el punto de encuentro del lugar", "Cómo llegar desde la estación más cercana", "Un teléfono de contacto para el día"],
       img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados en el pabellón",
     },
@@ -1094,7 +1095,7 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige un día entre semana y envía tu solicitud", body: "Dinos la fecha, cuántos sois con la edad de cada uno, y la ciudad si no es Himeji. Consultamos la fecha con el operador." },
       { title: "Respondemos en 24 horas", body: "Con la hora de inicio, el precio para tu grupo y las condiciones." },
-      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación. Dos semanas antes de la fecha te pedimos el sexo y la estatura aproximada de todos para la armadura." },
+      { title: "Paga para confirmar", body: "Tu reserva queda confirmada cuando llega tu pago; el operador reserva entonces el lugar, los instructores y el equipo, y empiezan las condiciones de cancelación.  Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio." },
     ],
     faq: [
       { q: "¿Necesito experiencia en kendo?", a: "No. La sesión está pensada para principiantes de cualquier edad y forma física; los instructores te llevan desde vestirte con la armadura hasta un combate." },
@@ -1114,7 +1115,7 @@ export const experiencesEs: Experience[] = [
     whatYoullDo: ["Vestirte con uniforme de kendo y armadura completa", "Participar en la ceremonia de saludo y escuchar lo que guiaba a los samuráis", "Practicar juego de pies, golpe y ataque", "Terminar con un combate entre participantes, arbitrado por los instructores"],
     master: { title: "Tus instructores", bio: "Maestros de kendo de quinto a séptimo dan con más de treinta años de práctica, de un operador que lleva visitantes a dojos japoneses desde 2016 y ha recibido premios nacionales de turismo. Su fundador empezó kendo a los cinco años y compitió en la universidad y en el kendo de empresa antes de crear el tour.", quote: "Unifica tu espíritu, cuida los modales, y el kendo te acompaña toda la vida." },
     itinerary: ["0:00 — La armadura", "0:20 — La ceremonia de saludo", "0:30 — Lo que guiaba a los samuráis", "0:45 — Práctica de ataque", "1:20 — El combate", "1:45 — Saludo final, fotos y cambio de ropa", "2:00 — Fin de la sesión"],
-    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Se necesita el sexo y la estatura aproximada de todos dos semanas antes, para la armadura.", "Inglés y japonés."],
+    goodToKnow: ["De 1,5 a 2 horas, mañanas entre semana; el lugar se elige para tu fecha.", "Desde 9 años; tarifa reducida de 9 a 13. De dos a doscientas personas.", "Envíanos el sexo y la estatura aproximada de cada participante: normalmente dos semanas antes; hasta dos días antes para grupos de cinco o menos; un mes antes para 70 o más. No hay un formulario obligatorio.", "Inglés y japonés."],
     story: { heading: "Ki, ken, tai", body: "Un golpe solo cuenta en kendo cuando espíritu, espada y cuerpo llegan a la vez — ki-ken-tai-itchi. Los instructores lo dicen en los primeros diez minutos y el resto de la sesión la pasas descubriendo con tus propias manos qué significa." },
   },
   {

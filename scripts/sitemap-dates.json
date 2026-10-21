@@ -16,8 +16,8 @@
     "lastmod": "2026-09-17"
   },
   "/en/experiences/": {
-    "hash": "2761303b3502",
-    "lastmod": "2026-10-16"
+    "hash": "b8d1c59474e0",
+    "lastmod": "2026-10-21"
   },
   "/en/faq/": {
     "hash": "6475e67568b3",
@@ -30,6 +30,14 @@
   "/en/golf/": {
     "hash": "ec6ec4d057df",
     "lastmod": "2026-10-15"
+  },
+  "/en/himeji/": {
+    "hash": "f0ecb8eabb41",
+    "lastmod": "2026-10-21"
+  },
+  "/en/himeji/himeji-kendo-experience-tour/": {
+    "hash": "824f37953f80",
+    "lastmod": "2026-10-21"
   },
   "/en/journal/": {
     "hash": "4954ccf587d7",
@@ -47,29 +55,65 @@
     "hash": "eae5c4a1b162",
     "lastmod": "2026-09-17"
   },
+  "/en/kanazawa/": {
+    "hash": "b63097e8fa9a",
+    "lastmod": "2026-10-21"
+  },
+  "/en/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "4e9d50217a4d",
+    "lastmod": "2026-10-21"
+  },
+  "/en/kendo/": {
+    "hash": "dd3b0864368a",
+    "lastmod": "2026-10-21"
+  },
   "/en/kyoto/": {
-    "hash": "cebc417528cc",
-    "lastmod": "2026-10-14"
+    "hash": "23a27b847580",
+    "lastmod": "2026-10-21"
   },
   "/en/kyoto/evening-with-geiko/": {
     "hash": "7d7da830f4e2",
     "lastmod": "2026-10-10"
   },
+  "/en/kyoto/kyoto-kendo-experience-tour/": {
+    "hash": "ae17e3a26f8d",
+    "lastmod": "2026-10-21"
+  },
+  "/en/nagoya/": {
+    "hash": "767c6f40738c",
+    "lastmod": "2026-10-21"
+  },
+  "/en/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "9da7c5d724cc",
+    "lastmod": "2026-10-21"
+  },
+  "/en/okinawa/": {
+    "hash": "8f516d1d90e7",
+    "lastmod": "2026-10-21"
+  },
+  "/en/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "22c9c79bc5c0",
+    "lastmod": "2026-10-21"
+  },
   "/en/osaka/": {
-    "hash": "0bdc4076b2a5",
-    "lastmod": "2026-10-16"
+    "hash": "c6d12d18e9aa",
+    "lastmod": "2026-10-21"
   },
   "/en/osaka/dotonbori-ramen-class/": {
     "hash": "e7e867cc38f0",
     "lastmod": "2026-10-16"
+  },
+  "/en/osaka/osaka-kendo-experience-tour/": {
+    "hash": "cf90f8dd3bc9",
+    "lastmod": "2026-10-21"
   },
   "/en/ramen/": {
     "hash": "326c6b1d8336",
     "lastmod": "2026-10-16"
   },
   "/en/tokyo/": {
-    "hash": "820ef80353d5",
-    "lastmod": "2026-10-16"
+    "hash": "242a68b7a6fc",
+    "lastmod": "2026-10-21"
   },
   "/en/tokyo/kanji-name-calligraphy/": {
     "hash": "f8843c6ff2d6",
@@ -82,6 +126,10 @@
   "/en/tokyo/shibuya-ramen-class/": {
     "hash": "7147c38e2583",
     "lastmod": "2026-10-16"
+  },
+  "/en/tokyo/tokyo-kendo-experience-tour/": {
+    "hash": "23778546fc91",
+    "lastmod": "2026-10-21"
   },
   "/en/trade/": {
     "hash": "bca33d71434d",
@@ -104,8 +152,8 @@
     "lastmod": "2026-09-17"
   },
   "/es/experiences/": {
-    "hash": "ac6558bc61c3",
-    "lastmod": "2026-10-16"
+    "hash": "d94a88b84bf1",
+    "lastmod": "2026-10-21"
   },
   "/es/faq/": {
     "hash": "b30dc3dba1ad",
@@ -119,33 +167,77 @@
     "hash": "c19561b2f068",
     "lastmod": "2026-10-15"
   },
+  "/es/himeji/": {
+    "hash": "aa1d0fd3147c",
+    "lastmod": "2026-10-21"
+  },
+  "/es/himeji/himeji-kendo-experience-tour/": {
+    "hash": "75174973e8aa",
+    "lastmod": "2026-10-21"
+  },
   "/es/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/es/kanazawa/": {
+    "hash": "e2575e1bf1d7",
+    "lastmod": "2026-10-21"
+  },
+  "/es/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "76aaebe38aa1",
+    "lastmod": "2026-10-21"
+  },
+  "/es/kendo/": {
+    "hash": "61e3389e097b",
+    "lastmod": "2026-10-21"
+  },
   "/es/kyoto/": {
-    "hash": "5934e31f1f17",
-    "lastmod": "2026-10-14"
+    "hash": "de0fa6888f50",
+    "lastmod": "2026-10-21"
   },
   "/es/kyoto/evening-with-geiko/": {
     "hash": "ac0f8a0f3cd4",
     "lastmod": "2026-10-10"
   },
+  "/es/kyoto/kyoto-kendo-experience-tour/": {
+    "hash": "200ed65a3935",
+    "lastmod": "2026-10-21"
+  },
+  "/es/nagoya/": {
+    "hash": "1a76c24820d8",
+    "lastmod": "2026-10-21"
+  },
+  "/es/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "b9cbd036d5d6",
+    "lastmod": "2026-10-21"
+  },
+  "/es/okinawa/": {
+    "hash": "655fada9fc9e",
+    "lastmod": "2026-10-21"
+  },
+  "/es/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "4b1eaed753ee",
+    "lastmod": "2026-10-21"
+  },
   "/es/osaka/": {
-    "hash": "f1598006221c",
-    "lastmod": "2026-10-16"
+    "hash": "320ba0df6ff7",
+    "lastmod": "2026-10-21"
   },
   "/es/osaka/dotonbori-ramen-class/": {
     "hash": "4f2fd848a3c1",
     "lastmod": "2026-10-16"
+  },
+  "/es/osaka/osaka-kendo-experience-tour/": {
+    "hash": "7b99b2634848",
+    "lastmod": "2026-10-21"
   },
   "/es/ramen/": {
     "hash": "2c2328c5ade6",
     "lastmod": "2026-10-16"
   },
   "/es/tokyo/": {
-    "hash": "279309910722",
-    "lastmod": "2026-10-16"
+    "hash": "1c24f4aaef46",
+    "lastmod": "2026-10-21"
   },
   "/es/tokyo/kanji-name-calligraphy/": {
     "hash": "1e6cd7f63318",
@@ -158,6 +250,10 @@
   "/es/tokyo/shibuya-ramen-class/": {
     "hash": "2f6ac3d0bf79",
     "lastmod": "2026-10-16"
+  },
+  "/es/tokyo/tokyo-kendo-experience-tour/": {
+    "hash": "63824ec365c6",
+    "lastmod": "2026-10-21"
   },
   "/es/trade/": {
     "hash": "59ca02ce7072",
@@ -180,8 +276,8 @@
     "lastmod": "2026-09-17"
   },
   "/fr/experiences/": {
-    "hash": "37d07b406d6a",
-    "lastmod": "2026-10-16"
+    "hash": "65610a03bc5b",
+    "lastmod": "2026-10-21"
   },
   "/fr/faq/": {
     "hash": "02b9560a1a76",
@@ -195,33 +291,77 @@
     "hash": "1ef75295daed",
     "lastmod": "2026-10-15"
   },
+  "/fr/himeji/": {
+    "hash": "e2ebe5e71bb9",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/himeji/himeji-kendo-experience-tour/": {
+    "hash": "a82382d1b4d1",
+    "lastmod": "2026-10-21"
+  },
   "/fr/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/fr/kanazawa/": {
+    "hash": "97ad63c91ede",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "ba7a24bfb4c1",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/kendo/": {
+    "hash": "bd7e954f77f8",
+    "lastmod": "2026-10-21"
+  },
   "/fr/kyoto/": {
-    "hash": "b69bde0cde6d",
-    "lastmod": "2026-10-14"
+    "hash": "bf7fcc7be019",
+    "lastmod": "2026-10-21"
   },
   "/fr/kyoto/evening-with-geiko/": {
     "hash": "256b3170b1f8",
     "lastmod": "2026-10-10"
   },
+  "/fr/kyoto/kyoto-kendo-experience-tour/": {
+    "hash": "146d7094608b",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/nagoya/": {
+    "hash": "34084dd6fc9f",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "5ee5658a55a0",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/okinawa/": {
+    "hash": "c61e544d3446",
+    "lastmod": "2026-10-21"
+  },
+  "/fr/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "dc2047efafdd",
+    "lastmod": "2026-10-21"
+  },
   "/fr/osaka/": {
-    "hash": "6b40020c656a",
-    "lastmod": "2026-10-16"
+    "hash": "deaa6bdd7f16",
+    "lastmod": "2026-10-21"
   },
   "/fr/osaka/dotonbori-ramen-class/": {
     "hash": "0884b798a69d",
     "lastmod": "2026-10-16"
+  },
+  "/fr/osaka/osaka-kendo-experience-tour/": {
+    "hash": "cd3f3e00948a",
+    "lastmod": "2026-10-21"
   },
   "/fr/ramen/": {
     "hash": "26dc2bd16b82",
     "lastmod": "2026-10-16"
   },
   "/fr/tokyo/": {
-    "hash": "82148890fbfc",
-    "lastmod": "2026-10-16"
+    "hash": "545de3a898e8",
+    "lastmod": "2026-10-21"
   },
   "/fr/tokyo/kanji-name-calligraphy/": {
     "hash": "65f35d2d1e70",
@@ -234,6 +374,10 @@
   "/fr/tokyo/shibuya-ramen-class/": {
     "hash": "8b65ef9a49e4",
     "lastmod": "2026-10-16"
+  },
+  "/fr/tokyo/tokyo-kendo-experience-tour/": {
+    "hash": "d92fdd086609",
+    "lastmod": "2026-10-21"
   },
   "/fr/trade/": {
     "hash": "49a39b3d05ef",
@@ -256,8 +400,8 @@
     "lastmod": "2026-09-17"
   },
   "/ja/experiences/": {
-    "hash": "e5d52f85652d",
-    "lastmod": "2026-10-16"
+    "hash": "ee222a379119",
+    "lastmod": "2026-10-21"
   },
   "/ja/faq/": {
     "hash": "4938be2962f9",
@@ -270,6 +414,14 @@
   "/ja/golf/": {
     "hash": "254ae4cf5edd",
     "lastmod": "2026-10-15"
+  },
+  "/ja/himeji/": {
+    "hash": "9d55864464f6",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/himeji/himeji-kendo-experience-tour/": {
+    "hash": "92eec1fe9708",
+    "lastmod": "2026-10-21"
   },
   "/ja/journal/": {
     "hash": "4954ccf587d7",
@@ -287,29 +439,65 @@
     "hash": "ddaa13aedfd5",
     "lastmod": "2026-09-17"
   },
+  "/ja/kanazawa/": {
+    "hash": "c16dacf824f2",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "9becc81bd826",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/kendo/": {
+    "hash": "232ffa27ca83",
+    "lastmod": "2026-10-21"
+  },
   "/ja/kyoto/": {
-    "hash": "4a984fde53f1",
-    "lastmod": "2026-10-14"
+    "hash": "cda03d3421ad",
+    "lastmod": "2026-10-21"
   },
   "/ja/kyoto/evening-with-geiko/": {
     "hash": "047caf3f3bd3",
     "lastmod": "2026-10-10"
   },
+  "/ja/kyoto/kyoto-kendo-experience-tour/": {
+    "hash": "5851c88776ea",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/nagoya/": {
+    "hash": "c89050aabda0",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "2c3b1f097199",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/okinawa/": {
+    "hash": "aa594aede755",
+    "lastmod": "2026-10-21"
+  },
+  "/ja/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "804ef23562cf",
+    "lastmod": "2026-10-21"
+  },
   "/ja/osaka/": {
-    "hash": "bcb895b35075",
-    "lastmod": "2026-10-16"
+    "hash": "7c5c6c623485",
+    "lastmod": "2026-10-21"
   },
   "/ja/osaka/dotonbori-ramen-class/": {
     "hash": "9ff7a7789315",
     "lastmod": "2026-10-16"
+  },
+  "/ja/osaka/osaka-kendo-experience-tour/": {
+    "hash": "70c504519b3a",
+    "lastmod": "2026-10-21"
   },
   "/ja/ramen/": {
     "hash": "b5e227ee1cd9",
     "lastmod": "2026-10-16"
   },
   "/ja/tokyo/": {
-    "hash": "b29c23144770",
-    "lastmod": "2026-10-16"
+    "hash": "c388f67d3056",
+    "lastmod": "2026-10-21"
   },
   "/ja/tokyo/kanji-name-calligraphy/": {
     "hash": "999932a818a4",
@@ -322,6 +510,10 @@
   "/ja/tokyo/shibuya-ramen-class/": {
     "hash": "8f326d36584a",
     "lastmod": "2026-10-16"
+  },
+  "/ja/tokyo/tokyo-kendo-experience-tour/": {
+    "hash": "628a0b936a64",
+    "lastmod": "2026-10-21"
   },
   "/ja/trade/": {
     "hash": "201367b89425",
@@ -348,8 +540,8 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/experiences/": {
-    "hash": "a523edb7a891",
-    "lastmod": "2026-10-16"
+    "hash": "0a0c57c995d8",
+    "lastmod": "2026-10-21"
   },
   "/zh-tw/faq/": {
     "hash": "b0daf3c1cab6",
@@ -363,33 +555,77 @@
     "hash": "a63d25886bf2",
     "lastmod": "2026-10-15"
   },
+  "/zh-tw/himeji/": {
+    "hash": "0b0dcdbaf423",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/himeji/himeji-kendo-experience-tour/": {
+    "hash": "e872aa08f68d",
+    "lastmod": "2026-10-21"
+  },
   "/zh-tw/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/zh-tw/kanazawa/": {
+    "hash": "50f02c1d1330",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/kanazawa/kanazawa-kendo-experience-tour/": {
+    "hash": "6e837ba47d61",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/kendo/": {
+    "hash": "ce85be404e35",
+    "lastmod": "2026-10-21"
+  },
   "/zh-tw/kyoto/": {
-    "hash": "cecd2080a7b3",
-    "lastmod": "2026-10-14"
+    "hash": "0f8618aaf519",
+    "lastmod": "2026-10-21"
   },
   "/zh-tw/kyoto/evening-with-geiko/": {
     "hash": "8421c6c4aeec",
     "lastmod": "2026-10-10"
   },
+  "/zh-tw/kyoto/kyoto-kendo-experience-tour/": {
+    "hash": "b5ede8405366",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/nagoya/": {
+    "hash": "5fa6242f9a39",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/nagoya/nagoya-kendo-experience-tour/": {
+    "hash": "dd8fcd7b8c09",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/okinawa/": {
+    "hash": "956930597ecd",
+    "lastmod": "2026-10-21"
+  },
+  "/zh-tw/okinawa/okinawa-kendo-experience-tour/": {
+    "hash": "54db7087f0d1",
+    "lastmod": "2026-10-21"
+  },
   "/zh-tw/osaka/": {
-    "hash": "67428c4ded52",
-    "lastmod": "2026-10-16"
+    "hash": "e225322bf2fb",
+    "lastmod": "2026-10-21"
   },
   "/zh-tw/osaka/dotonbori-ramen-class/": {
     "hash": "f9b474de8bbd",
     "lastmod": "2026-10-16"
+  },
+  "/zh-tw/osaka/osaka-kendo-experience-tour/": {
+    "hash": "8ba18fb96249",
+    "lastmod": "2026-10-21"
   },
   "/zh-tw/ramen/": {
     "hash": "bcb45959e0cd",
     "lastmod": "2026-10-16"
   },
   "/zh-tw/tokyo/": {
-    "hash": "fed9830b5960",
-    "lastmod": "2026-10-16"
+    "hash": "2b34f36c7c8e",
+    "lastmod": "2026-10-21"
   },
   "/zh-tw/tokyo/kanji-name-calligraphy/": {
     "hash": "87e597c89688",
@@ -402,6 +638,10 @@
   "/zh-tw/tokyo/shibuya-ramen-class/": {
     "hash": "4aca7a1e6ca3",
     "lastmod": "2026-10-16"
+  },
+  "/zh-tw/tokyo/tokyo-kendo-experience-tour/": {
+    "hash": "2254ed5b3a03",
+    "lastmod": "2026-10-21"
   },
   "/zh-tw/trade/": {
     "hash": "240733d0c108",

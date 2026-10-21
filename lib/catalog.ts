@@ -171,6 +171,8 @@ export interface Experience {
   tagline: string;
   duration: string;
   price: string;
+  /** Review-only product whose selling price has not been agreed. */
+  pricePending?: boolean;
   group: string;
   ages: string;
   area: string;
@@ -190,6 +192,8 @@ export interface Experience {
   /** Stepped cancellation fees: each step applies from `until` days before the date
    *  (counted in Japan time) down to the next step. Rendered as a table. */
   cancellationTiers?: { until: number; rate: number }[];
+  /** Exact Japan-time cutoff for the first (free) cancellation tier. */
+  cancellationCutoffTime?: string;
   /** Dietary needs the kitchen can meet on request (keys of the i18n dietary labels). */
   dietary?: string[];
   /** False when no interpreter guide comes with the product (the teacher runs it
@@ -331,7 +335,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "dietary" | "interpreter" | "skipSiteFaq";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
 
 export interface Tour {
   slug: string;
@@ -393,6 +397,7 @@ export const cities: City[] = [
 ];
 
 export const categories: Category[] = [
+  { slug: "wellness", title: "Wellness", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "Wellness" },
   { slug: "sushi", title: "Sushi", tag: "Food", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "Sushi in Japan is a craft measured in decades, not recipes. These small-group masterclasses put you behind the counter with working chefs in Tokyo and Kyoto — shaping, seasoning and tasting as they do, with an interpreter guide beside you." },
   { slug: "sumo", title: "Sumo", tag: "Traditional", mark: "相", img: "/images/cat-sumo.jpg",
@@ -430,6 +435,150 @@ export const categories: Category[] = [
 ];
 
 export const experiences: Experience[] = [
+  {
+    slug: "nerima-herbal-bath-private-spa",
+    city: "tokyo",
+    category: "wellness",
+    bookingType: "request",
+    status: "preview",
+    price: "Price on request",
+    pricePending: true,
+    priceUnit: "person",
+    partySize: {
+        min: 1,
+        max: 3
+    },
+    interpreter: false,
+    skipSiteFaq: true,
+    img: "/images/shakuji-bath.webp",
+    gallery: [],
+    title: "Herbal Bath Blending & Private Spa in Nerima, Tokyo",
+    tagline: "Make a fragrant sachet and your own herbal bath blend, then settle into a private bathing space with tea and time to rest. A 3.5-hour experience for your group alone in a quiet corner of Tokyo.",
+    duration: "About 3.5 hours",
+    group: "Private · 1–3 guests",
+    ages: "Children by prior arrangement",
+    area: "Tokyo (Nerima)",
+    alt: "The operator’s private bath and tea facilities",
+    galleryNote: "Operator imagery showing the bathing facilities and tea. The herbal workshop programme is described below.",
+    langTag: "Japanese host · translated instructions and translation tools",
+    overview: [
+        "Begin with a room introduction and a hands-on workshop: make a sachet with Japanese cypress and aromatic ingredients, then prepare three packs of your own herbal bath blend. The staff explain how to steep a pack for the bath.",
+        "After washing, enjoy around thirty minutes in the bath, change into a yukata and take time for tea or a rest. The space is reserved for your party; the operator normally welcomes one group per day. Your handmade bath blends can be taken home on the day."
+    ],
+    availabilityNote: "Start times offered by the operator: 11:00 or 16:30, subject to confirmation. Closed Tuesdays. Each date is checked individually; this is not a live availability calendar.",
+    cancellation: "Cancellation and date-change terms will be supplied with your quote for agreement before payment. The operator’s current policy applies; the specific deadlines and charges for this product are being confirmed.",
+    includedShort: "Herbal bath workshop · Private bathing · Rental towels and yukata · Tea",
+    included: [
+        "Materials for a fragrant sachet and three herbal bath packs",
+        "Staff instruction and translated explanations",
+        "Private bathing facilities and amenities",
+        "Rental towels, yukata and sheets",
+        "Herbal tea and drinking water",
+        "Packaging for the handmade bath blends"
+    ],
+    notIncluded: [
+        "Transport",
+        "Interpreter guide (by arrangement)",
+        "Meals; you may bring your own food",
+        "Extra treatments, purchases and extensions"
+    ],
+    highlights: [
+        {
+            icon: "brush",
+            title: "Blend something of your own",
+            body: "Prepare a fragrant sachet and herbal bath packs with staff guidance."
+        },
+        {
+            icon: "group",
+            title: "Your group alone",
+            body: "A private space for one to three guests, with larger groups discussed in advance."
+        },
+        {
+            icon: "spark",
+            title: "Leave time to rest",
+            body: "Bathing, tea and a quiet pause are part of the 3.5-hour visit."
+        }
+    ],
+    whatYoullDo: [
+        "Make a Japanese cypress and aromatic sachet",
+        "Blend three packs of herbal bath ingredients",
+        "Enjoy a private bath, then change into a yukata",
+        "Rest with tea and take your handmade bath blends home"
+    ],
+    master: {
+        title: "Your hosts",
+        bio: "The spa staff guide the workshop and explain how to use the private bathing space. Instructions are in Japanese with translated written materials and translation tools. A dedicated interpreter is not included.",
+        quote: ""
+    },
+    itinerary: [
+        "Welcome and room introduction",
+        "Sachet and herbal bath workshop",
+        "Prepare the bath and wash",
+        "Around 30 minutes of bathing",
+        "Yukata, tea and time to rest",
+        "Change and check out — approximately 3.5 hours in total"
+    ],
+    scheduleNote: "The order is indicative; the host guides the pace. Arrive 5–10 minutes before your confirmed start time.",
+    goodToKnow: [
+        "Tell us about herbal or fragrance allergies before booking.",
+        "Children must be accompanied by a guardian; ages, participation and prices are confirmed individually.",
+        "The operator lists camera-based monitoring for drowning prevention. The location, viewing arrangements and privacy conditions must be clarified and agreed before booking.",
+        "If you have health concerns, discuss suitability with the operator before booking. This is a leisure experience, not medical treatment.",
+        "The exact address is shared only after confirmation."
+    ],
+    venue: {
+        known: [
+            "A private home spa in Nerima, Tokyo",
+            "No shared session with other parties",
+            "Tuesday closure; all dates require confirmation"
+        ],
+        afterBooking: [
+            "Exact address and directions",
+            "Arrival instructions and the contact number for the day"
+        ]
+    },
+    flow: [
+        {
+            title: "Share your preferred dates",
+            body: "Tell us your party size, children’s ages, preferred language and any allergies."
+        },
+        {
+            title: "Receive a tailored quote",
+            body: "We check the date with the operator and confirm the selling price, cancellation terms and privacy arrangements."
+        },
+        {
+            title: "Confirm after reviewing the details",
+            body: "Payment and confirmation instructions are provided once the conditions have been agreed."
+        }
+    ],
+    faq: [
+        {
+            q: "Is this a private experience?",
+            a: "Yes. Your party has the space to itself; one to three guests is the usual group size."
+        },
+        {
+            q: "Is English spoken?",
+            a: "The host speaks Japanese and uses translated instructions and translation tools. A separate interpreter can be discussed in advance."
+        },
+        {
+            q: "Can children join?",
+            a: "Please tell us their ages and how many children will attend. Participation and pricing are agreed individually; a guardian must accompany them."
+        },
+        {
+            q: "Can we take the bath blends home?",
+            a: "Yes, your handmade blends can be taken home on the day. Postal delivery is not normally available."
+        },
+        {
+            q: "Is the bath monitored?",
+            a: "The operator lists camera-based monitoring for drowning prevention. We need to confirm the camera location, who can view it and privacy arrangements before any booking is accepted."
+        }
+    ],
+    story: {
+        heading: "Make, bathe, rest",
+        body: "A slower afternoon in Tokyo: aromatic ingredients in your hands, warm water, and time for a cup of tea."
+    }
+},
+
   {
     // Tokyo calligraphy teacher; the partner's own brand is deliberately not
     // shown (guests would find it and book around us). Built from the condition
@@ -978,9 +1127,9 @@ export const experiences: Experience[] = [
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Tokyo and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "tokyo-kendo-experience-tour", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "tokyo-kendo-experience-tour", city: "tokyo", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Tokyo with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a working dojo in Arakawa, Tokyo; also run in Osaka, Kyoto and other cities.",
     overview: [
@@ -1034,7 +1183,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo in Higashi-Nippori, Arakawa, about 10–12 minutes on foot from the north exit of JR Uguisudani station — the dojo's name and exact meeting point come with your confirmation", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo in Higashi-Nippori, Arakawa, about 10–12 minutes on foot from the north exit of JR Uguisudani station — the dojo's name and exact meeting point come with your confirmation", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1043,7 +1192,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Tokyo. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1063,16 +1212,16 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays), in a dojo in Arakawa near Uguisudani station.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays), in a dojo in Arakawa near Uguisudani station.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Osaka and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "osaka-kendo-experience-tour", city: "osaka", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "osaka-kendo-experience-tour", city: "osaka", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Osaka with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Osaka dojo arranged for your date; also run in Tokyo, Kyoto and other cities.",
     overview: [
@@ -1126,7 +1275,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Osaka, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Osaka, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1135,7 +1284,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Osaka. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1155,16 +1304,16 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Kyoto and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "kyoto-kendo-experience-tour", city: "kyoto", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "kyoto-kendo-experience-tour", city: "kyoto", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Kyoto with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Kyoto dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
@@ -1218,7 +1367,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Kyoto, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Kyoto, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1227,7 +1376,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Kyoto. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1247,16 +1396,16 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Nagoya and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "nagoya-kendo-experience-tour", city: "nagoya", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "nagoya-kendo-experience-tour", city: "nagoya", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Nagoya with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday afternoons in a Nagoya dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
@@ -1310,7 +1459,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Nagoya, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:30; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Nagoya, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:30; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1319,7 +1468,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Nagoya. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1339,16 +1488,16 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Okinawa and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "okinawa-kendo-experience-tour", city: "okinawa", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "okinawa-kendo-experience-tour", city: "okinawa", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Okinawa with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday afternoons in a Okinawa dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
@@ -1402,7 +1551,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Okinawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Okinawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday afternoons, usually starting at 13:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1411,7 +1560,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Okinawa. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1431,16 +1580,16 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday afternoons (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Kanazawa and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "kanazawa-kendo-experience-tour", city: "kanazawa", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "kanazawa-kendo-experience-tour", city: "kanazawa", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Kanazawa dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
@@ -1494,7 +1643,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Kanazawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Kanazawa, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1503,7 +1652,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Kanazawa. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1523,16 +1672,16 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
     // SAMURAI TRIP (Park For Us Inc.): the kendo experience tour it runs in
     // Himeji and other cities, from its e-mail of 2026-10-06 to us and its
     // public site (docs/EMAIL_TEMPLATES.md §K). Prices are its wholesale
-    // adult rate with tax as a placeholder until ours is set; the operator
-    // is not named on the page.
-    slug: "himeji-kendo-experience-tour", city: "himeji", category: "kendo", bookingType: "request", status: "preview",
+    // adult retail rate including tax. Listing approved 2026-10-20;
+    // operator identity remains private.
+    slug: "himeji-kendo-experience-tour", city: "himeji", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience Tour in Himeji with Dan-ranked Instructors",
     tagline: "A two-hour kendo session for groups of two to two hundred, led by instructors of fifth to seventh dan: into the armour, the bowing ceremony, what the samurai lived by, striking practice and a match. Weekday mornings in a Himeji dojo arranged for your date; also run in Tokyo, Osaka and other cities.",
     overview: [
@@ -1586,7 +1735,7 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the session" },
     ],
     venue: {
-      known: ["A working kendo dojo or sports hall in Himeji, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Two weeks before the date the operator needs everyone's gender and approximate height, to prepare the armour", "Private sessions for six adults or more, or for the price of six adults"],
+      known: ["A working kendo dojo or sports hall in Himeji, chosen by the operator for your date from venues within thirty to fifty minutes of the city centre — the meeting point comes with your confirmation; the venue itself cannot be chosen", "Weekday mornings, usually starting at 10:00; no weekends or Japanese public holidays", "Changing space on site; come in everyday clothes, the uniform is provided", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "Private sessions for six adults or more, or for the price of six adults"],
       afterBooking: ["The venue's name, address and meeting point", "Directions from the nearest station", "A phone number for the day"],
       img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up in the hall",
     },
@@ -1595,7 +1744,7 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a weekday and send your request", body: "Tell us your date, how many of you there are with everyone's age, and the city if it is not Himeji. We check the date with the operator." },
       { title: "We reply within 24 hours", body: "With the start time, the price for your group and the conditions." },
-      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start. Two weeks before the date we ask for everyone's gender and approximate height for the armour." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; the operator then books the venue, the instructors and the equipment, and cancellation terms start.  Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
     ],
     faq: [
       { q: "Do I need any kendo experience?", a: "No. The session is run for beginners of every age and fitness level; the instructors take you from dressing in the armour to a match." },
@@ -1615,7 +1764,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in kendo uniform and full armour", "Take part in the bowing ceremony and hear what the samurai lived by", "Practise footwork, the swing and the strike", "Finish with a match between participants, refereed by the instructors"],
     master: { title: "Your instructors", bio: "Kendo teachers of fifth to seventh dan with more than thirty years of practice, working for an operator that has brought visitors into Japanese dojos since 2016 and has been recognised with national tourism awards. The founder began kendo at five and competed through university and corporate kendo before starting the tour.", quote: "Unify your spirit, mind the manners, and kendo stays with you for life." },
     itinerary: ["0:00 — Into the armour", "0:20 — The bowing ceremony", "0:30 — What the samurai lived by", "0:45 — Striking practice", "1:20 — The match", "1:45 — Closing bow, photos and changing", "2:00 — End of the session"],
-    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Everyone's gender and approximate height are needed two weeks before, for the armour.", "English and Japanese."],
+    goodToKnow: ["About 1.5 to 2 hours, weekday mornings (no weekends or public holidays); the venue is chosen for your date.", "From age 9; reduced rate for ages 9–13. Two to two hundred guests.", "Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required.", "English and Japanese."],
     story: { heading: "Ki, ken, tai", body: "A strike only counts in kendo when spirit, sword and body arrive together — ki-ken-tai-itchi. The instructors say it in the first ten minutes and you spend the rest of the session finding out what it means with your own hands." },
   },
   {
@@ -2204,32 +2353,21 @@ export const experiences: Experience[] = [
     story: { heading: "One voice, a whole town", body: "A rakugo story has no set, no costume change and no second actor. A fan becomes chopsticks, a towel a purse, and the same voice plays the merchant, his wife and the fool who outwits them both. Hearing it in English, in the district that made it popular, is the easiest way into the form." },
   },
   {
-    // A Tokyo salon in Nihonbashi run by a small performing-arts company:
-    // three one-hour sessions (classical dance, English rakugo, shamisen) and
-    // a two-hour private plan. Built 2026-10-17 from the partner's condition
-    // sheet. Company, salon name, address, performer names and contacts stay
-    // off the page until the owner agrees the listing terms (the sheet says
-    // "掲載条件は要確認"). Price: the owner's rule (wholesale + ¥4,500 ad cost,
-    // 20% margin, rounded up to ¥500 incl. tax) applied to a placeholder
-    // wholesale = the partner's public price ¥12,000 incl. tax, because the
-    // wholesale is not agreed yet (ledger 料金マスタ, 管理番号 25). Sessions are
-    // scheduled individually; the sheet's former pattern was 2 pm / 4 pm.
-    // Free cancellation until 6 pm two days before; after that 100%. Photos
-    // are CC BY placeholders (docs/PLACEHOLDER_PHOTOS.md). Preview.
+    // Partner corrections received 2026-10-20: Kabuki Dance naming,
+    // daily minimum of three, two-day operating decision and exact cancellation cutoff.
+    // Retail price retained; private-session price remains quote-only.
+    // Supplied photos replace placeholders. Await final listing sign-off.
     slug: "nihonbashi-japanese-dance-salon", city: "tokyo", category: "performing-arts", bookingType: "request", status: "preview",
-    title: "Japanese Classical Dance Up Close in Nihonbashi, Tokyo: A Kabuki-Style Dance Salon",
+    title: "Kabuki Dance in Nihonbashi, Tokyo: Performance and Hands-On Experience",
     tagline: "An hour in a small salon in central Tokyo: a professional dancer performs nihon buyo, the classical dance of the kabuki stage, a few metres from your seat, then teaches you a short piece with a fan and poses with you for a photo. A drink is included.",
     overview: [
       "Nihon buyo is the dance that grew up with kabuki: the same stylised walks and turns, the fan that becomes a cup, a wave or a letter, the stillness that says more than the movement. In a theatre you watch it from row twenty. Here it happens in a small Nihonbashi salon, with at most twelve guests, close enough to hear the silk.",
       "After the performance the dancer talks about the piece and the training behind it, then teaches you the gestures of a short classic such as Sakura Sakura, fan in hand. The hour ends with a commemorative photo with the dancer. A drink — green tea, black tea or sparkling water — is included, and a printed guide explains what you have seen.",
     ],
     duration: "About 1 hour", price: "¥21,500", priceUnit: "person", group: "Up to 12 guests", ages: "Ages 6+", area: "Tokyo (Nihonbashi, Chuo)",
-    img: "/images/ajl-dance-hero.jpg", alt: "A dancer in a red kimono holding a pose with both sleeves raised on a small stage",
-    gallery: [
-      { img: "/images/ajl-dance-pair.jpg", alt: "Two dancers in patterned kimono kneeling with fans and flowers in front of a gold screen" },
-      { img: "/images/ajl-dance-green.jpg", alt: "A dancer in a green kimono mid-turn, sleeve extended, in front of a gold folding screen" },
-    ],
-    galleryNote: "Placeholder photos (Creative Commons). The partner's own photos replace them before this page is published.",
+    img: "/images/ajl-dance-partner.jpg", alt: "Kabuki Dance performer with a fan in front of a pine backdrop",
+    gallery: [],
+    galleryNote: "Photos supplied by the operator. The performer on your date may vary.",
     partySize: { min: 1, max: 12 },
     availability: { daily: false, startTimes: ["14:00", "16:00"], cutoffDays: 2, cutoffTime: "18:00", defaultTime: "14:00" },
     availabilityNote: "Sessions are scheduled individually around the performers' calendars, usually in the afternoon from 2 pm or 4 pm; tell us your dates in Tokyo and we confirm the nearest session.",
@@ -2238,8 +2376,9 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Performed in Japanese with a printed English guide",
     skipSiteFaq: true,
-    cancellation: "Free cancellation until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100% of the price. If the operator has to cancel — for example when a session does not reach its minimum of three guests — you receive a full refund.",
+    cancellation: "Free cancellation until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100% of the price. If the operator has to cancel — for example when the day does not reach its minimum of three guests — you receive a full refund.",
     cancellationTiers: [{ until: 2, rate: 0 }, { until: 0, rate: 100 }],
+    cancellationCutoffTime: "18:00",
     includedShort: "Performance · Talk and a short lesson · Photo with the dancer · A drink",
     highlights: [
       { icon: "dance", title: "A stage a few metres away", body: "A professional nihon buyo dancer performs for at most twelve guests in a small salon — every gesture of the fan and the sleeve in plain view." },
@@ -2260,7 +2399,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Welcome", body: "Shoes come off at the door; take a seat with your drink." },
-      { time: "0:05", title: "The performance", body: "A classical piece, danced a few metres from you.", img: "/images/ajl-dance-hero.jpg" },
+      { time: "0:05", title: "The performance", body: "A classical piece, danced a few metres from you.", img: "/images/ajl-dance-partner.jpg" },
       { time: "0:25", title: "Talk with the dancer", body: "The story behind the piece, the training, and your questions." },
       { time: "0:35", title: "Your turn", body: "The gestures of a short classic such as Sakura Sakura, fan in hand." },
       { time: "0:50", title: "Photo together", body: "A commemorative photo with the dancer." },
@@ -2269,7 +2408,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A small private salon in Nihonbashi, central Tokyo, a short walk from the subway — the exact address comes with your confirmation", "Shoes come off at the door: please wear or bring socks", "Regular sessions are shared with other guests, up to twelve in all; a private session for your own group is available on request"],
       afterBooking: ["The address and directions from the nearest station", "A phone number for the day", "Who performs on your date"],
-      img: "/images/ajl-dance-pair.jpg", alt: "Two dancers kneeling in front of a gold screen",
+      img: "/images/ajl-dance-partner.jpg", alt: "Kabuki Dance performer with a fan in front of a pine backdrop",
     },
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. children in the group; a wish for a private session; the dates you can make",
@@ -2285,15 +2424,15 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "From age 6, at the same price as adults." },
       { q: "What should I wear?", a: "Anything comfortable. Shoes come off at the door, so wear or bring socks." },
       { q: "When does it run?", a: "Sessions are scheduled individually, usually in the afternoon from 2 pm or 4 pm. Tell us your dates and we confirm the nearest session." },
-      { q: "Is there a minimum number of guests?", a: "A session runs with at least three guests in total, counting other guests on the same date. If your group is smaller, we confirm as soon as the session reaches the minimum or suggest another date." },
-      { q: "Can we have the salon to ourselves?", a: "Yes: a private two-hour session for up to twelve guests, from ¥144,000 for the group, with a programme that can combine dance, rakugo and shamisen. Ask in your request." },
+      { q: "Is there a minimum number of guests?", a: "The minimum is three guests per day, counting all sessions on that date. The operator decides whether the day will run two days before. You may request for one or two people; if the day cannot run, we offer another date or a full refund." },
+      { q: "Can we have the salon to ourselves?", a: "Private two-hour sessions for up to twelve guests are available on request. The price and combination of performances are quoted after checking with the operator." },
       { q: "What is the cancellation policy?", a: "Free until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100%." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
     ],
     whatYoullDo: ["Watch a nihon buyo performance by a professional dancer, a few metres away", "Hear the dancer explain the piece and the training behind it", "Learn the gestures of a short classic, fan in hand", "Take a commemorative photo with the dancer"],
     master: { title: "The performers", bio: "Professional nihon buyo dancers who perform in Tokyo. Who performs on your date depends on the schedule and is named in your confirmation.", quote: "" },
     itinerary: ["0:00 — Welcome", "0:05 — The performance", "0:25 — Talk with the dancer", "0:35 — Your turn", "0:50 — Photo together", "1:00 — End of the session"],
-    goodToKnow: ["About 1 hour, usually from 2 pm or 4 pm; sessions are confirmed individually.", "Up to 12 guests, from age 6. Regular sessions are shared with other guests.", "Shoes off at the door: wear or bring socks.", "Performed in Japanese with a printed English guide."],
+    goodToKnow: ["About 1 hour, usually from 2 pm or 4 pm; sessions are confirmed individually. Minimum three guests per day; operation is decided two days before.", "Up to 12 guests, from age 6. Regular sessions are shared with other guests.", "Shoes off at the door: wear or bring socks.", "Performed in Japanese with a printed English guide."],
     story: { heading: "Kabuki, from the front row", body: "The great kabuki actors trained in this dance before they trained in anything else. Seen from across a small room, the fan, the sleeve and the stillness stop being a spectacle and become a conversation." },
   },
   {
@@ -2307,12 +2446,9 @@ export const experiences: Experience[] = [
       "The story is told in English. Afterwards the storyteller talks about the art and the training, then hands you the fan and the towel to try a line or two yourself. The hour ends with a commemorative photo. A drink — green tea, black tea or sparkling water — is included, and a printed guide explains the form.",
     ],
     duration: "About 1 hour", price: "¥21,500", priceUnit: "person", group: "Up to 12 guests", ages: "Ages 6+", area: "Tokyo (Nihonbashi, Chuo)",
-    img: "/images/ajl-rakugo-hero.jpg", alt: "A rakugo storyteller in a grey kimono kneeling on a red-draped stage, one hand raised mid-story",
-    gallery: [
-      { img: "/images/ajl-rakugo-fan.jpg", alt: "A rakugo storyteller kneeling on a cushion in front of a gold screen, holding a fan" },
-      { img: "/images/ajl-rakugo-hall.jpg", alt: "A storyteller on a lit stage seen over the heads of the audience" },
-    ],
-    galleryNote: "Placeholder photos (Creative Commons). The partner's own photos replace them before this page is published.",
+    img: "/images/ajl-rakugo-partner.jpg", alt: "Rakugo storyteller seated on the salon stage",
+    gallery: [],
+    galleryNote: "Photos supplied by the operator. The performer on your date may vary.",
     partySize: { min: 1, max: 12 },
     availability: { daily: false, startTimes: ["14:00", "16:00"], cutoffDays: 2, cutoffTime: "18:00", defaultTime: "14:00" },
     availabilityNote: "Sessions are scheduled individually around the performers' calendars, usually in the afternoon from 2 pm or 4 pm; tell us your dates in Tokyo and we confirm the nearest session.",
@@ -2321,8 +2457,9 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Performed in English",
     skipSiteFaq: true,
-    cancellation: "Free cancellation until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100% of the price. If the operator has to cancel — for example when a session does not reach its minimum of three guests — you receive a full refund.",
+    cancellation: "Free cancellation until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100% of the price. If the operator has to cancel — for example when the day does not reach its minimum of three guests — you receive a full refund.",
     cancellationTiers: [{ until: 2, rate: 0 }, { until: 0, rate: 100 }],
+    cancellationCutoffTime: "18:00",
     includedShort: "Rakugo in English · Talk and a try yourself · Photo with the storyteller · A drink",
     highlights: [
       { icon: "chat", title: "Told in English, told close", body: "A rakugo storyteller performs in English for at most twelve guests — every face the fan pulls, every change of voice, from a few metres away." },
@@ -2343,7 +2480,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Welcome", body: "Shoes come off at the door; take a seat with your drink." },
-      { time: "0:05", title: "The story", body: "A rakugo story told in English from the cushion.", img: "/images/ajl-rakugo-hero.jpg" },
+      { time: "0:05", title: "The story", body: "A rakugo story told in English from the cushion.", img: "/images/ajl-rakugo-partner.jpg" },
       { time: "0:25", title: "Talk with the storyteller", body: "How the art works, how it is learned, and your questions." },
       { time: "0:35", title: "Your turn", body: "The fan, the towel and a line or two of your own." },
       { time: "0:50", title: "Photo together", body: "A commemorative photo with the storyteller." },
@@ -2352,7 +2489,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A small private salon in Nihonbashi, central Tokyo, a short walk from the subway — the exact address comes with your confirmation", "Shoes come off at the door: please wear or bring socks", "Regular sessions are shared with other guests, up to twelve in all; a private session for your own group is available on request"],
       afterBooking: ["The address and directions from the nearest station", "A phone number for the day", "Who performs on your date"],
-      img: "/images/ajl-rakugo-fan.jpg", alt: "A storyteller on a cushion with a fan",
+      img: "/images/ajl-rakugo-partner.jpg", alt: "Rakugo storyteller seated on the salon stage",
     },
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. children in the group; a wish for a private session; the dates you can make",
@@ -2368,15 +2505,15 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "From age 6, at the same price as adults." },
       { q: "What should I wear?", a: "Anything comfortable. Shoes come off at the door, so wear or bring socks." },
       { q: "When does it run?", a: "Sessions are scheduled individually, usually in the afternoon from 2 pm or 4 pm. Tell us your dates and we confirm the nearest session." },
-      { q: "Is there a minimum number of guests?", a: "A session runs with at least three guests in total, counting other guests on the same date. If your group is smaller, we confirm as soon as the session reaches the minimum or suggest another date." },
-      { q: "Can we have the salon to ourselves?", a: "Yes: a private two-hour session for up to twelve guests, from ¥144,000 for the group, with a programme that can combine rakugo, dance and shamisen. Ask in your request." },
+      { q: "Is there a minimum number of guests?", a: "The minimum is three guests per day, counting all sessions on that date. The operator decides whether the day will run two days before. You may request for one or two people; if the day cannot run, we offer another date or a full refund." },
+      { q: "Can we have the salon to ourselves?", a: "Private two-hour sessions for up to twelve guests are available on request. The price and combination of performances are quoted after checking with the operator." },
       { q: "What is the cancellation policy?", a: "Free until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100%." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
     ],
     whatYoullDo: ["Hear a rakugo story told in English from a few metres away", "Learn how one voice, a fan and a towel play a whole cast", "Try a line yourself with the props", "Take a commemorative photo with the storyteller"],
     master: { title: "The performers", bio: "Rakugo storytellers who perform in English in Tokyo. Who performs on your date depends on the schedule and is named in your confirmation.", quote: "" },
     itinerary: ["0:00 — Welcome", "0:05 — The story", "0:25 — Talk with the storyteller", "0:35 — Your turn", "0:50 — Photo together", "1:00 — End of the session"],
-    goodToKnow: ["About 1 hour, usually from 2 pm or 4 pm; sessions are confirmed individually.", "Up to 12 guests, from age 6. Regular sessions are shared with other guests.", "Shoes off at the door: wear or bring socks.", "Performed in English."],
+    goodToKnow: ["About 1 hour, usually from 2 pm or 4 pm; sessions are confirmed individually. Minimum three guests per day; operation is decided two days before.", "Up to 12 guests, from age 6. Regular sessions are shared with other guests.", "Shoes off at the door: wear or bring socks.", "Performed in English."],
     story: { heading: "One voice, a whole town", body: "A rakugo story has no set, no costume change and no second actor. A fan becomes chopsticks, a towel a purse, and the same voice plays the merchant, his wife and the fool who outwits them both. In a room this size, you can see the trick and still fall for it." },
   },
   {
@@ -2386,15 +2523,13 @@ export const experiences: Experience[] = [
     title: "Shamisen Up Close in Nihonbashi, Tokyo: Live Performance and a Hands-On Try",
     tagline: "An hour in a small salon in central Tokyo: a professional shamisen player performs a few metres from your seat, talks about the instrument, puts it in your hands for a first try, and poses with you for a photo. A drink is included.",
     overview: [
-      "Three strings, a square body of skin and wood, and a plectrum the size of a hand: the shamisen is the sound behind kabuki, the geisha's song and the folk music of the north, and it carries in a way that fills a small room without a microphone. In this Nihonbashi salon you sit at most twelve guests from the player.",
+      "Three strings, a square body of skin and wood, and a plectrum the size of a hand: the shamisen is the sound behind kabuki, the geisha's song and the folk music of the north, and it carries in a way that fills a small room without a microphone. With no more than twelve guests, you can enjoy the performance just a few metres from the musician.",
       "After the performance the musician explains the instrument — the strings, the plectrum, the striking that is as much drum as string — and then hands it to you for a first try. The hour ends with a commemorative photo. A drink — green tea, black tea or sparkling water — is included, and a printed English guide explains what you have heard.",
     ],
     duration: "About 1 hour", price: "¥21,500", priceUnit: "person", group: "Up to 12 guests", ages: "Ages 6+", area: "Tokyo (Nihonbashi, Chuo)",
-    img: "/images/ajl-shamisen-hero.jpg", alt: "A shamisen player striking the strings with a plectrum, lit against a dark stage",
-    gallery: [
-      { img: "/images/ajl-shamisen-vintage.jpg", alt: "A hand-tinted photograph from around 1914 of a woman in kimono playing the shamisen under a pine tree", caption: "The instrument, a century ago" },
-    ],
-    galleryNote: "Placeholder photos (Creative Commons). The partner's own photos replace them before this page is published.",
+    img: "/images/ajl-shamisen-partner.jpg", alt: "Shamisen performer demonstrating the instrument in the salon",
+    gallery: [],
+    galleryNote: "Photos supplied by the operator. The performer on your date may vary.",
     partySize: { min: 1, max: 12 },
     availability: { daily: false, startTimes: ["14:00", "16:00"], cutoffDays: 2, cutoffTime: "18:00", defaultTime: "14:00" },
     availabilityNote: "Sessions are scheduled individually around the performers' calendars, usually in the afternoon from 2 pm or 4 pm; tell us your dates in Tokyo and we confirm the nearest session.",
@@ -2403,8 +2538,9 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "English explanation and a printed English guide",
     skipSiteFaq: true,
-    cancellation: "Free cancellation until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100% of the price. If the operator has to cancel — for example when a session does not reach its minimum of three guests — you receive a full refund.",
+    cancellation: "Free cancellation until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100% of the price. If the operator has to cancel — for example when the day does not reach its minimum of three guests — you receive a full refund.",
     cancellationTiers: [{ until: 2, rate: 0 }, { until: 0, rate: 100 }],
+    cancellationCutoffTime: "18:00",
     includedShort: "Performance · Talk and a first try · Photo with the player · A drink",
     highlights: [
       { icon: "spark", title: "Three strings, no microphone", body: "A professional shamisen player performs for at most twelve guests in a small salon — close enough to feel the plectrum hit the skin." },
@@ -2425,7 +2561,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Welcome", body: "Shoes come off at the door; take a seat with your drink." },
-      { time: "0:05", title: "The performance", body: "Shamisen pieces played a few metres from you.", img: "/images/ajl-shamisen-hero.jpg" },
+      { time: "0:05", title: "The performance", body: "Shamisen pieces played a few metres from you.", img: "/images/ajl-shamisen-partner.jpg" },
       { time: "0:25", title: "Talk with the player", body: "The instrument, the plectrum, the music it was made for, and your questions." },
       { time: "0:35", title: "Your turn", body: "The shamisen in your hands for a first try." },
       { time: "0:50", title: "Photo together", body: "A commemorative photo with the player." },
@@ -2434,7 +2570,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A small private salon in Nihonbashi, central Tokyo, a short walk from the subway — the exact address comes with your confirmation", "Shoes come off at the door: please wear or bring socks", "Regular sessions are shared with other guests, up to twelve in all; a private session for your own group is available on request"],
       afterBooking: ["The address and directions from the nearest station", "A phone number for the day", "Who performs on your date"],
-      img: "/images/ajl-shamisen-hero.jpg", alt: "A shamisen player on stage",
+      img: "/images/ajl-shamisen-partner.jpg", alt: "Shamisen performer demonstrating the instrument in the salon",
     },
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. children in the group; a wish for a private session; the dates you can make",
@@ -2450,15 +2586,15 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "From age 6, at the same price as adults." },
       { q: "What should I wear?", a: "Anything comfortable. Shoes come off at the door, so wear or bring socks." },
       { q: "When does it run?", a: "Sessions are scheduled individually, usually in the afternoon from 2 pm or 4 pm. Tell us your dates and we confirm the nearest session." },
-      { q: "Is there a minimum number of guests?", a: "A session runs with at least three guests in total, counting other guests on the same date. If your group is smaller, we confirm as soon as the session reaches the minimum or suggest another date." },
-      { q: "Can we have the salon to ourselves?", a: "Yes: a private two-hour session for up to twelve guests, from ¥144,000 for the group, with a programme that can combine shamisen, dance and rakugo. Ask in your request." },
+      { q: "Is there a minimum number of guests?", a: "The minimum is three guests per day, counting all sessions on that date. The operator decides whether the day will run two days before. You may request for one or two people; if the day cannot run, we offer another date or a full refund." },
+      { q: "Can we have the salon to ourselves?", a: "Private two-hour sessions for up to twelve guests are available on request. The price and combination of performances are quoted after checking with the operator." },
       { q: "What is the cancellation policy?", a: "Free until 6 pm Japan time two days before the session. After that, and if you do not arrive, 100%." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the session, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
     ],
     whatYoullDo: ["Hear a shamisen performance from a few metres away", "Learn how the instrument is built and played", "Hold the shamisen and try the plectrum yourself", "Take a commemorative photo with the player"],
     master: { title: "The performers", bio: "Professional shamisen players who perform in Tokyo. Who performs on your date depends on the schedule and is named in your confirmation.", quote: "" },
     itinerary: ["0:00 — Welcome", "0:05 — The performance", "0:25 — Talk with the player", "0:35 — Your turn", "0:50 — Photo together", "1:00 — End of the session"],
-    goodToKnow: ["About 1 hour, usually from 2 pm or 4 pm; sessions are confirmed individually.", "Up to 12 guests, from age 6. Regular sessions are shared with other guests.", "Shoes off at the door: wear or bring socks.", "English explanation and a printed English guide."],
+    goodToKnow: ["About 1 hour, usually from 2 pm or 4 pm; sessions are confirmed individually. Minimum three guests per day; operation is decided two days before.", "Up to 12 guests, from age 6. Regular sessions are shared with other guests.", "Shoes off at the door: wear or bring socks.", "English explanation and a printed English guide."],
     story: { heading: "The sound under the stage", body: "Every kabuki scene, every geisha's song and half the folk music of Japan runs on these three strings. Heard across a small room, with the plectrum striking the skin, it is a drum and a voice at once." },
   },
   {
@@ -3220,7 +3356,7 @@ const golfPage = (e: Experience, lang: Lang) => isArrangement() ? applyGolfArran
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "availability", "map", "taxIncluded", "cancellationTiers", "dietary", "interpreter", "skipSiteFaq"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);
