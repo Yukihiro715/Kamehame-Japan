@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { quoteCopy } from "./quote-request-switch";
 import { useBooking } from "@/components/site/booking-context";
 import { useCurrency } from "@/components/site/currency-context";
 import { golfPriceParts } from "@/components/site/golf-options";
@@ -85,13 +86,14 @@ export function StickyRequestBar({
     if (D) shownCondition = D.estimateFor(b!.guestsNumber);
   }
 
+  if (b?.experience.provisionalCheckout && (b.quoteRequested || b.largeParty) && lang) { shownPrice = quoteCopy[lang].heading; shownCondition = D?.estimateFor(b.guestsNumber) ?? ""; }
   return (
     <div className={`sticky-request ${show ? "show" : ""}`} aria-hidden={!show}>
       <div className="sticky-price">
         <b><Fx brief>{shownPrice}</Fx></b>
         <small><Fx>{shownCondition}</Fx></small>
       </div>
-      <a className="booking-cta as-link" href={watchTarget} tabIndex={show ? 0 : -1}>{b?.experience.provisionalCheckout && b.largeParty && D ? D.requestAvailability : label}</a>
+      <a className="booking-cta as-link" href={watchTarget} tabIndex={show ? 0 : -1}>{b?.experience.provisionalCheckout && (b.largeParty || b.quoteRequested) && lang ? quoteCopy[lang].heading : label}</a>
     </div>
   );
 }

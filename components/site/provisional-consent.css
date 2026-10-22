@@ -4,3 +4,9 @@
 .provisional-consent .form-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
 .provisional-consent input[type="checkbox"] { width: 18px; height: 18px; flex: 0 0 18px; margin-top: 3px; }
 .provisional-consent summary { cursor: pointer; font-weight: 600; }
+
+.quote-request-switch { margin: 12px 0; font-size: 13px; line-height: 1.65; }
+.quote-request-switch button { cursor: pointer; color: inherit; font: inherit; background: transparent; border: 1px solid #d8d3ca; border-radius: 6px; padding: 12px 14px; min-height: 44px; width: 100%; text-align: left; font-weight: 600; }
+.quote-request-switch p { margin: 10px 0; }
+
+.bk-price .bk-quote-heading { font-size: 24px; line-height: 1.3; }

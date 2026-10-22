@@ -63,6 +63,7 @@ export const DEFAULT_MAX_GUESTS = 15;
  *  extras — lives here so the booking card beside the page and the request
  *  form at the bottom show the same choice and the same estimate. */
 export interface BookingState {
+  quoteRequested?: boolean;
   plan: string;
   date: string; time: string;
   guests: string;
@@ -225,7 +226,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
       },
       toggleAddOn: (id) => setState((s) => ({ ...s, addOns: s.addOns.includes(id) ? s.addOns.filter((x) => x !== id) : [...s.addOns, id] })),
       experience, pricing: activePricing, minDate,
-      estimate: activePricing && !largeParty && !customQuote ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
+      estimate: activePricing && !largeParty && !customQuote && !state.quoteRequested ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
       guestsNumber, largeParty, variantView, customQuote,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- pickDefault/variantTime derive from `experience`
