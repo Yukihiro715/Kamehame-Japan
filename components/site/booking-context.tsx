@@ -106,12 +106,17 @@ export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "cl
   return !isClosed(iso, x.closed);
 }
 
-/** Earliest date a guest can actually pick: for dated products, the first
- *  announced date on or after the booking cutoff. */
-export function firstOpenDate(x: Pick<BookingExperience, "dates">, min?: string): string | undefined {
-  if (!x.dates) return min;
+/** The first selectable date after the cutoff, respecting weekdays and closures. */
+export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly">, min?: string): string | undefined {
   if (!min) return undefined;
-  return x.dates.map((d) => d.date).sort().find((d) => d >= min);
+  if (x.dates) return x.dates.filter(d => d.times.length > 0).map(d => d.date).sort().find(d => d >= min && isBookable(d, x));
+  const day = new Date(`${min}T00:00:00Z`);
+  if (!Number.isFinite(day.getTime())) return undefined;
+  for (let i = 0; i <= 366; i++, day.setUTCDate(day.getUTCDate() + 1)) {
+    const iso = day.toISOString().slice(0, 10);
+    if (isBookable(iso, x)) return iso;
+  }
+  return undefined;
 }
 
 /** Start times offered on `iso` (all of them when no date is chosen yet). */

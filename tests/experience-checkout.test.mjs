@@ -15,7 +15,7 @@ const m=await vite.ssrLoadModule('/lib/experience-checkout.ts');
 const {EXPERIENCE_PRODUCTS,provisionalCopy}=await vite.ssrLoadModule('/lib/provisional-booking.ts');
 const {catalogFor}=await vite.ssrLoadModule('/lib/catalog.ts');
 const {pricingFor}=await vite.ssrLoadModule('/lib/pricing.ts');
-const {BookingProvider}=await vite.ssrLoadModule('/components/site/booking-context.tsx');
+const {BookingProvider,firstOpenDate}=await vite.ssrLoadModule('/components/site/booking-context.tsx');
 const {EnquiryForm}=await vite.ssrLoadModule('/components/site/enquiry-form.tsx');
 const {CurrencyProvider}=await vite.ssrLoadModule('/components/site/currency-context.tsx');
 const {receiveWebhook}=await vite.ssrLoadModule('/lib/payment-webhooks.ts');
@@ -246,4 +246,13 @@ test('ledger registration fills empty inputs only and state changes require expe
   assert.deepEqual(written,[[5,250000]]);
   row[2]='仮予約受領';c.experienceUpsert_('予約一覧',row[0],{'対応ステータス':'支払待ち'},{'対応ステータス':['仮予約受領']});
   assert.equal(row[2],'支払待ち');
+});
+
+test('earliest displayed date skips weekends, closures and empty announced slots',()=>{
+  assert.equal(firstOpenDate({weekdaysOnly:true},'2026-10-25'),'2026-10-26');
+  assert.equal(firstOpenDate({weekdaysOnly:true,closed:[{from:'10-26',to:'10-26'}]},'2026-10-25'),'2026-10-27');
+  assert.equal(firstOpenDate({closed:[{from:'12-29',to:'01-03'}]},'2026-12-31'),'2027-01-04');
+  assert.equal(firstOpenDate({dates:[{date:'2026-10-25',times:[]},{date:'2026-10-26',times:['10:00']}]},'2026-10-25'),'2026-10-26');
+  assert.equal(firstOpenDate({dates:[]},'2026-10-25'),undefined);
+  assert.equal(firstOpenDate({},'2026-10-25'),'2026-10-25');
 });

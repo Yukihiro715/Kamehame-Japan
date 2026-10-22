@@ -10,3 +10,6 @@
 .quote-request-switch p { margin: 10px 0; }
 
 .bk-price .bk-quote-heading { font-size: 24px; line-height: 1.3; }
+
+.xp2 .provisional-consent input[type="checkbox"] { width: 20px; height: 20px; min-height: 20px; padding: 0; flex: 0 0 20px; accent-color: var(--kame); }
+.provisional-consent .form-check { min-height: 44px; align-items: flex-start; }
