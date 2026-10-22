@@ -1719,3 +1719,18 @@ body[data-kh-modal] .sticky-request { display:none; }
 .ofk-carousel + .xp-note-sample { margin-top:12px; }
 .ofk-nav button { width:44px; height:44px; display:grid; place-items:center; border:1.5px solid var(--ink); border-radius:999px; background:var(--white); color:var(--ink); cursor:pointer; }
 .ofk-nav button:hover { background:var(--kame); }
+
+/* Ofukuro form: compact photo picker and chip checkboxes */
+.ofk-mini { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+@media(max-width:620px){ .ofk-mini { grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; } }
+.ofk-mini-item { position:relative; display:flex; flex-direction:column; gap:6px; padding:6px 6px 8px; border:2px solid #e3ded3; border-radius:12px; background:var(--white); cursor:pointer; min-height:44px; }
+.ofk-mini-item input { position:absolute; width:1px; height:1px; margin:0; opacity:0; pointer-events:none; }
+.ofk-mini-item img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:8px; display:block; }
+.ofk-mini-item b { font-size:12px; line-height:1.25; font-weight:600; }
+.ofk-mini-item:hover { border-color:#c9c2b3; }
+.ofk-mini-item:has(input:focus-visible) { outline:3px solid var(--kame); outline-offset:2px; }
+.ofk-mini-item.sel { border-color:var(--ink); box-shadow:0 0 0 2px var(--kame) inset; }
+.ofk-mini-check { position:absolute; top:10px; right:10px; width:22px; height:22px; display:grid; place-items:center; border-radius:999px; background:var(--kame); color:var(--white); }
+.ofk-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.ofk-chips .form-check { padding:8px 12px; min-height:44px; align-items:center; }
+.ofk-chips .form-check span b { font-weight:500; font-size:13px; }

@@ -13,13 +13,12 @@ import { menuById, OFUKURO, OFUKURO_MENUS, ofukuroQuote, yenOf } from "@/lib/ofu
  *  permission, allergies, dietary needs, special arrangements), then contact
  *  and a summary. Preview only: it is not connected to the enquiry backend,
  *  posts nowhere and says so; it never shows a "request received" state.
- *  No price is shown or computed, because none is agreed. */
+ *  The estimate follows the owner's pricing (lib/ofukuro-dinner.ts). */
 
-const TIMES = [["18:00", "Dinner · around 18:00"], ["19:00", "Dinner · around 19:00"], ["12:00", "Lunch · around 12:00"], ["flexible", "Flexible"]] as const;
+const TIMES = [["18:00", "Dinner · around 18:00"], ["19:00", "Dinner · around 19:00"], ["11:00", "Lunch · 11:00"], ["flexible", "Flexible"]] as const;
 const PERMISSION = [["yes", "Yes, the accommodation allows a visiting cook"], ["will-check", "I will check with the accommodation"], ["unsure", "Not sure"]] as const;
 const EQUIPMENT = ["Stove (2+ burners)", "Sink and work space", "Ventilation", "Fridge", "Pots and pans", "Plates, bowls and cutlery", "Not sure — please advise"] as const;
 const DIETS = [["none", "No restrictions"], ["vegetarian", "Vegetarian"], ["vegan", "Vegan"], ["pescatarian", "Pescatarian"], ["halal", "Halal-related request"], ["no-pork-alcohol", "No pork, no alcohol in cooking"], ["gluten-free", "Gluten-free request"], ["other", "Other (describe below)"]] as const;
-const ALLERGENS = ["Wheat / gluten", "Egg", "Dairy", "Soy", "Nuts", "Fish", "Shellfish", "Sesame"] as const;
 
 type Row = { label: string; value: string };
 
@@ -51,7 +50,7 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
       { label: "Visiting cook allowed", value: label(PERMISSION, one("permission")) },
       { label: "Kitchen equipment", value: many("equipment") || "Not stated" },
       { label: "Dietary needs", value: label(DIETS, one("diet")) },
-      { label: "Allergens to avoid", value: many("allergens") || "None named" },
+      { label: "Allergens to avoid", value: one("allergens") || "None named" },
       { label: "Arrangements to discuss", value: one("arrangements") || "—" },
       { label: "Name", value: one("name") },
       { label: "E-mail", value: one("email") },
@@ -75,6 +74,7 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
             </div>
             <label><span>Preferred start time</span>
               <select name="time" defaultValue="18:00">{TIMES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+              <small className="form-hint">Dinner from 18:00 or 19:00, or one lunch slot at 11:00.</small>
             </label>
           </div>
           <label className="form-row"><span>Area of your accommodation</span><input name="area" type="text" required maxLength={120} placeholder="e.g. Shinjuku, Tokyo — nearest station if you know it" /></label>
@@ -99,48 +99,51 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
 
         <fieldset className="form-step" id="ofk-step-menu">
           <legend>2 · Your menu</legend>
-          <label className="form-row"><span>One menu for the whole group</span>
-            <select name="menu" value={selected ?? ""} onChange={(e) => select(e.target.value || null)} required>
-              <option value="">Choose a menu</option>
-              {OFUKURO_MENUS.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
-            </select>
-          </label>
+          <div className="form-row">
+            <span>One menu for the whole group</span>
+            <div className="ofk-mini" role="radiogroup" aria-label="Your menu">
+              {OFUKURO_MENUS.map((m) => {
+                const sel = selected === m.id;
+                return (
+                  <label key={m.id} className={`ofk-mini-item${sel ? " sel" : ""}`}>
+                    <input type="radio" name="menu" value={m.id} checked={sel} onChange={() => select(m.id)} required />
+                    {/* eslint-disable-next-line @next/next/no-img-element -- plain <img>, as the detail pages use */}
+                    <img src={m.img} alt="" loading="lazy" width={1000} height={750} />
+                    <b>{m.name}</b>
+                    {sel && <span className="ofk-mini-check" aria-hidden="true"><Check size={12} /></span>}
+                  </label>
+                );
+              })}
+            </div>
+          </div>
           {menu
-            ? <p className="xp-note ofk-chosen"><Check size={14} /> {menu.name}: {menu.set}. <a href="#menus">See the menus again</a></p>
-            : <p className="xp-note ofk-chosen">Nothing chosen yet. <a href="#menus">Pick one from the seven menus above</a> or use the list here.</p>}
+            ? <p className="xp-note ofk-chosen"><Check size={14} /> {menu.name}: {menu.set}</p>
+            : <p className="xp-note ofk-chosen">Tap a dish, or <a href="#menus">read about the seven menus above</a>.</p>}
           <small className="form-hint">{OFUKURO.menuNote}</small>
         </fieldset>
 
         <fieldset className="form-step">
           <legend>3 · What we check before booking</legend>
-          <div className="form-row">
-            <span>Does your accommodation allow a visiting cook?</span>
-            <div className="hd-options">
-              {PERMISSION.map(([v, l], i) => <label key={v} className="form-check"><input type="radio" name="permission" value={v} defaultChecked={i === 1} /><span><b>{l}</b></span></label>)}
-            </div>
+          <div className="form-row two">
+            <label><span>Does your accommodation allow a visiting cook?</span>
+              <select name="permission" defaultValue="will-check">{PERMISSION.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+            </label>
+            <label><span>Dietary needs</span>
+              <select name="diet" defaultValue="none">{DIETS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+            </label>
           </div>
+          <label className="form-row"><span>Allergens to avoid (optional)</span>
+            <input name="allergens" type="text" maxLength={200} placeholder="e.g. peanuts (severe), shellfish, egg" />
+          </label>
           <div className="form-row">
-            <span>Kitchen equipment you know is there (select all that apply)</span>
-            <div className="hd-options">
+            <span>Kitchen equipment you know is there (optional)</span>
+            <div className="ofk-chips">
               {EQUIPMENT.map((q) => <label key={q} className="form-check"><input type="checkbox" name="equipment" value={q} /><span><b>{q}</b></span></label>)}
             </div>
-            <small className="form-hint">Not sure? Choose “Not sure — please advise” and we go through it with you. Photos of the kitchen are only ever requested through a secure link later, never here.</small>
-          </div>
-          <div className="form-row">
-            <span>Dietary needs</span>
-            <div className="hd-options">
-              {DIETS.map(([v, l], i) => <label key={v} className="form-check"><input type="radio" name="diet" value={v} defaultChecked={i === 0} /><span><b>{l}</b></span></label>)}
-            </div>
-          </div>
-          <div className="form-row">
-            <span>Allergens to avoid (select all that apply)</span>
-            <div className="hd-options">
-              {ALLERGENS.map((a) => <label key={a} className="form-check"><input type="checkbox" name="allergens" value={a} /><span><b>{a}</b></span></label>)}
-            </div>
+            <small className="form-hint">Not sure? Tick “Not sure — please advise” and we go through it with you. Photos of the kitchen are only ever requested through a secure link later, never here.</small>
           </div>
           <label className="form-row"><span>Anything to arrange or ask about (optional)</span>
-            <textarea name="arrangements" rows={3} maxLength={1500} placeholder="e.g. a severe allergy and cross-contact; children's portions; a special occasion; how you would like to communicate with the cook" />
-            <small className="form-hint">Children, dietary needs and special arrangements are handled here, in the same request: we check them with the cook and confirm what is possible, and any applicable pricing, before you pay.</small>
+            <textarea name="arrangements" rows={2} maxLength={1500} placeholder="e.g. a special occasion; how you would like to communicate with the cook" />
           </label>
         </fieldset>
 

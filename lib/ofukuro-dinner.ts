@@ -83,7 +83,7 @@ export const OFUKURO = {
   menuNote: "Side dishes and soups vary by cook and season. We will confirm any dietary requests and ingredient changes before your booking is confirmed.",
   included: {
     body: "Ingredients and shopping, cooking at your accommodation, serving the meal, and cleaning the kitchen area and equipment used by your cook.",
-    time: "Allow around two hours for the visit, including cooking, conversation, serving and cleanup. Shopping takes place before arrival.",
+    time: "Allow around two hours for the visit, including cooking, conversation, serving and cleanup. Shopping takes place before arrival. Dinner starts around 18:00 or 19:00; one lunch slot starts at 11:00.",
     items: ["Ingredients and shopping before the visit", "Cooking at your accommodation", "Serving the meal", "Cleaning the kitchen area and the equipment your cook used"],
     price: "¥35,200 for up to two guests, tax and ingredients included; ¥6,000 for the third and fourth guest and ¥8,000 for each guest from the fifth; children under 10 beyond the first two guests ¥3,000 each. The total for your group is confirmed with your request and paid in advance: there is no cash payment for groceries on the day.",
   },
@@ -131,6 +131,7 @@ export const OFUKURO = {
     { q: "Can you accommodate allergies or dietary needs?", a: "Please tell us before booking. We will check with the cook before confirming whether your request can be accommodated." },
     { q: "Can children join?", a: "Yes. Include each child’s age and any food needs in your request. Children under 10 are ¥3,000 each beyond the first two guests; children aged 10 and over count as adults. We confirm portions before payment." },
     { q: "Will my cook speak English?", a: "Language skills vary. Tell us your communication needs in advance so we can confirm what support is available." },
+    { q: "Can we book lunch instead of dinner?", a: "Yes. Dinner starts around 18:00 or 19:00; there is also one lunch slot starting at 11:00. Choose it in the request form." },
     { q: "Is this a cooking class?", a: "This is a home-cooked dinner experience. You are welcome to watch and chat, but a structured hands-on lesson is not included." },
     { q: "How do payment and confirmation work?", a: "Send a request first. We check the arrangements with a cook, then confirm the total and the conditions with you and send a prepayment link. Your booking is confirmed when your payment arrives, and cancellation terms start then." },
     { q: "What is the cancellation policy?", a: "Free cancellation until 3 days before your date (Japan time). 2 days before, half the price; from the day before, including no-shows, the full price, because the ingredients have been bought. If we cannot arrange a cook, anything paid is refunded in full." },
