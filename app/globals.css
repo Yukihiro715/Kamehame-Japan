@@ -1686,3 +1686,35 @@ body[data-kh-modal] .sticky-request { display:none; }
 .xp-card-tag { display:block; margin-top:10px; font-size:11.5px; color:var(--muted); letter-spacing:.02em; }
 .hd-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
 @media(max-width:620px){ .hd-options { grid-template-columns:1fr; } }
+
+/* Ofukuro Dinner concept preview: menu cards (one choice, radio semantics) and the cook carousel. */
+.ofk-subtitle { margin:6px 0 0; font-size:17px; color:#4a463e; }
+.ofk-chosen { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:8px 0 0; }
+.ofk-chosen svg { color:var(--kame); }
+.ofk-menus { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+@media(min-width:900px){ .ofk-menus { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+.ofk-menu { position:relative; display:flex; flex-direction:column; gap:8px; padding:10px 10px 12px; border:2px solid #e3ded3; border-radius:14px; background:var(--white); cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+.ofk-menu input { position:absolute; width:1px; height:1px; margin:0; opacity:0; pointer-events:none; }
+.ofk-menu:hover { border-color:#c9c2b3; }
+.ofk-menu:has(input:focus-visible) { outline:3px solid var(--kame); outline-offset:2px; }
+.ofk-menu.sel { border-color:var(--ink); box-shadow:0 0 0 2px var(--kame) inset; }
+.ofk-menu img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px; display:block; }
+.ofk-menu-body { display:grid; gap:4px; min-width:0; }
+.ofk-menu-body b { font-family:var(--font-display); font-weight:400; font-size:15px; letter-spacing:.04em; text-transform:uppercase; line-height:1.25; }
+.ofk-menu-set { font-size:12px; line-height:1.5; color:#4a463e; }
+.ofk-menu-blurb { font-size:12.5px; line-height:1.55; color:var(--muted); }
+.ofk-menu-state { display:inline-flex; align-items:center; gap:4px; min-height:44px; padding:0 12px; margin-top:auto; border:1.5px solid var(--ink); border-radius:999px; font-size:12.5px; font-weight:700; justify-self:start; width:max-content; }
+.ofk-menu.sel .ofk-menu-state { background:var(--kame); border-color:var(--kame); }
+.ofk-carousel { position:relative; }
+.ofk-track { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:4px; }
+.ofk-track::-webkit-scrollbar { display:none; }
+.ofk-cook { flex:0 0 82%; margin:0; scroll-snap-align:start; min-width:0; border:1px solid #e3ded3; border-radius:14px; background:var(--white); overflow:hidden; }
+@media(min-width:700px){ .ofk-cook { flex-basis:calc((100% - 24px) / 3); } }
+.ofk-cook img { width:100%; aspect-ratio:4/5; object-fit:cover; display:block; }
+.ofk-cook figcaption { padding:12px 14px 14px; display:grid; gap:4px; }
+.ofk-sample { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.ofk-cook b { font-size:14px; }
+.ofk-cook p { margin:0; font-size:13px; line-height:1.65; color:#4a463e; }
+.ofk-nav { display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
+.ofk-nav button { width:44px; height:44px; display:grid; place-items:center; border:1.5px solid var(--ink); border-radius:999px; background:var(--white); color:var(--ink); cursor:pointer; }
+.ofk-nav button:hover { background:var(--kame); }

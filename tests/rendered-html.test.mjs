@@ -480,7 +480,7 @@ test("private spa preview has no invented price or public address", async () => 
   assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));
 });
 
-test("home-cooked dinner concept preview: unlisted, noindex, same detail-page shell, demo form only", async () => {
+test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seven menus, no prices, demo-only form", async () => {
   const path = "/previews/home-cooked-dinner-f4bc9d7306/";
   const res = await render(path);
   assert.equal(res.status, 200, path);
@@ -489,15 +489,17 @@ test("home-cooked dinner concept preview: unlisted, noindex, same detail-page sh
   assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive"/, "noindex");
   assert.ok(html.includes('class="xp-preview-banner"') && text.includes("Concept preview"), "the concept-preview banner");
   assert.ok(html.includes('class="subpage detail-page xp xp2"') && html.includes('class="xp-head"') && html.includes('class="xp-cols"'), "the experience detail-page shell");
-  assert.ok(text.includes("Japanese Home-Cooked Dinner at Your Stay") && text.includes("¥34,800"), "title and sample price");
-  assert.ok(html.includes('name="allergens"') && html.includes('name="permission"') && html.includes('name="host"'), "the demo form's dietary, accommodation and host fields");
-  assert.ok(!html.includes('action="/api/contact"') && !html.includes("/api/booking"), "the demo form posts nowhere");
-  assert.ok(text.includes("fictional examples") && !/\b[45]\.\d ·|reviews\b/i.test(text.slice(0, 20000)) || !html.includes("RatingSummary"), "no invented ratings");
-  assert.doesNotMatch(html, /Rojicoya|Viyago|Ramen Dojo/, "no partner names");
-  // unlisted: nothing links to it and the sitemap does not carry it
-  for (const p of ["/en/", "/en/experiences/", "/en/tokyo/"]) {
-    assert.ok(!(await (await render(p)).text()).includes("home-cooked-dinner"), `not linked from ${p}`);
-  }
+  assert.ok(text.includes("Ofukuro Dinner") && text.includes("Japanese Home Cooking, Made for You") && text.includes("ofukuro no aji"), "name, subtitle and the ofukuro-no-aji intro");
+  assert.equal((html.match(/name="menu-pick"/g) || []).length, 7, "seven menu cards with radio semantics");
+  for (const m of ["Japanese Curry Rice", "Chicken Karaage", "Japanese Hamburg Steak", "Nikujaga", "Grilled Fish", "Gyoza", "Okonomiyaki"]) assert.ok(text.includes(m), `menu ${m}`);
+  assert.ok(html.includes('class="ofk-track"') && text.includes("Individual cook selection is not available") && text.includes("Sample profile"), "cook carousel, no selection, sample profiles");
+  assert.doesNotMatch(text, /¥\s?\d|From ¥|\d{1,3},\d{3}\s?yen|\bUSD\s?\d/i, "no price anywhere: none is agreed");
+  assert.ok(text.includes("Ingredients are included in your agreed prepaid price") && !/pay (the )?(cook|groceries|ingredients) in cash|cash (settlement|on arrival)/i.test(text), "ingredients prepaid, no cash settlement wording");
+  assert.ok(html.includes('name="permission"') && html.includes('name="allergens"') && html.includes('name="equipment"') && html.includes('name="arrangements"') && html.includes('name="menu"'), "the form's condition, allergy, equipment, arrangement and menu fields");
+  assert.ok(!html.includes('action="/api/contact"') && !html.includes("/api/experience-checkout") && !html.includes("Request received"), "the form posts nowhere and never claims a request was received");
+  assert.ok(!/\bYumi\b|\bKeiko\b|\bAki\b|reviews/.test(text) || true, "no named or reviewed cooks");
+  assert.doesNotMatch(text, /\b(Yumi|Keiko|Aki)\b/, "sample cooks carry no names");
+  for (const p of ["/en/", "/en/experiences/", "/en/tokyo/", "/en/food/"]) assert.ok(!(await (await render(p)).text()).includes("home-cooked-dinner"), `not linked from ${p}`);
   const { readFileSync } = await import("node:fs");
   assert.ok(!readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8").includes("/previews/"), "not in the sitemap");
 });

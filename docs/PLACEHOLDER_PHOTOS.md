@@ -25,10 +25,21 @@ Earlier preview pages (samurai, cooking, Asakusa rakugo, ninja meditation,
 Arashiyama workshops) use Wikimedia Commons photos noted in their catalog
 comments.
 
-## Home-cooked dinner concept preview (`/previews/home-cooked-dinner-f4bc9d7306/`) — 2026-10-22
+## Ofukuro Dinner concept preview (`/previews/home-cooked-dinner-f4bc9d7306/`) — 2026-10-23
 
-`hcd-home-table.webp`, `hcd-host-sample.webp`, `hcd-karaage.webp`, `hcd-plant-based.webp`,
-`hcd-host-yumi.webp`, `hcd-host-keiko.webp`, `hcd-host-aki.webp`: illustrative AI-generated
-images carried over from the first static version of the concept page (commit d113da1).
-The people shown are fictional sample hosts, the dishes are samples, and the page says so.
-They never appear on a published page; real host and food photos replace them before launch.
+Twelve AI-generated placeholders supplied with the implementation brief of
+2026-10-22 (`Ofukuro_Dinner_Claude_Package.zip`, asset_manifest.csv), resized
+and re-encoded as WebP:
+
+| File | Placement | Ratio |
+| --- | --- | --- |
+| `ofukuro-hero-table.webp` | first view (table) | 16:9 |
+| `ofukuro-cooking.webp` | the visit | 3:2 |
+| `ofukuro-menu-curry/karaage/hamburg/nikujaga/grilled-fish/gyoza/okonomiyaki.webp` | menu cards | 4:3 |
+| `ofukuro-cook-sample-01/02/03.webp` | cook carousel | 4:5 |
+
+The people shown are fictional models, not actual hosts, and the dishes are
+examples (sides and fish vary); the page says so and shows no names or
+reviews. Real service photography replaces them before publication, shot to
+the same twelve compositions (see the brief's shooting list). The earlier
+`hcd-*.webp` samples were removed with this change.
