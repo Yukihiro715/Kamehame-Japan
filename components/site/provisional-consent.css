@@ -1,0 +1,6 @@
+/* Paid provisional requests: match the existing form typography and spacing. */
+.provisional-consent { display: grid; gap: 12px; padding: 18px; margin: 18px 0; border: 1px solid #d8d3ca; border-radius: 8px; font-size: 13px; line-height: 1.65; }
+.provisional-consent p { margin: 0; }
+.provisional-consent .form-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.provisional-consent input[type="checkbox"] { width: 18px; height: 18px; flex: 0 0 18px; margin-top: 3px; }
+.provisional-consent summary { cursor: pointer; font-weight: 600; }

@@ -16,6 +16,11 @@ export interface BookingVariant {
 export interface BookingExperience {
   slug: string;
   title: string;
+  /** Enabled only after server-side payment and ledger readiness checks. */
+  provisionalCheckout?: boolean;
+  weekdaysOnly?: boolean;
+  cancellationText?: string;
+  cancellationTiers?: { until: number; rate: number }[];
   /** Days of notice the venue needs; the date picker starts after them. */
   leadDays: number;
   /** Clock time (Japan) by which a request must be in, e.g. "17:00". */
@@ -94,7 +99,8 @@ const Ctx = createContext<Booking | null>(null);
 
 /** True when a guest can pick `iso`: an announced date for dated products,
  *  otherwise any day outside the closed windows. */
-export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed">) {
+export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly">) {
+  if (x.weekdaysOnly && [0,6].includes(new Date(`${iso}T00:00:00Z`).getUTCDay())) return false;
   if (x.dates) return x.dates.some((d) => d.date === iso);
   return !isClosed(iso, x.closed);
 }

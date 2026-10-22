@@ -9,8 +9,9 @@ import { CONTACT_EMAIL } from "@/lib/contact";
 import { LANGS, t, type Lang } from "@/lib/i18n";
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { yen } from "@/lib/pricing";
+import { provisionalCopy } from "@/lib/provisional-booking";
 
-interface Lookup { ok: boolean; paid?: boolean; amount?: number; currency?: string; email?: string; error?: string; items?: { name: string; quantity: number; amount: number }[]; reference?: string }
+interface Lookup { ok: boolean; paid?: boolean; provisional?: boolean; processing?: boolean; amount?: number; currency?: string; email?: string; error?: string; items?: { name: string; quantity: number; amount: number }[]; reference?: string }
 
 /** Where a Stripe payment link sends the guest after paying. Stripe only
  *  redirects on success; the lookup confirms it and supplies the real amount.
@@ -22,6 +23,10 @@ export function BookedView({ lang }: { lang: Lang }) {
   // Announce receipt only after Stripe confirms that this session is paid.
   const [confirmed, setConfirmed] = useState(false);
   const [golf, setGolf] = useState(false);
+  const [provisional, setProvisional] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [reference, setReference] = useState<string>();
+  const P = provisionalCopy(lang);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -48,6 +53,10 @@ export function BookedView({ lang }: { lang: Lang }) {
       let data: Lookup = { ok: false };
       try { data = (await (await fetch(`/api/booking?session_id=${encodeURIComponent(id)}${acceptedExplicitly() ? "&email=1" : ""}`)).json()) as Lookup; } catch { /* offline */ }
       if (cancelled) return;
+      if (data.ok) {
+        setProvisional(!!data.provisional); setProcessing(!!data.processing);
+        setReference(data.reference);
+      }
       if (data.ok && typeof data.amount === "number") setAmount(data.currency === "JPY" || !data.currency ? yen(data.amount) : `${data.amount} ${data.currency}`);
       // Only a payment Stripe confirms as paid counts: a made-up or mistyped
       // session_id must never become a conversion.
@@ -69,7 +78,7 @@ export function BookedView({ lang }: { lang: Lang }) {
       track("purchase", {
         ...paid,
         booking_reference: data.reference,
-        items: (data.items ?? []).map((it) => ({ item_name: it.name, quantity: it.quantity, price: it.amount })),
+        items: (data.items ?? []).map((it) => ({ item_name: it.name, quantity: it.quantity, price: it.amount / Math.max(1, it.quantity) })),
       });
     })();
     return () => { cancelled = true; };
@@ -80,7 +89,7 @@ export function BookedView({ lang }: { lang: Lang }) {
       <div className="thanks">
         <div className="thanks-head">
           <h1>{K.noSessionH}</h1>
-          <p>{K.noSession(CONTACT_EMAIL)}</p>
+          <p>{provisional && processing ? P.processing : P.verify}</p>
         </div>
         <div className="thanks-actions">
           <Link className="thanks-btn primary" href={`/${lang}/experiences/`}>{K.browse} <ArrowRight size={16} /></Link>
@@ -93,15 +102,16 @@ export function BookedView({ lang }: { lang: Lang }) {
     <div className="thanks">
       <div className="thanks-head">
         <span className="thanks-check" aria-hidden="true"><Check size={34} strokeWidth={3} /></span>
-        <h1>{golf ? golfProcessCopy(lang).paidH : K.h}</h1>
-        <p>{golf ? golfProcessCopy(lang).paid : amount ? K.leadAmount(amount) : K.lead}</p>
-        {golf && amount && <p>{amount}</p>}
+        <h1>{provisional ? P.paid : golf ? golfProcessCopy(lang).paidH : K.h}</h1>
+        <p>{provisional ? P.pending : golf ? golfProcessCopy(lang).paid : amount ? K.leadAmount(amount) : K.lead}</p>
+        {(golf || provisional) && amount && <p>{amount}</p>}
+        {provisional && reference && <p>{reference}</p>}
       </div>
       <section className="thanks-card">
         <h2>{K.nextH}</h2>
         <ol className="thanks-steps">
-          <li><Receipt size={18} /><span>{K.stepReceipt}</span></li>
-          <li><MapPin size={18} /><span>{golf ? golfProcessCopy(lang).arrange : K.stepConfirm}</span></li>
+          <li><Receipt size={18} /><span>{provisional ? P.receipt : K.stepReceipt}</span></li>
+          <li><MapPin size={18} /><span>{provisional ? P.refund : golf ? golfProcessCopy(lang).arrange : K.stepConfirm}</span></li>
           <li><Mail size={18} /><span>{K.stepHelp(CONTACT_EMAIL)}</span></li>
         </ol>
       </section>

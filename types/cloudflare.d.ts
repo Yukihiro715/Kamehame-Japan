@@ -23,6 +23,10 @@ declare module "cloudflare:workers" {
     SLACK_WEBHOOK_URL?: string;
     /** Stripe restricted key (Checkout Sessions: read) for the booked page. */
     STRIPE_READ_KEY?: string;
+    /** Restricted live key: Checkout Sessions write, Prices read. */
+    STRIPE_CHECKOUT_KEY?: string;
+    /** Opt-in after the Apps Script readiness probe passes. */
+    EXPERIENCE_CHECKOUT_ENABLED?: string;
     GOLF_AUTOMATION_URL?: string;
     GOLF_AUTOMATION_TOKEN?: string;
     RESEND_WEBHOOK_SECRET?: string;

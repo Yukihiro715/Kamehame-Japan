@@ -38,6 +38,7 @@ function doPost(e) {
     var secret=props_().getProperty(p.action==='mail_event'?'MAIL_QUEUE_TOKEN':'AUTOMATION_TOKEN');
     if(!secret || typeof p.token!=='string' || p.token!==secret)return json_({ok:false,error:'unauthorized'});
     lock.waitLock(20000);
+    if(/^experience_/.test(p.action)&&typeof experienceAction_==='function')return json_(experienceAction_(p));
     if(p.action==='enqueue')return json_(enqueue_(p));
     if(p.action==='event')return json_(event_(p));
     if(p.action==='mail_event')return json_(mailEvent_(p)); // mail-queue.gs (same project)
