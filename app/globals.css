@@ -1550,9 +1550,9 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 }
 
 /* the request form */
-.golf-form .form-step { margin:0; padding:0; border:0; display:grid; gap:12px; min-width:0; }
-.golf-form .form-step > legend { padding:0; margin:0 0 6px; font-family:var(--font-display); font-weight:400; font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); }
-.golf-form .form-step + .form-step { margin-top:6px; padding-top:20px; border-top:1px solid #ece7dc; }
+.golf-form .form-step, .hd-form .form-step { margin:0; padding:0; border:0; display:grid; gap:12px; min-width:0; }
+.golf-form .form-step > legend, .hd-form .form-step > legend { padding:0; margin:0 0 6px; font-family:var(--font-display); font-weight:400; font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); }
+.golf-form .form-step + .form-step, .hd-form .form-step + .form-step { margin-top:6px; padding-top:20px; border-top:1px solid #ece7dc; }
 .go-summary { display:grid; gap:10px; padding:14px 16px 16px; border:1px solid #e3ded3; border-radius:12px; background:#faf8f3; }
 .go-summary-h { font-size:12px; letter-spacing:.04em; color:var(--muted); }
 .go-pick { display:grid; grid-template-columns:3fr 2fr; gap:10px 14px; }
@@ -1567,8 +1567,8 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-rental-note { display:block; margin:2px 0 8px; }
 .go-confirm-discount dd b { display:block; font-family:var(--font-display); font-weight:400; font-size:20px; letter-spacing:.02em; line-height:1.15; color:#1f4d2b; }
 .go-confirm-discount dd small { display:block; margin-top:2px; font-size:12px; color:#3b5e45; letter-spacing:0; }
-.golf-form .form-check { align-items:flex-start; }
-.golf-form .form-check input { width:18px; height:18px; min-height:0; margin-top:2px; flex:none; }
+.golf-form .form-check, .hd-form .form-check { align-items:flex-start; }
+.golf-form .form-check input, .hd-form .form-check input { width:18px; height:18px; min-height:0; margin-top:2px; flex:none; }
 .golf-form .go-check.one { align-items:center; }
 .golf-form .go-check.one input { margin-top:0; }
 .golf-form .go-check.one > span { line-height:1.3; }
@@ -1676,3 +1676,13 @@ body[data-kh-modal] .sticky-request { display:none; }
 /* CJK title: never break inside a word ("プライベートゴルフ"), and a size that keeps it to two lines on a phone */
 .xp-variant:is([lang="ja"], [lang="zh-tw"]) .xp-head h1 { word-break:keep-all; overflow-wrap:anywhere; }
 @media(max-width:700px){ .xp-variant:is([lang="ja"], [lang="zh-tw"]) .xp-head h1 { font-size:clamp(24px,7vw,30px); line-height:1.25; } }
+
+/* Concept-preview cards (hosts, menus) and demo-form option grids: the detail
+   page's highlight cards with a photo on top. */
+.xp-cards .xp-highlight img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px; display:block; margin-bottom:12px; }
+.xp-card-facts { list-style:none; margin:0 0 10px; padding:0; display:grid; gap:4px; font-size:12.5px; color:#4a463e; }
+.xp-card-facts li { display:flex; gap:6px; align-items:flex-start; }
+.xp-card-facts svg { flex:none; margin-top:3px; color:var(--kame); }
+.xp-card-tag { display:block; margin-top:10px; font-size:11.5px; color:var(--muted); letter-spacing:.02em; }
+.hd-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+@media(max-width:620px){ .hd-options { grid-template-columns:1fr; } }

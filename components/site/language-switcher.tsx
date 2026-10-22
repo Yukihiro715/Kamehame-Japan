@@ -68,6 +68,7 @@ function pathFor(target: Lang): string {
     if (path.startsWith(`/${l}/`)) { path = path.slice(l.length + 1); break; }
   }
   if (path.startsWith("/partners")) return path; // Japanese-only page
+  if (path.startsWith("/previews")) return path; // unlisted concept previews, English-only
   return path === "/" ? (target === "en" ? "/" : `/${target}/`) : `/${target}${path}`;
 }
 
