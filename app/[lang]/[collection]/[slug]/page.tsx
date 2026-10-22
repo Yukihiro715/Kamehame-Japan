@@ -504,7 +504,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
               <h2 className="xp-sub" id="request-form">{provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
-              <p className="xp-note">{provisional ? `${P.note} ${P.refund}` : live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>
+              {!provisional && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
               {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
             </section>
 
