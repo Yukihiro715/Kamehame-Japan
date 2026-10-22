@@ -53,21 +53,54 @@ export async function checkoutReady(env: ExperienceCheckoutEnv, timeoutMs = 2500
 
 /** The page render's view of readiness. The ledger health check is a round
  *  trip to Google Apps Script (2–3 s), so pages must not pay for it on every
- *  request: the answer is kept per isolate for READY_TTL_MS and refreshed in
- *  the background once stale (stale-while-revalidate). Only a cold isolate
- *  waits, and at most READY_TIMEOUT_MS. The checkout API itself still asks
- *  the ledger fresh before taking a payment (app/api/experience-checkout). */
+ *  request. Two layers: the answer is kept in this isolate's memory and in
+ *  the data centre's Cache API (shared by every isolate there) for
+ *  READY_TTL_MS, and refreshed in the background once stale
+ *  (stale-while-revalidate). Only a data centre with no answer at all waits,
+ *  and at most READY_TIMEOUT_MS. The checkout API itself still asks the
+ *  ledger fresh before taking a payment (app/api/experience-checkout). */
 const READY_TTL_MS = 5 * 60_000;
 const READY_TIMEOUT_MS = 6_000;
-let readyCache: { value: boolean; at: number; refreshing?: Promise<boolean> } | null = null;
+const READY_CACHE_URL = "https://kamehame-japan.com/__cache/experience-checkout-ready";
+type ReadyEntry = { value: boolean; at: number };
+let readyCache: (ReadyEntry & { refreshing?: Promise<boolean> }) | null = null;
 export function resetCheckoutReadyCache() { readyCache = null; }
+const sharedCache = () => (globalThis as { caches?: { default?: { match(u: string): Promise<Response | undefined>; put(u: string, r: Response): Promise<void> } } }).caches?.default;
+async function readShared(): Promise<ReadyEntry | null> {
+  try {
+    const r = await sharedCache()?.match(READY_CACHE_URL);
+    if (!r) return null;
+    const j = await r.json() as { ready?: unknown; at?: unknown };
+    return typeof j.at === "number" ? { value: j.ready === true, at: j.at } : null;
+  } catch { return null; }
+}
+async function writeShared(entry: ReadyEntry) {
+  try {
+    await sharedCache()?.put(READY_CACHE_URL, new Response(JSON.stringify({ ready: entry.value, at: entry.at }), {
+      headers: { "content-type": "application/json", "cache-control": `max-age=${Math.round(READY_TTL_MS / 1000)}` },
+    }));
+  } catch { /* the in-memory layer still applies */ }
+}
 export async function checkoutReadyCached(env: ExperienceCheckoutEnv, now = Date.now()): Promise<boolean> {
-  if (readyCache && now - readyCache.at < READY_TTL_MS) return readyCache.value;
-  const refresh = checkoutReady(env, READY_TIMEOUT_MS).then((value) => { readyCache = { value, at: Date.now() }; return value; });
-  if (readyCache) {
+  const fresh = (e: ReadyEntry | null) => !!e && now - e.at < READY_TTL_MS;
+  const mem = readyCache;
+  if (mem && fresh(mem)) return mem.value;
+  if (!mem?.refreshing) {
+    const shared = await readShared();
+    if (shared && fresh(shared)) { readyCache = shared; return shared.value; }
+    if (shared && !mem) readyCache = shared; // a stale shared answer still beats waiting
+  }
+  const refresh = checkoutReady(env, READY_TIMEOUT_MS).then(async (value) => {
+    const entry = { value, at: Date.now() };
+    readyCache = entry;
+    await writeShared(entry);
+    return value;
+  });
+  const stale = readyCache;
+  if (stale) {
     // Serve the last answer now; one refresh at a time replaces it when it lands.
-    if (!readyCache.refreshing) readyCache.refreshing = refresh.finally(() => { if (readyCache) readyCache.refreshing = undefined; });
-    return readyCache.value;
+    if (!stale.refreshing) stale.refreshing = refresh.finally(() => { if (readyCache === stale) stale.refreshing = undefined; });
+    return stale.value;
   }
   return refresh;
 }
