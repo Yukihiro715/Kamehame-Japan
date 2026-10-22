@@ -67,17 +67,20 @@ function experienceAction_(p) {
 }
 function writeExperienceLedger_(j) {
   var o=j.order,paid=!!j.paidAt;
+  var cities={tokyo:'東京',osaka:'大阪',kyoto:'京都',nagoya:'名古屋',okinawa:'沖縄',kanazawa:'金沢',himeji:'姫路'};
+  var charge=o.chargeUnit==='group'?'1組分（'+o.guests+'名）':o.quantity+'名分';
+  var interpreter=o.interpreter?{en:'英語',es:'スペイン語',fr:'フランス語',none:'不要'}[o.interpreter]:'';
   // Match the existing ledger's strict dropdown labels, not website locale codes.
   var language={en:'英語',ja:'日本語',es:'スペイン語',fr:'フランス語','zh-tw':'繁体字中国語'}[o.lang]||'その他';
   experienceUpsert_('予約一覧',j.id,{
-    'お客様名／窓口':o.name,'体験カテゴリ':o.slug==='shibuya-ramen-class'?'料理・グルメ':o.slug==='kanji-name-calligraphy'?'漢字・書道':'その他',
+    'お客様名／窓口':o.name,'体験カテゴリ':/ramen-class$/.test(o.slug)?'料理・グルメ':o.slug==='kanji-name-calligraphy'?'漢字・書道':o.slug==='evening-with-geiko'?'京都芸妓・舞妓':'その他',
     '対応ステータス':paid?'入金済・手配待ち':'仮予約受領','体験日':new Date(o.date+'T00:00:00+09:00'),'人数':o.guests,
     '支払い状況':paid?'入金済':'未請求','次のアクション':paid?'施設に空き確認 → 予約確定連絡。不可なら代替案／合意できなければ全額返金':'決済待ち。予約未確定・施設への手配は入金確認後',
     '担当':'ゆきひろ','受付日':new Date(j.createdAt),'受付経路':'Webフォーム','対応言語':language,'メール':o.email,
     'サイト概算（税込）':o.amount,'提示額（税込）':o.amount,'入金額':paid?o.amount:'','支払日':paid?new Date(j.paidAt):'',
-    '確認メモ':'体験決済管理参照。予約未確定。実参加'+o.guests+'名／請求'+o.quantity+'名分。規定版 '+o.policyVersion+'。GAS直接登録・Gmailからの再登録不要。'
+    '確認メモ':'体験決済管理参照。予約未確定。実参加'+o.guests+'名／請求'+charge+'。規定版 '+o.policyVersion+'。GAS直接登録・Gmailからの再登録不要。'
   },paid?{'対応ステータス':['仮予約受領','決済案内準備','支払待ち'],'支払い状況':['未請求','入金未確認'],'次のアクション':['決済待ち。予約未確定・施設への手配は入金確認後']}:undefined);
-  experienceUpsert_('手配・体験詳細',j.id,{'エリア':'東京','体験名／プラン内容':o.title,'体験開始時刻':o.time,'人数内訳':'実参加'+o.guests+'名／請求'+o.quantity+'名分','希望・アレルギー等':o.message||'なし','手配状況':'未着手','手配メモ・未確認事項':'希望日時は未確定。標準プラン・表示条件への同意取得済み。'});
+  experienceUpsert_('手配・体験詳細',j.id,{'エリア':cities[o.city]||'東京','体験名／プラン内容':o.title,'体験開始時刻':o.time,'人数内訳':'実参加'+o.guests+'名／請求'+charge,'希望・アレルギー等':(o.message||'なし')+(interpreter?'\n通訳希望: '+interpreter:''),'手配状況':'未着手','手配メモ・未確認事項':'希望日時は未確定。選択プラン・表示条件への同意取得済み。'});
   experienceUpsert_('決済・連絡管理',j.id,{'運用区分':'通常','リマインド運用':paid?'停止':'手動','Stripe決済ID':j.sessionId||'','入金確認日時':paid?new Date(j.paidAt):'','停止・保留理由':paid?'入金済み・施設確認待ち':'','運用メモ':'体験決済管理参照。予約確定メールは施設受入確認後に担当者が送付。'},paid?{'リマインド運用':['手動','自動送信','一時停止']}:undefined);
 }
 function experienceSend_(j,kind,to,subject,text) {
@@ -104,11 +107,11 @@ function processExperienceQueue() {
         var o=j.order;
         var sendErrors=[];
         if(!j.receiptId)try{
-          var text=j.receipt.text+'\n\nReference: '+j.id+'\n'+o.title+'\n'+o.date+' '+o.time+' JST\nGuests: '+o.guests+' / Charged guests: '+o.quantity+'\nJPY '+o.amount.toLocaleString('en-US')+' (tax included)\n\nhello@kamehame-japan.com\nKAMEHAME JAPAN | Prosent Inc.';
+          var text=j.receipt.text+'\n\nReference: '+j.id+'\n'+o.title+'\n'+o.date+' '+o.time+' JST\nGuests: '+o.guests+' / Charge: '+(o.chargeUnit==='group'?'1 group':o.quantity+' guests')+'\nJPY '+o.amount.toLocaleString('en-US')+' (tax included)\n\nhello@kamehame-japan.com\nKAMEHAME JAPAN | Prosent Inc.';
           j.receiptId=experienceSend_(j,'receipt',o.email,j.receipt.subject+' | '+j.id,text);saveExperience_(j,x.row);
         }catch(err){sendErrors.push('受付メール: '+String(err));}
         if(!j.teamId)try{
-          var team='【入金済・予約未確定】施設の受入確認が必要です。\n'+j.id+'\n'+o.title+'\n希望: '+o.date+' '+o.time+' JST\n実参加'+o.guests+'名／請求'+o.quantity+'名分\n入金: ¥'+o.amount+'\n'+o.name+' <'+o.email+'>\n備考: '+o.message+'\nStripe: '+j.sessionId+'\n台帳へ直接登録済み・Gmail起点の重複登録不要。\n満席なら代替日時を提案し、合意できなければ全額返金してください。';
+          var team='【入金済・予約未確定】施設の受入確認が必要です。\n'+j.id+'\n'+o.title+'\n希望: '+o.date+' '+o.time+' JST\n実参加'+o.guests+'名／請求'+(o.chargeUnit==='group'?'1組分':o.quantity+'名分')+'\n通訳: '+(o.interpreter||'なし')+'\n入金: ¥'+o.amount+'\n'+o.name+' <'+o.email+'>\n備考: '+o.message+'\nStripe: '+j.sessionId+'\n台帳へ直接登録済み・Gmail起点の重複登録不要。\n満席なら代替日時を提案し、合意できなければ全額返金してください。';
           j.teamId=experienceSend_(j,'team',props_().getProperty('TEAM_EMAIL'),'【要手配・入金済】'+j.id+' '+o.title,team);saveExperience_(j,x.row);
         }catch(err){sendErrors.push('運営通知: '+String(err));}
         if(sendErrors.length)throw Error(sendErrors.join(' / '));

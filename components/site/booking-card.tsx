@@ -140,10 +140,10 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         <a className="bk-cta" href="#request-form" onClick={(e) => {
           e.preventDefault();
           if (window.matchMedia(SIDE_BY_SIDE).matches) expand(); else jump();
-        }}>{x.ctaLabel ?? D.requestCta} <ArrowRight size={16} /></a>
+        }}>{x.provisionalCheckout && b.largeParty ? D.requestCta : x.ctaLabel ?? D.requestCta} <ArrowRight size={16} /></a>
       )}
       <ul className="bk-trust">
-        <li><ShieldCheck size={14} /> {x.ctaNote ?? D.noPaymentNow}</li>
+        <li><ShieldCheck size={14} /> {x.provisionalCheckout && b.largeParty ? D.noPaymentNow : x.ctaNote ?? D.noPaymentNow}</li>
         <li><Clock3 size={14} /> {x.provisionalCheckout ? provisionalCopy(lang).flow[2].title : D.replyIn24}</li>
         <li><CalendarDays size={14} /> {D.availCutoff(x.leadDays, x.cutoffTime)}</li>
       </ul>

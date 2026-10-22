@@ -163,8 +163,8 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
     });
   // Locale FAQs preserve the source ordering; identify the booking question
   // through the English source so no language can keep the old pay=confirmed text.
-  const bookingFaqIndex = catalogFor("en").experiences.find(v => v.slug === exp.slug)?.faq?.findIndex(f => f.q === "How does booking work?");
-  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq)];
+  const bookingFaqIndex = catalogFor("en").experiences.find(v => v.slug === exp.slug)?.faq?.findIndex(f => f.q === "How does booking work?" || f.q === "How long until the date is confirmed?");
+  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq.map((f, i) => provisional && i === 1 ? { ...f, a: `${P.note} ${P.refund}` } : f))];
   const flow = provisional ? P.flow : exp.flow ?? D.flow;
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const ctaLabel = provisional ? P.cta : live ? D.requestAvailability : T.comingSoonCta;

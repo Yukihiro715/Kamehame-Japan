@@ -14,7 +14,7 @@ import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
-import { EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy } from "@/lib/provisional-booking";
 import { CancellationTable } from "@/components/site/cancellation-table";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -49,7 +49,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   const [needDate, setNeedDate] = useState(false);
   const started = useRef(false);
   const attempt = useRef<{ signature: string; id: string } | null>(null);
-  const provisional = !!x?.provisionalCheckout;
+  const provisional = !!x?.provisionalCheckout && !b?.largeParty;
   const P = provisionalCopy(lang);
 
   /** One "form started" event per page view, on the first focus inside the form. */
@@ -88,7 +88,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
     try {
       if (provisional && b && x) {
         const payload = { name: data.name, email: data.email, message: data.message, website: data.website,
-          experience: x.slug, lang, date: b.date, time: b.time, guests: b.guestsNumber,
+          experience: x.slug, lang, date: b.date, time: b.time, guests: b.guestsNumber, plan: b.plan, interpreter: b.interpreter, addOns: b.addOns,
           consent: data.checkout_consent === "on", standard: data.checkout_standard === "on", adultOnly: data.checkout_adult === "on" };
         const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(payload)));
         const signature = Array.from(new Uint8Array(digest), v => v.toString(16).padStart(2, "0")).join("");
@@ -304,21 +304,21 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         <div className="provisional-consent">
           <p>{P.note}</p>
           <p>{P.refund}</p>
-          <p><b>{D.totalCol}: <Yen n={EXPERIENCE_PRODUCTS[x.slug].amount * Math.max(EXPERIENCE_PRODUCTS[x.slug].minCharge, b.guestsNumber)} /></b></p>
+          {b.estimate && <p><b>{D.totalCol}: <Yen n={b.estimate.total} /></b></p>}
           {b.guestsNumber < EXPERIENCE_PRODUCTS[x.slug].minCharge && <p>{D.minChargeNote(EXPERIENCE_PRODUCTS[x.slug].minCharge)}</p>}
           <details><summary>{D.cancellationH}</summary>
             <CancellationTable exp={{ cancellationTiers: x.cancellationTiers }} text={x.cancellationText ?? ""} lang={lang} />
           </details>
           <p>{P.cancellation}</p>
           <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{P.standard}</span></label>
-          {EXPERIENCE_PRODUCTS[x.slug].adultOnly && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{P.adult}</span></label>}
+          {(EXPERIENCE_PRODUCTS[x.slug].adultOnly || EXPERIENCE_PRODUCTS[x.slug].groupPricing) && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{checkoutAdultCopy(lang, x.slug)}</span></label>}
           <label className="form-check"><input name="checkout_consent" type="checkbox" required /><span>{P.consent} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{T.footerTerms}</a></span></label>
           <p><a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a></p>
         </div>
       )}
       <div className="enquiry-actions">
         <button type="submit" className={card ? "bk-cta" : "contact-cta"} disabled={status === "sending"}>
-          {status === "sending" ? F.sending : provisional ? P.cta : b ? x?.ctaLabel ?? F.sendRequest : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : provisional ? P.cta : b ? (x?.provisionalCheckout ? F.sendRequest : x?.ctaLabel ?? F.sendRequest) : F.send} <ArrowRight size={15} />
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>

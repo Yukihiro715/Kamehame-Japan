@@ -1,7 +1,15 @@
 import type { Lang } from "@/lib/i18n";
 
 export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
-export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean }> = {
+export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; groupPricing?: boolean }> = {
+  "osaka-kendo-experience-tour": { price: "price_1UTES5DpZ5Y8WoJ2IqJbx1wp", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "kyoto-kendo-experience-tour": { price: "price_1UTESBDpZ5Y8WoJ2vKiTajho", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "nagoya-kendo-experience-tour": { price: "price_1UTESIDpZ5Y8WoJ2xMeQieOF", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "okinawa-kendo-experience-tour": { price: "price_1UTESODpZ5Y8WoJ2ECyti0tU", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "kanazawa-kendo-experience-tour": { price: "price_1UTESUDpZ5Y8WoJ21CKaE1Du", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "himeji-kendo-experience-tour": { price: "price_1UTESZDpZ5Y8WoJ2dSJGCE12", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "dotonbori-ramen-class": { price: "price_1UTESxDpZ5Y8WoJ22NGPt3xy", amount: 26500, min: 1, max: 16, minCharge: 1 },
+  "evening-with-geiko": { price: "", amount: 0, min: 2, max: 5, minCharge: 1, groupPricing: true },
   "tokyo-kendo-experience-tour": { price: "price_1USyu1DpZ5Y8WoJ2tnGKPAdj", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "shibuya-ramen-class": { price: "price_1USyuLDpZ5Y8WoJ2Er2OtMAL", amount: 26500, min: 1, max: 16, minCharge: 1 },
   "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 1, max: 4, minCharge: 2 },
@@ -85,3 +93,12 @@ const copy = {
   },
 };
 export const provisionalCopy = (lang: Lang) => copy[lang];
+
+const geikoAdultCopy: Record<Lang, string> = {
+  en: "All participants are aged 12 or over. For children aged 11 or under, contact us for a quote before paying.",
+  ja: "参加者全員が12歳以上です。11歳以下のお子様がいる場合は、決済前に個別見積もりをご依頼ください。",
+  es: "Todos los participantes tienen al menos 12 años. Para menores de 12 años, solicita un presupuesto antes de pagar.",
+  fr: "Tous les participants ont au moins 12 ans. Pour les moins de 12 ans, demandez un devis avant de payer.",
+  "zh-tw": "所有參加者皆年滿12歲。如有11歲以下兒童，請於付款前聯絡我們取得報價。",
+};
+export const checkoutAdultCopy = (lang: Lang, slug: string) => slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
