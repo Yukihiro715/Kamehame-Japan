@@ -23,7 +23,9 @@ are not the partner's performers; the pages never name them.
 
 Earlier preview pages (samurai, cooking, Asakusa rakugo, ninja meditation,
 Arashiyama workshops) use Wikimedia Commons photos noted in their catalog
-comments.
+comments. The Yotsuya tea ceremony page used `craft-hands.jpg` and
+`cat-tea.jpg` until 2026-10-22, when the host's own photos
+(`tea-yotsuya-*.jpg`, from the partner's Drive folder) replaced them.
 
 ## Ofukuro Dinner concept preview (`/previews/home-cooked-dinner-f4bc9d7306/`) — 2026-10-23
 
@@ -43,3 +45,15 @@ examples (sides and fish vary); the page says so and shows no names or
 reviews. Real service photography replaces them before publication, shot to
 the same twelve compositions (see the brief's shooting list). The earlier
 `hcd-*.webp` samples were removed with this change.
+
+## Partner photos added 2026-10-22 (not placeholders)
+
+| Files | Page | Source |
+| --- | --- | --- |
+| `tea-yotsuya-*.jpg` (9) | `/tokyo/yotsuya-tea-ceremony/` | The host's photos, Drive folder 「茶の湯ヒーリング協会/写真・動画」(15 photos, 3 videos; 9 photos used, videos unused). |
+| `tea-kyoto-garden-*.jpg` (7), `tea-kyoto-flower-*.jpg` (6), `tea-kyoto-private-*.jpg` (6), `tea-kyoto-annex-*.jpg` (7) | the four Kyoto tea-ceremony previews | The operator's public media galleries (Google Photos albums linked from its venue guides in Drive 「Camellia Tea Ceremony」). Usage terms not yet agreed: confirm before publication. Photos showing the operator's sign were not used. |
+| `soba-asakusa-*.jpg` (6), `ramen-asakusa-*.jpg` (2) | `/tokyo/asakusa-soba-making-class/`, `/tokyo/asakusa-ramen-making-class/` | The studio's own website. Its condition sheet allows all media but asks to review before publication: confirm before publication. Aprons in the hero photo show the studio's logo. |
+
+`/tokyo/setagaya-omotesenke-tea-ceremony/` still uses the Wikimedia
+placeholders `craft-hands.jpg` and `cat-tea.jpg` until the school sends its
+photos (the sheet promises several).

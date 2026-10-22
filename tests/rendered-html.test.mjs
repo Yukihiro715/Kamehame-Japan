@@ -397,6 +397,52 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
   assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
 });
 
+test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setagaya and Asakusa noodle previews never name the partners", async () => {
+  // The Yotsuya tea page carries the host's corrected table and the host's photos.
+  const tea = await (await render("/en/tokyo/yotsuya-tea-ceremony/")).text();
+  const teaText = tea.replace(/<[^>]+>/g, " ");
+  for (const s of ["¥8,800", "¥15,400", "¥23,100", "¥30,800", "¥66,000", "¥7,700", "¥6,600", "Groups of five to nine are quoted"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
+  assert.ok(tea.includes("/images/tea-yotsuya-class.jpg") && tea.includes("/images/tea-yotsuya-tatami.jpg"), "host photos on the tea page");
+  assert.ok(!tea.includes("craft-hands.jpg") && !tea.includes("Placeholder photos"), "no placeholder photos left on the tea page");
+  for (const lang of ["ja", "es", "fr", "zh-tw"]) {
+    const alt = await (await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`)).text();
+    assert.ok(alt.includes("/images/tea-yotsuya-class.jpg") && !alt.includes("craft-hands.jpg"), `${lang} tea photos`);
+    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥66,000"), `${lang} tea table`);
+  }
+  const pages = [
+    ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥25,000", "¥30,000", "¥150,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
+    ["/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/", "Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥4,000", "¥32,000", "¥2,500", "Kimono for the ceremony"]],
+    ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥15,000", "¥16,000", "¥40,000", "Kimono for the ceremony"]],
+    ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥20,000", "¥50,000", "ryurei", "Larger parties are quoted on request"]],
+    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 4 days before the date", "3 to 2 days before"]],
+    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 to 4 days before"]],
+    ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "Up to 15 days before the date"]],
+  ];
+  const partners = /Camellia|camelliakyoto|tea-kyoto\.com|Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介|Masuya-cho|Ikenoshita|605-0826|616-8003/i;
+  const { readFileSync } = await import("node:fs");
+  const xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+  const listings = await Promise.all(["/en/", "/en/kyoto/", "/en/tokyo/", "/en/experiences/", "/en/food/", "/en/tradition/"].map(async (p) => (await render(p)).text()));
+  for (const [path, title, needs] of pages) {
+    const res = await render(path);
+    assert.equal(res.status, 200, path);
+    const html = await res.text();
+    const text = html.replace(/<[^>]+>/g, " ");
+    assert.ok(text.includes(title), `title on ${path}`);
+    for (const s of needs) assert.ok(text.includes(s), `${s} on ${path}`);
+    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
+    assert.match(html, /name="robots" content="noindex/, `noindex on ${path}`);
+    assert.doesNotMatch(text, partners, `partner names stay private on ${path}`);
+    assert.ok(!xml.includes(path), `${path} not in the sitemap`);
+    for (const l of listings) assert.ok(!l.includes(`href="${path}"`), `${path} not listed`);
+    // other locales resolve (English fallback) and keep the names private
+    for (const lang of ["ja", "fr"]) {
+      const alt = await render(path.replace("/en/", `/${lang}/`));
+      assert.equal(alt.status, 200, `${lang} ${path}`);
+      assert.doesNotMatch((await alt.text()).replace(/<[^>]+>/g, " "), partners, `partner names stay private on ${lang} ${path}`);
+    }
+  }
+});
+
 test("display currency: the header offers USD/JPY, the HTML is always yen, and /api/fx is a JSON endpoint", async () => {
   const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
   // The switcher sits in the header beside the language menu, on yen by default.

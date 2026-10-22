@@ -275,6 +275,10 @@ export interface Experience {
     /** Pre-selected start time in the booking box (default: 18:00 if offered, else the first). */
     defaultTime?: string;
     closed?: { from: string; to: string }[];
+    /** Runs on Saturdays and Sundays only (the date picker closes weekdays). */
+    weekendsOnly?: boolean;
+    /** First date that can be requested (ISO), e.g. a partner taking guests from a future month. */
+    openFrom?: string;
     /** Products that run on announced dates only (e.g. a teacher's calendar
      *  released every three months): the open dates and each date's start times. */
     dates?: { date: string; times: string[] }[];
@@ -1047,10 +1051,13 @@ export const experiences: Experience[] = [
     story: { heading: "A sword with no opponent", body: "The Nihon Kendo Kata were set down in 1912 so that the sword of the samurai would survive the end of the samurai. Two people, wooden swords, fixed forms — and no winner. What is left when nobody wins is the question the hour is about." },
   },
   {
-    // Tea ceremony in Yotsuya, from the host's public listing on Airbnb. No
-    // agreement, prices or photos from the host yet: price and photos are
-    // placeholders (docs/EMAIL_TEMPLATES.md §J); the host and the gallery are
-    // not named on the page.
+    // Tea ceremony in Yotsuya, from the host's public listing on Airbnb
+    // (docs/EMAIL_TEMPLATES.md §J); the host and the gallery are not named on
+    // the page. 2026-10-22: the host's own photos (Drive, 写真・動画) replace
+    // the placeholders, and the price table follows the host's correction of
+    // the same day (1 guest ¥8,800; 2–4 guests ¥7,700 each; 10 guests ¥6,600
+    // each). Parties of 5–9 have no confirmed rate and are quoted. Public
+    // prices still: no wholesale terms yet.
     slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
     title: "Tea Ceremony in a Yotsuya Tearoom, Tokyo",
     tagline: "Ninety minutes with a tea teacher of the Sōhen school in a small Yotsuya tearoom: the history and etiquette, entering the room the traditional way, a full tea performance, then a bowl of matcha you whisk yourself and a few minutes of quiet. Taught in English, from age five.",
@@ -1058,13 +1065,22 @@ export const experiences: Experience[] = [
       "The tea ceremony distils Japanese hospitality into a single bowl, and this is a chance to sit inside it rather than watch from the door. Your host is the third generation of her family to teach tea: licensed as an instructor of the Sōhen school in 1993, more than forty years in the practice, and teaching several hundred students a month. She has welcomed visitors from abroad to this tearoom for years.",
       "The ninety minutes follow the shape of a real gathering. You meet at the gallery in Yotsuya, learn how the ceremony came to be and the etiquette of a guest, enter the tearoom the traditional way, and watch the host prepare tea — every movement with a reason. Then you whisk a bowl yourself, under her guidance, and sit for a short meditation before questions and photographs. In English, for a group of up to ten, with socks the only thing to bring.",
     ],
-    duration: "About 1.5 hours", price: "¥8,800", priceUnit: "person", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
-    img: "/images/craft-hands.jpg", alt: "Tea ceremony host placing a tea bowl on tatami before seated guests",
+    duration: "About 1.5 hours", price: "¥8,800", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
+    img: "/images/tea-yotsuya-class.jpg", alt: "The host in a kimono guiding a class of guests whisking matcha at a long wooden table",
     gallery: [
-      { img: "/images/cat-tea.jpg", alt: "Host preparing matcha at a tea gathering" },
+      { img: "/images/tea-yotsuya-tatami.jpg", alt: "The host kneeling before guests seated on the tatami of the tearoom" },
+      { img: "/images/tea-yotsuya-host.jpg", alt: "The host in a white kimono beside the iron kettle" },
+      { img: "/images/tea-yotsuya-whisking.jpg", alt: "Guests whisking their own bowls of matcha at the table" },
+      { img: "/images/tea-yotsuya-bowl.jpg", alt: "A bowl of freshly whisked matcha on the tatami" },
+      { img: "/images/tea-yotsuya-drink.jpg", alt: "A guest drinking matcha in the tearoom" },
+      { img: "/images/tea-yotsuya-guests.jpg", alt: "Guests sitting with their bowls on the tatami" },
+      { img: "/images/tea-yotsuya-host-bow.jpg", alt: "The host bowing at the start of the gathering" },
     ],
-    galleryNote: "Placeholder photos; the host's own photos of the tearoom follow.",
-    partySize: { min: 1, max: 10 },
+    galleryNote: "Photos from the host's tearoom in Yotsuya.",
+    partySize: { min: 1, max: 10, default: 2 },
+    // Whole-group totals from the host's corrected table (2026-10-22): 1 guest
+    // ¥8,800, 2–4 guests ¥7,700 each, 10 guests ¥6,600 each. 5–9: no row, quoted.
+    pricing: { tiers: [{ party: 1, total: 8800 }, { party: 2, total: 15400 }, { party: 3, total: 23100 }, { party: 4, total: 30800 }, { party: 10, total: 66000 }] },
     taxIncluded: true,
     interpreter: false,
     langTag: "Taught in English",
@@ -1090,7 +1106,7 @@ export const experiences: Experience[] = [
       { time: "0:00", title: "Meet at the gallery", body: "A small gallery in Yotsuya; the tearoom is inside." },
       { time: "0:10", title: "History and etiquette", body: "How the tea ceremony came to be, and how a guest behaves." },
       { time: "0:25", title: "Entering the tearoom", body: "Through the small door, the traditional way." },
-      { time: "0:35", title: "The host's temae", body: "A full tea performance, bowl by bowl.", img: "/images/craft-hands.jpg" },
+      { time: "0:35", title: "The host's temae", body: "A full tea performance, bowl by bowl.", img: "/images/tea-yotsuya-temae.jpg" },
       { time: "1:00", title: "Your own bowl", body: "Whisk matcha yourself, under the host's guidance." },
       { time: "1:15", title: "Meditation, questions and photos", body: "A few minutes of quiet, then anything you want to ask." },
       { time: "1:30", title: "End of the session" },
@@ -1098,7 +1114,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A small tearoom inside a gallery in Yotsuya, Shinjuku-ku, a short walk from Yotsuya station — the exact address comes with your confirmation", "Sitting is on tatami; bring socks (the only thing to bring)", "Light activity, beginner level; from age 5", "Up to ten guests share a session"],
       afterBooking: ["The gallery's name and address", "Directions from Yotsuya station", "A phone number for the day"],
-      img: "/images/cat-tea.jpg", alt: "Matcha being prepared at a tea gathering",
+      img: "/images/tea-yotsuya-tatami.jpg", alt: "The tearoom, with guests seated on the tatami",
     },
     notesLabel: "Dietary needs, children's ages and anything the host should know (optional)",
     notesHint: "e.g. one of us is vegetarian; a child of six joins; we have never sat on tatami",
@@ -1114,6 +1130,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, from age 5. Tell us their ages in your request." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
+      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥8,800 for one guest, ¥7,700 per person for two to four guests, and ¥6,600 per person for a group of ten. Groups of five to nine are quoted with your request. Tax is included." },
       { q: "What is the cancellation policy?", a: "Free until the day before your session; from the day itself, including no-shows, the full price." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
@@ -3043,6 +3060,663 @@ export const experiences: Experience[] = [
     itinerary: ["-0:15 — Arrive and check in", "0:00 — Design and mould", "0:20 — The pour", "0:30 — Quench and polish", "1:00 — End of the session"],
     goodToKnow: ["About 60 minutes, every day; the start time is arranged with your date. Be there by your start time.", "From age 6. Groups of 1 to 12; private sessions on request. Standard or mini shuriken; aprons and gloves provided.", "Not accessible for wheelchairs or strollers. You take the star home the same day; ask us about carrying it.", "English or Japanese."],
     story: { heading: "Cast, not thrown", body: "Every ninja film shows the throw. Almost none shows the making: the sand, the pour, the hiss of the quench. An hour in Arashiyama gives you the part the films leave out, and the star to prove it." },
+  },
+  {
+    // Camellia Tea Ceremony, Kyoto (tea-kyoto.com): the Garden Teahouse in
+    // Ukyo-ku near Ryoan-ji. Built 2026-10-22 from the operator's 2026/27
+    // price guide and venue guides handed over by Richard (Drive folder
+    // "Camellia Tea Ceremony"). Prices are the operator's public rates
+    // (regular / peak season); no partner terms yet, so the page is a
+    // preview and the operator's brand stays off it. Photos come from the
+    // operator's public media gallery linked in its guides.
+    slug: "kyoto-garden-teahouse-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    title: "Private Tea Ceremony in a Garden Teahouse, West Kyoto",
+    tagline: "A fifty-minute tea ceremony for your group alone, in a traditional teahouse with its own garden near Ryoan-ji. The host explains each step in English, serves a seasonal sweet and a bowl of matcha, then teaches you to whisk your own. Up to ten guests, from age four.",
+    overview: [
+      "West Kyoto is temple country: Ryoan-ji with its rock garden, Ninna-ji, Kinkaku-ji a bus ride away. A few minutes' walk from Ryoan-ji, this teahouse sits in a garden of its own, with maples that turn red in November and moss that stays green all year. The session is private, so the room is yours.",
+      "Your host, in kimono, walks you through the ceremony as it happens: the greeting, the sweet, the preparation of the tea, the way to hold and turn the bowl. Everything is in English. After drinking the matcha your host prepared, you whisk a bowl yourself. Chairs and tables are available, so nobody has to kneel, and the sweets are vegan, nut-free and gluten-free.",
+    ],
+    duration: "About 50 minutes", price: "¥15,000", priceUnit: "group", group: "Private · 1–10 guests", ages: "Ages 4+", area: "Kyoto (Ukyo-ku, near Ryoan-ji)",
+    img: "/images/tea-kyoto-garden-hero.jpg", alt: "The host in kimono preparing tea by the open window of the garden teahouse",
+    gallery: [
+      { img: "/images/tea-kyoto-garden-garden.jpg", alt: "The teahouse garden with maples in autumn colour and a stone path" },
+      { img: "/images/tea-kyoto-garden-room.jpg", alt: "Guests seated at low tables in the tearoom during a ceremony" },
+      { img: "/images/tea-kyoto-garden-bowl.jpg", alt: "Hands holding a tea bowl in the tearoom" },
+      { img: "/images/tea-kyoto-garden-path.jpg", alt: "The approach to the teahouse under red maples" },
+      { img: "/images/tea-kyoto-garden-kettle.jpg", alt: "Steam rising from the iron kettle set into the tatami" },
+      { img: "/images/tea-kyoto-garden-bow.jpg", alt: "Two guests in kimono bowing on the tatami" },
+    ],
+    galleryNote: "Photos from the teahouse's own gallery.",
+    partySize: { min: 1, max: 10, default: 2 },
+    // Operator's 2026/27 rates: ¥15,000 per person for two or more (peak
+    // ¥18,000), solo session ¥25,000 (peak ¥30,000). Peak: March, April,
+    // October, November and the New Year holiday (28 Dec – 3 Jan).
+    pricing: {
+      tiers: [{ party: 1, total: 25000 }, { party: 2, total: 30000 }, { party: 3, total: 45000 }, { party: 4, total: 60000 }, { party: 5, total: 75000 }, { party: 6, total: 90000 }, { party: 7, total: 105000 }, { party: 8, total: 120000 }, { party: 9, total: 135000 }, { party: 10, total: 150000 }],
+      highSeason: {
+        tiers: [{ party: 1, total: 30000 }, { party: 2, total: 36000 }, { party: 3, total: 54000 }, { party: 4, total: 72000 }, { party: 5, total: 90000 }, { party: 6, total: 108000 }, { party: 7, total: 126000 }, { party: 8, total: 144000 }, { party: 9, total: 162000 }, { party: 10, total: 180000 }],
+        windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
+      },
+    },
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions at 11:00, 13:00, 15:00 and 17:00 all year, and also at 10:00, 12:00, 14:00 and 16:00 from March to November. Sundays are not available in winter.",
+    scheduleNote: "Timings counted from the start of your session; the session runs about 50 minutes.",
+    interpreter: false,
+    langTag: "In English",
+    skipSiteFaq: true,
+    map: { lat: 35.0345, lng: 135.7182, zoom: 15 },
+    mapNote: "The pin marks Ryoan-ji temple; the teahouse is a few minutes' walk from it. The exact address comes with your confirmation.",
+    cancellation: "Free cancellation until 3 days before the date of your session (Japan time); from then on, including no-shows, the full price is charged. Rescheduling on the day may carry a fee of half the price. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
+    includedShort: "Private 50-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
+    highlights: [
+      { icon: "group", title: "Your group only", body: "A private session in a teahouse with its own garden: no other guests, and the host's attention on you." },
+      { icon: "chat", title: "Explained in English", body: "Every step of the ceremony is explained as it happens, and questions are welcome." },
+      { icon: "meal", title: "Two bowls", body: "The matcha your host prepares, with a seasonal sweet, then the bowl you whisk yourself." },
+    ],
+    included: [
+      "A private 50-minute tea ceremony in English",
+      "A seasonal Japanese sweet (vegan, nut-free and gluten-free) and a bowl of matcha",
+      "The bowl of matcha you whisk yourself",
+      "Chairs and tables on request, for up to ten guests",
+    ],
+    notIncluded: [
+      "Transport to the teahouse (meet on site; near Ryoan-ji)",
+      "Kimono rental (not offered at this teahouse)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome", body: "Take your seat in the tearoom, at a table or on the tatami." },
+      { time: "0:05", title: "The ceremony", body: "The host prepares tea for each guest, explaining the utensils and the movements as she goes.", img: "/images/tea-kyoto-garden-kettle.jpg" },
+      { time: "0:25", title: "Sweet and matcha", body: "A seasonal sweet, then the bowl of matcha prepared for you." },
+      { time: "0:35", title: "Your own bowl", body: "Whisk a bowl of matcha yourself, with the host's guidance." },
+      { time: "0:50", title: "End of the session", body: "Time for photographs in the room and the garden." },
+    ],
+    venue: {
+      known: ["A traditional teahouse with its own garden in Ukyo-ku, West Kyoto, a few minutes' walk from Ryoan-ji — the exact address comes with your confirmation", "Chairs and tables for up to ten guests; floor cushions for larger groups", "Wheelchair accessible: tell us when you request", "Sweets are vegan, nut-free and gluten-free", "A small shop sells Uji matcha and tea utensils"],
+      afterBooking: ["The teahouse's name and address", "Directions from Ryoan-ji and the nearest bus stops", "A phone number for the day"],
+      img: "/images/tea-kyoto-garden-garden.jpg", alt: "The teahouse garden in autumn",
+    },
+    notesLabel: "Children's ages, chairs needed, wheelchair access and anything else (optional)",
+    notesHint: "e.g. two of us would prefer chairs; a child of five joins; one wheelchair user",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, a preferred start time and how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "Is the session private?", a: "Yes. Every session at this teahouse is for your group only, from one guest up to ten. Larger groups can be arranged on request." },
+      { q: "Do we sit on the floor?", a: "Only if you want to. Chairs and tables are available for up to ten guests; say so when you request." },
+      { q: "Can children join?", a: "Yes, from age four, at the same price as adults." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the per-person price is ¥18,000 instead of ¥15,000 (a solo session ¥30,000 instead of ¥25,000). Choose a date to see the rate." },
+      { q: "Why does a solo session cost more?", a: "The teahouse prices a session for one guest at a flat ¥25,000 (¥30,000 in peak season); from two guests the price is per person." },
+      { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
+      { q: "Is the teahouse accessible?", a: "Yes, it is wheelchair accessible; please tell us when you request so the room can be arranged." },
+      { q: "Can we rent a kimono?", a: "Not at this teahouse. Kimono rental is offered at the operator's Higashiyama teahouses." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date of your session; from then on, including no-shows, the full price. Rescheduling on the day may carry a fee of half the price." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Watch a full tea ceremony prepared for your group", "Taste a seasonal sweet and the matcha your host prepares", "Whisk your own bowl of matcha", "Walk the teahouse garden"],
+    master: { title: "Your host", bio: "The teahouse's hosts are trained tea practitioners who conduct the ceremony in English and welcome questions throughout.", quote: "" },
+    itinerary: ["0:00 — Welcome", "0:05 — The ceremony", "0:25 — Sweet and matcha", "0:35 — Your own bowl", "0:50 — End of the session"],
+    goodToKnow: ["About 50 minutes, private. Sessions at 11:00, 13:00, 15:00 and 17:00 all year, with extra sessions at 10:00, 12:00, 14:00 and 16:00 from March to November. Sundays not available in winter.", "From age 4. One to ten guests; larger groups on request.", "Chairs and tables available; wheelchair accessible.", "In English."],
+    story: { heading: "A garden of your own for an hour", body: "Most tea ceremonies offered to visitors happen in a shared room on a schedule. Here the garden gate closes behind you, the host prepares tea for your group alone, and the only sound is the kettle. West Kyoto, where the temples are, is the right place for it." },
+  },
+  {
+    // Camellia Tea Ceremony, Kyoto: the Flower Teahouse in Higashiyama
+    // (Masuya-cho, near Yasaka Pagoda), shared sessions. Built 2026-10-22 from
+    // the operator's guides; public rates, no partner terms yet, preview.
+    slug: "kyoto-higashiyama-shared-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    title: "Tea Ceremony in a Higashiyama Teahouse, Kyoto",
+    tagline: "A forty-five-minute tea ceremony in a small teahouse in the lanes below Yasaka Pagoda, shared with up to eight guests. The host explains in English, serves a seasonal sweet and matcha, then shows you how to whisk your own. Hourly from 10:00 to 17:00; children from six.",
+    overview: [
+      "Higashiyama's stone lanes between Kiyomizu-dera and Yasaka Pagoda are where most visitors to Kyoto walk at least once. The teahouse is a few steps off them: a tatami room where a host in kimono prepares tea for a small group, explaining the utensils, the sweet and the etiquette in English as she goes.",
+      "You drink the bowl prepared for you, then whisk one yourself. Sessions start every hour from 10:00 to 17:00, are shared with other visitors (up to eight in all), and suit a first encounter with tea in the middle of a sightseeing day. A kimono can be rented at the studio next door and worn for the ceremony.",
+    ],
+    duration: "About 45 minutes", price: "¥4,000", priceUnit: "group", group: "Shared session · 1–8 guests", ages: "Ages 6+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
+    img: "/images/tea-kyoto-flower-hero.jpg", alt: "The host in a brown kimono preparing tea in the tearoom",
+    gallery: [
+      { img: "/images/tea-kyoto-flower-room.jpg", alt: "The host in an orange kimono preparing tea in the tatami room" },
+      { img: "/images/tea-kyoto-flower-scoop.jpg", alt: "A bamboo scoop of bright green matcha held over a lacquer caddy" },
+      { img: "/images/tea-kyoto-flower-pagoda.jpg", alt: "Yasaka Pagoda above the lanes of Higashiyama" },
+      { img: "/images/tea-kyoto-flower-whisk.jpg", alt: "Whisking matcha in a bowl with a bamboo whisk" },
+      { img: "/images/tea-kyoto-flower-bowl.jpg", alt: "The host holding a bowl of matcha" },
+    ],
+    galleryNote: "Photos from the teahouse's own gallery.",
+    partySize: { min: 1, max: 8, default: 2 },
+    // Operator's 2026/27 shared rates: adults ¥4,000 (peak ¥5,000), children
+    // 6–12 ¥2,500 (peak ¥3,000); the table shows adults, children are adjusted
+    // in the reply. Peak: Mar, Apr, Oct, Nov and 28 Dec – 3 Jan.
+    pricing: {
+      tiers: [{ party: 1, total: 4000 }, { party: 2, total: 8000 }, { party: 3, total: 12000 }, { party: 4, total: 16000 }, { party: 5, total: 20000 }, { party: 6, total: 24000 }, { party: 7, total: 28000 }, { party: 8, total: 32000 }],
+      highSeason: {
+        tiers: [{ party: 1, total: 5000 }, { party: 2, total: 10000 }, { party: 3, total: 15000 }, { party: 4, total: 20000 }, { party: 5, total: 25000 }, { party: 6, total: 30000 }, { party: 7, total: 35000 }, { party: 8, total: 40000 }],
+        windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
+      },
+    },
+    addOns: [
+      // Operator's kimono studio next door: ¥6,000 per person all year, dressing
+      // from an hour before the session, last dressing 16:00, return by 17:00.
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead.", price: 6000, perGuest: true },
+    ],
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions every hour from 10:00 to 17:00.",
+    scheduleNote: "Timings counted from the start of your session; the session runs about 45 minutes.",
+    interpreter: false,
+    langTag: "In English",
+    skipSiteFaq: true,
+    map: { lat: 34.9988, lng: 135.7797, zoom: 16 },
+    mapNote: "The pin marks Yasaka Pagoda; the teahouse is a short walk from it. The exact address comes with your confirmation.",
+    cancellation: "Free cancellation until 3 days before the date of your session (Japan time); from then on, including no-shows, the full price is charged. Rescheduling on the day may carry a fee of half the price. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
+    includedShort: "45-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
+    highlights: [
+      { icon: "chat", title: "Explained in English", body: "The host explains the utensils, the sweet and the etiquette as the ceremony happens." },
+      { icon: "meal", title: "Two bowls", body: "The matcha prepared for you with a seasonal sweet, then the bowl you whisk yourself." },
+      { icon: "spark", title: "In the lanes of Higashiyama", body: "A few steps from the walk between Yasaka Pagoda and Kiyomizu-dera; a kimono can be rented next door." },
+    ],
+    included: [
+      "A 45-minute tea ceremony in English, shared with up to eight guests",
+      "A seasonal Japanese sweet (vegan, nut-free and gluten-free) and a bowl of matcha",
+      "The bowl of matcha you whisk yourself",
+    ],
+    notIncluded: [
+      "Transport to the teahouse (meet on site, in Higashiyama)",
+      "Kimono rental (optional, ¥6,000 per person)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome", body: "Take your place in the tatami room; a few chairs are available on request." },
+      { time: "0:05", title: "The ceremony", body: "The host prepares tea, explaining each movement and utensil.", img: "/images/tea-kyoto-flower-scoop.jpg" },
+      { time: "0:20", title: "Sweet and matcha", body: "A seasonal sweet, then the bowl prepared for you." },
+      { time: "0:30", title: "Your own bowl", body: "Whisk a bowl of matcha yourself, with the host's guidance." },
+      { time: "0:45", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A small teahouse in Higashiyama, Kyoto, a short walk from Yasaka Pagoda — the exact address comes with your confirmation", "Sitting is on tatami; a limited number of chairs and tables on request", "Bring socks if you are barefoot in sandals", "Not accessible for wheelchairs", "A small shop sells Uji matcha and tea utensils; a kimono studio is next door"],
+      afterBooking: ["The teahouse's name and address", "Directions from Gion-Shijo and Kiyomizu-Gojo stations", "A phone number for the day"],
+      img: "/images/tea-kyoto-flower-pagoda.jpg", alt: "Yasaka Pagoda, a short walk from the teahouse",
+    },
+    notesLabel: "Children's ages, chairs needed, kimono sizes and anything else (optional)",
+    notesHint: "e.g. two children aged 8 and 11; one of us needs a chair; two kimono (one woman, one man)",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, a preferred start time and how many of you there are, with children's ages." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "Is the session shared?", a: "Yes: up to eight guests in all share the session. For a session of your own, see the private tea ceremony at the same teahouse." },
+      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 12 pay ¥2,500 (¥3,000 in peak season) instead of the adult ¥4,000 (¥5,000); the table above shows adult prices and our reply adjusts for children." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when adults pay ¥5,000 instead of ¥4,000. Choose a date to see the rate." },
+      { q: "Do we sit on the floor?", a: "Mostly, yes, on tatami. A limited number of chairs and tables can be requested." },
+      { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Tell us how many women's and men's kimono you need." },
+      { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date of your session; from then on, including no-shows, the full price. Rescheduling on the day may carry a fee of half the price." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Watch a tea ceremony explained in English", "Taste a seasonal sweet and a bowl of matcha", "Whisk your own bowl", "Wear a kimono for it, if you like"],
+    master: { title: "Your host", bio: "The teahouse's hosts are trained tea practitioners who conduct the ceremony in English and welcome questions throughout.", quote: "" },
+    itinerary: ["0:00 — Welcome", "0:05 — The ceremony", "0:20 — Sweet and matcha", "0:30 — Your own bowl", "0:45 — End of the session"],
+    goodToKnow: ["About 45 minutes; sessions every hour from 10:00 to 17:00, shared with up to eight guests.", "From age 6; children 6–12 at a reduced price.", "Sitting on tatami; a few chairs on request. Not wheelchair accessible.", "In English. Kimono rental next door, ¥6,000 per person."],
+    story: { heading: "Forty-five minutes off the lane", body: "The lanes of Higashiyama are busy for a reason, and a tearoom a few steps away from them is the quietest place you will find all afternoon. The ceremony is short, the explanation is clear, and the bowl you whisk at the end is yours." },
+  },
+  {
+    // Camellia Tea Ceremony, Kyoto: the Flower Teahouse in Higashiyama,
+    // private sessions. Built 2026-10-22 from the operator's guides; public
+    // rates, no partner terms yet, preview.
+    slug: "kyoto-higashiyama-private-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    title: "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto",
+    tagline: "The same teahouse below Yasaka Pagoda, reserved for your group: a forty-five-minute ceremony in English for one to five guests, with a seasonal sweet, matcha, and a bowl you whisk yourself. Hourly from 10:00 to 17:00; from age four.",
+    overview: [
+      "A private session in the Higashiyama teahouse: the tatami room, the host and the forty-five minutes are yours. It suits couples, families with small children, and anyone who wants to ask questions without an audience. The host explains the ceremony in English step by step, serves a seasonal sweet and a bowl of matcha, and then teaches you to whisk your own.",
+      "Sessions start every hour from 10:00 to 17:00 and take up to five guests. A kimono can be rented at the studio next door and worn for the ceremony, with dressing an hour before your session.",
+    ],
+    duration: "About 45 minutes", price: "¥8,000", priceUnit: "group", group: "Private · 1–5 guests", ages: "Ages 4+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
+    img: "/images/tea-kyoto-private-hero.jpg", alt: "The host in kimono preparing tea at the hearth of the tearoom",
+    gallery: [
+      { img: "/images/tea-kyoto-private-stand.jpg", alt: "The host preparing tea at a lacquered stand in the tearoom" },
+      { img: "/images/tea-kyoto-private-host.jpg", alt: "The host in a dark green kimono smiling in the tearoom" },
+      { img: "/images/tea-kyoto-private-hands.jpg", alt: "Hands whisking matcha in a tea bowl" },
+      { img: "/images/tea-kyoto-private-street.jpg", alt: "A stone lane in Higashiyama with old wooden houses" },
+      { img: "/images/tea-kyoto-private-scroll.jpg", alt: "A hanging scroll in the alcove of the tearoom" },
+    ],
+    galleryNote: "Photos from the teahouse's own gallery.",
+    partySize: { min: 1, max: 5, default: 2 },
+    // Operator's 2026/27 private rates: ¥8,000 per person for two or more
+    // (peak ¥10,000), solo ¥15,000 (peak ¥17,000).
+    pricing: {
+      tiers: [{ party: 1, total: 15000 }, { party: 2, total: 16000 }, { party: 3, total: 24000 }, { party: 4, total: 32000 }, { party: 5, total: 40000 }],
+      highSeason: {
+        tiers: [{ party: 1, total: 17000 }, { party: 2, total: 20000 }, { party: 3, total: 30000 }, { party: 4, total: 40000 }, { party: 5, total: 50000 }],
+        windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
+      },
+    },
+    addOns: [
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead.", price: 6000, perGuest: true },
+    ],
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions every hour from 10:00 to 17:00.",
+    scheduleNote: "Timings counted from the start of your session; the session runs about 45 minutes.",
+    interpreter: false,
+    langTag: "In English",
+    skipSiteFaq: true,
+    map: { lat: 34.9988, lng: 135.7797, zoom: 16 },
+    mapNote: "The pin marks Yasaka Pagoda; the teahouse is a short walk from it. The exact address comes with your confirmation.",
+    cancellation: "Free cancellation until 3 days before the date of your session (Japan time); from then on, including no-shows, the full price is charged. Rescheduling on the day may carry a fee of half the price. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
+    includedShort: "Private 45-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
+    highlights: [
+      { icon: "group", title: "Your group only", body: "The room and the host for your party alone, from one to five guests." },
+      { icon: "chat", title: "Explained in English", body: "Each step as it happens, with time for your questions." },
+      { icon: "meal", title: "Two bowls", body: "The matcha prepared for you with a seasonal sweet, then the bowl you whisk yourself." },
+    ],
+    included: [
+      "A private 45-minute tea ceremony in English",
+      "A seasonal Japanese sweet (vegan, nut-free and gluten-free) and a bowl of matcha",
+      "The bowl of matcha you whisk yourself",
+    ],
+    notIncluded: [
+      "Transport to the teahouse (meet on site, in Higashiyama)",
+      "Kimono rental (optional, ¥6,000 per person)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome", body: "Your group takes its place in the tatami room; a few chairs are available on request." },
+      { time: "0:05", title: "The ceremony", body: "The host prepares tea for each of you, explaining each movement and utensil.", img: "/images/tea-kyoto-private-hands.jpg" },
+      { time: "0:20", title: "Sweet and matcha", body: "A seasonal sweet, then the bowl prepared for you." },
+      { time: "0:30", title: "Your own bowl", body: "Whisk a bowl of matcha yourself, with the host's guidance." },
+      { time: "0:45", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A small teahouse in Higashiyama, Kyoto, a short walk from Yasaka Pagoda — the exact address comes with your confirmation", "Sitting is on tatami; a limited number of chairs and tables on request", "Bring socks if you are barefoot in sandals", "Not accessible for wheelchairs", "A small shop sells Uji matcha and tea utensils; a kimono studio is next door"],
+      afterBooking: ["The teahouse's name and address", "Directions from Gion-Shijo and Kiyomizu-Gojo stations", "A phone number for the day"],
+      img: "/images/tea-kyoto-private-street.jpg", alt: "The lanes of Higashiyama near the teahouse",
+    },
+    notesLabel: "Children's ages, chairs needed, kimono sizes and anything else (optional)",
+    notesHint: "e.g. a child of four joins; one of us needs a chair; two kimono (one woman, one man)",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, a preferred start time and how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "Is the session private?", a: "Yes: the room and the host are for your group only, from one to five guests. Larger private groups use the annex tearoom nearby, listed separately." },
+      { q: "Can children join?", a: "Yes, from age four, at the same price as adults." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the per-person price is ¥10,000 instead of ¥8,000 (a solo session ¥17,000 instead of ¥15,000). Choose a date to see the rate." },
+      { q: "Why does a solo session cost more?", a: "The teahouse prices a private session for one guest at a flat ¥15,000 (¥17,000 in peak season); from two guests the price is per person." },
+      { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Tell us how many women's and men's kimono you need." },
+      { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date of your session; from then on, including no-shows, the full price. Rescheduling on the day may carry a fee of half the price." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Watch a tea ceremony prepared for your group alone", "Taste a seasonal sweet and a bowl of matcha", "Whisk your own bowl", "Wear a kimono for it, if you like"],
+    master: { title: "Your host", bio: "The teahouse's hosts are trained tea practitioners who conduct the ceremony in English and welcome questions throughout.", quote: "" },
+    itinerary: ["0:00 — Welcome", "0:05 — The ceremony", "0:20 — Sweet and matcha", "0:30 — Your own bowl", "0:45 — End of the session"],
+    goodToKnow: ["About 45 minutes, private; sessions every hour from 10:00 to 17:00.", "From age 4. One to five guests.", "Sitting on tatami; a few chairs on request. Not wheelchair accessible.", "In English. Kimono rental next door, ¥6,000 per person."],
+    story: { heading: "The room to yourselves", body: "A private session changes the pace: the host can wait while a child finds the courage to whisk, and the questions you would not ask in a shared room get asked. Forty-five minutes is enough for all of it." },
+  },
+  {
+    // Camellia Tea Ceremony, Kyoto: the Annex tearoom in Higashiyama. Private
+    // sessions for 2–5 (6 on request) and a ryurei (chairs) group room for
+    // 9–20. Built 2026-10-22 from the operator's guides; public rates, no
+    // partner terms yet, preview.
+    slug: "kyoto-higashiyama-annex-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    title: "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto",
+    tagline: "A newly built tearoom a few doors from the Higashiyama teahouse, reserved for your group: a forty-five-minute ceremony in English for two to five guests, and a tables-and-chairs room for groups of nine to twenty. Hourly from 10:00 to 17:00; from age four.",
+    overview: [
+      "The annex is the teahouse's second building in the same Higashiyama lanes: a tatami tearoom for private sessions, and a larger room with tables and chairs where a ceremony in the ryurei style is held for groups. Both are a short walk from Yasaka Pagoda.",
+      "The ceremony is the same forty-five minutes: the host explains in English, serves a seasonal sweet and a bowl of matcha, and then teaches you to whisk your own. Private sessions take two to five guests (six on request); the group room takes nine to twenty, seated at tables, and is wheelchair accessible. A kimono can be rented at the studio next door.",
+    ],
+    duration: "About 45 minutes", price: "¥10,000", priceUnit: "group", group: "Private · 2–5 guests · groups of 9–20 on request", ages: "Ages 4+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
+    img: "/images/tea-kyoto-annex-hero.jpg", alt: "The host in kimono preparing tea in the annex tearoom",
+    gallery: [
+      { img: "/images/tea-kyoto-annex-entrance.jpg", alt: "The wooden entrance of the annex with a bamboo blind" },
+      { img: "/images/tea-kyoto-annex-room.jpg", alt: "The annex tearoom with its hearth and alcove scroll" },
+      { img: "/images/tea-kyoto-annex-bowl.jpg", alt: "The host holding a tea bowl in the annex tearoom" },
+      { img: "/images/tea-kyoto-annex-tables.jpg", alt: "The group room with tables and chairs set for a ryurei-style ceremony" },
+      { img: "/images/tea-kyoto-annex-ryurei.jpg", alt: "The host preparing tea at a table in the group room" },
+      { img: "/images/tea-kyoto-annex-fusuma.jpg", alt: "Sliding doors painted with red flowers in the annex" },
+    ],
+    galleryNote: "Photos from the teahouse's own gallery.",
+    partySize: { min: 2, max: 20, default: 2 },
+    // Operator's 2026/27 annex rates: private ¥10,000 per person for 2–5 (peak
+    // ¥12,000); 6 on request; group room 9–20 guests ¥4,000 per person (peak
+    // ¥5,000), quoted. 6–8 guests: by arrangement.
+    pricing: {
+      tiers: [{ party: 2, total: 20000 }, { party: 3, total: 30000 }, { party: 4, total: 40000 }, { party: 5, total: 50000 }],
+      highSeason: {
+        tiers: [{ party: 2, total: 24000 }, { party: 3, total: 36000 }, { party: 4, total: 48000 }, { party: 5, total: 60000 }],
+        windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
+      },
+    },
+    addOns: [
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead.", price: 6000, perGuest: true },
+    ],
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions every hour from 10:00 to 17:00.",
+    scheduleNote: "Timings counted from the start of your session; the session runs about 45 minutes.",
+    interpreter: false,
+    langTag: "In English",
+    skipSiteFaq: true,
+    map: { lat: 34.9988, lng: 135.7797, zoom: 16 },
+    mapNote: "The pin marks Yasaka Pagoda; the annex is a short walk from it. The exact address comes with your confirmation.",
+    cancellation: "Private sessions: free cancellation until 3 days before the date of your session (Japan time); from then on, including no-shows, the full price is charged. Group sessions of nine or more: free cancellation until 7 days before. Rescheduling on the day may carry a fee of half the price. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
+    includedShort: "Private 45-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
+    highlights: [
+      { icon: "group", title: "Your group only", body: "A private tatami session for two to five, or the tables-and-chairs room for groups of nine to twenty." },
+      { icon: "chat", title: "Explained in English", body: "Each step as it happens, with time for your questions." },
+      { icon: "meal", title: "Two bowls", body: "The matcha prepared for you with a seasonal sweet, then the bowl you whisk yourself." },
+    ],
+    included: [
+      "A private 45-minute tea ceremony in English",
+      "A seasonal Japanese sweet (vegan, nut-free and gluten-free) and a bowl of matcha",
+      "The bowl of matcha you whisk yourself",
+    ],
+    notIncluded: [
+      "Transport to the annex (meet on site, in Higashiyama)",
+      "Kimono rental (optional, ¥6,000 per person)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome", body: "Your group takes its place in the tearoom, or at the tables in the group room." },
+      { time: "0:05", title: "The ceremony", body: "The host prepares tea, explaining each movement and utensil.", img: "/images/tea-kyoto-annex-bowl.jpg" },
+      { time: "0:20", title: "Sweet and matcha", body: "A seasonal sweet, then the bowl prepared for you." },
+      { time: "0:30", title: "Your own bowl", body: "Whisk a bowl of matcha yourself, with the host's guidance." },
+      { time: "0:45", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A newly built annex in the Higashiyama lanes of Kyoto, a short walk from Yasaka Pagoda — the exact address comes with your confirmation", "Private sessions are on tatami, with a few chairs on request; the group room has tables and chairs for everyone", "The group room is wheelchair accessible; the tatami room is not", "Bring socks if you are barefoot in sandals", "A kimono studio is next door"],
+      afterBooking: ["The annex's name and address", "Directions from Gion-Shijo and Kiyomizu-Gojo stations", "A phone number for the day"],
+      img: "/images/tea-kyoto-annex-room.jpg", alt: "The annex tearoom",
+    },
+    notesLabel: "Group size details, chairs needed, kimono sizes and anything else (optional)",
+    notesHint: "e.g. a group of 14 at tables; two of us need chairs; three kimono (two women, one man)",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, a preferred start time and how many of you there are." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "How many can take part?", a: "Private sessions in the tatami room take two to five guests, or six on request. Groups of nine to twenty use the group room at tables and chairs, at ¥4,000 per person (¥5,000 in peak season); six to eight guests are arranged individually. Send the request with your number and we reply with the price." },
+      { q: "What is the ryurei style?", a: "A tea ceremony conducted at a table, with guests seated on chairs rather than on the tatami. It is how the group room works, and it makes the ceremony easy for everyone." },
+      { q: "Can children join?", a: "Yes, from age four, at the same price as adults." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the private rate is ¥12,000 per person instead of ¥10,000 and the group rate ¥5,000 instead of ¥4,000. Choose a date to see the rate." },
+      { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Larger groups may be dressed at a neighbouring partner studio to save time." },
+      { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
+      { q: "What is the cancellation policy?", a: "Private sessions: free until 3 days before the date; from then on, including no-shows, the full price. Group sessions of nine or more: free until 7 days before. Rescheduling on the day may carry a fee of half the price." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Watch a tea ceremony prepared for your group alone", "Taste a seasonal sweet and a bowl of matcha", "Whisk your own bowl", "Bring a larger group to the tables-and-chairs room"],
+    master: { title: "Your host", bio: "The teahouse's hosts are trained tea practitioners who conduct the ceremony in English and welcome questions throughout.", quote: "" },
+    itinerary: ["0:00 — Welcome", "0:05 — The ceremony", "0:20 — Sweet and matcha", "0:30 — Your own bowl", "0:45 — End of the session"],
+    goodToKnow: ["About 45 minutes, private; sessions every hour from 10:00 to 17:00.", "From age 4. Two to five guests on tatami (six on request); nine to twenty at tables in the group room.", "The group room is wheelchair accessible.", "In English. Kimono rental next door, ¥6,000 per person."],
+    story: { heading: "Tea at a table", body: "Tea ceremony at tables and chairs was devised in the nineteenth century for guests who could not kneel, and it has never stopped being useful. For a group of a dozen, or a grandparent who would rather not fold their legs, the annex is the room that makes the ceremony possible." },
+  },
+  {
+    // 表千家茶道教室 自休庵 (Omotesenke tea school, Kyodo, Setagaya): a 90-minute
+    // private tea ceremony. Built 2026-10-22 from the partner's condition sheet
+    // (Drive folder 自休庵). Partner's price ¥15,000 incl. tax per adult
+    // (children 6–17 ¥7,500) is the wholesale figure ("add your fee on top");
+    // the sale price below follows the owner's rule (wholesale + ¥4,500 ad
+    // cost, 20% margin, rounded up to ¥500) and is provisional. Guests from
+    // mid-January 2027, weekends only. The school's name and the teacher's
+    // name may be published per the sheet but stay off the page until the
+    // owner decides. Placeholder photos.
+    slug: "setagaya-omotesenke-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
+    title: "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo",
+    tagline: "Ninety minutes in a private tearoom in residential Setagaya with a teacher of the Omotesenke school: an introduction, entering the room the traditional way, and a full tea ceremony with two sweets. For your group of two to six, on weekends; from age six.",
+    overview: [
+      "Omotesenke is one of the three main schools descended from Sen no Rikyu, and this is its tea as it is practised today, in a tearoom in a quiet part of Setagaya, half an hour from Shinjuku. The teacher, who runs the school, takes one group at a time, so the ninety minutes are yours.",
+      "The session begins with an explanation of the ceremony and the etiquette of a guest, then the entry into the tearoom and the ceremony itself: two kinds of sweets, matcha prepared for each of you, and the small gestures that make a guest at a tea gathering. Kaishi paper, a fan and a sweet pick are provided and are yours to keep. Sessions are on Saturdays and Sundays, starting at 11:00 or 15:00, and the tearoom takes guests from mid-January 2027.",
+    ],
+    duration: "About 1.5 hours", price: "¥24,500", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (children 6–17 at a reduced price)", area: "Tokyo (Kyodo, Setagaya-ku)",
+    img: "/images/craft-hands.jpg", alt: "A tea ceremony host placing a tea bowl on the tatami before seated guests",
+    gallery: [
+      { img: "/images/cat-tea.jpg", alt: "Matcha being prepared at a tea gathering" },
+    ],
+    galleryNote: "Placeholder photos. The tearoom's own photos replace them before this page is published.",
+    partySize: { min: 2, max: 6, default: 2 },
+    availability: { daily: false, startTimes: ["11:00", "15:00"], defaultTime: "11:00", cutoffDays: 5, cutoffTime: "17:00", weekendsOnly: true, openFrom: "2027-01-16", closed: [{ from: "12-28", to: "01-05" }] },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Saturdays and Sundays, starting at 11:00 or 15:00; the tearoom takes guests from mid-January 2027. Closed over the New Year holidays.",
+    scheduleNote: "Timings counted from the start of your session; the session runs about 90 minutes.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "In English",
+    skipSiteFaq: true,
+    map: { lat: 35.6485, lng: 139.6254, zoom: 15 },
+    mapNote: "The pin marks Chitose-Funabashi station (Odakyu line); the tearoom is about five minutes on foot. The exact address comes with your confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 17:00 four days before; three or two days before, half the price; the day before and on the day, including no-shows, the full price. If the teacher has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 4, rate: 0 }, { until: 2, rate: 50 }, { until: 0, rate: 100 }],
+    cancellationCutoffTime: "17:00",
+    includedShort: "Private 90-minute ceremony · Two sweets and matcha · Kaishi, fan and sweet pick to keep",
+    highlights: [
+      { icon: "group", title: "One group at a time", body: "The tearoom and the teacher are yours for ninety minutes, from two to six guests." },
+      { icon: "brush", title: "A school, not a show", body: "Omotesenke tea as the teacher practises and teaches it, explained in English." },
+      { icon: "meal", title: "Two sweets and a bowl", body: "A dry sweet and a moist one, then matcha prepared for each guest." },
+    ],
+    included: [
+      "A private 90-minute tea ceremony in English",
+      "Matcha, two kinds of Japanese sweets",
+      "Kaishi paper, a fan and a sweet pick, yours to keep",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the tearoom (meet on site; the address comes with your confirmation)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Introduction", body: "How a tea gathering works and how a guest behaves." },
+      { time: "0:20", title: "Entering the tearoom", body: "Through the entrance the traditional way, taking in the alcove and the kettle." },
+      { time: "0:30", title: "The ceremony", body: "Sweets, then matcha prepared for each guest, with the gestures explained.", img: "/images/craft-hands.jpg" },
+      { time: "1:15", title: "Questions", body: "Time for anything you want to ask about tea." },
+      { time: "1:30", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A tearoom in Kyodo, Setagaya-ku, about five minutes on foot from Chitose-Funabashi station on the Odakyu line — the exact address comes with your confirmation", "Sitting is on tatami. Socks are required (white is customary but any colour is fine); bare feet are not", "Light activity, beginner level; from age 6", "Your group only; two to six guests"],
+      afterBooking: ["The tearoom's address", "Directions from Chitose-Funabashi station", "A phone number for the day"],
+      img: "/images/cat-tea.jpg", alt: "Matcha at a tea gathering",
+    },
+    notesLabel: "Children's ages, dietary needs and anything the teacher should know (optional)",
+    notesHint: "e.g. a child of eight joins; one of us cannot kneel; no wheat in the sweets, please",
+    flow: [
+      { title: "Choose a weekend date and send your request", body: "Pick a Saturday or Sunday from mid-January 2027, a start time (11:00 or 15:00) and how many of you there are, with children's ages." },
+      { title: "We reply by the next day", body: "The teacher checks the date; we reply with the start time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "Do I need to know anything about tea?", a: "No. The session starts with an explanation, and the teacher guides each gesture as it comes." },
+      { q: "When does it run?", a: "On Saturdays and Sundays, starting at 11:00 or 15:00, from mid-January 2027. Other times can be asked for. Requests close five days before the date, at 17:00 Japan time." },
+      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 17 pay ¥15,000 instead of ¥24,500; the table above shows adult prices and our reply adjusts for children." },
+      { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are required; bare feet are not allowed in the tearoom. Tell us if kneeling is difficult." },
+      { q: "Is the session private?", a: "Yes. The teacher takes one group at a time, from two to six guests." },
+      { q: "What is the cancellation policy?", a: "Free until 17:00 four days before the date; three or two days before, half the price; the day before and on the day, including no-shows, the full price." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply by the next day with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Learn how a tea gathering works and how a guest behaves", "Enter the tearoom the traditional way", "Take two sweets and a bowl of matcha prepared for you", "Keep the kaishi, fan and sweet pick"],
+    master: { title: "Your teacher", bio: "The head of an Omotesenke tea school in Setagaya, who teaches students of all levels through the year and runs this session himself.", quote: "" },
+    itinerary: ["0:00 — Introduction", "0:20 — Entering the tearoom", "0:30 — The ceremony", "1:15 — Questions", "1:30 — End of the session"],
+    goodToKnow: ["About 90 minutes, private. Saturdays and Sundays at 11:00 or 15:00, from mid-January 2027.", "From age 6; children 6–17 at a reduced price. Two to six guests.", "Sitting on tatami; socks required.", "In English."],
+    story: { heading: "The school's own room", body: "Most tea ceremonies offered to visitors are staged for visitors. This one is a school's tearoom on a weekend, with the teacher who runs it. The sweets, the kettle and the pace are what the students get." },
+  },
+  {
+    // SOBAGIRI RAKUJYO (株式会社RAKUJYO), Matsugaya, Taito-ku: 60-minute
+    // soba-making class (30 min making, 30 min eating) on Kappabashi
+    // kitchenware street near Asakusa. Built 2026-10-22 from the partner's
+    // condition sheet (Drive folder SOBAGIRI) and its public site. Wholesale
+    // ¥6,500 (Mon–Thu) / ¥7,500 (Fri–Sun and holidays) incl. tax; the sale
+    // prices follow the owner's rule (wholesale + ¥4,500 ad cost, 20% margin,
+    // rounded up to ¥500) and are provisional: ¥14,000 / ¥15,000. The page
+    // shows the higher rate and says weekdays are lower. Cancellation terms
+    // follow the partner's travel-agency (B2B) scale, to be confirmed. The
+    // studio's name may be published per the sheet but stays off the page
+    // until the owner decides. Photos from the studio's site, pending the
+    // partner's review.
+    slug: "asakusa-soba-making-class", city: "tokyo", category: "cooking", bookingType: "request", status: "preview",
+    title: "Soba Noodle-Making Class near Asakusa, Tokyo",
+    tagline: "Make soba from 100% buckwheat flour with a noodle maker's tools and no machine, then eat what you cut, with a broth of your choice, in a bright studio on Kappabashi kitchenware street. An hour in all: thirty minutes making, thirty eating. Groups of two to six, from age ten.",
+    overview: [
+      "Kappabashi is the street where Tokyo's restaurants buy their knives, pots and plastic food, a ten-minute walk from Asakusa. The studio on it teaches the one thing the street's tools are for: making noodles by hand. In thirty minutes you mix, knead, roll and cut soba from pure buckwheat flour, the way it has been done since the Edo period, with tools chosen or made for beginners.",
+      "Then you eat it. The soba you cut is cooked at once and served the way you choose: a cold Edo-style dipping sauce, a Kyoto-style one, hot wagyu sukiyaki broth, chicken and soft-boiled egg, shrimp and salt, braised pork, walnut sauce, or a vegan broth. The soba itself contains no wheat. Six guests make a session private; smaller groups share the room.",
+    ],
+    duration: "1 hour", price: "¥15,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
+    img: "/images/soba-asakusa-hero.jpg", alt: "Two guests in aprons cutting soba noodles with wide knives at the studio's wooden table",
+    gallery: [
+      { img: "/images/soba-asakusa-cutting.jpg", alt: "A wide soba knife cutting folded dough into thin noodles" },
+      { img: "/images/soba-asakusa-table.jpg", alt: "A group of guests eating the soba they made at a long table" },
+      { img: "/images/soba-asakusa-dish.jpg", alt: "A serving of cold soba with dipping sauce and a bowl of hot soba" },
+      { img: "/images/soba-asakusa-noodles.jpg", alt: "Freshly cut soba noodles lifted with chopsticks" },
+      { img: "/images/soba-asakusa-knife.jpg", alt: "Cutting soba against a wooden guide board" },
+    ],
+    galleryNote: "Photos from the studio's website, pending the studio's review.",
+    partySize: { min: 2, max: 6, default: 2 },
+    availability: { daily: true, startTimes: ["11:45", "13:15", "14:45"], defaultTime: "11:45", cutoffDays: 3, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions at 11:45, 13:15 and 14:45 on days with bookings; requests close three days before the date.",
+    scheduleNote: "Timings counted from the start of your session; the session runs one hour.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Japanese with English materials",
+    skipSiteFaq: true,
+    map: { lat: 35.7137, lng: 139.7893, zoom: 15 },
+    mapNote: "The pin marks Kappabashi kitchenware street; the studio is on it. The exact address comes with your confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 15 days before; from 14 to 8 days before, 30% of the price; from 7 to 4 days before, half; from 3 days before, including no-shows, the full price. A smaller group than booked is charged for the missing guests on the same scale. Arriving more than 15 minutes late, or not calling before the start time, counts as a cancellation. A change of date is treated as a cancellation and a new booking. If the studio has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 15, rate: 0 }, { until: 8, rate: 30 }, { until: 4, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "One-hour class · The soba you make, with a broth of your choice · Photos of your session",
+    highlights: [
+      { icon: "brush", title: "No machine", body: "Mix, knead, roll and cut by hand, with tools the studio chose or made for beginners." },
+      { icon: "meal", title: "Eat what you cut", body: "Your noodles, cooked at once, with one of nine broths and sauces, from Edo-style dipping sauce to wagyu sukiyaki." },
+      { icon: "photo", title: "Photos included", body: "The studio photographs your session and shares the pictures." },
+    ],
+    included: [
+      "A one-hour class: 30 minutes of noodle-making, 30 minutes to eat",
+      "The soba you make, cooked and served with the broth or sauce of your choice (vegan broth ¥500 extra)",
+      "Photographs of your session",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the studio (meet on site, on Kappabashi street)",
+      "Noodles to take home (none are packed)",
+      "Drinks beyond those served with the meal",
+    ],
+    schedule: [
+      { time: "0:00", title: "Flour to dough", body: "Mix pure buckwheat flour with water and knead it into a ball." },
+      { time: "0:10", title: "Roll and fold", body: "Roll the dough into a sheet and fold it for cutting." },
+      { time: "0:20", title: "Cut", body: "Cut the noodles with the wide soba knife against a guide board.", img: "/images/soba-asakusa-cutting.jpg" },
+      { time: "0:30", title: "Eat", body: "Your soba is cooked and served with the broth or sauce you chose." },
+      { time: "1:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A bright noodle-making studio on Kappabashi kitchenware street, Taito-ku, about ten minutes on foot from Asakusa station (Tsukuba Express) and fifteen from Tawaramachi (Ginza line) — the exact address comes with your confirmation", "Aprons are provided; wear clothes that can take a little flour", "Sessions are shared unless six guests book together", "The staff speak Japanese; the class follows English written materials"],
+      afterBooking: ["The studio's name and address", "Directions from Asakusa and Tawaramachi stations", "A phone number for the day"],
+      img: "/images/soba-asakusa-table.jpg", alt: "Guests eating the soba they made",
+    },
+    notesLabel: "Allergies, your choice of broth, children's ages and anything else (optional)",
+    notesHint: "e.g. one vegan; we would like the wagyu sukiyaki broth; a child of twelve joins",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, a start time and how many of you there are, with everyone's ages and countries of residence (the studio asks for them)." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "How much is it?", a: "¥15,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,000 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
+      { q: "Is the soba gluten-free?", a: "The noodles are 100% buckwheat with no wheat flour. Most broths and sauces contain soy sauce; the vegan broth is made with gluten-free tamari. Tell us about allergies when you request; the studio cannot use ingredients brought by guests." },
+      { q: "Which broths can we choose from?", a: "Cold: Edo-style dipping sauce, Kyoto-style dipping sauce, salt only, walnut sauce. Hot: wagyu sukiyaki, chicken and soft-boiled egg, shrimp and salt, braised pork. A vegan broth is ¥500 extra. Choose on the day or tell us in your request." },
+      { q: "Which language is the class in?", a: "The instructor speaks Japanese; the steps are shown and English materials are provided. The class is designed so that children can follow it." },
+      { q: "Can we have the room to ourselves?", a: "A booking for six makes the session private automatically, from Monday to Thursday. On Fridays, weekends and holidays private sessions are only possible for groups of eight or more, arranged individually." },
+      { q: "Can we take noodles home?", a: "No. The soba you make is cooked and eaten in the studio." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the date; 14 to 8 days before, 30%; 7 to 4 days before, half; from 3 days before, including no-shows, the full price. Fewer guests than booked are charged on the same scale. Arriving more than 15 minutes late counts as a cancellation, and a change of date is a cancellation and a new booking." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Knead pure buckwheat flour into dough", "Roll and fold it into a sheet", "Cut your noodles with a soba knife", "Eat them with a broth or sauce of your choice"],
+    master: { title: "Your instructor", bio: "The studio's noodle maker teaches every session himself and designed the tools and the method so that first-timers, children included, cut good noodles in thirty minutes.", quote: "" },
+    itinerary: ["0:00 — Flour to dough", "0:10 — Roll and fold", "0:20 — Cut", "0:30 — Eat", "1:00 — End of the session"],
+    goodToKnow: ["One hour: 30 minutes making, 30 minutes eating. Sessions at 11:45, 13:15 and 14:45.", "From age 10. Groups of two to six; six guests make the session private (Monday to Thursday).", "100% buckwheat noodles; nine broths and sauces, one vegan.", "Japanese-speaking staff with English materials. Photos of your session included."],
+    story: { heading: "Noodles are science", body: "The studio's owner puts it simply: broth is made by feel and takes years, but noodles are made by science and take thirty minutes. The flour, the water, the fold and the knife are a method anyone can learn in an hour, and the proof is in the bowl." },
+  },
+  {
+    // SOBAGIRI RAKUJYO, Matsugaya: the 60-minute ramen noodle-making class
+    // (same studio, conditions and provisional pricing as the soba class;
+    // see that entry's comment).
+    slug: "asakusa-ramen-making-class", city: "tokyo", category: "ramen", bookingType: "request", status: "preview",
+    title: "Ramen Noodle-Making Class near Asakusa, Tokyo",
+    tagline: "Make ramen noodles from flour by hand, with no machine, using the soba-cutting technique of the Edo period, then eat them in a bowl of the studio's broth. An hour in a bright studio on Kappabashi kitchenware street: thirty minutes making, thirty eating. Groups of two to six, from age ten.",
+    overview: [
+      "The studio on Kappabashi street took the hand-cutting technique it teaches for soba and applied it to ramen: a flour developed for noodles, a method that works without a machine, and tools chosen or made so that first-timers can follow it. In thirty minutes you mix, knead, roll and cut your own ramen noodles.",
+      "Then they go into a bowl. The noodles you cut are cooked at once and served in the studio's ramen broth, with toppings, at the table where you made them. Six guests make a session private; smaller groups share the room. A ten-minute walk from Asakusa.",
+    ],
+    duration: "1 hour", price: "¥15,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
+    img: "/images/ramen-asakusa-hero.jpg", alt: "A bowl of ramen beside hands cutting fresh noodles with a wide knife",
+    gallery: [
+      { img: "/images/ramen-asakusa-bowl.jpg", alt: "A bowl of ramen with chashu pork, egg and nori" },
+      { img: "/images/soba-asakusa-knife.jpg", alt: "Cutting noodles against a wooden guide board" },
+      { img: "/images/soba-asakusa-table.jpg", alt: "A group of guests eating the noodles they made at a long table" },
+      { img: "/images/soba-asakusa-cutting.jpg", alt: "A wide noodle knife cutting folded dough" },
+    ],
+    galleryNote: "Photos from the studio's website, pending the studio's review.",
+    partySize: { min: 2, max: 6, default: 2 },
+    availability: { daily: true, startTimes: ["11:45", "13:15", "14:45"], defaultTime: "11:45", cutoffDays: 3, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions at 11:45, 13:15 and 14:45 on days with bookings; requests close three days before the date.",
+    scheduleNote: "Timings counted from the start of your session; the session runs one hour.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Japanese with English materials",
+    skipSiteFaq: true,
+    map: { lat: 35.7137, lng: 139.7893, zoom: 15 },
+    mapNote: "The pin marks Kappabashi kitchenware street; the studio is on it. The exact address comes with your confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 15 days before; from 14 to 8 days before, 30% of the price; from 7 to 4 days before, half; from 3 days before, including no-shows, the full price. A smaller group than booked is charged for the missing guests on the same scale. Arriving more than 15 minutes late, or not calling before the start time, counts as a cancellation. A change of date is treated as a cancellation and a new booking. If the studio has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 15, rate: 0 }, { until: 8, rate: 30 }, { until: 4, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "One-hour class · The ramen you make, in the studio's broth · Photos of your session",
+    highlights: [
+      { icon: "brush", title: "No machine", body: "Flour, water, a rolling pin and a knife: the Edo-period cutting technique applied to ramen." },
+      { icon: "meal", title: "Eat what you cut", body: "Your noodles, cooked at once and served in the studio's broth with toppings." },
+      { icon: "photo", title: "Photos included", body: "The studio photographs your session and shares the pictures." },
+    ],
+    included: [
+      "A one-hour class: 30 minutes of noodle-making, 30 minutes to eat",
+      "The ramen you make, cooked and served in the studio's broth with toppings",
+      "Photographs of your session",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Transport to the studio (meet on site, on Kappabashi street)",
+      "Noodles to take home (none are packed)",
+      "Drinks beyond those served with the meal",
+    ],
+    schedule: [
+      { time: "0:00", title: "Flour to dough", body: "Mix the studio's ramen flour with water and knead it into a ball." },
+      { time: "0:10", title: "Roll and fold", body: "Roll the dough into a sheet and fold it for cutting." },
+      { time: "0:20", title: "Cut", body: "Cut the noodles with the wide knife against a guide board.", img: "/images/soba-asakusa-knife.jpg" },
+      { time: "0:30", title: "Eat", body: "Your noodles are cooked and served in a bowl of ramen." },
+      { time: "1:00", title: "End of the session" },
+    ],
+    venue: {
+      known: ["A bright noodle-making studio on Kappabashi kitchenware street, Taito-ku, about ten minutes on foot from Asakusa station (Tsukuba Express) and fifteen from Tawaramachi (Ginza line) — the exact address comes with your confirmation", "Aprons are provided; wear clothes that can take a little flour", "Sessions are shared unless six guests book together", "The staff speak Japanese; the class follows English written materials"],
+      afterBooking: ["The studio's name and address", "Directions from Asakusa and Tawaramachi stations", "A phone number for the day"],
+      img: "/images/soba-asakusa-table.jpg", alt: "Guests eating the noodles they made",
+    },
+    notesLabel: "Allergies, children's ages and anything else (optional)",
+    notesHint: "e.g. no pork for one of us; a child of eleven joins",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date, a start time and how many of you there are, with everyone's ages and countries of residence (the studio asks for them)." },
+      { title: "We reply within 24 hours", body: "With the session time, the price for your group and the conditions." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "How much is it?", a: "¥15,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,000 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
+      { q: "What goes in the bowl?", a: "The studio's ramen broth with toppings such as chashu pork, a seasoned egg and nori. Tell us about allergies or ingredients you avoid when you request; the studio cannot use ingredients brought by guests." },
+      { q: "Which language is the class in?", a: "The instructor speaks Japanese; the steps are shown and English materials are provided. The class is designed so that children can follow it." },
+      { q: "Can we have the room to ourselves?", a: "A booking for six makes the session private automatically, from Monday to Thursday. On Fridays, weekends and holidays private sessions are only possible for groups of eight or more, arranged individually." },
+      { q: "Can we take noodles home?", a: "No. The noodles you make are cooked and eaten in the studio." },
+      { q: "What is the cancellation policy?", a: "Free until 15 days before the date; 14 to 8 days before, 30%; 7 to 4 days before, half; from 3 days before, including no-shows, the full price. Fewer guests than booked are charged on the same scale. Arriving more than 15 minutes late counts as a cancellation, and a change of date is a cancellation and a new booking." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Knead ramen flour into dough by hand", "Roll and fold it into a sheet", "Cut your noodles with a wide knife", "Eat them in a bowl of the studio's ramen"],
+    master: { title: "Your instructor", bio: "The studio's noodle maker teaches every session himself and designed the tools and the method so that first-timers, children included, cut good noodles in thirty minutes.", quote: "" },
+    itinerary: ["0:00 — Flour to dough", "0:10 — Roll and fold", "0:20 — Cut", "0:30 — Eat", "1:00 — End of the session"],
+    goodToKnow: ["One hour: 30 minutes making, 30 minutes eating. Sessions at 11:45, 13:15 and 14:45.", "From age 10. Groups of two to six; six guests make the session private (Monday to Thursday).", "Hand-cut noodles, no machine; served in the studio's broth.", "Japanese-speaking staff with English materials. Photos of your session included."],
+    story: { heading: "Not just standing in line", body: "Tokyo has thousands of ramen shops and most of the time you queue for them. An hour on Kappabashi street turns that round: the noodles are yours, cut by your hand, and the bowl they go into was waiting for them." },
   },
   {
     slug: "sushi-masterclass", city: "tokyo", category: "sushi",

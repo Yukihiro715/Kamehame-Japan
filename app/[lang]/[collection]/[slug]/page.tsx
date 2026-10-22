@@ -179,6 +179,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   const booking = {
     slug: exp.slug, title: exp.title,
     provisionalCheckout: provisional, weekdaysOnly: provisional && !!EXPERIENCE_PRODUCTS[exp.slug].adultOnly,
+    weekendsOnly: avail?.weekendsOnly, openFrom: avail?.openFrom,
     cancellationText: cancellation, cancellationTiers: exp.cancellationTiers,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
     startTimes: provisional && !avail?.startTimes ? ["10:00"] : avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
