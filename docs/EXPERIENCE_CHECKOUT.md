@@ -24,7 +24,7 @@
    if(/^experience_/.test(p.action)&&typeof experienceAction_==='function')return json_(experienceAction_(p));
    ```
 
-2. `setupExperienceCheckout()` を1回実行する。既存顧客台帳に **体験決済管理** シートを作成し、`processExperienceQueue` の1分トリガーを作成する。既存の `SPREADSHEET_ID`、`AUTOMATION_TOKEN`、`RESEND_API_KEY`、`TEAM_EMAIL`、`LIVE_SEND_ENABLED=true` を利用する。既存Webアプリの新バージョンとしてデプロイする（URLを維持）。
+2. `setupExperienceCheckout()` を1回実行する。既存顧客台帳に **体験決済管理** シートを作成し、`processExperienceQueue` の1分トリガーを作成する。既存の `SPREADSHEET_ID`、`AUTOMATION_TOKEN`、`RESEND_API_KEY`、`TEAM_EMAIL`、`EXPERIENCE_LIVE_SEND_ENABLED=true` を利用する。既存Webアプリの新バージョンとしてデプロイする（URLを維持）。
 
 3. Stripeアカウント **KAMEHAME JAPAN / acct_1UGdMSDpZ5Y8WoJ2** の本番制限付きキーを作成し、Cloudflare本番Workerの **Secret** `STRIPE_CHECKOUT_KEY` に登録する。最低限、Checkout Sessions書込／参照とPrices参照を許可し、必要な依存権限はStripeの画面に従う。返金、入金、商品変更などの権限は不要。キー値をGitやチャットに貼らない。
 

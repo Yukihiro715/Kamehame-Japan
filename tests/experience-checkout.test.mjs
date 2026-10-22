@@ -144,3 +144,24 @@ test('enabled request form renders paid-provisional copy, charge minimum and con
     assert.ok(!html.includes('No payment now'));
   }
 });
+
+test('ledger vacancies respect manual input, preserve formulas and reject duplicate IDs',()=>{
+  const c=vm.createContext({});vm.runInContext(readFileSync(new URL('../docs/experience-checkout.gs',import.meta.url),'utf8'),c);
+  const t={headers:['予約・案件ID','名前','計算'],values:[['予約・案件ID','名前','計算'],['','手入力あり',''],['','','']],formulas:[['','',''],['','',''],['','','=A3']]};
+  assert.equal(c.experienceLedgerSlot_(t,'KJ-261018-01',{'名前':'Test'}),3);
+  assert.throws(()=>c.experienceLedgerSlot_(t,'x',{'不明列':1}),/見出し/);
+  t.values[1][0]='same';t.values[2][0]='same';
+  assert.throws(()=>c.experienceLedgerSlot_(t,'same',{}),/重複/);
+});
+test('ledger registration fills empty inputs only and state changes require expected values',()=>{
+  const c=vm.createContext({});vm.runInContext(readFileSync(new URL('../docs/experience-checkout.gs',import.meta.url),'utf8'),c); const written=[];c.literal_=x=>x;
+  const headers=['予約・案件ID','名前','対応ステータス','計算','金額'];
+  const row=['KJ-261018-01','Staff edited','キャンセル手続き中',123,''];
+  const formulas=['','','','=SUM(A1)', ''];
+  const sheet={getMaxRows:()=>10,setRowHeight(){},getRange:(r,col,n,w)=>({getValues:()=>[row],getFormulas:()=>[formulas],setWrap(){},setValue(v){written.push([col,v]);row[col-1]=v;}})};
+  c.experienceLedgerSnapshot_=()=>({sheet,headers,values:[headers,row],formulas:[[],formulas],width:5});
+  c.experienceUpsert_('予約一覧',row[0],{'名前':'Replacement','対応ステータス':'支払待ち','計算':0,'金額':250000},{'対応ステータス':['仮予約受領']});
+  assert.deepEqual(written,[[5,250000]]);
+  row[2]='仮予約受領';c.experienceUpsert_('予約一覧',row[0],{'対応ステータス':'支払待ち'},{'対応ステータス':['仮予約受領']});
+  assert.equal(row[2],'支払待ち');
+});
