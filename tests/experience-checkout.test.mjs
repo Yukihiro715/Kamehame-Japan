@@ -39,6 +39,49 @@ test('server prices: minimum charge, allowed quantities, adult eligibility and t
   assert.equal(m.parseExperienceOrder({...k,adultOnly:true,date:'2026-11-07'},now),null,'weekend');
   assert.equal(m.parseExperienceOrder({...base,experience:'shibuya-ramen-class',time:'11:00',guests:16},now).amount,424000);
 });
+
+test('every published non-golf experience supports its priced party range and correct city return URL',()=>{
+  const products=catalogFor('en').experiences.filter(x=>x.category!=='golf');
+  assert.equal(products.length,11);
+  assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
+  for(const x of products) {
+    const product=EXPERIENCE_PRODUCTS[x.slug];
+    for(let guests=product.min;guests<=product.max;guests++) {
+      const input={...base,experience:x.slug,guests,time:x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':'',interpreter:'fr'};
+      const o=m.parseExperienceOrder(input,now);
+      assert.ok(o,x.slug+' '+guests);
+      assert.equal(o.city,x.city);
+      assert.equal(o.amount,product.groupPricing?({2:179000,3:209000,4:231000,5:271000})[guests]:product.amount*Math.max(guests,product.minCharge));
+      assert.match(m.checkoutParameters(o,reference,now).get('cancel_url'),new RegExp('/'+x.city+'/'+x.slug+'/'));
+    }
+    assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:product.max+1,adultOnly:true},now),null);
+  }
+});
+
+test('geiko checkout matches every season, plan and party price and rejects unpriced choices',()=>{
+  for(const [date,totals] of Object.entries({'2027-02-02':[161000,182000,195000,226000],'2026-11-02':[179000,209000,231000,271000]})) {
+    for(const [plan,supplement] of Object.entries({select:0,signature:70000,reserve:135000}))for(let guests=2;guests<=5;guests++) {
+      const o=m.parseExperienceOrder({...base,experience:'evening-with-geiko',time:'18:00',date,guests,plan,interpreter:'es',adultOnly:true,amount:1,price:'fake'},now);
+      assert.equal(o.amount,totals[guests-2]+supplement);
+      assert.equal(o.quantity,1);assert.equal(o.chargeUnit,'group');assert.equal(o.interpreter,'es');
+      assert.ok(o.price.startsWith('price_'));assert.ok(o.title.includes(guests+' guests'));
+    }
+  }
+  const input={...base,experience:'evening-with-geiko',time:'18:00',guests:2,plan:'select',interpreter:'en',adultOnly:true};
+  for(const patch of [{plan:'fake'},{guests:6},{adultOnly:false},{interpreter:'fake'},{addOns:['fake']}])assert.equal(m.parseExperienceOrder({...input,...patch},now),null);
+});
+
+test('ledger preserves non-Tokyo cities, group charge labels and interpreter choice',()=>{
+  const c=vm.createContext({});vm.runInContext(readFileSync(new URL('../docs/experience-checkout.gs',import.meta.url),'utf8'),c);
+  const saved={};c.experienceUpsert_=(sheet,id,fields)=>{saved[sheet]=fields;};
+  c.writeExperienceLedger_({id:reference,createdAt:now,order:{...order,city:'kyoto',slug:'evening-with-geiko',chargeUnit:'group',quantity:1,guests:3,interpreter:'fr'}});
+  assert.equal(saved['予約一覧']['体験カテゴリ'],'京都芸妓・舞妓');
+  assert.equal(saved['手配・体験詳細']['エリア'],'京都');
+  assert.match(saved['手配・体験詳細']['人数内訳'],/1組分（3名）/);
+  assert.match(saved['手配・体験詳細']['希望・アレルギー等'],/フランス語/);
+  c.writeExperienceLedger_({id:reference,createdAt:now,order:{...order,city:'osaka',slug:'dotonbori-ramen-class'}});
+  assert.equal(saved['予約一覧']['体験カテゴリ'],'料理・グルメ');assert.equal(saved['手配・体験詳細']['エリア'],'大阪');
+});
 test('Checkout binds reference, language return URL, quantity and pending text; dynamic methods retained',()=>{
   const p=m.checkoutParameters(order,reference,now);
   assert.equal(p.get('line_items[0][quantity]'),'2');assert.equal(p.get('client_reference_id'),reference);

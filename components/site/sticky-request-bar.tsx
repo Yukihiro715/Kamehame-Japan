@@ -91,7 +91,7 @@ export function StickyRequestBar({
         <b><Fx brief>{shownPrice}</Fx></b>
         <small><Fx>{shownCondition}</Fx></small>
       </div>
-      <a className="booking-cta as-link" href={watchTarget} tabIndex={show ? 0 : -1}>{label}</a>
+      <a className="booking-cta as-link" href={watchTarget} tabIndex={show ? 0 : -1}>{b?.experience.provisionalCheckout && b.largeParty && D ? D.requestAvailability : label}</a>
     </div>
   );
 }

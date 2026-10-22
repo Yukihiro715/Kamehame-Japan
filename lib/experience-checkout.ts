@@ -1,4 +1,6 @@
 import { catalogFor } from "@/lib/catalog";
+import { pricingFor, quote } from "@/lib/pricing";
+import { GEIKO_CHECKOUT_PRICES } from "@/lib/geiko-checkout-prices";
 import { isLang, type Lang } from "@/lib/i18n";
 import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
 
@@ -14,6 +16,7 @@ export interface ExperienceCheckoutEnv {
 export interface ExperienceOrder {
   requestId: string; slug: string; title: string; name: string; email: string; message: string; lang: Lang;
   date: string; time: string; guests: number; quantity: number; price: string; amount: number;
+  city?: string; chargeUnit?: "group" | "guest"; plan?: string; interpreter?: string;
   policyVersion: string; consent: true;
 }
 const ORIGIN = "https://kamehame-japan.com";
@@ -59,6 +62,8 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const x = product && catalogFor("en").experiences.find(x => x.slug === slug && x.status === "live");
   if (!x || !product || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
   if (product.adultOnly && body.adultOnly !== true) return null;
+  if (product.groupPricing && body.adultOnly !== true) return null;
+  if (body.addOns !== undefined && (!Array.isArray(body.addOns) || body.addOns.length)) return null;
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
@@ -77,9 +82,23 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   if (!times.includes(time)) return null;
   if (a?.closed?.some(w => w.from <= w.to ? date.slice(5) >= w.from && date.slice(5) <= w.to : date.slice(5) >= w.from || date.slice(5) <= w.to)) return null;
   if (product.adultOnly && [0,6].includes(d.getUTCDay())) return null;
-  const quantity = Math.max(product.minCharge, guests);
-  return { requestId: body.request_id.toLowerCase(), slug, title: x.title, name, email, message, lang: body.lang as Lang,
-    date, time, guests, quantity, price: product.price, amount: product.amount * quantity, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
+  const quantity = product.groupPricing ? 1 : Math.max(product.minCharge, guests);
+  let price = product.price, amount = product.amount * quantity, title = x.title;
+  let plan: string | undefined, interpreter: string | undefined;
+  if (product.groupPricing) {
+    plan = typeof body.plan === "string" ? body.plan : "";
+    const view = pricingFor(x, "en");
+    if (!view.plans?.some(p => p.id === plan) || !["en", "es", "fr", "none"].includes(String(body.interpreter))) return null;
+    interpreter = String(body.interpreter);
+    const q = quote(view, plan, guests, date);
+    const selected = q && GEIKO_CHECKOUT_PRICES[`${q.peak ? "peak" : "regular"}_${plan}_${guests}`];
+    if (!selected || selected.amount !== q?.total) return null;
+    price = selected.price; amount = selected.amount;
+    title += ` — ${view.plans.find(p => p.id === plan)!.label} (${guests} guests)`;
+  } else if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
+  return { requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
+    city: x.city, chargeUnit: product.groupPricing ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
+    date, time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
 }
 
 export function checkoutParameters(order: ExperienceOrder, reference: string, createdAt: number) {
@@ -88,10 +107,12 @@ export function checkoutParameters(order: ExperienceOrder, reference: string, cr
     mode: "payment", "line_items[0][price]": order.price, "line_items[0][quantity]": String(order.quantity),
     customer_email: order.email, client_reference_id: reference,
     success_url: `${ORIGIN}/${order.lang}/booked/?stay=1&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${ORIGIN}/${order.lang}/tokyo/${order.slug}/?checkout=cancelled#request-form`,
+    cancel_url: `${ORIGIN}/${order.lang}/${order.city ?? "tokyo"}/${order.slug}/?checkout=cancelled#request-form`,
     expires_at: String(Math.floor(createdAt/1000) + 3600),
     "metadata[booking_flow]": "experience_provisional", "metadata[booking_reference]": reference,
     "metadata[experience_slug]": order.slug, "metadata[policy_version]": order.policyVersion,
+    "metadata[plan]": order.plan ?? "", "metadata[guests]": String(order.guests),
+    "metadata[city]": order.city ?? "tokyo", "metadata[interpreter]": order.interpreter ?? "",
     "payment_intent_data[metadata][booking_reference]": reference,
     "payment_intent_data[metadata][booking_flow]": "experience_provisional",
     "custom_text[submit][message]": `${c.note} ${c.refund}`,
