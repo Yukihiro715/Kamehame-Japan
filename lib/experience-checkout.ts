@@ -19,10 +19,18 @@ export interface ExperienceOrder {
 const ORIGIN = "https://kamehame-japan.com";
 const VERSION = "2026-08-26.dahlia";
 export const experienceReference = (id: unknown): id is string => typeof id === "string" && /^KJ-E-[0-9a-f]{32}$/.test(id);
+export function checkoutConfigurationChecks(env: ExperienceCheckoutEnv) {
+  return {
+    enabled: env.EXPERIENCE_CHECKOUT_ENABLED === "true",
+    checkout_key: !!env.STRIPE_CHECKOUT_KEY?.startsWith("rk_live_"),
+    read_key: !!env.STRIPE_READ_KEY,
+    webhook_secret: !!(env.STRIPE_EXPERIENCE_WEBHOOK_SECRET || env.STRIPE_WEBHOOK_SECRET),
+    ledger_token: !!env.GOLF_AUTOMATION_TOKEN,
+    ledger_url: !!env.GOLF_AUTOMATION_URL?.startsWith("https://script.google.com/macros/s/"),
+  };
+}
 export function checkoutConfigured(env: ExperienceCheckoutEnv) {
-  return env.EXPERIENCE_CHECKOUT_ENABLED === "true" && !!env.STRIPE_CHECKOUT_KEY?.startsWith("rk_live_") &&
-    !!env.STRIPE_READ_KEY && !!(env.STRIPE_EXPERIENCE_WEBHOOK_SECRET || env.STRIPE_WEBHOOK_SECRET) &&
-    !!env.GOLF_AUTOMATION_TOKEN && !!env.GOLF_AUTOMATION_URL?.startsWith("https://script.google.com/macros/s/");
+  return Object.values(checkoutConfigurationChecks(env)).every(Boolean);
 }
 export async function experienceLedger(env: ExperienceCheckoutEnv, action: string, payload: Record<string, unknown> = {}) {
   if (!env.GOLF_AUTOMATION_TOKEN || !env.GOLF_AUTOMATION_URL?.startsWith("https://script.google.com/macros/s/")) throw Error("ledger_unconfigured");
