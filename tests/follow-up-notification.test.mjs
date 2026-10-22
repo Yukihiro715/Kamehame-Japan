@@ -94,6 +94,24 @@ test("trade enquiries do not schedule a guest follow-up or show its controls", a
   assert.doesNotMatch(calls[0].body[0].text, /停止・状況確認|フォローアップ管理ID/);
 });
 
+test("experience requests accept optional blank notes and retain booking details", async (t) => {
+  const calls = await submit(t, { experience: "osaka-kendo-experience-tour", message: "", party: "2", dates: "2026-11-10 10:00" });
+  const internal = calls.at(-1).body[0];
+  assert.match(internal.text, /2026-11-10 10:00/);
+  assert.match(internal.text, /大阪/);
+});
+
+test("blank notes do not bypass required general/trade messages or missing booking details", async (t) => {
+  t.mock.method(globalThis, "fetch", () => { throw Error("invalid requests must not send mail"); });
+  for (const patch of [{}, { experience: "not-a-product" }, { experience: "osaka-kendo-experience-tour", dates: "" }, { experience: "osaka-kendo-experience-tour", party: "0" }, { experience: "osaka-kendo-experience-tour", kind: "trade" }]) {
+    const response = await POST(new Request("https://kamehame-japan.com/api/contact", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...enquiry, message: "", ...patch }),
+    }));
+    assert.equal(response.status, 400);
+  }
+});
+
 test("malformed provider IDs and missing schedules do not create management links", () => {
   for (const followUp of [
     null,

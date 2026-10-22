@@ -156,10 +156,15 @@ function parse(body: Record<string, unknown>): Enquiry | null {
   // The message keeps its line breaks; everything else is single-line.
   const message = typeof body.message === "string" ? body.message.trim().slice(0, MAX.message) : "";
   const area = clean(body.area, MAX.area) || undefined;
-  // The golf request carries its substance in its own fields; its notes are optional.
-  if (!name || !email || (!message && !area)) return null;
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
+  // Booking forms carry their substance in the selected experience, date and
+  // party size. Their notes are optional; general/trade messages are not.
+  const experience = clean(body.experience, MAX.experience) || undefined;
+  const dates = clean(body.dates, MAX.dates) || undefined;
   const party = clean(body.party, MAX.party) || undefined;
+  const experienceRequest = kind === "guest" && !!dates && /^[1-9]\d*$/.test(party ?? "") &&
+    catalogFor("en").experiences.some((x) => x.slug === experience && x.status === "live");
+  if (!name || !email || (!message && !area && !experienceRequest)) return null;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
 
   // The golf page: the choice is validated against the price master and the
   // reference price is read from it here — what the browser sends is the
@@ -191,7 +196,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     kind, name, email, message,
     company: clean(body.company, MAX.company) || undefined,
     country: clean(body.country, MAX.country) || undefined,
-    dates: clean(body.dates, MAX.dates) || undefined,
+    dates,
     party,
     plan: clean(body.plan, MAX.plan) || undefined,
     addons: clean(body.addons, MAX.addons) || undefined,
@@ -216,7 +221,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     shoes: golf.areaId ? clean(body.shoes, 240) || undefined : undefined,
     shoeKeys: golf.areaId && /^(own|unsure|\d{2}(\.5)?)(,(own|unsure|\d{2}(\.5)?)){0,3}$/.test(String(body.shoe_keys ?? "")) ? String(body.shoe_keys) : undefined,
     lang: clean(body.lang, 5) || "en",
-    experience: clean(body.experience, MAX.experience) || undefined,
+    experience,
     website: clean(body.website, 200) || undefined,
   };
 }
