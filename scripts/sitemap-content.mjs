@@ -29,6 +29,15 @@ function categoryBlock(src, slug) {
   return m ? m[0] : null;
 }
 
+/** One theme's `{ slug: "x", … },` block in lib/themes.ts (copy in every language). */
+function themeBlock(src, slug) {
+  const i = src.indexOf(`slug: "${slug}", tags:`);
+  if (i < 0) return null;
+  const start = src.lastIndexOf("\n  {", i);
+  const end = src.indexOf("\n  },", i);
+  return start < 0 || end < 0 ? null : src.slice(start, end + 5);
+}
+
 /** The `${indent}lang: {` … `${indent}},` block of a per-language object. */
 function langBlock(src, lang, indent = "  ") {
   const key = lang.includes("-") ? `"${lang}"` : lang;
@@ -83,7 +92,13 @@ export function buildEntries(read) {
   const experiences = placeholdersPublished ? allExperiences : allExperiences.filter((e) => e.live);
   const cities = allCities.filter((c) => placeholdersPublished || experiences.some((e) => e.city === c));
   const categories = allCategories.filter((c) => placeholdersPublished || experiences.some((e) => e.category === c));
-  const collections = [...new Set([...cities, ...categories, ...(toursPublished ? ["tours"] : []), "experiences"])];
+  // Themes (lib/themes.ts) group categories by their English tag; a theme has a page while one published category sits in it.
+  const tagOf = Object.fromEntries([...catalog.matchAll(/\{\s*slug:\s*"([a-z-]+)",\s*title:[^}]*?tag:\s*"([^"]+)"/g)].map((m) => [m[1], m[2]]));
+  const themesSrc = src("lib/themes.ts");
+  const themeDefs = [...themesSrc.matchAll(/slug:\s*"([a-z-]+)",\s*tags:\s*\[([^\]]*)\]/g)].map((m) => ({ slug: m[1], tags: [...m[2].matchAll(/"([^"]+)"/g)].map((t) => t[1]) }));
+  const themeCategories = (th) => categories.filter((c) => th.tags.includes(tagOf[c]));
+  const themes = themeDefs.filter((th) => themeCategories(th).length > 0);
+  const collections = [...new Set([...cities, ...categories, ...themes.map((th) => th.slug), ...(toursPublished ? ["tours"] : []), "experiences"])];
 
   const entries = [];
   const add = (path, { priority = "0.7", changefreq = "weekly", alternates = null, key = null, date = null, deps = [] } = {}) =>
@@ -110,6 +125,11 @@ export function buildEntries(read) {
       let key, members;
       if (cities.includes(c)) { members = inCity(c); key = join(entryBlock(cat.en, c), lang === "en" ? "" : entryBlock(cat[lang], c), members.map((e) => e.slug).join(",")); }
       else if (categories.includes(c)) { members = inCategory(c); key = join(categoryBlock(cat.en, c), lang === "en" ? "" : categoryBlock(cat[lang], c), members.map((e) => e.slug).join(",")); }
+      else if (themes.some((th) => th.slug === c)) {
+        const th = themes.find((x) => x.slug === c); const cats = themeCategories(th).map((x) => x.slug);
+        members = experiences.filter((e) => cats.includes(e.category));
+        key = join(themeBlock(themesSrc, c), lang, members.map((e) => e.slug).join(","));
+      }
       else if (c === "tours") { members = []; key = join(langBlock(collectionsCopy, lang), tours.join(",")); }
       else { members = experiences; key = join(langBlock(collectionsCopy, lang), experiences.map((e) => e.slug).join(",")); }
       add(`/${lang}/${c}/`, { priority: "0.8", alternates: siblings((l) => `/${l}/${c}/`), key, deps: members.map((e) => expPath(lang, e)) });

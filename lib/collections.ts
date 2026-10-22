@@ -7,6 +7,7 @@ import {
 } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 import { listPrice } from "@/lib/pricing";
+import { THEMES, themeBySlug, themeCategories } from "@/lib/themes";
 
 export interface ListingItem {
   kind: "experience" | "tour";
@@ -342,6 +343,30 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     };
   }
 
+  // A theme (home-page tile): every published experience in its categories,
+  // with the categories as the refine chips.
+  const theme = themeBySlug(slug);
+  if (theme) {
+    const cats = themeCategories(theme, categories);
+    if (cats.length === 0) return undefined;
+    const catSlugs = new Set(cats.map((c) => c.slug));
+    const exps = experiences.filter((e) => catSlugs.has(e.category));
+    const copy = theme.copy[lang];
+    const catLinks = cats.map((c) => ({ label: c.title, href: p(`/${c.slug}/`) }));
+    const cityLinks = [...new Set(exps.map((e) => e.city))].map((c) => ({ label: cityTitle(c), href: p(`/${c}/`) }));
+    const otherThemes = THEMES.filter((th) => th.slug !== slug && themeCategories(th, categories).length > 0)
+      .map((th) => ({ label: th.copy[lang].title, href: p(`/${th.slug}/`) }));
+    return {
+      slug, crumb: copy.title, h1: copy.h1,
+      heroImg: theme.img, heroAlt: copy.heroAlt, lead: copy.lead,
+      items: exps.map(expItem),
+      refine: [...catLinks, ...cityLinks],
+      about: { heading: S.catAboutH(copy.title), body: S.catAbout },
+      faq: [{ q: S.catFaqQ, a: S.catFaqA }, FAQ_GUIDE, FAQ_BOOK],
+      explore: [...otherThemes, { label: S.allExperiences, href: p("/experiences/") }],
+    };
+  }
+
   if (slug === "tours" && TOURS_PUBLISHED) {
     return {
       slug, crumb: S.toursCrumb, h1: S.toursH1,
@@ -386,6 +411,7 @@ const { cities: listedCities, categories: listedCategories } = catalogFor("en");
 export const collectionSlugs = [
   ...listedCities.map((c) => c.slug),
   ...listedCategories.map((c) => c.slug),
+  ...THEMES.filter((th) => themeCategories(th, listedCategories).length > 0).map((th) => th.slug),
   ...(TOURS_PUBLISHED ? ["tours"] : []),
   "experiences",
 ];

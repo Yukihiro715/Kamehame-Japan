@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { articleDate, latestArticles } from "@/lib/articles";
 import { featuredReviews } from "@/lib/reviews";
 import { RatingSummary, Stars } from "@/components/site/reviews";
+import { themeIsLive } from "@/lib/themes";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
 import { listPrice, pricingFor, yen } from "@/lib/pricing";
 import { Fx } from "@/components/site/money";
@@ -20,11 +21,11 @@ const COPY = {
     heroEyebrow: "Curated experiences in Japan",
     themesH: "Find your Japan.",
     themes: [
-      { t: "Food & Drink", s: "Ramen / Sushi / Sake", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
-      { t: "Arts & Crafts", s: "Calligraphy / Craftsmanship", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
-      { t: "Tradition & Culture", s: "Geiko / Tea Ceremony / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
-      { t: "Pop Culture & Beauty", s: "Character Nails / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "Sports & Outdoors", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
+      { t: "Food & Drink", s: "Ramen / Sushi / Sake", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "food" },
+      { t: "Arts & Crafts", s: "Calligraphy / Craftsmanship", img: "/images/kanji-works-table.jpg", mark: "書", href: "arts-crafts" },
+      { t: "Tradition & Culture", s: "Geiko / Tea Ceremony / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "tradition" },
+      { t: "Pop Culture & Beauty", s: "Character Nails / Anime", img: "/images/cat-nail.jpg", mark: "爪", href: "pop-culture" },
+      { t: "Sports & Outdoors", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "sports" },
     ], comingSoon: "Coming soon",
     heroTitle: ["Don't just", "see Japan.", "Step into it."],
     heroLede: "Discover Japan through experiences you won't find on a typical itinerary. From food and craftsmanship to pop culture and private access, every experience is carefully selected.",
@@ -70,11 +71,11 @@ const COPY = {
     heroEyebrow: "Experiencias seleccionadas en Japón",
     themesH: "Encuentra tu Japón.",
     themes: [
-      { t: "Comida y bebida", s: "Ramen / Sushi / Sake", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
-      { t: "Arte y oficios", s: "Caligrafía / Artesanía", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
-      { t: "Tradición y cultura", s: "Geiko / Ceremonia del té / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
-      { t: "Cultura pop y belleza", s: "Uñas de personajes / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "Deporte y aire libre", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
+      { t: "Comida y bebida", s: "Ramen / Sushi / Sake", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "food" },
+      { t: "Arte y oficios", s: "Caligrafía / Artesanía", img: "/images/kanji-works-table.jpg", mark: "書", href: "arts-crafts" },
+      { t: "Tradición y cultura", s: "Geiko / Ceremonia del té / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "tradition" },
+      { t: "Cultura pop y belleza", s: "Uñas de personajes / Anime", img: "/images/cat-nail.jpg", mark: "爪", href: "pop-culture" },
+      { t: "Deporte y aire libre", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "sports" },
     ], comingSoon: "Próximamente",
     heroTitle: ["No te limites a ver Japón.", "Entra en él."],
     heroLede: "Descubre Japón a través de experiencias que no encontrarás en un itinerario al uso. De la comida y la artesanía a la cultura pop y los accesos privados, cada experiencia está cuidadosamente seleccionada.",
@@ -120,11 +121,11 @@ const COPY = {
     heroEyebrow: "厳選した日本の体験",
     themesH: "あなたの日本を見つける。",
     themes: [
-      { t: "食と酒", s: "ラーメン / 寿司 / 日本酒", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
-      { t: "アート・工芸", s: "書道 / 職人の技", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
-      { t: "伝統と文化", s: "芸妓・舞妓 / 茶道 / 着物", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
-      { t: "ポップカルチャー・美容", s: "キャラクターネイル / アニメ", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "スポーツ・アウトドア", s: "ゴルフ / 相撲", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
+      { t: "食と酒", s: "ラーメン / 寿司 / 日本酒", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "food" },
+      { t: "アート・工芸", s: "書道 / 職人の技", img: "/images/kanji-works-table.jpg", mark: "書", href: "arts-crafts" },
+      { t: "伝統と文化", s: "芸妓・舞妓 / 茶道 / 着物", img: "/images/geiko-dance.jpg", mark: "芸", href: "tradition" },
+      { t: "ポップカルチャー・美容", s: "キャラクターネイル / アニメ", img: "/images/cat-nail.jpg", mark: "爪", href: "pop-culture" },
+      { t: "スポーツ・アウトドア", s: "ゴルフ / 相撲", img: "/images/cat-sumo.jpg", mark: "武", href: "sports" },
     ], comingSoon: "近日公開",
     heroTitle: ["日本を、見るだけで", "終わらせない。"],
     heroLede: "普通の観光では出会えない体験で、日本を知る。食、職人の技、ポップカルチャー、特別なアクセスまで、ひとつひとつ厳選しています。",
@@ -170,11 +171,11 @@ const COPY = {
     heroEyebrow: "Expériences sélectionnées au Japon",
     themesH: "Trouvez votre Japon.",
     themes: [
-      { t: "Cuisine et boissons", s: "Ramen / Sushi / Saké", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
-      { t: "Arts et artisanat", s: "Calligraphie / Savoir-faire", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
-      { t: "Tradition et culture", s: "Geiko / Cérémonie du thé / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
-      { t: "Pop culture et beauté", s: "Nail art de personnages / Anime", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "Sport et plein air", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
+      { t: "Cuisine et boissons", s: "Ramen / Sushi / Saké", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "food" },
+      { t: "Arts et artisanat", s: "Calligraphie / Savoir-faire", img: "/images/kanji-works-table.jpg", mark: "書", href: "arts-crafts" },
+      { t: "Tradition et culture", s: "Geiko / Cérémonie du thé / Kimono", img: "/images/geiko-dance.jpg", mark: "芸", href: "tradition" },
+      { t: "Pop culture et beauté", s: "Nail art de personnages / Anime", img: "/images/cat-nail.jpg", mark: "爪", href: "pop-culture" },
+      { t: "Sport et plein air", s: "Golf / Sumo", img: "/images/cat-sumo.jpg", mark: "武", href: "sports" },
     ], comingSoon: "Bientôt",
     heroTitle: ["Ne vous contentez pas de voir le Japon.", "Entrez-y."],
     heroLede: "Découvrez le Japon à travers des expériences absentes des itinéraires classiques. De la cuisine et de l'artisanat à la pop culture et aux accès privés, chaque expérience est soigneusement sélectionnée.",
@@ -220,11 +221,11 @@ const COPY = {
     heroEyebrow: "精選的日本體驗",
     themesH: "找到你的日本。",
     themes: [
-      { t: "美食與酒", s: "拉麵 / 壽司 / 日本酒", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "ramen" },
-      { t: "藝術與工藝", s: "書道 / 職人技藝", img: "/images/kanji-works-table.jpg", mark: "書", href: "calligraphy" },
-      { t: "傳統與文化", s: "藝妓 / 茶道 / 和服", img: "/images/geiko-dance.jpg", mark: "芸", href: "geisha" },
-      { t: "流行文化與美容", s: "角色美甲 / 動漫", img: "/images/cat-nail.jpg", mark: "爪" },
-      { t: "運動與戶外", s: "高爾夫 / 相撲", img: "/images/cat-sumo.jpg", mark: "武", href: "golf" },
+      { t: "美食與酒", s: "拉麵 / 壽司 / 日本酒", img: "/images/ramen-noodle-machine.jpg", mark: "食", href: "food" },
+      { t: "藝術與工藝", s: "書道 / 職人技藝", img: "/images/kanji-works-table.jpg", mark: "書", href: "arts-crafts" },
+      { t: "傳統與文化", s: "藝妓 / 茶道 / 和服", img: "/images/geiko-dance.jpg", mark: "芸", href: "tradition" },
+      { t: "流行文化與美容", s: "角色美甲 / 動漫", img: "/images/cat-nail.jpg", mark: "爪", href: "pop-culture" },
+      { t: "運動與戶外", s: "高爾夫 / 相撲", img: "/images/cat-sumo.jpg", mark: "武", href: "sports" },
     ], comingSoon: "即將推出",
     heroTitle: ["不只是看日本。", "走進去。"],
     heroLede: "透過一般行程找不到的體驗，認識日本。從美食、職人工藝到流行文化與私人通道，每一項體驗都經過精心挑選。",
@@ -353,7 +354,8 @@ export function HomePage({ lang }: { lang: Lang }) {
         <h2 id="themes-heading">{C.themesH}</h2>
         <div className="themes-grid">
           {C.themes.map((th) => {
-            const live = "href" in th && categories.some((c) => c.slug === th.href);
+            // A tile is live once one published category sits in its theme (lib/themes.ts).
+            const live = "href" in th && themeIsLive(th.href, categories);
             const inner = (
               <>
                 <img src={th.img} alt="" loading="lazy" />

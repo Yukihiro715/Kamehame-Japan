@@ -35,23 +35,44 @@ export function checkoutConfigurationChecks(env: ExperienceCheckoutEnv) {
 export function checkoutConfigured(env: ExperienceCheckoutEnv) {
   return Object.values(checkoutConfigurationChecks(env)).every(Boolean);
 }
-export async function experienceLedger(env: ExperienceCheckoutEnv, action: string, payload: Record<string, unknown> = {}) {
+export async function experienceLedger(env: ExperienceCheckoutEnv, action: string, payload: Record<string, unknown> = {}, timeoutMs = 25000) {
   if (!env.GOLF_AUTOMATION_TOKEN || !env.GOLF_AUTOMATION_URL?.startsWith("https://script.google.com/macros/s/")) throw Error("ledger_unconfigured");
   const r = await fetch(env.GOLF_AUTOMATION_URL, {
-    method: "POST", headers: { "content-type": "application/json" }, redirect: "follow", signal: AbortSignal.timeout(25000),
+    method: "POST", headers: { "content-type": "application/json" }, redirect: "follow", signal: AbortSignal.timeout(timeoutMs),
     body: JSON.stringify({ ...payload, action, token: env.GOLF_AUTOMATION_TOKEN }),
   });
   const data = r.ok ? await r.json() as Record<string, unknown> : null;
   if (!data?.ok) throw Error("ledger_unavailable");
   return data;
 }
-export async function checkoutReady(env: ExperienceCheckoutEnv) {
+export async function checkoutReady(env: ExperienceCheckoutEnv, timeoutMs = 25000) {
   if (!checkoutConfigured(env)) return false;
-  try { const h = await experienceLedger(env, "experience_health"); return h.version === EXPERIENCE_POLICY_VERSION && h.ready === true; }
+  try { const h = await experienceLedger(env, "experience_health", {}, timeoutMs); return h.version === EXPERIENCE_POLICY_VERSION && h.ready === true; }
   catch { return false; }
 }
+
+/** The page render's view of readiness. The ledger health check is a round
+ *  trip to Google Apps Script (2–3 s), so pages must not pay for it on every
+ *  request: the answer is kept per isolate for READY_TTL_MS and refreshed in
+ *  the background once stale (stale-while-revalidate). Only a cold isolate
+ *  waits, and at most READY_TIMEOUT_MS. The checkout API itself still asks
+ *  the ledger fresh before taking a payment (app/api/experience-checkout). */
+const READY_TTL_MS = 5 * 60_000;
+const READY_TIMEOUT_MS = 6_000;
+let readyCache: { value: boolean; at: number; refreshing?: Promise<boolean> } | null = null;
+export function resetCheckoutReadyCache() { readyCache = null; }
+export async function checkoutReadyCached(env: ExperienceCheckoutEnv, now = Date.now()): Promise<boolean> {
+  if (readyCache && now - readyCache.at < READY_TTL_MS) return readyCache.value;
+  const refresh = checkoutReady(env, READY_TIMEOUT_MS).then((value) => { readyCache = { value, at: Date.now() }; return value; });
+  if (readyCache) {
+    // Serve the last answer now; one refresh at a time replaces it when it lands.
+    if (!readyCache.refreshing) readyCache.refreshing = refresh.finally(() => { if (readyCache) readyCache.refreshing = undefined; });
+    return readyCache.value;
+  }
+  return refresh;
+}
 export async function experienceCheckoutEnabled() {
-  try { const { env } = await import("cloudflare:workers"); return await checkoutReady(env); }
+  try { const { env } = await import("cloudflare:workers"); return await checkoutReadyCached(env); }
   catch { return false; }
 }
 

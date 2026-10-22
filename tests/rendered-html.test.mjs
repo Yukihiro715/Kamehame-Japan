@@ -266,6 +266,30 @@ test("ramen classes: Tokyo and Osaka published, priced per person, listed, never
   assert.ok(home.includes('href="/en/osaka/"') || home.includes('href="/en/osaka/dotonbori-ramen-class/"'), "home reaches Osaka");
 });
 
+test("theme pages: a home tile lists every published experience in its categories", async () => {
+  // Food & Drink → /en/food/: both ramen classes (and any other Food category), with the categories as refine chips.
+  const food = await render("/en/food/");
+  assert.equal(food.status, 200, "food theme page");
+  const html = await food.text();
+  assert.ok(html.includes("/en/tokyo/shibuya-ramen-class/") && html.includes("/en/osaka/dotonbori-ramen-class/"), "both ramen classes listed");
+  assert.ok(html.includes('<a href="/en/ramen/" class="chip">'), "the ramen category is a refine chip");
+  assert.ok(html.includes("Food &amp; drink experiences in Japan") || html.includes("Food & drink experiences in Japan"), "theme heading");
+  assert.doesNotMatch(html, /Ramen Dojo|Ohashi|Meguro|Soemoncho|宗右衛門|Viyago/i, "partner names stay private");
+  // the home tiles link to the themes, not to one category each
+  const home = await (await render("/en/")).text();
+  for (const th of ["food", "arts-crafts", "tradition", "sports"]) assert.ok(home.includes(`<a href="/en/${th}/" class="theme-card live">`), `home tile → /en/${th}/`);
+  assert.ok(!home.includes('<a href="/en/ramen/" class="theme-card live">'), "no tile goes straight to the ramen category");
+  // a theme with no published category has no page and no live tile
+  assert.equal((await render("/en/pop-culture/")).status, 404, "pop-culture theme without a published category");
+  assert.ok(!home.includes('href="/en/pop-culture/"'), "pop-culture tile is not a link");
+  // other languages resolve the same slugs
+  for (const lang of ["ja", "es", "fr", "zh-tw"]) assert.equal((await render(`/${lang}/food/`)).status, 200, `${lang} food theme`);
+  // the sitemap carries the theme pages
+  const { readFileSync } = await import("node:fs");
+  const xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+  assert.ok(xml.includes("https://kamehame-japan.com/en/food/") && !xml.includes("/en/pop-culture/"), "sitemap lists live themes only");
+});
+
 test("kendo tours are published after approval; unapproved partners remain in preview", async () => {
   const pages = [
     ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥20,000", "/en/tokyo/"],

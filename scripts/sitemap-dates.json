@@ -7,6 +7,10 @@
     "hash": "8adaab45d107",
     "lastmod": "2026-10-10"
   },
+  "/en/arts-crafts/": {
+    "hash": "2bb34212884a",
+    "lastmod": "2026-10-22"
+  },
   "/en/calligraphy/": {
     "hash": "a92d5fa8fe4a",
     "lastmod": "2026-09-24"
@@ -22,6 +26,10 @@
   "/en/faq/": {
     "hash": "6475e67568b3",
     "lastmod": "2026-10-10"
+  },
+  "/en/food/": {
+    "hash": "0a278728b180",
+    "lastmod": "2026-10-22"
   },
   "/en/geisha/": {
     "hash": "53fcc3fe8cc9",
@@ -111,6 +119,10 @@
     "hash": "326c6b1d8336",
     "lastmod": "2026-10-16"
   },
+  "/en/sports/": {
+    "hash": "1f464a6df080",
+    "lastmod": "2026-10-22"
+  },
   "/en/tokyo/": {
     "hash": "242a68b7a6fc",
     "lastmod": "2026-10-21"
@@ -135,6 +147,10 @@
     "hash": "bca33d71434d",
     "lastmod": "2026-10-10"
   },
+  "/en/tradition/": {
+    "hash": "ce6cfda595b0",
+    "lastmod": "2026-10-22"
+  },
   "/es/": {
     "hash": "e83249bd3ba7",
     "lastmod": "2026-09-17"
@@ -142,6 +158,10 @@
   "/es/about/": {
     "hash": "95bc6f1c71b3",
     "lastmod": "2026-10-10"
+  },
+  "/es/arts-crafts/": {
+    "hash": "25c831d8575f",
+    "lastmod": "2026-10-22"
   },
   "/es/calligraphy/": {
     "hash": "f3938a12bd23",
@@ -158,6 +178,10 @@
   "/es/faq/": {
     "hash": "b30dc3dba1ad",
     "lastmod": "2026-10-10"
+  },
+  "/es/food/": {
+    "hash": "b5d464173506",
+    "lastmod": "2026-10-22"
   },
   "/es/geisha/": {
     "hash": "6538d34cd364",
@@ -235,6 +259,10 @@
     "hash": "2c2328c5ade6",
     "lastmod": "2026-10-16"
   },
+  "/es/sports/": {
+    "hash": "9e4d7ddadc5e",
+    "lastmod": "2026-10-22"
+  },
   "/es/tokyo/": {
     "hash": "1c24f4aaef46",
     "lastmod": "2026-10-21"
@@ -259,6 +287,10 @@
     "hash": "59ca02ce7072",
     "lastmod": "2026-10-10"
   },
+  "/es/tradition/": {
+    "hash": "dcb2b8adffcf",
+    "lastmod": "2026-10-22"
+  },
   "/fr/": {
     "hash": "e83249bd3ba7",
     "lastmod": "2026-09-17"
@@ -266,6 +298,10 @@
   "/fr/about/": {
     "hash": "7290a6d99d90",
     "lastmod": "2026-10-10"
+  },
+  "/fr/arts-crafts/": {
+    "hash": "6d5b81460a14",
+    "lastmod": "2026-10-22"
   },
   "/fr/calligraphy/": {
     "hash": "4edb022984e9",
@@ -282,6 +318,10 @@
   "/fr/faq/": {
     "hash": "02b9560a1a76",
     "lastmod": "2026-10-10"
+  },
+  "/fr/food/": {
+    "hash": "ea44f4fb6383",
+    "lastmod": "2026-10-22"
   },
   "/fr/geisha/": {
     "hash": "590bc0c7af27",
@@ -359,6 +399,10 @@
     "hash": "26dc2bd16b82",
     "lastmod": "2026-10-16"
   },
+  "/fr/sports/": {
+    "hash": "ab48f38453a0",
+    "lastmod": "2026-10-22"
+  },
   "/fr/tokyo/": {
     "hash": "545de3a898e8",
     "lastmod": "2026-10-21"
@@ -383,6 +427,10 @@
     "hash": "49a39b3d05ef",
     "lastmod": "2026-10-10"
   },
+  "/fr/tradition/": {
+    "hash": "397751d862b3",
+    "lastmod": "2026-10-22"
+  },
   "/ja/": {
     "hash": "e83249bd3ba7",
     "lastmod": "2026-09-17"
@@ -390,6 +438,10 @@
   "/ja/about/": {
     "hash": "5260cfc4be30",
     "lastmod": "2026-10-10"
+  },
+  "/ja/arts-crafts/": {
+    "hash": "3a9891f5fe57",
+    "lastmod": "2026-10-22"
   },
   "/ja/calligraphy/": {
     "hash": "a719258c5ec6",
@@ -406,6 +458,10 @@
   "/ja/faq/": {
     "hash": "4938be2962f9",
     "lastmod": "2026-10-10"
+  },
+  "/ja/food/": {
+    "hash": "56ab1596a8c4",
+    "lastmod": "2026-10-22"
   },
   "/ja/geisha/": {
     "hash": "badfebe577fa",
@@ -495,6 +551,10 @@
     "hash": "b5e227ee1cd9",
     "lastmod": "2026-10-16"
   },
+  "/ja/sports/": {
+    "hash": "fbbf64127b87",
+    "lastmod": "2026-10-22"
+  },
   "/ja/tokyo/": {
     "hash": "c388f67d3056",
     "lastmod": "2026-10-21"
@@ -519,6 +579,10 @@
     "hash": "201367b89425",
     "lastmod": "2026-10-10"
   },
+  "/ja/tradition/": {
+    "hash": "eefbfe8ac3e3",
+    "lastmod": "2026-10-22"
+  },
   "/partners/": {
     "hash": "e94b2945ee23",
     "lastmod": "2026-10-09"
@@ -530,6 +594,10 @@
   "/zh-tw/about/": {
     "hash": "cb6a5c238e33",
     "lastmod": "2026-10-10"
+  },
+  "/zh-tw/arts-crafts/": {
+    "hash": "82920cd848e2",
+    "lastmod": "2026-10-22"
   },
   "/zh-tw/calligraphy/": {
     "hash": "7be6c654bdf5",
@@ -546,6 +614,10 @@
   "/zh-tw/faq/": {
     "hash": "b0daf3c1cab6",
     "lastmod": "2026-10-10"
+  },
+  "/zh-tw/food/": {
+    "hash": "38b6f1dd08a2",
+    "lastmod": "2026-10-22"
   },
   "/zh-tw/geisha/": {
     "hash": "08827c2e1cfa",
@@ -623,6 +695,10 @@
     "hash": "bcb45959e0cd",
     "lastmod": "2026-10-16"
   },
+  "/zh-tw/sports/": {
+    "hash": "e327d5ec9989",
+    "lastmod": "2026-10-22"
+  },
   "/zh-tw/tokyo/": {
     "hash": "2b34f36c7c8e",
     "lastmod": "2026-10-21"
@@ -646,5 +722,9 @@
   "/zh-tw/trade/": {
     "hash": "240733d0c108",
     "lastmod": "2026-10-10"
+  },
+  "/zh-tw/tradition/": {
+    "hash": "5af54ed78281",
+    "lastmod": "2026-10-22"
   }
 }

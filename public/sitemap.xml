@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://kamehame-japan.com/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
@@ -25,7 +25,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
@@ -36,7 +36,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/fr/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
@@ -47,7 +47,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/zh-tw/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/"/>
@@ -715,6 +715,226 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/food/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/food/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/food/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/food/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/food/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/food/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/food/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/food/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/food/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/food/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/food/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/food/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/food/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/food/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/food/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/food/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/food/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/food/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/food/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/food/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/food/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/food/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/food/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/food/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/food/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/food/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/food/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/food/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/food/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/food/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/arts-crafts/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/arts-crafts/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/arts-crafts/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/arts-crafts/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/arts-crafts/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/arts-crafts/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/arts-crafts/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/arts-crafts/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/arts-crafts/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/arts-crafts/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/arts-crafts/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/tradition/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tradition/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/tradition/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tradition/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/tradition/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tradition/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/tradition/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tradition/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/tradition/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/tradition/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/tradition/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/en/sports/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sports/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sports/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sports/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sports/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sports/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/sports/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sports/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sports/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sports/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sports/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sports/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/sports/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sports/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sports/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sports/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sports/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sports/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/sports/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sports/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sports/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sports/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sports/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sports/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/sports/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/sports/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/sports/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/sports/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/sports/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/sports/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/experiences/</loc>
@@ -1811,7 +2031,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/legal/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
@@ -1822,7 +2042,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/legal/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
@@ -1833,7 +2053,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/legal/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
@@ -1844,7 +2064,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/fr/legal/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
@@ -1855,7 +2075,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/zh-tw/legal/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/legal/"/>
@@ -1866,7 +2086,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/terms/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
@@ -1877,7 +2097,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/terms/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
@@ -1888,7 +2108,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/terms/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
@@ -1899,7 +2119,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/fr/terms/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>
@@ -1910,7 +2130,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/zh-tw/terms/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/terms/"/>

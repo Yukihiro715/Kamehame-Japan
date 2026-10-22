@@ -65,3 +65,4 @@
 - 金額・商品・通貨・セッション不一致は成功応答にせず再試行対象にする。Stripeの配信失敗と台帳の最終エラーを確認する。
 - 利用者都合の取消条件は表示の既存規定を維持し、支払い時点から適用。手配不可かつ代替案に合意できない場合の全額返金を別途明示。
 - 停止時は `EXPERIENCE_CHECKOUT_ENABLED=false`。新規チェックアウトのみ停止し、既に発生した決済通知と受付メールの処理は継続する。
+- 体験ページの表示は、台帳の `experience_health` 応答をWorkerのアイソレートごとに5分間キャッシュする（`lib/experience-checkout.ts` `checkoutReadyCached`。期限切れ後は前回の答えを返しつつ裏で更新）。2026-10-22まではページ表示のたびにApps Scriptへ往復していたため、ラーメン・筆文字の詳細ページの応答が2〜3秒かかっていた。決済API（`/api/experience-checkout`）は支払い前に毎回あらためて確認する。停止（`EXPERIENCE_CHECKOUT_ENABLED=false`）はデプロイで即時反映、台帳側の `ready` 変更は最長5分でページに反映。
