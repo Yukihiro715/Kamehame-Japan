@@ -11,6 +11,7 @@ import { RatingSummary } from "@/components/site/reviews";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
+import { provisionalCopy } from "@/lib/provisional-booking";
 
 /** Wide screens: the card sits beside the page, so its button opens the rest
  *  of the request (name, email, notes) inside the card. Phones: the card is
@@ -120,7 +121,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
             <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
             <b><Yen n={b.estimate.total} /></b>
             <JpyRef n={b.estimate.total} lang={lang} />
-            <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>
+            <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {x.provisionalCheckout ? provisionalCopy(lang).note : plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>
           </>
         ) : (
           <>
@@ -143,7 +144,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       )}
       <ul className="bk-trust">
         <li><ShieldCheck size={14} /> {x.ctaNote ?? D.noPaymentNow}</li>
-        <li><Clock3 size={14} /> {D.replyIn24}</li>
+        <li><Clock3 size={14} /> {x.provisionalCheckout ? provisionalCopy(lang).flow[2].title : D.replyIn24}</li>
         <li><CalendarDays size={14} /> {D.availCutoff(x.leadDays, x.cutoffTime)}</li>
       </ul>
     </div>

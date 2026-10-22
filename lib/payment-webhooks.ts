@@ -1,8 +1,9 @@
 import type { GolfAutomationEnv } from "@/lib/golf-automation";
 import type { MailQueueEnv } from "@/lib/mail-queue";
+import { experienceReference, handleExperienceEvent, type ExperienceCheckoutEnv } from "@/lib/experience-checkout";
 
 type Provider = "resend" | "stripe";
-type Env = GolfAutomationEnv & MailQueueEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string };
+type Env = GolfAutomationEnv & MailQueueEnv & ExperienceCheckoutEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string };
 const RESEND_EVENTS = ["email.sent", "email.delivered", "email.delivery_delayed", "email.bounced", "email.failed", "email.suppressed", "email.complained", "email.opened", "email.clicked"];
 const gasUrl = (url: string | undefined) => !!url?.startsWith("https://script.google.com/macros/s/");
 
@@ -80,8 +81,12 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
         click: event.data.click ? { link: event.data.click.link, timestamp: event.data.click.timestamp } : undefined,
       };
     } else {
-      if (!["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed"].includes(event.type)) return Response.json({ ok: true, ignored: true });
       const s = event.data.object;
+      if (experienceReference(s?.client_reference_id) && ["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed", "checkout.session.expired"].includes(event.type)) {
+        await handleExperienceEvent(env, event);
+        return Response.json({ ok: true });
+      }
+      if (!["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed"].includes(event.type)) return Response.json({ ok: true, ignored: true });
       if (!s || !/^KJ-\d{6}-G[0-9a-f]{8}$/i.test(s.client_reference_id ?? "")) return Response.json({ ok: true, ignored: true });
       const discountRef = (value: unknown) => {
         if (typeof value === "string") return { id: value };

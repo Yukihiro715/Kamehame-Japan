@@ -15,7 +15,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return { title: `${t(lang).booked.h} | KAMEHAME JAPAN`, robots: { index: false, follow: false } };
+  return { title: `${t(lang).booked.nextH} | KAMEHAME JAPAN`, robots: { index: false, follow: false } };
 }
 
 export default async function BookedPage({ params }: Props) {

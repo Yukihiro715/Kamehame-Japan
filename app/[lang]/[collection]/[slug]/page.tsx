@@ -8,6 +8,8 @@ import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { BookingBox } from "@/components/site/booking-box";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider } from "@/components/site/booking-context";
+import { experienceCheckoutEnabled } from "@/lib/experience-checkout";
+import { EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
 import { BookingCard } from "@/components/site/booking-card";
 import { DateList } from "@/components/site/date-list";
 import { Gallery } from "@/components/site/gallery";
@@ -124,9 +126,11 @@ export default async function DetailPage({ params }: Props) {
 
 const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Languages, dance: Music, meal: Utensils, photo: Camera, spark: Sparkles, brush: Brush, car: Car, flag: Flag };
 
-function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
+async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
   const D = T.detail;
+  const provisional = !!EXPERIENCE_PRODUCTS[exp.slug] && await experienceCheckoutEnabled();
+  const P = provisionalCopy(lang);
   const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
@@ -157,10 +161,13 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       const [time, ...rest] = step.split(" — ");
       return { time, title: rest.join(" — ") };
     });
-  const faq = [...(exp.faq ?? []), ...(exp.skipSiteFaq ? [] : D.siteFaq)];
-  const flow = exp.flow ?? D.flow;
+  // Locale FAQs preserve the source ordering; identify the booking question
+  // through the English source so no language can keep the old pay=confirmed text.
+  const bookingFaqIndex = catalogFor("en").experiences.find(v => v.slug === exp.slug)?.faq?.findIndex(f => f.q === "How does booking work?");
+  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq)];
+  const flow = provisional ? P.flow : exp.flow ?? D.flow;
   const cancellation = exp.cancellation ?? cancellationFor(lang);
-  const ctaLabel = live ? D.requestAvailability : T.comingSoonCta;
+  const ctaLabel = provisional ? P.cta : live ? D.requestAvailability : T.comingSoonCta;
   const avail = exp.availability;
   const conditions = [
     { Icon: MapPin, text: city.title },
@@ -170,14 +177,16 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   ];
   const booking = {
     slug: exp.slug, title: exp.title,
+    provisionalCheckout: provisional, weekdaysOnly: provisional && !!EXPERIENCE_PRODUCTS[exp.slug].adultOnly,
+    cancellationText: cancellation, cancellationTiers: exp.cancellationTiers,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
-    startTimes: avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
+    startTimes: provisional && !avail?.startTimes ? ["10:00"] : avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
-    listedMax: eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),
+    listedMax: provisional ? EXPERIENCE_PRODUCTS[exp.slug].max : eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),
     maxGuests: exp.partySize?.max,
     dates: avail?.dates, interpreter: exp.interpreter,
     notesLabel: exp.notesLabel, notesHint: exp.notesHint,
-    ctaLabel: exp.cta?.label, ctaNote: exp.cta?.note, timeLabel: exp.timeLabel,
+    ctaLabel: provisional ? P.cta : exp.cta?.label, ctaNote: provisional ? P.note : exp.cta?.note, timeLabel: exp.timeLabel,
   };
   const fmtDay = new Intl.DateTimeFormat(DATE_LOCALES[lang], { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
 
@@ -494,8 +503,8 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
-              <h2 className="xp-sub" id="request-form">{live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
-              <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>
+              <h2 className="xp-sub" id="request-form">{provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
+              <p className="xp-note">{provisional ? `${P.note} ${P.refund}` : live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>
               {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
             </section>
 
@@ -518,7 +527,7 @@ function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
           </div>
 
         </div>
-        {!exp.pricePending && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
+        {!exp.pricePending && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={provisional ? P.cta : live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
       </BookingProvider>
 
       {moreInCity.length > 0 && (

@@ -1,4 +1,5 @@
 "use client";
+import "./provisional-consent.css";
 
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
@@ -13,6 +14,8 @@ import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
+import { EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
+import { CancellationTable } from "@/components/site/cancellation-table";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
@@ -45,6 +48,9 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   const card = variant === "card";
   const [needDate, setNeedDate] = useState(false);
   const started = useRef(false);
+  const attempt = useRef<{ signature: string; id: string } | null>(null);
+  const provisional = !!x?.provisionalCheckout;
+  const P = provisionalCopy(lang);
 
   /** One "form started" event per page view, on the first focus inside the form. */
   const markStarted = () => {
@@ -80,6 +86,31 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
     }
     setStatus("sending");
     try {
+      if (provisional && b && x) {
+        const payload = { name: data.name, email: data.email, message: data.message, website: data.website,
+          experience: x.slug, lang, date: b.date, time: b.time, guests: b.guestsNumber,
+          consent: data.checkout_consent === "on", standard: data.checkout_standard === "on", adultOnly: data.checkout_adult === "on" };
+        const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(payload)));
+        const signature = Array.from(new Uint8Array(digest), v => v.toString(16).padStart(2, "0")).join("");
+        // Reuse the same UUID on network retries; only a changed request gets a new one.
+        if (!attempt.current || attempt.current.signature !== signature) {
+          let id = crypto.randomUUID();
+          try {
+            const old = sessionStorage.getItem(`kh-checkout-attempt-${signature}`);
+            if (old && /^[0-9a-f-]{36}$/.test(old)) id = old as typeof id;
+            sessionStorage.setItem(`kh-checkout-attempt-${signature}`, id);
+          } catch { /* storage blocked: the in-memory attempt still protects retries */ }
+          attempt.current = { signature, id };
+        }
+        const res = await fetch("/api/experience-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: attempt.current.id }) });
+        const json = await res.json() as { ok?: boolean; url?: string };
+        if (!res.ok || !json.ok || !json.url) { setStatus("failed"); return; }
+        const target = new URL(json.url);
+        if (target.protocol !== "https:" || !["checkout.stripe.com", "book.stripe.com"].includes(target.hostname)) { setStatus("failed"); return; }
+        track("begin_checkout", { experience: x.slug, value: b.estimate?.total, currency: "JPY", language: lang });
+        window.location.assign(target.href);
+        return;
+      }
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -148,7 +179,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   }
 
   return (
-    <form className={card ? "bk-form" : "enquiry-form"} method="post" action="/api/contact" onSubmit={submit} onFocusCapture={markStarted} noValidate={false} data-clarity-mask="True">
+    <form className={card ? "bk-form" : "enquiry-form"} method="post" action={provisional ? "/api/experience-checkout" : "/api/contact"} onSubmit={submit} onFocusCapture={markStarted} noValidate={false} data-clarity-mask="True">
       {card && needDate && !b?.date && <p className="form-error" role="alert">{F.chooseDateFirst}</p>}
       {experience && !card && (
         <p className="form-context">
@@ -211,7 +242,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           </div>
           {!card && <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} /><small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
+              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} /><small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {provisional ? P.note : plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}
@@ -269,17 +300,33 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         <input name="website" type="text" tabIndex={-1} autoComplete="off" />
       </label>
 
+      {provisional && x && b && (
+        <div className="provisional-consent">
+          <p>{P.note}</p>
+          <p>{P.refund}</p>
+          <p><b>{D.totalCol}: <Yen n={EXPERIENCE_PRODUCTS[x.slug].amount * Math.max(EXPERIENCE_PRODUCTS[x.slug].minCharge, b.guestsNumber)} /></b></p>
+          {b.guestsNumber < EXPERIENCE_PRODUCTS[x.slug].minCharge && <p>{D.minChargeNote(EXPERIENCE_PRODUCTS[x.slug].minCharge)}</p>}
+          <details><summary>{D.cancellationH}</summary>
+            <CancellationTable exp={{ cancellationTiers: x.cancellationTiers }} text={x.cancellationText ?? ""} lang={lang} />
+          </details>
+          <p>{P.cancellation}</p>
+          <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{P.standard}</span></label>
+          {EXPERIENCE_PRODUCTS[x.slug].adultOnly && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{P.adult}</span></label>}
+          <label className="form-check"><input name="checkout_consent" type="checkbox" required /><span>{P.consent} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{T.footerTerms}</a></span></label>
+          <p><a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a></p>
+        </div>
+      )}
       <div className="enquiry-actions">
         <button type="submit" className={card ? "bk-cta" : "contact-cta"} disabled={status === "sending"}>
-          {status === "sending" ? F.sending : b ? x?.ctaLabel ?? F.sendRequest : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : provisional ? P.cta : b ? x?.ctaLabel ?? F.sendRequest : F.send} <ArrowRight size={15} />
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>
-      {b && <p className="form-after">{F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
+      {b && <p className="form-after">{provisional ? P.note : F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
 
       {status === "failed" && (
         <p className="form-error" role="alert">
-          <Mail size={14} /> {F.failed} <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a>
+          <Mail size={14} /> {provisional ? P.retry : F.failed} <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a>
         </p>
       )}
     </form>

@@ -40,6 +40,8 @@ export async function GET(request: Request): Promise<Response> {
       payment_status?: string; amount_total?: number | null; currency?: string | null;
       customer_details?: { email?: string | null } | null; created?: number;
       client_reference_id?: string | null;
+      metadata?: { booking_flow?: string };
+      status?: string;
       line_items?: { data?: { description?: string | null; quantity?: number | null; amount_total?: number | null }[] } | null;
     };
     // The session id is the only thing a caller shows, so the payer's email
@@ -50,6 +52,8 @@ export async function GET(request: Request): Promise<Response> {
     return Response.json({
       ok: true,
       paid: s.payment_status === "paid",
+      provisional: s.metadata?.booking_flow === "experience_provisional",
+      processing: s.status === "complete" && s.payment_status !== "paid",
       amount: typeof s.amount_total === "number" ? s.amount_total : undefined,
       currency: s.currency ? s.currency.toUpperCase() : undefined,
       // Only for the guest's own enhanced-conversion match on this page.

@@ -9,6 +9,7 @@ import { arrangementPolicy } from "@/lib/golf-arrangement-policy";
 import type { Lang } from "@/lib/i18n";
 import { isArrangement } from "@/lib/golf-prices";
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
+import { provisionalCopy } from "@/lib/provisional-booking";
 
 export interface LegalCopy {
   title: string;
@@ -26,7 +27,7 @@ export interface TermsCopy {
   sections: { heading: string; body: string[] }[];
 }
 
-export const LEGAL_UPDATED = isArrangement() ? "2026-10-17" : "2026-10-13";
+export const LEGAL_UPDATED = "2026-10-22";
 
 const OPERATOR = { ja: "Prosent Inc.", en: "Prosent Inc." };
 const ADDRESS_JA = "〒104-0054 東京都中央区勝どき1-3-1 43F";
@@ -188,14 +189,19 @@ export function legalFor(lang: Lang): LegalCopy {
   const base = lang === "ja" ? LEGAL_JA : LEGAL_EN;
   const golf = golfTerms(lang);
   return { ...base, title: TITLES[lang].legal, rows: base.rows.map(([label, body], i) => [label,
-    [11, 13, 14].includes(i) ? `${body} ${golf}` : i === 16 ? transportCopy(body, lang) : body,
+    [11, 13, 14].includes(i) ? `${body} ${golf} ${experienceTerms(lang)}` : i === 10 ? `${body} ${lang === "ja" ? "サイト上の決済ボタンからStripeの決済画面に進む場合もあります。" : "Some experiences also offer payment through a Stripe checkout opened directly from the website."}` : i === 16 ? transportCopy(body, lang) : body,
   ]) };
 }
 export function termsFor(lang: Lang): TermsCopy {
   const base = lang === "ja" ? TERMS_JA : TERMS_EN;
   return { ...base, title: TITLES[lang].terms, sections: base.sections.map((s, i) => ({ ...s,
-    body: i === 0 ? s.body.map(b => transportCopy(b, lang)) : [1,2,3].includes(i) ? [...s.body, golfTerms(lang)] : s.body,
+    body: i === 0 ? s.body.map(b => transportCopy(b, lang)) : [1,2,3].includes(i) ? [...s.body, golfTerms(lang), experienceTerms(lang)] : s.body,
   })) };
+}
+
+function experienceTerms(lang: Lang) {
+  const c = provisionalCopy(lang === "ja" ? "ja" : "en");
+  return (lang === "ja" ? "「仮予約として決済」と表示された体験には、上記に優先して以下が適用されます。" : "For experiences explicitly offered as a paid provisional booking, the following takes precedence: ") + `${c.note} ${c.cancellation} ${c.refund}`;
 }
 
 function golfTerms(lang: Lang) {
