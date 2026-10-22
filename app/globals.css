@@ -1716,5 +1716,6 @@ body[data-kh-modal] .sticky-request { display:none; }
 .ofk-cook b { font-size:14px; }
 .ofk-cook p { margin:0; font-size:13px; line-height:1.65; color:#4a463e; }
 .ofk-nav { display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
+.ofk-carousel + .xp-note-sample { margin-top:12px; }
 .ofk-nav button { width:44px; height:44px; display:grid; place-items:center; border:1.5px solid var(--ink); border-radius:999px; background:var(--white); color:var(--ink); cursor:pointer; }
 .ofk-nav button:hover { background:var(--kame); }
