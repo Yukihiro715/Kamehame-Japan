@@ -1,3 +1,4 @@
+import { BookingRequestHeading } from "@/components/site/quote-request-switch";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -503,7 +504,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
-              <h2 className="xp-sub" id="request-form">{provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta}</h2>
+              <BookingRequestHeading lang={lang} defaultTitle={provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta} />
               {!provisional && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
               {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
             </section>

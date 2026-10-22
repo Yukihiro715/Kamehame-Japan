@@ -11,6 +11,7 @@ import { RatingSummary } from "@/components/site/reviews";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { t, type Lang } from "@/lib/i18n";
+import { QuoteRequestSwitch, quoteCopy } from "./quote-request-switch";
 import { provisionalCopy } from "@/lib/provisional-booking";
 
 /** Wide screens: the card sits beside the page, so its button opens the rest
@@ -62,7 +63,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   return (
     <div className={`bk-card${open ? " open" : ""}`} id="booking">
       <div className="bk-price">
-        {groupRow ? (
+        {x.provisionalCheckout && (b.quoteRequested || b.largeParty) ? <b className="bk-quote-heading">{quoteCopy[lang].heading}</b> : groupRow ? (
           <>
             {/* Group-priced: the per-person figure leads, the group total it comes from sits right under it. */}
             {D.fromPrice && <small>{D.fromPrice}</small>}
@@ -132,6 +133,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         <FxNote lang={lang} />
       </div>
 
+      {!open && <QuoteRequestSwitch lang={lang} onStart={() => { if (window.matchMedia(SIDE_BY_SIDE).matches) expand(); else jump(); }} />}
       {open ? (
         <div className="bk-more" ref={more}>
           <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: x.slug, title: x.title }} variant="card" />
@@ -140,12 +142,12 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         <a className="bk-cta" href="#request-form" onClick={(e) => {
           e.preventDefault();
           if (window.matchMedia(SIDE_BY_SIDE).matches) expand(); else jump();
-        }}>{x.provisionalCheckout && b.largeParty ? D.requestCta : x.ctaLabel ?? D.requestCta} <ArrowRight size={16} /></a>
+        }}>{x.provisionalCheckout && (b.largeParty || b.quoteRequested) ? quoteCopy[lang].heading : x.ctaLabel ?? D.requestCta} <ArrowRight size={16} /></a>
       )}
       <ul className="bk-trust">
-        {(!open || !x.provisionalCheckout || b.largeParty) && <li><ShieldCheck size={14} /> {x.provisionalCheckout && b.largeParty ? D.noPaymentNow : x.ctaNote ?? D.noPaymentNow}</li>}
-        {x.provisionalCheckout && !b.largeParty && !open && <li><ShieldCheck size={14} /> <strong>{provisionalCopy(lang).refund}</strong></li>}
-        <li><Clock3 size={14} /> {x.provisionalCheckout ? provisionalCopy(lang).flow[2].title : D.replyIn24}</li>
+        {(!open || !x.provisionalCheckout || b.largeParty || b.quoteRequested) && <li><ShieldCheck size={14} /> {x.provisionalCheckout && (b.largeParty || b.quoteRequested) ? D.noPaymentNow : x.ctaNote ?? D.noPaymentNow}</li>}
+        {x.provisionalCheckout && !b.largeParty && !b.quoteRequested && !open && <li><ShieldCheck size={14} /> <strong>{provisionalCopy(lang).refund}</strong></li>}
+        <li><Clock3 size={14} /> {x.provisionalCheckout && !b.largeParty && !b.quoteRequested ? provisionalCopy(lang).flow[2].title : D.replyIn24}</li>
         <li><CalendarDays size={14} /> {D.availCutoff(x.leadDays, x.cutoffTime)}</li>
       </ul>
     </div>

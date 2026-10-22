@@ -1,5 +1,6 @@
 "use client";
 import "./provisional-consent.css";
+import { QuoteRequestSwitch, quoteCopy } from "./quote-request-switch";
 
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
@@ -49,8 +50,9 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   const [needDate, setNeedDate] = useState(false);
   const started = useRef(false);
   const attempt = useRef<{ signature: string; id: string } | null>(null);
-  const provisional = !!x?.provisionalCheckout && !b?.largeParty;
+  const provisional = !!x?.provisionalCheckout && !b?.largeParty && !b?.quoteRequested;
   const P = provisionalCopy(lang);
+  const Q = quoteCopy[lang];
 
   /** One "form started" event per page view, on the first focus inside the form. */
   const markStarted = () => {
@@ -82,6 +84,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
       if (x?.interpreter !== false) data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
       if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${[plans.length ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : "", D.estimateFor(b.guestsNumber)].filter(Boolean).join(", ")})`;
+      if (b.quoteRequested || (x?.provisionalCheckout && b.largeParty)) { data.message = `[Custom quote: children / special arrangements]\n${data.message ?? ""}`; delete data.estimate; }
       delete data.date; delete data.guests; delete data.time;
     }
     setStatus("sending");
@@ -180,6 +183,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
 
   return (
     <form className={card ? "bk-form" : "enquiry-form"} method="post" action={provisional ? "/api/experience-checkout" : "/api/contact"} onSubmit={submit} onFocusCapture={markStarted} noValidate={false} data-clarity-mask="True">
+      <QuoteRequestSwitch lang={lang} />
       {card && needDate && !b?.date && <p className="form-error" role="alert">{F.chooseDateFirst}</p>}
       {experience && !card && (
         <p className="form-context">
@@ -287,10 +291,10 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       )}
 
       <label className="form-row">
-        <span>{trade ? F.messageTrade : b ? (x?.notesLabel ?? F.notesXp) : F.message}</span>
+        <span>{b?.quoteRequested ? Q.details : trade ? F.messageTrade : b ? (x?.notesLabel ?? F.notesXp) : F.message}</span>
         <textarea
-          name="message" required={!b} rows={card ? 3 : b ? 4 : 7} maxLength={4000}
-          placeholder={trade ? F.messageTradeHint : b ? (x?.notesHint ?? F.notesXpHint) : F.messageHint}
+          name="message" required={!b || !!b.quoteRequested} rows={card ? 3 : b ? 4 : 7} maxLength={4000}
+          placeholder={b?.quoteRequested ? Q.details : trade ? F.messageTradeHint : b ? (x?.notesHint ?? F.notesXpHint) : F.messageHint}
         />
       </label>
 
@@ -313,12 +317,12 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{P.standard}</span></label>
           {(EXPERIENCE_PRODUCTS[x.slug].adultOnly || EXPERIENCE_PRODUCTS[x.slug].groupPricing) && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{checkoutAdultCopy(lang, x.slug)}</span></label>}
           <label className="form-check"><input name="checkout_consent" type="checkbox" required /><span>{P.consent} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{T.footerTerms}</a></span></label>
-          <p><a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a></p>
+
         </div>
       )}
       <div className="enquiry-actions">
         <button type="submit" className={card ? "bk-cta" : "contact-cta"} disabled={status === "sending"}>
-          {status === "sending" ? F.sending : provisional ? P.cta : b ? (x?.provisionalCheckout ? F.sendRequest : x?.ctaLabel ?? F.sendRequest) : F.send} <ArrowRight size={15} />
+          {status === "sending" ? F.sending : provisional ? P.cta : b ? (x?.provisionalCheckout ? Q.heading : x?.ctaLabel ?? F.sendRequest) : F.send} <ArrowRight size={15} />
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>
