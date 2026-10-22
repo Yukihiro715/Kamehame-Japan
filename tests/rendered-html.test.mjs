@@ -526,7 +526,7 @@ test("private spa preview has no invented price or public address", async () => 
   assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));
 });
 
-test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seven menus, no prices, demo-only form", async () => {
+test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seven menus, the owner's pricing, demo-only form", async () => {
   const path = "/previews/home-cooked-dinner-f4bc9d7306/";
   const res = await render(path);
   assert.equal(res.status, 200, path);
@@ -539,8 +539,10 @@ test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seve
   assert.equal((html.match(/name="menu-pick"/g) || []).length, 7, "seven menu cards with radio semantics");
   for (const m of ["Japanese Curry Rice", "Chicken Karaage", "Japanese Hamburg Steak", "Nikujaga", "Grilled Fish", "Gyoza", "Okonomiyaki"]) assert.ok(text.includes(m), `menu ${m}`);
   assert.ok(html.includes('class="ofk-track"') && text.includes("Individual cook selection is not available") && text.includes("Sample profile"), "cook carousel, no selection, sample profiles");
-  assert.doesNotMatch(text, /¥\s?\d|From ¥|\d{1,3},\d{3}\s?yen|\bUSD\s?\d/i, "no price anywhere: none is agreed");
-  assert.ok(text.includes("Ingredients are included in your agreed prepaid price") && !/pay (the )?(cook|groceries|ingredients) in cash|cash (settlement|on arrival)/i.test(text), "ingredients prepaid, no cash settlement wording");
+  // The owner's pricing of 2026-10-22: a flat price for two, per-guest additions, children under 10, the 23 wards, prepaid with a 3-day cancellation window.
+  for (const s of ["¥35,200", "¥41,200", "¥47,200", "¥55,200", "¥63,200", "¥6,000", "¥8,000", "¥3,000", "Tokyo 23 wards", "Free cancellation until 3 days before"]) assert.ok(text.includes(s), `pricing: ${s}`);
+  assert.doesNotMatch(text, /\bUSD\s?\d/, "yen only in the server HTML");
+  assert.ok(text.includes("Ingredients are included in your prepaid price") && !/pay (the )?(cook|groceries|ingredients) in cash|cash (settlement|on arrival)/i.test(text), "ingredients prepaid, no cash settlement wording");
   assert.ok(html.includes('name="permission"') && html.includes('name="allergens"') && html.includes('name="equipment"') && html.includes('name="arrangements"') && html.includes('name="menu"'), "the form's condition, allergy, equipment, arrangement and menu fields");
   assert.ok(!html.includes('action="/api/contact"') && !html.includes("/api/experience-checkout") && !html.includes("Request received"), "the form posts nowhere and never claims a request was received");
   assert.ok(!/\bYumi\b|\bKeiko\b|\bAki\b|reviews/.test(text) || true, "no named or reviewed cooks");

@@ -4,9 +4,12 @@
 // tidies up in the kitchen of the guest's accommodation: about two hours
 // from arrival to clean-up, one menu per group chosen from seven. Content
 // follows the implementation brief of 2026-10-22 (v1.0). Nothing here is a
-// catalog product: no price, area, party limit or cancellation term is
-// published, because none is agreed yet; the page says what is confirmed
-// with a request. Photos are AI-generated placeholders (asset manifest in
+// catalog product. Price, area and cancellation terms were set by the owner
+// on 2026-10-22 (see OFUKURO_PRICE): ¥35,200 tax included for up to two
+// guests, +¥6,000 for the third and fourth guest, +¥8,000 from the fifth,
+// children under 10 +¥3,000 each beyond the first two; Tokyo's 23 wards;
+// prepaid, free cancellation until 3 days before. The form still posts
+// nowhere. Photos are AI-generated placeholders (asset manifest in
 // docs/PLACEHOLDER_PHOTOS.md); the cook profiles are fictional samples with
 // no names. The page lives at /previews/home-cooked-dinner-f4bc9d7306/
 // (unlisted, noindex), English only for now.
@@ -35,12 +38,41 @@ export const OFUKURO_MENUS: OfukuroMenu[] = [
 
 export const menuById = (id: string | null | undefined) => OFUKURO_MENUS.find((m) => m.id === id) ?? null;
 
+/** Owner's pricing of 2026-10-22, tax and ingredients included: a flat price
+ *  for up to two guests (adults or children), then per additional guest. */
+export const OFUKURO_PRICE = {
+  /** For up to two guests, tax included. */
+  base: 35200,
+  baseCovers: 2,
+  /** Third and fourth guest (ages 10 and over). */
+  extraAdult: 6000,
+  /** Fifth guest onwards (ages 10 and over). */
+  extraAdultFromFifth: 8000,
+  /** Each child under 10 beyond the first two guests. */
+  child: 3000,
+} as const;
+
+/** Whole-group total for a party: adults fill the base two places first,
+ *  then children, so one adult with one child pays the base price. */
+export function ofukuroQuote(adults: number, children: number): number {
+  const a = Math.max(0, Math.floor(adults || 0)), c = Math.max(0, Math.floor(children || 0));
+  let total: number = OFUKURO_PRICE.base, position = 0;
+  for (let i = 0; i < a; i++) { position++; if (position > OFUKURO_PRICE.baseCovers) total += position >= 5 ? OFUKURO_PRICE.extraAdultFromFifth : OFUKURO_PRICE.extraAdult; }
+  for (let i = 0; i < c; i++) { position++; if (position > OFUKURO_PRICE.baseCovers) total += OFUKURO_PRICE.child; }
+  return total;
+}
+
+export const yenOf = (n: number) => `¥${n.toLocaleString("en-US")}`;
+
+/** Reference table: parties of adults, one to six. */
+export const OFUKURO_PRICE_ROWS = [1, 2, 3, 4, 5, 6].map((n) => ({ party: n, total: ofukuroQuote(n, 0) }));
+
 export const OFUKURO = {
   title: "Ofukuro Dinner",
   subtitle: "Japanese Home Cooking, Made for You",
   lede: "Enjoy a comforting Japanese home-cooked meal, prepared by a local cook in the kitchen at your accommodation.",
   note: "A usable kitchen is required. Your cook is matched to your date, area and menu.",
-  conditions: ["At your accommodation", "About 2 hours", "One menu per group", "Ingredients included"],
+  conditions: ["At your accommodation · Tokyo 23 wards", "About 2 hours", "One menu per group", "Ingredients included"],
   intro: {
     heading: "A taste of everyday Japan",
     body: [
@@ -53,7 +85,16 @@ export const OFUKURO = {
     body: "Ingredients and shopping, cooking at your accommodation, serving the meal, and cleaning the kitchen area and equipment used by your cook.",
     time: "Allow around two hours for the visit, including cooking, conversation, serving and cleanup. Shopping takes place before arrival.",
     items: ["Ingredients and shopping before the visit", "Cooking at your accommodation", "Serving the meal", "Cleaning the kitchen area and the equipment your cook used"],
-    price: "The price for your group, and the conditions, are confirmed with your request before any payment. Ingredients are included in the agreed prepaid price: there is no cash payment for groceries on the day.",
+    price: "¥35,200 for up to two guests, tax and ingredients included; ¥6,000 for the third and fourth guest and ¥8,000 for each guest from the fifth; children under 10 beyond the first two guests ¥3,000 each. The total for your group is confirmed with your request and paid in advance: there is no cash payment for groceries on the day.",
+  },
+  pricing: {
+    heading: "Price",
+    lede: "One price for your group, tax and ingredients included. The first two guests, adults or children, are covered by the base price.",
+    notes: [
+      "Children under 10 beyond the first two guests: ¥3,000 each. Children aged 10 and over count as adults.",
+      "Tokyo's 23 wards, with the cook's travel included. Accommodation outside the 23 wards: ask when you request.",
+      "Prepaid once the arrangements are confirmed. Free cancellation until 3 days before your date (Japan time); 2 days before, half the price; from the day before, including no-shows, the full price. If we cannot arrange a cook, anything paid is refunded in full.",
+    ],
   },
   flow: [
     { time: "Before the visit", cook: "Buys the ingredients at a nearby supermarket", guest: "Groceries are included in the prepaid price" },
@@ -84,12 +125,15 @@ export const OFUKURO = {
   faq: [
     { q: "Can I choose my cook?", a: "We match a cook to your date, area and menu. You cannot select a specific cook." },
     { q: "Do I need a kitchen?", a: "Yes. Your accommodation must have a usable kitchen and allow a visiting cook. If you are unsure about the facilities, tell us in your request." },
-    { q: "Are ingredients included?", a: "Yes. Ingredients are included in your agreed prepaid price. There is no separate cash payment for groceries on the day." },
+    { q: "How much does it cost?", a: "¥35,200 for up to two guests, tax and ingredients included. The third and fourth guest add ¥6,000 each, and each guest from the fifth adds ¥8,000. Children under 10 beyond the first two guests add ¥3,000 each; one adult with one child pays the base price. The total for your group is shown in the request form and confirmed before payment." },
+    { q: "Are ingredients included?", a: "Yes. Ingredients are included in your prepaid price. There is no separate cash payment for groceries on the day." },
+    { q: "Which areas do you cover?", a: "Accommodation in Tokyo's 23 wards, with the cook's travel included in the price. If you are staying outside the 23 wards, ask when you request and we will tell you whether we can arrange it." },
     { q: "Can you accommodate allergies or dietary needs?", a: "Please tell us before booking. We will check with the cook before confirming whether your request can be accommodated." },
-    { q: "Can children join?", a: "Please include each child’s age and any food needs in your request. We will confirm suitable portions and any applicable pricing before payment." },
+    { q: "Can children join?", a: "Yes. Include each child’s age and any food needs in your request. Children under 10 are ¥3,000 each beyond the first two guests; children aged 10 and over count as adults. We confirm portions before payment." },
     { q: "Will my cook speak English?", a: "Language skills vary. Tell us your communication needs in advance so we can confirm what support is available." },
     { q: "Is this a cooking class?", a: "This is a home-cooked dinner experience. You are welcome to watch and chat, but a structured hands-on lesson is not included." },
-    { q: "How do payment and confirmation work?", a: "Send a request first. We check the arrangements with a cook, then confirm the price and conditions with you and send a prepayment link. Your booking is not confirmed until we say so." },
+    { q: "How do payment and confirmation work?", a: "Send a request first. We check the arrangements with a cook, then confirm the total and the conditions with you and send a prepayment link. Your booking is confirmed when your payment arrives, and cancellation terms start then." },
+    { q: "What is the cancellation policy?", a: "Free cancellation until 3 days before your date (Japan time). 2 days before, half the price; from the day before, including no-shows, the full price, because the ingredients have been bought. If we cannot arrange a cook, anything paid is refunded in full." },
   ],
   /** The states a live request moves through; shown with the form so "paid" and "confirmed" are never read as the same thing. */
   states: ["Request received", "Checking arrangements", "Awaiting payment", "Paid", "Booking confirmed"],

@@ -9,15 +9,15 @@ import { OfukuroHeroCta, OfukuroMenuPicker, OfukuroMenuProvider, OfukuroSticky }
 import { OfukuroCooks } from "@/components/site/ofukuro-cooks";
 import { OfukuroForm } from "@/components/site/ofukuro-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { OFUKURO } from "@/lib/ofukuro-dinner";
+import { OFUKURO, OFUKURO_PRICE_ROWS, yenOf } from "@/lib/ofukuro-dinner";
 import { t } from "@/lib/i18n";
 
 // Ofukuro Dinner — unlisted preview built on the experience detail-page
 // system (app/[lang]/[collection]/[slug]/page.tsx): same header, footer,
 // breadcrumbs, preview banner, hero, chips, side card, sections, FAQ and
 // sticky bar. Not in the catalog, the sitemap, any listing or the
-// navigation; noindex. No price, area, party limit or cancellation term is
-// published (none is agreed); the form is not connected (lib/ofukuro-dinner.ts).
+// navigation; noindex. Price, area and cancellation terms are the owner's
+// of 2026-10-22 (lib/ofukuro-dinner.ts); the form is still not connected.
 
 export const metadata: Metadata = {
   title: `${OFUKURO.title} — ${OFUKURO.subtitle} | KAMEHAME JAPAN — Concept preview`,
@@ -68,10 +68,12 @@ export default function OfukuroDinnerPreviewPage() {
         <div className="xp-cols">
           <aside className="xp-side">
             <div className="bk-card" id="booking">
+              <div className="bk-price"><small>{D.fromPrice}</small> <b>{yenOf(OFUKURO_PRICE_ROWS[1].total)}</b> <small>{D.minPriceNote(2)}</small></div>
+              <p className="xp-note" style={{ margin: 0 }}>Tax and ingredients included · third and fourth guest +¥6,000 each, from the fifth +¥8,000 · children under 10 +¥3,000</p>
               <p className="xp-lede" style={{ margin: 0 }}>{x.lede}</p>
               <p className="xp-note" style={{ margin: 0 }}>{x.note}</p>
               <OfukuroHeroCta />
-              <p className="xp-note" style={{ margin: 0 }}>Price and conditions are confirmed with your request, before any payment.</p>
+              <p className="xp-note" style={{ margin: 0 }}>The total for your group is confirmed with your request, before any payment.</p>
             </div>
           </aside>
 
@@ -103,11 +105,20 @@ export default function OfukuroDinnerPreviewPage() {
               <div className="xp-included">
                 <div><ul className="check-list">{x.included.items.map((i) => <li key={i}><span className="tick">✓</span><span>{i}</span></li>)}</ul></div>
                 <div>
-                  <h3>Price</h3>
+                  <h3>{x.pricing.heading}</h3>
                   <p className="xp-note">{x.included.price}</p>
                   <p className="xp-note">{x.included.time}</p>
                 </div>
               </div>
+              <p className="xp-lede" style={{ marginTop: 24 }}>{x.pricing.lede}</p>
+              <table className="xp-pricing">
+                <thead><tr><th>{D.partyCol}</th><th>{D.totalCol}</th><th>{D.perPersonCol}</th></tr></thead>
+                <tbody>
+                  {OFUKURO_PRICE_ROWS.map((r) => <tr key={r.party}><td>{D.estimateFor(r.party)}</td><td><b>{yenOf(r.total)}</b></td><td>{yenOf(Math.round(r.total / r.party))}</td></tr>)}
+                </tbody>
+              </table>
+              <p className="xp-pricing-note">Adults, tax and ingredients included. Larger groups: ¥8,000 for each guest from the fifth.</p>
+              <ul className="check-list muted">{x.pricing.notes.map((n) => <li key={n}><span className="tick">✓</span><span>{n}</span></li>)}</ul>
             </section>
 
             {/* 5. The visit */}
@@ -149,13 +160,13 @@ export default function OfukuroDinnerPreviewPage() {
             {/* 8. Request form */}
             <section className="xp-section xp-request" id="request">
               <h2 className="xp-sub" id="request-form">Request your dinner</h2>
-              <p className="xp-note">Four short steps. We check the arrangements with a cook, then confirm the price and the conditions with you before any payment.</p>
+              <p className="xp-note">Four short steps. We check the arrangements with a cook, then confirm the total and the conditions with you before any payment.</p>
               <OfukuroForm fallbackEmail={CONTACT_EMAIL} />
             </section>
 
             <section className="xp-section">
               <ul className="check-list muted">
-                <li><span className="tick"><Sparkles size={14} /></span><span>Preview only: not listed on the site, not in the sitemap, not indexed. Price, areas, group limits, cancellation terms and payment are set before publication.</span></li>
+                <li><span className="tick"><Sparkles size={14} /></span><span>Preview only: not listed on the site, not in the sitemap, not indexed. The request form is not connected yet; payment and the cook roster are set up before publication.</span></li>
               </ul>
             </section>
           </div>

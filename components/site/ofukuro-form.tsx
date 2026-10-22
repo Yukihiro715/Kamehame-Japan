@@ -6,7 +6,7 @@ import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { GuestStepper } from "@/components/site/guest-stepper";
 import { useOfukuroMenu } from "@/components/site/ofukuro-menu";
-import { menuById, OFUKURO, OFUKURO_MENUS } from "@/lib/ofukuro-dinner";
+import { menuById, OFUKURO, OFUKURO_MENUS, ofukuroQuote, yenOf } from "@/lib/ofukuro-dinner";
 
 /** The Ofukuro Dinner request form, in four steps: date and group, the menu
  *  (carried over from the page), the conditions we check (kitchen,
@@ -32,6 +32,7 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
   const [error, setError] = useState<string | null>(null);
   const min = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 3); return d.toISOString().slice(0, 10); }, []);
   const kids = Number(children) || 0;
+  const total = ofukuroQuote(Number(adults) || 0, kids);
 
   function preview(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,7 +45,8 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
     setSummary([
       { label: "Date and time", value: `${one("date") || "—"} · ${label(TIMES, one("time"))}` },
       { label: "Area", value: one("area") || "—" },
-      { label: "Group", value: `${adults} adult(s)${kids ? `, ${kids} child(ren) (ages: ${one("ages") || "—"})` : ""}` },
+      { label: "Group", value: `${adults} adult(s)${kids ? `, ${kids} child(ren) under 10 (ages: ${one("ages") || "—"})` : ""}` },
+      { label: "Estimated total", value: `${yenOf(total)} · tax and ingredients included · confirmed before payment` },
       { label: "Menu", value: menu.name },
       { label: "Visiting cook allowed", value: label(PERMISSION, one("permission")) },
       { label: "Kitchen equipment", value: many("equipment") || "Not stated" },
@@ -82,16 +84,17 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
               <GuestStepper id="ofk-adults" value={adults} min={1} max={12} onChange={setAdults} label={(n) => `${n} adult${n === 1 ? "" : "s"}`} decLabel="Fewer adults" incLabel="More adults" />
             </div>
             <div className="field">
-              <label htmlFor="ofk-children"><span>Children</span></label>
+              <label htmlFor="ofk-children"><span>Children under 10</span></label>
               <GuestStepper id="ofk-children" value={children} min={0} max={8} onChange={setChildren} label={(n) => `${n} child${n === 1 ? "" : "ren"}`} decLabel="Fewer children" incLabel="More children" />
             </div>
           </div>
           {kids > 0 && (
             <label className="form-row"><span>Children&apos;s ages</span>
               <input name="ages" type="text" required maxLength={80} placeholder="e.g. 4 and 9" />
-              <small className="form-hint">Portions and any children&apos;s pricing are confirmed with you before payment.</small>
+              <small className="form-hint">Children aged 10 and over count as adults. Portions are confirmed with you before payment.</small>
             </label>
           )}
+          <p className="form-estimate"><span>Estimated total for your group</span><b>{yenOf(total)}</b><small>Tax and ingredients included · confirmed with your request, before any payment</small></p>
         </fieldset>
 
         <fieldset className="form-step" id="ofk-step-menu">

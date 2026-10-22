@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Check } from "lucide-react";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
-import { menuById, OFUKURO_MENUS } from "@/lib/ofukuro-dinner";
+import { menuById, OFUKURO_MENUS, OFUKURO_PRICE, yenOf } from "@/lib/ofukuro-dinner";
 
 /** One menu per group, chosen on the page and carried into the request form.
  *  The choice lives in this context and in sessionStorage, so going back to
@@ -64,14 +64,14 @@ export function OfukuroHeroCta({ className = "bk-cta" }: { className?: string })
   );
 }
 
-/** The phone's bottom bar follows the same choice; no price is shown because none is agreed. */
+/** The phone's bottom bar follows the same choice and shows the base price. */
 export function OfukuroSticky() {
   const { selected } = useOfukuroMenu();
   const menu = menuById(selected);
   return (
     <StickyRequestBar
-      price={menu ? menu.name : "Seven menus"}
-      condition={menu ? "Selected for your group" : "Choose one for your group"}
+      price={`${yenOf(OFUKURO_PRICE.base)}`}
+      condition={menu ? `Up to 2 guests · ${menu.name}` : "Up to 2 guests · choose one of seven menus"}
       label={menu ? "Continue to request" : "Choose your menu"}
       lang="en" watchHero="#booking" watchTarget={menu ? "#request-form" : "#menus"}
     />
