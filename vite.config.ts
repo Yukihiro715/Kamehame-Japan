@@ -20,6 +20,15 @@ const localBindingConfig = {
   // Workers AI: translates what a visitor typed into Japanese for the team's
   // notification (lib/translate.ts). No key needed; the free tier covers it.
   ai: { binding: "AI" },
+  // Checkout readiness (lib/experience-checkout.ts): a cron asks the ledger
+  // every five minutes and publishes the answer to KV, so page renders never
+  // wait for Google Apps Script. The namespace is created by the deploy
+  // workflow, which passes its id in READY_STATE_KV_ID; without it the
+  // binding is omitted and pages fall back to the in-request cache.
+  triggers: { crons: ["*/5 * * * *"] },
+  kv_namespaces: process.env.READY_STATE_KV_ID
+    ? [{ binding: "READY_STATE", id: process.env.READY_STATE_KV_ID }]
+    : [],
   // ARCHIVE_TO (optional secret) would add a second recipient to the team
   // notification; the booking ledger (lib/ledger.ts) is the record instead.
   d1_databases: d1

@@ -23,6 +23,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Checkout readiness is published to KV by a cron (lib/experience-checkout.ts).
+      # Create the namespace once and hand its id to the build; if the token
+      # cannot manage KV, the build proceeds without the binding (pages then
+      # fall back to the per-request cache) and this step's log says so.
+      - name: Ensure the READY_STATE KV namespace
+        continue-on-error: true
+        run: |
+          set -u
+          id=$(npx wrangler kv namespace list 2>/dev/null | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const l=JSON.parse(s);const n=l.find(x=>/READY_STATE$/.test(x.title));console.log(n?n.id:"")}catch{console.log("")}})')
+          if [ -z "$id" ]; then
+            out=$(npx wrangler kv namespace create READY_STATE 2>&1) || { echo "could not create the namespace:"; echo "$out"; exit 1; }
+            id=$(echo "$out" | grep -oE '[0-9a-f]{32}' | head -1)
+          fi
+          [ -n "$id" ] && echo "READY_STATE_KV_ID=$id" >> "$GITHUB_ENV" && echo "READY_STATE namespace: $id" || { echo "no namespace id"; exit 1; }
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
+
       - name: Build
         run: npm run build
 

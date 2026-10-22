@@ -1,10 +1,13 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import { publishCheckoutReady, type ReadyStateKv } from "../lib/experience-checkout";
 
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
+  /** Checkout readiness published by the cron (vite.config.ts kv_namespaces); absent until the namespace exists. */
+  READY_STATE?: ReadyStateKv;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -150,4 +153,12 @@ const worker = {
   },
 };
 
-export default worker;
+const scheduled = {
+  /** Every five minutes (vite.config.ts triggers): ask the ledger whether
+   *  checkout is ready and publish the answer to KV for the page renders. */
+  async scheduled(_event: unknown, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil(publishCheckoutReady(env as unknown as Parameters<typeof publishCheckoutReady>[0]));
+  },
+};
+
+export default { ...worker, ...scheduled };

@@ -46,3 +46,23 @@ test("a shared Cache API answer saves the cold wait, and the result is written b
     assert.equal(calls, 1, "no ledger call: the shared answer was fresh");
   } finally { delete globalThis.caches; }
 });
+
+test("a published KV answer is used without any ledger call, and the publisher writes it", async (t) => {
+  let calls = 0; const kv = new Map();
+  const READY_STATE = { get: async (k) => kv.has(k) ? JSON.parse(kv.get(k)) : null, put: async (k, v) => { kv.set(k, v); } };
+  t.mock.method(globalThis, "fetch", async () => { calls++; return Response.json({ ok: true, version: EXPERIENCE_POLICY_VERSION, ready: true }); });
+  m.resetCheckoutReadyCache();
+  const published = await m.publishCheckoutReady({ ...env, READY_STATE });
+  assert.equal(published.value, true); assert.equal(calls, 1);
+  assert.equal(JSON.parse(kv.get(m.READY_STATE_KEY)).ready, true, "written to KV");
+  m.resetCheckoutReadyCache();
+  assert.equal(await m.checkoutReadyCached({ ...env, READY_STATE }, Date.now()), true, "a page reads the published answer");
+  assert.equal(calls, 1, "no ledger call from the page");
+  // the env switch wins immediately over a published "ready"
+  assert.equal(await m.checkoutReadyCached({ ...env, READY_STATE, EXPERIENCE_CHECKOUT_ENABLED: "false" }, Date.now()), false);
+  // a published answer older than 30 minutes is ignored (the cron has stopped): the fallback asks the ledger
+  kv.set(m.READY_STATE_KEY, JSON.stringify({ ready: true, at: Date.now() - 31 * 60_000, version: EXPERIENCE_POLICY_VERSION }));
+  m.resetCheckoutReadyCache();
+  assert.equal(await m.checkoutReadyCached({ ...env, READY_STATE }, Date.now()), true);
+  assert.equal(calls, 2, "stale publication: one fallback ledger call");
+});

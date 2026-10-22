@@ -12,6 +12,12 @@ export interface ExperienceCheckoutEnv {
   STRIPE_EXPERIENCE_WEBHOOK_SECRET?: string;
   GOLF_AUTOMATION_URL?: string;
   GOLF_AUTOMATION_TOKEN?: string;
+  /** KV namespace the cron publishes the readiness answer to (worker/index.ts scheduled). */
+  READY_STATE?: ReadyStateKv;
+}
+export interface ReadyStateKv {
+  get(key: string, type: "json"): Promise<unknown>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 }
 export interface ExperienceOrder {
   requestId: string; slug: string; title: string; name: string; email: string; message: string; lang: Lang;
@@ -52,19 +58,45 @@ export async function checkoutReady(env: ExperienceCheckoutEnv, timeoutMs = 2500
 }
 
 /** The page render's view of readiness. The ledger health check is a round
- *  trip to Google Apps Script (2–3 s), so pages must not pay for it on every
- *  request. Two layers: the answer is kept in this isolate's memory and in
- *  the data centre's Cache API (shared by every isolate there) for
- *  READY_TTL_MS, and refreshed in the background once stale
- *  (stale-while-revalidate). Only a data centre with no answer at all waits,
- *  and at most READY_TIMEOUT_MS. The checkout API itself still asks the
- *  ledger fresh before taking a payment (app/api/experience-checkout). */
+ *  trip to Google Apps Script (2–3 s), so page renders never make it:
+ *
+ *  1. A cron (worker/index.ts, every five minutes) asks the ledger and
+ *     publishes the answer to KV (publishCheckoutReady); the readiness API's
+ *     GET does the same on demand. Pages read that key, kept in memory for
+ *     MEMO_MS, and trust it while it is younger than READY_STATE_MAX_AGE_MS.
+ *  2. Without KV (namespace not created yet) or with a stale key, the older
+ *     per-request cache applies: the answer kept in this isolate and in the
+ *     data centre's Cache API for READY_TTL_MS, refreshed in the background
+ *     once stale; only a data centre with no answer at all waits, and at
+ *     most READY_TIMEOUT_MS.
+ *
+ *  The checkout API itself still asks the ledger fresh before taking a
+ *  payment (app/api/experience-checkout). */
+export const READY_STATE_KEY = "experience-checkout-ready";
+const READY_STATE_MAX_AGE_MS = 30 * 60_000;
+const MEMO_MS = 60_000;
 const READY_TTL_MS = 5 * 60_000;
 const READY_TIMEOUT_MS = 6_000;
 const READY_CACHE_URL = "https://kamehame-japan.com/__cache/experience-checkout-ready";
 type ReadyEntry = { value: boolean; at: number };
 let readyCache: (ReadyEntry & { refreshing?: Promise<boolean> }) | null = null;
-export function resetCheckoutReadyCache() { readyCache = null; }
+let memo: ReadyEntry | null = null;
+export function resetCheckoutReadyCache() { readyCache = null; memo = null; }
+
+/** Ask the ledger now and publish the answer to KV (cron, and the readiness API's GET). */
+export async function publishCheckoutReady(env: ExperienceCheckoutEnv): Promise<ReadyEntry> {
+  const entry = { value: await checkoutReady(env), at: Date.now() };
+  try { await env.READY_STATE?.put(READY_STATE_KEY, JSON.stringify({ ready: entry.value, at: entry.at, version: EXPERIENCE_POLICY_VERSION }), { expirationTtl: 24 * 3600 }); } catch { /* the cron retries in five minutes */ }
+  memo = entry;
+  return entry;
+}
+async function readPublished(env: ExperienceCheckoutEnv, now: number): Promise<ReadyEntry | null> {
+  try {
+    const j = await env.READY_STATE?.get(READY_STATE_KEY, "json") as { ready?: unknown; at?: unknown; version?: unknown } | null | undefined;
+    if (!j || typeof j.at !== "number" || j.version !== EXPERIENCE_POLICY_VERSION || now - j.at > READY_STATE_MAX_AGE_MS) return null;
+    return { value: j.ready === true, at: j.at };
+  } catch { return null; }
+}
 const sharedCache = () => (globalThis as { caches?: { default?: { match(u: string): Promise<Response | undefined>; put(u: string, r: Response): Promise<void> } } }).caches?.default;
 async function readShared(): Promise<ReadyEntry | null> {
   try {
@@ -82,6 +114,15 @@ async function writeShared(entry: ReadyEntry) {
   } catch { /* the in-memory layer still applies */ }
 }
 export async function checkoutReadyCached(env: ExperienceCheckoutEnv, now = Date.now()): Promise<boolean> {
+  // The env switch is immediate; the ledger's state comes from the published answer.
+  if (!checkoutConfigured(env)) return false;
+  if (memo && now - memo.at < MEMO_MS) return memo.value;
+  const published = await readPublished(env, now);
+  if (published) { memo = { value: published.value, at: now }; return published.value; }
+  return checkoutReadyInRequest(env, now);
+}
+/** Fallback while nothing is published: the per-request cache described above. */
+async function checkoutReadyInRequest(env: ExperienceCheckoutEnv, now: number): Promise<boolean> {
   const fresh = (e: ReadyEntry | null) => !!e && now - e.at < READY_TTL_MS;
   const mem = readyCache;
   if (mem && fresh(mem)) return mem.value;

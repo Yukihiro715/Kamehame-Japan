@@ -1,7 +1,8 @@
-import { checkoutReady, openExperienceCheckout, parseExperienceOrder } from "@/lib/experience-checkout";
+import { checkoutReady, openExperienceCheckout, parseExperienceOrder, publishCheckoutReady } from "@/lib/experience-checkout";
 const headers = { "cache-control": "no-store" };
+/** A fresh answer from the ledger, published to KV for the page renders (the cron does the same every five minutes). */
 export async function GET() {
-  try { const { env } = await import("cloudflare:workers"); return Response.json({ ready: await checkoutReady(env) }, { headers }); }
+  try { const { env } = await import("cloudflare:workers"); const { value, at } = await publishCheckoutReady(env); return Response.json({ ready: value, at, published: !!env.READY_STATE }, { headers }); }
   catch { return Response.json({ ready: false }, { headers }); }
 }
 export async function POST(request: Request) {

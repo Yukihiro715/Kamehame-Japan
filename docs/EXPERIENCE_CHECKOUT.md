@@ -66,3 +66,4 @@
 - 利用者都合の取消条件は表示の既存規定を維持し、支払い時点から適用。手配不可かつ代替案に合意できない場合の全額返金を別途明示。
 - 停止時は `EXPERIENCE_CHECKOUT_ENABLED=false`。新規チェックアウトのみ停止し、既に発生した決済通知と受付メールの処理は継続する。
 - 体験ページの表示は、台帳の `experience_health` 応答をWorkerのアイソレートごとに5分間キャッシュする（`lib/experience-checkout.ts` `checkoutReadyCached`。期限切れ後は前回の答えを返しつつ裏で更新）。2026-10-22まではページ表示のたびにApps Scriptへ往復していたため、ラーメン・筆文字の詳細ページの応答が2〜3秒かかっていた。決済API（`/api/experience-checkout`）は支払い前に毎回あらためて確認する。停止（`EXPERIENCE_CHECKOUT_ENABLED=false`）はデプロイで即時反映、台帳側の `ready` 変更は最長5分でページに反映。
+- 2026-10-23: 準備状態の確認は「別経路」に変更。Workerのcron（5分ごと、`vite.config.ts` の `triggers`）が台帳の `experience_health` を確認し、結果をKV（バインディング `READY_STATE`、キー `experience-checkout-ready`）に公開する。ページ表示はそのKVを読むだけ（1分メモ化）で、Apps Scriptへは一切往復しない。`/api/experience-checkout` のGETも同じ確認と公開を即時に行う（デプロイ直後の初期化や手動更新に使う）。KVの値が30分より古い（cronが止まっている）場合や、KVがまだ無い場合は、従来のリクエスト内キャッシュに戻る。KVネームスペースはデプロイワークフローが `wrangler kv namespace create READY_STATE` で一度だけ作成し、そのidをビルドに渡す。`EXPERIENCE_CHECKOUT_ENABLED=false` は従来どおりデプロイで即時反映。

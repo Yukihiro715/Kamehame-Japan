@@ -34,6 +34,8 @@ declare module "cloudflare:workers" {
     /** Additional KAMEHAME endpoint secret; preserves the existing Stripe secret. */
     STRIPE_EXPERIENCE_WEBHOOK_SECRET?: string;
     DB?: unknown;
+    /** KV namespace the readiness cron publishes to (vite.config.ts); absent until the deploy workflow has created it. */
+    READY_STATE?: { get(key: string, type: "json"): Promise<unknown>; put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void> };
     /** Workers AI binding (translation for the team's notification). */
     AI?: { run(model: string, input: Record<string, unknown>): Promise<unknown> };
   };
