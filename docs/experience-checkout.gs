@@ -67,11 +67,13 @@ function experienceAction_(p) {
 }
 function writeExperienceLedger_(j) {
   var o=j.order,paid=!!j.paidAt;
+  // Match the existing ledger's strict dropdown labels, not website locale codes.
+  var language={en:'英語',ja:'日本語',es:'スペイン語',fr:'フランス語','zh-tw':'繁体字中国語'}[o.lang]||'その他';
   experienceUpsert_('予約一覧',j.id,{
-    'お客様名／窓口':o.name,'体験カテゴリ':o.slug==='shibuya-ramen-class'?'料理・グルメ':o.slug==='kanji-name-calligraphy'?'漢字・書道':'剣道・武道',
+    'お客様名／窓口':o.name,'体験カテゴリ':o.slug==='shibuya-ramen-class'?'料理・グルメ':o.slug==='kanji-name-calligraphy'?'漢字・書道':'その他',
     '対応ステータス':paid?'入金済・手配待ち':'仮予約受領','体験日':new Date(o.date+'T00:00:00+09:00'),'人数':o.guests,
     '支払い状況':paid?'入金済':'未請求','次のアクション':paid?'施設に空き確認 → 予約確定連絡。不可なら代替案／合意できなければ全額返金':'決済待ち。予約未確定・施設への手配は入金確認後',
-    '担当':'ゆきひろ','受付日':new Date(j.createdAt),'受付経路':'Webフォーム','対応言語':o.lang,'メール':o.email,
+    '担当':'ゆきひろ','受付日':new Date(j.createdAt),'受付経路':'Webフォーム','対応言語':language,'メール':o.email,
     'サイト概算（税込）':o.amount,'提示額（税込）':o.amount,'入金額':paid?o.amount:'','支払日':paid?new Date(j.paidAt):'',
     '確認メモ':'体験決済管理参照。予約未確定。実参加'+o.guests+'名／請求'+o.quantity+'名分。規定版 '+o.policyVersion+'。GAS直接登録・Gmailからの再登録不要。'
   },paid?{'対応ステータス':['仮予約受領','決済案内準備','支払待ち'],'支払い状況':['未請求','入金未確認'],'次のアクション':['決済待ち。予約未確定・施設への手配は入金確認後']}:undefined);

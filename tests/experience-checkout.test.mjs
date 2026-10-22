@@ -173,6 +173,29 @@ test('ledger vacancies respect manual input, preserve formulas and reject duplic
   t.values[1][0]='same';t.values[2][0]='same';
   assert.throws(()=>c.experienceLedgerSlot_(t,'same',{}),/重複/);
 });
+test('experience ledger uses production dropdown labels for every product and language',()=>{
+  const c=vm.createContext({});vm.runInContext(readFileSync(new URL('../docs/experience-checkout.gs',import.meta.url),'utf8'),c);
+  const allowed={
+    '体験カテゴリ':['プライベートゴルフ','京都芸妓・舞妓','東京芸者','漢字・書道','茶道','料理・グルメ','その他'],
+    '対応言語':['日本語','英語','スペイン語','フランス語','繁体字中国語','その他'],
+    '対応ステータス':['仮予約受領','入金済・手配待ち'],
+    '支払い状況':['未請求','入金済'],
+    '受付経路':['Webフォーム'],
+    '手配状況':['未着手'],
+    '運用区分':['通常'],
+    'リマインド運用':['手動','停止'],
+  };
+  const languages={en:'英語',ja:'日本語',es:'スペイン語',fr:'フランス語','zh-tw':'繁体字中国語'};
+  let reservation;
+  c.experienceUpsert_=(sheet,id,fields)=>{
+    for(const [name,value] of Object.entries(fields)) if(allowed[name]) assert.ok(allowed[name].includes(value),`${sheet}: ${name} rejects ${value}`);
+    if(sheet==='予約一覧')reservation=fields;
+  };
+  for(const slug of Object.keys(EXPERIENCE_PRODUCTS))for(const [lang,label] of Object.entries(languages))for(const paidAt of [undefined,Date.now()]) {
+    c.writeExperienceLedger_({id:reference,createdAt:Date.now(),order:{...order,slug,lang},paidAt});
+    assert.equal(reservation['対応言語'],label);
+  }
+});
 test('ledger registration fills empty inputs only and state changes require expected values',()=>{
   const c=vm.createContext({});vm.runInContext(readFileSync(new URL('../docs/experience-checkout.gs',import.meta.url),'utf8'),c); const written=[];c.literal_=x=>x;
   const headers=['予約・案件ID','名前','対応ステータス','計算','金額'];
