@@ -92,8 +92,8 @@ export default function OfukuroDinnerPreviewPage() {
 
             {/* 3. Menus */}
             <section className="xp-section" id="menus">
-              <h2>Choose your menu</h2>
-              <p className="xp-note">One set for the whole group. Your choice is carried into the request form below.</p>
+              <h2>The seven menus</h2>
+              <p className="xp-note">One set for the whole group. You choose it in the request form below.</p>
               <OfukuroMenuPicker />
               <p className="xp-dietary-note">{x.menuNote}</p>
             </section>

@@ -536,7 +536,8 @@ test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seve
   assert.ok(html.includes('class="xp-preview-banner"') && text.includes("Concept preview"), "the concept-preview banner");
   assert.ok(html.includes('class="subpage detail-page xp xp2"') && html.includes('class="xp-head"') && html.includes('class="xp-cols"'), "the experience detail-page shell");
   assert.ok(text.includes("Ofukuro Dinner") && text.includes("Japanese Home Cooking, Made for You") && text.includes("ofukuro no aji"), "name, subtitle and the ofukuro-no-aji intro");
-  assert.equal((html.match(/name="menu-pick"/g) || []).length, 7, "seven menu cards with radio semantics");
+  assert.equal((html.match(/class="ofk-menu ofk-menu-static"/g) || []).length, 7, "seven descriptive menu cards on the page");
+  assert.equal((html.match(/name="menu"/g) || []).length, 7, "seven menu radios in the form's slider");
   for (const m of ["Japanese Curry Rice", "Chicken Karaage", "Japanese Hamburg Steak", "Nikujaga", "Grilled Fish", "Gyoza", "Okonomiyaki"]) assert.ok(text.includes(m), `menu ${m}`);
   assert.ok(html.includes('class="ofk-track"') && text.includes("Individual cook selection is not available") && text.includes("Sample profile"), "cook carousel, no selection, sample profiles");
   // The owner's pricing of 2026-10-22: a flat price for two, per-guest additions, children under 10, the 23 wards, prepaid with a 3-day cancellation window.

@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
-import { ArrowRight, Check, Mail } from "lucide-react";
+import { useMemo, useRef, useState, type FormEvent } from "react";
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Mail } from "lucide-react";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { GuestStepper } from "@/components/site/guest-stepper";
@@ -32,6 +32,8 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
   const min = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 3); return d.toISOString().slice(0, 10); }, []);
   const kids = Number(children) || 0;
   const total = ofukuroQuote(Number(adults) || 0, kids);
+  const track = useRef<HTMLDivElement>(null);
+  const slide = (dir: 1 | -1) => { const t = track.current; if (!t) return; const w = (t.firstElementChild as HTMLElement | null)?.offsetWidth ?? 280; t.scrollBy({ left: dir * (w + 12), behavior: "smooth" }); };
 
   function preview(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -101,24 +103,33 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
           <legend>2 · Your menu</legend>
           <div className="form-row">
             <span>One menu for the whole group</span>
-            <div className="ofk-mini" role="radiogroup" aria-label="Your menu">
-              {OFUKURO_MENUS.map((m) => {
-                const sel = selected === m.id;
-                return (
-                  <label key={m.id} className={`ofk-mini-item${sel ? " sel" : ""}`}>
-                    <input type="radio" name="menu" value={m.id} checked={sel} onChange={() => select(m.id)} required />
-                    {/* eslint-disable-next-line @next/next/no-img-element -- plain <img>, as the detail pages use */}
-                    <img src={m.img} alt="" loading="lazy" width={1000} height={750} />
-                    <b>{m.name}</b>
-                    {sel && <span className="ofk-mini-check" aria-hidden="true"><Check size={12} /></span>}
-                  </label>
-                );
-              })}
+            <div className="ofk-slider">
+              <div className="ofk-track ofk-slider-track" ref={track} role="radiogroup" aria-label="Your menu">
+                {OFUKURO_MENUS.map((m) => {
+                  const sel = selected === m.id;
+                  return (
+                    <label key={m.id} className={`ofk-menu ofk-slide${sel ? " sel" : ""}`}>
+                      <input type="radio" name="menu" value={m.id} checked={sel} onChange={() => select(m.id)} required />
+                      {/* eslint-disable-next-line @next/next/no-img-element -- plain <img>, as the detail pages use */}
+                      <img src={m.img} alt={m.alt} loading="lazy" width={1000} height={750} />
+                      <span className="ofk-menu-body">
+                        <b>{m.name}</b>
+                        <small className="ofk-menu-set">{m.set}</small>
+                      </span>
+                      <span className="ofk-menu-state" aria-hidden="true">{sel ? <><Check size={14} /> Selected</> : "Select"}</span>
+                    </label>
+                  );
+                })}
+              </div>
+              <div className="ofk-nav">
+                <button type="button" onClick={() => slide(-1)} aria-label="Previous menus"><ChevronLeft size={18} /></button>
+                <button type="button" onClick={() => slide(1)} aria-label="Next menus"><ChevronRight size={18} /></button>
+              </div>
             </div>
           </div>
           {menu
             ? <p className="xp-note ofk-chosen"><Check size={14} /> {menu.name}: {menu.set}</p>
-            : <p className="xp-note ofk-chosen">Tap a dish, or <a href="#menus">read about the seven menus above</a>.</p>}
+            : <p className="xp-note ofk-chosen">Swipe through the seven menus and tap one. <a href="#menus">Read about them above</a>.</p>}
           <small className="form-hint">{OFUKURO.menuNote}</small>
         </fieldset>
 
