@@ -40,9 +40,9 @@ test('server prices: minimum charge, allowed quantities, adult eligibility and t
   assert.equal(m.parseExperienceOrder({...base,experience:'shibuya-ramen-class',time:'11:00',guests:16},now).amount,424000);
 });
 
-test('every published non-golf experience supports its priced party range and correct city return URL',()=>{
-  const products=catalogFor('en').experiences.filter(x=>x.category!=='golf');
-  assert.equal(products.length,11);
+test('enabled non-golf experiences support their priced party range and correct city return URL',()=>{
+  const products=catalogFor('en').experiences.filter(x=>x.category!=='golf' && x.slug!=='evening-with-geiko');
+  assert.equal(products.length,10);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
     const product=EXPERIENCE_PRODUCTS[x.slug];
@@ -58,17 +58,13 @@ test('every published non-golf experience supports its priced party range and co
   }
 });
 
-test('geiko checkout matches every season, plan and party price and rejects unpriced choices',()=>{
-  for(const [date,totals] of Object.entries({'2027-02-02':[161000,182000,195000,226000],'2026-11-02':[179000,209000,231000,271000]})) {
-    for(const [plan,supplement] of Object.entries({select:0,signature:70000,reserve:135000}))for(let guests=2;guests<=5;guests++) {
-      const o=m.parseExperienceOrder({...base,experience:'evening-with-geiko',time:'18:00',date,guests,plan,interpreter:'es',adultOnly:true,amount:1,price:'fake'},now);
-      assert.equal(o.amount,totals[guests-2]+supplement);
-      assert.equal(o.quantity,1);assert.equal(o.chargeUnit,'group');assert.equal(o.interpreter,'es');
-      assert.ok(o.price.startsWith('price_'));assert.ok(o.title.includes(guests+' guests'));
+test('geiko stays enquiry-only and cannot create a provisional checkout',()=>{
+  assert.equal(EXPERIENCE_PRODUCTS['evening-with-geiko'],undefined);
+  for(const date of ['2027-02-02','2026-11-02']) {
+    for(const plan of ['select','signature','reserve'])for(let guests=2;guests<=5;guests++) {
+      assert.equal(m.parseExperienceOrder({...base,experience:'evening-with-geiko',time:'18:00',date,guests,plan,interpreter:'es',adultOnly:true},now),null);
     }
   }
-  const input={...base,experience:'evening-with-geiko',time:'18:00',guests:2,plan:'select',interpreter:'en',adultOnly:true};
-  for(const patch of [{plan:'fake'},{guests:6},{adultOnly:false},{interpreter:'fake'},{addOns:['fake']}])assert.equal(m.parseExperienceOrder({...input,...patch},now),null);
 });
 
 test('ledger preserves non-Tokyo cities, group charge labels and interpreter choice',()=>{

@@ -9,7 +9,6 @@ export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number
   "kanazawa-kendo-experience-tour": { price: "price_1UTESUDpZ5Y8WoJ21CKaE1Du", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "himeji-kendo-experience-tour": { price: "price_1UTESZDpZ5Y8WoJ2dSJGCE12", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "dotonbori-ramen-class": { price: "price_1UTESxDpZ5Y8WoJ22NGPt3xy", amount: 26500, min: 1, max: 16, minCharge: 1 },
-  "evening-with-geiko": { price: "", amount: 0, min: 2, max: 5, minCharge: 1, groupPricing: true },
   "tokyo-kendo-experience-tour": { price: "price_1USyu1DpZ5Y8WoJ2tnGKPAdj", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "shibuya-ramen-class": { price: "price_1USyuLDpZ5Y8WoJ2Er2OtMAL", amount: 26500, min: 1, max: 16, minCharge: 1 },
   "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 1, max: 4, minCharge: 2 },
