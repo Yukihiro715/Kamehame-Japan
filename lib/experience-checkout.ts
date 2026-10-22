@@ -7,6 +7,7 @@ export interface ExperienceCheckoutEnv {
   STRIPE_CHECKOUT_KEY?: string;
   STRIPE_READ_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
+  STRIPE_EXPERIENCE_WEBHOOK_SECRET?: string;
   GOLF_AUTOMATION_URL?: string;
   GOLF_AUTOMATION_TOKEN?: string;
 }
@@ -20,7 +21,7 @@ const VERSION = "2026-08-26.dahlia";
 export const experienceReference = (id: unknown): id is string => typeof id === "string" && /^KJ-E-[0-9a-f]{32}$/.test(id);
 export function checkoutConfigured(env: ExperienceCheckoutEnv) {
   return env.EXPERIENCE_CHECKOUT_ENABLED === "true" && !!env.STRIPE_CHECKOUT_KEY?.startsWith("rk_live_") &&
-    !!env.STRIPE_READ_KEY && !!env.STRIPE_WEBHOOK_SECRET &&
+    !!env.STRIPE_READ_KEY && !!(env.STRIPE_EXPERIENCE_WEBHOOK_SECRET || env.STRIPE_WEBHOOK_SECRET) &&
     !!env.GOLF_AUTOMATION_TOKEN && !!env.GOLF_AUTOMATION_URL?.startsWith("https://script.google.com/macros/s/");
 }
 export async function experienceLedger(env: ExperienceCheckoutEnv, action: string, payload: Record<string, unknown> = {}) {

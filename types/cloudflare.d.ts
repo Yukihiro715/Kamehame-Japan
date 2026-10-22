@@ -31,6 +31,8 @@ declare module "cloudflare:workers" {
     GOLF_AUTOMATION_TOKEN?: string;
     RESEND_WEBHOOK_SECRET?: string;
     STRIPE_WEBHOOK_SECRET?: string;
+    /** Additional KAMEHAME endpoint secret; preserves the existing Stripe secret. */
+    STRIPE_EXPERIENCE_WEBHOOK_SECRET?: string;
     DB?: unknown;
     /** Workers AI binding (translation for the team's notification). */
     AI?: { run(model: string, input: Record<string, unknown>): Promise<unknown> };

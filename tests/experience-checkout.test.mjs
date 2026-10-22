@@ -50,12 +50,32 @@ test('Checkout binds reference, language return URL, quantity and pending text; 
 });
 test('readiness fails closed on missing key, old ledger and downstream errors',async()=>{
   assert.equal(m.checkoutConfigured({...env,STRIPE_CHECKOUT_KEY:undefined}),false);
+  assert.equal(m.checkoutConfigured({...env,STRIPE_WEBHOOK_SECRET:undefined,STRIPE_EXPERIENCE_WEBHOOK_SECRET:'whsec_additional'}),true);
+  assert.equal(m.checkoutConfigured({...env,STRIPE_WEBHOOK_SECRET:undefined,STRIPE_EXPERIENCE_WEBHOOK_SECRET:undefined}),false);
   const old=globalThis.fetch;
   try {
     globalThis.fetch=async()=>Response.json({ok:true,version:'old',ready:true});assert.equal(await m.checkoutReady(env),false);
     globalThis.fetch=async()=>Response.json({ok:true,version:'2026-10-22',ready:true});assert.equal(await m.checkoutReady(env),true);
     globalThis.fetch=async()=>{throw Error('offline');};assert.equal(await m.checkoutReady(env),false);
   }finally{globalThis.fetch=old;}
+});
+
+test('additional Stripe secret accepts the new endpoint and preserves legacy verification',async()=>{
+  const timestamp=Math.floor(Date.now()/1000);
+  const raw=JSON.stringify({id:'evt_signature_probe',type:'checkout.session.expired',data:{object:{client_reference_id:'SIGNATURE-CHECK-NO-BOOKING'}}});
+  const request=(secret,body=raw)=>new Request('https://kamehame-japan.com/api/webhooks/stripe',{
+    method:'POST',body,headers:{'stripe-signature':`t=${timestamp},v1=${createHmac('sha256',secret).update(timestamp+'.'+raw).digest('hex')}`}
+  });
+  const dual={...env,STRIPE_EXPERIENCE_WEBHOOK_SECRET:'whsec_additional'};
+  for(const key of ['whsec_example','whsec_additional']) {
+    const result=await receiveWebhook('stripe',request(key),dual);
+    assert.equal(result.status,200);assert.deepEqual(await result.json(),{ok:true,ignored:true});
+  }
+  assert.equal((await receiveWebhook('stripe',request('whsec_example'),env)).status,200);
+  assert.equal((await receiveWebhook('stripe',request('whsec_additional'),{...dual,STRIPE_WEBHOOK_SECRET:undefined})).status,200);
+  assert.equal((await receiveWebhook('stripe',request('whsec_unknown'),dual)).status,400);
+  assert.equal((await receiveWebhook('stripe',request('whsec_additional',raw+' '),dual)).status,400);
+  assert.equal((await receiveWebhook('stripe',request('whsec_additional'),{...env,STRIPE_WEBHOOK_SECRET:undefined})).status,503);
 });
 test('retry uses same Stripe idempotency key; no redirect until session is persisted',async()=>{
   const old=globalThis.fetch,calls=[];let failPersist=true;const createdAt=Date.now();
