@@ -242,7 +242,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           </div>
           {!card && <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} /><small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {provisional ? P.note : plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small></>
+              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} />{provisional ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}</>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}
@@ -303,7 +303,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       {provisional && x && b && (
         <div className="provisional-consent">
           <p>{P.note}</p>
-          <p>{P.refund}</p>
+          <p><strong>{P.refund}</strong></p>
           {b.estimate && <p><b>{D.totalCol}: <Yen n={b.estimate.total} /></b></p>}
           {b.guestsNumber < EXPERIENCE_PRODUCTS[x.slug].minCharge && <p>{D.minChargeNote(EXPERIENCE_PRODUCTS[x.slug].minCharge)}</p>}
           <details><summary>{D.cancellationH}</summary>
@@ -322,7 +322,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         </button>
         {!b && <span className="form-privacy">{F.privacy}</span>}
       </div>
-      {b && <p className="form-after">{provisional ? P.note : F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
+      {b && <p className="form-after">{!provisional && F.sendRequestNote} <span className="form-privacy">{F.privacy}</span></p>}
 
       {status === "failed" && (
         <p className="form-error" role="alert">

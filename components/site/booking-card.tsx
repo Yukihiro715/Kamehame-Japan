@@ -121,7 +121,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
             <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
             <b><Yen n={b.estimate.total} /></b>
             <JpyRef n={b.estimate.total} lang={lang} />
-            <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {x.provisionalCheckout ? provisionalCopy(lang).note : plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>
+            {x.provisionalCheckout ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}
           </>
         ) : (
           <>
@@ -143,7 +143,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         }}>{x.provisionalCheckout && b.largeParty ? D.requestCta : x.ctaLabel ?? D.requestCta} <ArrowRight size={16} /></a>
       )}
       <ul className="bk-trust">
-        <li><ShieldCheck size={14} /> {x.provisionalCheckout && b.largeParty ? D.noPaymentNow : x.ctaNote ?? D.noPaymentNow}</li>
+        {(!open || !x.provisionalCheckout || b.largeParty) && <li><ShieldCheck size={14} /> {x.provisionalCheckout && b.largeParty ? D.noPaymentNow : x.ctaNote ?? D.noPaymentNow}</li>}
+        {x.provisionalCheckout && !b.largeParty && !open && <li><ShieldCheck size={14} /> <strong>{provisionalCopy(lang).refund}</strong></li>}
         <li><Clock3 size={14} /> {x.provisionalCheckout ? provisionalCopy(lang).flow[2].title : D.replyIn24}</li>
         <li><CalendarDays size={14} /> {D.availCutoff(x.leadDays, x.cutoffTime)}</li>
       </ul>
