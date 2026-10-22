@@ -455,25 +455,3 @@ test("private spa preview has no invented price or public address", async () => 
   const listing = await (await render("/en/tokyo/")).text();
   assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));
 });
-
-test("home-cooked dinner concept preview: unlisted, noindex, same detail-page shell, demo form only", async () => {
-  const path = "/previews/home-cooked-dinner-f4bc9d7306/";
-  const res = await render(path);
-  assert.equal(res.status, 200, path);
-  const html = await res.text();
-  const text = html.replace(/<[^>]+>/g, " ");
-  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive"/, "noindex");
-  assert.ok(html.includes('class="xp-preview-banner"') && text.includes("Concept preview"), "the concept-preview banner");
-  assert.ok(html.includes('class="subpage detail-page xp xp2"') && html.includes('class="xp-head"') && html.includes('class="xp-cols"'), "the experience detail-page shell");
-  assert.ok(text.includes("Japanese Home-Cooked Dinner at Your Stay") && text.includes("¥34,800"), "title and sample price");
-  assert.ok(html.includes('name="allergens"') && html.includes('name="permission"') && html.includes('name="host"'), "the demo form's dietary, accommodation and host fields");
-  assert.ok(!html.includes('action="/api/contact"') && !html.includes("/api/booking"), "the demo form posts nowhere");
-  assert.ok(text.includes("fictional examples") && !/\b[45]\.\d ·|reviews\b/i.test(text.slice(0, 20000)) || !html.includes("RatingSummary"), "no invented ratings");
-  assert.doesNotMatch(html, /Rojicoya|Viyago|Ramen Dojo/, "no partner names");
-  // unlisted: nothing links to it and the sitemap does not carry it
-  for (const p of ["/en/", "/en/experiences/", "/en/tokyo/"]) {
-    assert.ok(!(await (await render(p)).text()).includes("home-cooked-dinner"), `not linked from ${p}`);
-  }
-  const { readFileSync } = await import("node:fs");
-  assert.ok(!readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8").includes("/previews/"), "not in the sitemap");
-});

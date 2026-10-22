@@ -24,11 +24,3 @@ are not the partner's performers; the pages never name them.
 Earlier preview pages (samurai, cooking, Asakusa rakugo, ninja meditation,
 Arashiyama workshops) use Wikimedia Commons photos noted in their catalog
 comments.
-
-## Home-cooked dinner concept preview (`/previews/home-cooked-dinner-f4bc9d7306/`) — 2026-10-22
-
-`hcd-home-table.webp`, `hcd-host-sample.webp`, `hcd-karaage.webp`, `hcd-plant-based.webp`,
-`hcd-host-yumi.webp`, `hcd-host-keiko.webp`, `hcd-host-aki.webp`: illustrative AI-generated
-images carried over from the first static version of the concept page (commit d113da1).
-The people shown are fictional sample hosts, the dishes are samples, and the page says so.
-They never appear on a published page; real host and food photos replace them before launch.

@@ -1,6 +1,6 @@
 /** Add to the EXISTING payment-automation Apps Script project.
  * Uses its AUTOMATION_TOKEN, SPREADSHEET_ID, RESEND_API_KEY, TEAM_EMAIL and
- * LIVE_SEND_ENABLED. No Stripe key is stored in Apps Script.
+ * EXPERIENCE_LIVE_SEND_ENABLED. No Stripe key is stored in Apps Script.
  * Run setupExperienceCheckout once; redeploy the existing web-app version.
  */
 var EXPERIENCE_VERSION = '2026-10-22';
@@ -19,7 +19,7 @@ function saveExperience_(j,row) {
 }
 function experienceAction_(p) {
   if(p.action==='experience_health') {
-    var ready=props_().getProperty('LIVE_SEND_ENABLED')==='true' && !!props_().getProperty('RESEND_API_KEY') && !!props_().getProperty('TEAM_EMAIL') &&
+    var ready=props_().getProperty('EXPERIENCE_LIVE_SEND_ENABLED')==='true' && !!props_().getProperty('RESEND_API_KEY') && !!props_().getProperty('TEAM_EMAIL') &&
       ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='processExperienceQueue';});
     // Health is read-only. setupExperienceCheckout creates the sheet, not this request.
     var s=book_().getSheetByName(EXPERIENCE_SHEET);
@@ -67,7 +67,7 @@ function experienceAction_(p) {
 }
 function writeExperienceLedger_(j) {
   var o=j.order,paid=!!j.paidAt;
-  upsert_('予約一覧',j.id,{
+  experienceUpsert_('予約一覧',j.id,{
     'お客様名／窓口':o.name,'体験カテゴリ':o.slug==='shibuya-ramen-class'?'料理・グルメ':o.slug==='kanji-name-calligraphy'?'漢字・書道':'剣道・武道',
     '対応ステータス':paid?'入金済・手配待ち':'仮予約受領','体験日':new Date(o.date+'T00:00:00+09:00'),'人数':o.guests,
     '支払い状況':paid?'入金済':'未請求','次のアクション':paid?'施設に空き確認 → 予約確定連絡。不可なら代替案／合意できなければ全額返金':'決済待ち。予約未確定・施設への手配は入金確認後',
@@ -75,11 +75,11 @@ function writeExperienceLedger_(j) {
     'サイト概算（税込）':o.amount,'提示額（税込）':o.amount,'入金額':paid?o.amount:'','支払日':paid?new Date(j.paidAt):'',
     '確認メモ':'体験決済管理参照。予約未確定。実参加'+o.guests+'名／請求'+o.quantity+'名分。規定版 '+o.policyVersion+'。GAS直接登録・Gmailからの再登録不要。'
   },paid?{'対応ステータス':['仮予約受領','決済案内準備','支払待ち'],'支払い状況':['未請求','入金未確認'],'次のアクション':['決済待ち。予約未確定・施設への手配は入金確認後']}:undefined);
-  upsert_('手配・体験詳細',j.id,{'エリア':'東京','体験名／プラン内容':o.title,'体験開始時刻':o.time,'人数内訳':'実参加'+o.guests+'名／請求'+o.quantity+'名分','希望・アレルギー等':o.message||'なし','手配状況':'未着手','手配メモ・未確認事項':'希望日時は未確定。標準プラン・表示条件への同意取得済み。'});
-  upsert_('決済・連絡管理',j.id,{'運用区分':'通常','リマインド運用':paid?'停止':'手動','Stripe決済ID':j.sessionId||'','入金確認日時':paid?new Date(j.paidAt):'','停止・保留理由':paid?'入金済み・施設確認待ち':'','運用メモ':'体験決済管理参照。予約確定メールは施設受入確認後に担当者が送付。'},paid?{'リマインド運用':['手動','自動送信','一時停止']}:undefined);
+  experienceUpsert_('手配・体験詳細',j.id,{'エリア':'東京','体験名／プラン内容':o.title,'体験開始時刻':o.time,'人数内訳':'実参加'+o.guests+'名／請求'+o.quantity+'名分','希望・アレルギー等':o.message||'なし','手配状況':'未着手','手配メモ・未確認事項':'希望日時は未確定。標準プラン・表示条件への同意取得済み。'});
+  experienceUpsert_('決済・連絡管理',j.id,{'運用区分':'通常','リマインド運用':paid?'停止':'手動','Stripe決済ID':j.sessionId||'','入金確認日時':paid?new Date(j.paidAt):'','停止・保留理由':paid?'入金済み・施設確認待ち':'','運用メモ':'体験決済管理参照。予約確定メールは施設受入確認後に担当者が送付。'},paid?{'リマインド運用':['手動','自動送信','一時停止']}:undefined);
 }
 function experienceSend_(j,kind,to,subject,text) {
-  if(props_().getProperty('LIVE_SEND_ENABLED')!=='true')throw Error('sending disabled');
+  if(props_().getProperty('EXPERIENCE_LIVE_SEND_ENABLED')!=='true')throw Error('sending disabled');
   var res=UrlFetchApp.fetch('https://api.resend.com/emails',{method:'post',contentType:'application/json',
     headers:{Authorization:'Bearer '+props_().getProperty('RESEND_API_KEY'),'Idempotency-Key':'experience-'+j.id+'-'+kind},
     payload:JSON.stringify({from:'KAMEHAME JAPAN <enquiries@kamehame-japan.com>',to:[to],reply_to:'hello@kamehame-japan.com',subject:subject,text:text}),muteHttpExceptions:true});
@@ -117,7 +117,48 @@ function processExperienceQueue() {
 }
 function setupExperienceCheckout() {
   ['SPREADSHEET_ID','AUTOMATION_TOKEN','RESEND_API_KEY','TEAM_EMAIL'].forEach(function(k){if(!props_().getProperty(k))throw Error(k+' missing');});
-  LEDGER_SHEETS.forEach(ledgerSnapshot_);
+  ['予約一覧','手配・体験詳細','決済・連絡管理'].forEach(experienceLedgerSnapshot_);
   sheet_(EXPERIENCE_SHEET,EXPERIENCE_HEADERS);
   if(!ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='processExperienceQueue';}))ScriptApp.newTrigger('processExperienceQueue').timeBased().everyMinutes(1).create();
+}
+
+// Independent helpers support the deployed legacy golf script without changing its behavior.
+function experienceLedgerSnapshot_(name) {
+  var s=book_().getSheetByName(name);if(!s)throw new Error(name+'なし');
+  var w=s.getLastColumn(), n=Math.max(s.getLastRow(),2), range=s.getRange(1,1,n,w);
+  var values=range.getValues(), formulas=range.getFormulas();
+  if(values[0][0]!=='予約・案件ID')throw new Error(name+'のID見出しが変更されています');
+  return {sheet:s,headers:values[0],values:values,formulas:formulas,width:w};
+}
+// Formula-only template rows are vacant; any manual input reserves the row.
+function experienceLedgerSlot_(t,id,fields) {
+  Object.keys(fields).forEach(function(k){if(t.headers.indexOf(k)<0)throw new Error('台帳の見出しがありません: '+k);});
+  var matches=[];t.values.forEach(function(r,i){if(i&&String(r[0])===id)matches.push(i+1);});
+  if(matches.length>1)throw new Error('台帳の案件IDが重複しています');
+  if(matches.length)return matches[0];
+  for(var i=1;i<t.values.length;i++)if(t.values[i].every(function(v,c){return !!t.formulas[i][c]||v===''||v===null;}))return i+1;
+  return t.values.length+1;
+}
+// New/retried registration fills empty inputs only. Explicit state transitions
+// supply expected previous values; staff edits and formulas are never replaced.
+function experienceUpsert_(sheetName,id,fields,expected) {
+  var t=experienceLedgerSnapshot_(sheetName), s=t.sheet, row=experienceLedgerSlot_(t,id,fields);
+  if(row>s.getMaxRows()) {
+    var prev=s.getMaxRows();s.insertRowsAfter(prev,1);
+    var src=s.getRange(prev,1,1,t.width), dest=s.getRange(row,1,1,t.width);
+    src.copyTo(dest,SpreadsheetApp.CopyPasteType.PASTE_FORMAT,false);
+    src.copyTo(dest,SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION,false);
+    src.getFormulasR1C1()[0].forEach(function(f,c){if(f)s.getRange(row,c+1).setFormulaR1C1(f);});
+  }
+  // Re-read immediately before writing; don't use a stale row snapshot.
+  var range=s.getRange(row,1,1,t.width), current=range.getValues()[0], formulas=range.getFormulas()[0];
+  if(current[0]&&String(current[0])!==id)throw new Error('台帳行が変更されました');
+  if(!current[0]&&current.some(function(v,c){return !formulas[c]&&v!==''&&v!==null;}))throw new Error('空き行に手動入力があります');
+  if(!current[0])s.getRange(row,1).setValue(id);
+  Object.keys(fields).forEach(function(k){
+    var c=t.headers.indexOf(k), allow=expected&&expected[k];
+    if(formulas[c])return;
+    if(current[c]===''||current[c]===null||(allow&&allow.indexOf(current[c])>=0))s.getRange(row,c+1).setValue(literal_(fields[k]));
+  });
+  range.setWrap(true);s.setRowHeight(row,72);return row;
 }
