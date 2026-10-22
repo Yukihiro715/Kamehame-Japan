@@ -35,7 +35,7 @@
    - `checkout.session.async_payment_failed`
    - `checkout.session.expired`
 
-   対応する署名シークレットをCloudflareの **Secret** `STRIPE_WEBHOOK_SECRET` に設定する。既存送信先が後日追加されていれば重複作成せず既存の購読を確認する。2026-10-22の接続アカウント確認では、v1 Webhook Endpoints／v2 Event Destinationsともに0件だった。
+   対応する署名シークレットをCloudflareの **Secret** `STRIPE_EXPERIENCE_WEBHOOK_SECRET` に追加する。既存の `STRIPE_WEBHOOK_SECRET` は保持する。同じKAMEHAMEアカウントの新旧署名を受け付け、署名検証後の予約振り分けと金額照合は維持する。既存送信先があれば重複作成せず購読を確認する。2026-10-22に作成した送信先は `we_1UTD7oDpZ5Y8WoJ2oCk3q3Ru`。本番署名テストで既存値との不一致を確認したため、上書きせず追加方式とした。
 
 5. 既存の `STRIPE_READ_KEY`（Checkout Sessions参照・明細展開可能）、`GOLF_AUTOMATION_URL`、`GOLF_AUTOMATION_TOKEN` が同じ本番アカウント／台帳を指すことを確認する。ゴルフ用のURL名だが、新しいexperienceアクションを独立処理し、ゴルフのジョブは作成しない。
 

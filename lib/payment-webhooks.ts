@@ -54,12 +54,17 @@ export async function verifyWebhook(provider: Provider, raw: string, headers: He
 }
 
 export async function receiveWebhook(provider: Provider, request: Request, env: Env): Promise<Response> {
-  const secret = provider === "resend" ? env.RESEND_WEBHOOK_SECRET : env.STRIPE_WEBHOOK_SECRET;
-  if (!secret) return Response.json({ ok: false }, { status: 503 });
+  // Keep the legacy endpoint credential valid when adding the new Stripe destination.
+  // Both Stripe destinations belong to the same KAMEHAME account; routing and
+  // payment reconciliation remain unchanged after signature verification.
+  const secrets = (provider === "resend" ? [env.RESEND_WEBHOOK_SECRET] :
+    [env.STRIPE_WEBHOOK_SECRET, env.STRIPE_EXPERIENCE_WEBHOOK_SECRET]).filter((s): s is string => !!s);
+  if (!secrets.length) return Response.json({ ok: false }, { status: 503 });
   if (provider === "stripe" && (!env.GOLF_AUTOMATION_TOKEN || !gasUrl(env.GOLF_AUTOMATION_URL))) return Response.json({ ok: false }, { status: 503 });
   const raw = await request.text();
   if (raw.length > 512_000) return new Response(null, { status: 413 });
-  if (!await verifyWebhook(provider, raw, request.headers, secret)) return Response.json({ ok: false }, { status: 400 });
+  const verified = await Promise.all(secrets.map(secret => verifyWebhook(provider, raw, request.headers, secret)));
+  if (!verified.some(Boolean)) return Response.json({ ok: false }, { status: 400 });
   try {
     const event = JSON.parse(raw);
     const eventId = provider === "resend" ? request.headers.get("svix-id") : event.id;
