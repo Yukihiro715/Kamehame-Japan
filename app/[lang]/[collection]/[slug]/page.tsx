@@ -242,7 +242,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               <p className="xp-lede">{exp.tagline}</p>
               {exp.overview?.map((p) => <p key={p} className="xp-overview-p">{p}</p>)}
               <ul className="xp-overview-facts">
-                {avail && <li><CalendarDays size={15} /><span>{avail.dates ? D.availSelected : avail.daily ? D.availDaily : ""} · {exp.timeLabel ?? D.availStart} {avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}</span></li>}
+                {avail && <li><CalendarDays size={15} /><span>{[avail.dates ? D.availSelected : avail.daily ? D.availDaily : "", `${exp.timeLabel ?? D.availStart} ${avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}`].filter(Boolean).join(" · ")}</span></li>}
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
                 {exp.taxIncluded && <li><ShieldCheck size={15} /><span>{D.taxIncluded}</span></li>}
                 {avail && <li><Clock3 size={15} /><span>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
@@ -440,7 +440,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                         <small className="xp-dates-note">{D.availDatesNote}{exp.availabilityNote && ` ${exp.availabilityNote}`}</small>
                       </dd></div>
                     ) : (
-                      <div><dt>{D.availDays}</dt><dd>{avail.daily ? D.availDaily : "—"}{exp.availabilityNote && ` · ${exp.availabilityNote}`}</dd></div>
+                      <div><dt>{D.availDays}</dt><dd>{[avail.daily ? D.availDaily : "", exp.availabilityNote ?? ""].filter(Boolean).join(" · ") || "—"}</dd></div>
                     )}
                     {!avail.dates && <div><dt>{exp.timeLabel ?? D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>}
                     <div><dt>{D.availCutoffH}</dt><dd>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</dd></div>
