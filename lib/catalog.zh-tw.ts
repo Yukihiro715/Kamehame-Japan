@@ -38,7 +38,7 @@ export const citiesZh: City[] = [
 ];
 
 export const categoriesZh: Category[] = [
-  { slug: "wellness", title: "溫泉與放鬆", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "溫泉與放鬆" },
+  { slug: "wellness", title: "溫泉與放鬆", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "溫泉與放鬆" },
   { slug: "sushi", title: "壽司", tag: "美食", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "在日本，壽司是以數十年計算的手藝，而非食譜。這些小班制大師課讓您站到東京與京都現役職人的吧檯後——像他們一樣捏製、調味、品嚐，口譯導遊全程在旁。" },
   { slug: "sumo", title: "相撲", tag: "傳統", mark: "相", img: "/images/cat-sumo.jpg",

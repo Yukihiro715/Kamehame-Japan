@@ -38,7 +38,7 @@ export const citiesFr: City[] = [
 ];
 
 export const categoriesFr: Category[] = [
-  { slug: "wellness", title: "Bien-être", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "Bien-être" },
+  { slug: "wellness", title: "Bien-être", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "Bien-être" },
   { slug: "sushi", title: "Sushi", tag: "Gastronomie", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "Au Japon, le sushi est un métier qui se mesure en décennies, pas en recettes. Ces masterclasses en tout petit groupe vous placent derrière le comptoir avec des chefs en activité à Tokyo et Kyoto — façonner, assaisonner et goûter comme eux, avec un guide-interprète à vos côtés." },
   { slug: "sumo", title: "Sumo", tag: "Traditionnel", mark: "相", img: "/images/cat-sumo.jpg",

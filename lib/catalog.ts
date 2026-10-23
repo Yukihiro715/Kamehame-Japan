@@ -405,7 +405,7 @@ export const cities: City[] = [
 ];
 
 export const categories: Category[] = [
-  { slug: "wellness", title: "Wellness", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "Wellness" },
+  { slug: "wellness", title: "Wellness", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "Wellness" },
   { slug: "sushi", title: "Sushi", tag: "Food", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "Sushi in Japan is a craft measured in decades, not recipes. These small-group masterclasses put you behind the counter with working chefs in Tokyo and Kyoto — shaping, seasoning and tasting as they do, with an interpreter guide beside you." },
   { slug: "sumo", title: "Sumo", tag: "Traditional", mark: "相", img: "/images/cat-sumo.jpg",
@@ -464,7 +464,7 @@ export const experiences: Experience[] = [
       "Then the slow part. Wash, soak for about thirty minutes in the private hot-spring bath, change into a yukata, and take the rest of the time as you like: a nap, the herbal tea and spring water that come with the room, or a meal you brought along. The staff speak Japanese and work with translated materials and translation tools; a dedicated interpreter is not included.",
     ],
     duration: "About 3.5 hours", price: "¥24,000", priceUnit: "person", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
-    img: "/images/shakuji-bath.webp", alt: "The private bath and tea space of the home spa",
+    img: "/images/nerima-herbal-bath.webp", alt: "The private bath and tea space of the home spa",
     gallery: [],
     galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
     partySize: { min: 1, max: 3, default: 2 },
@@ -512,7 +512,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "The bath is watched by a camera for drowning prevention; where it points, who can see it and the privacy rules are confirmed with you before you book"],
       afterBooking: ["The spa's name, address and directions", "Arrival instructions and a phone number for the day"],
-      img: "/images/shakuji-bath.webp", alt: "The private bath",
+      img: "/images/nerima-herbal-bath.webp", alt: "The private bath",
     },
     notesLabel: "Allergies to herbs or fragrances, children's ages, health concerns and anything else (optional)",
     notesHint: "e.g. one of us is pregnant; a child of eight joins; we would like an interpreter",

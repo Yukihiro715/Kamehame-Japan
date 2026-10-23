@@ -43,7 +43,7 @@ export const citiesJa: City[] = [
 ];
 
 export const categoriesJa: Category[] = [
-  { slug: "wellness", title: "温泉・リラクゼーション", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "温泉・リラクゼーション" },
+  { slug: "wellness", title: "温泉・リラクゼーション", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "温泉・リラクゼーション" },
   { slug: "sushi", title: "寿司", tag: "食", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "日本の寿司は、レシピではなく十年単位で測られる仕事です。東京と京都の現役の職人の付け台に立ち、握り、締め、その場で味わう少人数のクラスを、通訳ガイド同行でご用意しています。" },
   { slug: "sumo", title: "相撲", tag: "伝統", mark: "相", img: "/images/cat-sumo.jpg",
@@ -90,7 +90,7 @@ export const experiencesJa: Experience[] = [
       "そのあとはゆっくりの時間。体を洗い、貸切の温泉に30分ほど浸かり、浴衣に着替えて、残りは自由に。低温ハーブサウナ、薬膳茶と温泉水、お昼寝、持参したお弁当。スタッフは日本語で、翻訳資料と翻訳ツールを使って案内します。専属通訳は含まれません。",
     ],
     duration: "約3.5時間", price: "¥24,000", group: "完全貸切・1〜3名", ages: "お子様は保護者同伴で事前相談", area: "東京（練馬）",
-    img: "/images/shakuji-bath.webp", alt: "ホームスパの貸切浴室とお茶の空間",
+    img: "/images/nerima-herbal-bath.webp", alt: "ホームスパの貸切浴室とお茶の空間",
     gallery: [],
     galleryNote: "施設提供の浴室とお茶の空間の写真。体験の写真は施設から追って提供されます。",
     timeLabel: "希望開始時刻",
@@ -132,7 +132,7 @@ export const experiencesJa: Experience[] = [
     venue: {
       known: ["東京都練馬区の貸切ホームスパ。正確な住所は確定通知でご案内", "他のお客様との混在なし。1日1組", "火曜定休", "開始5〜10分前に建物玄関に集合", "浴室には溺水防止の見守りカメラがあります。設置位置・閲覧者・プライバシーの扱いは予約前に確認してお伝えします"],
       afterBooking: ["施設名・住所・道順", "到着時の案内と当日の連絡先"],
-      img: "/images/shakuji-bath.webp", alt: "貸切の浴室",
+      img: "/images/nerima-herbal-bath.webp", alt: "貸切の浴室",
     },
     notesLabel: "薬草・香料のアレルギー、お子様の年齢、体調の不安など（任意）",
     notesHint: "例：妊娠中の参加者がいる／8歳の子どもが参加／通訳を希望",

@@ -39,7 +39,7 @@ export const citiesEs: City[] = [
 ];
 
 export const categoriesEs: Category[] = [
-  { slug: "wellness", title: "Bienestar", tag: "Wellness", mark: "湯", img: "/images/shakuji-bath.webp", lead: "Bienestar" },
+  { slug: "wellness", title: "Bienestar", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "Bienestar" },
   { slug: "sushi", title: "Sushi", tag: "Gastronomía", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "En Japón, el sushi es un oficio que se mide en décadas, no en recetas. Estas clases magistrales en grupos reducidos te ponen detrás de la barra con chefs en activo de Tokio y Kioto — moldeando, sazonando y probando como ellos, con un guía intérprete a tu lado." },
   { slug: "sumo", title: "Sumo", tag: "Tradicional", mark: "相", img: "/images/cat-sumo.jpg",
