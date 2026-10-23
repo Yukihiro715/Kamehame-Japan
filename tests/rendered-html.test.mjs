@@ -419,7 +419,7 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
     ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥15,000", "¥16,000", "¥40,000", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥20,000", "¥50,000", "ryurei", "Larger parties are quoted on request"]],
     ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
-    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 to 4 days before"]],
+    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 days before", "6 days before or later"]],
     ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "Up to 15 days before the date"]],
   ];
   const partners = /Camellia|camelliakyoto|tea-kyoto\.com|Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介|Masuya-cho|Ikenoshita|605-0826|616-8003/i;
