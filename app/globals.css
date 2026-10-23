@@ -1020,6 +1020,12 @@ button.photo-count { font:inherit; font-size:12px; font-weight:700; cursor:point
 /* --- Form fields outside a <label> (the calendar), and the email suggestions --- */
 .form-row .field { display:grid; gap:6px; align-content:start; }
 .enquiry-form .field > label { font-size:12px; letter-spacing:.04em; color:var(--muted); cursor:pointer; }
+.wa-field { display:grid; grid-template-columns:minmax(0, 46%) minmax(0, 1fr); gap:8px; align-items:start; }
+.wa-field select, .wa-field input { min-width:0; }
+.wa-field select:disabled { color:var(--muted); background:var(--rice); }
+.wa-field .wa-preview { grid-column:1 / -1; font-size:12px; color:var(--muted); letter-spacing:.02em; }
+.wa-field.wa-bad .wa-preview { color:#b4231b; }
+.wa-field.wa-bad input { border-color:#b4231b; }
 .email-field { position:relative; }
 .email-suggest { position:absolute; left:0; right:0; top:100%; z-index:25; margin:4px 0 0; padding:4px 0; list-style:none; background:var(--white); border:2px solid var(--ink); box-shadow:4px 4px 0 rgba(23,26,33,.85); }
 .email-suggest button { display:block; width:100%; padding:10px 14px; background:none; border:0; text-align:left; font:inherit; font-size:14px; color:var(--ink); cursor:pointer; overflow-wrap:anywhere; }

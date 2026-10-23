@@ -4,6 +4,7 @@ import { useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Mail } from "lucide-react";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
+import { WhatsAppInput } from "@/components/site/whatsapp-input";
 import { GuestStepper } from "@/components/site/guest-stepper";
 import { useOfukuroMenu } from "@/components/site/ofukuro-menu";
 import { menuById, OFUKURO, OFUKURO_MENUS, ofukuroQuote, yenOf } from "@/lib/ofukuro-dinner";
@@ -181,7 +182,7 @@ export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; o
             <label><span>Name</span><input name="name" type="text" required autoComplete="name" maxLength={120} /></label>
             <label><span>E-mail</span><EmailInput lang="en" required /></label>
           </div>
-          <label className="form-row"><span>Phone or WhatsApp (optional)</span><input name="phone" type="tel" maxLength={60} autoComplete="tel" inputMode="tel" /></label>
+          <label className="form-row"><span>Phone or WhatsApp (optional)</span><WhatsAppInput lang="en" name="phone" /></label>
           <label className="form-check">
             <input type="checkbox" name="consent" required />
             <span><b>I understand this is a request, not a booking: the price, the conditions and whether the dinner can be arranged are confirmed with me before any payment.</b></span>

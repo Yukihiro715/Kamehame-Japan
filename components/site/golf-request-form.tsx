@@ -11,6 +11,7 @@ import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
 import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
+import { WhatsAppInput } from "@/components/site/whatsapp-input";
 import { isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
@@ -334,7 +335,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         <div className="form-row two">
           <label>
             <span>{G.whatsapp}</span>
-            <input name="whatsapp" type="tel" maxLength={60} autoComplete="tel" inputMode="tel" placeholder={G.whatsappHint} />
+            <WhatsAppInput lang={lang} />
           </label>
           <span />
         </div>

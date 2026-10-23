@@ -7,6 +7,7 @@ import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isArrangement, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
+import { normalizePhone } from "@/lib/phone";
 import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
 import { automationConfigured, submitGolfAutomation } from "@/lib/golf-automation";
@@ -213,7 +214,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     rental: clean(body.rental, MAX.rental) || undefined,
     clubs: clean(body.clubs, MAX.clubs) || undefined,
     pickup: clean(body.pickup, MAX.pickup) || undefined,
-    whatsapp: clean(body.whatsapp, MAX.whatsapp) || undefined,
+    whatsapp: normalizePhone(clean(body.whatsapp, MAX.whatsapp)).value || undefined,
     priceNote: golf.priceNote,
     levelKey: golf.areaId ? clean(body.level_key, 20) || undefined : undefined,
     handicap: golf.areaId ? clean(body.handicap, 60) || undefined : undefined,

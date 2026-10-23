@@ -172,6 +172,9 @@ test("golf page (package): two areas, published prices for 2–4 golfers, one op
   for (const field of ['name="golfers"', 'name="area"', 'name="specific-course"', 'name="pickup"', 'name="hotel-undecided"', 'name="level"', 'name="rental-1"', 'name="handed-1"', 'name="shoes-1"', 'name="whatsapp"']) {
     assert.ok(html.includes(field), `request form has ${field}`);
   }
+  // WhatsApp: a country-code select beside the number, one hidden field with the international number
+  assert.ok(html.includes('class="wa-field"') && html.includes("Country code…") && html.includes("+44 United Kingdom") && html.includes("+81 Japan"), "WhatsApp field has a country-code select");
+  assert.ok(html.includes('type="hidden" name="whatsapp"'), "the WhatsApp number is sent as one hidden field");
   assert.ok(html.includes("Send Golf Day Request"), "the submit button has its own label");
   assert.ok(html.includes("Check Availability"), "the page CTA is Check Availability");
   assert.ok(html.includes("Custom quote"), "a specific course is quoted");
