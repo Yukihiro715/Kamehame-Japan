@@ -5,6 +5,7 @@ import { quoteCopy } from "./quote-request-switch";
 import { useBooking } from "@/components/site/booking-context";
 import { useCurrency } from "@/components/site/currency-context";
 import { golfPriceParts } from "@/components/site/golf-options";
+import { GOLF_FIXED_FEE_MAX, isArrangement } from "@/lib/golf-prices";
 import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { Fx, Yen } from "@/components/site/money";
 import { t, type Lang } from "@/lib/i18n";
@@ -56,7 +57,9 @@ export function StickyRequestBar({
 
   if (b && variant && golf) {
     const n = b.guestsNumber;
-    const p = golfPriceParts(golf, b.customQuote ? null : tierTotal(variant.tiers, n), n);
+    // Five golfers or more in the booking service: quoted for the group, same words as the panel.
+    const large = isArrangement() && n > GOLF_FIXED_FEE_MAX;
+    const p = golfPriceParts(golf, b.customQuote || large ? null : tierTotal(variant.tiers, n), n, large);
     return (
       <div className={`sticky-request sticky-golf ${show ? "show" : ""}`} aria-hidden={!show}>
         <div className="sticky-price">
