@@ -187,7 +187,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
     listedMax: provisional ? EXPERIENCE_PRODUCTS[exp.slug].max : eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),
     maxGuests: exp.partySize?.max,
     dates: avail?.dates, interpreter: exp.interpreter,
-    notesLabel: exp.notesLabel, notesHint: exp.notesHint,
+    notesLabel: exp.notesLabel, notesHint: exp.notesHint, replyNote: exp.replyNote,
     ctaLabel: provisional ? P.cta : exp.cta?.label, ctaNote: provisional ? P.note : exp.cta?.note, timeLabel: exp.timeLabel,
   };
   const fmtDay = new Intl.DateTimeFormat(DATE_LOCALES[lang], { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
