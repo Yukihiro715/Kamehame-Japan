@@ -12,8 +12,10 @@ import { menuById, OFUKURO, OFUKURO_MENUS, ofukuroQuote, yenOf } from "@/lib/ofu
 /** The Ofukuro Dinner request form, in four steps: date and group, the menu
  *  (carried over from the page), the conditions we check (kitchen,
  *  permission, allergies, dietary needs, special arrangements), then contact
- *  and a summary. Preview only: it is not connected to the enquiry backend,
- *  posts nowhere and says so; it never shows a "request received" state.
+ *  and a summary. With `live` it posts to /api/contact like the other
+ *  request forms (the founding-guest page, published 2026-10-23); without
+ *  it, as on the concept preview, it only shows what would be sent and
+ *  never claims receipt. Dates open five days ahead (owner, 2026-10-23).
  *  The estimate follows the owner's pricing (lib/ofukuro-dinner.ts). */
 
 const TIMES = [["18:00", "Dinner · around 18:00"], ["19:00", "Dinner · around 19:00"], ["11:00", "Lunch · 11:00"], ["flexible", "Flexible"]] as const;
@@ -26,29 +28,31 @@ type Row = { label: string; value: string };
 
 export interface OfukuroOffer { discount: number; label: string }
 
-export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; offer?: OfukuroOffer }) {
+export function OfukuroForm({ fallbackEmail, offer, live = false }: { fallbackEmail: string; offer?: OfukuroOffer; live?: boolean }) {
   const { selected, select } = useOfukuroMenu();
   const menu = menuById(selected);
   const [adults, setAdults] = useState("2");
   const [children, setChildren] = useState("0");
   const [summary, setSummary] = useState<Row[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const min = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 3); return d.toISOString().slice(0, 10); }, []);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+  const min = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 5); return d.toISOString().slice(0, 10); }, []);
   const kids = Number(children) || 0;
   const regular = ofukuroQuote(Number(adults) || 0, kids);
   const total = offer ? ofukuroQuote(Number(adults) || 0, kids, offer.discount) : regular;
   const track = useRef<HTMLDivElement>(null);
   const slide = (dir: 1 | -1) => { const t = track.current; if (!t) return; const w = (t.firstElementChild as HTMLElement | null)?.offsetWidth ?? 280; t.scrollBy({ left: dir * (w + 12), behavior: "smooth" }); };
 
-  function preview(e: FormEvent<HTMLFormElement>) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (status === "sending") return;
     if (!menu) { setError("Choose a menu first (step 2)."); document.getElementById("ofk-step-menu")?.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
     setError(null);
     const fd = new FormData(e.currentTarget);
     const one = (k: string) => String(fd.get(k) ?? "").trim();
     const many = (k: string) => fd.getAll(k).map(String).join(", ");
     const label = <T extends readonly (readonly [string, string])[]>(list: T, v: string) => list.find(([k]) => k === v)?.[1] ?? v;
-    setSummary([
+    const rows: Row[] = [
       { label: "Date and time", value: `${one("date") || "—"} · ${label(TIMES, one("time"))}` },
       { label: "Area", value: one("area") || "—" },
       { label: "Group", value: `${adults} adult(s)${kids ? `, ${kids} child(ren) under 10 (ages: ${one("ages") || "—"})` : ""}` },
@@ -63,13 +67,46 @@ export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; o
       { label: "Name", value: one("name") },
       { label: "E-mail", value: one("email") },
       { label: "Phone / WhatsApp", value: one("phone") || "—" },
-    ]);
-    document.getElementById("ofk-summary")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    ];
+    if (!live) {
+      setSummary(rows);
+      document.getElementById("ofk-summary")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    // The live form: one request to the same endpoint as the other pages. The
+    // substance travels in the message (every answer, labelled) plus the
+    // fields the ledger and the team's alert read (not `area`, which the
+    // endpoint reserves for the golf page); the amount is the page's
+    // estimate and is confirmed by a person before any payment link.
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          kind: "guest", lang: "en", experience: offer ? "ofukuro-dinner-founding" : "ofukuro-dinner",
+          name: one("name"), email: one("email"), whatsapp: one("phone"), website: one("website"),
+          dates: `${one("date")} ${label(TIMES, one("time"))}`, party: String((Number(adults) || 0) + kids),
+          plan: `${menu.name}${offer ? ` · ${offer.label} · photos: ${label(FACES, one("faces"))}` : ""}`,
+          estimate: `${yenOf(total)}${offer ? ` (regular ${yenOf(regular)})` : ""}`,
+          message: rows.map((r) => `${r.label}: ${r.value}`).join("\n"),
+        }),
+      });
+      const json = (await res.json()) as { ok?: boolean };
+      if (!res.ok || !json.ok) { setStatus("failed"); return; }
+      setSummary(rows);
+      setStatus("sent");
+      document.getElementById("ofk-summary")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch {
+      setStatus("failed");
+    }
   }
 
   return (
     <>
-      <form className="enquiry-form golf-form hd-form" onSubmit={preview} data-clarity-mask="True">
+      <form className="enquiry-form golf-form hd-form" onSubmit={submit} data-clarity-mask="True">
+        {/* Honeypot: a filled field marks a bot, as on the other forms. */}
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
         {error && <p className="form-error" role="alert"><Mail size={14} /> {error}</p>}
 
         <fieldset className="form-step">
@@ -196,12 +233,27 @@ export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; o
         </fieldset>
 
         <div className="enquiry-actions">
-          <button type="submit" className="contact-cta">Preview my request <ArrowRight size={15} /></button>
+          <button type="submit" className="contact-cta" disabled={status === "sending"}>{live ? (status === "sending" ? "Sending…" : "Send request") : "Preview my request"} <ArrowRight size={15} /></button>
         </div>
-        <p className="form-after">Preview build: this form is not connected yet. The button shows what the live form would send; nothing is sent, stored or e-mailed. <span className="form-privacy">If you want to reach us now, write to {fallbackEmail}.</span></p>
+        {status === "failed" && <p className="form-error" role="alert"><Mail size={14} /> Sorry, the request could not be sent. Please try again, or write to {fallbackEmail}.</p>}
+        {live
+          ? <p className="form-after">No payment now. We reply within 24 hours with whether a cook is free on your date and the next step. <span className="form-privacy">Prefer e-mail? Write to {fallbackEmail}.</span></p>
+          : <p className="form-after">Preview build: this form is not connected yet. The button shows what the live form would send; nothing is sent, stored or e-mailed. <span className="form-privacy">If you want to reach us now, write to {fallbackEmail}.</span></p>}
       </form>
 
-      {summary && (
+      {summary && live && (
+        <div className="form-done" role="status" id="ofk-summary">
+          <Check size={22} />
+          <div>
+            <b>{OFUKURO.states[0]}</b>
+            <p>{OFUKURO.received}</p>
+            <ul className="know-list">{summary.map((r) => <li key={r.label}><b>{r.label}:</b> {r.value}</li>)}</ul>
+            <p className="xp-note" style={{ marginTop: 12 }}>What happens next: {OFUKURO.states.join(" → ")}. If we cannot arrange it, we tell you and nothing is charged.</p>
+          </div>
+        </div>
+      )}
+
+      {summary && !live && (
         <div className="form-done" role="status" id="ofk-summary">
           <Check size={22} />
           <div>

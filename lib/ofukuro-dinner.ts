@@ -66,7 +66,7 @@ export function ofukuroQuote(adults: number, children: number, discount = 0): nu
  *  are 30% off the whole price, in return for permission to use the photos.
  *  Separate unlisted URL; the slot count is a placeholder for the owner. */
 export const OFUKURO_FOUNDING = {
-  path: "/previews/ofukuro-founding-guests-5e8c1a72d9/",
+  path: "/ofukuro-dinner/",
   discount: 0.3,
   slots: 10,
   flag: "Founding guests · first 10 dinners · 30% off",

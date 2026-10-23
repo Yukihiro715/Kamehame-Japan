@@ -191,6 +191,8 @@ export function buildEntries(read) {
   }
 
   add("/partners/", { priority: "0.4", changefreq: "monthly", key: src("app/partners/page.tsx") || null });
+  // The Ofukuro Dinner founding-guest campaign (published 2026-10-23): its copy lives in lib/ofukuro-dinner.ts and the page.
+  add("/ofukuro-dinner/", { priority: "0.7", changefreq: "weekly", key: (src("app/ofukuro-dinner/page.tsx") || "") + (src("lib/ofukuro-dinner.ts") || "") || null });
 
   return { entries, stats: { experiences: experiences.length, tours: toursPublished ? tours.length : 0, collections: collections.length } };
 }

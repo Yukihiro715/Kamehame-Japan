@@ -447,22 +447,27 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
   }
 });
 
-test("Ofukuro founding-guest offer: separate unlisted URL, 30% off the whole price, photo consent in the form", async () => {
-  const path = "/previews/ofukuro-founding-guests-5e8c1a72d9/";
+test("Ofukuro founding-guest offer: published at /ofukuro-dinner/, indexable, 30% off the whole price, live form with photo consent; the old preview address redirects", async () => {
+  const path = "/ofukuro-dinner/";
   const res = await render(path);
   assert.equal(res.status, 200, path);
   const html = await res.text();
   const text = html.replace(/<[^>]+>/g, " ");
-  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive"/, "noindex");
-  assert.ok(html.includes('class="xp-preview-banner"'), "preview banner");
-  for (const s of ["30% off", "¥24,640", "¥35,200", "¥28,840", "¥44,240", "¥4,200", "¥5,600", "¥2,100", "Ten dinners", "20 minutes"]) assert.ok(text.includes(s), `offer copy: ${s}`);
-  assert.ok(html.includes('name="photo-consent"') && html.includes('name="faces"') && html.includes('name="menu"'), "photo consent, faces choice and menu in the form");
+  assert.doesNotMatch(html, /<meta name="robots" content="noindex/, "indexable");
+  assert.ok(html.includes('rel="canonical" href="https://kamehame-japan.com/ofukuro-dinner/"'), "canonical");
+  assert.ok(!html.includes('class="xp-preview-banner"'), "no preview banner");
+  for (const s of ["30% off", "¥24,640", "¥35,200", "¥28,840", "¥44,240", "¥4,200", "¥5,600", "¥2,100", "Ten dinners", "20 minutes", "Dates open five days ahead"]) assert.ok(text.includes(s), `offer copy: ${s}`);
+  assert.ok(html.includes('name="photo-consent"') && html.includes('name="faces"') && html.includes('name="menu"') && html.includes('name="website"'), "photo consent, faces choice, menu and honeypot in the form");
   assert.equal((html.match(/class="ofk-menu ofk-menu-static"/g) || []).length, 7, "seven descriptive menu cards");
-  assert.ok(!html.includes('action="/api/contact"') && !html.includes("/api/experience-checkout") && !html.includes("Request received"), "posts nowhere, never claims receipt");
+  assert.ok(text.includes("Send request") && !text.includes("Preview my request") && !text.includes("not connected"), "the live form sends");
+  assert.ok(!html.includes("/api/experience-checkout") && !text.includes("Request received"), "no checkout, no receipt claimed before sending");
   assert.doesNotMatch(text, /\b(Yumi|Keiko|Aki)\b|reviews from|★/, "no fabricated cooks or reviews");
   for (const p of ["/en/", "/en/experiences/", "/en/tokyo/", "/en/food/"]) assert.ok(!(await (await render(p)).text()).includes("founding-guests"), `not linked from ${p}`);
   const { readFileSync } = await import("node:fs");
-  assert.ok(!readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8").includes("/previews/"), "not in the sitemap");
+  const sitemap = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+  assert.ok(sitemap.includes("https://kamehame-japan.com/ofukuro-dinner/") && !sitemap.includes("/previews/"), "the campaign is in the sitemap, the previews are not");
+  const old = await render("/previews/ofukuro-founding-guests-5e8c1a72d9/", { redirect: "manual" });
+  assert.ok([301, 302, 307, 308].includes(old.status) && /\/ofukuro-dinner\/$/.test(old.headers.get("location") || ""), `old address redirects (${old.status} ${old.headers.get("location")})`);
   // the regular preview keeps the regular price and no photo step
   const regular = await (await render("/previews/home-cooked-dinner-f4bc9d7306/")).text();
   assert.ok(!regular.includes('name="photo-consent"') && !regular.includes("¥24,640"), "regular page unchanged");
