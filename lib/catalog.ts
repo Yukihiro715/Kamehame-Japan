@@ -451,8 +451,10 @@ export const experiences: Experience[] = [
     // the owner's rule (wholesale + ¥4,500 ad cost, 20% margin, rounded up
     // to ¥500) → ¥24,000. Children's price: the operator has none yet, so
     // children are quoted. Cancellation from the operator's current terms
-    // (free until 2 days before; the day before 50%; the day itself and
-    // no-shows 100%), still to be confirmed for this product. The operator's
+    // was the spa's own; 2026-10-23 the owner set KAMEHAME's standard
+    // instead (free until 7 days before, then the full price) and ruled out
+    // date changes. Late arrival, extensions, treatments and the damage fee
+    // follow the spa's terms (options are paid in cash on the day). The operator's
     // name and address stay off the page until the owner decides; the sheet
     // allows the name. Camera monitoring of the bath is disclosed and still
     // to be agreed. Preview until the operator approves the page.
@@ -476,8 +478,8 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Japanese host · translated materials and translation tools",
     skipSiteFaq: true,
-    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 2 days before; the day before, half the price; on the day, including no-shows, the full price. The date can be changed once, free of charge, up to 2 days before. Arriving late shortens your session without a refund; more than about 15 minutes late may count as a cancellation. If the spa has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 2, rate: 0 }, { until: 1, rate: 50 }, { until: 0, rate: 100 }],
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price. A confirmed date cannot be changed: cancel and send a new request. Arriving late shortens your session without a refund; more than about 15 minutes late may count as a cancellation. If the spa has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "Sachet and three bath packs · Private hot-spring bath and herbal sauna · Yukata, towels, tea",
     highlights: [
       { icon: "brush", title: "Blend something of your own", body: "A fragrant sachet and three packs of herbal bath salts, mixed by hand with the staff's guidance; two packs go home with you." },
@@ -510,7 +512,7 @@ export const experiences: Experience[] = [
       { time: "3:30", title: "End of the session" },
     ],
     venue: {
-      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "The bath is watched by a camera for drowning prevention; where it points, who can see it and the privacy rules are confirmed with you before you book"],
+      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "As Tokyo regulations require, an attendant is on duty and a monitoring camera watches over the bath for safety; where it points, who can see it and how the images are handled are confirmed with you before you book"],
       afterBooking: ["The spa's name, address and directions", "Arrival instructions and a phone number for the day"],
       img: "/images/nerima-herbal-bath.webp", alt: "The private bath",
     },
@@ -528,9 +530,9 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, with a guardian, by prior arrangement. Tell us their ages and how many; the spa confirms participation and the price. Mixed bathing in the private bath is for children up to six." },
       { q: "Can we take the bath blends home?", a: "Yes: two of the three packs you make go home with you, packed on the day. Postal delivery is not offered." },
       { q: "Can we bring food?", a: "Yes. Herbal tea and hot-spring drinking water are provided; you may bring your own meal for the rest time." },
-      { q: "Is the bath monitored?", a: "The spa uses a camera to watch for drowning. Before you book we confirm with you where it points, who can see it and how the images are handled, and you decide." },
+      { q: "Is the bath monitored?", a: "Yes. As Tokyo regulations require, an attendant is on duty and a monitoring camera watches over the bath for safety. Before you book we confirm with you where it points, who can see it and how the images are handled, and you decide." },
       { q: "Who should check with us first?", a: "Anyone pregnant, with a chronic condition, a heart condition or high blood pressure, or who is unwell: the spa asks for a doctor's clearance. This is a relaxation experience, not a medical treatment." },
-      { q: "What is the cancellation policy?", a: "Free until 2 days before the date; the day before, half the price; on the day, including no-shows, the full price. One free date change up to 2 days before. Days are counted in Japan time." },
+      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. A confirmed date cannot be changed. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the date confirmation, the price for your group and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Make a Japanese cypress and aromatic sachet", "Blend three packs of herbal bath salts and steep one for your bath", "Soak in a private hot-spring bath, then try the low-temperature herbal sauna", "Rest in a yukata with tea, and take your blends home"],
