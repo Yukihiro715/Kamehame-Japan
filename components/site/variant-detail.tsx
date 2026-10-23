@@ -161,7 +161,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                   <table className="xp-pricing vp-table vh-table">
                     <thead><tr><th>{vc.prices.golfersCol}</th>{variants.map((v) => <th key={v.id}>{v.short}</th>)}</tr></thead>
                     <tbody>
-                      {parties.map((n) => (
+                      {parties.filter((n) => tierTotal(variants[0].tiers, n) !== null).map((n) => (
                         <tr key={n}>
                           <td data-label={vc.prices.golfersCol}><b>{countOf(O.golfers, n)}</b></td>
                           {variants.map((v) => {
@@ -176,6 +176,13 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                           })}
                         </tr>
                       ))}
+                      {/* The booking service's larger groups: one row, quoted for the group */}
+                      {parties.some((n) => tierTotal(variants[0].tiers, n) === null) && (
+                        <tr>
+                          <td data-label={vc.prices.golfersCol}><b>{O.largePartyRow ?? countOf(O.golfers, parties[parties.length - 1])}</b></td>
+                          {variants.map((v) => <td key={v.id} className="quote" data-label={v.short}><span>{O.largePartyQuote ?? O.customQuote}</span></td>)}
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                   <ul className="vp-notes">

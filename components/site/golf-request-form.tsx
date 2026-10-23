@@ -15,7 +15,7 @@ import { WhatsAppInput } from "@/components/site/whatsapp-input";
 import { isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
-import { GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs, isArrangement } from "@/lib/golf-prices";
+import { GOLF_FIXED_FEE_MAX, GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs, isArrangement } from "@/lib/golf-prices";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 type Rental = "required" | "own" | "unsure";
@@ -66,8 +66,10 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const golfers = Array.from({ length: n }, (_, i) => i + 1);
   const specific = !arrangement && b.coursePref === "preferred";
   const namedCourse = arrangement ? wantCourse : specific;
-  const total = specific ? null : tierTotal(v.tiers, n);
-  const p = golfPriceParts(O, total, n);
+  // Five golfers or more in the booking service: no published fee, quoted for the group.
+  const large = arrangement && n > GOLF_FIXED_FEE_MAX;
+  const total = specific || large ? null : tierTotal(v.tiers, n);
+  const p = golfPriceParts(O, total, n, large);
   const rentalOf = (i: number): Rental => rental[i] ?? "required";
   const handedOf = (i: number): Handed => handed[i] ?? "right";
   const shoeOf = (i: number): string => shoes[i] ?? "";
@@ -139,7 +141,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         area: v.id,
         golfers: n,
         course_mode: specific ? "specific" : "recommended",
-        custom_quote: specific,
+        custom_quote: specific || large,
         language: lang,
         party_size: n,
         value: total ?? undefined,

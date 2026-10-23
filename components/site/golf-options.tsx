@@ -2,6 +2,8 @@
 
 import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useBooking } from "@/components/site/booking-context";
+import { GuestStepper } from "@/components/site/guest-stepper";
+import { GOLF_FIXED_FEE_MAX, isArrangement } from "@/lib/golf-prices";
 import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
@@ -16,9 +18,11 @@ type OptionsCopy = VariantPageCopy["options"];
  *  so they can never disagree. Each leads with the group total; the
  *  per-person figure is the small line under it. `total` is the package price for `n`
  *  golfers; null means the request is quoted individually. */
-export function golfPriceParts(copy: OptionsCopy, total: number | null, n: number) {
+export function golfPriceParts(copy: OptionsCopy, total: number | null, n: number, large = false) {
   if (total === null) {
-    return { custom: true as const, headline: copy.customQuote, line: countOf(copy.customQuoteLine, n) };
+    return large
+      ? { custom: true as const, headline: copy.largePartyQuote ?? copy.customQuote, line: countOf(copy.largePartyLine ?? copy.customQuoteLine, n) }
+      : { custom: true as const, headline: copy.customQuote, line: countOf(copy.customQuoteLine, n) };
   }
   const { perPerson, approximate } = perPersonOf(total, n);
   const totalWords = copy.total.replace("{n}", String(n)).split("{total}").map((x) => x.trim());
@@ -61,7 +65,9 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
   const { usdActive } = useCurrency();
   if (!b) return null;
   const n = b.guestsNumber;
-  const custom = b.customQuote;
+  // Five golfers or more in the booking service: no published fee, quoted for the group.
+  const large = isArrangement() && n > GOLF_FIXED_FEE_MAX;
+  const custom = b.customQuote || large;
   const jump = (e: React.MouseEvent) => {
     e.preventDefault();
     document.querySelector("#request-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -88,7 +94,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
         <div className="go-area-grid">
           {variants.map((v) => {
             const on = b.variant === v.id;
-            const p = golfPriceParts(copy, custom ? null : tierTotal(v.tiers, n), n);
+            const p = golfPriceParts(copy, custom ? null : tierTotal(v.tiers, n), n, large);
             return (
               <label key={v.id} className={`go-area${on ? " on" : ""}`}>
                 <input type="radio" name="area" value={v.id} checked={on} onChange={() => b.set({ variant: v.id })} />
@@ -116,7 +122,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
       </fieldset>
 
       <p className="go-includes">{copy.includes}</p>
-      {custom ? <p className="go-note">{copy.customNote}</p> : (
+      {custom ? <p className="go-note">{large ? copy.largePartyNote ?? copy.customNote : copy.customNote}</p> : (
         <div className="go-assure"><ShieldCheck size={16} aria-hidden="true" /><div><b>{copy.assure.heading}</b><p>{copy.assure.body}</p></div></div>
       )}
       <FxNote lang={lang} short />
@@ -130,18 +136,34 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
 /** The party-size control: one pill per size, the chosen one marked like the
  *  area cards (ink border, cream fill, a check). Shared by the panel and the
  *  form's summary; both write the same booking state. */
-function GolfersSeg({ parties, copy, name }: { parties: number[]; copy: Pick<OptionsCopy, "golfers">; name: string }) {
+function GolfersSeg({ parties, copy, name }: { parties: number[]; copy: Pick<OptionsCopy, "golfers" | "moreGolfers">; name: string }) {
   const b = useBooking();
   if (!b) return null;
   const n = b.guestsNumber;
+  // Sizes with a published fee get a pill each; the larger sizes (quoted) share
+  // one "5 or more" pill that opens a stepper, so the row stays short.
+  const fixed = parties.filter((k) => k <= GOLF_FIXED_FEE_MAX);
+  const extra = parties.filter((k) => k > GOLF_FIXED_FEE_MAX);
+  const large = extra.length > 0 && n > GOLF_FIXED_FEE_MAX;
   return (
-    <div className="go-seg">
-      {parties.map((k) => (
-        <label key={k} className={`go-seg-opt${n === k ? " on" : ""}`}>
-          <input type="radio" name={name} value={k} checked={n === k} onChange={() => b.set({ guests: String(k) })} />
-          <span>{n === k && <Check size={13} aria-hidden="true" />}{countOf(copy.golfers, k)}</span>
-        </label>
-      ))}
+    <div className="go-seg-wrap">
+      <div className="go-seg">
+        {fixed.map((k) => (
+          <label key={k} className={`go-seg-opt${n === k ? " on" : ""}`}>
+            <input type="radio" name={name} value={k} checked={n === k} onChange={() => b.set({ guests: String(k) })} />
+            <span>{n === k && <Check size={13} aria-hidden="true" />}{countOf(copy.golfers, k)}</span>
+          </label>
+        ))}
+        {extra.length > 0 && (
+          <label className={`go-seg-opt${large ? " on" : ""}`}>
+            <input type="radio" name={name} value={large ? n : extra[0]} checked={large} onChange={() => b.set({ guests: String(extra[0]) })} />
+            <span>{large && <Check size={13} aria-hidden="true" />}{copy.moreGolfers ?? `${extra[0]}+`}</span>
+          </label>
+        )}
+      </div>
+      {large && (
+        <GuestStepper id={`${name}-count`} value={String(n)} min={extra[0]} max={extra[extra.length - 1]} onChange={(v) => b.set({ guests: v })} label={(k) => countOf(copy.golfers, k)} decLabel="−" incLabel="+" />
+      )}
     </div>
   );
 }

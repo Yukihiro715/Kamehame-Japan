@@ -74,6 +74,8 @@ test("golf page (booking service): flat fee per golfer from one golfer, meet at 
   for (const price of ["¥15,000", "¥30,000", "¥45,000", "¥60,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
   assert.doesNotMatch(html, /¥250,000|¥270,000|¥290,000|¥310,000|¥330,000|¥350,000/, "no package prices");
   assert.ok(text.includes("1 golfer") && !text.includes("1 golfers"), "a single golfer, in the singular");
+  // larger groups (2026-10-23): a "5 or more" choice, a quoted row in the fee table, the FAQ
+  assert.ok(text.includes("5 or more") && text.includes("5 to 12 golfers") && text.includes("Can you arrange for a group of five or more?"), "five or more golfers are taken and quoted");
   assert.doesNotMatch(text, /−¥5,000|Bringing own \(/, "no own-clubs deduction in the booking service");
   // what we arrange vs what is not part of the service
   assert.ok(text.includes("What the Arrangement Fee Covers"), "inclusions heading");
@@ -229,7 +231,10 @@ test("golf request: the server validates the choice against the price master", a
   assert.equal(ok.status, 503);
   assert.equal(ok.json.error, "unconfigured");
   // an area or a party size outside the master is refused, whatever the browser claims
-  for (const bad of [{ area_id: "osaka", party: "2" }, { area_id: "fuji", party: "5" }, { area_id: "fuji", party: "1" }]) {
+  // five golfers or more: accepted as a quote (the booking service, 2026-10-23), so it reaches delivery too
+  const large = await post({ ...base, area_id: "fuji", party: "6", course_mode: "recommended" });
+  assert.equal(large.status, 503, "a party of six is accepted and quoted");
+  for (const bad of [{ area_id: "osaka", party: "2" }, { area_id: "fuji", party: "13" }, { area_id: "fuji", party: "0" }]) {
     const r = await post({ ...base, ...bad });
     assert.equal(r.status, 400, `rejects ${JSON.stringify(bad)}`);
   }

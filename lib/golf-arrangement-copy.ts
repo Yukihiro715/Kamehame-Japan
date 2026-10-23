@@ -57,7 +57,7 @@ const en: ArrangementCopy = {
     "Booking a round in Japan is harder than it should be: Japanese-only websites, member introductions, deposits, dress codes nobody explains. We do that part for you. Tell us your date, your group and whether you would like the Tokyo area or the Mt. Fuji region, and we propose a course and a tee time, reserve it in your name and brief you on everything the club expects.",
     "You meet us at the course, not in a hotel lobby: there is no transfer in the fee, so you are free to drive, take the train or book a private car through the transfer partner we introduce. Green fees, cart, rentals and lunch are paid directly at the club on the day. An English-speaking assistant for the day can be added and is quoted separately.",
   ],
-  duration: "One round, 18 holes", group: "1–4 golfers · meet at the course", area: "Tokyo area or Mt. Fuji region",
+  duration: "One round, 18 holes", group: "1–12 golfers · 5 or more quoted · meet at the course", area: "Tokyo area or Mt. Fuji region",
   includedShort: "Course selection and tee-time booking · Club liaison in English · Green fees paid at the course",
   cancellation: arrangementPolicy["en"].terms,
   included: [
@@ -95,6 +95,7 @@ const en: ArrangementCopy = {
     { q: "How do we get to the course?", a: "As you prefer. Many guests drive, or take the train and a taxi; we send the route. If you would like a private car from your hotel, we introduce a licensed transfer partner; you book and pay them directly." },
     { q: "Can someone come with us on the day?", a: "Yes. An English-speaking assistant can meet you at the club, handle check-in and the rentals and stay on hand at the clubhouse. Ask in the form and we quote it separately. The assistant does not play." },
     { q: "Can I request a specific course?", a: "Yes, for the same fee. Name it in the form and we try there first; the club's availability decides, and members-only clubs cannot be guaranteed." },
+    { q: "Can you arrange for a group of five or more?", a: "Yes, up to twelve golfers. Groups of five or more are quoted individually: the club usually needs two or more tee times, so we confirm the fee for your group with the proposal. Send the request with your number and preferred date; enquiring is free." },
     { q: "Can I book for one golfer?", a: "Yes. Many clubs pair single players or twosomes with other guests; we tell you how your course handles it before you confirm." },
     { q: "Will we see Mt. Fuji?", a: "On many courses in the Mt. Fuji area, weather permitting; it can never be guaranteed. Tokyo-area courses do not promise a view." },
     { q: "Are rental clubs and shoes available?", a: "At most courses, yes: tell us who needs them and we reserve. Rental fees are paid at the club. Golf wear and gloves are yours to bring." },
@@ -143,6 +144,8 @@ const en: ArrangementCopy = {
     heading: "Plan your round", golfersLegend: "Golfers", areaLegend: "Area", golfers: "{n} golfers",
     perPerson: " / golfer", total: "{total} fee · {n} golfers", totalShort: "{total} fee", perPersonRef: "{price} / golfer",
     customQuote: "Custom quote", customQuoteLine: "Specific course · {n} golfers",
+    moreGolfers: "5 or more", largePartyQuote: "Quoted individually", largePartyLine: "{n} golfers · fee quoted for your group", largePartyRow: "5 to 12 golfers",
+    largePartyNote: "For five golfers or more we quote the arrangement fee for your group: send the request with your number and date and we reply with the fee and a proposal. Enquiring is free.",
     includes: "Arrangement fee only. Green fees, cart, rentals and lunch are paid at the club; we tell you the amounts before you confirm.",
     note: arrangementPolicy["en"].beforePayment,
     assure: { heading: arrangementPolicy["en"].stageTitle, body: arrangementPolicy["en"].research },
@@ -166,7 +169,7 @@ const en: ArrangementCopy = {
   },
   prices: {
     heading: "Arrangement fee by group size",
-    only: "The fee is per golfer and the same in both areas. Course charges are paid at the club.",
+    only: "The fee is per golfer and the same in both areas. Course charges are paid at the club. For five golfers or more, the fee is quoted individually for the group.",
     golfersCol: "Golfers", perPersonCol: "Per golfer", totalCol: "Fee for the group",
     approxNote: "The fee includes tax. Green fees, cart, rentals and lunch are paid at the club on the day.",
     notes: [
@@ -217,7 +220,7 @@ const ja: ArrangementCopy = {
     "日本でゴルフ場を予約するのは、思いのほか難しいもの。日本語だけのサイト、メンバー紹介、予約金、誰も説明してくれないドレスコード。その部分を私たちが引き受けます。日程と人数、東京近郊か富士山エリアかをお知らせいただければ、コースとティータイムをご提案し、お客様のお名前で予約して、ゴルフ場が求めることをすべて事前にご案内します。",
     "集合はホテルのロビーではなくゴルフ場。手配料に送迎は含まれないので、レンタカー、電車、あるいは当社がご紹介する送迎の提携会社との直接契約など、行き方は自由に選べます。プレー代、カート、レンタル、昼食は当日ゴルフ場で直接お支払いください。英語対応のアシスタントの同行はオプションで、別途お見積もりします。",
   ],
-  duration: "1ラウンド・18ホール", group: "1〜4名・現地集合", area: "東京近郊または富士山エリア",
+  duration: "1ラウンド・18ホール", group: "1〜12名(5名以上は見積)・現地集合", area: "東京近郊または富士山エリア",
   includedShort: "コース選定とティータイム予約・ゴルフ場との英語での調整・プレー代は現地精算",
   cancellation: arrangementPolicy["ja"].terms,
   included: [
@@ -255,6 +258,7 @@ const ja: ArrangementCopy = {
     { q: "ゴルフ場へはどう行けばいいですか?", a: "ご自由にお選びください。レンタカー、または電車とタクシーで向かう方が多く、行き方をご案内します。ホテルから専用車をご希望なら、認可を受けた送迎の提携会社をご紹介します。予約とお支払いは提携会社と直接行っていただきます。" },
     { q: "当日、誰か同行してもらえますか?", a: "はい。英語対応のアシスタントがゴルフ場でお迎えし、チェックインやレンタルの手続きを担い、クラブハウスで待機します。フォームでご希望いただければ別途お見積もりします。アシスタントはプレーしません。" },
     { q: "特定のコースを指定できますか?", a: "はい、手配料は同じです。フォームにコース名をご記入いただければ、まずそのコースに当たります。空き状況はゴルフ場次第で、メンバー限定のクラブは確約できません。" },
+    { q: "5名以上のグループでも手配できますか?", a: "はい、12名までお受けします。5名以上は個別見積もりです。ゴルフ場では通常2組以上のティータイムが必要になるため、人数と希望日をお送りいただき、ご提案と一緒に手配料をご案内します。お問い合わせは無料です。" },
     { q: "1名でも予約できますか?", a: "はい。多くのゴルフ場では1名や2名のお客様を他の組と合わせてスタートします。ご確定の前に、そのコースの扱いをお知らせします。" },
     { q: "富士山は見えますか?", a: "富士山エリアの多くのコースでは天候次第で見えますが、確約はできません。東京近郊のコースは眺望をお約束するものではありません。" },
     { q: "レンタルクラブやシューズはありますか?", a: "ほとんどのコースで可能です。必要な方をお知らせいただければ予約します。レンタル料はゴルフ場でお支払いください。ウェアとグローブはご持参ください。" },
@@ -303,6 +307,8 @@ const ja: ArrangementCopy = {
     heading: "ラウンドを計画する", golfersLegend: "人数", areaLegend: "エリア", golfers: "{n}名",
     perPerson: "", total: "{n}名の手配料 {total}", totalShort: "手配料 {total}", perPersonRef: "1名 {price}",
     customQuote: "個別見積", customQuoteLine: "希望コース指定・{n}名",
+    moreGolfers: "5名以上", largePartyQuote: "個別見積", largePartyLine: "{n}名・手配料はお見積もり", largePartyRow: "5〜12名",
+    largePartyNote: "5名以上は、人数と日程をお送りいただければグループの手配料をお見積もりし、ご提案と一緒にご返信します。お問い合わせは無料です。",
     includes: "表示は手配料のみ。プレー代、カート、レンタル、昼食はゴルフ場払いで、金額はご確定の前にお知らせします。",
     note: arrangementPolicy["ja"].beforePayment,
     assure: { heading: arrangementPolicy["ja"].stageTitle, body: arrangementPolicy["ja"].research },
@@ -326,7 +332,7 @@ const ja: ArrangementCopy = {
   },
   prices: {
     heading: "人数別の手配料",
-    only: "手配料は1名あたりで、どちらのエリアも同額です。ゴルフ場の費用は現地でお支払いください。",
+    only: "手配料は1名あたりで、どちらのエリアも同額です。ゴルフ場の費用は現地でお支払いください。5名以上は手配料をグループごとに個別にお見積もりします。",
     golfersCol: "人数", perPersonCol: "1名あたり", totalCol: "グループの手配料",
     approxNote: "手配料は税込です。プレー代、カート、レンタル、昼食は当日ゴルフ場でお支払いください。",
     notes: [
@@ -377,7 +383,7 @@ const es: ArrangementCopy = {
     "Reservar una vuelta en Japón es más difícil de lo que debería: webs solo en japonés, presentaciones de socios, depósitos, códigos de vestimenta que nadie explica. Nosotros nos ocupamos de esa parte. Dinos tu fecha, tu grupo y si prefieres la zona de Tokio o la región del monte Fuji; proponemos un campo y una hora de salida, lo reservamos a tu nombre y te explicamos todo lo que el club espera.",
     "Nos encontramos en el campo, no en el vestíbulo de un hotel: la tarifa no incluye traslado, así que puedes conducir, ir en tren o contratar un coche privado con el socio de traslados que te presentamos. Green fees, carrito, alquileres y almuerzo se pagan directamente en el club ese día. Un asistente de habla inglesa para el día puede añadirse y se presupuesta aparte.",
   ],
-  duration: "Una vuelta, 18 hoyos", group: "1–4 golfistas · encuentro en el campo", area: "Zona de Tokio o región del monte Fuji",
+  duration: "Una vuelta, 18 hoyos", group: "1–12 golfistas · 5 o más con presupuesto · encuentro en el campo", area: "Zona de Tokio o región del monte Fuji",
   includedShort: "Elección del campo y reserva de la salida · Gestión con el club en inglés · Green fees pagados en el campo",
   cancellation: arrangementPolicy["es"].terms,
   included: [
@@ -415,6 +421,7 @@ const es: ArrangementCopy = {
     { q: "¿Cómo llegamos al campo?", a: "Como prefieras. Muchos conducen o van en tren y taxi; te enviamos la ruta. Si quieres un coche privado desde tu hotel, te presentamos a un socio de traslados con licencia; reservas y pagas directamente con él." },
     { q: "¿Puede acompañarnos alguien ese día?", a: "Sí. Un asistente de habla inglesa puede recibirte en el club, gestionar el check-in y los alquileres y quedarse en la casa club. Pídelo en el formulario y lo presupuestamos aparte. El asistente no juega." },
     { q: "¿Puedo pedir un campo concreto?", a: "Sí, por la misma tarifa. Indícalo en el formulario y lo intentamos primero allí; decide la disponibilidad del club, y los clubes solo para socios no se pueden garantizar." },
+    { q: "¿Podéis gestionar un grupo de cinco o más?", a: "Sí, hasta doce golfistas. Los grupos de cinco o más se presupuestan individualmente: el club suele necesitar dos o más horas de salida, así que confirmamos la tarifa de tu grupo con la propuesta. Envía la solicitud con el número y la fecha preferida; consultar es gratis." },
     { q: "¿Puedo reservar para un solo golfista?", a: "Sí. Muchos clubes emparejan a jugadores solos o parejas con otros; te decimos cómo lo gestiona tu campo antes de confirmar." },
     { q: "¿Veremos el monte Fuji?", a: "En muchos campos de la zona del Fuji, si el tiempo lo permite; nunca se puede garantizar. Los campos de la zona de Tokio no prometen vistas." },
     { q: "¿Hay palos y zapatos de alquiler?", a: "En la mayoría de los campos, sí: dinos quién los necesita y los reservamos. El alquiler se paga en el club. La ropa y los guantes los traes tú." },
@@ -463,6 +470,8 @@ const es: ArrangementCopy = {
     heading: "Planifica tu vuelta", golfersLegend: "Golfistas", areaLegend: "Zona", golfers: "{n} golfistas",
     perPerson: " / golfista", total: "{total} de tarifa · {n} golfistas", totalShort: "{total} de tarifa", perPersonRef: "{price} / golfista",
     customQuote: "Presupuesto individual", customQuoteLine: "Campo concreto · {n} golfistas",
+    moreGolfers: "5 o más", largePartyQuote: "Presupuesto individual", largePartyLine: "{n} golfistas · tarifa presupuestada para tu grupo", largePartyRow: "5 a 12 golfistas",
+    largePartyNote: "Para cinco golfistas o más presupuestamos la tarifa de gestión para tu grupo: envía la solicitud con el número y la fecha y te respondemos con la tarifa y una propuesta. Consultar es gratis.",
     includes: "Solo la tarifa de gestión. Green fees, carrito, alquileres y almuerzo se pagan en el club; te decimos los importes antes de confirmar.",
     note: arrangementPolicy["es"].beforePayment,
     assure: { heading: arrangementPolicy["es"].stageTitle, body: arrangementPolicy["es"].research },
@@ -486,7 +495,7 @@ const es: ArrangementCopy = {
   },
   prices: {
     heading: "Tarifa de gestión por tamaño de grupo",
-    only: "La tarifa es por golfista y la misma en ambas zonas. Los cargos del campo se pagan en el club.",
+    only: "La tarifa es por golfista y la misma en ambas zonas. Los cargos del campo se pagan en el club. Para cinco golfistas o más, la tarifa se presupuesta individualmente para el grupo.",
     golfersCol: "Golfistas", perPersonCol: "Por golfista", totalCol: "Tarifa del grupo",
     approxNote: "La tarifa incluye impuestos. Green fees, carrito, alquileres y almuerzo se pagan en el club ese día.",
     notes: [
@@ -537,7 +546,7 @@ const fr: ArrangementCopy = {
     "Réserver une partie au Japon est plus compliqué qu'il ne le faudrait : sites uniquement en japonais, parrainage de membres, acomptes, codes vestimentaires que personne n'explique. Nous nous chargeons de cette partie. Indiquez votre date, votre groupe et votre préférence entre la région de Tokyo et celle du mont Fuji ; nous proposons un parcours et un départ, le réservons à votre nom et vous expliquons tout ce que le club attend.",
     "Le rendez-vous est au parcours, pas dans le hall d'un hôtel : le forfait ne comprend pas de transfert, vous êtes donc libre de conduire, de prendre le train ou de réserver une voiture privée auprès du partenaire de transfert que nous vous présentons. Green fees, voiturette, locations et déjeuner se règlent directement au club le jour même. Un assistant anglophone pour la journée peut être ajouté, sur devis séparé.",
   ],
-  duration: "Une partie, 18 trous", group: "1 à 4 golfeurs · rendez-vous au parcours", area: "Région de Tokyo ou du mont Fuji",
+  duration: "Une partie, 18 trous", group: "1 à 12 golfeurs · 5 ou plus sur devis · rendez-vous au parcours", area: "Région de Tokyo ou du mont Fuji",
   includedShort: "Choix du parcours et réservation du départ · Relations avec le club en anglais · Green fees réglés au parcours",
   cancellation: arrangementPolicy["fr"].terms,
   included: [
@@ -575,6 +584,7 @@ const fr: ArrangementCopy = {
     { q: "Comment se rend-on au parcours ?", a: "Comme vous le souhaitez. Beaucoup conduisent, ou prennent le train puis un taxi ; nous envoyons l'itinéraire. Pour une voiture privée depuis votre hôtel, nous vous présentons un partenaire de transfert agréé ; vous réservez et payez directement auprès de lui." },
     { q: "Quelqu'un peut-il nous accompagner ce jour-là ?", a: "Oui. Un assistant anglophone peut vous accueillir au club, s'occuper de l'enregistrement et des locations et rester disponible au club-house. Demandez-le dans le formulaire ; il fait l'objet d'un devis séparé. L'assistant ne joue pas." },
     { q: "Puis-je demander un parcours précis ?", a: "Oui, pour les mêmes frais. Indiquez-le dans le formulaire et nous l'essayons en premier ; la disponibilité du club décide, et les clubs réservés aux membres ne peuvent être garantis." },
+    { q: "Pouvez-vous organiser pour un groupe de cinq ou plus ?", a: "Oui, jusqu'à douze golfeurs. Les groupes de cinq ou plus font l'objet d'un devis individuel : le club a généralement besoin de deux départs ou plus, nous confirmons donc les frais de votre groupe avec la proposition. Envoyez la demande avec le nombre et la date souhaitée ; la demande est gratuite." },
     { q: "Puis-je réserver pour un seul golfeur ?", a: "Oui. Beaucoup de clubs associent les joueurs seuls ou à deux à d'autres invités ; nous vous expliquons la pratique de votre parcours avant confirmation." },
     { q: "Verrons-nous le mont Fuji ?", a: "Sur de nombreux parcours de la région du Fuji, si la météo le permet ; cela ne peut jamais être garanti. Les parcours de la région de Tokyo ne promettent pas de vue." },
     { q: "Y a-t-il des clubs et des chaussures de location ?", a: "Sur la plupart des parcours, oui : dites-nous qui en a besoin et nous réservons. La location se règle au club. Tenue et gants sont à apporter." },
@@ -623,6 +633,8 @@ const fr: ArrangementCopy = {
     heading: "Préparez votre partie", golfersLegend: "Golfeurs", areaLegend: "Région", golfers: "{n} golfeurs",
     perPerson: " / golfeur", total: "{total} de frais · {n} golfeurs", totalShort: "{total} de frais", perPersonRef: "{price} / golfeur",
     customQuote: "Devis individuel", customQuoteLine: "Parcours précis · {n} golfeurs",
+    moreGolfers: "5 ou plus", largePartyQuote: "Devis individuel", largePartyLine: "{n} golfeurs · frais chiffrés pour votre groupe", largePartyRow: "5 à 12 golfeurs",
+    largePartyNote: "À partir de cinq golfeurs, nous chiffrons les frais d'organisation pour votre groupe : envoyez la demande avec le nombre et la date, nous répondons avec les frais et une proposition. La demande est gratuite.",
     includes: "Frais d'organisation uniquement. Green fees, voiturette, locations et déjeuner se règlent au club ; nous vous indiquons les montants avant confirmation.",
     note: arrangementPolicy["fr"].beforePayment,
     assure: { heading: arrangementPolicy["fr"].stageTitle, body: arrangementPolicy["fr"].research },
@@ -646,7 +658,7 @@ const fr: ArrangementCopy = {
   },
   prices: {
     heading: "Frais d'organisation par taille de groupe",
-    only: "Les frais sont par golfeur, identiques dans les deux régions. Les frais du parcours se règlent au club.",
+    only: "Les frais sont par golfeur, identiques dans les deux régions. Les frais du parcours se règlent au club. À partir de cinq golfeurs, les frais sont chiffrés individuellement pour le groupe.",
     golfersCol: "Golfeurs", perPersonCol: "Par golfeur", totalCol: "Frais pour le groupe",
     approxNote: "Les frais sont TTC. Green fees, voiturette, locations et déjeuner se règlent au club le jour même.",
     notes: [
@@ -697,7 +709,7 @@ const zh: ArrangementCopy = {
     "在日本預約球場比想像中困難：只有日文的網站、需要會員介紹、訂金、沒有人解釋的服裝規定。這部分由我們處理。告訴我們日期、人數，以及想打東京近郊還是富士山區域，我們會提案球場與開球時間，以你的名字預約，並事先說明球場的所有要求。",
     "集合地點是球場，而不是飯店大廳：代辦費不含接送，你可以自駕、搭電車，或透過我們介紹的接送合作夥伴直接預約私人用車。果嶺費、球車、租借與午餐當天在球場直接支付。可加購英文助理隨行，另行報價。",
   ],
-  duration: "一輪 18 洞", group: "1 至 4 位球友 · 球場集合", area: "東京近郊或富士山區域",
+  duration: "一輪 18 洞", group: "1 至 12 位球友 · 5 位以上個別報價 · 球場集合", area: "東京近郊或富士山區域",
   includedShort: "球場挑選與開球時間預約 · 以英文與球場溝通 · 果嶺費於球場支付",
   cancellation: arrangementPolicy["zh-tw"].terms,
   included: [
@@ -735,6 +747,7 @@ const zh: ArrangementCopy = {
     { q: "怎麼前往球場？", a: "依你的喜好。許多旅客自駕，或搭電車再轉計程車，我們會提供路線。若希望從飯店搭乘私人用車，我們會介紹持有執照的接送合作夥伴，由你直接向對方預約與付款。" },
     { q: "當天可以有人陪同嗎？", a: "可以。英文助理可在球場迎接、協助報到與租借手續，並在會館待命。請在表單中提出，我們另行報價。助理不下場打球。" },
     { q: "可以指定球場嗎？", a: "可以，代辦費相同。在表單中寫下球場名稱，我們會優先洽詢；是否成功取決於球場空檔，會員制球場無法保證。" },
+    { q: "可以安排 5 位以上的團體嗎？", a: "可以，最多 12 位。5 位以上採個別報價：球場通常需要兩組以上的開球時段，因此我們會在提案時確認您團體的代辦費。請送出人數與希望日期；詢問免費。" },
     { q: "一位球友也能預約嗎？", a: "可以。許多球場會將單人或兩人與其他組合併開球；確認前我們會告知你的球場如何處理。" },
     { q: "看得到富士山嗎？", a: "富士山區域的許多球場在天氣許可時可以看到，但無法保證。東京近郊的球場不保證景觀。" },
     { q: "有租借球桿與球鞋嗎？", a: "多數球場有：告訴我們誰需要，我們代為預約。租借費於球場支付。服裝與手套請自備。" },
@@ -783,6 +796,8 @@ const zh: ArrangementCopy = {
     heading: "規劃你的一輪", golfersLegend: "人數", areaLegend: "區域", golfers: "{n} 位球友",
     perPerson: "", total: "{n} 位代辦費 {total}", totalShort: "代辦費 {total}", perPersonRef: "每位 {price}",
     customQuote: "個別報價", customQuoteLine: "指定球場 · {n} 位球友",
+    moreGolfers: "5 位以上", largePartyQuote: "個別報價", largePartyLine: "{n} 位球友 · 代辦費依團體報價", largePartyRow: "5 至 12 位",
+    largePartyNote: "5 位以上的團體，代辦費依人數個別報價：請送出人數與日期，我們會連同提案回覆代辦費。詢問免費。",
     includes: "僅顯示代辦費。果嶺費、球車、租借與午餐於球場支付；確認前我們會告知金額。",
     note: arrangementPolicy["zh-tw"].beforePayment,
     assure: { heading: arrangementPolicy["zh-tw"].stageTitle, body: arrangementPolicy["zh-tw"].research },
@@ -806,7 +821,7 @@ const zh: ArrangementCopy = {
   },
   prices: {
     heading: "各人數的代辦費",
-    only: "代辦費以每位計算，兩個區域相同。球場費用於球場支付。",
+    only: "代辦費以每位計算，兩個區域相同。球場費用於球場支付。5 位以上的團體，代辦費依團體個別報價。",
     golfersCol: "人數", perPersonCol: "每位", totalCol: "團體代辦費",
     approxNote: "代辦費含稅。果嶺費、球車、租借與午餐當天在球場支付。",
     notes: [

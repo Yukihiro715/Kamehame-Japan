@@ -30,7 +30,9 @@ export function golfPriceNoteJa(areaId: string, golfers: number, price: { groupT
     ? isArrangement()
       ? `${yen(price.groupTotal)} — ${golfers}名の手配料(${area}・1名${yen(price.perPersonDisplay)}、税込)。プレー代・カート・レンタル・昼食は現地精算、送迎は提携会社と直接契約、アシスタント同行は別途見積。価格表 ${version}。`
       : `${yen(price.groupTotal)} — ${golfers}名パッケージ(${area}・おすすめコース)。1名あたり${price.approximate ? `約${yen(price.perPersonDisplay)}(端数処理)` : yen(price.perPersonDisplay)}。価格表 ${version}。オプションは別途、最終金額はお支払い前に確定。`
-    : `個別見積もり — 希望コース指定(${golfers}名・${area})。パッケージ料金は適用なし。価格表 ${version}。`;
+    : isArrangement()
+      ? `個別見積もり — ${golfers}名の手配(${area})。5名以上は手配料をグループごとに見積もり(通常2組以上のティータイム)。価格表 ${version}。`
+      : `個別見積もり — 希望コース指定(${golfers}名・${area})。パッケージ料金は適用なし。価格表 ${version}。`;
 }
 
 /** "ゴルファー1: 必要(右利き) · ゴルファー2: 持参する" from the keys the form sent. */

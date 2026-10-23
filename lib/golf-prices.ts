@@ -28,9 +28,13 @@ export const GOLF_PACKAGE_PRICE_VERSION = "2026-10-10";
 export const GOLF_ARRANGEMENT_PRICE_VERSION = "arrangement-2026-10-17";
 export const GOLF_PRICE_VERSION = isArrangement() ? GOLF_ARRANGEMENT_PRICE_VERSION : GOLF_PACKAGE_PRICE_VERSION;
 
-/** Party sizes offered: the package needs a car-load of two to four; the booking service takes a single golfer too. */
+/** Party sizes with a published fee: the package needs a car-load of two to four; the booking service takes a single golfer too. */
 export const GOLF_GOLFERS: GolfGolfers[] = GOLF_MODE === "arrangement" ? [1, 2, 3, 4] : [2, 3, 4];
-export const golfPartySize = () => GOLF_MODE === "arrangement" ? { min: 1, max: 4, default: 2 } : { min: 2, max: 4, default: 4 };
+/** The booking service also takes larger groups (owner, 2026-10-23): from five golfers the
+ *  fee is quoted for the group — the club usually needs two or more tee times — up to this size. */
+export const GOLF_FIXED_FEE_MAX = 4;
+export const GOLF_MAX_GOLFERS = 12;
+export const golfPartySize = () => GOLF_MODE === "arrangement" ? { min: 1, max: GOLF_MAX_GOLFERS, default: 2 } : { min: 2, max: 4, default: 4 };
 
 export const GOLF_PRICES_JPY: Record<GolfArea, Record<2 | 3 | 4, number>> = {
   tokyo: { 2: 250000, 3: 290000, 4: 330000 },
@@ -38,7 +42,9 @@ export const GOLF_PRICES_JPY: Record<GolfArea, Record<2 | 3 | 4, number>> = {
 };
 
 export const isGolfArea = (s: unknown): s is GolfArea => s === "tokyo" || s === "fuji";
-export const isGolfGolfers = (n: unknown): n is GolfGolfers => (GOLF_GOLFERS as unknown[]).includes(n);
+/** A party size the request endpoint accepts: 1–12 for the booking service (5+ quoted), the priced sizes for the package. */
+export const isGolfGolfers = (n: unknown): n is number =>
+  GOLF_MODE === "arrangement" ? Number.isInteger(n) && (n as number) >= 1 && (n as number) <= GOLF_MAX_GOLFERS : (GOLF_GOLFERS as unknown[]).includes(n);
 
 export interface GolfPackagePrice {
   currency: "JPY";
@@ -50,10 +56,11 @@ export interface GolfPackagePrice {
   approximate: boolean;
 }
 
-/** Null means "quoted individually" (a specific course), never free. */
-export function golfPackagePrice(area: GolfArea, golfers: GolfGolfers, mode: GolfCourseMode = "recommended"): GolfPackagePrice | null {
-  // The booking service charges the same flat fee whichever course is played, so a named course is not a custom quote.
-  if (GOLF_MODE === "arrangement") return { currency: "JPY", groupTotal: GOLF_ARRANGEMENT_FEE_JPY * golfers, perPersonDisplay: GOLF_ARRANGEMENT_FEE_JPY, approximate: false };
+/** Null means "quoted individually" (a specific course in the package; five golfers or more in the booking service), never free. */
+export function golfPackagePrice(area: GolfArea, golfers: number, mode: GolfCourseMode = "recommended"): GolfPackagePrice | null {
+  // The booking service charges the same flat fee whichever course is played, so a named course is not a custom quote;
+  // a group beyond the published sizes is.
+  if (GOLF_MODE === "arrangement") return golfers > GOLF_FIXED_FEE_MAX ? null : { currency: "JPY", groupTotal: GOLF_ARRANGEMENT_FEE_JPY * golfers, perPersonDisplay: GOLF_ARRANGEMENT_FEE_JPY, approximate: false };
   if (mode === "specific") return null;
   const groupTotal = GOLF_PRICES_JPY[area][golfers as 2 | 3 | 4];
   return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };

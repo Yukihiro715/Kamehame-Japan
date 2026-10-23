@@ -116,6 +116,9 @@ export interface VariantPageCopy {
     customQuote: string;
     /** "Preferred course · {n} golfers" */
     customQuoteLine: string;
+    /** The booking service's larger groups (five or more, quoted): the "5 or more" pill, the headline and
+     *  line in place of the fee, the note under the cards, and the row label in the fee table. */
+    moreGolfers?: string; largePartyQuote?: string; largePartyLine?: string; largePartyNote?: string; largePartyRow?: string;
     /** One line under the cards: what both packages include. */
     includes: string;
     /** Under the cards: recommended-course package, confirmed before payment. */
