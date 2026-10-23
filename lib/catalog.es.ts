@@ -498,7 +498,7 @@ export const experiencesEs: Experience[] = [
     ],
     galleryNote: "Fotos de la sala de té de la anfitriona en Yotsuya.",
     langTag: "Impartida en inglés",
-    cancellation: "Cancelación gratuita hasta el día anterior a tu sesión; desde el mismo día, incluida la no presentación, se cobra el precio completo. Si la anfitriona tiene que cancelar, recibes el reembolso completo en tu método de pago original.",
+    cancellation: "Los días se cuentan hasta la fecha de la sesión, hora de Japón. Cancelación gratuita hasta 7 días antes; desde 6 días antes, incluidos el mismo día y la no presentación, se cobra el precio completo. Si la anfitriona tiene que cancelar, recibes el reembolso completo en tu método de pago original.",
     includedShort: "90 minutos · Dos cuencos de matcha · Dulce jonamagashi · En inglés",
     highlights: [
       { icon: "chat", title: "Una profesora, no una demostración", body: "Tres generaciones de té en una familia, una licencia de la escuela Sōhen desde 1993 y varios cientos de alumnos al mes: tu anfitriona explica sobre la marcha, en inglés." },
@@ -544,7 +544,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Nos sentamos en el suelo?", a: "Sí, en tatami. Los calcetines son lo único que hay que traer; si arrodillarse resulta difícil, la anfitriona sugiere una forma más cómoda de sentarse." },
       { q: "¿De cuántas personas es el grupo?", a: "Hasta diez personas comparten una sesión. Los grupos más grandes se presupuestan individualmente." },
       { q: "¿Cómo se calcula el precio?", a: "Por persona, con una tarifa menor para grupos: ¥17,000 para una persona, ¥15,500 por persona de dos a cuatro, y ¥14,000 por persona de cinco a diez. Impuestos incluidos." },
-      { q: "¿Cuál es la política de cancelación?", a: "Gratuita hasta el día anterior a tu sesión; desde el mismo día, incluida la no presentación, el precio completo." },
+      { q: "¿Cuál es la política de cancelación?", a: "Gratuita hasta 7 días antes de la fecha; desde 6 días antes, incluida la no presentación, el precio completo. Los días se cuentan en hora de Japón." },
       { q: "¿Cómo funciona la reserva?", a: "Elige una fecha y envía una solicitud; no cuesta nada. Respondemos en 24 horas con la hora de inicio, el precio y las condiciones. Tu reserva queda confirmada cuando pagas a través del enlace que te enviamos, y las condiciones de cancelación empiezan entonces." },
     ],
     whatYoullDo: ["Aprender la historia de la ceremonia y la etiqueta del invitado", "Entrar en la sala de té a la manera tradicional", "Ver un temae completo y después batir tu propio cuenco de matcha", "Sentarte para una breve meditación antes de las preguntas y las fotos"],

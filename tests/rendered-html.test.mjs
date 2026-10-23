@@ -371,9 +371,9 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
     assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
     if (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/")) {
-      // The salon's own terms: free until two days before, then 100%; a minimum of three guests; socks.
-      assert.ok(text.includes("Until 18:00 Japan time 2 days before") && text.includes("After that deadline, including no-shows"), `salon cancellation table on ${path}`);
-      assert.ok(text.includes("6 pm Japan time two days before"), `salon cut-off time on ${path}`);
+      // KAMEHAME's standard cancellation (2026-10-23: the stricter of ours and the salon's two-day rule); a minimum of three guests; socks.
+      assert.ok(text.includes("Up to 7 days before the date") && text.includes("6 days before or later, including no-shows"), `salon cancellation table on ${path}`);
+      assert.ok(!text.includes("6 pm Japan time two days before"), `salon's own cut-off no longer shown on ${path}`);
       assert.ok(text.includes("three guests per day") && text.includes("decides whether the day will run two days before") && text.includes("wear or bring socks"), `salon minimum and socks on ${path}`);
       assert.doesNotMatch(text, /Free cancellation up to 7 days/i, `no site default on ${path}`);
     }
@@ -418,7 +418,7 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
     ["/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/", "Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥4,000", "¥32,000", "¥2,500", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥15,000", "¥16,000", "¥40,000", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥20,000", "¥50,000", "ryurei", "Larger parties are quoted on request"]],
-    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 4 days before the date", "3 to 2 days before"]],
+    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
     ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 to 4 days before"]],
     ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "Up to 15 days before the date"]],
   ];
