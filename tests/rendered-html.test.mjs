@@ -443,6 +443,27 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
   }
 });
 
+test("Ofukuro founding-guest offer: separate unlisted URL, 30% off the whole price, photo consent in the form", async () => {
+  const path = "/previews/ofukuro-founding-guests-5e8c1a72d9/";
+  const res = await render(path);
+  assert.equal(res.status, 200, path);
+  const html = await res.text();
+  const text = html.replace(/<[^>]+>/g, " ");
+  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive"/, "noindex");
+  assert.ok(html.includes('class="xp-preview-banner"'), "preview banner");
+  for (const s of ["30% off", "¥24,640", "¥35,200", "¥28,840", "¥44,240", "¥4,200", "¥5,600", "¥2,100", "Ten dinners", "20 minutes"]) assert.ok(text.includes(s), `offer copy: ${s}`);
+  assert.ok(html.includes('name="photo-consent"') && html.includes('name="faces"') && html.includes('name="menu"'), "photo consent, faces choice and menu in the form");
+  assert.equal((html.match(/class="ofk-menu ofk-menu-static"/g) || []).length, 7, "seven descriptive menu cards");
+  assert.ok(!html.includes('action="/api/contact"') && !html.includes("/api/experience-checkout") && !html.includes("Request received"), "posts nowhere, never claims receipt");
+  assert.doesNotMatch(text, /\b(Yumi|Keiko|Aki)\b|reviews from|★/, "no fabricated cooks or reviews");
+  for (const p of ["/en/", "/en/experiences/", "/en/tokyo/", "/en/food/"]) assert.ok(!(await (await render(p)).text()).includes("founding-guests"), `not linked from ${p}`);
+  const { readFileSync } = await import("node:fs");
+  assert.ok(!readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8").includes("/previews/"), "not in the sitemap");
+  // the regular preview keeps the regular price and no photo step
+  const regular = await (await render("/previews/home-cooked-dinner-f4bc9d7306/")).text();
+  assert.ok(!regular.includes('name="photo-consent"') && !regular.includes("¥24,640"), "regular page unchanged");
+});
+
 test("display currency: the header offers USD/JPY, the HTML is always yen, and /api/fx is a JSON endpoint", async () => {
   const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
   // The switcher sits in the header beside the language menu, on yen by default.

@@ -59,13 +59,13 @@ export function OfukuroHeroCta({ className = "bk-cta" }: { className?: string })
 }
 
 /** The phone's bottom bar follows the same choice and shows the base price. */
-export function OfukuroSticky() {
+export function OfukuroSticky({ price, note }: { price?: string; note?: string } = {}) {
   const { selected } = useOfukuroMenu();
   const menu = menuById(selected);
   return (
     <StickyRequestBar
-      price={`${yenOf(OFUKURO_PRICE.base)}`}
-      condition={menu ? `Up to 2 guests · ${menu.name}` : "Up to 2 guests · seven menus"}
+      price={price ?? `${yenOf(OFUKURO_PRICE.base)}`}
+      condition={menu ? `${note ?? "Up to 2 guests"} · ${menu.name}` : `${note ?? "Up to 2 guests"} · seven menus`}
       label={menu ? "Continue to request" : "Request your dinner"}
       lang="en" watchHero="#booking" watchTarget="#request-form"
     />

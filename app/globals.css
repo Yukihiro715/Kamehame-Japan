@@ -1736,3 +1736,13 @@ body[data-kh-modal] .sticky-request { display:none; }
 .ofk-chips { display:flex; flex-wrap:wrap; gap:8px; }
 .ofk-chips .form-check { padding:8px 12px; min-height:44px; align-items:center; }
 .ofk-chips .form-check span b { font-weight:500; font-size:13px; }
+
+/* Ofukuro founding-guest offer */
+.ofk-regular { margin-left:10px; font-size:15px; font-weight:400; color:var(--muted); text-decoration:line-through; }
+.ofk-offer { display:grid; gap:14px; padding:18px; border:2px solid var(--ink); border-radius:16px; background:var(--white); }
+@media(min-width:720px){ .ofk-offer { grid-template-columns:1fr 1fr; gap:24px; } }
+.ofk-offer h3 { margin:0 0 8px; font-family:var(--font-display); font-weight:400; font-size:18px; letter-spacing:.04em; text-transform:uppercase; }
+.ofk-offer ul { margin:0; padding:0; list-style:none; display:grid; gap:8px; }
+.ofk-offer li { display:flex; gap:8px; font-size:14px; line-height:1.55; }
+.ofk-offer li .tick { color:var(--kame); flex:0 0 auto; }
+.xp-pricing td s { color:var(--muted); font-weight:400; margin-right:8px; }

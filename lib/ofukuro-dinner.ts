@@ -54,13 +54,62 @@ export const OFUKURO_PRICE = {
 
 /** Whole-group total for a party: adults fill the base two places first,
  *  then children, so one adult with one child pays the base price. */
-export function ofukuroQuote(adults: number, children: number): number {
+export function ofukuroQuote(adults: number, children: number, discount = 0): number {
   const a = Math.max(0, Math.floor(adults || 0)), c = Math.max(0, Math.floor(children || 0));
   let total: number = OFUKURO_PRICE.base, position = 0;
   for (let i = 0; i < a; i++) { position++; if (position > OFUKURO_PRICE.baseCovers) total += position >= 5 ? OFUKURO_PRICE.extraAdultFromFifth : OFUKURO_PRICE.extraAdult; }
   for (let i = 0; i < c; i++) { position++; if (position > OFUKURO_PRICE.baseCovers) total += OFUKURO_PRICE.child; }
-  return total;
+  return Math.round(total * (1 - discount));
 }
+
+/** Founding-guest offer (owner, 2026-10-23): the first dinners we photograph
+ *  are 30% off the whole price, in return for permission to use the photos.
+ *  Separate unlisted URL; the slot count is a placeholder for the owner. */
+export const OFUKURO_FOUNDING = {
+  path: "/previews/ofukuro-founding-guests-5e8c1a72d9/",
+  discount: 0.3,
+  slots: 10,
+  flag: "Founding guests · first 10 dinners · 30% off",
+  title: "Ofukuro Dinner for Founding Guests",
+  subtitle: "A Japanese home-cooked dinner at your accommodation, 30% off, in return for letting us photograph it.",
+  lede: "We launched Ofukuro Dinner this autumn. The cooks are ready; what we do not have yet are photographs of real dinners. The first ten dinners we photograph are 30% off.",
+  why: {
+    heading: "Why 30% off",
+    body: [
+      "Every picture on this page is an illustration, because the service is new and the real dinners have not happened yet. We would rather be honest about that than pretend.",
+      "So we are asking the first ten groups for one thing: let us photograph your dinner. In return you pay 30% less on every part of the price, and you get the photos.",
+    ],
+  },
+  give: {
+    heading: "What you give",
+    items: [
+      "A photographer from our team joins for about 20 minutes while your cook plates up and serves. The rest of the evening is yours.",
+      "Permission to use the photos on our website and social media. Faces are optional: tell us in the form if you would rather not be shown, and we photograph the food, the table and the cook only.",
+      "A few honest sentences afterwards about how it went, if you are willing. We do not publish reviews we have not received.",
+    ],
+  },
+  get: {
+    heading: "What you get",
+    items: [
+      "The same dinner: ingredients bought for you, cooked and served at your accommodation, kitchen tidied, about two hours.",
+      "30% off the whole price: ¥24,640 for up to two guests instead of ¥35,200, and the same discount on every additional guest.",
+      "The photos of your evening, sent to you within a week.",
+      "Pay only after we have confirmed a cook and the date with you. If we cannot arrange it, nothing is charged.",
+    ],
+  },
+  faq: [
+    { q: "Who takes the photos, and for how long?", a: "A member of our team, for about 20 minutes around the time the dishes are served. Nobody films the whole evening and nobody stays for the meal." },
+    { q: "Do we have to be in the photos?", a: "No. Choose “food and cook only” in the form and we keep you out of every frame. If you are happy to appear, we still show you the photos before using any with your faces." },
+    { q: "Where will the photos be used?", a: "On this website and on KAMEHAME JAPAN's social media accounts, to show what the dinner is like. Never for anything else, and never with your name." },
+    { q: "Is the discount really on the whole price?", a: "Yes: 30% off the base price and off every additional guest. ¥24,640 for up to two guests, then ¥4,200 for the third and fourth guest, ¥5,600 from the fifth, and ¥2,100 for each child under 10 beyond the first two." },
+    { q: "What if we change our minds about the photos?", a: "Tell us before the day and we simply change your booking to the regular price. On the day, if something is not working for you, say so and the photographer leaves; the discount stays." },
+    { q: "How many founding-guest dinners are there?", a: "Ten. When they are gone, this page says so and the regular page takes over." },
+    { q: "What is the cancellation policy?", a: "The same as the regular dinner: free until 3 days before your date (Japan time); 2 days before, half the price; from the day before, including no-shows, the full price, because the ingredients have been bought. If we cannot arrange a cook, anything paid is refunded in full." },
+    { q: "How does booking work?", a: "Send the request below; it costs nothing. We check a cook and the date, confirm the total and the photo arrangements with you, and send a prepayment link. Your booking is confirmed when your payment arrives." },
+  ],
+} as const;
+
+export const ofukuroFoundingRows = [1, 2, 3, 4, 5, 6].map((n) => ({ party: n, regular: ofukuroQuote(n, 0), founding: ofukuroQuote(n, 0, OFUKURO_FOUNDING.discount) }));
 
 export const yenOf = (n: number) => `¥${n.toLocaleString("en-US")}`;
 

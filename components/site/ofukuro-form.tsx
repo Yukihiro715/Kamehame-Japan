@@ -18,11 +18,14 @@ import { menuById, OFUKURO, OFUKURO_MENUS, ofukuroQuote, yenOf } from "@/lib/ofu
 const TIMES = [["18:00", "Dinner · around 18:00"], ["19:00", "Dinner · around 19:00"], ["11:00", "Lunch · 11:00"], ["flexible", "Flexible"]] as const;
 const PERMISSION = [["yes", "Yes, the accommodation allows a visiting cook"], ["will-check", "I will check with the accommodation"], ["unsure", "Not sure"]] as const;
 const EQUIPMENT = ["Stove (2+ burners)", "Sink and work space", "Ventilation", "Fridge", "Pots and pans", "Plates, bowls and cutlery", "Not sure — please advise"] as const;
+const FACES = [["ok", "We are happy to appear in the photos"], ["no-faces", "Food and cook only, please: keep us out of the frame"]] as const;
 const DIETS = [["none", "No restrictions"], ["vegetarian", "Vegetarian"], ["vegan", "Vegan"], ["pescatarian", "Pescatarian"], ["halal", "Halal-related request"], ["no-pork-alcohol", "No pork, no alcohol in cooking"], ["gluten-free", "Gluten-free request"], ["other", "Other (describe below)"]] as const;
 
 type Row = { label: string; value: string };
 
-export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
+export interface OfukuroOffer { discount: number; label: string }
+
+export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; offer?: OfukuroOffer }) {
   const { selected, select } = useOfukuroMenu();
   const menu = menuById(selected);
   const [adults, setAdults] = useState("2");
@@ -31,7 +34,8 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
   const [error, setError] = useState<string | null>(null);
   const min = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 3); return d.toISOString().slice(0, 10); }, []);
   const kids = Number(children) || 0;
-  const total = ofukuroQuote(Number(adults) || 0, kids);
+  const regular = ofukuroQuote(Number(adults) || 0, kids);
+  const total = offer ? ofukuroQuote(Number(adults) || 0, kids, offer.discount) : regular;
   const track = useRef<HTMLDivElement>(null);
   const slide = (dir: 1 | -1) => { const t = track.current; if (!t) return; const w = (t.firstElementChild as HTMLElement | null)?.offsetWidth ?? 280; t.scrollBy({ left: dir * (w + 12), behavior: "smooth" }); };
 
@@ -47,7 +51,8 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
       { label: "Date and time", value: `${one("date") || "—"} · ${label(TIMES, one("time"))}` },
       { label: "Area", value: one("area") || "—" },
       { label: "Group", value: `${adults} adult(s)${kids ? `, ${kids} child(ren) under 10 (ages: ${one("ages") || "—"})` : ""}` },
-      { label: "Estimated total", value: `${yenOf(total)} · tax and ingredients included · confirmed before payment` },
+      { label: "Estimated total", value: `${yenOf(total)}${offer ? ` (${offer.label}; regular ${yenOf(regular)})` : ""} · tax and ingredients included · confirmed before payment` },
+      ...(offer ? [{ label: "Photos", value: `${label(FACES, one("faces"))}; permission given for our website and social media` }] : []),
       { label: "Menu", value: menu.name },
       { label: "Visiting cook allowed", value: label(PERMISSION, one("permission")) },
       { label: "Kitchen equipment", value: many("equipment") || "Not stated" },
@@ -96,7 +101,7 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
               <small className="form-hint">Children aged 10 and over count as adults. Portions are confirmed with you before payment.</small>
             </label>
           )}
-          <p className="form-estimate"><span>Estimated total for your group</span><b>{yenOf(total)}</b><small>Tax and ingredients included · confirmed with your request, before any payment</small></p>
+          <p className="form-estimate"><span>Estimated total for your group</span><b>{yenOf(total)}{offer && <s className="ofk-regular">{yenOf(regular)}</s>}</b><small>{offer ? `${offer.label} · tax and ingredients included · confirmed with your request, before any payment` : "Tax and ingredients included · confirmed with your request, before any payment"}</small></p>
         </fieldset>
 
         <fieldset className="form-step" id="ofk-step-menu">
@@ -158,8 +163,24 @@ export function OfukuroForm({ fallbackEmail }: { fallbackEmail: string }) {
           </label>
         </fieldset>
 
+        {offer && (
+          <fieldset className="form-step">
+            <legend>4 · Photos</legend>
+            <div className="form-row">
+              <span>Can we show you in the photos?</span>
+              <div className="hd-options">
+                {FACES.map(([v, l], i) => <label key={v} className="form-check"><input type="radio" name="faces" value={v} defaultChecked={i === 0} /><span><b>{l}</b></span></label>)}
+              </div>
+            </div>
+            <label className="form-check">
+              <input type="checkbox" name="photo-consent" required />
+              <span><b>I agree that a member of KAMEHAME JAPAN photographs the dinner for about 20 minutes and uses the photos on its website and social media, and that this is what the 30% founding-guest price is for.</b></span>
+            </label>
+          </fieldset>
+        )}
+
         <fieldset className="form-step">
-          <legend>4 · Contact</legend>
+          <legend>{offer ? "5" : "4"} · Contact</legend>
           <div className="form-row two">
             <label><span>Name</span><input name="name" type="text" required autoComplete="name" maxLength={120} /></label>
             <label><span>E-mail</span><EmailInput lang="en" required /></label>
