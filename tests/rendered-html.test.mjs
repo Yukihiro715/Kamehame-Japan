@@ -533,15 +533,18 @@ test("sends baseline security headers", async () => {
 });
 
 
-test("private spa preview has no invented price or public address", async () => {
+test("private spa preview: the owner's price, the spa's terms, no public address or operator name", async () => {
   for (const lang of ["en", "ja"]) {
     const res = await render(`/${lang}/tokyo/nerima-herbal-bath-private-spa/`);
     assert.equal(res.status, 200);
     const html = await res.text();
+    const text = html.replace(/<[^>]+>/g, " ");
     assert.match(html, /noindex/);
-    assert.doesNotMatch(html, /¥0/);
-    assert.doesNotMatch(html, /class="xp-pricing"/);
-    assert.ok(html.includes(lang === "en" ? "camera-based monitoring" : "カメラ"));
+    assert.ok(text.includes("¥24,000") && !text.includes("¥18,000") && !text.includes("¥14,400"), `sale price only on ${lang}`);
+    assert.ok(text.includes(lang === "en" ? "Closed on Tuesdays" : "火曜定休"), `Tuesday closure on ${lang}`);
+    assert.ok(text.includes(lang === "en" ? "camera" : "カメラ"), `camera disclosure on ${lang}`);
+    assert.ok(text.includes(lang === "en" ? "Up to 2 days before the date" : "開催2日前まで"), `cancellation table on ${lang}`);
+    assert.doesNotMatch(html, /石神癒|Shakuji|shakujinoyu|hidukiminato|ガムナミエス|Gamunamiesu|上石神井|Kamishakujii|リフュージュ|Refuge Happiness|\b城\s|\bJo\b|Jō\b/, `operator name and address stay off ${lang}`);
   }
   const listing = await (await render("/en/tokyo/")).text();
   assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));

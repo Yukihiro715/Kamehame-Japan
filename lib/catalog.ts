@@ -277,6 +277,8 @@ export interface Experience {
     /** Pre-selected start time in the booking box (default: 18:00 if offered, else the first). */
     defaultTime?: string;
     closed?: { from: string; to: string }[];
+    /** Weekly closing days, 0 = Sunday … 6 = Saturday (e.g. [2] for Tuesdays). */
+    closedWeekdays?: number[];
     /** Runs on Saturdays and Sundays only (the date picker closes weekdays). */
     weekendsOnly?: boolean;
     /** First date that can be requested (ISO), e.g. a partner taking guests from a future month. */
@@ -442,148 +444,101 @@ export const categories: Category[] = [
 
 export const experiences: Experience[] = [
   {
-    slug: "nerima-herbal-bath-private-spa",
-    city: "tokyo",
-    category: "wellness",
-    bookingType: "request",
-    status: "preview",
-    price: "Price on request",
-    pricePending: true,
-    priceUnit: "person",
-    partySize: {
-        min: 1,
-        max: 3
-    },
-    interpreter: false,
-    skipSiteFaq: true,
-    img: "/images/shakuji-bath.webp",
-    gallery: [],
-    title: "Herbal Bath Blending & Private Spa in Nerima, Tokyo",
-    tagline: "Make a fragrant sachet and your own herbal bath blend, then settle into a private bathing space with tea and time to rest. A 3.5-hour experience for your group alone in a quiet corner of Tokyo.",
-    duration: "About 3.5 hours",
-    group: "Private · 1–3 guests",
-    ages: "Children by prior arrangement",
-    area: "Tokyo (Nerima)",
-    alt: "The operator’s private bath and tea facilities",
-    galleryNote: "Operator imagery showing the bathing facilities and tea. The herbal workshop programme is described below.",
-    langTag: "Japanese host · translated instructions and translation tools",
+    // 貸切温泉ホームスパ 石神癒 (Nerima, Tokyo): the herbal bath-salt workshop
+    // plus a private hot-spring bath. Rebuilt 2026-10-23 from the partner's
+    // condition sheet (confirmed by the operator 2026-10-11) and its terms
+    // page. Wholesale ¥14,400 per person incl. tax; the sale price follows
+    // the owner's rule (wholesale + ¥4,500 ad cost, 20% margin, rounded up
+    // to ¥500) → ¥24,000. Children's price: the operator has none yet, so
+    // children are quoted. Cancellation from the operator's current terms
+    // (free until 2 days before; the day before 50%; the day itself and
+    // no-shows 100%), still to be confirmed for this product. The operator's
+    // name and address stay off the page until the owner decides; the sheet
+    // allows the name. Camera monitoring of the bath is disclosed and still
+    // to be agreed. Preview until the operator approves the page.
+    slug: "nerima-herbal-bath-private-spa", city: "tokyo", category: "wellness", bookingType: "request", status: "preview",
+    title: "Herbal Bath Blending & Private Hot-Spring Spa in Nerima, Tokyo",
+    tagline: "Make a fragrant sachet and three packs of your own herbal bath blend, steep one, and settle into a private hot-spring bath, a low-temperature herbal sauna and tea in a home spa reserved for your group alone. About three and a half hours, one group a day, in a quiet corner of Tokyo.",
     overview: [
-        "Begin with a room introduction and a hands-on workshop: make a sachet with Japanese cypress and aromatic ingredients, then prepare three packs of your own herbal bath blend. The staff explain how to steep a pack for the bath.",
-        "After washing, enjoy around thirty minutes in the bath, change into a yukata and take time for tea or a rest. The space is reserved for your party; the operator normally welcomes one group per day. Your handmade bath blends can be taken home on the day."
+      "A home spa in Nerima that takes one group a day. You start at the work table: a sachet of Japanese cypress and aromatic herbs, then three packs of your own herbal bath blend, mixed by hand with the staff showing you how. One pack is steeped in two litres of hot water and goes into the bath; the other two go home with you.",
+      "Then the slow part. Wash, soak for about thirty minutes in the private hot-spring bath, change into a yukata, and take the rest of the time as you like: a nap, the herbal tea and spring water that come with the room, or a meal you brought along. The staff speak Japanese and work with translated materials and translation tools; a dedicated interpreter is not included.",
     ],
-    availabilityNote: "Start times offered by the operator: 11:00 or 16:30, subject to confirmation. Closed Tuesdays. Each date is checked individually; this is not a live availability calendar.",
-    cancellation: "Cancellation and date-change terms will be supplied with your quote for agreement before payment. The operator’s current policy applies; the specific deadlines and charges for this product are being confirmed.",
-    includedShort: "Herbal bath workshop · Private bathing · Rental towels and yukata · Tea",
+    duration: "About 3.5 hours", price: "¥24,000", priceUnit: "person", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
+    img: "/images/shakuji-bath.webp", alt: "The private bath and tea space of the home spa",
+    gallery: [],
+    galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
+    partySize: { min: 1, max: 3, default: 2 },
+    availability: { daily: true, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
+    timeLabel: "Preferred start time",
+    availabilityNote: "Sessions start at 11:00 or 16:30; closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
+    scheduleNote: "The order is the spa's; the staff set the pace. Please be at the building entrance 5 to 10 minutes before your start time.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Japanese host · translated materials and translation tools",
+    skipSiteFaq: true,
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 2 days before; the day before, half the price; on the day, including no-shows, the full price. The date can be changed once, free of charge, up to 2 days before. Arriving late shortens your session without a refund; more than about 15 minutes late may count as a cancellation. If the spa has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 2, rate: 0 }, { until: 1, rate: 50 }, { until: 0, rate: 100 }],
+    includedShort: "Sachet and three bath packs · Private hot-spring bath and herbal sauna · Yukata, towels, tea",
+    highlights: [
+      { icon: "brush", title: "Blend something of your own", body: "A fragrant sachet and three packs of herbal bath salts, mixed by hand with the staff's guidance; two packs go home with you." },
+      { icon: "group", title: "One group a day", body: "The spa takes a single party per day, so the bath, the sauna and the rest room are yours for the whole visit." },
+      { icon: "spark", title: "Time to do nothing", body: "After the bath there is time for tea, a nap or a meal you brought, before you change and check out." },
+    ],
     included: [
-        "Materials for a fragrant sachet and three herbal bath packs",
-        "Staff instruction and translated explanations",
-        "Private bathing facilities and amenities",
-        "Rental towels, yukata and sheets",
-        "Herbal tea and drinking water",
-        "Packaging for the handmade bath blends"
+      "Materials for the sachet and three herbal bath packs",
+      "Herbs for the low-temperature herbal sauna",
+      "Staff guidance with translated explanations",
+      "Private use of the hot-spring bath and the room",
+      "Rental yukata, towels and sheets; soap, shampoo, cosmetics and amenities",
+      "Herbal tea and hot-spring drinking water",
+      "Packaging to take your bath blends home",
+      "Tax included",
     ],
     notIncluded: [
-        "Transport",
-        "Interpreter guide (by arrangement)",
-        "Meals; you may bring your own food",
-        "Extra treatments, purchases and extensions"
+      "Transport to the spa (the address comes with your confirmation)",
+      "An interpreter guide (by arrangement, quoted separately)",
+      "Meals and drinks beyond the tea and water (you may bring your own food)",
+      "Extensions (¥2,000 per hour) and extra treatments (from ¥8,000 per hour), purchases, and a handling fee from ¥10,000 if the facilities are damaged or soiled",
     ],
-    highlights: [
-        {
-            icon: "brush",
-            title: "Blend something of your own",
-            body: "Prepare a fragrant sachet and herbal bath packs with staff guidance."
-        },
-        {
-            icon: "group",
-            title: "Your group alone",
-            body: "A private space for one to three guests, with larger groups discussed in advance."
-        },
-        {
-            icon: "spark",
-            title: "Leave time to rest",
-            body: "Bathing, tea and a quiet pause are part of the 3.5-hour visit."
-        }
-    ],
-    whatYoullDo: [
-        "Make a Japanese cypress and aromatic sachet",
-        "Blend three packs of herbal bath ingredients",
-        "Enjoy a private bath, then change into a yukata",
-        "Rest with tea and take your handmade bath blends home"
-    ],
-    master: {
-        title: "Your hosts",
-        bio: "The spa staff guide the workshop and explain how to use the private bathing space. Instructions are in Japanese with translated written materials and translation tools. A dedicated interpreter is not included.",
-        quote: ""
-    },
-    itinerary: [
-        "Welcome and room introduction",
-        "Sachet and herbal bath workshop",
-        "Prepare the bath and wash",
-        "Around 30 minutes of bathing",
-        "Yukata, tea and time to rest",
-        "Change and check out — approximately 3.5 hours in total"
-    ],
-    scheduleNote: "The order is indicative; the host guides the pace. Arrive 5–10 minutes before your confirmed start time.",
-    goodToKnow: [
-        "Tell us about herbal or fragrance allergies before booking.",
-        "Children must be accompanied by a guardian; ages, participation and prices are confirmed individually.",
-        "The operator lists camera-based monitoring for drowning prevention. The location, viewing arrangements and privacy conditions must be clarified and agreed before booking.",
-        "If you have health concerns, discuss suitability with the operator before booking. This is a leisure experience, not medical treatment.",
-        "The exact address is shared only after confirmation."
+    schedule: [
+      { time: "0:00", title: "Welcome and the room", body: "How the rooms, the bath and the sauna work." },
+      { time: "0:15", title: "Your sachet", body: "Japanese cypress and aromatic herbs, mixed and tied by hand." },
+      { time: "0:40", title: "Three herbal bath packs", body: "Blend the herbs for your bath; one pack is steeped in two litres of hot water for today, two are packed to take home." },
+      { time: "1:15", title: "The bath", body: "Set the water, wash, and soak for about thirty minutes in the private hot-spring bath, with herbal tea or spring water to hand." },
+      { time: "2:00", title: "Yukata and rest", body: "Dry off, change into a yukata, and take the time as you like: the herbal sauna, tea, a nap or your own meal." },
+      { time: "3:25", title: "Change and check out", body: "Start changing five minutes before the end, then call the staff." },
+      { time: "3:30", title: "End of the session" },
     ],
     venue: {
-        known: [
-            "A private home spa in Nerima, Tokyo",
-            "No shared session with other parties",
-            "Tuesday closure; all dates require confirmation"
-        ],
-        afterBooking: [
-            "Exact address and directions",
-            "Arrival instructions and the contact number for the day"
-        ]
+      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "The bath is watched by a camera for drowning prevention; where it points, who can see it and the privacy rules are confirmed with you before you book"],
+      afterBooking: ["The spa's name, address and directions", "Arrival instructions and a phone number for the day"],
+      img: "/images/shakuji-bath.webp", alt: "The private bath",
     },
+    notesLabel: "Allergies to herbs or fragrances, children's ages, health concerns and anything else (optional)",
+    notesHint: "e.g. one of us is pregnant; a child of eight joins; we would like an interpreter",
     flow: [
-        {
-            title: "Share your preferred dates",
-            body: "Tell us your party size, children’s ages, preferred language and any allergies."
-        },
-        {
-            title: "Receive a tailored quote",
-            body: "We check the date with the operator and confirm the selling price, cancellation terms and privacy arrangements."
-        },
-        {
-            title: "Confirm after reviewing the details",
-            body: "Payment and confirmation instructions are provided once the conditions have been agreed."
-        }
+      { title: "Choose a date and send your request", body: "Pick a date, 11:00 or 16:30, and how many of you there are, with children's ages and any allergies." },
+      { title: "We reply within 24 hours", body: "The spa takes one group a day, so we check your date first, then confirm the price for your group, the conditions and the camera arrangements." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-        {
-            q: "Is this a private experience?",
-            a: "Yes. Your party has the space to itself; one to three guests is the usual group size."
-        },
-        {
-            q: "Is English spoken?",
-            a: "The host speaks Japanese and uses translated instructions and translation tools. A separate interpreter can be discussed in advance."
-        },
-        {
-            q: "Can children join?",
-            a: "Please tell us their ages and how many children will attend. Participation and pricing are agreed individually; a guardian must accompany them."
-        },
-        {
-            q: "Can we take the bath blends home?",
-            a: "Yes, your handmade blends can be taken home on the day. Postal delivery is not normally available."
-        },
-        {
-            q: "Is the bath monitored?",
-            a: "The operator lists camera-based monitoring for drowning prevention. We need to confirm the camera location, who can view it and privacy arrangements before any booking is accepted."
-        }
+      { q: "Is this a private experience?", a: "Yes. The spa takes one group a day, of one to three guests; larger groups can be asked about." },
+      { q: "How much is it?", a: "¥24,000 per person, tax included, with the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
+      { q: "Is English spoken?", a: "The staff speak Japanese and use translated written materials and translation tools. An interpreter guide can be arranged for an extra charge; ask when you request." },
+      { q: "Can children join?", a: "Yes, with a guardian, by prior arrangement. Tell us their ages and how many; the spa confirms participation and the price. Mixed bathing in the private bath is for children up to six." },
+      { q: "Can we take the bath blends home?", a: "Yes: two of the three packs you make go home with you, packed on the day. Postal delivery is not offered." },
+      { q: "Can we bring food?", a: "Yes. Herbal tea and hot-spring drinking water are provided; you may bring your own meal for the rest time." },
+      { q: "Is the bath monitored?", a: "The spa uses a camera to watch for drowning. Before you book we confirm with you where it points, who can see it and how the images are handled, and you decide." },
+      { q: "Who should check with us first?", a: "Anyone pregnant, with a chronic condition, a heart condition or high blood pressure, or who is unwell: the spa asks for a doctor's clearance. This is a relaxation experience, not a medical treatment." },
+      { q: "What is the cancellation policy?", a: "Free until 2 days before the date; the day before, half the price; on the day, including no-shows, the full price. One free date change up to 2 days before. Days are counted in Japan time." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the date confirmation, the price for your group and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
-    story: {
-        heading: "Make, bathe, rest",
-        body: "A slower afternoon in Tokyo: aromatic ingredients in your hands, warm water, and time for a cup of tea."
-    }
-},
+    whatYoullDo: ["Make a Japanese cypress and aromatic sachet", "Blend three packs of herbal bath salts and steep one for your bath", "Soak in a private hot-spring bath, then try the low-temperature herbal sauna", "Rest in a yukata with tea, and take your blends home"],
+    master: { title: "Your hosts", bio: "The spa's staff guide the workshop and explain the bath and the sauna, in Japanese with translated materials and translation tools. A dedicated interpreter is not included.", quote: "" },
+    itinerary: ["0:00 — Welcome and the room", "0:15 — Your sachet", "0:40 — Three herbal bath packs", "1:15 — The bath", "2:00 — Yukata and rest", "3:25 — Change and check out", "3:30 — End of the session"],
+    goodToKnow: ["About 3.5 hours; sessions at 11:00 or 16:30, closed Tuesdays; one group a day.", "One to three guests; children with a guardian by prior arrangement, quoted individually.", "Tell us about herb or fragrance allergies, pregnancy or health conditions when you request.", "Japanese-speaking staff with translated materials. Bring a meal if you like; tea and water are provided."],
+    story: { heading: "Make, bathe, rest", body: "A slower afternoon in Tokyo: aromatic ingredients in your hands, hot-spring water, a sauna scented with the herbs you chose, and nobody else in the building." },
+  },
 
   {
     // Tokyo calligraphy teacher; the partner's own brand is deliberately not

@@ -23,6 +23,8 @@ export interface BookingExperience {
   weekendsOnly?: boolean;
   /** Nothing before this ISO date can be requested. */
   openFrom?: string;
+  /** Weekly closing days, 0 = Sunday … 6 = Saturday. */
+  closedWeekdays?: number[];
   cancellationText?: string;
   cancellationTiers?: { until: number; rate: number }[];
   /** Days of notice the venue needs; the date picker starts after them. */
@@ -105,17 +107,18 @@ const Ctx = createContext<Booking | null>(null);
 
 /** True when a guest can pick `iso`: an announced date for dated products,
  *  otherwise any day outside the closed windows. */
-export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom">) {
+export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays">) {
   if (x.openFrom && iso < x.openFrom) return false;
   const day = new Date(`${iso}T00:00:00Z`).getUTCDay();
   if (x.weekdaysOnly && [0,6].includes(day)) return false;
   if (x.weekendsOnly && ![0,6].includes(day)) return false;
+  if (x.closedWeekdays?.includes(day)) return false;
   if (x.dates) return x.dates.some((d) => d.date === iso);
   return !isClosed(iso, x.closed);
 }
 
 /** The first selectable date after the cutoff, respecting weekdays and closures. */
-export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom">, min?: string): string | undefined {
+export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays">, min?: string): string | undefined {
   if (!min) return undefined;
   if (x.dates) return x.dates.filter(d => d.times.length > 0).map(d => d.date).sort().find(d => d >= min && isBookable(d, x));
   const day = new Date(`${min}T00:00:00Z`);
