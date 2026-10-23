@@ -484,7 +484,7 @@ export const experiencesFr: Experience[] = [
       "La cérémonie du thé condense l'hospitalité japonaise dans un seul bol, et c'est l'occasion de s'y asseoir plutôt que de regarder depuis la porte. Votre hôtesse est la troisième génération de sa famille à enseigner le thé : diplômée instructrice de l'école Sōhen en 1993, plus de quarante ans de pratique et plusieurs centaines d'élèves par mois. Elle accueille des visiteurs étrangers dans ce salon depuis des années.",
       "Les quatre-vingt-dix minutes suivent la forme d'une vraie réunion. Vous vous retrouvez à la galerie de Yotsuya, apprenez la naissance de la cérémonie et l'étiquette de l'invité, entrez dans le salon de thé à la manière traditionnelle et regardez l'hôtesse préparer le thé — chaque geste a sa raison. Puis vous fouettez un bol vous-même, sous sa conduite, et vous asseyez pour une courte méditation avant les questions et les photos. En anglais, pour un groupe de dix au plus, avec des chaussettes pour seul bagage.",
     ],
-    duration: "Environ 1 h 30", price: "¥8,800", group: "Petit groupe · 1 à 10 personnes", ages: "Dès 5 ans", area: "Tokyo (Yotsuya, Shinjuku)",
+    duration: "Environ 1 h 30", price: "¥17,000", group: "Petit groupe · 1 à 10 personnes", ages: "Dès 5 ans", area: "Tokyo (Yotsuya, Shinjuku)",
     img: "/images/tea-yotsuya-class.jpg", alt: "L'hôtesse en kimono guide un groupe qui fouette son matcha autour d'une longue table en bois",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "L'hôtesse agenouillée devant les invités assis sur le tatami du salon de thé" },
@@ -542,7 +542,7 @@ export const experiencesFr: Experience[] = [
       { q: "Les enfants peuvent-ils participer ?", a: "Oui, dès 5 ans. Indiquez leur âge dans votre demande." },
       { q: "S'assoit-on par terre ?", a: "Oui, sur le tatami. Les chaussettes sont la seule chose à apporter ; si s'agenouiller est difficile, l'hôtesse propose une façon plus confortable de s'asseoir." },
       { q: "Quelle est la taille du groupe ?", a: "Jusqu'à dix personnes partagent une séance. Les groupes plus nombreux sont chiffrés individuellement." },
-      { q: "Comment le prix est-il calculé ?", a: "Par personne, avec un tarif dégressif : ¥8,800 pour une personne, ¥7,700 par personne de deux à quatre, et ¥6,600 par personne pour un groupe de dix. Les groupes de cinq à neuf sont chiffrés avec votre demande. Taxes comprises." },
+      { q: "Comment le prix est-il calculé ?", a: "Par personne, avec un tarif dégressif : ¥17,000 pour une personne, ¥15,500 par personne de deux à quatre, et ¥14,000 par personne de cinq à dix. Taxes comprises." },
       { q: "Quelles sont les conditions d'annulation ?", a: "Gratuite jusqu'à la veille de votre séance ; le jour même, non-présentation comprise, le prix total." },
       { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; cela ne coûte rien. Nous répondons sous 24 heures avec l'heure de début, le prix et les conditions. Votre réservation est confirmée quand vous payez via le lien que nous envoyons, et les conditions d'annulation courent à partir de là." },
     ],

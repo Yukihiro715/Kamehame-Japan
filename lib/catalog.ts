@@ -1013,9 +1013,11 @@ export const experiences: Experience[] = [
     // (docs/EMAIL_TEMPLATES.md §J); the host and the gallery are not named on
     // the page. 2026-10-22: the host's own photos (Drive, 写真・動画) replace
     // the placeholders, and the price table follows the host's correction of
-    // the same day (1 guest ¥8,800; 2–4 guests ¥7,700 each; 10 guests ¥6,600
-    // each). Parties of 5–9 have no confirmed rate and are quoted. Public
-    // prices still: no wholesale terms yet.
+    // the same day. 2026-10-23: the owner set the sale price by the house
+    // rule (host's public rate + ¥4,500 ad cost at a 20% margin, rounded up
+    // to ¥500) because the host has given no wholesale rate: 1 guest ¥17,000,
+    // 2–4 guests ¥15,500 each, 5–10 guests ¥14,000 each (the host's proposed
+    // ¥8,800 / ¥7,700 / ¥6,600). Still to agree with the host.
     slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
     title: "Tea Ceremony in a Yotsuya Tearoom, Tokyo",
     tagline: "Ninety minutes with a tea teacher of the Sōhen school in a small Yotsuya tearoom: the history and etiquette, entering the room the traditional way, a full tea performance, then a bowl of matcha you whisk yourself and a few minutes of quiet. Taught in English, from age five.",
@@ -1023,7 +1025,7 @@ export const experiences: Experience[] = [
       "The tea ceremony distils Japanese hospitality into a single bowl, and this is a chance to sit inside it rather than watch from the door. Your host is the third generation of her family to teach tea: licensed as an instructor of the Sōhen school in 1993, more than forty years in the practice, and teaching several hundred students a month. She has welcomed visitors from abroad to this tearoom for years.",
       "The ninety minutes follow the shape of a real gathering. You meet at the gallery in Yotsuya, learn how the ceremony came to be and the etiquette of a guest, enter the tearoom the traditional way, and watch the host prepare tea — every movement with a reason. Then you whisk a bowl yourself, under her guidance, and sit for a short meditation before questions and photographs. In English, for a group of up to ten, with socks the only thing to bring.",
     ],
-    duration: "About 1.5 hours", price: "¥8,800", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
+    duration: "About 1.5 hours", price: "¥17,000", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
     img: "/images/tea-yotsuya-class.jpg", alt: "The host in a kimono guiding a class of guests whisking matcha at a long wooden table",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "The host kneeling before guests seated on the tatami of the tearoom" },
@@ -1036,9 +1038,9 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the host's tearoom in Yotsuya.",
     partySize: { min: 1, max: 10, default: 2 },
-    // Whole-group totals from the host's corrected table (2026-10-22): 1 guest
-    // ¥8,800, 2–4 guests ¥7,700 each, 10 guests ¥6,600 each. 5–9: no row, quoted.
-    pricing: { tiers: [{ party: 1, total: 8800 }, { party: 2, total: 15400 }, { party: 3, total: 23100 }, { party: 4, total: 30800 }, { party: 10, total: 66000 }] },
+    // Whole-group totals at the owner's rates (2026-10-23): 1 guest ¥17,000,
+    // 2–4 guests ¥15,500 each, 5–10 guests ¥14,000 each.
+    pricing: { tiers: [{ party: 1, total: 17000 }, { party: 2, total: 31000 }, { party: 3, total: 46500 }, { party: 4, total: 62000 }, { party: 5, total: 70000 }, { party: 6, total: 84000 }, { party: 7, total: 98000 }, { party: 8, total: 112000 }, { party: 9, total: 126000 }, { party: 10, total: 140000 }] },
     taxIncluded: true,
     interpreter: false,
     langTag: "Taught in English",
@@ -1089,7 +1091,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, from age 5. Tell us their ages in your request." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
-      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥8,800 for one guest, ¥7,700 per person for two to four guests, and ¥6,600 per person for a group of ten. Groups of five to nine are quoted with your request. Tax is included." },
+      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,000 for one guest, ¥15,500 per person for two to four guests, and ¥14,000 per person for five to ten guests. Tax is included." },
       { q: "What is the cancellation policy?", a: "Free until the day before your session; from the day itself, including no-shows, the full price." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],

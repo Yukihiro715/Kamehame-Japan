@@ -485,7 +485,7 @@ export const experiencesEs: Experience[] = [
       "La ceremonia del té destila la hospitalidad japonesa en un solo cuenco, y esta es la ocasión de sentarte dentro en lugar de mirar desde la puerta. Tu anfitriona es la tercera generación de su familia que enseña té: titulada como instructora de la escuela Sōhen en 1993, con más de cuarenta años de práctica y varios cientos de alumnos al mes. Lleva años recibiendo a visitantes extranjeros en esta sala.",
       "Los noventa minutos siguen la forma de una reunión real. Os encontráis en la galería de Yotsuya, aprendéis cómo nació la ceremonia y la etiqueta del invitado, entráis en la sala de té a la manera tradicional y veis a la anfitriona preparar el té, con cada movimiento justificado. Después bates un cuenco tú mismo, con su guía, y os sentáis para una breve meditación antes de las preguntas y las fotos. En inglés, para un grupo de hasta diez, con los calcetines como único equipaje.",
     ],
-    duration: "Alrededor de 1,5 horas", price: "¥8,800", group: "Clase reducida · 1–10 personas", ages: "Desde 5 años", area: "Tokio (Yotsuya, Shinjuku)",
+    duration: "Alrededor de 1,5 horas", price: "¥17,000", group: "Clase reducida · 1–10 personas", ages: "Desde 5 años", area: "Tokio (Yotsuya, Shinjuku)",
     img: "/images/tea-yotsuya-class.jpg", alt: "La anfitriona en kimono guía a un grupo que bate matcha en una larga mesa de madera",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "La anfitriona arrodillada ante los invitados sentados en el tatami de la sala de té" },
@@ -543,7 +543,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Pueden participar niños?", a: "Sí, desde 5 años. Dinos sus edades en tu solicitud." },
       { q: "¿Nos sentamos en el suelo?", a: "Sí, en tatami. Los calcetines son lo único que hay que traer; si arrodillarse resulta difícil, la anfitriona sugiere una forma más cómoda de sentarse." },
       { q: "¿De cuántas personas es el grupo?", a: "Hasta diez personas comparten una sesión. Los grupos más grandes se presupuestan individualmente." },
-      { q: "¿Cómo se calcula el precio?", a: "Por persona, con una tarifa menor para grupos: ¥8,800 para una persona, ¥7,700 por persona de dos a cuatro, y ¥6,600 por persona para un grupo de diez. Los grupos de cinco a nueve se presupuestan con tu solicitud. Impuestos incluidos." },
+      { q: "¿Cómo se calcula el precio?", a: "Por persona, con una tarifa menor para grupos: ¥17,000 para una persona, ¥15,500 por persona de dos a cuatro, y ¥14,000 por persona de cinco a diez. Impuestos incluidos." },
       { q: "¿Cuál es la política de cancelación?", a: "Gratuita hasta el día anterior a tu sesión; desde el mismo día, incluida la no presentación, el precio completo." },
       { q: "¿Cómo funciona la reserva?", a: "Elige una fecha y envía una solicitud; no cuesta nada. Respondemos en 24 horas con la hora de inicio, el precio y las condiciones. Tu reserva queda confirmada cuando pagas a través del enlace que te enviamos, y las condiciones de cancelación empiezan entonces." },
     ],

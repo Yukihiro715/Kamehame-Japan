@@ -297,7 +297,7 @@ test("kendo tours are published after approval; unapproved partners remain in pr
   const pages = [
     ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥20,000", "/en/tokyo/"],
     ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000", "/en/tokyo/"],
-    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥8,800", "/en/tokyo/"],
+    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥17,000", "/en/tokyo/"],
     ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800", "/en/tokyo/"],
     ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥19,800", "/en/osaka/"],
     ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥19,800", "/en/kyoto/"],
@@ -401,16 +401,17 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
 });
 
 test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setagaya and Asakusa noodle previews never name the partners", async () => {
-  // The Yotsuya tea page carries the host's corrected table and the host's photos.
+  // The Yotsuya tea page carries the owner's table (2026-10-23: ¥17,000 / ¥15,500 / ¥14,000 per person) and the host's photos.
   const tea = await (await render("/en/tokyo/yotsuya-tea-ceremony/")).text();
   const teaText = tea.replace(/<[^>]+>/g, " ");
-  for (const s of ["¥8,800", "¥15,400", "¥23,100", "¥30,800", "¥66,000", "¥7,700", "¥6,600", "Groups of five to nine are quoted"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
+  for (const s of ["¥17,000", "¥31,000", "¥46,500", "¥62,000", "¥70,000", "¥140,000", "¥15,500", "¥14,000", "five to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
+  for (const s of ["¥8,800", "¥7,700", "¥6,600", "quoted with your request"]) assert.ok(!teaText.includes(s), `host's public rate not shown: ${s}`);
   assert.ok(tea.includes("/images/tea-yotsuya-class.jpg") && tea.includes("/images/tea-yotsuya-tatami.jpg"), "host photos on the tea page");
   assert.ok(!tea.includes("craft-hands.jpg") && !tea.includes("Placeholder photos"), "no placeholder photos left on the tea page");
   for (const lang of ["ja", "es", "fr", "zh-tw"]) {
     const alt = await (await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`)).text();
     assert.ok(alt.includes("/images/tea-yotsuya-class.jpg") && !alt.includes("craft-hands.jpg"), `${lang} tea photos`);
-    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥66,000"), `${lang} tea table`);
+    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥140,000"), `${lang} tea table`);
   }
   const pages = [
     ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥25,000", "¥30,000", "¥150,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
