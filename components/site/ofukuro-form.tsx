@@ -172,10 +172,6 @@ export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; o
                 {FACES.map(([v, l], i) => <label key={v} className="form-check"><input type="radio" name="faces" value={v} defaultChecked={i === 0} /><span><b>{l}</b></span></label>)}
               </div>
             </div>
-            <label className="form-check">
-              <input type="checkbox" name="photo-consent" required />
-              <span><b>I agree that a member of KAMEHAME JAPAN photographs the dinner for about 20 minutes and uses the photos on its website and social media, and that this is what the 30% founding-guest price is for.</b></span>
-            </label>
           </fieldset>
         )}
 
@@ -190,6 +186,12 @@ export function OfukuroForm({ fallbackEmail, offer }: { fallbackEmail: string; o
             <input type="checkbox" name="consent" required />
             <span><b>I understand this is a request, not a booking: the price, the conditions and whether the dinner can be arranged are confirmed with me before any payment.</b></span>
           </label>
+          {offer && (
+            <label className="form-check">
+              <input type="checkbox" name="photo-consent" required />
+              <span><b>I agree that a member of KAMEHAME JAPAN photographs the dinner for about 20 minutes and uses the photos on its website and social media, and that this is what the 30% founding-guest price is for.</b></span>
+            </label>
+          )}
         </fieldset>
 
         <div className="enquiry-actions">
