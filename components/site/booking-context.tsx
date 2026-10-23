@@ -46,6 +46,7 @@ export interface BookingExperience {
   interpreter?: boolean;
   /** Request-form notes field copy, when the product needs something specific. */
   notesLabel?: string;
+  replyNote?: string;
   notesHint?: string;
   /** Product-specific button text and the trust line under it. */
   ctaLabel?: string;

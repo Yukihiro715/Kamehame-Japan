@@ -146,7 +146,7 @@ export const experiencesFr: Experience[] = [
       { q: "Les enfants peuvent-ils participer ?", a: "Dès 10 ans, car on utilise de la vraie encre. Ils paient le tarif adulte." },
       { q: "Je voyage seul(e). Puis-je participer ?", a: "Oui. Un cours pour une personne est facturé comme pour deux ; l'encadré de réservation affiche le total quand vous choisissez une personne." },
       { q: "Comment s'habiller ?", a: "Avec des vêtements que l'encre peut tacher. Des tabliers sont fournis." },
-      { q: "Peut-on réserver au dernier moment ?", a: "Oui, jusqu'à 18 h, heure du Japon, la veille. Certains jours, le studio n'est réservé qu'à l'arrivée d'une demande : pour un cours dans les prochains jours, nous ne pouvons confirmer que s'il est encore libre." },
+      { q: "Peut-on réserver au dernier moment ?", a: "Les demandes sont acceptées jusqu'à 18 h, heure du Japon, deux jours avant. Certains jours, le studio n'est réservé qu'à l'arrivée d'une demande : pour un cours dans les prochains jours, nous ne pouvons confirmer que s'il est encore libre." },
       { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; nous répondons sous 24 heures avec le prix et les conditions. La demande est gratuite. La réservation est confirmée lorsque vous réglez via le lien envoyé, et les conditions d'annulation commencent alors." },
       { q: "Et si nous sommes en retard ?", a: "Le studio est loué à l'heure : le cours se termine à l'heure prévue et l'exercice est raccourci. Prévenez-nous dès que vous savez que vous serez en retard." },
       { q: "Le transport est-il compris ?", a: "Non. Vous retrouvez la professeure au studio de Shinjuku ; l'adresse et l'itinéraire arrivent avec votre confirmation." },
@@ -321,7 +321,7 @@ export const experiencesFr: Experience[] = [
     title: "Initiation au kendo dans un dojo de Nihonbashi, Tokyo",
     tagline: "Revêtez l'armure, prenez le shinai et entraînez-vous dans un vrai dojo de Tokyo : l'histoire et l'étiquette du kendo, les déplacements, la frappe, les exercices d'attaque et un combat pour finir, contre les autres participants puis contre l'instructeur. Deux heures, en anglais, dès six ans.",
     overview: [
-      "Le kendo, c'est le sabre du samouraï devenu discipline, et ici c'est le vrai : un dojo en activité à Nihonbashi, où l'instructeur entraîne ses élèves chaque semaine et enseigne aux visiteurs dans la même salle. Vous commencez par la naissance du kendo et la raison pour laquelle chaque échange s'ouvre et se ferme par un salut, puis vous apprenez les déplacements, la prise et la frappe, et vous assemblez le tout dans les exercices d'attaque, jusqu'à ce que l'esprit, le sabre et le corps tombent ensemble.",
+      "Le kendo, c'est le sabre du samouraï devenu discipline, et ici c'est le vrai : un dojo en activité à Nihonbashi, où les visiteurs découvrent le kendo avec un instructeur. Vous commencez par la naissance du kendo et la raison pour laquelle chaque échange s'ouvre et se ferme par un salut, puis vous apprenez les déplacements, la prise et la frappe, et vous assemblez le tout dans les exercices d'attaque, jusqu'à ce que l'esprit, le sabre et le corps tombent ensemble.",
       "La dernière partie est un combat. Vous affrontez les autres participants, puis l'instructeur, en armure complète. Personne n'a besoin d'avoir déjà tenu un sabre : la séance est conçue pour les débutants et s'adapte à l'âge et à la condition physique de chacun. Le dojo prête tout — tenue, armure et shinai — et photographie la séance pour vous.",
     ],
     duration: "Environ 2 heures", price: "¥20,000", group: "Petit groupe · 1 à 8 personnes", ages: "Dès 6 ans (tarif réduit de 6 à 15 ans et à partir de 65 ans)", area: "Tokyo (Nihonbashi)",
@@ -401,18 +401,19 @@ export const experiencesFr: Experience[] = [
   {
     slug: "nihonbashi-bushido-experience", city: "tokyo", category: "kendo",
     title: "Expérience bushido dans un dojo de Tokyo : le Nihon Kendo Kata",
-    tagline: "Une heure dans un dojo en activité de Nihonbashi avec le Nihon Kendo Kata — les formes qui conservent le sabre du samouraï — et les mots que les samouraïs ont laissés. Sans armure, sans combat, sans réponse unique : une heure calme pour trouver la vôtre.",
+    tagline: "Une heure dans un dojo en activité de Nihonbashi avec le Nihon Kendo Kata — des formes codifiées qui préservent des principes hérités des traditions japonaises du sabre — et les mots que les samouraïs ont laissés. Sans armure, sans combat, sans réponse unique : une heure calme pour trouver la vôtre.",
     overview: [
       "Ce n'est pas un spectacle de samouraïs, et le dojo le dit clairement : ce n'est pas fait pour s'amuser au sens habituel. Le bushido n'a pas une seule bonne réponse. Ce que chacun retire des formes et des mots laissés par les samouraïs sera différent, et l'heure est construite pour vous laisser découvrir ce que c'est pour vous.",
-      "Elle avance en trois temps. La tradition : le Nihon Kendo Kata, exécuté au sabre de bois, qui garde les techniques et l'esprit du samouraï dans une suite fixe de mouvements — pourquoi le salut, pourquoi la distance, pourquoi c'est plus qu'un exercice au sabre. Les mots : les paroles transmises par les samouraïs, lues avec la pensée qu'il y a derrière. La réflexion : ce que vous ressentez, et comment vous le lisez. La séance est en anglais, sans effort physique intense, et le dojo la photographie pour vous.",
+      "Elle avance en trois temps. La tradition : le Nihon Kendo Kata, exécuté au sabre de bois, qui explore des principes hérités des traditions japonaises du sabre dans une suite fixe de mouvements — pourquoi le salut, pourquoi la distance, pourquoi c'est plus qu'un exercice au sabre. Les mots : les paroles transmises par les samouraïs, lues avec la pensée qu'il y a derrière. La réflexion : ce que vous ressentez, et comment vous le lisez. La séance est en anglais, sans effort physique intense, et le dojo la photographie pour vous.",
     ],
     duration: "Environ 1 heure", price: "¥10,000", group: "Petit groupe · 2 à 8 personnes", ages: "Dès 15 ans", area: "Tokyo (Nihonbashi)",
-    img: "/images/bushido-kata.jpg", alt: "Deux participants en tenues sombres lèvent des sabres de bois à l'unisson sur le sol du dojo",
+    img: "/images/bushido-20261022-3.jpg", alt: "Deux pratiquants montrent une forme au sabre debout, sans armure",
     gallery: [
-      { img: "/images/bushido-seiza.jpg", alt: "Deux participants à genoux en seiza, les yeux fermés, côte à côte dans le dojo" },
-      { img: "/images/bushido-stance.jpg", alt: "Une participante tient le sabre droit en position de garde, regard droit devant" },
-      { img: "/images/bushido-senior.jpg", alt: "Un participant âgé et souriant croise le sabre avec l'instructeur" },
-      { img: "/images/kendo-grip.jpg", alt: "L'instructeur ajuste la prise d'un participant, sabres croisés" },
+      { img: "/images/bushido-20261022-1.jpg", alt: "Deux pratiquants se saluent au sol dans le dojo" },
+      { img: "/images/bushido-20261022-2.jpg", alt: "Deux pratiquants montrent une forme au sabre à genoux" },
+      { img: "/images/bushido-20261022-4.jpg", alt: "Deux pratiquants travaillent un mouvement au sabre assis" },
+      { img: "/images/bushido-20261022-5.jpg", alt: "Un instructeur montre un mouvement au sabre assis" },
+      { img: "/images/bushido-20261022-6.jpg", alt: "Un instructeur et deux participants assis pour un moment de réflexion" },
     ],
     galleryNote: "Photos du dojo.",
     scheduleNote: "Environ une heure ; l'ordre des trois parties varie selon le groupe.",
@@ -420,7 +421,7 @@ export const experiencesFr: Experience[] = [
     cancellation: "Annulation gratuite jusqu'à 24 heures avant le début de la séance ; au-delà, non-présentation comprise, le prix est dû en totalité. La date peut être déplacée dans le même délai si une autre séance a de la place — demandez-le le plus tôt possible. Si le dojo doit annuler, vous êtes intégralement remboursé sur votre moyen de paiement d'origine.",
     includedShort: "Séance d'1 heure · Tenue et sabre de bois · Photos de votre séance",
     highlights: [
-      { icon: "brush", title: "La tradition : le Nihon Kendo Kata", body: "Les formes qui portent le sabre du samouraï d'une génération à la suivante, exécutées au sabre de bois. Pas une compétition : une façon d'imaginer le cœur de ceux qui les ont laissées." },
+      { icon: "brush", title: "La tradition : le Nihon Kendo Kata", body: "Des formes codifiées qui préservent des principes hérités des traditions japonaises du sabre, exécutées au sabre de bois. Pas une compétition : une façon d'imaginer le cœur de ceux qui les ont laissées." },
       { icon: "chat", title: "Les mots", body: "Les samouraïs ont aussi laissé des mots. Lus avec la pensée qu'il y a derrière, ils s'approchent un peu plus qu'une traduction ne le peut." },
       { icon: "spark", title: "La réflexion", body: "Il n'y a pas de réponse hors de vous. Que ressentez-vous, et comment le lisez-vous ? L'heure laisse de la place pour cela." },
       { icon: "photo", title: "En anglais, sans effort", body: "La séance se déroule en anglais, sans effort physique intense, et le dojo la photographie pour vous." },
@@ -437,7 +438,7 @@ export const experiencesFr: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Tenue et début", body: "On enfile la tenue, un salut, et ce qu'est le bushido — et ce qu'il n'est pas." },
-      { time: "0:10", title: "La tradition", body: "Le Nihon Kendo Kata au sabre de bois : le salut, la distance, les formes.", img: "/images/bushido-kata.jpg" },
+      { time: "0:10", title: "La tradition", body: "Le Nihon Kendo Kata au sabre de bois : le salut, la distance, les formes.", img: "/images/bushido-20261022-2.jpg" },
       { time: "0:35", title: "Les mots", body: "Des paroles laissées par les samouraïs, et la pensée qu'ils y ont mise." },
       { time: "0:50", title: "La réflexion", body: "Quelques minutes de silence, puis votre propre lecture de ce que vous avez fait." },
       { time: "1:00", title: "Fin de la séance" },
@@ -445,7 +446,7 @@ export const experiencesFr: Experience[] = [
     venue: {
       known: ["Un dojo de kendo en activité, à l'étage d'un immeuble de Nihonbashi, arrondissement de Chūō — à six ou sept minutes à pied des gares de Ningyōchō, Mitsukoshimae et Shin-Nihombashi, à 18 minutes de la gare de Tokyo ; l'adresse exacte arrive avec votre confirmation", "Vestiaires et casiers sur place ; venez en tenue de ville, la tenue de kendo est prêtée", "Une partie de l'étiquette se fait à genoux au sol — une chaise est fournie si c'est difficile", "Les accompagnants qui souhaitent seulement regarder sont les bienvenus", "Pas d'effort intense : l'heure est centrée sur le kata"],
       afterBooking: ["L'adresse du dojo et un lien Google Maps", "Un guide photo de l'entrée de l'immeuble jusqu'au dojo", "Un numéro de téléphone pour le jour même"],
-      img: "/images/bushido-seiza.jpg", alt: "Des participants à genoux en silence dans le dojo",
+      img: "/images/bushido-20261022-6.jpg", alt: "Un instructeur et deux participants assis pour un moment de réflexion",
     },
     notesLabel: "Tout ce que l'instructeur doit savoir (facultatif)",
     notesHint: "ex. l'un de nous a pratiqué le kendo ; une chaise pour les parties assises ; nous souhaitons participer seul",
@@ -457,7 +458,7 @@ export const experiencesFr: Experience[] = [
     faq: [
       { q: "Qu'est-ce que l'expérience bushido ?", a: "Une heure qui explore les valeurs du samouraï à travers le Nihon Kendo Kata et les mots qu'ils ont laissés, et vous laisse réfléchir à ce que le bushido signifie pour vous." },
       { q: "Que fait-on exactement ?", a: "Pratiquer le Nihon Kendo Kata au sabre de bois, lire des mots transmis par les samouraïs, et prendre quelques minutes pour réfléchir." },
-      { q: "Qu'est-ce que le Nihon Kendo Kata ?", a: "Un ensemble de formes fixes, transmises pour conserver les techniques, les principes et l'esprit du sabre du samouraï. Il ne s'agit pas de compétition : il enseigne le salut, la distance et l'état d'esprit auxquels les samouraïs tenaient." },
+      { q: "Qu'est-ce que le Nihon Kendo Kata ?", a: "Des formes codifiées qui préservent des principes hérités des traditions japonaises du sabre. Il ne s'agit pas de compétition : il enseigne le salut, la distance et l'état d'esprit auxquels les samouraïs tenaient." },
       { q: "Faut-il avoir déjà pratiqué le kendo ?", a: "Non. La séance est ouverte aux grands débutants." },
       { q: "Est-ce physiquement exigeant ?", a: "Non. L'heure est centrée sur le kata et ne demande aucun effort intense, ce qui convient à la plupart des gens. Là où l'étiquette demande de s'agenouiller, une chaise est fournie." },
       { q: "Y a-t-il une bonne réponse au bushido ?", a: "Non. Ce que chacun retire des formes et des mots sera différent ; c'est le but." },
@@ -473,7 +474,7 @@ export const experiencesFr: Experience[] = [
     master: { title: "Votre instructeur", bio: "Le fondateur du dojo a commencé le kendo à cinq ans à Osaka et enseigne depuis des années aux visiteurs étrangers ; il a ouvert ce dojo en 2025 pour transmettre le kendo et le bushido en anglais, et mène cette heure lui-même ou avec l'un des instructeurs du dojo.", quote: "Notre rôle n'est pas de définir le sens. C'est d'imaginer le cœur de ceux qui ont laissé ces formes." },
     itinerary: ["0:00 — Tenue et début", "0:10 — La tradition : le Nihon Kendo Kata", "0:35 — Les mots", "0:50 — La réflexion", "1:00 — Fin de la séance"],
     goodToKnow: ["Environ une heure ; pas d'effort intense. Venez en tenue de ville.", "Dès 15 ans. Les séances se font à deux personnes ou plus ; une personne seule peut demander.", "Jusqu'à huit personnes partagent une séance ; séances privées sur demande.", "En anglais."],
-    story: { heading: "Un sabre sans adversaire", body: "Le Nihon Kendo Kata a été fixé en 1912 pour que le sabre du samouraï survive à la fin des samouraïs. Deux personnes, des sabres de bois, des formes fixes — et pas de vainqueur. Ce qui reste quand personne ne gagne, c'est la question de cette heure." },
+    story: { heading: "Un sabre sans adversaire", body: "Le Nihon Kendo Kata explore des principes hérités des traditions japonaises du sabre à travers une suite de mouvements codifiés. Deux personnes, des sabres de bois, des formes fixes — et pas de vainqueur. Ce qui reste quand personne ne gagne, c'est la question de cette heure." },
   },
   {
     slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony",
@@ -497,7 +498,7 @@ export const experiencesFr: Experience[] = [
     galleryNote: "Photos du salon de thé de l'hôtesse à Yotsuya.",
     langTag: "En anglais",
     cancellation: "Annulation gratuite jusqu'à la veille de votre séance ; le jour même, non-présentation comprise, le prix est dû en totalité. Si l'hôtesse doit annuler, vous êtes intégralement remboursé sur votre moyen de paiement d'origine.",
-    includedShort: "Séance de 90 minutes · Le thé que vous fouettez · En anglais",
+    includedShort: "90 minutes · Deux bols de matcha · Pâtisserie jonamagashi · En anglais",
     highlights: [
       { icon: "chat", title: "Une enseignante, pas une démonstration", body: "Trois générations de thé dans une famille, un diplôme de l'école Sōhen depuis 1993 et plusieurs centaines d'élèves par mois : votre hôtesse explique au fil de la séance, en anglais." },
       { icon: "brush", title: "Entrer dans la pièce comme il se doit", body: "La porte basse, le tokonoma, l'ordre des regards : l'étiquette de l'invité, apprise en la faisant." },
@@ -506,7 +507,8 @@ export const experiencesFr: Experience[] = [
     ],
     included: [
       "Une séance de quatre-vingt-dix minutes en anglais",
-      "Le matcha que vous fouettez vous-même",
+      "Deux bols de matcha, dont celui que vous fouettez vous-même",
+      "Jonamagashi, une pâtisserie japonaise fraîche traditionnelle",
       "Taxes comprises — rien n'est ajouté le jour même",
     ],
     notIncluded: [
