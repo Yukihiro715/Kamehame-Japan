@@ -428,13 +428,13 @@ export const categories: Category[] = [
     lead: "Kendo is the samurai's sword turned into a discipline: a bow, the footwork, a strike that unites spirit, sword and body. Train in a working Tokyo dojo with an instructor who teaches in English, or spend a quieter hour with the Nihon Kendo Kata and the words the samurai left behind." },
   { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
     lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
-  { slug: "samurai", title: "Samurai", tag: "Traditional", mark: "侍", img: "/images/tate-kata-performance.jpg",
+  { slug: "samurai", title: "Samurai", tag: "Traditional", mark: "侍", img: "/images/tate-swords-window.jpg",
     lead: "The samurai left Tokyo its old post towns, its sword schools and a code of conduct that still shapes manners here. Walk a historic district in samurai dress, or learn tate, the choreographed sword combat of Japanese stage and film, with a professional performer." },
-  { slug: "rakugo", title: "Rakugo", tag: "Traditional", mark: "噺", img: "/images/rakugo-stage.jpg",
+  { slug: "rakugo", title: "Rakugo", tag: "Traditional", mark: "噺", img: "/images/rakugo-performer.jpg",
     lead: "Rakugo is Japan's comic storytelling: one performer, a fan and a hand towel, and a whole cast of characters. Hear it performed in English in Asakusa, then walk the district where Tokyo's popular entertainment grew up." },
   { slug: "performing-arts", title: "Performing arts", tag: "Traditional", mark: "舞", img: "/images/ajl-dance-hero.jpg",
     lead: "Japan's stage arts were made for small rooms before they were made for theatres. These salon sessions in Tokyo put a professional dancer or musician a few metres from your seat, with time to talk, to try it yourself and to take a photo together." },
-  { slug: "cooking", title: "Cooking", tag: "Food", mark: "料", img: "/images/cooking-sushi-lesson.jpg",
+  { slug: "cooking", title: "Cooking", tag: "Food", mark: "料", img: "/images/kichijoji-chef-counter.jpg",
     lead: "Japanese home and restaurant cooking, taught hands-on by professional chefs: sushi rice, rolls and nigiri, fermented seasonings and the dishes built on them. Small classes where you cook, then sit down to eat." },
   { slug: "ninja", title: "Ninja", tag: "Traditional", mark: "忍", img: "/images/ninja-arashiyama-hero.jpg",
     lead: "The ninja were scouts and survivors, and their skills ran from the blowpipe and the throwing star to breathing and stillness. Try the tools in a Kyoto studio, cast your own shuriken, or sit down to the meditation practice behind the legend in Tokyo." },
@@ -2005,13 +2005,12 @@ export const experiences: Experience[] = [
       "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
     ],
     duration: "About 2.5 hours", price: "¥40,000", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
-    img: "/images/samurai-walk-performers.jpg", alt: "Costumed samurai performers in armour and hakama performing in front of a crowd",
+    img: "/images/samurai-walk-pair.jpg", alt: "A guest in a black kimono and the samurai master in hakama walking down a Kitasenju shopping street",
     gallery: [
-      { img: "/images/samurai-senju-street.jpg", alt: "A quiet street in Senju with a sign marking the old post town and a willow tree" },
-      { img: "/images/samurai-sword-practice.jpg", alt: "People practising sword strikes with wooden swords under trees in a Tokyo park" },
-      { img: "/images/city-tokyo.jpg", alt: "The gate of Senso-ji temple lit at night" },
+      { img: "/images/samurai-walk-master.jpg", alt: "The samurai master in a black kimono holding a sword in front of a calligraphy scroll" },
+      { img: "/images/tate-swords-window.jpg", alt: "Two guests in kimono crossing swords in a tatami room" },
     ],
-    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 5 },
     availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
     availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
@@ -2042,7 +2041,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Dress as a samurai", body: "Change into samurai attire with the staff's help; about twenty minutes." },
-      { time: "0:20", title: "Street walk", body: "An hour through Kitasenju: the old gateway of Senju-juku, local shops and a historic temple.", img: "/images/samurai-senju-street.jpg" },
+      { time: "0:20", title: "Street walk", body: "An hour through Kitasenju: the old gateway of Senju-juku, local shops and a historic temple.", img: "/images/samurai-walk-pair.jpg" },
       { time: "1:20", title: "Back at the venue", body: "A short break before the workshop." },
       { time: "1:30", title: "Samurai workshop and bushido", body: "Posture, grip and basic cuts with the instructor, and the ideas behind them; about an hour." },
       { time: "2:20", title: "Photos and tea", body: "Commemorative photos in costume, then Japanese tea." },
@@ -2051,7 +2050,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥55,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
       afterBooking: ["The venue's name and address", "Directions from Kitasenju station", "A phone number for the day"],
-      img: "/images/samurai-walk-performers.jpg", alt: "Costumed samurai performers in front of a crowd",
+      img: "/images/samurai-walk-master.jpg", alt: "The samurai master with a sword before a calligraphy scroll",
     },
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. heights for costume sizes; a child in the group; the dates you can make",
@@ -2090,13 +2089,15 @@ export const experiences: Experience[] = [
       "You rehearse with a partner, then perform a short duel together. The master then performs kenbu, the sword dance, for you; you try a few characters with a brush and keep the sheet; and the session closes with matcha and traditional sweets. Groups are private, two to six guests, on Mondays, Tuesdays, Thursdays and Saturdays from September to November 2026.",
     ],
     duration: "About 90 minutes", price: "¥33,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
-    img: "/images/tate-kata-performance.jpg", alt: "Two swordsmen in black hakama performing a paired sword kata before an audience",
+    img: "/images/tate-swords-window.jpg", alt: "Two guests in kimono crossing swords by the shoji window of a tatami room",
     gallery: [
-      { img: "/images/samurai-sword-practice.jpg", alt: "People practising sword strikes with wooden swords in a Tokyo park" },
-      { img: "/images/cat-tea.jpg", alt: "A bowl of matcha being prepared" },
-      { img: "/images/cat-sword.jpg", alt: "A katana blade against a dark background" },
+      { img: "/images/tate-group.jpg", alt: "A group of guests in kimono and hakama posing with swords after the workshop" },
+      { img: "/images/tate-training.jpg", alt: "Guests practising sword movements in a line across the tatami hall" },
+      { img: "/images/tate-pair.jpg", alt: "Two guests facing each other with swords raised" },
+      { img: "/images/tate-tea.jpg", alt: "Guests in kimono taking tea at a low table after practice" },
+      { img: "/images/tate-performance.jpg", alt: "A stage sword-fighting performance in black and white" },
     ],
-    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 2, max: 6 },
     availability: { daily: false, startTimes: ["13:00", "15:00"], cutoffDays: 7, cutoffTime: "18:00", dates: [
       { date: "2026-09-01", times: ["13:00", "15:00"] },
@@ -2232,12 +2233,14 @@ export const experiences: Experience[] = [
       "Then you sit down to eat: premium chirashi sushi with seasonal fish prepared by the chef, and a soft-serve dessert made with moromi, the soy-sauce mash. The chef began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills before coming home to teach. The seminar is designed for international visitors and runs for eight guests on announced dates.",
     ],
     duration: "2 hours", price: "¥18,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
-    img: "/images/cooking-sushi-lesson.jpg", alt: "A chef in whites demonstrating sushi preparation to a group gathered around the counter",
+    img: "/images/kichijoji-chef-counter.jpg", alt: "The chef in whites at the kitchen counter, preparing sushi rolls",
     gallery: [
-      { img: "/images/exp-sushi.jpg", alt: "A sushi counter with seats and a chef's station" },
-      { img: "/images/kichijoji-inokashira.jpg", alt: "Greenery and a path in Inokashira Park, a few minutes from Kichijoji station" },
+      { img: "/images/kichijoji-rolls.jpg", alt: "A row of salmon-topped sushi rolls on a slate board" },
+      { img: "/images/kichijoji-tuna.jpg", alt: "The chef's hands seasoning slices of tuna with fermented condiments" },
+      { img: "/images/kichijoji-chef-plating.jpg", alt: "The chef plating a finished roll at the counter" },
+      { img: "/images/kichijoji-chef-talk.jpg", alt: "The chef explaining a step to the class from behind the counter" },
     ],
-    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 8 },
     availability: { daily: false, startTimes: ["13:00"], cutoffDays: 14, cutoffTime: "18:00", dates: [
       { date: "2026-11-21", times: ["13:00"] }, { date: "2026-12-10", times: ["13:00"] }, { date: "2027-01-14", times: ["13:00"] }, { date: "2027-02-14", times: ["13:00"] },
@@ -2272,7 +2275,7 @@ export const experiences: Experience[] = [
       { time: "-0:30", title: "Meet at the studio", body: "Check in and wash up; the chef introduces the menu." },
       { time: "0:00", title: "Sushi rice", body: "Washing, cooking and seasoning the rice: the base of everything that follows." },
       { time: "0:25", title: "A fermented-seasoning dish", body: "A quick dish with shibazuke pickles and crunchy soy-sauce almonds." },
-      { time: "0:45", title: "Rolls", body: "Roll sushi, including a wagyu roast-beef roll, with the chef showing each step.", img: "/images/cooking-sushi-lesson.jpg" },
+      { time: "0:45", title: "Rolls", body: "Roll sushi, including a wagyu roast-beef roll, with the chef showing each step.", img: "/images/kichijoji-rolls.jpg" },
       { time: "1:10", title: "Nigiri", body: "Press nigiri yourself as the chef demonstrates the professional hand." },
       { time: "1:30", title: "The meal", body: "Premium chirashi sushi with seasonal fish, prepared by the chef, and a moromi soft-serve dessert." },
       { time: "2:00", title: "End of the seminar" },
@@ -2280,7 +2283,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A cooking studio in Kichijoji, about five minutes on foot from Kichijoji station (JR Chuo Line and Keio Inokashira Line) — the exact address comes with your confirmation", "Knives and cooking equipment are used: guests follow the chef's safety instructions", "Food allergies: tell us when you request; some cannot be accommodated. Halal menus are not available"],
       afterBooking: ["The studio's name and address", "Directions from Kichijoji station", "A phone number for the day"],
-      img: "/images/kichijoji-inokashira.jpg", alt: "Inokashira Park, a few minutes from the studio",
+      img: "/images/kichijoji-chef-counter.jpg", alt: "The kitchen counter where the class is held",
     },
     notesLabel: "Allergies and requests (optional)",
     notesHint: "e.g. a shellfish allergy; vegetarian in the group",
@@ -2319,12 +2322,15 @@ export const experiences: Experience[] = [
       "After the performance, an English-speaking guide walks you through Asakusa for an hour: the well-known landmarks, and the streets linked to the theatres and entertainers of old Tokyo. The afternoon ends near the stations. It runs on the second and fourth Sundays from October to December 2026, for two to ten guests.",
     ],
     duration: "About 4 hours", price: "¥12,000", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
-    img: "/images/rakugo-stage.jpg", alt: "A rakugo performer in a dark kimono kneeling on a cushion on stage, gesturing to the audience",
+    img: "/images/rakugo-performer.jpg", alt: "A rakugo performer in a grey kimono kneeling on a red cushion, telling a story in English",
     gallery: [
-      { img: "/images/asakusa-kaminarimon.jpg", alt: "Crowds in front of the Kaminarimon gate and its great red lantern" },
-      { img: "/images/city-tokyo.jpg", alt: "Senso-ji temple in Asakusa lit at night" },
+      { img: "/images/rakugo-audience.jpg", alt: "The audience seated in the small hall before the performance" },
+      { img: "/images/rakugo-performer-white.jpg", alt: "A performer in a white kimono with a fan, mid-story" },
+      { img: "/images/asakusa-kaminarimon-day.jpg", alt: "The Kaminarimon gate and its great red lantern on a summer day" },
+      { img: "/images/asakusa-denboin.jpg", alt: "Denboin-dori, a shopping street in Asakusa" },
+      { img: "/images/asakusa-pagoda.jpg", alt: "The five-storey pagoda of Senso-ji" },
     ],
-    galleryNote: "Placeholder photos (Wikimedia Commons). The partner's own photos replace them before this page is published.",
+    galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 2, max: 10 },
     availability: { daily: false, startTimes: ["13:30"], cutoffDays: 7, cutoffTime: "18:00", dates: [
       { date: "2026-10-25", times: ["13:30"] }, { date: "2026-11-08", times: ["13:30"] }, { date: "2026-11-22", times: ["13:30"] }, { date: "2026-12-13", times: ["13:30"] }, { date: "2026-12-27", times: ["13:30"] },
@@ -2355,7 +2361,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Meet in Asakusa", body: "Check in at the tourist information centre's ground-floor lobby, opposite the Kaminarimon gate." },
-      { time: "0:30", title: "English rakugo", body: "Two hours of stories and traditional variety entertainment, performed entirely in English.", img: "/images/rakugo-stage.jpg" },
+      { time: "0:30", title: "English rakugo", body: "Two hours of stories and traditional variety entertainment, performed entirely in English.", img: "/images/rakugo-performer.jpg" },
       { time: "2:30", title: "Break", body: "Half an hour before the walk." },
       { time: "3:00", title: "Asakusa walk", body: "An hour with your guide: the famous sights and the streets of old Tokyo's entertainment district." },
       { time: "4:00", title: "End near the stations" },
@@ -2363,7 +2369,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["The performance is at the Asakusa Culture Tourist Information Center, across from the Kaminarimon gate; the walk is on public streets nearby", "Late arrivals may not be admitted to the performance: please be at the meeting point by 1:30 pm", "The walk goes ahead in light rain; the route may change with the weather or local conditions"],
       afterBooking: ["Exactly where to meet in the lobby", "A phone number for the day"],
-      img: "/images/asakusa-kaminarimon.jpg", alt: "The Kaminarimon gate, across from the meeting point",
+      img: "/images/asakusa-kaminarimon-day.jpg", alt: "The Kaminarimon gate, across from the meeting point",
     },
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. children in the group; mobility needs for the walk",
@@ -3092,7 +3098,7 @@ export const experiences: Experience[] = [
       "West Kyoto is temple country: Ryoan-ji with its rock garden, Ninna-ji, Kinkaku-ji a bus ride away. A few minutes' walk from Ryoan-ji, this teahouse sits in a garden of its own, with maples that turn red in November and moss that stays green all year. The session is private, so the room is yours.",
       "Your host, in kimono, walks you through the ceremony as it happens: the greeting, the sweet, the preparation of the tea, the way to hold and turn the bowl. Everything is in English. After drinking the matcha your host prepared, you whisk a bowl yourself. Chairs and tables are available, so nobody has to kneel, and the sweets are vegan, nut-free and gluten-free.",
     ],
-    duration: "About 50 minutes", price: "¥15,000", priceUnit: "group", group: "Private · 1–10 guests", ages: "Ages 4+", area: "Kyoto (Ukyo-ku, near Ryoan-ji)",
+    duration: "About 50 minutes", price: "¥25,000", priceUnit: "group", group: "Private · 1–10 guests", ages: "Ages 4+", area: "Kyoto (Ukyo-ku, near Ryoan-ji)",
     img: "/images/tea-kyoto-garden-hero.jpg", alt: "The host in kimono preparing tea by the open window of the garden teahouse",
     gallery: [
       { img: "/images/tea-kyoto-garden-garden.jpg", alt: "The teahouse garden with maples in autumn colour and a stone path" },
@@ -3104,13 +3110,15 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the teahouse's own gallery.",
     partySize: { min: 1, max: 10, default: 2 },
-    // Operator's 2026/27 rates: ¥15,000 per person for two or more (peak
-    // ¥18,000), solo session ¥25,000 (peak ¥30,000). Peak: March, April,
+    // Sale prices (owner, 2026-10-23): the operator's public rate per person
+    // treated as wholesale, + ¥5,000 ad cost, 20% margin, rounded up to ¥500:
+    // ¥15,000 → ¥25,000 (peak ¥18,000 → ¥29,000); solo ¥25,000 → ¥37,500
+    // (peak ¥30,000 → ¥44,000). Peak: March, April,
     // October, November and the New Year holiday (28 Dec – 3 Jan).
     pricing: {
-      tiers: [{ party: 1, total: 25000 }, { party: 2, total: 30000 }, { party: 3, total: 45000 }, { party: 4, total: 60000 }, { party: 5, total: 75000 }, { party: 6, total: 90000 }, { party: 7, total: 105000 }, { party: 8, total: 120000 }, { party: 9, total: 135000 }, { party: 10, total: 150000 }],
+      tiers: [{ party: 1, total: 37500 }, { party: 2, total: 50000 }, { party: 3, total: 75000 }, { party: 4, total: 100000 }, { party: 5, total: 125000 }, { party: 6, total: 150000 }, { party: 7, total: 175000 }, { party: 8, total: 200000 }, { party: 9, total: 225000 }, { party: 10, total: 250000 }],
       highSeason: {
-        tiers: [{ party: 1, total: 30000 }, { party: 2, total: 36000 }, { party: 3, total: 54000 }, { party: 4, total: 72000 }, { party: 5, total: 90000 }, { party: 6, total: 108000 }, { party: 7, total: 126000 }, { party: 8, total: 144000 }, { party: 9, total: 162000 }, { party: 10, total: 180000 }],
+        tiers: [{ party: 1, total: 44000 }, { party: 2, total: 58000 }, { party: 3, total: 87000 }, { party: 4, total: 116000 }, { party: 5, total: 145000 }, { party: 6, total: 174000 }, { party: 7, total: 203000 }, { party: 8, total: 232000 }, { party: 9, total: 261000 }, { party: 10, total: 290000 }],
         windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
       },
     },
@@ -3164,8 +3172,8 @@ export const experiences: Experience[] = [
       { q: "Is the session private?", a: "Yes. Every session at this teahouse is for your group only, from one guest up to ten. Larger groups can be arranged on request." },
       { q: "Do we sit on the floor?", a: "Only if you want to. Chairs and tables are available for up to ten guests; say so when you request." },
       { q: "Can children join?", a: "Yes, from age four, at the same price as adults." },
-      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the per-person price is ¥18,000 instead of ¥15,000 (a solo session ¥30,000 instead of ¥25,000). Choose a date to see the rate." },
-      { q: "Why does a solo session cost more?", a: "The teahouse prices a session for one guest at a flat ¥25,000 (¥30,000 in peak season); from two guests the price is per person." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the per-person price is ¥29,000 instead of ¥25,000 (a solo session ¥44,000 instead of ¥37,500). Choose a date to see the rate." },
+      { q: "Why does a solo session cost more?", a: "A session for one guest is a flat ¥37,500 (¥44,000 in peak season); from two guests the price is ¥25,000 per person (¥29,000 in peak season)." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
       { q: "Is the teahouse accessible?", a: "Yes, it is wheelchair accessible; please tell us when you request so the room can be arranged." },
       { q: "Can we rent a kimono?", a: "Not at this teahouse. Kimono rental is offered at the operator's Higashiyama teahouses." },
@@ -3189,7 +3197,7 @@ export const experiences: Experience[] = [
       "Higashiyama's stone lanes between Kiyomizu-dera and Yasaka Pagoda are where most visitors to Kyoto walk at least once. The teahouse is a few steps off them: a tatami room where a host in kimono prepares tea for a small group, explaining the utensils, the sweet and the etiquette in English as she goes.",
       "You drink the bowl prepared for you, then whisk one yourself. Sessions start every hour from 10:00 to 17:00, are shared with other visitors (up to eight in all), and suit a first encounter with tea in the middle of a sightseeing day. A kimono can be rented at the studio next door and worn for the ceremony.",
     ],
-    duration: "About 45 minutes", price: "¥4,000", priceUnit: "group", group: "Shared session · 1–8 guests", ages: "Ages 6+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
+    duration: "About 45 minutes", price: "¥11,500", priceUnit: "group", group: "Shared session · 1–8 guests", ages: "Ages 6+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
     img: "/images/tea-kyoto-flower-hero.jpg", alt: "The host in a brown kimono preparing tea in the tearoom",
     gallery: [
       { img: "/images/tea-kyoto-flower-room.jpg", alt: "The host in an orange kimono preparing tea in the tatami room" },
@@ -3200,20 +3208,21 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the teahouse's own gallery.",
     partySize: { min: 1, max: 8, default: 2 },
-    // Operator's 2026/27 shared rates: adults ¥4,000 (peak ¥5,000), children
-    // 6–12 ¥2,500 (peak ¥3,000); the table shows adults, children are adjusted
+    // Sale prices (owner, 2026-10-23: public rate + ¥5,000 ad cost, 20%
+    // margin, rounded up to ¥500): adults ¥4,000 → ¥11,500 (peak ¥5,000 →
+    // ¥12,500), children 6–12 ¥2,500 → ¥9,500 (peak ¥3,000 → ¥10,000); the table shows adults, children are adjusted
     // in the reply. Peak: Mar, Apr, Oct, Nov and 28 Dec – 3 Jan.
     pricing: {
-      tiers: [{ party: 1, total: 4000 }, { party: 2, total: 8000 }, { party: 3, total: 12000 }, { party: 4, total: 16000 }, { party: 5, total: 20000 }, { party: 6, total: 24000 }, { party: 7, total: 28000 }, { party: 8, total: 32000 }],
+      tiers: [{ party: 1, total: 11500 }, { party: 2, total: 23000 }, { party: 3, total: 34500 }, { party: 4, total: 46000 }, { party: 5, total: 57500 }, { party: 6, total: 69000 }, { party: 7, total: 80500 }, { party: 8, total: 92000 }],
       highSeason: {
-        tiers: [{ party: 1, total: 5000 }, { party: 2, total: 10000 }, { party: 3, total: 15000 }, { party: 4, total: 20000 }, { party: 5, total: 25000 }, { party: 6, total: 30000 }, { party: 7, total: 35000 }, { party: 8, total: 40000 }],
+        tiers: [{ party: 1, total: 12500 }, { party: 2, total: 25000 }, { party: 3, total: 37500 }, { party: 4, total: 50000 }, { party: 5, total: 62500 }, { party: 6, total: 75000 }, { party: 7, total: 87500 }, { party: 8, total: 100000 }],
         windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
       },
     },
     addOns: [
       // Operator's kimono studio next door: ¥6,000 per person all year, dressing
       // from an hour before the session, last dressing 16:00, return by 17:00.
-      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Kimono rental has free cancellation until three days before; for bookings of eight or more kimono, until one week before.", price: 6000, perGuest: true },
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Cancellation follows the terms of the session.", price: 6000, perGuest: true },
     ],
     availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
     timeLabel: "Preferred start time",
@@ -3262,8 +3271,8 @@ export const experiences: Experience[] = [
     ],
     faq: [
       { q: "Is the session shared?", a: "Yes: up to eight guests in all share the session. For a session of your own, see the private tea ceremony at the same teahouse." },
-      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 12 pay ¥2,500 (¥3,000 in peak season) instead of the adult ¥4,000 (¥5,000); the table above shows adult prices and our reply adjusts for children." },
-      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when adults pay ¥5,000 instead of ¥4,000. Choose a date to see the rate." },
+      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 12 pay ¥9,500 (¥10,000 in peak season) instead of the adult ¥11,500 (¥12,500); the table above shows adult prices and our reply adjusts for children." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when adults pay ¥12,500 instead of ¥11,500. Choose a date to see the rate." },
       { q: "Do we sit on the floor?", a: "Mostly, yes, on tatami. A limited number of chairs and tables can be requested." },
       { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Tell us how many women's and men's kimono you need." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
@@ -3287,7 +3296,7 @@ export const experiences: Experience[] = [
       "A private session in the Higashiyama teahouse: the tatami room, the host and the forty-five minutes are yours. It suits couples, families with small children, and anyone who wants to ask questions without an audience. The host explains the ceremony in English step by step, serves a seasonal sweet and a bowl of matcha, and then teaches you to whisk your own.",
       "Sessions start every hour from 10:00 to 17:00 and take up to five guests. A kimono can be rented at the studio next door and worn for the ceremony, with dressing an hour before your session.",
     ],
-    duration: "About 45 minutes", price: "¥8,000", priceUnit: "group", group: "Private · 1–5 guests", ages: "Ages 4+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
+    duration: "About 45 minutes", price: "¥16,500", priceUnit: "group", group: "Private · 1–5 guests", ages: "Ages 4+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
     img: "/images/tea-kyoto-private-hero.jpg", alt: "The host in kimono preparing tea at the hearth of the tearoom",
     gallery: [
       { img: "/images/tea-kyoto-private-stand.jpg", alt: "The host preparing tea at a lacquered stand in the tearoom" },
@@ -3298,17 +3307,18 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the teahouse's own gallery.",
     partySize: { min: 1, max: 5, default: 2 },
-    // Operator's 2026/27 private rates: ¥8,000 per person for two or more
-    // (peak ¥10,000), solo ¥15,000 (peak ¥17,000).
+    // Sale prices (owner, 2026-10-23: public rate + ¥5,000 ad cost, 20%
+    // margin, rounded up to ¥500): ¥8,000 → ¥16,500 per person (peak ¥10,000
+    // → ¥19,000); solo ¥15,000 → ¥25,000 (peak ¥17,000 → ¥27,500).
     pricing: {
-      tiers: [{ party: 1, total: 15000 }, { party: 2, total: 16000 }, { party: 3, total: 24000 }, { party: 4, total: 32000 }, { party: 5, total: 40000 }],
+      tiers: [{ party: 1, total: 25000 }, { party: 2, total: 33000 }, { party: 3, total: 49500 }, { party: 4, total: 66000 }, { party: 5, total: 82500 }],
       highSeason: {
-        tiers: [{ party: 1, total: 17000 }, { party: 2, total: 20000 }, { party: 3, total: 30000 }, { party: 4, total: 40000 }, { party: 5, total: 50000 }],
+        tiers: [{ party: 1, total: 27500 }, { party: 2, total: 38000 }, { party: 3, total: 57000 }, { party: 4, total: 76000 }, { party: 5, total: 95000 }],
         windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
       },
     },
     addOns: [
-      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Kimono rental has free cancellation until three days before; for bookings of eight or more kimono, until one week before.", price: 6000, perGuest: true },
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Cancellation follows the terms of the session.", price: 6000, perGuest: true },
     ],
     availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
     timeLabel: "Preferred start time",
@@ -3358,8 +3368,8 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Is the session private?", a: "Yes: the room and the host are for your group only, from one to five guests. Larger private groups use the annex tearoom nearby, listed separately." },
       { q: "Can children join?", a: "Yes, from age four, at the same price as adults." },
-      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the per-person price is ¥10,000 instead of ¥8,000 (a solo session ¥17,000 instead of ¥15,000). Choose a date to see the rate." },
-      { q: "Why does a solo session cost more?", a: "The teahouse prices a private session for one guest at a flat ¥15,000 (¥17,000 in peak season); from two guests the price is per person." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the per-person price is ¥19,000 instead of ¥16,500 (a solo session ¥27,500 instead of ¥25,000). Choose a date to see the rate." },
+      { q: "Why does a solo session cost more?", a: "A private session for one guest is a flat ¥25,000 (¥27,500 in peak season); from two guests the price is ¥16,500 per person (¥19,000 in peak season)." },
       { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Tell us how many women's and men's kimono you need." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time. The same terms apply to kimono rental booked with the session." },
@@ -3383,7 +3393,7 @@ export const experiences: Experience[] = [
       "The annex is the teahouse's second building in the same Higashiyama lanes: a tatami tearoom for private sessions, and a larger room with tables and chairs where a ceremony in the ryurei style is held for groups. Both are a short walk from Yasaka Pagoda.",
       "The ceremony is the same forty-five minutes: the host explains in English, serves a seasonal sweet and a bowl of matcha, and then teaches you to whisk your own. Private sessions take two to five guests (six on request); the group room takes nine to twenty, seated at tables, and is wheelchair accessible. A kimono can be rented at the studio next door.",
     ],
-    duration: "About 45 minutes", price: "¥10,000", priceUnit: "group", group: "Private · 2–5 guests · groups of 9–20 on request", ages: "Ages 4+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
+    duration: "About 45 minutes", price: "¥19,000", priceUnit: "group", group: "Private · 2–5 guests · groups of 9–20 on request", ages: "Ages 4+", area: "Kyoto (Higashiyama, near Yasaka Pagoda)",
     img: "/images/tea-kyoto-annex-hero.jpg", alt: "The host in kimono preparing tea in the annex tearoom",
     gallery: [
       { img: "/images/tea-kyoto-annex-entrance.jpg", alt: "The wooden entrance of the annex with a bamboo blind" },
@@ -3395,18 +3405,19 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the teahouse's own gallery.",
     partySize: { min: 2, max: 20, default: 2 },
-    // Operator's 2026/27 annex rates: private ¥10,000 per person for 2–5 (peak
-    // ¥12,000); 6 on request; group room 9–20 guests ¥4,000 per person (peak
-    // ¥5,000), quoted. 6–8 guests: by arrangement.
+    // Sale prices (owner, 2026-10-23: public rate + ¥5,000 ad cost, 20%
+    // margin, rounded up to ¥500): private ¥10,000 → ¥19,000 per person for
+    // 2–5 (peak ¥12,000 → ¥21,500); 6 on request; group room 9–20 guests
+    // ¥4,000 → ¥11,500 per person (peak ¥5,000 → ¥12,500), quoted. 6–8 guests: by arrangement.
     pricing: {
-      tiers: [{ party: 2, total: 20000 }, { party: 3, total: 30000 }, { party: 4, total: 40000 }, { party: 5, total: 50000 }],
+      tiers: [{ party: 2, total: 38000 }, { party: 3, total: 57000 }, { party: 4, total: 76000 }, { party: 5, total: 95000 }],
       highSeason: {
-        tiers: [{ party: 2, total: 24000 }, { party: 3, total: 36000 }, { party: 4, total: 48000 }, { party: 5, total: 60000 }],
+        tiers: [{ party: 2, total: 43000 }, { party: 3, total: 64500 }, { party: 4, total: 86000 }, { party: 5, total: 107500 }],
         windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
       },
     },
     addOns: [
-      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Kimono rental has free cancellation until three days before; for bookings of eight or more kimono, until one week before.", price: 6000, perGuest: true },
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Cancellation follows the terms of the session.", price: 6000, perGuest: true },
     ],
     availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
     timeLabel: "Preferred start time",
@@ -3454,10 +3465,10 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-      { q: "How many can take part?", a: "Private sessions in the tatami room take two to five guests, or six on request. Groups of nine to twenty use the group room at tables and chairs, at ¥4,000 per person (¥5,000 in peak season); six to eight guests are arranged individually. Send the request with your number and we reply with the price." },
+      { q: "How many can take part?", a: "Private sessions in the tatami room take two to five guests, or six on request. Groups of nine to twenty use the group room at tables and chairs, at ¥11,500 per person (¥12,500 in peak season); six to eight guests are arranged individually. Send the request with your number and we reply with the price." },
       { q: "What is the ryurei style?", a: "A tea ceremony conducted at a table, with guests seated on chairs rather than on the tatami. It is how the group room works, and it makes the ceremony easy for everyone." },
       { q: "Can children join?", a: "Yes, from age four, at the same price as adults." },
-      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the private rate is ¥12,000 per person instead of ¥10,000 and the group rate ¥5,000 instead of ¥4,000. Choose a date to see the rate." },
+      { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the private rate is ¥21,500 per person instead of ¥19,000 and the group rate ¥12,500 instead of ¥11,500. Choose a date to see the rate." },
       { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Larger groups may be dressed at a neighbouring partner studio to save time." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time. The same terms apply to kimono rental booked with the session." },

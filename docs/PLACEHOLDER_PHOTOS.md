@@ -57,3 +57,7 @@ the same twelve compositions (see the brief's shooting list). The earlier
 `/tokyo/setagaya-omotesenke-tea-ceremony/` still uses the Wikimedia
 placeholders `craft-hands.jpg` and `cat-tea.jpg` until the school sends its
 photos (the sheet promises several).
+
+## Trip in real Japan pages — replaced 2026-10-23
+
+The four Trip in real Japan previews (Kitasenju samurai walk, tate workshop, Kichijoji cuisine class, Asakusa English rakugo) now use photos from the operator's own pages (trjk.jp, linked in the 営業リスト M column), saved as `samurai-walk-*.jpg`, `tate-*.jpg`, `kichijoji-*.jpg`, `rakugo-*.jpg`, `asakusa-*-day.jpg`, `asakusa-denboin.jpg`, `asakusa-pagoda.jpg`. Branded header images, photos with device watermarks, the venue storefront and AI-generated images on the operator's pages were not used. Permission: the owner's rule of 2026-10-23 (operator and OTA images are cleared when requested). The samurai, rakugo and cooking category tiles use the same photos.

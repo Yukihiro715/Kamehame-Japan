@@ -414,10 +414,10 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
     assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥140,000"), `${lang} tea table`);
   }
   const pages = [
-    ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥25,000", "¥30,000", "¥150,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
-    ["/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/", "Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥4,000", "¥32,000", "¥2,500", "Kimono for the ceremony"]],
-    ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥15,000", "¥16,000", "¥40,000", "Kimono for the ceremony"]],
-    ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥20,000", "¥50,000", "ryurei", "Larger parties are quoted on request"]],
+    ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥37,500", "¥50,000", "¥250,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
+    ["/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/", "Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥11,500", "¥92,000", "¥9,500", "Kimono for the ceremony"]],
+    ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥25,000", "¥33,000", "¥82,500", "Kimono for the ceremony"]],
+    ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥38,000", "¥95,000", "ryurei", "Larger parties are quoted on request"]],
     ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
     ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 days before", "6 days before or later"]],
     ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "Up to 15 days before the date"]],
