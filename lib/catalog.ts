@@ -833,7 +833,10 @@ export const experiences: Experience[] = [
     story: { heading: "Three broths, one bowl at a time", body: "Tonkotsu, shoyu and miso are the three words every ramen menu in Japan turns on. Making the noodles yourself and tasting the three side by side is the fastest way to know which one is yours." },
   },
   {
-    // Kendo Spirit (Nihonbashi dojo), from its public pages and PR photos. No
+    // Kendo Spirit (Nihonbashi dojo), from its public pages and PR photos.
+    // Cancellation (2026-10-23, owner): KAMEHAME's standard (free until 7 days
+    // before, then the full price), the stricter of ours and the dojo's own
+    // 24-hour rule. No
     // condition sheet yet: the sale price, start times and wholesale terms are
     // placeholders (docs/EMAIL_TEMPLATES.md §I). The partner's brand and the
     // founder's name stay off the page so guests cannot book around us.
@@ -863,8 +866,8 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Taught in English",
     skipSiteFaq: true,
-    cancellation: "Free cancellation until 24 hours before the start of your session; later than that, including no-shows, the full price is charged. The date can be moved within the same window if another session has room — ask as early as you can. If the dojo has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 1, rate: 0 }, { until: 0, rate: 100 }],
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price is charged. A confirmed date can be moved within the free period if another session has room — ask as early as you can. If the dojo has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "2-hour session · Uniform, armour and shinai · Photos and video of your session",
     highlights: [
       { icon: "chat", title: "Begins and ends with a bow", body: "Kendo's etiquette is not decoration. You learn why the bow comes first and what it asks of you, and the rest of the session makes sense from there." },
@@ -916,7 +919,7 @@ export const experiences: Experience[] = [
       { q: "I am not sporty. Can I keep up?", a: "Yes. The session is adjusted to each person's age and fitness, and there is no need to perform every movement perfectly. Older guests join regularly; where the etiquette involves kneeling, a chair is provided." },
       { q: "Can we take photos?", a: "Yes, as long as they do not disturb the other guests. The dojo also photographs and films the session and sends you the files." },
       { q: "Can friends come and watch?", a: "Yes, spectators are welcome." },
-      { q: "What is the cancellation policy?", a: "Free until 24 hours before the start of your session; later than that, including no-shows, the full price. The date can be moved within the same window if another session has room." },
+      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. The date can be moved within the free period if another session has room. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Learn where kendo comes from and why it begins and ends with a bow", "Footwork, grip and swing, then striking practice", "Put on full armour and face the other guests in a match", "Challenge the instructor, then watch a demonstration"],
@@ -951,8 +954,8 @@ export const experiences: Experience[] = [
     interpreter: false,
     langTag: "Taught in English",
     skipSiteFaq: true,
-    cancellation: "Free cancellation until 24 hours before the start of your session; later than that, including no-shows, the full price is charged. The date can be moved within the same window if another session has room — ask as early as you can. If the dojo has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 1, rate: 0 }, { until: 0, rate: 100 }],
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price is charged. A confirmed date can be moved within the free period if another session has room — ask as early as you can. If the dojo has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "1-hour session · Uniform and wooden sword · Photos of your session",
     highlights: [
       { icon: "brush", title: "Tradition: the Nihon Kendo Kata", body: "Formal sword forms that preserve principles inherited from Japan's swordsmanship traditions, performed with a wooden sword. Not a competition — a way of imagining the hearts of those who left them." },
@@ -1001,7 +1004,7 @@ export const experiences: Experience[] = [
       { q: "How is this different from the Kendo Experience?", a: "Bushido is the philosophy of the samurai; kendo is the modern martial art that carries its spirit. This hour asks why those traditions were kept; the two-hour Kendo Experience puts you in armour to practise them." },
       { q: "Which language is the session in?", a: "English. The instructor teaches in English and Japanese." },
       { q: "Can we take photos?", a: "Yes, as long as they do not disturb the other guests. The dojo also photographs and films the session and sends you the files." },
-      { q: "What is the cancellation policy?", a: "Free until 24 hours before the start of your session; later than that, including no-shows, the full price. The date can be moved within the same window if another session has room." },
+      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. The date can be moved within the free period if another session has room. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Perform the Nihon Kendo Kata with a wooden sword", "Read the words the samurai left behind, with the thoughts behind them", "Sit with what you felt, and find your own reading of Bushido"],
