@@ -72,7 +72,8 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   // the group fee leads (2026-10-24: ¥15,000 for the first golfer + ¥5,000 each additional), its breakdown under it; the package prices are gone
   assert.match(text, /¥20,000\s*fee\s*¥15,000 \+ ¥5,000 × 1 additional golfer(?!s)/, "Mt. Fuji card: the fee for two, then its breakdown");
   for (const price of ["¥15,000", "¥20,000", "¥25,000", "¥30,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
-  assert.ok(text.includes("¥15,000 for one golfer") && text.includes("¥15,000 + ¥5,000 × 3 additional golfers"), "fee table breakdown for one and four golfers");
+  assert.ok(text.includes("¥15,000 for the first golfer, ¥5,000 for each additional golfer") && !text.includes("× 3 additional"), "fee table: the rule once, the figures alone");
+  assert.ok(!/xp-sub-h">How booking works/.test(html), "no duplicate booking-steps list in the booking service");
   assert.doesNotMatch(text, /¥45,000|¥60,000|flat fee|per golfer and the same/, "no trace of the per-golfer fee");
   assert.doesNotMatch(html, /¥250,000|¥270,000|¥290,000|¥310,000|¥330,000|¥350,000/, "no package prices");
   assert.ok(text.includes("1 golfer") && !text.includes("1 golfers"), "a single golfer, in the singular");
@@ -80,20 +81,20 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.ok(text.includes("5 or more") && text.includes("5 to 12 golfers") && text.includes("Can you arrange for a group of five or more?"), "five or more golfers are taken and quoted");
   assert.doesNotMatch(text, /−¥5,000|Bringing own \(/, "no own-clubs deduction in the booking service");
   // what we arrange vs what is not part of the service
-  assert.ok(text.includes("What the Arrangement Fee Covers"), "inclusions heading");
+  assert.ok(text.includes("What the fee covers"), "inclusions heading");
   assert.equal(html.split('class="gi-card"').length - 1, 9, "nine arranged items (ten cards: no driver or lunch card)");
   assert.equal(html.split('class="gi-card gi-no"').length - 1, 1, "only golf wear is outside the service");
   assert.match(html, /gi-card"[\s\S]{0,900}Private Transfer[\s\S]{0,300}We introduce a licensed transfer company/, "the transfer partner is something we arrange");
   assert.match(html, /gi-card"[\s\S]{0,900}English Assistant[\s\S]{0,200}Optional/, "the assistant is an option");
   assert.ok(!/gi-label">(Driver|Lunch)</.test(html), "no driver or lunch card");
   assert.ok(text.includes("Getting There: Your Choice") && !text.includes("Travel in Comfort"), "the getting-there section replaces the transfer section");
-  assert.ok(text.includes("we introduce a licensed private transfer partner"), "the partner is introduced, not named");
+  assert.ok(text.includes("introduce a licensed private transfer partner"), "the partner is introduced, not named");
   assert.doesNotMatch(html, /Rion/i, "the transfer partner is never named");
-  assert.ok(text.includes("Agree requirements and pay for research"), "reassurance under the options");
+  assert.ok(text.includes("No payment to enquire"), "reassurance under the options");
   // the form: tee time, optional base, no pick-up prefecture, an assistant choice
   assert.ok(html.includes("Preferred tee time") && html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
   // the transfer choice: not ours to sell, the partner introduced on request
-  assert.ok(html.includes('name="transfer"') && html.includes("please introduce the transfer partner") && html.includes("we connect you directly with our partner transfer company"), "transfer choice with the partner note");
+  assert.ok(html.includes('name="transfer"') && html.includes("please introduce the transfer partner") && html.includes("we can introduce our partner, whom you book and pay directly"), "transfer choice with the partner note");
   assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");
   assert.ok(html.includes("Send Tee-Time Request") && html.includes("Check Tee Times"), "CTAs");
   assert.equal(html.split("<form ").length - 1, 1, "exactly one form");

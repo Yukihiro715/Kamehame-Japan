@@ -186,9 +186,10 @@ test("all public languages and automatic mails use the staged terms and keep pri
     const c = GOLF_ARRANGEMENT_COPY[lang], p = arrangementPolicy[lang];
     assert.equal(c.cancellation, p.terms);
     // FAQ 9 is the large-group answer added 2026-10-23; the policy answers follow it
-    assert.equal(c.faq[10].a, p.beforePayment);
+    // the FAQ answers are short summaries (owner, 2026-10-24); the full terms stay in the Cancellation section
     assert.equal(c.faq[11].a, p.weather);
-    assert.equal(c.faq[12].a, p.terms);
+    assert.match(c.faq[12].a, /5,000/);
+    assert.notEqual(c.faq[12].a, p.terms);
     assert.equal(c.process.paid, p.paid);
     assert.equal(applyGolfArrangement({ slug: "mt-fuji-golf-day", variants: [], cancellationTiers: [{ until: 7, rate: 0 }] }, lang).cancellationTiers, undefined);
     assert.doesNotMatch(JSON.stringify(c), /seven days before|7日前|siete días antes|sept jours avant|7 天前|Option 2/);

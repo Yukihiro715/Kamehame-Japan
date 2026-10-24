@@ -1503,6 +1503,7 @@ main.xp2, main.xp2 .xp-cols, main.xp2 .xp-main, main.xp2 .xp-side { overflow-x:c
 .go-seg-opt input, .go-area input { position:absolute; left:0; top:0; width:1px; height:1px; min-height:0; opacity:0; margin:0; padding:0; border:0; pointer-events:none; }
 .go-seg-opt.on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; color:var(--ink); font-weight:700; }
 .go-seg-opt:focus-within, .go-area:focus-within { outline:2px solid var(--kame); outline-offset:2px; }
+.go-seg-wrap { display:grid; gap:8px; }
 .go-area-grid { display:grid; grid-template-columns:1fr; gap:8px; }
 .go-area { position:relative; min-width:0; display:grid; grid-template-columns:auto minmax(0,1fr); gap:4px 12px; align-content:start; padding:14px 14px 12px; border:1px solid #d9d3c7; border-radius:12px; background:var(--white); cursor:pointer; transition:border-color .15s, box-shadow .15s, background .15s; }
 .go-area.on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; }

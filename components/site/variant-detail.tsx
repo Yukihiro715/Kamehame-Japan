@@ -15,7 +15,7 @@ import { GolfInclusions } from "@/components/site/golf-inclusions";
 import { GolfTransfer } from "@/components/site/golf-transfer";
 import { isArrangement } from "@/lib/golf-prices";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { countOf, golfFeeBreakdown, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
+import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { Fx, FxNote } from "@/components/site/money";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
@@ -54,6 +54,8 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const faq = exp.faq ?? [];
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const totals = variants.flatMap((v) => v.tiers.map((x) => x.total));
+  // The booking service charges the same fee in both areas, so its table has one "Fee" column.
+  const feeColumns = isArrangement() ? [{ id: "fee", short: vc.prices.totalCol, tiers: variants[0].tiers }] : variants;
   const minPrice = Math.min(...totals);
   const maxPrice = Math.max(...totals);
   const addOns = exp.addOns ?? [];
@@ -81,7 +83,6 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
       ]} />
 
       <BookingProvider experience={booking} pricings={pricings} lang={lang}>
-        {/* The booking service shows dollars first (owner's decision, 2026-10-17); the visitor's own choice still wins. */}
         {/* 1. Title block: a short H1 and one line, then straight to the photos */}
         <header className="xp-head vh-head">
           <h1>{exp.title}</h1>
@@ -132,7 +133,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
               </ol>
               <p className="xp-note">{vc.day.note}</p>
               {exp.schedule && (
-                <details className="vh-timings" open>
+                <details className="vh-timings" open={!isArrangement() || undefined}>
                   <summary>{vc.day.timingsH}</summary>
                   {exp.scheduleNote && <p className="xp-note xp-note-sample">{exp.scheduleNote}</p>}
                   <ol className="xp-timeline">
@@ -142,10 +143,15 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                   </ol>
                 </details>
               )}
-              <h3 className="xp-sub-h">{vc.day.bookingH}</h3>
-              <ol className="xp-flow">
-                {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
-              </ol>
+              {/* The booking service's four steps above already say how booking works */}
+              {!isArrangement() && (
+                <>
+                  <h3 className="xp-sub-h">{vc.day.bookingH}</h3>
+                  <ol className="xp-flow">
+                    {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
+                  </ol>
+                </>
+              )}
             </section>
 
             {/* 6. FAQ, with the read-only price table (no choices here) */}
@@ -157,20 +163,19 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                   <summary>{vc.prices.heading}</summary>
                   <p className="xp-note">{vc.prices.only}</p>
                   <table className="xp-pricing vp-table vh-table">
-                    <thead><tr><th>{vc.prices.golfersCol}</th>{variants.map((v) => <th key={v.id}>{v.short}</th>)}</tr></thead>
+                    <thead><tr><th>{vc.prices.golfersCol}</th>{feeColumns.map((v) => <th key={v.id}>{v.short}</th>)}</tr></thead>
                     <tbody>
                       {parties.filter((n) => tierTotal(variants[0].tiers, n) !== null).map((n) => (
                         <tr key={n}>
                           <td data-label={vc.prices.golfersCol}><b>{countOf(O.golfers, n)}</b></td>
-                          {variants.map((v) => {
+                          {feeColumns.map((v) => {
                             const total = tierTotal(v.tiers, n);
                             if (total === null) return <td key={v.id} className="quote" data-label={v.short}><span>{O.customQuote}</span></td>;
                             const pp = perPersonOf(total, n);
-                            // the booking service's fee is a group amount: its breakdown, not a per-golfer figure, goes under it
-                            const sub = isArrangement() ? golfFeeBreakdown(O, n) : perPersonRefText(O, pp.perPerson, pp.approximate);
+                            // the booking service's fee is one group amount: the figure alone (the rule sits above the table)
                             return (
                               <td key={v.id} className="total" data-label={v.short}>
-                                <span><b><Fx>{yen(total)}</Fx></b><small>{isArrangement() ? sub : <Fx>{sub}</Fx>}</small></span>
+                                <span><b><Fx>{yen(total)}</Fx></b>{!isArrangement() && <small><Fx>{perPersonRefText(O, pp.perPerson, pp.approximate)}</Fx></small>}</span>
                               </td>
                             );
                           })}
@@ -180,7 +185,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                       {parties.some((n) => tierTotal(variants[0].tiers, n) === null) && (
                         <tr>
                           <td data-label={vc.prices.golfersCol}><b>{O.largePartyRow ?? countOf(O.golfers, parties[parties.length - 1])}</b></td>
-                          {variants.map((v) => <td key={v.id} className="quote" data-label={v.short}><span>{O.largePartyQuote ?? O.customQuote}</span></td>)}
+                          {feeColumns.map((v) => <td key={v.id} className="quote" data-label={v.short}><span>{O.largePartyQuote ?? O.customQuote}</span></td>)}
                         </tr>
                       )}
                     </tbody>
