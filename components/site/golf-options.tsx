@@ -93,6 +93,43 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
         <GolfersSeg parties={parties} copy={copy} name="golfers" />
       </fieldset>
 
+      {isArrangement() ? (() => {
+        // The booking service charges the same fee in both areas, so the area is a pair of pills
+        // (as in the form) and the fee is shown once under them (owner, 2026-10-24).
+        const chosen = variants.find((v) => v.id === b.variant) ?? variants[0];
+        const p = golfPriceParts(copy, custom ? null : tierTotal(chosen.tiers, n), n, large);
+        return (
+          <>
+            <fieldset className="go-size">
+              <legend>{copy.areaLegend}</legend>
+              <div className="go-seg two">
+                {variants.map((v) => (
+                  <label key={v.id} className={`go-seg-opt${b.variant === v.id ? " on" : ""}`}>
+                    <input type="radio" name="area" value={v.id} checked={b.variant === v.id} onChange={() => b.set({ variant: v.id })} />
+                    <span>{b.variant === v.id && <Check size={13} aria-hidden="true" />}{v.short}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="go-area-line">{chosen.tagline}</p>
+            </fieldset>
+            <div className="go-fee" aria-live="polite">
+              {p.custom ? (
+                <><b className="go-fee-quote">{p.headline}</b><small>{p.line}</small></>
+              ) : (
+                <>
+                  <span className="go-fee-main">
+                    {!p.totalWordAfter && p.totalWord && <small>{p.totalWord}</small>}
+                    <b><Yen n={p.total} /></b>
+                    {p.totalWordAfter && p.totalWord && <small>{p.totalWord}</small>}
+                  </span>
+                  <JpyRef n={p.total} unit={p.totalWordAfter ? p.totalWord : undefined} lang={lang} />
+                  <small className="go-breakdown">{p.breakdown}</small>
+                </>
+              )}
+            </div>
+          </>
+        );
+      })() : (
       <fieldset className="go-areas">
         <legend>{copy.areaLegend}</legend>
         <div className="go-area-grid">
@@ -133,6 +170,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
           })}
         </div>
       </fieldset>
+      )}
 
       <p className="go-includes">{copy.includes}</p>
       {custom ? <p className="go-note">{large ? copy.largePartyNote ?? copy.customNote : copy.customNote}</p> : (

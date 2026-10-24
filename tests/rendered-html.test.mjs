@@ -70,7 +70,9 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.match(html, /<title>Japan Golf Course Booking Service \| Tokyo Area &amp; Mt\. Fuji \| KAMEHAME JAPAN<\/title>/);
   assert.match(html, /<h1>Japan Golf Course Booking Service<\/h1>/);
   // the group fee leads (2026-10-24: ¥15,000 for the first golfer + ¥5,000 each additional), its breakdown under it; the package prices are gone
-  assert.match(text, /¥20,000\s*fee\s*¥15,000 \+ ¥5,000 × 1 additional golfer(?!s)/, "Mt. Fuji card: the fee for two, then its breakdown");
+  assert.match(text, /¥20,000\s*fee\s*¥15,000 \+ ¥5,000 × 1 additional golfer(?!s)/, "the fee for two, then its breakdown");
+  assert.equal(html.split('class="go-fee"').length - 1, 1, "the options panel shows the fee once, under the area pills, not per area card");
+  assert.equal(html.split('class="go-area').length - 1 - html.split('class="go-area-line"').length + 1, 0, "no area cards in the booking service");
   for (const price of ["¥15,000", "¥20,000", "¥25,000", "¥30,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
   assert.ok(text.includes("¥15,000 for the first golfer, ¥5,000 for each additional golfer") && !text.includes("× 3 additional"), "fee table: the rule once, the figures alone");
   assert.ok(!/xp-sub-h">How booking works/.test(html), "no duplicate booking-steps list in the booking service");
