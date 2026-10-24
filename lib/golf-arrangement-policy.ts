@@ -2,7 +2,8 @@ import type { Lang } from "@/lib/i18n";
 
 /** Separate from the price version: existing customers keep their agreed terms. */
 /** 2026-10-24: the fee became ¥15,000 for the first golfer + ¥5,000 per additional golfer, and the research
- *  portion retained after a proposal became ¥5,000 per group (it was ¥5,000 per golfer under staged-2026-10-19). */
+ *  portion retained after a proposal became ¥5,000 per group, approved by the owner the same day (it was
+ *  ¥5,000 per golfer under staged-2026-10-19). */
 export const GOLF_ARRANGEMENT_POLICY_VERSION = "staged-2026-10-24";
 
 export const arrangementPolicy: Record<Lang, {
