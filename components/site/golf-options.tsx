@@ -108,16 +108,14 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                 {p.custom ? (
                   <span className="go-price quote"><b>{p.headline}</b><small>{p.line}</small></span>
                 ) : p.leadTotal ? (
-                  <>
-                    <span className="go-price">
-                      {/* the booking service: the group fee leads; its breakdown follows */}
-                      {!p.totalWordAfter && p.totalWord && <small className="go-lead">{p.totalWord}</small>}
-                      <b><Yen n={p.total} /></b>
-                      {p.totalWordAfter && p.totalWord && <small className="go-unit">{p.totalWord}</small>}
-                      <JpyRef n={p.total} unit={p.totalWordAfter ? p.totalWord : undefined} lang={lang} />
-                    </span>
-                    <span className="go-tt">{p.breakdown}</span>
-                  </>
+                  <span className="go-price wide">
+                    {/* the booking service: one figure, the group fee; its breakdown in a quiet line under it */}
+                    {!p.totalWordAfter && p.totalWord && <small className="go-lead">{p.totalWord}</small>}
+                    <b><Yen n={p.total} /></b>
+                    {p.totalWordAfter && p.totalWord && <small className="go-unit">{p.totalWord}</small>}
+                    <JpyRef n={p.total} unit={p.totalWordAfter ? p.totalWord : undefined} lang={lang} />
+                    <small className="go-breakdown">{p.breakdown}</small>
+                  </span>
                 ) : (
                   <>
                     <span className="go-price">
