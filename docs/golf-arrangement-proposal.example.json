@@ -13,7 +13,7 @@
     "assistant": "none"
   },
   "proposal": {
-    "policyVersion": "staged-2026-10-19",
+    "policyVersion": "staged-2026-10-24",
     "eligibility": "new-enquiry-no-prior-terms",
     "date": "2099-11-18",
     "preferredTeeTime": "09:00 preferred; 08:00 or later is essential",

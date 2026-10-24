@@ -7,7 +7,7 @@
 import { catalogFor } from "@/lib/catalog";
 import type { Enquiry } from "@/lib/contact";
 import { yen } from "@/lib/pricing";
-import { isArrangement } from "@/lib/golf-prices";
+import { GOLF_ARRANGEMENT_EXTRA_JPY, GOLF_ARRANGEMENT_FEE_JPY, isArrangement } from "@/lib/golf-prices";
 import type { TranslatedField } from "@/lib/translate";
 
 const LANG_JA: Record<string, string> = { en: "英語", ja: "日本語", es: "スペイン語", fr: "フランス語", "zh-tw": "繁体字中国語" };
@@ -28,7 +28,7 @@ export function golfPriceNoteJa(areaId: string, golfers: number, price: { groupT
   const area = golfAreaJa(areaId);
   return price
     ? isArrangement()
-      ? `${yen(price.groupTotal)} — ${golfers}名の手配料(${area}・1名${yen(price.perPersonDisplay)}、税込)。プレー代・カート・レンタル・昼食は現地精算、送迎は提携会社と直接契約、アシスタント同行は別途見積。価格表 ${version}。`
+      ? `${yen(price.groupTotal)} — ${golfers}名の手配料(${area}・基本料${yen(GOLF_ARRANGEMENT_FEE_JPY)}${golfers > 1 ? `＋追加${yen(GOLF_ARRANGEMENT_EXTRA_JPY)}×${golfers - 1}名` : ""}、税込)。プレー代・カート・レンタル・昼食は現地精算、送迎は提携会社と直接契約、アシスタント同行は別途見積。価格表 ${version}。`
       : `${yen(price.groupTotal)} — ${golfers}名パッケージ(${area}・おすすめコース)。1名あたり${price.approximate ? `約${yen(price.perPersonDisplay)}(端数処理)` : yen(price.perPersonDisplay)}。価格表 ${version}。オプションは別途、最終金額はお支払い前に確定。`
     : isArrangement()
       ? `個別見積もり — ${golfers}名の手配(${area})。5名以上は手配料をグループごとに見積もり(通常2組以上のティータイム)。価格表 ${version}。`

@@ -18,16 +18,21 @@ const automation = await vite.ssrLoadModule("/lib/golf-automation.ts");
 const { golfCustomerEmail } = await vite.ssrLoadModule("/lib/golf-customer-email.ts");
 const prices = await vite.ssrLoadModule("/lib/golf-prices.ts");
 const { arrangementPaymentTemplate } = await vite.ssrLoadModule("/lib/golf-arrangement-email.ts");
-const { golfArrangementPayment } = await vite.ssrLoadModule("/lib/golf-arrangement-payments.ts");
-const e = { kind: "guest", experience: "mt-fuji-golf-day", name: '<img src=x> {{TOTAL}}', email: "guest@example.invalid", lang: "en", areaId: "fuji", area: "Mt. Fuji", dates: "2099-11-18 09:00", party: "2", message: "", courseMode: "recommended", pickup: "Example Hotel", assistant: "required", transfer: "introduce", caddie: "required", rentalKeys: "own,own", estimate: "¥30,000" };
+const { golfArrangementPayment, golfArrangementPaymentReady } = await vite.ssrLoadModule("/lib/golf-arrangement-payments.ts");
+// Party sizes whose Stripe link at the current fee is registered; the group drafts run only once the owner adds the 2–4 links.
+const READY = [1, 2, 3, 4].filter(golfArrangementPaymentReady);
+const groupLinks = READY.includes(2);
+const e = { kind: "guest", experience: "mt-fuji-golf-day", name: '<img src=x> {{TOTAL}}', email: "guest@example.invalid", lang: "en", areaId: "fuji", area: "Mt. Fuji", dates: "2099-11-18 09:00", party: "2", message: "", courseMode: "recommended", pickup: "Example Hotel", assistant: "required", transfer: "introduce", caddie: "required", rentalKeys: "own,own", estimate: "¥20,000" };
 const proposal = {
-  policyVersion: "staged-2026-10-19", eligibility: "new-enquiry-no-prior-terms",
+  policyVersion: "staged-2026-10-24", eligibility: "new-enquiry-no-prior-terms",
   date: "2099-11-18", preferredTeeTime: "09:00 preferred, no earlier than 08:00",
   essentialRequirements: "Tokyo area, approved date and party", preferences: "Scenic course", rentalRequirements: "Own clubs",
   budget: { totalJpy: 150000, scope: "Service fee, course charges, rentals and transport for the whole group" },
   validUntil: "2099-11-10T18:00:00+09:00",
-  payment: { url: "https://book.stripe.com/8x2bJ16rT2AHbD19V83Je0m", amount: 30000, currency: "JPY", verified: true, priceVersion: "arrangement-2026-10-17" },
+  payment: groupLinks ? { ...golfArrangementPayment(2), verified: true } : undefined,
 };
+const solo = { ...e, party: "1", rentalKeys: "own", estimate: "¥15,000" };
+const soloProposal = { ...proposal, payment: { ...golfArrangementPayment(1), verified: true } };
 const env = { GOLF_AUTOMATION_URL: "https://script.google.com/macros/s/example/exec", GOLF_AUTOMATION_TOKEN: "test-only" };
 
 test("new requests cannot enter package automation, even with both production settings present", async t => {
@@ -35,7 +40,7 @@ test("new requests cannot enter package automation, even with both production se
   t.mock.method(globalThis, "fetch", () => { throw Error("must not call external automation"); });
   await assert.rejects(automation.submitGolfAutomation(env, e, "Golf", "", {}), /disabled/);
   assert.equal(automation.paymentTemplate(e), null, "an enquiry alone is never a reviewed payment invitation");
-  assert.equal(prices.GOLF_PRICE_VERSION, "arrangement-2026-10-17");
+  assert.equal(prices.GOLF_PRICE_VERSION, "arrangement-2026-10-24");
 });
 
 test("all five acknowledgement/follow-up languages add safe HTML, fee split and assistant selections", () => {
@@ -45,7 +50,7 @@ test("all five acknowledgement/follow-up languages add safe HTML, fee split and 
     assert.doesNotMatch(mail.html, /<img src=x>/);
     assert.match(mail.html, /&lt;img src=x&gt;/);
     assert.doesNotMatch(mail.text, /package price|Pick-up:|Thank you for booking/);
-    if (kind === "ack") assert.match(mail.text, /30,000/);
+    if (kind === "ack") assert.match(mail.text, /20,000/);
   }
   const ack = golfCustomerEmail("ack", e);
   assert.match(ack.text, /Requested \(quoted separately\)/);
@@ -58,12 +63,21 @@ test("all five acknowledgement/follow-up languages add safe HTML, fee split and 
   assert.equal(golfCustomerEmail("ack", { ...e, kind: "trade" }).html, undefined);
 });
 
-test("reviewed fee drafts cover both areas and 1–4 golfers without club discounts or package claims", () => {
-  for (const areaId of ["tokyo", "fuji"]) for (const party of [1, 2, 3, 4]) {
+test("the group fee: ¥15,000 for the first golfer + ¥5,000 per additional golfer, quoted from five", () => {
+  assert.deepEqual([1, 2, 3, 4, 5, 12].map(prices.golfArrangementFee), [15000, 20000, 25000, 30000, 35000, 70000]);
+  assert.deepEqual(prices.golfPackagePrice("fuji", 3), { currency: "JPY", groupTotal: 25000, perPersonDisplay: 8333, approximate: true });
+  assert.equal(prices.golfPackagePrice("tokyo", 5), null, "five or more are quoted");
+  assert.deepEqual(prices.golfTiers("tokyo").map((t) => t.total), [15000, 20000, 25000, 30000]);
+});
+
+test("reviewed fee drafts cover both areas and the registered party sizes without club discounts or package claims", () => {
+  assert.ok(READY.includes(1), "the one-golfer link is registered");
+  for (const areaId of ["tokyo", "fuji"]) for (const party of READY) {
     const t = arrangementPaymentTemplate({ ...e, areaId, party: String(party) }, { ...proposal, payment: undefined });
-    assert.equal(t.amount, party * 15000);
-    assert.equal(t.priceVersion, "arrangement-2026-10-17");
-    assert.equal(t.version, "arrangement-staged-2026-10-19");
+    assert.equal(t.amount, prices.golfArrangementFee(party));
+    assert.match(t.text, party === 1 ? /¥15,000 for one golfer/ : new RegExp(`¥15,000 for the first golfer \\+ ¥5,000 × ${party - 1} additional golfer`));
+    assert.equal(t.priceVersion, "arrangement-2026-10-24");
+    assert.equal(t.version, "arrangement-staged-2026-10-24");
     assert.match(t.text, /paid directly to the club/);
     assert.match(t.text, /book, contract and pay directly/);
     assert.match(t.text, /fee is refunded in full/);
@@ -80,12 +94,13 @@ test("reviewed fee drafts cover both areas and 1–4 golfers without club discou
 });
 
 test("unreviewed/expired proposals and mismatched or unsafe payment links cannot produce drafts", () => {
-  for (const patch of [{ essentialRequirements: "" }, { rentalRequirements: "" }, { preferences: "" }, { date: "2099-02-30" }, { date: "2099-11-19" }, { preferredTeeTime: "" }, { validUntil: "2000-01-01T00:00:00Z" }, { validUntil: "2099-11-19T00:00:00Z" }, { validUntil: "2099-11-10T18:00:00" }])
-    assert.throws(() => arrangementPaymentTemplate(e, { ...proposal, ...patch }));
-  for (const patch of [{ verified: false }, { amount: 270000 }, { amount: 20000 }, { priceVersion: "2026-10-10" }, { currency: "USD" }, { url: "javascript:alert(1)" }, { url: "https://book.stripe.com.evil.test/x" }, { url: "https://book.stripe.com/x?quantity=9" }])
-    assert.throws(() => arrangementPaymentTemplate(e, { ...proposal, payment: { ...proposal.payment, ...patch } }));
+  assert.ok(arrangementPaymentTemplate(solo, soloProposal).text, "the unpatched one-golfer proposal drafts");
+  for (const patch of [{ essentialRequirements: "" }, { rentalRequirements: "" }, { preferences: "" }, { date: "2099-02-30" }, { date: "2099-11-19" }, { preferredTeeTime: "" }, { validUntil: "2000-01-01T00:00:00Z" }, { validUntil: "2099-11-19T00:00:00Z" }, { validUntil: "2099-11-10T18:00:00" }, { policyVersion: "staged-2026-10-19" }])
+    assert.throws(() => arrangementPaymentTemplate(solo, { ...soloProposal, ...patch }));
+  for (const patch of [{ verified: false }, { amount: 270000 }, { amount: 20000 }, { priceVersion: "arrangement-2026-10-17" }, { currency: "USD" }, { url: "javascript:alert(1)" }, { url: "https://book.stripe.com.evil.test/x" }, { url: "https://book.stripe.com/x?quantity=9" }, { url: "https://book.stripe.com/8x2bJ16rT2AHbD19V83Je0m" }])
+    assert.throws(() => arrangementPaymentTemplate(solo, { ...soloProposal, payment: { ...soloProposal.payment, ...patch } }), /do not match/);
   for (const party of ["0", "5", "2.5"]) assert.throws(() => arrangementPaymentTemplate({ ...e, party }, proposal));
-  assert.throws(() => arrangementPaymentTemplate({ ...e, lang: "ja" }, proposal), /reviewed translation/);
+  assert.throws(() => arrangementPaymentTemplate({ ...solo, lang: "ja" }, soloProposal), /reviewed translation/);
 });
 
 test("one mode switch restores package prices, original templates and original delivery format", async () => {
@@ -127,32 +142,34 @@ test("public terms agree with fee emails, while package terms are preserved on r
 });
 
 
-test("registered links match every party size and cannot be replaced with another party's or a package link", () => {
-  const ids = ["8x228rcQhejp8qP2sG3Je0l", "8x2bJ16rT2AHbD19V83Je0m", "7sYeVd3fHcbh22rc3g3Je0n", "3cI3cvcQh5MTgXlffs3Je0o"];
-  for (const [i, id] of ids.entries()) {
-    const p = golfArrangementPayment(i + 1);
-    assert.equal(p.url, `https://book.stripe.com/${id}`);
-    assert.equal(p.amount, (i + 1) * 15000);
-    assert.equal(p.currency, "JPY");
+test("registered links match the current fee; the retired ¥15,000-per-golfer links for 2–4 golfers are refused until replaced", () => {
+  const one = golfArrangementPayment(1);
+  assert.equal(one.url, "https://book.stripe.com/8x228rcQhejp8qP2sG3Je0l");
+  assert.deepEqual([one.amount, one.currency, one.priceVersion], [15000, "JPY", "arrangement-2026-10-24"]);
+  for (const n of [2, 3, 4]) {
+    if (READY.includes(n)) { assert.equal(golfArrangementPayment(n).amount, prices.golfArrangementFee(n)); continue; }
+    assert.throws(() => golfArrangementPayment(n), /No approved Stripe link/, `${n} golfers: no draft until the owner registers the new link`);
+    assert.throws(() => arrangementPaymentTemplate({ ...e, party: String(n) }, { ...proposal, payment: undefined }), /No approved Stripe link/);
   }
-  for (const n of [0, 5, -1, 1.5, NaN, Infinity, "2", null]) assert.throws(() => golfArrangementPayment(n));
-  for (const url of [golfArrangementPayment(1).url, golfArrangementPayment(3).url, "https://book.stripe.com/14A4gz3fHdfldL92sG3Je0i"]) {
-    assert.throws(() => arrangementPaymentTemplate(e, { ...proposal, payment: { ...proposal.payment, url } }), /do not match/);
+  for (const n of [0, 5, -1, 1.5, NaN, Infinity, "2", null]) { assert.throws(() => golfArrangementPayment(n)); assert.equal(golfArrangementPaymentReady(n), false); }
+  // another party's link (the retired two-golfer link) or a package link never passes the one-golfer check
+  for (const url of ["https://book.stripe.com/8x2bJ16rT2AHbD19V83Je0m", "https://book.stripe.com/7sYeVd3fHcbh22rc3g3Je0n", "https://book.stripe.com/14A4gz3fHdfldL92sG3Je0i"]) {
+    assert.throws(() => arrangementPaymentTemplate(solo, { ...soloProposal, payment: { ...soloProposal.payment, url } }), /do not match/);
   }
-  const explicit = arrangementPaymentTemplate(e, proposal);
-  const selected = arrangementPaymentTemplate(e, { ...proposal, payment: undefined });
+  const explicit = arrangementPaymentTemplate(solo, soloProposal);
+  const selected = arrangementPaymentTemplate(solo, { ...soloProposal, payment: undefined });
   assert.equal(explicit.text, selected.text);
   assert.equal(explicit.html, selected.html);
-  assert.equal(automation.paymentTemplate(e), null, "registered links do not bypass requirements and terms review");
+  assert.equal(automation.paymentTemplate(solo), null, "registered links do not bypass requirements and terms review");
 });
 
 test("new policy cannot be silently applied to saved or existing customer arrangements", () => {
-  for (const patch of [{ policyVersion: undefined }, { eligibility: undefined }, { policyVersion: "old" }, { eligibility: "customer-agreed-change-before-work" }])
-    assert.throws(() => arrangementPaymentTemplate(e, { ...proposal, ...patch }));
-  assert.doesNotThrow(() => arrangementPaymentTemplate(e, { ...proposal, eligibility: "customer-agreed-change-before-work", changedTermsAgreement: "Customer's written agreement before any work: reference TEST" }));
-  for (const budget of [undefined, { totalJpy: null, scope: "All costs" }, { totalJpy: 1000, scope: "All costs" }, { totalJpy: 50000, scope: "" }])
-    assert.throws(() => arrangementPaymentTemplate(e, { ...proposal, budget }));
-  assert.doesNotThrow(() => arrangementPaymentTemplate(e, { ...proposal, budget: { totalJpy: null, noCeilingConfirmed: true, scope: "No cap confirmed, all costs still require approval" } }));
+  for (const patch of [{ policyVersion: undefined }, { eligibility: undefined }, { policyVersion: "old" }, { policyVersion: "staged-2026-10-19" }, { eligibility: "customer-agreed-change-before-work" }])
+    assert.throws(() => arrangementPaymentTemplate(solo, { ...soloProposal, ...patch }));
+  assert.doesNotThrow(() => arrangementPaymentTemplate(solo, { ...soloProposal, eligibility: "customer-agreed-change-before-work", changedTermsAgreement: "Customer's written agreement before any work: reference TEST" }));
+  for (const budget of [undefined, { totalJpy: null, scope: "All costs" }, { totalJpy: 1000, scope: "All costs" }, { totalJpy: 14999, scope: "All costs" }, { totalJpy: 50000, scope: "" }])
+    assert.throws(() => arrangementPaymentTemplate(solo, { ...soloProposal, budget }));
+  assert.doesNotThrow(() => arrangementPaymentTemplate(solo, { ...soloProposal, budget: { totalJpy: null, noCeilingConfirmed: true, scope: "No cap confirmed, all costs still require approval" } }));
 });
 
 test("all public languages and automatic mails use the staged terms and keep private offers out", async () => {
@@ -176,16 +193,23 @@ test("all public languages and automatic mails use the staged terms and keep pri
   }
 });
 
-test("individual offers distinguish one golfer, group enquiry, and a fully reviewed private quote", () => {
-  const solo = arrangementPaymentTemplate({ ...e, party: "1" }, { ...proposal, payment: undefined });
-  assert.doesNotMatch(solo.text, /Option 2/);
+test("a one-golfer draft: the fee for one, the refund split, no second option", () => {
+  const t = arrangementPaymentTemplate(solo, { ...soloProposal, payment: undefined });
+  assert.doesNotMatch(t.text, /Option 2/);
+  assert.match(t.text, /Booking service fee: ¥15,000 including tax \(¥15,000 for one golfer\)/);
+  assert.match(t.text, /¥15,000 refunded;.*¥10,000 refunded \(¥5,000 retained\)/);
+  assert.match(t.text, /¥15,000 for the first golfer plus ¥5,000 for each additional golfer/);
+});
+
+test("individual offers distinguish one golfer, group enquiry, and a fully reviewed private quote", { skip: !groupLinks && "waiting for the owner's ¥20,000 Stripe link for two golfers" }, () => {
   const group = arrangementPaymentTemplate(e, proposal);
   assert.match(group.text, /Option 1 — Golf course booking service/);
   assert.match(group.text, /Option 2 — Private golf day/);
   assert.match(group.text, /do not use it to pay for Option 2/);
   assert.doesNotMatch(group.text, /¥270,000|campaign|guaranteed tee time/);
   assert.ok(group.html.indexOf("Booking-service fee and refunds") < group.html.indexOf("Pay booking service fee —"));
-  assert.match(group.text, /¥30,000 refunded;.*¥20,000 refunded.*¥10,000 retained/);
+  assert.match(group.text, /Booking service fee: ¥20,000 including tax \(¥15,000 for the first golfer \+ ¥5,000 × 1 additional golfer\)/);
+  assert.match(group.text, /¥20,000 refunded;.*¥15,000 refunded.*¥5,000 retained/);
   assert.throws(() => arrangementPaymentTemplate(e, { ...proposal, privateQuote: { totalJpy: 250000, verifiedForThisRequest: true } }));
   const quote = { totalJpy: 250000, verifiedForThisRequest: true, inclusions: "Return transfers, assistant and golf", exclusions: "Personal purchases", contractingParty: "Example licensed travel company", paymentRecipient: "Example licensed travel company", cancellationTerms: "Example reviewed cancellation conditions" };
   const offered = arrangementPaymentTemplate(e, { ...proposal, privateQuote: quote });

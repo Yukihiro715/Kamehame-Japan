@@ -64,14 +64,16 @@ test("serves security.txt and marks confirmation pages noindex", async () => {
 /** Mirrors GOLF_MODE in lib/golf-prices.ts: "arrangement" (the booking service, 2026-10-17) or "package" (the private golf day). */
 const GOLF_MODE = "arrangement";
 
-test("golf page (booking service): flat fee per golfer from one golfer, meet at the course, no transfers in the fee", { skip: GOLF_MODE !== "arrangement" }, async () => {
+test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,000 per additional golfer), meet at the course, no transfers in the fee", { skip: GOLF_MODE !== "arrangement" }, async () => {
   const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
   const text = html.replace(/<[^>]+>/g, "");
   assert.match(html, /<title>Japan Golf Course Booking Service \| Tokyo Area &amp; Mt\. Fuji \| KAMEHAME JAPAN<\/title>/);
   assert.match(html, /<h1>Japan Golf Course Booking Service<\/h1>/);
-  // the fee, per golfer, with the group figure beside it; the package prices are gone
-  assert.match(text, /¥15,000\s*\/ golfer\s*¥30,000 fee · 2 golfers/, "Mt. Fuji card: fee per golfer, then the fee for two");
-  for (const price of ["¥15,000", "¥30,000", "¥45,000", "¥60,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
+  // the group fee leads (2026-10-24: ¥15,000 for the first golfer + ¥5,000 each additional), its breakdown under it; the package prices are gone
+  assert.match(text, /¥20,000\s*fee\s*¥15,000 \+ ¥5,000 × 1 additional golfer(?!s)/, "Mt. Fuji card: the fee for two, then its breakdown");
+  for (const price of ["¥15,000", "¥20,000", "¥25,000", "¥30,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
+  assert.ok(text.includes("¥15,000 for one golfer") && text.includes("¥15,000 + ¥5,000 × 3 additional golfers"), "fee table breakdown for one and four golfers");
+  assert.doesNotMatch(text, /¥45,000|¥60,000|flat fee|per golfer and the same/, "no trace of the per-golfer fee");
   assert.doesNotMatch(html, /¥250,000|¥270,000|¥290,000|¥310,000|¥330,000|¥350,000/, "no package prices");
   assert.ok(text.includes("1 golfer") && !text.includes("1 golfers"), "a single golfer, in the singular");
   // larger groups (2026-10-23): a "5 or more" choice, a quoted row in the fee table, the FAQ
@@ -96,13 +98,13 @@ test("golf page (booking service): flat fee per golfer from one golfer, meet at 
   assert.ok(html.includes("Send Tee-Time Request") && html.includes("Check Tee Times"), "CTAs");
   assert.equal(html.split("<form ").length - 1, 1, "exactly one form");
   // terms and structured data follow the fee
-  assert.ok(!text.includes("Up to 7 days before the date") && text.includes("¥5,000 for research and a suitable proposal") && text.includes("¥10,000 for booking and coordination"), "fee cancellation terms");
-  assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"15000"') && html.includes('"highPrice":"60000"'), "structured data carries the fee range");
+  assert.ok(!text.includes("Up to 7 days before the date") && text.includes("¥5,000 covers research and a suitable proposal") && text.includes("we retain ¥5,000 and refund the remainder"), "fee cancellation terms");
+  assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"15000"') && html.includes('"highPrice":"30000"'), "structured data carries the fee range");
   // the Japanese page and the listing card follow
   const ja = (await (await render("/ja/tokyo/mt-fuji-golf-day/")).text()).replace(/<[^>]+>/g, "");
   assert.ok(ja.includes("日本のゴルフ場予約手配サービス") && ja.includes("手配料") && ja.includes("ゴルフ場に集合"), "Japanese booking-service copy");
   const list = (await (await render("/en/golf/")).text()).replace(/<[^>]+>/g, "");
-  assert.ok(list.includes("¥15,000") && !list.includes("¥330,000"), "listing card shows the fee");
+  assert.ok(list.includes("¥15,000") && list.includes("/ group") && list.includes("then ¥5,000 for each additional golfer") && !list.includes("¥330,000"), "listing card shows the fee for the group with its rule");
 });
 
 test("golf page (package): two areas, published prices for 2–4 golfers, one options panel, one form", { skip: GOLF_MODE !== "package" }, async () => {

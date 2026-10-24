@@ -64,7 +64,12 @@ export function StickyRequestBar({
       <div className={`sticky-request sticky-golf ${show ? "show" : ""}`} aria-hidden={!show}>
         <div className="sticky-price">
           <small>{variant.short} · {countOf(golf.golfers, n)}</small>
-          {p.custom ? <b>{p.headline}</b> : (
+          {p.custom ? <b>{p.headline}</b> : p.leadTotal ? (
+            <>
+              <b>{!p.totalWordAfter && p.totalWord && <em>{p.totalWord}</em>}<Yen n={p.total} />{p.totalWordAfter && p.totalWord && <em>{p.totalWord}</em>}</b>
+              <small>{p.breakdown}</small>
+            </>
+          ) : (
             <>
               <b>{p.ppPrefix && <em>{p.ppPrefix}</em>}<Yen n={p.perPerson} /><em>{p.ppUnit}{p.approximate && !usdActive ? ` · ${golf.approx}` : ""}</em></b>
               <small><Fx>{p.totalShort}</Fx></small>

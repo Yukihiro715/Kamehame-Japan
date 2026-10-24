@@ -7,7 +7,7 @@ import { GOLF_FIXED_FEE_MAX, isArrangement } from "@/lib/golf-prices";
 import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
-import { countOf, fromPrice, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
+import { countOf, fromPrice, golfFeeBreakdown, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
 import type { Lang } from "@/lib/i18n";
 import type { ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 
@@ -15,8 +15,10 @@ type OptionsCopy = VariantPageCopy["options"];
 
 /** The words and figures every price display on the golf page shares — the
  *  options panel, the sticky bar, the form summary and its confirmation —
- *  so they can never disagree. Each leads with the group total; the
- *  per-person figure is the small line under it. `total` is the package price for `n`
+ *  so they can never disagree. The package leads with the per-person figure and
+ *  puts the group total under it; the booking service (`leadTotal`) leads with the
+ *  group fee and puts its breakdown ("¥15,000 + ¥5,000 × 1 additional golfer") under
+ *  it, since the fee is not a per-golfer amount. `total` is the price for `n`
  *  golfers; null means the request is quoted individually. */
 export function golfPriceParts(copy: OptionsCopy, total: number | null, n: number, large = false) {
   if (total === null) {
@@ -29,6 +31,8 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
   const shortWords = copy.totalShort.split("{total}").map((x) => x.trim());
   const ppWords = copy.perPersonRef.split("{price}").map((x) => x.trim());
   return {
+    /** The booking service: the group fee leads and `breakdown` is the small line */
+    leadTotal: isArrangement(), breakdown: isArrangement() ? golfFeeBreakdown(copy, n) : "",
     /** The words of `perPersonRef` before the figure ("1名あたり", "每位") and after it ("/ person") */
     ppPrefix: ppWords[0], ppUnit: ppWords[1],
     /** "¥87,500 / person" — beside a fixed total */
@@ -103,6 +107,17 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
                 <span className="go-line">{v.tagline}</span>
                 {p.custom ? (
                   <span className="go-price quote"><b>{p.headline}</b><small>{p.line}</small></span>
+                ) : p.leadTotal ? (
+                  <>
+                    <span className="go-price">
+                      {/* the booking service: the group fee leads; its breakdown follows */}
+                      {!p.totalWordAfter && p.totalWord && <small className="go-lead">{p.totalWord}</small>}
+                      <b><Yen n={p.total} /></b>
+                      {p.totalWordAfter && p.totalWord && <small className="go-unit">{p.totalWord}</small>}
+                      <JpyRef n={p.total} unit={p.totalWordAfter ? p.totalWord : undefined} lang={lang} />
+                    </span>
+                    <span className="go-tt">{p.breakdown}</span>
+                  </>
                 ) : (
                   <>
                     <span className="go-price">

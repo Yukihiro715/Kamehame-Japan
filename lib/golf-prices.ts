@@ -14,18 +14,28 @@ export type GolfCourseMode = "recommended" | "specific";
  *  - "package": the private golf day — transfers, green fees, cart, rentals, lunch and
  *    an assistant in one group price (GOLF_PRICES_JPY). The full implementation stays
  *    in the code and in git (tag golf-package-2026-10-16).
- *  - "arrangement": a course-booking service — a flat fee per golfer
- *    (GOLF_ARRANGEMENT_FEE_JPY); green fees and everything at the club are paid there,
+ *  - "arrangement": a course-booking service — a base fee for the first golfer plus a
+ *    smaller amount for each additional golfer (golfArrangementFee); green fees and
+ *    everything at the club are paid there,
  *    transfers through a partner contracted directly, an assistant quoted separately.
  *  Switch back to "package" to restore the previous page; nothing else needs to change. */
 export type GolfMode = "package" | "arrangement";
 export const GOLF_MODE: GolfMode = "arrangement";
+/** The booking-service fee (owner, 2026-10-24): ¥15,000 covers the first golfer and each
+ *  additional golfer adds ¥5,000, so a party of two pays ¥20,000 and a party of four ¥30,000.
+ *  Before 2026-10-24 the fee was ¥15,000 for every golfer. */
 export const GOLF_ARRANGEMENT_FEE_JPY = 15000;
+export const GOLF_ARRANGEMENT_EXTRA_JPY = 5000;
+/** The whole group's fee for `golfers` (1 or more): base + extra × (golfers − 1). */
+export const golfArrangementFee = (golfers: number) => GOLF_ARRANGEMENT_FEE_JPY + GOLF_ARRANGEMENT_EXTRA_JPY * Math.max(0, golfers - 1);
+/** The part of the fee that pays for research and a suitable proposal: one amount per group,
+ *  retained when the customer cancels after that proposal (lib/golf-arrangement-policy.ts). */
+export const GOLF_ARRANGEMENT_RESEARCH_JPY = 5000;
 export const isArrangement = () => GOLF_MODE === "arrangement";
 
 /** Version stamped on every request, so a stored reference price can be read against the list it came from. */
 export const GOLF_PACKAGE_PRICE_VERSION = "2026-10-10";
-export const GOLF_ARRANGEMENT_PRICE_VERSION = "arrangement-2026-10-17";
+export const GOLF_ARRANGEMENT_PRICE_VERSION = "arrangement-2026-10-24";
 export const GOLF_PRICE_VERSION = isArrangement() ? GOLF_ARRANGEMENT_PRICE_VERSION : GOLF_PACKAGE_PRICE_VERSION;
 
 /** Party sizes with a published fee: the package needs a car-load of two to four; the booking service takes a single golfer too. */
@@ -52,15 +62,19 @@ export interface GolfPackagePrice {
   groupTotal: number;
   /** Per-person figure for display only; rounded, so never multiplied back. */
   perPersonDisplay: number;
-  /** True when the per-person figure is rounded (three golfers). */
+  /** True when the per-person figure is rounded (three golfers in either mode). */
   approximate: boolean;
 }
 
 /** Null means "quoted individually" (a specific course in the package; five golfers or more in the booking service), never free. */
 export function golfPackagePrice(area: GolfArea, golfers: number, mode: GolfCourseMode = "recommended"): GolfPackagePrice | null {
-  // The booking service charges the same flat fee whichever course is played, so a named course is not a custom quote;
+  // The booking service charges the same fee whichever course is played, so a named course is not a custom quote;
   // a group beyond the published sizes is.
-  if (GOLF_MODE === "arrangement") return golfers > GOLF_FIXED_FEE_MAX ? null : { currency: "JPY", groupTotal: GOLF_ARRANGEMENT_FEE_JPY * golfers, perPersonDisplay: GOLF_ARRANGEMENT_FEE_JPY, approximate: false };
+  if (GOLF_MODE === "arrangement") {
+    if (golfers > GOLF_FIXED_FEE_MAX) return null;
+    const groupTotal = golfArrangementFee(golfers);
+    return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };
+  }
   if (mode === "specific") return null;
   const groupTotal = GOLF_PRICES_JPY[area][golfers as 2 | 3 | 4];
   return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };
@@ -80,4 +94,4 @@ export const golfTotalWithOwnClubs = (groupTotal: number, ownClubs: number) =>
   GOLF_MODE === "arrangement" ? groupTotal : Math.max(0, groupTotal - GOLF_OWN_CLUBS_DISCOUNT_JPY * Math.max(0, ownClubs));
 
 /** The area's table in the catalog's tier shape. */
-export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_MODE === "arrangement" ? GOLF_ARRANGEMENT_FEE_JPY * party : GOLF_PRICES_JPY[area][party as 2 | 3 | 4] }));
+export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_MODE === "arrangement" ? golfArrangementFee(party) : GOLF_PRICES_JPY[area][party as 2 | 3 | 4] }));

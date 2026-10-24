@@ -1,5 +1,5 @@
 import type { Enquiry } from "@/lib/contact";
-import { GOLF_ARRANGEMENT_FEE_JPY, GOLF_ARRANGEMENT_PRICE_VERSION, isGolfArea } from "@/lib/golf-prices";
+import { GOLF_ARRANGEMENT_EXTRA_JPY, GOLF_ARRANGEMENT_FEE_JPY, GOLF_ARRANGEMENT_PRICE_VERSION, GOLF_ARRANGEMENT_RESEARCH_JPY, golfArrangementFee, isGolfArea } from "@/lib/golf-prices";
 import { escapeEmailHtml, golfEmailHtml } from "@/lib/golf-email-html";
 import { SIGN, threadSubject } from "@/lib/mail-copy";
 import { arrangementMailCopy } from "@/lib/golf-arrangement-mail-copy";
@@ -7,7 +7,7 @@ import { golfArrangementPayment } from "@/lib/golf-arrangement-payments";
 import { arrangementPolicy, GOLF_ARRANGEMENT_POLICY_VERSION } from "@/lib/golf-arrangement-policy";
 import { privateGolfOption, type ReviewedPrivateQuote } from "@/lib/golf-individual-offer";
 
-export const ARRANGEMENT_EMAIL_VERSION = "arrangement-staged-2026-10-19";
+export const ARRANGEMENT_EMAIL_VERSION = "arrangement-staged-2026-10-24";
 
 /** Staff-reviewed requirements, before detailed research. Never from the public form.
  * Older proposal JSON cannot silently opt an existing customer into new terms. */
@@ -41,7 +41,7 @@ export function arrangementPaymentTemplate(e: Enquiry, p: ArrangementProposal, t
     throw new Error("Confirm policy version and eligibility; existing terms must not be overwritten");
   if (p.eligibility === "customer-agreed-change-before-work") clean(p.changedTermsAgreement);
   const requirements = clean(p.essentialRequirements), preferences = clean(p.preferences), rentals = clean(p.rentalRequirements), time = clean(p.preferredTeeTime, 200);
-  if (!p.budget || !(p.budget.totalJpy === null ? p.budget.noCeilingConfirmed === true : Number.isSafeInteger(p.budget.totalJpy) && p.budget.totalJpy >= n * GOLF_ARRANGEMENT_FEE_JPY))
+  if (!p.budget || !(p.budget.totalJpy === null ? p.budget.noCeilingConfirmed === true : Number.isSafeInteger(p.budget.totalJpy) && p.budget.totalJpy >= golfArrangementFee(n)))
     throw new Error("Agree a realistic total budget ceiling or explicitly confirm no ceiling; unknown is not unlimited");
   const budgetScope = clean(p.budget.scope);
   const day = new Date(`${p.date}T00:00:00Z`);
@@ -63,13 +63,13 @@ export function arrangementPaymentTemplate(e: Enquiry, p: ArrangementProposal, t
     `• Essential requirements: ${requirements}`, `• Preferences (not guaranteed): ${preferences}`, `• Rental requirements: ${rentals}`,
     `• Total budget ceiling: ${p.budget.totalJpy === null ? "No ceiling, as you confirmed; your approval is still required before any booking" : `¥${p.budget.totalJpy.toLocaleString("en-US")}`}. Budget covers: ${budgetScope}`, "",
     n >= 2 ? "Option 1 — Golf course booking service" : "Golf course booking service",
-    `Booking service fee: ¥{{TOTAL}} including tax (¥${GOLF_ARRANGEMENT_FEE_JPY.toLocaleString("en-US")} × ${n} golfers).`,
+    `Booking service fee: ¥{{TOTAL}} including tax (${n === 1 ? `¥${GOLF_ARRANGEMENT_FEE_JPY.toLocaleString("en-US")} for one golfer` : `¥${GOLF_ARRANGEMENT_FEE_JPY.toLocaleString("en-US")} for the first golfer + ¥${GOLF_ARRANGEMENT_EXTRA_JPY.toLocaleString("en-US")} × ${n - 1} additional ${n - 1 === 1 ? "golfer" : "golfers"}`}).`,
     arrangementMailCopy.en.paymentSplit,
     "No hotel pick-up or staff accompaniment is included in this booking-service fee. Bringing your own clubs reduces the rental expense at the club, not our service fee.", "",
     ...(option ? [option, ""] : []),
     "How we proceed", arrangementPolicy.en.beforePayment, arrangementPolicy.en.research, arrangementPolicy.en.confirmation, "",
     "Booking-service fee and refunds", arrangementPolicy.en.terms,
-    `For your group: before a qualifying proposal, ¥${total.toLocaleString("en-US")} refunded; after a qualifying proposal but before the completed booking and written confirmation, ¥${(n * 10000).toLocaleString("en-US")} refunded (¥${(n * 5000).toLocaleString("en-US")} retained). After the completed booking and written confirmation, no service-fee refund for customer-requested cancellation.`, "",
+    `For your group: before a qualifying proposal, ¥${total.toLocaleString("en-US")} refunded; after a qualifying proposal but before the completed booking and written confirmation, ¥${(total - GOLF_ARRANGEMENT_RESEARCH_JPY).toLocaleString("en-US")} refunded (¥${GOLF_ARRANGEMENT_RESEARCH_JPY.toLocaleString("en-US")} retained). After the completed booking and written confirmation, no service-fee refund for customer-requested cancellation.`, "",
     "Your agreement and payment",
     "Please reply to confirm these essential requirements, budget and refund terms, and that you would like the booking service. Please correct anything that does not match your plans. We begin detailed research only after both your written agreement and payment; payment alone is not a course reservation.",
     `Once you have confirmed, use the link below to pay only the ¥{{TOTAL}} booking service fee. This invitation is valid until ${deadline} JST; contact us before paying after that time.`, "{{PAYMENT_URL}}", "",

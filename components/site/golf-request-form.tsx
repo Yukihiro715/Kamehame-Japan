@@ -189,7 +189,9 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         <GolfQuickPick variants={variants} copy={O} parties={parties} name="form" />
         {p.custom
           ? <span className="go-summary-price"><strong>{p.headline}</strong><small>{p.line}</small></span>
-          : <span className="go-summary-price"><strong><Fx brief>{p.perPersonRef}</Fx></strong><small><Fx>{p.totalShort}</Fx></small></span>}
+          : p.leadTotal
+            ? <span className="go-summary-price"><strong><Fx brief>{p.totalShort}</Fx></strong><small>{p.breakdown}</small></span>
+            : <span className="go-summary-price"><strong><Fx brief>{p.perPersonRef}</Fx></strong><small><Fx>{p.totalShort}</Fx></small></span>}
         {clubDiscount > 0 && totalWithClubs !== null && <span className="go-summary-discount"><Fx>{ownClubsLine}</Fx> → <b><Fx brief>{yen(totalWithClubs)}</Fx></b> <small>{G.ownClubsTotal}</small></span>}
       </div>
 
@@ -379,7 +381,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <div><dt>{O.golfersLegend}</dt><dd>{countOf(O.golfers, n)}</dd></div>
           <div><dt>{F.preferredDate}</dt><dd>{b.date ? `${fmtDate(b.date, lang)} · ${timeLabel}` : "—"}</dd></div>
           <div><dt>{G.steps.course}</dt><dd>{specific ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
-          <div className="go-confirm-price"><dt>{G.package}</dt><dd><b><Fx brief>{p.custom ? p.headline : p.totalShort}</Fx></b>{!p.custom && <small><Fx>{p.perPersonRef}</Fx> · {G.perPersonRef}</small>}</dd></div>
+          <div className="go-confirm-price"><dt>{G.package}</dt><dd><b><Fx brief>{p.custom ? p.headline : p.totalShort}</Fx></b>{!p.custom && (p.leadTotal ? <small>{p.breakdown}</small> : <small><Fx>{p.perPersonRef}</Fx> · {G.perPersonRef}</small>)}</dd></div>
           {clubDiscount > 0 && totalWithClubs !== null && <div className="go-confirm-discount"><dt>{G.ownClubsTotal}</dt><dd><b><Fx brief>{yen(totalWithClubs)}</Fx></b><small><Fx>{ownClubsLine}</Fx></small></dd></div>}
           {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd><Fx>{addOnLine(a)}</Fx></dd></div>)}
         </dl>

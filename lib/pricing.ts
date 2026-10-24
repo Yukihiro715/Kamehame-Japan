@@ -7,6 +7,7 @@
 // read the same whichever shape the catalog entry uses.
 
 import type { Experience, ExperienceVariant } from "@/lib/catalog";
+import { GOLF_ARRANGEMENT_EXTRA_JPY, GOLF_ARRANGEMENT_FEE_JPY } from "@/lib/golf-prices";
 import { t, type Lang } from "@/lib/i18n";
 
 export interface PriceRow { party: number; total: number; perPerson: number }
@@ -210,6 +211,17 @@ export function pricingForVariant(exp: Experience, v: ExperienceVariant, lang: L
  *  flagged as approximate when it does not divide exactly (three golfers). */
 export const perPersonOf = (total: number, n: number) => ({ perPerson: Math.round(total / n), approximate: total % n !== 0 });
 
+/** The booking service's fee in its parts: "¥15,000 for one golfer" / "¥15,000 + ¥5,000 × 2 additional golfers",
+ *  from the options copy (`feeBase`, `feeBreakdown`); "" when the copy has no such line (the package). */
+export function golfFeeBreakdown(copy: { feeBase?: string; feeBreakdown?: string }, n: number): string {
+  const base = yen(GOLF_ARRANGEMENT_FEE_JPY), extra = yen(GOLF_ARRANGEMENT_EXTRA_JPY);
+  if (n <= 1) return (copy.feeBase ?? "").replace("{base}", base);
+  const k = n - 1;
+  // "golfer|golfers": the word before the bar for one additional golfer, the word after it for more
+  const words = (copy.feeBreakdown ?? "").replace(/(\S+)\|(\S+)/, (_, one: string, many: string) => (k === 1 ? one : many));
+  return words.replace("{base}", base).replace("{extra}", extra).replace("{n}", String(k));
+}
+
 /** The package total for a party size, or null when that size is quoted. */
 export const tierTotal = (tiers: { party: number; total: number }[], n: number) => tiers.find((t) => t.party === n)?.total ?? null;
 
@@ -230,6 +242,12 @@ export interface ListPrice { price: string; unit: "person" | "group"; /** "Based
 export function listPrice(exp: Experience, lang: Lang): ListPrice {
   const vc = exp.variantCopy;
   if (exp.variants?.length && vc) {
+    // A fee for the group (the golf booking service): the lowest fee, for the smallest party, with the rule beside it.
+    if (exp.priceUnit === "group") {
+      const n = exp.partySize?.min ?? 1;
+      const totals = exp.variants.map((v) => tierTotal(v.tiers, n)).filter((x): x is number => x !== null);
+      if (totals.length) return { price: yen(Math.min(...totals)), unit: "group", note: vc.options.feeRule, party: countOf(vc.options.golfers, n) };
+    }
     const n = exp.partySize?.default ?? exp.partySize?.min ?? 2;
     const totals = exp.variants.map((v) => tierTotal(v.tiers, n)).filter((x): x is number => x !== null);
     if (totals.length) {

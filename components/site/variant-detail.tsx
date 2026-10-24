@@ -16,7 +16,7 @@ import { GolfTransfer } from "@/components/site/golf-transfer";
 import { PreferCurrency } from "@/components/site/prefer-currency";
 import { isArrangement } from "@/lib/golf-prices";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
+import { countOf, golfFeeBreakdown, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { Fx, FxNote } from "@/components/site/money";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
@@ -168,9 +168,11 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
                             const total = tierTotal(v.tiers, n);
                             if (total === null) return <td key={v.id} className="quote" data-label={v.short}><span>{O.customQuote}</span></td>;
                             const pp = perPersonOf(total, n);
+                            // the booking service's fee is a group amount: its breakdown, not a per-golfer figure, goes under it
+                            const sub = isArrangement() ? golfFeeBreakdown(O, n) : perPersonRefText(O, pp.perPerson, pp.approximate);
                             return (
                               <td key={v.id} className="total" data-label={v.short}>
-                                <span><b><Fx>{yen(total)}</Fx></b><small><Fx>{perPersonRefText(O, pp.perPerson, pp.approximate)}</Fx></small></span>
+                                <span><b><Fx>{yen(total)}</Fx></b><small>{isArrangement() ? sub : <Fx>{sub}</Fx>}</small></span>
                               </td>
                             );
                           })}

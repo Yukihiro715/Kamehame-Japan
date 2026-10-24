@@ -1,6 +1,6 @@
 // The golf page as a course-booking service (GOLF_MODE "arrangement", 2026-10-17).
 //
-// A flat fee per golfer for choosing the course, reserving the tee time and handling the
+// A group fee (¥15,000 for the first golfer, ¥5,000 per additional golfer) for choosing the course, reserving the tee time and handling the
 // club in English. Green fees, cart, rentals and lunch are paid at the club; transfers go
 // through a partner the guest contracts directly; an assistant for the day is quoted
 // separately. Everything below replaces the package page's text while the mode is on,
@@ -8,7 +8,7 @@
 // GOLF_MODE back to "package" restores the previous page word for word.
 
 import type { Experience, GolfInclusionId, VariantPageCopy } from "@/lib/catalog";
-import { GOLF_ARRANGEMENT_FEE_JPY, golfPartySize, golfTiers } from "@/lib/golf-prices";
+import { GOLF_ARRANGEMENT_EXTRA_JPY, GOLF_ARRANGEMENT_FEE_JPY, golfPartySize, golfTiers } from "@/lib/golf-prices";
 import { arrangementPolicy } from "@/lib/golf-arrangement-policy";
 import type { Lang } from "@/lib/i18n";
 import { yen } from "@/lib/pricing";
@@ -45,14 +45,15 @@ interface ArrangementCopy {
 }
 
 const FEE = yen(GOLF_ARRANGEMENT_FEE_JPY);
+const EXTRA = yen(GOLF_ARRANGEMENT_EXTRA_JPY);
 /** Ten cards: the driver (part of the partner's car) and lunch (ordered at the club) are not listed (owner, 2026-10-17). */
 const ITEM_ORDER: GolfInclusionId[] = ["round", "clubs", "shoes", "transfer", "assistant", "cart", "locker", "bath", "taxes", "wear"];
 
 const en: ArrangementCopy = {
   title: "Japan Golf Course Booking Service",
   seoTitle: "Japan Golf Course Booking Service | Tokyo Area & Mt. Fuji | KAMEHAME JAPAN",
-  metaDescription: `We book your tee time at a golf course near Tokyo or in the Mt. Fuji region, in English, for a flat ${FEE} per golfer. Green fees, cart and rentals are paid at the club; private transfers through our partner.`,
-  tagline: "Tell us when you would like to play. We find the course, secure the tee time and handle the club in English, so you simply arrive and play. One flat fee per golfer; green fees settled at the course.",
+  metaDescription: `We book your tee time at a golf course near Tokyo or in the Mt. Fuji region, in English, for ${FEE} (first golfer) plus ${EXTRA} per additional golfer. Green fees, cart and rentals are paid at the club; private transfers through our partner.`,
+  tagline: `Tell us when you would like to play. We find the course, secure the tee time and handle the club in English, so you simply arrive and play. One group fee from ${FEE}; green fees settled at the course.`,
   overview: [
     "Booking a round in Japan is harder than it should be: Japanese-only websites, member introductions, deposits, dress codes nobody explains. We do that part for you. Tell us your date, your group and whether you would like the Tokyo area or the Mt. Fuji region, and we propose a course and a tee time, reserve it in your name and brief you on everything the club expects.",
     "You meet us at the course, not in a hotel lobby: there is no transfer in the fee, so you are free to drive, take the train or book a private car through the transfer partner we introduce. Green fees, cart, rentals and lunch are paid directly at the club on the day. An English-speaking assistant for the day can be added and is quoted separately.",
@@ -90,7 +91,7 @@ const en: ArrangementCopy = {
     afterBooking: ["Written confirmation of your tee time in your name", "Your briefing: address, route, arrival time, dress code, rentals and lunch", "A WhatsApp contact for the day"],
   },
   faq: [
-    { q: "What exactly do you do for the fee?", a: "We choose a course that suits your group in the area you want, reserve the tee time in your name, handle every exchange with the club in Japanese (rentals, cart, caddie, dress code, lunch) and brief you before the day. The fee is flat per golfer, and we add nothing to the club's prices." },
+    { q: "What exactly do you do for the fee?", a: `We choose a course that suits your group in the area you want, reserve the tee time in your name, handle every exchange with the club in Japanese (rentals, cart, caddie, dress code, lunch) and brief you before the day. The fee is ${FEE} for the first golfer plus ${EXTRA} for each additional golfer, and we add nothing to the club's prices.` },
     { q: "How much are the green fees?", a: "They vary by course and day of the week. Green fees, cart, rentals and lunch are paid directly at the club on the day; we send the club's prices with the proposal, so you know the full picture before you approve." },
     { q: "How do we get to the course?", a: "As you prefer. Many guests drive, or take the train and a taxi; we send the route. If you would like a private car from your hotel, we introduce a licensed transfer partner; you book and pay them directly." },
     { q: "Can someone come with us on the day?", a: "Yes. An English-speaking assistant can meet you at the club, handle check-in and the rentals and stay on hand at the clubhouse. Ask in the form and we quote it separately. The assistant does not play." },
@@ -105,12 +106,12 @@ const en: ArrangementCopy = {
     { q: "What is the cancellation policy?", a: arrangementPolicy["en"].terms },
     { q: "How far ahead should we book?", a: "Two to four weeks ahead gives the best choice of courses and tee times; requests close at 6:00 pm JST three days before the date." },
   ],
-  benefits: ["Tee time booked in your name", "Everything with the club handled in English", "Flat fee per golfer, nothing added to green fees"],
+  benefits: ["Tee time booked in your name", "Everything with the club handled in English", `One group fee from ${FEE}, nothing added to green fees`],
   crumb: "Golf Course Booking",
   photoNote: "Example courses, clubhouses and meals from clubs in both areas; your course is confirmed with your reservation. Mt. Fuji views depend on the course and the weather.",
   inclusions: {
     heading: "What the Arrangement Fee Covers",
-    sub: "One flat fee per golfer for the booking and the liaison. The day itself is paid at the club, as it is for every golfer in Japan.",
+    sub: `One fee for the group — ${FEE} for the first golfer, ${EXTRA} for each additional golfer — for the booking and the liaison. The day itself is paid at the club, as it is for every golfer in Japan.`,
     includedLabel: "We arrange it", notIncludedLabel: "Not part of the service",
     items: {
       round: { label: "Tee-Time Booking", note: "Course chosen and reserved in your name; green fees paid at the club" },
@@ -143,6 +144,7 @@ const en: ArrangementCopy = {
   options: {
     heading: "Plan your round", golfersLegend: "Golfers", areaLegend: "Area", golfers: "{n} golfers",
     perPerson: " / golfer", total: "{total} fee · {n} golfers", totalShort: "{total} fee", perPersonRef: "{price} / golfer",
+    feeBase: "{base} for one golfer", feeBreakdown: "{base} + {extra} × {n} additional golfer|golfers", feeRule: `${FEE} for the first golfer, then ${EXTRA} for each additional golfer`,
     customQuote: "Custom quote", customQuoteLine: "Specific course · {n} golfers",
     moreGolfers: "5 or more", largePartyQuote: "Quoted individually", largePartyLine: "{n} golfers · fee quoted for your group", largePartyRow: "5 to 12 golfers",
     largePartyNote: "For five golfers or more we quote the arrangement fee for your group: send the request with your number and date and we reply with the fee and a proposal. Enquiring is free.",
@@ -169,8 +171,8 @@ const en: ArrangementCopy = {
   },
   prices: {
     heading: "Arrangement fee by group size",
-    only: "The fee is per golfer and the same in both areas. Course charges are paid at the club. For five golfers or more, the fee is quoted individually for the group.",
-    golfersCol: "Golfers", perPersonCol: "Per golfer", totalCol: "Fee for the group",
+    only: `The fee is ${FEE} for the first golfer plus ${EXTRA} for each additional golfer, the same in both areas. Course charges are paid at the club. For five golfers or more, the fee is quoted individually for the group.`,
+    golfersCol: "Golfers", perPersonCol: "Breakdown", totalCol: "Fee for the group",
     approxNote: "The fee includes tax. Green fees, cart, rentals and lunch are paid at the club on the day.",
     notes: [
       arrangementPolicy["en"].beforePayment,
@@ -214,8 +216,8 @@ const en: ArrangementCopy = {
 const ja: ArrangementCopy = {
   title: "日本のゴルフ場予約手配サービス",
   seoTitle: "日本のゴルフ場予約手配サービス | 東京近郊・富士山エリア | KAMEHAME JAPAN",
-  metaDescription: `東京近郊または富士山エリアのゴルフ場で、あなたの名前でティータイムを予約します。手配料は1名${FEE}の定額。プレー代・カート・レンタルは当日ゴルフ場で精算、送迎は提携会社をご紹介します。`,
-  tagline: "プレーしたい日を教えてください。コースを選び、ティータイムを確保し、ゴルフ場とのやり取りを英語でお引き受けします。あとは当日ゴルフ場へ向かうだけ。手配料は1名定額、プレー代は現地精算です。",
+  metaDescription: `東京近郊または富士山エリアのゴルフ場で、あなたの名前でティータイムを予約します。手配料は1名目${FEE}、2名目以降は1名${EXTRA}を追加。プレー代・カート・レンタルは当日ゴルフ場で精算、送迎は提携会社をご紹介します。`,
+  tagline: `プレーしたい日を教えてください。コースを選び、ティータイムを確保し、ゴルフ場とのやり取りを英語でお引き受けします。あとは当日ゴルフ場へ向かうだけ。手配料は1名目${FEE}＋追加1名${EXTRA}、プレー代は現地精算です。`,
   overview: [
     "日本でゴルフ場を予約するのは、思いのほか難しいもの。日本語だけのサイト、メンバー紹介、予約金、誰も説明してくれないドレスコード。その部分を私たちが引き受けます。日程と人数、東京近郊か富士山エリアかをお知らせいただければ、コースとティータイムをご提案し、お客様のお名前で予約して、ゴルフ場が求めることをすべて事前にご案内します。",
     "集合はホテルのロビーではなくゴルフ場。手配料に送迎は含まれないので、レンタカー、電車、あるいは当社がご紹介する送迎の提携会社との直接契約など、行き方は自由に選べます。プレー代、カート、レンタル、昼食は当日ゴルフ場で直接お支払いください。英語対応のアシスタントの同行はオプションで、別途お見積もりします。",
@@ -253,7 +255,7 @@ const ja: ArrangementCopy = {
     afterBooking: ["お客様のお名前でのティータイム確定通知(書面)", "事前案内:住所、行き方、到着時刻、ドレスコード、レンタル、昼食", "当日のWhatsApp連絡先"],
   },
   faq: [
-    { q: "手配料で何をしてもらえますか?", a: "ご希望エリアで人数とレベルに合うコースを選び、お客様のお名前でティータイムを予約し、ゴルフ場との日本語のやり取り(レンタル、カート、キャディ、ドレスコード、昼食)をすべて引き受け、当日前にご案内します。手配料は1名定額で、ゴルフ場の料金に上乗せはしません。" },
+    { q: "手配料で何をしてもらえますか?", a: `ご希望エリアで人数とレベルに合うコースを選び、お客様のお名前でティータイムを予約し、ゴルフ場との日本語のやり取り(レンタル、カート、キャディ、ドレスコード、昼食)をすべて引き受け、当日前にご案内します。手配料は1名目${FEE}、2名目以降は1名につき${EXTRA}の追加で、ゴルフ場の料金に上乗せはしません。` },
     { q: "プレー代はいくらですか?", a: "コースと曜日によって異なります。プレー代、カート、レンタル、昼食は当日ゴルフ場で直接お支払いいただきます。ご提案時にゴルフ場の料金をお知らせするので、承認の前に全体像が分かります。" },
     { q: "ゴルフ場へはどう行けばいいですか?", a: "ご自由にお選びください。レンタカー、または電車とタクシーで向かう方が多く、行き方をご案内します。ホテルから専用車をご希望なら、認可を受けた送迎の提携会社をご紹介します。予約とお支払いは提携会社と直接行っていただきます。" },
     { q: "当日、誰か同行してもらえますか?", a: "はい。英語対応のアシスタントがゴルフ場でお迎えし、チェックインやレンタルの手続きを担い、クラブハウスで待機します。フォームでご希望いただければ別途お見積もりします。アシスタントはプレーしません。" },
@@ -268,12 +270,12 @@ const ja: ArrangementCopy = {
     { q: "キャンセル規定は?", a: arrangementPolicy["ja"].terms },
     { q: "どれくらい前に予約すべきですか?", a: "2〜4週間前が、コースとティータイムの選択肢がもっとも広がります。リクエストの受付はプレー日の3日前18時(日本時間)までです。" },
   ],
-  benefits: ["お客様のお名前でティータイムを予約", "ゴルフ場とのやり取りはすべて英語で対応", "1名定額の手配料、プレー代に上乗せなし"],
+  benefits: ["お客様のお名前でティータイムを予約", "ゴルフ場とのやり取りはすべて英語で対応", `手配料は1名目${FEE}＋追加1名${EXTRA}、プレー代に上乗せなし`],
   crumb: "ゴルフ場予約手配",
   photoNote: "写真は両エリアのゴルフ場のコース・クラブハウス・食事の例です。実際のコースは予約確定時にお知らせします。富士山の眺望はコースと天候によります。",
   inclusions: {
     heading: "手配料に含まれるもの",
-    sub: "予約と調整に対する1名定額の手配料です。当日の費用は、日本のゴルファーと同じようにゴルフ場でお支払いいただきます。",
+    sub: `予約と調整に対する1組の手配料です(1名目${FEE}、2名目以降は1名${EXTRA}を追加)。当日の費用は、日本のゴルファーと同じようにゴルフ場でお支払いいただきます。`,
     includedLabel: "当社が手配", notIncludedLabel: "サービス対象外",
     items: {
       round: { label: "ティータイム予約", note: "コースを選定し、お名前で予約。プレー代はゴルフ場払い" },
@@ -306,6 +308,7 @@ const ja: ArrangementCopy = {
   options: {
     heading: "ラウンドを計画する", golfersLegend: "人数", areaLegend: "エリア", golfers: "{n}名",
     perPerson: "", total: "{n}名の手配料 {total}", totalShort: "手配料 {total}", perPersonRef: "1名 {price}",
+    feeBase: "基本料 {base}(1名)", feeBreakdown: "基本料 {base}＋追加{n}名×{extra}", feeRule: `1名目${FEE}、2名目以降は1名${EXTRA}を追加`,
     customQuote: "個別見積", customQuoteLine: "希望コース指定・{n}名",
     moreGolfers: "5名以上", largePartyQuote: "個別見積", largePartyLine: "{n}名・手配料はお見積もり", largePartyRow: "5〜12名",
     largePartyNote: "5名以上は、人数と日程をお送りいただければグループの手配料をお見積もりし、ご提案と一緒にご返信します。お問い合わせは無料です。",
@@ -332,8 +335,8 @@ const ja: ArrangementCopy = {
   },
   prices: {
     heading: "人数別の手配料",
-    only: "手配料は1名あたりで、どちらのエリアも同額です。ゴルフ場の費用は現地でお支払いください。5名以上は手配料をグループごとに個別にお見積もりします。",
-    golfersCol: "人数", perPersonCol: "1名あたり", totalCol: "グループの手配料",
+    only: `手配料は1名目${FEE}、2名目以降は1名につき${EXTRA}を追加した1組の金額で、どちらのエリアも同額です。ゴルフ場の費用は現地でお支払いください。5名以上は手配料をグループごとに個別にお見積もりします。`,
+    golfersCol: "人数", perPersonCol: "内訳", totalCol: "グループの手配料",
     approxNote: "手配料は税込です。プレー代、カート、レンタル、昼食は当日ゴルフ場でお支払いください。",
     notes: [
       arrangementPolicy["ja"].beforePayment,
@@ -377,8 +380,8 @@ const ja: ArrangementCopy = {
 const es: ArrangementCopy = {
   title: "Reserva de campos de golf en Japón",
   seoTitle: "Reserva de campos de golf en Japón | Zona de Tokio y monte Fuji | KAMEHAME JAPAN",
-  metaDescription: `Reservamos tu hora de salida en un campo cerca de Tokio o en la región del monte Fuji, en inglés, por una tarifa fija de ${FEE} por golfista. Green fees, carrito y alquileres se pagan en el club; traslados privados a través de nuestro socio.`,
-  tagline: "Dinos cuándo quieres jugar. Elegimos el campo, aseguramos la hora de salida y tratamos con el club en inglés; tú solo tienes que llegar y jugar. Una tarifa fija por golfista; los green fees se pagan en el campo.",
+  metaDescription: `Reservamos tu hora de salida en un campo cerca de Tokio o en la región del monte Fuji, en inglés, por ${FEE} (primer golfista) más ${EXTRA} por cada golfista adicional. Green fees, carrito y alquileres se pagan en el club; traslados privados a través de nuestro socio.`,
+  tagline: `Dinos cuándo quieres jugar. Elegimos el campo, aseguramos la hora de salida y tratamos con el club en inglés; tú solo tienes que llegar y jugar. Una sola tarifa por grupo desde ${FEE}; los green fees se pagan en el campo.`,
   overview: [
     "Reservar una vuelta en Japón es más difícil de lo que debería: webs solo en japonés, presentaciones de socios, depósitos, códigos de vestimenta que nadie explica. Nosotros nos ocupamos de esa parte. Dinos tu fecha, tu grupo y si prefieres la zona de Tokio o la región del monte Fuji; proponemos un campo y una hora de salida, lo reservamos a tu nombre y te explicamos todo lo que el club espera.",
     "Nos encontramos en el campo, no en el vestíbulo de un hotel: la tarifa no incluye traslado, así que puedes conducir, ir en tren o contratar un coche privado con el socio de traslados que te presentamos. Green fees, carrito, alquileres y almuerzo se pagan directamente en el club ese día. Un asistente de habla inglesa para el día puede añadirse y se presupuesta aparte.",
@@ -416,7 +419,7 @@ const es: ArrangementCopy = {
     afterBooking: ["Confirmación escrita de tu hora de salida a tu nombre", "Tu guía: dirección, ruta, hora de llegada, vestimenta, alquileres y almuerzo", "Un contacto de WhatsApp para el día"],
   },
   faq: [
-    { q: "¿Qué hacéis exactamente por la tarifa?", a: "Elegimos un campo adecuado para tu grupo en la zona que quieras, reservamos la salida a tu nombre, gestionamos todo con el club en japonés (alquileres, carrito, caddie, vestimenta, almuerzo) y te preparamos antes del día. La tarifa es fija por golfista y no añadimos nada a los precios del club." },
+    { q: "¿Qué hacéis exactamente por la tarifa?", a: `Elegimos un campo adecuado para tu grupo en la zona que quieras, reservamos la salida a tu nombre, gestionamos todo con el club en japonés (alquileres, carrito, caddie, vestimenta, almuerzo) y te preparamos antes del día. La tarifa es de ${FEE} por el primer golfista más ${EXTRA} por cada golfista adicional, y no añadimos nada a los precios del club.` },
     { q: "¿Cuánto cuestan los green fees?", a: "Varían según el campo y el día de la semana. Green fees, carrito, alquileres y almuerzo se pagan directamente en el club ese día; enviamos los precios del club con la propuesta para que lo sepas todo antes de aprobar." },
     { q: "¿Cómo llegamos al campo?", a: "Como prefieras. Muchos conducen o van en tren y taxi; te enviamos la ruta. Si quieres un coche privado desde tu hotel, te presentamos a un socio de traslados con licencia; reservas y pagas directamente con él." },
     { q: "¿Puede acompañarnos alguien ese día?", a: "Sí. Un asistente de habla inglesa puede recibirte en el club, gestionar el check-in y los alquileres y quedarse en la casa club. Pídelo en el formulario y lo presupuestamos aparte. El asistente no juega." },
@@ -431,12 +434,12 @@ const es: ArrangementCopy = {
     { q: "¿Cuál es la política de cancelación?", a: arrangementPolicy["es"].terms },
     { q: "¿Con cuánta antelación reservar?", a: "Dos a cuatro semanas dan la mejor elección de campos y horas; las solicitudes se cierran a las 18:00 JST tres días antes de la fecha." },
   ],
-  benefits: ["Hora de salida reservada a tu nombre", "Todo con el club gestionado en inglés", "Tarifa fija por golfista, sin recargo en los green fees"],
+  benefits: ["Hora de salida reservada a tu nombre", "Todo con el club gestionado en inglés", `Una tarifa por grupo desde ${FEE}, sin recargo en los green fees`],
   crumb: "Reserva de campo de golf",
   photoNote: "Ejemplos de campos, casas club y comidas de clubes de ambas zonas; tu campo se confirma con la reserva. Las vistas del monte Fuji dependen del campo y del tiempo.",
   inclusions: {
     heading: "Qué cubre la tarifa de gestión",
-    sub: "Una tarifa fija por golfista por la reserva y la gestión. El día en sí se paga en el club, como lo hace cualquier golfista en Japón.",
+    sub: `Una tarifa por grupo —${FEE} por el primer golfista, ${EXTRA} por cada golfista adicional— por la reserva y la gestión. El día en sí se paga en el club, como lo hace cualquier golfista en Japón.`,
     includedLabel: "Lo gestionamos", notIncludedLabel: "No forma parte del servicio",
     items: {
       round: { label: "Reserva de la salida", note: "Campo elegido y reservado a tu nombre; green fees pagados en el club" },
@@ -469,6 +472,7 @@ const es: ArrangementCopy = {
   options: {
     heading: "Planifica tu vuelta", golfersLegend: "Golfistas", areaLegend: "Zona", golfers: "{n} golfistas",
     perPerson: " / golfista", total: "{total} de tarifa · {n} golfistas", totalShort: "{total} de tarifa", perPersonRef: "{price} / golfista",
+    feeBase: "{base} por un golfista", feeBreakdown: "{base} + {extra} × {n} golfista adicional|golfistas adicionales", feeRule: `${FEE} por el primer golfista, más ${EXTRA} por cada golfista adicional`,
     customQuote: "Presupuesto individual", customQuoteLine: "Campo concreto · {n} golfistas",
     moreGolfers: "5 o más", largePartyQuote: "Presupuesto individual", largePartyLine: "{n} golfistas · tarifa presupuestada para tu grupo", largePartyRow: "5 a 12 golfistas",
     largePartyNote: "Para cinco golfistas o más presupuestamos la tarifa de gestión para tu grupo: envía la solicitud con el número y la fecha y te respondemos con la tarifa y una propuesta. Consultar es gratis.",
@@ -495,8 +499,8 @@ const es: ArrangementCopy = {
   },
   prices: {
     heading: "Tarifa de gestión por tamaño de grupo",
-    only: "La tarifa es por golfista y la misma en ambas zonas. Los cargos del campo se pagan en el club. Para cinco golfistas o más, la tarifa se presupuesta individualmente para el grupo.",
-    golfersCol: "Golfistas", perPersonCol: "Por golfista", totalCol: "Tarifa del grupo",
+    only: `La tarifa es de ${FEE} por el primer golfista más ${EXTRA} por cada golfista adicional, la misma en ambas zonas. Los cargos del campo se pagan en el club. Para cinco golfistas o más, la tarifa se presupuesta individualmente para el grupo.`,
+    golfersCol: "Golfistas", perPersonCol: "Desglose", totalCol: "Tarifa del grupo",
     approxNote: "La tarifa incluye impuestos. Green fees, carrito, alquileres y almuerzo se pagan en el club ese día.",
     notes: [
       arrangementPolicy["es"].beforePayment,
@@ -540,8 +544,8 @@ const es: ArrangementCopy = {
 const fr: ArrangementCopy = {
   title: "Réservation de parcours de golf au Japon",
   seoTitle: "Réservation de parcours de golf au Japon | Région de Tokyo et mont Fuji | KAMEHAME JAPAN",
-  metaDescription: `Nous réservons votre départ sur un parcours près de Tokyo ou dans la région du mont Fuji, en anglais, pour un forfait fixe de ${FEE} par golfeur. Green fees, voiturette et locations se règlent au club ; transferts privés via notre partenaire.`,
-  tagline: "Dites-nous quand vous souhaitez jouer. Nous choisissons le parcours, bloquons l'heure de départ et gérons le club en anglais ; vous n'avez plus qu'à arriver et jouer. Un forfait fixe par golfeur ; les green fees se règlent au parcours.",
+  metaDescription: `Nous réservons votre départ sur un parcours près de Tokyo ou dans la région du mont Fuji, en anglais, pour ${FEE} (premier golfeur) plus ${EXTRA} par golfeur supplémentaire. Green fees, voiturette et locations se règlent au club ; transferts privés via notre partenaire.`,
+  tagline: `Dites-nous quand vous souhaitez jouer. Nous choisissons le parcours, bloquons l'heure de départ et gérons le club en anglais ; vous n'avez plus qu'à arriver et jouer. Un seul forfait par groupe dès ${FEE} ; les green fees se règlent au parcours.`,
   overview: [
     "Réserver une partie au Japon est plus compliqué qu'il ne le faudrait : sites uniquement en japonais, parrainage de membres, acomptes, codes vestimentaires que personne n'explique. Nous nous chargeons de cette partie. Indiquez votre date, votre groupe et votre préférence entre la région de Tokyo et celle du mont Fuji ; nous proposons un parcours et un départ, le réservons à votre nom et vous expliquons tout ce que le club attend.",
     "Le rendez-vous est au parcours, pas dans le hall d'un hôtel : le forfait ne comprend pas de transfert, vous êtes donc libre de conduire, de prendre le train ou de réserver une voiture privée auprès du partenaire de transfert que nous vous présentons. Green fees, voiturette, locations et déjeuner se règlent directement au club le jour même. Un assistant anglophone pour la journée peut être ajouté, sur devis séparé.",
@@ -579,7 +583,7 @@ const fr: ArrangementCopy = {
     afterBooking: ["Confirmation écrite de votre départ à votre nom", "Votre briefing : adresse, itinéraire, heure d'arrivée, tenue, locations et déjeuner", "Un contact WhatsApp pour la journée"],
   },
   faq: [
-    { q: "Que faites-vous exactement pour ces frais ?", a: "Nous choisissons un parcours adapté à votre groupe dans la région souhaitée, réservons le départ à votre nom, gérons tous les échanges avec le club en japonais (locations, voiturette, caddie, tenue, déjeuner) et vous briefons avant le jour J. Les frais sont fixes par golfeur et nous n'ajoutons rien aux tarifs du club." },
+    { q: "Que faites-vous exactement pour ces frais ?", a: `Nous choisissons un parcours adapté à votre groupe dans la région souhaitée, réservons le départ à votre nom, gérons tous les échanges avec le club en japonais (locations, voiturette, caddie, tenue, déjeuner) et vous briefons avant le jour J. Les frais sont de ${FEE} pour le premier golfeur plus ${EXTRA} par golfeur supplémentaire, et nous n'ajoutons rien aux tarifs du club.` },
     { q: "Combien coûtent les green fees ?", a: "Ils varient selon le parcours et le jour de la semaine. Green fees, voiturette, locations et déjeuner se règlent directement au club le jour même ; nous envoyons les tarifs du club avec la proposition, pour que vous ayez tout en main avant d'approuver." },
     { q: "Comment se rend-on au parcours ?", a: "Comme vous le souhaitez. Beaucoup conduisent, ou prennent le train puis un taxi ; nous envoyons l'itinéraire. Pour une voiture privée depuis votre hôtel, nous vous présentons un partenaire de transfert agréé ; vous réservez et payez directement auprès de lui." },
     { q: "Quelqu'un peut-il nous accompagner ce jour-là ?", a: "Oui. Un assistant anglophone peut vous accueillir au club, s'occuper de l'enregistrement et des locations et rester disponible au club-house. Demandez-le dans le formulaire ; il fait l'objet d'un devis séparé. L'assistant ne joue pas." },
@@ -594,12 +598,12 @@ const fr: ArrangementCopy = {
     { q: "Quelles sont les conditions d'annulation ?", a: arrangementPolicy["fr"].terms },
     { q: "Combien de temps à l'avance réserver ?", a: "Deux à quatre semaines offrent le meilleur choix de parcours et de départs ; les demandes sont closes à 18 h JST trois jours avant la date." },
   ],
-  benefits: ["Départ réservé à votre nom", "Tous les échanges avec le club en anglais", "Forfait fixe par golfeur, aucune majoration des green fees"],
+  benefits: ["Départ réservé à votre nom", "Tous les échanges avec le club en anglais", `Un forfait par groupe dès ${FEE}, aucune majoration des green fees`],
   crumb: "Réservation de parcours",
   photoNote: "Exemples de parcours, de club-houses et de repas de clubs des deux régions ; votre parcours est confirmé avec la réservation. La vue sur le mont Fuji dépend du parcours et de la météo.",
   inclusions: {
     heading: "Ce que couvrent les frais d'organisation",
-    sub: "Un forfait fixe par golfeur pour la réservation et la coordination. La journée elle-même se règle au club, comme pour tout golfeur au Japon.",
+    sub: `Un forfait par groupe — ${FEE} pour le premier golfeur, ${EXTRA} par golfeur supplémentaire — pour la réservation et la coordination. La journée elle-même se règle au club, comme pour tout golfeur au Japon.`,
     includedLabel: "Nous l'organisons", notIncludedLabel: "Hors service",
     items: {
       round: { label: "Réservation du départ", note: "Parcours choisi et réservé à votre nom ; green fees réglés au club" },
@@ -632,6 +636,7 @@ const fr: ArrangementCopy = {
   options: {
     heading: "Préparez votre partie", golfersLegend: "Golfeurs", areaLegend: "Région", golfers: "{n} golfeurs",
     perPerson: " / golfeur", total: "{total} de frais · {n} golfeurs", totalShort: "{total} de frais", perPersonRef: "{price} / golfeur",
+    feeBase: "{base} pour un golfeur", feeBreakdown: "{base} + {extra} × {n} golfeur supplémentaire|golfeurs supplémentaires", feeRule: `${FEE} pour le premier golfeur, puis ${EXTRA} par golfeur supplémentaire`,
     customQuote: "Devis individuel", customQuoteLine: "Parcours précis · {n} golfeurs",
     moreGolfers: "5 ou plus", largePartyQuote: "Devis individuel", largePartyLine: "{n} golfeurs · frais chiffrés pour votre groupe", largePartyRow: "5 à 12 golfeurs",
     largePartyNote: "À partir de cinq golfeurs, nous chiffrons les frais d'organisation pour votre groupe : envoyez la demande avec le nombre et la date, nous répondons avec les frais et une proposition. La demande est gratuite.",
@@ -658,8 +663,8 @@ const fr: ArrangementCopy = {
   },
   prices: {
     heading: "Frais d'organisation par taille de groupe",
-    only: "Les frais sont par golfeur, identiques dans les deux régions. Les frais du parcours se règlent au club. À partir de cinq golfeurs, les frais sont chiffrés individuellement pour le groupe.",
-    golfersCol: "Golfeurs", perPersonCol: "Par golfeur", totalCol: "Frais pour le groupe",
+    only: `Les frais sont de ${FEE} pour le premier golfeur plus ${EXTRA} par golfeur supplémentaire, identiques dans les deux régions. Les frais du parcours se règlent au club. À partir de cinq golfeurs, les frais sont chiffrés individuellement pour le groupe.`,
+    golfersCol: "Golfeurs", perPersonCol: "Détail", totalCol: "Frais pour le groupe",
     approxNote: "Les frais sont TTC. Green fees, voiturette, locations et déjeuner se règlent au club le jour même.",
     notes: [
       arrangementPolicy["fr"].beforePayment,
@@ -703,8 +708,8 @@ const fr: ArrangementCopy = {
 const zh: ArrangementCopy = {
   title: "日本高爾夫球場預約代辦服務",
   seoTitle: "日本高爾夫球場預約代辦服務 | 東京近郊與富士山區域 | KAMEHAME JAPAN",
-  metaDescription: `我們以英文為你預約東京近郊或富士山區域球場的開球時間，每位球友固定 ${FEE} 代辦費。果嶺費、球車與租借費用在球場支付；私人接送可透過合作夥伴安排。`,
-  tagline: "告訴我們你想打球的日期。我們挑選球場、確保開球時間，並以英文與球場溝通，你只需抵達球場開球。每位球友固定代辦費；果嶺費於球場現場結算。",
+  metaDescription: `我們以英文為你預約東京近郊或富士山區域球場的開球時間，代辦費第 1 位 ${FEE}，每增加 1 位加 ${EXTRA}。果嶺費、球車與租借費用在球場支付；私人接送可透過合作夥伴安排。`,
+  tagline: `告訴我們你想打球的日期。我們挑選球場、確保開球時間，並以英文與球場溝通，你只需抵達球場開球。團體代辦費 ${FEE} 起；果嶺費於球場現場結算。`,
   overview: [
     "在日本預約球場比想像中困難：只有日文的網站、需要會員介紹、訂金、沒有人解釋的服裝規定。這部分由我們處理。告訴我們日期、人數，以及想打東京近郊還是富士山區域，我們會提案球場與開球時間，以你的名字預約，並事先說明球場的所有要求。",
     "集合地點是球場，而不是飯店大廳：代辦費不含接送，你可以自駕、搭電車，或透過我們介紹的接送合作夥伴直接預約私人用車。果嶺費、球車、租借與午餐當天在球場直接支付。可加購英文助理隨行，另行報價。",
@@ -742,7 +747,7 @@ const zh: ArrangementCopy = {
     afterBooking: ["以你的名字預約的開球時間書面確認", "行前說明：地址、路線、抵達時間、服裝規定、租借與午餐", "當天的 WhatsApp 聯絡方式"],
   },
   faq: [
-    { q: "代辦費包含哪些服務？", a: "在你想要的區域挑選適合團體的球場，以你的名字預約開球時間，以日文處理與球場的所有溝通（租借、球車、桿弟、服裝規定、午餐），並在行前向你說明。代辦費每位固定，不在球場價格上加價。" },
+    { q: "代辦費包含哪些服務？", a: `在你想要的區域挑選適合團體的球場，以你的名字預約開球時間，以日文處理與球場的所有溝通（租借、球車、桿弟、服裝規定、午餐），並在行前向你說明。代辦費第 1 位 ${FEE}，每增加 1 位加 ${EXTRA}，不在球場價格上加價。` },
     { q: "果嶺費多少？", a: "依球場與星期幾而不同。果嶺費、球車、租借與午餐當天在球場直接支付；提案時我們會附上球場價格，讓你在同意前就掌握全貌。" },
     { q: "怎麼前往球場？", a: "依你的喜好。許多旅客自駕，或搭電車再轉計程車，我們會提供路線。若希望從飯店搭乘私人用車，我們會介紹持有執照的接送合作夥伴，由你直接向對方預約與付款。" },
     { q: "當天可以有人陪同嗎？", a: "可以。英文助理可在球場迎接、協助報到與租借手續，並在會館待命。請在表單中提出，我們另行報價。助理不下場打球。" },
@@ -757,12 +762,12 @@ const zh: ArrangementCopy = {
     { q: "取消政策是什麼？", a: arrangementPolicy["zh-tw"].terms },
     { q: "應該提前多久預約？", a: "提前 2 至 4 週可有最多的球場與開球時間選擇；申請於打球日 3 天前日本時間 18:00 截止。" },
   ],
-  benefits: ["以你的名字預約開球時間", "與球場的所有溝通以英文處理", "每位固定代辦費，果嶺費不加價"],
+  benefits: ["以你的名字預約開球時間", "與球場的所有溝通以英文處理", `團體代辦費 ${FEE} 起，果嶺費不加價`],
   crumb: "球場預約代辦",
   photoNote: "照片為兩個區域球場的球道、會館與餐點範例；實際球場於預約確認時告知。富士山景觀視球場與天氣而定。",
   inclusions: {
     heading: "代辦費包含的內容",
-    sub: "每位球友固定代辦費，用於預約與協調。當天費用在球場支付，與日本球友相同。",
+    sub: `一筆團體代辦費（第 1 位 ${FEE}，每增加 1 位加 ${EXTRA}），用於預約與協調。當天費用在球場支付，與日本球友相同。`,
     includedLabel: "由我們安排", notIncludedLabel: "不在服務範圍",
     items: {
       round: { label: "開球時間預約", note: "挑選球場並以你的名字預約；果嶺費於球場支付" },
@@ -795,6 +800,7 @@ const zh: ArrangementCopy = {
   options: {
     heading: "規劃你的一輪", golfersLegend: "人數", areaLegend: "區域", golfers: "{n} 位球友",
     perPerson: "", total: "{n} 位代辦費 {total}", totalShort: "代辦費 {total}", perPersonRef: "每位 {price}",
+    feeBase: "1 位基本費 {base}", feeBreakdown: "基本費 {base} + 加收 {n} 位 × {extra}", feeRule: `第 1 位 ${FEE}，每增加 1 位加 ${EXTRA}`,
     customQuote: "個別報價", customQuoteLine: "指定球場 · {n} 位球友",
     moreGolfers: "5 位以上", largePartyQuote: "個別報價", largePartyLine: "{n} 位球友 · 代辦費依團體報價", largePartyRow: "5 至 12 位",
     largePartyNote: "5 位以上的團體，代辦費依人數個別報價：請送出人數與日期，我們會連同提案回覆代辦費。詢問免費。",
@@ -821,8 +827,8 @@ const zh: ArrangementCopy = {
   },
   prices: {
     heading: "各人數的代辦費",
-    only: "代辦費以每位計算，兩個區域相同。球場費用於球場支付。5 位以上的團體，代辦費依團體個別報價。",
-    golfersCol: "人數", perPersonCol: "每位", totalCol: "團體代辦費",
+    only: `代辦費為第 1 位 ${FEE}，每增加 1 位加 ${EXTRA}，兩個區域相同。球場費用於球場支付。5 位以上的團體，代辦費依團體個別報價。`,
+    golfersCol: "人數", perPersonCol: "明細", totalCol: "團體代辦費",
     approxNote: "代辦費含稅。果嶺費、球車、租借與午餐當天在球場支付。",
     notes: [
       arrangementPolicy["zh-tw"].beforePayment,
@@ -876,7 +882,7 @@ export function applyGolfArrangement(e: Experience, lang: Lang): Experience {
   return {
     ...e,
     title: c.title, seoTitle: c.seoTitle, metaDescription: c.metaDescription, tagline: c.tagline, overview: c.overview,
-    duration: c.duration, price: FEE, priceUnit: "person", group: c.group, area: c.area,
+    duration: c.duration, price: FEE, priceUnit: "group", group: c.group, area: c.area,
     includedShort: c.includedShort, cancellation: c.cancellation, cancellationTiers: undefined, included: c.included, notIncluded: c.notIncluded,
     addOns: undefined,
     partySize: size,

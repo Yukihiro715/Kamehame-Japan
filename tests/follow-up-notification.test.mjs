@@ -128,11 +128,11 @@ test("arrangement enquiries send new HTML through Resend even when package autom
   const calls = await submit(t, { experience: "mt-fuji-golf-day", area: "Mt. Fuji", area_id: "fuji", course_mode: "recommended", party: "2", assistant: "required", caddie: "none", estimate: "¥270,000", rental_keys: "own,own" });
   assert.equal(calls.length, 2);
   const follow = calls[0].body, [internal, ack] = calls[1].body;
-  assert.match(ack.text, /30,000/);
+  assert.match(ack.text, /20,000/);
   assert.doesNotMatch(ack.text, /270,000/);
   assert.match(ack.html, /paid directly to the club/);
   assert.match(follow.html, /fuji-oyama.jpg/);
-  assert.match(internal.text, /arrangement-2026-10-17/);
+  assert.match(internal.text, /arrangement-2026-10-24/);
   assert.doesNotMatch(follow.text, /Thank you for booking/);
   assert.doesNotMatch(ack.html + follow.html, /book\.stripe\.com|Proceed to payment/);
 });
@@ -157,5 +157,5 @@ test("as shipped, the follow-up is paused: no scheduling call, and the team noti
   const [internal, ack] = calls[0].body;
   assert.match(internal.text, /フォローアップ: 一時停止中/);
   assert.doesNotMatch(internal.text, /自動送信できていません|停止・状況確認/);
-  assert.match(ack.text, /30,000/, "the acknowledgement still goes out");
+  assert.match(ack.text, /20,000/, "the acknowledgement still goes out");
 });
