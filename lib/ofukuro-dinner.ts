@@ -7,7 +7,8 @@
 // catalog product. Price, area and cancellation terms were set by the owner
 // on 2026-10-22 (see OFUKURO_PRICE): ¥35,200 tax included for up to two
 // guests, +¥6,000 for the third and fourth guest, +¥8,000 from the fifth,
-// children under 10 +¥3,000 each beyond the first two; Tokyo's 23 wards;
+// children under 10 +¥3,000 each beyond the first two; Tokyo's 23 wards and,
+// from 2026-10-24, Osaka City;
 // prepaid, free cancellation until 3 days before. The form still posts
 // nowhere. Photos are AI-generated placeholders (asset manifest in
 // docs/PLACEHOLDER_PHOTOS.md); the cook profiles are fictional samples with
@@ -121,7 +122,7 @@ export const OFUKURO = {
   subtitle: "Japanese Home Cooking, Made for You",
   lede: "Enjoy a comforting Japanese home-cooked meal, prepared by a local cook in the kitchen at your accommodation.",
   note: "A usable kitchen is required. Your cook is matched to your date, area and menu.",
-  conditions: ["At your accommodation · Tokyo 23 wards", "About 2 hours", "One menu per group", "Ingredients included"],
+  conditions: ["At your accommodation · Tokyo 23 wards or Osaka City", "About 2 hours", "One menu per group", "Ingredients included"],
   intro: {
     heading: "A taste of everyday Japan",
     body: [
@@ -141,7 +142,7 @@ export const OFUKURO = {
     lede: "One price for your group, tax and ingredients included. The first two guests, adults or children, are covered by the base price.",
     notes: [
       "Children under 10 beyond the first two guests: ¥3,000 each. Children aged 10 and over count as adults.",
-      "Tokyo's 23 wards, with the cook's travel included. Accommodation outside the 23 wards: ask when you request.",
+      "Tokyo's 23 wards or Osaka City, with the cook's travel included. Accommodation outside these areas: ask when you request.",
       "Prepaid once the arrangements are confirmed. Free cancellation until 3 days before your date (Japan time); 2 days before, half the price; from the day before, including no-shows, the full price. If we cannot arrange a cook, anything paid is refunded in full.",
     ],
   },
@@ -176,7 +177,7 @@ export const OFUKURO = {
     { q: "Do I need a kitchen?", a: "Yes. Your accommodation must have a usable kitchen and allow a visiting cook. If you are unsure about the facilities, tell us in your request." },
     { q: "How much does it cost?", a: "¥35,200 for up to two guests, tax and ingredients included. The third and fourth guest add ¥6,000 each, and each guest from the fifth adds ¥8,000. Children under 10 beyond the first two guests add ¥3,000 each; one adult with one child pays the base price. The total for your group is shown in the request form and confirmed before payment." },
     { q: "Are ingredients included?", a: "Yes. Ingredients are included in your prepaid price. There is no separate cash payment for groceries on the day." },
-    { q: "Which areas do you cover?", a: "Accommodation in Tokyo's 23 wards, with the cook's travel included in the price. If you are staying outside the 23 wards, ask when you request and we will tell you whether we can arrange it." },
+    { q: "Which areas do you cover?", a: "Accommodation in Tokyo's 23 wards or in Osaka City, with the cook's travel included in the price. If you are staying outside these areas, ask when you request and we will tell you whether we can arrange it." },
     { q: "Can you accommodate allergies or dietary needs?", a: "Please tell us before booking. We will check with the cook before confirming whether your request can be accommodated." },
     { q: "Can children join?", a: "Yes. Include each child’s age and any food needs in your request. Children under 10 are ¥3,000 each beyond the first two guests; children aged 10 and over count as adults. We confirm portions before payment." },
     { q: "Will my cook speak English?", a: "Language skills vary. Tell us your communication needs in advance so we can confirm what support is available." },
@@ -194,9 +195,9 @@ export const OFUKURO = {
 /** The campaign's teaser on the home page and in the listings, in every site
  *  language (the campaign page itself is in English; the note says so). */
 export const OFUKURO_CAMPAIGN: Record<"en" | "ja" | "es" | "fr" | "zh-tw", { badge: string; eyebrow: string; title: string; line: string; priceNote: string; cta: string; tag: string; meta: string; alt: string; note: string }> = {
-  en: { badge: "Founding guests · 30% off", eyebrow: "New · limited to ten dinners", title: "A home-cooked Japanese dinner at your Tokyo accommodation", line: "A local home cook shops, cooks one of seven set menus in your kitchen and clears up. The first ten dinners we photograph are 30% off.", priceNote: "for up to two guests · regular ¥35,200", cta: "See the founding-guest offer", tag: "Food", meta: "Tokyo · About 2 hours", alt: "Illustration of a Japanese home-cooked dinner served at an accommodation", note: "" },
-  ja: { badge: "ファウンディングゲスト・30%オフ", eyebrow: "新登場・先着10組", title: "東京の宿泊先で味わう、日本の家庭料理ディナー", line: "地元の家庭料理の作り手が買い出しから調理、片付けまで。7つの献立から1つを選べます。撮影にご協力いただける最初の10組は30%オフ。", priceNote: "2名まで・通常 ¥35,200", cta: "ファウンディングゲスト特典を見る", tag: "食", meta: "東京・約2時間", alt: "宿泊先で供される日本の家庭料理ディナーのイラスト", note: "ページは英語です。" },
-  es: { badge: "Primeros invitados · 30% de descuento", eyebrow: "Nuevo · solo diez cenas", title: "Una cena casera japonesa en tu alojamiento de Tokio", line: "Un cocinero casero local hace la compra, prepara uno de los siete menús en tu cocina y recoge. Las diez primeras cenas que fotografiamos tienen un 30% de descuento.", priceNote: "hasta dos personas · precio normal ¥35,200", cta: "Ver la oferta para los primeros invitados", tag: "Gastronomía", meta: "Tokio · Unas 2 horas", alt: "Ilustración de una cena casera japonesa servida en un alojamiento", note: "La página está en inglés." },
-  fr: { badge: "Premiers convives · −30 %", eyebrow: "Nouveau · dix dîners seulement", title: "Un dîner japonais fait maison dans votre hébergement à Tokyo", line: "Un cuisinier ou une cuisinière du quartier fait les courses, prépare l'un des sept menus dans votre cuisine et range. Les dix premiers dîners que nous photographions sont à −30 %.", priceNote: "jusqu'à deux convives · prix normal ¥35,200", cta: "Voir l'offre premiers convives", tag: "Gastronomie", meta: "Tokyo · Environ 2 heures", alt: "Illustration d'un dîner japonais fait maison servi dans un hébergement", note: "La page est en anglais." },
-  "zh-tw": { badge: "創始賓客 · 7 折", eyebrow: "新推出 · 限量十場", title: "在東京住處享用日本家常晚餐", line: "在地家庭料理人代為採買、在你的廚房烹調七套菜單之一並收拾善後。接受拍攝的前十場晚餐享 7 折。", priceNote: "最多兩位 · 原價 ¥35,200", cta: "查看創始賓客優惠", tag: "美食", meta: "東京 · 約 2 小時", alt: "在住處享用日本家常晚餐的插畫", note: "頁面為英文。" },
+  en: { badge: "Founding guests · 30% off", eyebrow: "New · limited to ten dinners", title: "A home-cooked Japanese dinner at your accommodation in Tokyo or Osaka", line: "A local home cook shops, cooks one of seven set menus in your kitchen and clears up. The first ten dinners we photograph are 30% off.", priceNote: "for up to two guests · regular ¥35,200", cta: "See the founding-guest offer", tag: "Food", meta: "Tokyo & Osaka · About 2 hours", alt: "Illustration of a Japanese home-cooked dinner served at an accommodation", note: "" },
+  ja: { badge: "ファウンディングゲスト・30%オフ", eyebrow: "新登場・先着10組", title: "東京・大阪の宿泊先で味わう、日本の家庭料理ディナー", line: "地元の家庭料理の作り手が買い出しから調理、片付けまで。7つの献立から1つを選べます。撮影にご協力いただける最初の10組は30%オフ。", priceNote: "2名まで・通常 ¥35,200", cta: "ファウンディングゲスト特典を見る", tag: "食", meta: "東京・大阪・約2時間", alt: "宿泊先で供される日本の家庭料理ディナーのイラスト", note: "ページは英語です。" },
+  es: { badge: "Primeros invitados · 30% de descuento", eyebrow: "Nuevo · solo diez cenas", title: "Una cena casera japonesa en tu alojamiento de Tokio u Osaka", line: "Un cocinero casero local hace la compra, prepara uno de los siete menús en tu cocina y recoge. Las diez primeras cenas que fotografiamos tienen un 30% de descuento.", priceNote: "hasta dos personas · precio normal ¥35,200", cta: "Ver la oferta para los primeros invitados", tag: "Gastronomía", meta: "Tokio y Osaka · Unas 2 horas", alt: "Ilustración de una cena casera japonesa servida en un alojamiento", note: "La página está en inglés." },
+  fr: { badge: "Premiers convives · −30 %", eyebrow: "Nouveau · dix dîners seulement", title: "Un dîner japonais fait maison dans votre hébergement à Tokyo ou Osaka", line: "Un cuisinier ou une cuisinière du quartier fait les courses, prépare l'un des sept menus dans votre cuisine et range. Les dix premiers dîners que nous photographions sont à −30 %.", priceNote: "jusqu'à deux convives · prix normal ¥35,200", cta: "Voir l'offre premiers convives", tag: "Gastronomie", meta: "Tokyo et Osaka · Environ 2 heures", alt: "Illustration d'un dîner japonais fait maison servi dans un hébergement", note: "La page est en anglais." },
+  "zh-tw": { badge: "創始賓客 · 7 折", eyebrow: "新推出 · 限量十場", title: "在東京或大阪的住處享用日本家常晚餐", line: "在地家庭料理人代為採買、在你的廚房烹調七套菜單之一並收拾善後。接受拍攝的前十場晚餐享 7 折。", priceNote: "最多兩位 · 原價 ¥35,200", cta: "查看創始賓客優惠", tag: "美食", meta: "東京・大阪 · 約 2 小時", alt: "在住處享用日本家常晚餐的插畫", note: "頁面為英文。" },
 };

@@ -461,14 +461,14 @@ test("Ofukuro founding-guest offer: published at /ofukuro-dinner/, indexable, 30
   assert.doesNotMatch(html, /<meta name="robots" content="noindex/, "indexable");
   assert.ok(html.includes('rel="canonical" href="https://kamehame-japan.com/ofukuro-dinner/"'), "canonical");
   assert.ok(!html.includes('class="xp-preview-banner"'), "no preview banner");
-  for (const s of ["30% off", "¥24,640", "¥35,200", "¥28,840", "¥44,240", "¥4,200", "¥5,600", "¥2,100", "Ten dinners", "20 minutes", "Dates open five days ahead"]) assert.ok(text.includes(s), `offer copy: ${s}`);
-  assert.ok(html.includes('name="photo-consent"') && html.includes('name="faces"') && html.includes('name="menu"') && html.includes('name="website"'), "photo consent, faces choice, menu and honeypot in the form");
+  for (const s of ["30% off", "¥24,640", "¥35,200", "¥28,840", "¥44,240", "¥4,200", "¥5,600", "¥2,100", "Ten dinners", "20 minutes", "Dates open five days ahead", "Tokyo 23 wards or Osaka City"]) assert.ok(text.includes(s), `offer copy: ${s}`);
+  assert.ok(html.includes('name="photo-consent"') && html.includes('name="faces"') && html.includes('name="menu"') && html.includes('name="website"') && html.includes('name="city"'), "photo consent, faces choice, menu, city and honeypot in the form");
   assert.equal((html.match(/class="ofk-menu ofk-menu-static"/g) || []).length, 7, "seven descriptive menu cards");
   assert.ok(text.includes("Send request") && !text.includes("Preview my request") && !text.includes("not connected"), "the live form sends");
   assert.ok(!html.includes("/api/experience-checkout") && !text.includes("Request received"), "no checkout, no receipt claimed before sending");
   assert.doesNotMatch(text, /\b(Yumi|Keiko|Aki)\b|reviews from|★/, "no fabricated cooks or reviews");
   // Reachable from the top (2026-10-24): the home band and the Tokyo, food and all-experiences listings link to it.
-  for (const p of ["/en/", "/ja/", "/en/experiences/", "/en/tokyo/", "/en/food/"]) assert.ok((await (await render(p)).text()).includes('href="/ofukuro-dinner/"'), `linked from ${p}`);
+  for (const p of ["/en/", "/ja/", "/en/experiences/", "/en/tokyo/", "/en/osaka/", "/en/food/"]) assert.ok((await (await render(p)).text()).includes('href="/ofukuro-dinner/"'), `linked from ${p}`);
   assert.ok((await (await render("/en/")).text()).includes('class="campaign-band"'), "home band");
   const { readFileSync } = await import("node:fs");
   const sitemap = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
@@ -582,7 +582,7 @@ test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seve
   for (const m of ["Japanese Curry Rice", "Chicken Karaage", "Japanese Hamburg Steak", "Nikujaga", "Grilled Fish", "Gyoza", "Okonomiyaki"]) assert.ok(text.includes(m), `menu ${m}`);
   assert.ok(html.includes('class="ofk-track"') && text.includes("Individual cook selection is not available") && text.includes("Sample profile"), "cook carousel, no selection, sample profiles");
   // The owner's pricing of 2026-10-22: a flat price for two, per-guest additions, children under 10, the 23 wards, prepaid with a 3-day cancellation window.
-  for (const s of ["¥35,200", "¥41,200", "¥47,200", "¥55,200", "¥63,200", "¥6,000", "¥8,000", "¥3,000", "Tokyo 23 wards", "Free cancellation until 3 days before"]) assert.ok(text.includes(s), `pricing: ${s}`);
+  for (const s of ["¥35,200", "¥41,200", "¥47,200", "¥55,200", "¥63,200", "¥6,000", "¥8,000", "¥3,000", "Tokyo 23 wards or Osaka City", "Free cancellation until 3 days before"]) assert.ok(text.includes(s), `pricing: ${s}`);
   assert.doesNotMatch(text, /\bUSD\s?\d/, "yen only in the server HTML");
   assert.ok(text.includes("Ingredients are included in your prepaid price") && !/pay (the )?(cook|groceries|ingredients) in cash|cash (settlement|on arrival)/i.test(text), "ingredients prepaid, no cash settlement wording");
   assert.ok(html.includes('name="permission"') && html.includes('name="allergens"') && html.includes('name="equipment"') && html.includes('name="arrangements"') && html.includes('name="menu"'), "the form's condition, allergy, equipment, arrangement and menu fields");

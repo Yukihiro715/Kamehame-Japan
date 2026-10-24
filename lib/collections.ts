@@ -289,7 +289,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     };
   };
   // The Ofukuro Dinner campaign (published 2026-10-23, English page): a card at
-  // the top of the Tokyo, food and all-experiences listings.
+  // the top of the Tokyo, Osaka, food and all-experiences listings.
   const cc = OFUKURO_CAMPAIGN[lang];
   const campaignItem: ListingItem = {
     kind: "experience", slug: "ofukuro-dinner", live: true, unit: "group", href: OFUKURO_FOUNDING.path,
@@ -319,7 +319,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     return {
       slug, crumb: city.title, h1: S.cityH1(city.title),
       heroImg: city.img, heroAlt: S.cityStreet(city.title), lead: city.lead,
-      items: [...(city.slug === "tokyo" ? [campaignItem] : []), ...exps.map(expItem), ...cityTours.map(tourItem)],
+      items: [...(city.slug === "tokyo" || city.slug === "osaka" ? [campaignItem] : []), ...exps.map(expItem), ...cityTours.map(tourItem)],
       refine: catLinks,
       about: { heading: S.cityAboutH(city.title), body: S.cityAbout(city.title) },
       faq: [{ q: S.cityFaqQ(city.title), a: S.cityFaqA(city.title, exps[0]?.area ?? "") }, FAQ_GUIDE, FAQ_CANCEL],

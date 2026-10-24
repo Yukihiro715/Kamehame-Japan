@@ -42,7 +42,7 @@ export default function OfukuroDinnerPreviewPage() {
   return (
     <main className="subpage detail-page xp xp2" lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
-      <Breadcrumbs trail={[{ label: T.home, href: "/" }, { label: "Tokyo", href: "/en/tokyo/" }, { label: x.title }]} />
+      <Breadcrumbs trail={[{ label: T.home, href: "/" }, { label: T.navExperiences ?? "Experiences", href: "/en/experiences/" }, { label: x.title }]} />
 
       <p className="xp-preview-banner" role="status">Concept preview — not published and not bookable. Illustrative AI-generated photos and sample cook profiles; the form is not connected and sends nothing.</p>
 

@@ -21,9 +21,9 @@ import { t } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: `${OFUKURO_FOUNDING.title} — 30% off for the first ten dinners | KAMEHAME JAPAN`,
-  description: "A Japanese home-cooked dinner at your Tokyo accommodation, cooked by a local home cook: 30% off for the first ten founding guests who let us photograph the dinner for about 20 minutes. ¥24,640 for up to two guests, tax and ingredients included.",
+  description: "A Japanese home-cooked dinner at your accommodation in Tokyo or Osaka, cooked by a local home cook: 30% off for the first ten founding guests who let us photograph the dinner for about 20 minutes. ¥24,640 for up to two guests, tax and ingredients included.",
   alternates: { canonical: OFUKURO_FOUNDING.path },
-  openGraph: { title: `${OFUKURO_FOUNDING.title} — 30% off for the first ten dinners`, description: "A home-cooked Japanese dinner at your accommodation in Tokyo. Founding guests get 30% off in return for a 20-minute photo session.", url: OFUKURO_FOUNDING.path, type: "website", images: [{ url: "/images/ofukuro-hero-table.webp" }] },
+  openGraph: { title: `${OFUKURO_FOUNDING.title} — 30% off for the first ten dinners`, description: "A home-cooked Japanese dinner at your accommodation in Tokyo or Osaka. Founding guests get 30% off in return for a 20-minute photo session.", url: OFUKURO_FOUNDING.path, type: "website", images: [{ url: "/images/ofukuro-hero-table.webp" }] },
 };
 
 export default function OfukuroDinnerPage() {
@@ -42,7 +42,7 @@ export default function OfukuroDinnerPage() {
   return (
     <main className="subpage detail-page xp xp2" lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
-      <Breadcrumbs trail={[{ label: T.home, href: "/" }, { label: "Tokyo", href: "/en/tokyo/" }, { label: f.title }]} />
+      <Breadcrumbs trail={[{ label: T.home, href: "/" }, { label: T.navExperiences ?? "Experiences", href: "/en/experiences/" }, { label: f.title }]} />
 
       <OfukuroMenuProvider>
         <header className="xp-head">
@@ -60,7 +60,7 @@ export default function OfukuroDinnerPage() {
           <Gallery photos={photos} lang={lang} note="Illustrations, not photographs of real dinners: that is exactly what this offer is for. Your dinner's photos replace them." />
           <ul className="xp-conditions">
             <li><Camera size={14} /> 30% off for a 20-minute photo session</li>
-            <li><Home size={14} /> At your accommodation · Tokyo 23 wards</li>
+            <li><Home size={14} /> At your accommodation · Tokyo 23 wards or Osaka City</li>
             <li><Clock3 size={14} /> About 2 hours</li>
             <li><UtensilsCrossed size={14} /> One menu per group</li>
           </ul>
@@ -102,7 +102,7 @@ export default function OfukuroDinnerPage() {
                   {ofukuroFoundingRows.map((r) => <tr key={r.party}><td>{D.estimateFor(r.party)}</td><td><b>{yenOf(r.founding)}</b></td><td><s>{yenOf(r.regular)}</s></td></tr>)}
                 </tbody>
               </table>
-              <p className="xp-pricing-note">Adults. Children under 10 beyond the first two guests: ¥2,100 each (regular ¥3,000). From the fifth guest ¥5,600 each (regular ¥8,000). Tokyo&apos;s 23 wards, with the cook&apos;s travel included.</p>
+              <p className="xp-pricing-note">Adults. Children under 10 beyond the first two guests: ¥2,100 each (regular ¥3,000). From the fifth guest ¥5,600 each (regular ¥8,000). Tokyo&apos;s 23 wards or Osaka City, with the cook&apos;s travel included.</p>
             </section>
 
             <section className="xp-section" id="menus">

@@ -19,6 +19,7 @@ import { menuById, OFUKURO, OFUKURO_MENUS, ofukuroQuote, yenOf } from "@/lib/ofu
  *  The estimate follows the owner's pricing (lib/ofukuro-dinner.ts). */
 
 const TIMES = [["18:00", "Dinner · around 18:00"], ["19:00", "Dinner · around 19:00"], ["11:00", "Lunch · 11:00"], ["flexible", "Flexible"]] as const;
+const CITIES = [["tokyo", "Tokyo (23 wards)"], ["osaka", "Osaka (Osaka City)"]] as const;
 const PERMISSION = [["yes", "Yes, the accommodation allows a visiting cook"], ["will-check", "I will check with the accommodation"], ["unsure", "Not sure"]] as const;
 const EQUIPMENT = ["Stove (2+ burners)", "Sink and work space", "Ventilation", "Fridge", "Pots and pans", "Plates, bowls and cutlery", "Not sure — please advise"] as const;
 const FACES = [["ok", "We are happy to appear in the photos"], ["no-faces", "Food and cook only, please: keep us out of the frame"]] as const;
@@ -54,7 +55,7 @@ export function OfukuroForm({ fallbackEmail, offer, live = false }: { fallbackEm
     const label = <T extends readonly (readonly [string, string])[]>(list: T, v: string) => list.find(([k]) => k === v)?.[1] ?? v;
     const rows: Row[] = [
       { label: "Date and time", value: `${one("date") || "—"} · ${label(TIMES, one("time"))}` },
-      { label: "Area", value: one("area") || "—" },
+      { label: "City and area", value: `${label(CITIES, one("city"))} · ${one("area") || "—"}` },
       { label: "Group", value: `${adults} adult(s)${kids ? `, ${kids} child(ren) under 10 (ages: ${one("ages") || "—"})` : ""}` },
       { label: "Estimated total", value: `${yenOf(total)}${offer ? ` (${offer.label}; regular ${yenOf(regular)})` : ""} · tax and ingredients included · confirmed before payment` },
       ...(offer ? [{ label: "Photos", value: `${label(FACES, one("faces"))}; permission given for our website and social media` }] : []),
@@ -122,7 +123,13 @@ export function OfukuroForm({ fallbackEmail, offer, live = false }: { fallbackEm
               <small className="form-hint">Dinner from 18:00 or 19:00, or one lunch slot at 11:00.</small>
             </label>
           </div>
-          <label className="form-row"><span>Area of your accommodation</span><input name="area" type="text" required maxLength={120} placeholder="e.g. Shinjuku, Tokyo — nearest station if you know it" /></label>
+          <div className="form-row two">
+            <label><span>City</span>
+              <select name="city" defaultValue="tokyo">{CITIES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+              <small className="form-hint">Tokyo&apos;s 23 wards or Osaka City; the cook&apos;s travel is included.</small>
+            </label>
+            <label><span>Area of your accommodation</span><input name="area" type="text" required maxLength={120} placeholder="e.g. Shinjuku, or Namba — nearest station if you know it" /></label>
+          </div>
           <div className="form-row two">
             <div className="field">
               <label htmlFor="ofk-adults"><span>Adults</span></label>
