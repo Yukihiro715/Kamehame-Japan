@@ -32,6 +32,17 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
+/** A deploy replaces every hashed asset. A page opened before the deploy then fails
+ *  to load a chunk it needs ("Failed to fetch dynamically imported module"), React
+ *  unmounts the tree and the visitor sees a blank page (owner, 2026-10-24). Vite raises
+ *  vite:preloadError for that; an unhandled import rejection is the fallback. Reload
+ *  once, so the fresh HTML and its assets match; never loop. */
+const chunkReloadScript = `
+(function(){var k='kh-chunk-reload',t=Date.now();function again(){try{var p=+sessionStorage.getItem(k)||0;if(t-p<60000)return;sessionStorage.setItem(k,String(t))}catch(e){}location.reload()}
+addEventListener('vite:preloadError',function(e){if(e&&e.preventDefault)e.preventDefault();again()});
+addEventListener('unhandledrejection',function(e){var m=String(e&&e.reason&&(e.reason.message||e.reason));if(/dynamically imported module|Importing a module script failed|Loading chunk|Loading CSS chunk/i.test(m))again()});
+addEventListener('error',function(e){var el=e&&e.target;if(el&&el.tagName==='SCRIPT'&&el.src&&el.src.indexOf('/assets/')>-1)again()},true)})();`;
+
 const gtmSnippet = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -76,6 +87,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         {/* Consent Mode v2 defaults. This has to run before the container,
             or tags would load with storage already allowed. */}
         <script dangerouslySetInnerHTML={{ __html: consentDefaultScript }} />
+        {/* After a deploy, a stale page that cannot load a chunk reloads itself once */}
+        <script dangerouslySetInnerHTML={{ __html: chunkReloadScript }} />
         {/* Google Tag Manager — GA4, Ads conversions and Search Console
             verification are all configured inside the container. */}
         <script dangerouslySetInnerHTML={{ __html: gtmSnippet }} />
