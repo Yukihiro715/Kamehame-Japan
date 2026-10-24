@@ -61,12 +61,13 @@
 | 人数 | 手配料（税込） | 登録リンクの末尾 |
 |---|---:|---|
 | 1名 | 15,000円 | `8x228rcQhejp8qP2sG3Je0l` |
-| 2名 | 20,000円 | **未登録**（オーナーがStripeで作成後 `lib/golf-arrangement-payments.ts` に登録） |
-| 3名 | 25,000円 | **未登録**（同上） |
-| 4名 | 30,000円 | **未登録**（同上） |
+| 2名 | 20,000円 | `dRmeVd03v7V15eD8R43Je0s`（2026-10-24 登録） |
+| 3名 | 25,000円 | `9B67sL7vX3EL6iHebo3Je0t`（同上） |
+| 4名 | 30,000円 | `eVq00jcQha390Yn8R43Je0u`（同上） |
 
-2026-10-24 の改定前のリンク（2名 30,000円 `8x2bJ16rT2AHbD19V83Je0m`、3名 45,000円 `7sYeVd3fHcbh22rc3g3Je0n`、4名 60,000円 `3cI3cvcQh5MTgXlffs3Je0o`）は金額が旧料金のため登録から外した。Stripe側でも無効化すること。
-未登録の人数は `golfArrangementPayment` が例外を投げ、下書き生成（`npm run golf:email`）は失敗する。旧リンクで案内しないための仕様。
+2026-10-24 の改定前のリンク（2名 30,000円 `8x2bJ16rT2AHbD19V83Je0m`、3名 45,000円 `7sYeVd3fHcbh22rc3g3Je0n`、4名 60,000円 `3cI3cvcQh5MTgXlffs3Je0o`）は金額が旧料金のため登録から外し、Stripe側でも無効化済み（オーナー 2026-10-24）。
+新リンクはクーポン利用可、決済完了後の遷移先は従来どおり `https://kamehame-japan.com/en/booked/?session_id={CHECKOUT_SESSION_ID}`。
+登録のない人数や金額の合わない人数は `golfArrangementPayment` が例外を投げ、下書き生成（`npm run golf:email`）は失敗する。旧リンクで案内しないための仕様。
 
 人数分をまとめた料金で数量を増やさない。Stripe側の説明・規約表示はこのコード配信では変更されないため、送信前に現物を確認する。
 案内期限は共有Stripeリンクの自動失効ではない。期限後入金は個別確認する。

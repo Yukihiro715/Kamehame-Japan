@@ -1,20 +1,18 @@
 import { GOLF_ARRANGEMENT_PRICE_VERSION, golfArrangementFee } from "@/lib/golf-prices";
 
-/** Booking-service-only Payment Links, one per party size. Each link charges the whole
- * group's fee once, not a per-person quantity. Package links remain in their existing,
- * separate payment master.
+/** Booking-service-only Payment Links, one per party size, supplied by the owner (one golfer
+ * on 2026-10-17, two to four on 2026-10-24). Each link charges the whole group's fee once
+ * (quantity fixed at 1), not a per-person quantity; the number of golfers is never multiplied
+ * into a quantity. Package links remain in their existing, separate payment master.
  *
- * Fee of 2026-10-24: ¥15,000 for the first golfer + ¥5,000 per additional golfer. The
- * one-golfer link supplied on 2026-10-17 still charges the right amount; the links for
- * two to four golfers charged ¥15,000 × golfers and are retired. Until the owner creates
- * the ¥20,000 / ¥25,000 / ¥30,000 links in Stripe and registers them here, a draft for
- * those party sizes cannot be produced (the template throws), which is the point: no
- * customer is ever sent a link for the old amount. */
+ * Fee of 2026-10-24: ¥15,000 for the first golfer + ¥5,000 per additional golfer. The links
+ * for two to four golfers that charged ¥15,000 × golfers (…AHbD19V83Je0m ¥30,000,
+ * …22rc3g3Je0n ¥45,000, …gXlffs3Je0o ¥60,000) are retired here and disabled in Stripe. */
 const LINKS: Readonly<Record<1 | 2 | 3 | 4, { readonly amount: number; readonly url: string | null }>> = Object.freeze({
   1: Object.freeze({ amount: 15000, url: "https://book.stripe.com/8x228rcQhejp8qP2sG3Je0l" }),
-  2: Object.freeze({ amount: 20000, url: null }),
-  3: Object.freeze({ amount: 25000, url: null }),
-  4: Object.freeze({ amount: 30000, url: null }),
+  2: Object.freeze({ amount: 20000, url: "https://book.stripe.com/dRmeVd03v7V15eD8R43Je0s" }),
+  3: Object.freeze({ amount: 25000, url: "https://book.stripe.com/9B67sL7vX3EL6iHebo3Je0t" }),
+  4: Object.freeze({ amount: 30000, url: "https://book.stripe.com/eVq00jcQha390Yn8R43Je0u" }),
 });
 
 /** True when an approved link for this party size exists at the current fee. */

@@ -146,8 +146,15 @@ test("registered links match the current fee; the retired ¥15,000-per-golfer li
   const one = golfArrangementPayment(1);
   assert.equal(one.url, "https://book.stripe.com/8x228rcQhejp8qP2sG3Je0l");
   assert.deepEqual([one.amount, one.currency, one.priceVersion], [15000, "JPY", "arrangement-2026-10-24"]);
+  const ids = { 2: "dRmeVd03v7V15eD8R43Je0s", 3: "9B67sL7vX3EL6iHebo3Je0t", 4: "eVq00jcQha390Yn8R43Je0u" };
   for (const n of [2, 3, 4]) {
-    if (READY.includes(n)) { assert.equal(golfArrangementPayment(n).amount, prices.golfArrangementFee(n)); continue; }
+    if (READY.includes(n)) {
+      const p = golfArrangementPayment(n);
+      assert.equal(p.amount, prices.golfArrangementFee(n));
+      assert.equal(p.url, `https://book.stripe.com/${ids[n]}`, `${n} golfers: the owner's link of 2026-10-24`);
+      assert.doesNotMatch(p.url, /quantity|\?/, "one fixed amount for the group, no quantity");
+      continue;
+    }
     assert.throws(() => golfArrangementPayment(n), /No approved Stripe link/, `${n} golfers: no draft until the owner registers the new link`);
     assert.throws(() => arrangementPaymentTemplate({ ...e, party: String(n) }, { ...proposal, payment: undefined }), /No approved Stripe link/);
   }
