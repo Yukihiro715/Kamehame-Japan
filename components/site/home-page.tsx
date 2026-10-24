@@ -9,6 +9,7 @@ import { RatingSummary, Stars } from "@/components/site/reviews";
 import { themeIsLive } from "@/lib/themes";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
 import { listPrice, pricingFor, yen } from "@/lib/pricing";
+import { OFUKURO_CAMPAIGN, OFUKURO_FOUNDING, ofukuroFoundingRows, yenOf } from "@/lib/ofukuro-dinner";
 import { Fx } from "@/components/site/money";
 import { t, type Lang } from "@/lib/i18n";
 
@@ -348,6 +349,24 @@ export function HomePage({ lang }: { lang: Lang }) {
             <Button asChild size="lg"><Link href={heroHref}>{heroCta} <ArrowDownRight /></Link></Button>
           </div>
         </div>
+      </section>
+
+      {/* The Ofukuro Dinner campaign (published 2026-10-23): one band under the hero, in every language, to the English page. */}
+      <section className="campaign-band" aria-labelledby="campaign-heading">
+        <Link href={OFUKURO_FOUNDING.path} className="campaign-card">
+          <div className="campaign-art">
+            <img src="/images/ofukuro-hero-table.webp" alt={OFUKURO_CAMPAIGN[lang].alt} loading="lazy" />
+            <span className="campaign-badge">{OFUKURO_CAMPAIGN[lang].badge}</span>
+          </div>
+          <div className="campaign-copy">
+            <p className="eyebrow"><span /> {OFUKURO_CAMPAIGN[lang].eyebrow}</p>
+            <h2 id="campaign-heading">{OFUKURO_CAMPAIGN[lang].title}</h2>
+            <p>{OFUKURO_CAMPAIGN[lang].line}</p>
+            <p className="campaign-price"><b><Fx>{yenOf(ofukuroFoundingRows[1].founding)}</Fx></b> <s>{yenOf(ofukuroFoundingRows[1].regular)}</s> <small>{OFUKURO_CAMPAIGN[lang].priceNote}</small></p>
+            <span className="underlined-link">{OFUKURO_CAMPAIGN[lang].cta} <ArrowRight /></span>
+            {OFUKURO_CAMPAIGN[lang].note && <small className="campaign-note">{OFUKURO_CAMPAIGN[lang].note}</small>}
+          </div>
+        </Link>
       </section>
 
       <section className="themes-section" aria-labelledby="themes-heading">

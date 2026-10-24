@@ -8,6 +8,7 @@ import {
 import type { Lang } from "@/lib/i18n";
 import { listPrice } from "@/lib/pricing";
 import { THEMES, themeBySlug, themeCategories } from "@/lib/themes";
+import { OFUKURO_CAMPAIGN, OFUKURO_FOUNDING, ofukuroFoundingRows, yenOf } from "@/lib/ofukuro-dinner";
 
 export interface ListingItem {
   kind: "experience" | "tour";
@@ -287,6 +288,15 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       meta: `${cityTitle(e.city)} · ${e.duration}`, price: lp.price, priceNote: lp.note,
     };
   };
+  // The Ofukuro Dinner campaign (published 2026-10-23, English page): a card at
+  // the top of the Tokyo, food and all-experiences listings.
+  const cc = OFUKURO_CAMPAIGN[lang];
+  const campaignItem: ListingItem = {
+    kind: "experience", slug: "ofukuro-dinner", live: true, unit: "group", href: OFUKURO_FOUNDING.path,
+    img: "/images/ofukuro-hero-table.webp", alt: cc.alt, tags: [cc.tag, S.privateTag],
+    title: cc.title, line: cc.line, meta: cc.meta,
+    price: yenOf(ofukuroFoundingRows[1].founding), priceNote: cc.priceNote,
+  };
   const tourItem = (tr: Tour): ListingItem => ({
     kind: "tour", slug: tr.slug, live: false, unit: "group", href: p(`/tours/${tr.slug}/`), img: tr.img, alt: tr.alt,
     tags: [S.tourTag, S.privateTag],
@@ -309,7 +319,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     return {
       slug, crumb: city.title, h1: S.cityH1(city.title),
       heroImg: city.img, heroAlt: S.cityStreet(city.title), lead: city.lead,
-      items: [...exps.map(expItem), ...cityTours.map(tourItem)],
+      items: [...(city.slug === "tokyo" ? [campaignItem] : []), ...exps.map(expItem), ...cityTours.map(tourItem)],
       refine: catLinks,
       about: { heading: S.cityAboutH(city.title), body: S.cityAbout(city.title) },
       faq: [{ q: S.cityFaqQ(city.title), a: S.cityFaqA(city.title, exps[0]?.area ?? "") }, FAQ_GUIDE, FAQ_CANCEL],
@@ -359,7 +369,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     return {
       slug, crumb: copy.title, h1: copy.h1,
       heroImg: theme.img, heroAlt: copy.heroAlt, lead: copy.lead,
-      items: exps.map(expItem),
+      items: [...(theme.slug === "food" ? [campaignItem] : []), ...exps.map(expItem)],
       refine: [...catLinks, ...cityLinks],
       about: { heading: S.catAboutH(copy.title), body: S.catAbout },
       faq: [{ q: S.catFaqQ, a: S.catFaqA }, FAQ_GUIDE, FAQ_BOOK],
@@ -388,7 +398,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       slug, crumb: S.allCrumb, h1: S.allH1,
       heroImg: "/images/craft-hands.jpg", heroAlt: S.allHeroAlt,
       lead: S.allLead,
-      items: [...experiences.map(expItem), ...tours.map(tourItem)],
+      items: [campaignItem, ...experiences.map(expItem), ...tours.map(tourItem)],
       refine: [
         ...cities.map((c) => ({ label: c.title, href: p(`/${c.slug}/`) })),
         ...categories.map((c) => ({ label: c.title, href: p(`/${c.slug}/`) })),

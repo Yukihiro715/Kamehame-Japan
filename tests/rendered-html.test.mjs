@@ -467,7 +467,9 @@ test("Ofukuro founding-guest offer: published at /ofukuro-dinner/, indexable, 30
   assert.ok(text.includes("Send request") && !text.includes("Preview my request") && !text.includes("not connected"), "the live form sends");
   assert.ok(!html.includes("/api/experience-checkout") && !text.includes("Request received"), "no checkout, no receipt claimed before sending");
   assert.doesNotMatch(text, /\b(Yumi|Keiko|Aki)\b|reviews from|★/, "no fabricated cooks or reviews");
-  for (const p of ["/en/", "/en/experiences/", "/en/tokyo/", "/en/food/"]) assert.ok(!(await (await render(p)).text()).includes("founding-guests"), `not linked from ${p}`);
+  // Reachable from the top (2026-10-24): the home band and the Tokyo, food and all-experiences listings link to it.
+  for (const p of ["/en/", "/ja/", "/en/experiences/", "/en/tokyo/", "/en/food/"]) assert.ok((await (await render(p)).text()).includes('href="/ofukuro-dinner/"'), `linked from ${p}`);
+  assert.ok((await (await render("/en/")).text()).includes('class="campaign-band"'), "home band");
   const { readFileSync } = await import("node:fs");
   const sitemap = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
   assert.ok(sitemap.includes("https://kamehame-japan.com/ofukuro-dinner/") && !sitemap.includes("/previews/"), "the campaign is in the sitemap, the previews are not");
