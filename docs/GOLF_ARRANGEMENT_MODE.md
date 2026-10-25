@@ -38,13 +38,13 @@
 - 2名以上の送迎付き案は担当者の個別メール下書きだけに含める。公開ページは手配サービスのまま。運用は `GOLF_MAIL_MODES.md` を参照。
 - `tests/rendered-html.test.mjs` のゴルフのテストはモードごとに分かれている。
 
-## 指定レンタルクラブ（オプション、2026-10-25、確認用プレビューのみ）
+## 指定レンタルクラブ（オプション、2026-10-25 本番リリース）
 
 ゴルフ場のレンタルはメーカー・モデルを選べないため、提携先のレンタル業者から選んだセットをゴルフ場へ届けるオプション。
 `lib/golf-club-rental.ts` に料金（1セット ¥15,000 税込、`GOLF_CLUB_RENTAL_JPY`）、締切（プレー7日前、`GOLF_CLUB_RENTAL_CUTOFF_DAYS`）、
 代表13セット（画像は `public/images/golf-clubs/`、提携先の許可を得て転載。提携先名はページに出さない）、5言語の文言。
 
-- 表示は `ClubRentalProvider`（`components/site/club-rental-context.tsx`）と `VariantDetail` の `clubRental` で切り替える。本番のゴルフページでは無効のまま。
+- 表示は `ClubRentalProvider`（`components/site/club-rental-context.tsx`）と `VariantDetail` の `clubRental` で切り替える。本番のゴルフページは `GOLF_CLUB_RENTAL_LIVE`（`lib/golf-club-rental.ts`）で有効化済み（2026-10-25、確認用プレビューで承認後）。false にすれば本番から外れ、プレビューだけに戻る。
   確認用: `/previews/golf-club-rental-7c3e9a51b2/?lang=en`（noindex、一覧・サイトマップ外。`lang` は ja/es/fr/zh-tw も可）。
 - フォーム: ゴルファーごとのレンタル選択に「指定モデル（+¥15,000）」が加わり、セット選択のシートが開く。`rental_keys` は `designated:<利き手>:<セットID>`。
   サーバーはセットIDをカタログと照合し（不明なIDは400）、概算に1セット¥15,000×人数を加算、`priceNote` に `club-rental-2026-10-25` を記録。通知・Slackに「指定レンタル」行。

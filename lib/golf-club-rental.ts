@@ -5,11 +5,14 @@
 // delivered to the course the day before; the guest hands it back at the
 // front desk after the round with the enclosed return slip. One fee per set,
 // paid to us with the booking service fee. The supplier is never named on the
-// page (the photos are used with its permission). While the option is being
-// reviewed it is shown only on the unlisted preview page
-// (app/previews/golf-club-rental-7c3e9a51b2/).
+// page (the photos are used with its permission). Reviewed on the unlisted
+// preview page (app/previews/golf-club-rental-7c3e9a51b2/) and released to the
+// live golf page on 2026-10-25 (GOLF_CLUB_RENTAL_LIVE).
 
 import type { Lang } from "@/lib/i18n";
+
+/** The option on the live golf page (owner, 2026-10-25: released after review on the preview). */
+export const GOLF_CLUB_RENTAL_LIVE = true;
 
 /** Per set, including tax, paid to us. */
 export const GOLF_CLUB_RENTAL_JPY = 15000;

@@ -19,6 +19,9 @@ import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { CancellationTable } from "@/components/site/cancellation-table";
 import { VariantDetail } from "@/components/site/variant-detail";
+import { ClubRentalProvider } from "@/components/site/club-rental-context";
+import { GOLF_CLUB_RENTAL_LIVE } from "@/lib/golf-club-rental";
+import { isArrangement } from "@/lib/golf-prices";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { pricingFor, yen, type PricingView, listPrice } from "@/lib/pricing";
@@ -121,7 +124,11 @@ export default async function DetailPage({ params }: Props) {
   if (!exp && !tour) notFound();
 
   if (tour) return <TourDetail tour={tour} lang={lang} />;
-  if (exp!.variants) return <VariantDetail exp={exp!} lang={lang} />;
+  if (exp!.variants) {
+    // The golf booking service's chosen-model club rental (lib/golf-club-rental.ts), on since 2026-10-25.
+    const clubRental = GOLF_CLUB_RENTAL_LIVE && isArrangement() && exp!.slug === "mt-fuji-golf-day";
+    return <ClubRentalProvider enabled={clubRental}><VariantDetail exp={exp!} lang={lang} clubRental={clubRental} /></ClubRentalProvider>;
+  }
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }
 

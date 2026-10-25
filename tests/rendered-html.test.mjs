@@ -111,7 +111,7 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.ok(list.includes("¥15,000") && list.includes("/ group") && list.includes("then ¥5,000 for each additional golfer") && !list.includes("¥330,000"), "listing card shows the fee for the group with its rule");
 });
 
-test("golf club-rental option: on the unlisted preview only, thirteen sets, the fee lines, the supplier unnamed", { skip: GOLF_MODE !== "arrangement" }, async () => {
+test("golf club-rental option: thirteen sets, the fee lines, the supplier unnamed, live and on the preview", { skip: GOLF_MODE !== "arrangement" }, async () => {
   const res = await render("/previews/golf-club-rental-7c3e9a51b2/?lang=en");
   assert.equal(res.status, 200);
   const html = await res.text();
@@ -125,9 +125,9 @@ test("golf club-rental option: on the unlisted preview only, thirteen sets, the 
     const t = (await (await render(`/previews/golf-club-rental-7c3e9a51b2/?lang=${lang}`)).text()).replace(/<[^>]+>/g, "");
     assert.ok(t.includes(needle), `${lang} copy`);
   }
-  // the live golf page does not carry the option yet
+  // released to the live golf page on 2026-10-25
   const live = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
-  assert.ok(!live.includes('class="gcr-card"') && !live.includes("Rental clubs: two ways"), "not on the live page");
+  assert.ok(live.includes('class="gcr-card"') && live.includes("Rental clubs: two ways") && live.includes('Rental clubs: choose…'), "on the live page, with the rental choice starting empty");
 });
 
 test("golf page (package): two areas, published prices for 2–4 golfers, one options panel, one form", { skip: GOLF_MODE !== "package" }, async () => {
