@@ -339,7 +339,8 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
                 <div className="go-rental-set">
                   <span>{C.optionShort}: <b>{clubSetLabel(lang, sets[i])}</b></span>
                   <button type="button" onClick={() => setPicking(i)}>{sets[i] ? C.change : C.choose}</button>
-                  <small>{C.deadline}</small>
+                  <button type="button" className="go-rental-remove" onClick={() => { setRental((all) => ({ ...all, [i]: "required" })); setSets((all) => { const next = { ...all }; delete next[i]; return next; }); }}>{C.remove}</button>
+                  <small>{C.perSet} · {C.deadline}</small>
                 </div>
               )}
             </div>

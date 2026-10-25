@@ -97,6 +97,7 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
             <GolfGallery photos={photos} lang={lang} />
             <ul className="vh-benefits">
               {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
+              {clubRental && <li><a href="#rental-clubs"><Check size={13} /> {R.fvBenefit}</a></li>}
             </ul>
             <p className="gg-note">{vc.photoNote}</p>
           </section>
@@ -115,7 +116,7 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
             </section>
 
             {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}
-            <GolfInclusions copy={vc.inclusions} />
+            <GolfInclusions copy={clubRental ? { ...vc.inclusions, items: vc.inclusions.items.map((it) => (it.id === "clubs" ? { ...it, note: R.inclusionNote } : it)) } : vc.inclusions} />
 
             {/* 3a'. The chosen-model club rental (preview) */}
             {clubRental && <GolfClubRental lang={lang} />}
