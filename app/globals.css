@@ -1797,6 +1797,17 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gcr-way p { margin:4px 0 0; font-size:13px; line-height:1.6; color:#4a463e; }
 .gcr-grid { list-style:none; margin:0 -16px; padding:4px 16px 10px; display:grid; grid-auto-flow:column; grid-template-rows:repeat(2, auto); grid-auto-columns:190px; gap:10px; overflow-x:auto; scroll-snap-type:x proximity; scrollbar-width:thin; -webkit-overflow-scrolling:touch; }
 .gcr-grid > li { scroll-snap-align:start; }
+.gcr-grid-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.gcr-grid-head .xp-sub-h { margin-bottom:0; }
+.gcr-swipe { display:inline-flex; align-items:center; gap:4px; font-size:12px; color:var(--kame); font-weight:600; }
+.gcr-arrows { display:none; gap:6px; }
+.gcr-arrows button { width:34px; height:34px; display:grid; place-items:center; border:1px solid #d9d3c7; border-radius:50%; background:var(--white); color:var(--ink); cursor:pointer; }
+.gcr-rail { position:relative; }
+.gcr-rail::after { content:""; position:absolute; top:0; right:-16px; bottom:10px; width:56px; pointer-events:none; background:linear-gradient(to right, rgba(247,244,236,0), var(--paper) 80%); transition:opacity .2s; }
+.gcr-rail.at-end::after { opacity:0; }
+@media(min-width:701px){ .gcr-arrows { display:inline-flex; } .gcr-swipe { display:none; } .gcr-rail::after { right:0; } .gcr-grid { margin:0; padding:4px 0 10px; } }
+.gt-h { grid-column:1 / -1; margin-bottom:6px !important; }
+.go-rental-pick { border-color:var(--kame) !important; color:#5c584f; grid-column:1 / -1; }
 .gcr-card { display:grid; gap:2px; width:100%; padding:10px 10px 12px; border:1px solid #e6e1d6; border-radius:14px; background:var(--white); text-align:left; cursor:pointer; font:inherit; color:var(--ink); transition:border-color .15s, box-shadow .15s; }
 .gcr-card:hover, .gcr-card:focus-visible { border-color:var(--ink); outline:none; }
 .gcr-photo { display:block; aspect-ratio:2 / 3; border-radius:10px; overflow:hidden; background:#f3efe6; margin-bottom:6px; }

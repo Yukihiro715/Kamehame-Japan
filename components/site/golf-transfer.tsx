@@ -11,12 +11,12 @@ const POINT_ICONS = [CarFront, UserRound, Languages];
 export function GolfTransfer({ copy }: { copy: Copy }) {
   return (
     <section className="xp-section gt" id="transfer" aria-labelledby="gt-heading">
+      <h2 id="gt-heading" className="gt-h">{copy.heading}</h2>
       <div className="gt-media">
         <img src={copy.photo.img} alt={copy.photo.alt} width={1600} height={900} loading="lazy" decoding="async" />
         {copy.photo2 && <img className="gt-photo2" src={copy.photo2.img} alt={copy.photo2.alt} width={800} height={600} loading="lazy" decoding="async" />}
       </div>
       <div className="gt-text">
-        <h2 id="gt-heading">{copy.heading}</h2>
         <p className="gt-lede">{copy.body}</p>
         <ul className="gt-points">
           {copy.points.map((pt, i) => {

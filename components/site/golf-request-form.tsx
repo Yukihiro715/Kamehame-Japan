@@ -24,6 +24,8 @@ import { useClubRental } from "@/components/site/club-rental-context";
 type Status = "idle" | "sending" | "sent" | "failed";
 /** "designated": the chosen-set rental (lib/golf-club-rental.ts), offered only while the option is on. */
 type Rental = "required" | "designated" | "own" | "unsure";
+/** "" = not chosen yet: with the chosen-set option on, the select starts empty so the choice is a real one. */
+type RentalChoice = Rental | "";
 type Handed = "right" | "left" | "unsure";
 /** Shoe sizes offered, in cm (Japanese courses size rental shoes in cm). */
 const SHOE_SIZES = Array.from({ length: 19 }, (_, i) => (22 + i * 0.5).toFixed(1).replace(/\.0$/, ""));
@@ -58,7 +60,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   // Booking service: a named course is a preference at the same fee, never a custom quote.
   const arrangement = isArrangement();
   const [wantCourse, setWantCourse] = useState(false);
-  const [rental, setRental] = useState<Record<number, Rental>>({});
+  const [rental, setRental] = useState<Record<number, RentalChoice>>({});
   const [handed, setHanded] = useState<Record<number, Handed>>({});
   // The chosen-set rental: the set per golfer, and which golfer's picker is open.
   const clubRental = useClubRental();
@@ -85,12 +87,12 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const large = arrangement && n > GOLF_FIXED_FEE_MAX;
   const total = specific || large ? null : tierTotal(v.tiers, n);
   const p = golfPriceParts(O, total, n, large, designatedCount, C);
-  const rentalOf = (i: number): Rental => rental[i] ?? "required";
+  const rentalOf = (i: number): RentalChoice => rental[i] ?? (clubRental ? "" : "required");
   const handedOf = (i: number): Handed => handed[i] ?? "right";
   const shoeOf = (i: number): string => shoes[i] ?? "";
   const shoeText = (i: number) => { const k = shoeOf(i); return k === "own" ? G.shoeOpts.own : !k || k === "unsure" ? G.shoeOpts.unsure : G.shoeSize.replace("{n}", k); };
   const anyRental = golfers.some((i) => rentalOf(i) !== "own");
-  const rentalLabel = (i: number) => rentalOf(i) === "designated" ? `${C.optionShort}: ${clubSetLabel(lang, sets[i])}` : G.rentalOpts[rentalOf(i) as keyof typeof G.rentalOpts];
+  const rentalLabel = (i: number) => rentalOf(i) === "designated" ? `${C.optionShort}: ${clubSetLabel(lang, sets[i])}` : G.rentalOpts[(rentalOf(i) || "unsure") as keyof typeof G.rentalOpts];
   const designatedLine = golfers.filter((i) => rentalOf(i) === "designated").map((i) => `${countOf(G.golferN, i)}: ${clubSetLabel(lang, sets[i])}`).join(" · ");
   // Own clubs: ¥5,000 less per golfer, shown as soon as a golfer picks it (the server recomputes the same figure).
   const ownCount = golfers.filter((i) => rentalOf(i) === "own").length;
@@ -135,7 +137,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       // The same choices as keys, for the team's Japanese notification.
       level_key: level, handicap: data.handicap,
       // "designated:right:<set id>" carries the chosen set; the server validates the id against the catalog.
-      rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : rentalOf(i) === "designated" ? `designated:${handedOf(i)}:${sets[i] ?? "unchosen"}` : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
+      rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : rentalOf(i) === "designated" ? `designated:${handedOf(i)}:${sets[i] ?? "unchosen"}` : `${rentalOf(i) || "unsure"}:${handedOf(i)}`)).join(","),
       club_rental_sets: String(designatedCount),
       own_clubs: String(ownCount),
       shoe_keys: golfers.map((i) => shoeOf(i) || "unsure").join(","),
@@ -318,13 +320,14 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           {golfers.map((i) => (
             <div className="go-rental-row" key={i}>
               <b>{countOf(G.golferN, i)}</b>
-              <select name={`rental-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.rental}`} value={rentalOf(i)} onChange={(e) => { const r = e.target.value as Rental; setRental((all) => ({ ...all, [i]: r })); if (r === "designated" && !sets[i]) setPicking(i); }}>
+              <select name={`rental-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.rental}`} value={rentalOf(i)} required={clubRental} className={clubRental && !rentalOf(i) ? "go-rental-pick" : undefined} onChange={(e) => { const r = e.target.value as Rental; setRental((all) => ({ ...all, [i]: r })); if (r === "designated" && !sets[i]) setPicking(i); }}>
+                {clubRental && <option value="" disabled>{C.pickRental}</option>}
                 <option value="required">{G.rentalOpts.required}</option>
                 {clubRental && <option value="designated">{C.option}</option>}
                 <option value="own">{G.rentalOpts.own}</option>
                 <option value="unsure">{G.rentalOpts.unsure}</option>
               </select>
-              {rentalOf(i) !== "own" ? (
+              {rentalOf(i) !== "own" && rentalOf(i) !== "" ? (
                 <select name={`handed-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.handed}`} value={handedOf(i)} onChange={(e) => setHanded((h) => ({ ...h, [i]: e.target.value as Handed }))}>
                   {(Object.keys(G.handedOpts) as Handed[]).map((k) => <option key={k} value={k}>{G.handedOpts[k]}</option>)}
                 </select>

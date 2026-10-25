@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Check, LandPlot, PackageCheck, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, LandPlot, PackageCheck, X } from "lucide-react";
 import { CLUB_RENTAL_COPY, CLUB_SETS, clubSetById, clubSetName, type ClubHand, type ClubSet } from "@/lib/golf-club-rental";
 import type { Lang } from "@/lib/i18n";
 
@@ -11,6 +11,10 @@ import type { Lang } from "@/lib/i18n";
 export function GolfClubRental({ lang }: { lang: Lang }) {
   const C = CLUB_RENTAL_COPY[lang];
   const [open, setOpen] = useState<ClubSet | null>(null);
+  const rail = useRef<HTMLUListElement>(null);
+  const [atEnd, setAtEnd] = useState(false);
+  const slide = (dir: 1 | -1) => rail.current?.scrollBy({ left: dir * rail.current.clientWidth * 0.8, behavior: "smooth" });
+  const onScroll = () => { const el = rail.current; if (el) setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 8); };
   return (
     <section className="xp-section gcr" id="rental-clubs" aria-labelledby="gcr-heading">
       <h2 id="gcr-heading">{C.heading}</h2>
@@ -29,8 +33,16 @@ export function GolfClubRental({ lang }: { lang: Lang }) {
           <p>{C.chosen.body}</p>
         </div>
       </div>
-      <h3 className="xp-sub-h">{C.gridH}</h3>
-      <ul className="gcr-grid">
+      <div className="gcr-grid-head">
+        <h3 className="xp-sub-h">{C.gridH}</h3>
+        <span className="gcr-swipe"><ChevronLeft size={14} aria-hidden="true" />{C.swipe.replace("{n}", String(CLUB_SETS.length))}<ChevronRight size={14} aria-hidden="true" /></span>
+        <span className="gcr-arrows">
+          <button type="button" onClick={() => slide(-1)} aria-label="‹"><ChevronLeft size={18} /></button>
+          <button type="button" onClick={() => slide(1)} aria-label="›"><ChevronRight size={18} /></button>
+        </span>
+      </div>
+      <div className={`gcr-rail${atEnd ? " at-end" : ""}`}>
+      <ul className="gcr-grid" ref={rail} onScroll={onScroll}>
         {CLUB_SETS.map((s) => (
           <li key={s.id}>
             <button type="button" className="gcr-card" onClick={() => setOpen(s)} aria-haspopup="dialog">
@@ -43,6 +55,7 @@ export function GolfClubRental({ lang }: { lang: Lang }) {
           </li>
         ))}
       </ul>
+      </div>
       <p className="gcr-note">{C.gridNote}</p>
       <ul className="gcr-facts">
         <li>{C.returns}</li>

@@ -85,6 +85,8 @@ export interface ClubRentalCopy {
   terms: string;
   /** First view: the benefit pill; the inclusion card's note; the form's note after choosing; the "remove" action */
   fvBenefit: string; inclusionNote: string; perSet: string; remove: string;
+  /** The rental select starts empty: its placeholder; the swipe hint over the set slider */
+  pickRental: string; swipe: string;
 }
 
 const yen = (n: number) => `¥${n.toLocaleString("en-US")}`;
@@ -107,7 +109,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     setIncludes: "Driver, fairway wood, hybrid, irons, wedges, putter and a caddie bag.",
     condition: "Used set in good playing condition. Availability is confirmed with your proposal.",
     pickThis: "Choose this set", picked: "Chosen",
-    option: "Chosen model", optionShort: "Chosen set", choose: "Choose a set", change: "Change", notChosen: "No set chosen yet", forGolfer: "Set for {golfer}",
+    option: "Chosen model (you pick the maker)", optionShort: "Chosen set", choose: "Choose a set", change: "Change", notChosen: "No set chosen yet", forGolfer: "Set for {golfer}",
     line: `Club rental × {n}`, total: "{fee} fee + {rental} club rental × {n}", feeWord: "fee",
     faqQ: "Can I choose the make and model of the rental clubs?",
     faqA: `Yes. Course rental sets are the club's choice. For ${FEE} per set we order the set you pick and have it delivered to the course the day before; you hand it back at the front desk after the round. Order by ${D} days before your round.`,
@@ -115,6 +117,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     fvBenefit: "Rental clubs of your choice: TaylorMade, Callaway, PING, XXIO",
     inclusionNote: `Course rental, or choose the set (TaylorMade, Callaway, PING…) for ${FEE}`,
     perSet: `+${FEE} per set, paid with our fee`, remove: "Remove",
+    pickRental: "Rental clubs: choose…", swipe: "Swipe to see all {n} sets",
   },
   ja: {
     heading: "レンタルクラブは2通り",
@@ -131,7 +134,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     setIncludes: "ドライバー、フェアウェイウッド、ユーティリティ、アイアン、ウェッジ、パター、キャディバッグ。",
     condition: "中古セット（プレーに支障のない状態）。在庫はご提案時に確認します。",
     pickThis: "このセットにする", picked: "選択中",
-    option: "指定モデル", optionShort: "指定セット", choose: "セットを選ぶ", change: "変更", notChosen: "セット未選択", forGolfer: "{golfer}のセット",
+    option: "指定モデル（メーカー・モデルを選べる）", optionShort: "指定セット", choose: "セットを選ぶ", change: "変更", notChosen: "セット未選択", forGolfer: "{golfer}のセット",
     line: "指定レンタル × {n}", total: "手配料 {fee} + 指定レンタル {rental} × {n}", feeWord: "手配料",
     faqQ: "レンタルクラブのメーカーやモデルは選べますか?",
     faqA: `はい。ゴルフ場のレンタルはゴルフ場任せですが、1セット${FEE}で選んだセットを手配し、前日にゴルフ場へ届けます。プレー後はフロントで返送。お申し込みはプレー${D}日前までです。`,
@@ -139,6 +142,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     fvBenefit: "レンタルクラブはモデルを指定可: テーラーメイド、キャロウェイ、PING、XXIO",
     inclusionNote: `ゴルフ場のレンタル、または指定モデル（テーラーメイド、キャロウェイ、PING…）を1セット${FEE}で`,
     perSet: `+${FEE}／セット、手配料と一緒にお支払い`, remove: "取り消す",
+    pickRental: "レンタルクラブを選択…", swipe: "横にスワイプで全{n}セット",
   },
   es: {
     heading: "Palos de alquiler: dos opciones",
@@ -155,7 +159,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     setIncludes: "Driver, madera de calle, híbrido, hierros, wedges, putter y bolsa.",
     condition: "Set usado en buen estado de juego. La disponibilidad se confirma con la propuesta.",
     pickThis: "Elegir este set", picked: "Elegido",
-    option: "Modelo elegido", optionShort: "Set elegido", choose: "Elegir un set", change: "Cambiar", notChosen: "Sin set elegido", forGolfer: "Set para {golfer}",
+    option: "Modelo elegido (eliges la marca)", optionShort: "Set elegido", choose: "Elegir un set", change: "Cambiar", notChosen: "Sin set elegido", forGolfer: "Set para {golfer}",
     line: "Alquiler de palos × {n}", total: "{fee} de tarifa + {rental} alquiler de palos × {n}", feeWord: "tarifa",
     faqQ: "¿Puedo elegir la marca y el modelo de los palos de alquiler?",
     faqA: `Sí. Los sets del campo los elige el club. Por ${FEE} por set pedimos el que elijas y llega al campo el día anterior; lo entregas en recepción tras la vuelta. Pídelo hasta ${D} días antes.`,
@@ -163,6 +167,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     fvBenefit: "Palos de alquiler a tu elección: TaylorMade, Callaway, PING, XXIO",
     inclusionNote: `Alquiler del campo, o el set que elijas (TaylorMade, Callaway, PING…) por ${FEE}`,
     perSet: `+${FEE} por set, se paga con nuestra tarifa`, remove: "Quitar",
+    pickRental: "Palos de alquiler: elige…", swipe: "Desliza para ver los {n} sets",
   },
   fr: {
     heading: "Clubs de location : deux façons",
@@ -179,7 +184,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     setIncludes: "Driver, bois de parcours, hybride, fers, wedges, putter et sac.",
     condition: "Set d'occasion en bon état de jeu. Disponibilité confirmée avec la proposition.",
     pickThis: "Choisir ce set", picked: "Choisi",
-    option: "Modèle choisi", optionShort: "Set choisi", choose: "Choisir un set", change: "Modifier", notChosen: "Aucun set choisi", forGolfer: "Set pour {golfer}",
+    option: "Modèle choisi (vous choisissez la marque)", optionShort: "Set choisi", choose: "Choisir un set", change: "Modifier", notChosen: "Aucun set choisi", forGolfer: "Set pour {golfer}",
     line: "Location de clubs × {n}", total: "{fee} de frais + {rental} location de clubs × {n}", feeWord: "frais",
     faqQ: "Puis-je choisir la marque et le modèle des clubs de location ?",
     faqA: `Oui. Les sets du parcours sont au choix du club. Pour ${FEE} par set, nous commandons celui que vous choisissez et il est livré au parcours la veille ; vous le rendez à l'accueil après la partie. À commander jusqu'à ${D} jours avant.`,
@@ -187,6 +192,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     fvBenefit: "Clubs de location au choix : TaylorMade, Callaway, PING, XXIO",
     inclusionNote: `Location du parcours, ou le set de votre choix (TaylorMade, Callaway, PING…) pour ${FEE}`,
     perSet: `+${FEE} par set, réglés avec nos frais`, remove: "Retirer",
+    pickRental: "Clubs de location : choisir…", swipe: "Faites défiler pour voir les {n} sets",
   },
   "zh-tw": {
     heading: "租借球桿：兩種方式",
@@ -203,7 +209,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     setIncludes: "一號木、球道木、混合桿、鐵桿、挖起桿、推桿與球袋。",
     condition: "二手球桿組，狀態良好。可用性於提案時確認。",
     pickThis: "選擇此組", picked: "已選",
-    option: "指定型號", optionShort: "指定球桿組", choose: "選擇球桿組", change: "更改", notChosen: "尚未選擇", forGolfer: "{golfer}的球桿組",
+    option: "指定型號（可選品牌與型號）", optionShort: "指定球桿組", choose: "選擇球桿組", change: "更改", notChosen: "尚未選擇", forGolfer: "{golfer}的球桿組",
     line: "指定租借 × {n}", total: "代辦費 {fee} + 指定租借 {rental} × {n}", feeWord: "代辦費",
     faqQ: "可以指定租借球桿的品牌與型號嗎？",
     faqA: `可以。球場的租借球桿由球場決定；每組 ${FEE}，我們代訂你選的球桿組並於前一天送到球場，打完後交給櫃檯即可。請於開球 ${D} 天前申請。`,
@@ -211,5 +217,6 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     fvBenefit: "租借球桿可指定型號：TaylorMade、Callaway、PING、XXIO",
     inclusionNote: `球場租借，或指定球桿組（TaylorMade、Callaway、PING…）每組 ${FEE}`,
     perSet: `+${FEE}／組，與代辦費一起支付`, remove: "取消選擇",
+    pickRental: "租借球桿：請選擇…", swipe: "左右滑動查看全部 {n} 組",
   },
 };
