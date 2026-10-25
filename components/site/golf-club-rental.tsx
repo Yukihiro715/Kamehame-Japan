@@ -56,12 +56,14 @@ export function GolfClubRental({ lang }: { lang: Lang }) {
         ))}
       </ul>
       </div>
-      <p className="gcr-note">{C.gridNote}</p>
-      <ul className="gcr-facts">
-        <li>{C.returns}</li>
-        <li>{C.deadline}</li>
-        <li>{C.cancel}</li>
-      </ul>
+      <div className="gcr-notes">
+        <p>{C.gridNote}</p>
+        <ul>
+          <li>{C.returns}</li>
+          <li>{C.deadline}</li>
+          <li>{C.cancel}</li>
+        </ul>
+      </div>
       {open && <ClubSetSheet lang={lang} set={open} onClose={() => setOpen(null)} />}
     </section>
   );

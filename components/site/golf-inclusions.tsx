@@ -114,8 +114,10 @@ export function GolfInclusions({ copy }: { copy: Copy }) {
           );
         })}
       </ul>
-      <p className="gi-foot">{copy.footnote}</p>
-      <p className="gi-fine">{copy.courseNote} {copy.alsoNot}</p>
+      <div className="gi-notes">
+        <p className="gi-foot">{copy.footnote}</p>
+        <p className="gi-fine">{copy.courseNote} {copy.alsoNot}</p>
+      </div>
     </section>
   );
 }
