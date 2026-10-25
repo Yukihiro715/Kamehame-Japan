@@ -59,7 +59,7 @@ export function arrangementPaymentTemplate(e: Enquiry, p: ArrangementProposal, t
   const text = [
     `Hello ${clean(e.name, 120)},`, "",
     "Thank you for sharing your plans. We would be happy to help you find a suitable round in Japan. Please review the details below so we can make sure the arrangements fit your trip.", "",
-    "Your request", `• Date: ${fmt(day)}`, `• Preferred tee-time window: ${time} (Japan time)`, `• Area: ${e.areaId === "fuji" ? "Mt. Fuji region" : "Tokyo area"}`, `• Golfers: ${n}`,
+    "Your request", `• Date: ${fmt(day)}`, `• Preferred tee-time window: ${time} (Japan time)`, `• Area: ${e.areaId === "fuji" ? "Mt. Fuji region" : e.areaId === "other" ? `Other area${e.course ? ` — ${clean(e.course, 160)}` : ""}` : "Tokyo area"}`, `• Golfers: ${n}`,
     `• Essential requirements: ${requirements}`, `• Preferences (not guaranteed): ${preferences}`, `• Rental requirements: ${rentals}`,
     `• Total budget ceiling: ${p.budget.totalJpy === null ? "No ceiling, as you confirmed; your approval is still required before any booking" : `¥${p.budget.totalJpy.toLocaleString("en-US")}`}. Budget covers: ${budgetScope}`, "",
     n >= 2 ? "Option 1 — Golf course booking service" : "Golf course booking service",

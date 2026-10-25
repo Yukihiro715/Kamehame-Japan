@@ -1876,3 +1876,5 @@ body[data-kh-modal] .sticky-request { display:none; }
 .xp-variant .gcr-notes ul { margin:0; padding:0 0 0 16px; font-size:inherit; line-height:inherit; color:inherit; }
 .xp-variant .gcr-notes li + li { margin-top:2px; }
 .xp-variant .gi-notes .gi-foot { color:#3d3a34; }
+
+.go-other-hint { margin:0 0 10px; }

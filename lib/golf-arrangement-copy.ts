@@ -29,7 +29,9 @@ interface ArrangementCopy {
   included: string[]; notIncluded: string[];
   schedule: { time: string; title: string; body: string }[]; scheduleNote: string; timeLabel: string;
   cta: { label: string; note: string; heading: string; lead: string };
-  variants: { tokyo: { title: string; short: string; tagline: string }; fuji: { title: string; short: string; tagline: string } };
+  variants: { tokyo: { title: string; short: string; tagline: string }; fuji: { title: string; short: string; tagline: string }; other: { title: string; short: string; tagline: string } };
+  /** The "other area" form field: where in Japan (prefecture, city or course) */
+  otherArea: { label: string; hint: string };
   venue: { known: string[]; afterBooking: string[] };
   faq: { q: string; a: string }[];
   benefits: string[]; crumb: string; photoNote: string;
@@ -85,7 +87,8 @@ const en: ArrangementCopy = {
   scheduleNote: "A typical day; the tee time and the lunch pattern depend on the course.",
   timeLabel: "Preferred tee time",
   cta: { label: "Check Tee Times", note: "No payment required to enquire.", heading: "Request a Tee Time", lead: "Your date, your golfers, your area. No payment now." },
-  variants: { tokyo: { title: "Tokyo Area", short: "Tokyo Area", tagline: "Courses within 1–1.5 hours of Tokyo" }, fuji: { title: "Mt. Fuji Area", short: "Mt. Fuji Area", tagline: "Courses with Mt. Fuji on the horizon" } },
+  variants: { tokyo: { title: "Tokyo Area", short: "Tokyo Area", tagline: "Courses within 1–1.5 hours of Tokyo" }, fuji: { title: "Mt. Fuji Area", short: "Mt. Fuji Area", tagline: "Courses with Mt. Fuji on the horizon" }, other: { title: "Other Area", short: "Other", tagline: "Anywhere in Japan: tell us where in the form. Same fee." } },
+  otherArea: { label: "Where would you like to play?", hint: "Prefecture, city or course name, e.g. Hokkaido, Karuizawa, Miyazaki" },
   venue: {
     known: ["The fee for your group", "Meet at the course, or a transfer through the partner we introduce"],
     afterBooking: ["Written confirmation of your tee time in your name", "Your briefing: address, route, arrival time, dress code, rentals and lunch", "A WhatsApp contact for the day"],
@@ -248,7 +251,8 @@ const ja: ArrangementCopy = {
   scheduleNote: "一日の流れの例です。ティータイムと昼食はコースによります。",
   timeLabel: "希望のティータイム",
   cta: { label: "空き状況を確認する", note: "お問い合わせの時点でお支払いは発生しません。", heading: "ティータイムをリクエスト", lead: "日程・人数・エリアをお送りください。今はお支払い不要です。" },
-  variants: { tokyo: { title: "東京近郊", short: "東京近郊", tagline: "東京から車で1〜1.5時間のコース" }, fuji: { title: "富士山エリア", short: "富士山エリア", tagline: "富士山を望むコース" } },
+  variants: { tokyo: { title: "東京近郊", short: "東京近郊", tagline: "東京から車で1〜1.5時間のコース" }, fuji: { title: "富士山エリア", short: "富士山エリア", tagline: "富士山を望むコース" }, other: { title: "その他のエリア", short: "その他", tagline: "全国どこでも。場所はフォームでお知らせください。手配料は同じです。" } },
+  otherArea: { label: "プレーしたい場所", hint: "都道府県・都市・コース名など。例: 北海道、軽井沢、宮崎" },
   venue: {
     known: ["グループの手配料", "集合はゴルフ場。送迎はご自身で、またはご紹介する提携会社で"],
     afterBooking: ["お客様のお名前でのティータイム確定通知(書面)", "事前案内:住所、行き方、到着時刻、ドレスコード、レンタル、昼食", "当日のWhatsApp連絡先"],
@@ -411,7 +415,8 @@ const es: ArrangementCopy = {
   scheduleNote: "Un día típico; la hora de salida y el almuerzo dependen del campo.",
   timeLabel: "Hora de salida preferida",
   cta: { label: "Consultar horas de salida", note: "No se paga nada al consultar.", heading: "Solicitar una hora de salida", lead: "Tu fecha, tus golfistas, tu zona. Sin pago ahora." },
-  variants: { tokyo: { title: "Zona de Tokio", short: "Zona de Tokio", tagline: "Campos a 1–1,5 horas de Tokio" }, fuji: { title: "Zona del monte Fuji", short: "Monte Fuji", tagline: "Campos con el monte Fuji en el horizonte" } },
+  variants: { tokyo: { title: "Zona de Tokio", short: "Zona de Tokio", tagline: "Campos a 1–1,5 horas de Tokio" }, fuji: { title: "Zona del monte Fuji", short: "Monte Fuji", tagline: "Campos con el monte Fuji en el horizonte" }, other: { title: "Otra zona", short: "Otra", tagline: "En cualquier lugar de Japón: dinos dónde en el formulario. Misma tarifa." } },
+  otherArea: { label: "¿Dónde quieres jugar?", hint: "Prefectura, ciudad o campo, p. ej. Hokkaido, Karuizawa, Miyazaki" },
   venue: {
     known: ["La tarifa de tu grupo", "Encuentro en el campo, o traslado con el socio que presentamos"],
     afterBooking: ["Confirmación escrita de tu hora de salida a tu nombre", "Tu guía: dirección, ruta, hora de llegada, vestimenta, alquileres y almuerzo", "Un contacto de WhatsApp para el día"],
@@ -574,7 +579,8 @@ const fr: ArrangementCopy = {
   scheduleNote: "Une journée type ; l'horaire et le déjeuner dépendent du parcours.",
   timeLabel: "Heure de départ souhaitée",
   cta: { label: "Voir les départs", note: "Aucun paiement lors de la demande.", heading: "Demander un départ", lead: "Votre date, vos golfeurs, votre région. Aucun paiement maintenant." },
-  variants: { tokyo: { title: "Région de Tokyo", short: "Région de Tokyo", tagline: "Parcours à 1 h – 1 h 30 de Tokyo" }, fuji: { title: "Région du mont Fuji", short: "Mont Fuji", tagline: "Parcours avec le mont Fuji à l'horizon" } },
+  variants: { tokyo: { title: "Région de Tokyo", short: "Région de Tokyo", tagline: "Parcours à 1 h – 1 h 30 de Tokyo" }, fuji: { title: "Région du mont Fuji", short: "Mont Fuji", tagline: "Parcours avec le mont Fuji à l'horizon" }, other: { title: "Autre région", short: "Autre", tagline: "Partout au Japon : indiquez le lieu dans le formulaire. Mêmes frais." } },
+  otherArea: { label: "Où souhaitez-vous jouer ?", hint: "Préfecture, ville ou parcours, ex. Hokkaido, Karuizawa, Miyazaki" },
   venue: {
     known: ["Les frais pour votre groupe", "Rendez-vous au parcours, ou transfert via le partenaire que nous présentons"],
     afterBooking: ["Confirmation écrite de votre départ à votre nom", "Votre briefing : adresse, itinéraire, heure d'arrivée, tenue, locations et déjeuner", "Un contact WhatsApp pour la journée"],
@@ -737,7 +743,8 @@ const zh: ArrangementCopy = {
   scheduleNote: "一天的範例；開球時間與午餐依球場而定。",
   timeLabel: "希望的開球時間",
   cta: { label: "查詢開球時間", note: "詢問時無需付款。", heading: "申請開球時間", lead: "你的日期、人數、區域。現在無需付款。" },
-  variants: { tokyo: { title: "東京近郊", short: "東京近郊", tagline: "距東京 1 至 1.5 小時車程的球場" }, fuji: { title: "富士山區域", short: "富士山區域", tagline: "可眺望富士山的球場" } },
+  variants: { tokyo: { title: "東京近郊", short: "東京近郊", tagline: "距東京 1 至 1.5 小時車程的球場" }, fuji: { title: "富士山區域", short: "富士山區域", tagline: "可眺望富士山的球場" }, other: { title: "其他區域", short: "其他", tagline: "日本全國皆可：請在表單告知地點。代辦費相同。" } },
+  otherArea: { label: "想在哪裡打球？", hint: "都道府縣、城市或球場名，例如北海道、輕井澤、宮崎" },
   venue: {
     known: ["你的團體代辦費", "球場集合，或透過我們介紹的夥伴接送"],
     afterBooking: ["以你的名字預約的開球時間書面確認", "行前說明：地址、路線、抵達時間、服裝規定、租借與午餐", "當天的 WhatsApp 聯絡方式"],
@@ -882,7 +889,11 @@ export function applyGolfArrangement(e: Experience, lang: Lang): Experience {
     addOns: undefined,
     partySize: size,
     pricing: { tiers: golfTiers("tokyo") },
-    variants: e.variants.map((v) => ({ ...v, ...c.variants[v.id as "tokyo" | "fuji"], tiers: golfTiers(v.id as "tokyo" | "fuji"), defaultTime: "08:00" })),
+    variants: [
+      ...e.variants.map((v) => ({ ...v, ...c.variants[v.id as "tokyo" | "fuji"], tiers: golfTiers(v.id as "tokyo" | "fuji"), defaultTime: "08:00" })),
+      // Anywhere else in Japan (owner, 2026-10-25): the same fee; the guest names the place in the form.
+      { id: "other", ...c.variants.other, tiers: golfTiers("other"), img: e.variants[0]?.img ?? "/images/golf-gallery-10-golf-course.webp", alt: e.variants[0]?.alt ?? "", defaultTime: "08:00" },
+    ],
     defaultVariant: "fuji",
     availability: { daily: true, startTimes: ["07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00"], defaultTime: "08:00", cutoffDays: 3, cutoffTime: "18:00" },
     timeLabel: c.timeLabel, scheduleNote: c.scheduleNote, schedule: c.schedule,
@@ -897,6 +908,7 @@ export function applyGolfArrangement(e: Experience, lang: Lang): Experience {
       inclusions: { ...vc.inclusions, heading: c.inclusions.heading, sub: c.inclusions.sub, includedLabel: c.inclusions.includedLabel, notIncludedLabel: c.inclusions.notIncludedLabel, items: ITEM_ORDER.map((id) => ({ id, ...c.inclusions.items[id] })), footnote: c.inclusions.footnote, courseNote: c.inclusions.courseNote, alsoNot: c.inclusions.alsoNot },
       transfer: { heading: c.transfer.heading, body: c.transfer.body, photo: vc.transfer.photo, points: c.transfer.points, note: c.transfer.note },
       options: { ...vc.options, ...c.options, from: "", approx: vc.options.approx },
+      otherArea: c.otherArea,
       intro: c.intro,
       day: c.day,
       prices: c.prices,

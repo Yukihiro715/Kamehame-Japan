@@ -6,7 +6,8 @@
 // derive from this table; nothing else hard-codes a golf price. A specific
 // course requested by the guest is quoted individually and has no price here.
 
-export type GolfArea = "tokyo" | "fuji";
+/** "other": anywhere else in Japan, booking service only (owner, 2026-10-25); the package has no price for it. */
+export type GolfArea = "tokyo" | "fuji" | "other";
 export type GolfGolfers = 1 | 2 | 3 | 4;
 export type GolfCourseMode = "recommended" | "specific";
 
@@ -46,12 +47,12 @@ export const GOLF_FIXED_FEE_MAX = 4;
 export const GOLF_MAX_GOLFERS = 12;
 export const golfPartySize = () => GOLF_MODE === "arrangement" ? { min: 1, max: GOLF_MAX_GOLFERS, default: 2 } : { min: 2, max: 4, default: 4 };
 
-export const GOLF_PRICES_JPY: Record<GolfArea, Record<2 | 3 | 4, number>> = {
+export const GOLF_PRICES_JPY: Record<"tokyo" | "fuji", Record<2 | 3 | 4, number>> = {
   tokyo: { 2: 250000, 3: 290000, 4: 330000 },
   fuji: { 2: 270000, 3: 310000, 4: 350000 },
 };
 
-export const isGolfArea = (s: unknown): s is GolfArea => s === "tokyo" || s === "fuji";
+export const isGolfArea = (s: unknown): s is GolfArea => s === "tokyo" || s === "fuji" || (s === "other" && GOLF_MODE === "arrangement");
 /** A party size the request endpoint accepts: 1–12 for the booking service (5+ quoted), the priced sizes for the package. */
 export const isGolfGolfers = (n: unknown): n is number =>
   GOLF_MODE === "arrangement" ? Number.isInteger(n) && (n as number) >= 1 && (n as number) <= GOLF_MAX_GOLFERS : (GOLF_GOLFERS as unknown[]).includes(n);
@@ -75,7 +76,7 @@ export function golfPackagePrice(area: GolfArea, golfers: number, mode: GolfCour
     const groupTotal = golfArrangementFee(golfers);
     return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };
   }
-  if (mode === "specific") return null;
+  if (mode === "specific" || area === "other") return null;
   const groupTotal = GOLF_PRICES_JPY[area][golfers as 2 | 3 | 4];
   return { currency: "JPY", groupTotal, perPersonDisplay: Math.round(groupTotal / golfers), approximate: groupTotal % golfers !== 0 };
 }
@@ -94,4 +95,4 @@ export const golfTotalWithOwnClubs = (groupTotal: number, ownClubs: number) =>
   GOLF_MODE === "arrangement" ? groupTotal : Math.max(0, groupTotal - GOLF_OWN_CLUBS_DISCOUNT_JPY * Math.max(0, ownClubs));
 
 /** The area's table in the catalog's tier shape. */
-export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_MODE === "arrangement" ? golfArrangementFee(party) : GOLF_PRICES_JPY[area][party as 2 | 3 | 4] }));
+export const golfTiers = (area: GolfArea) => GOLF_GOLFERS.map((party) => ({ party, total: GOLF_MODE === "arrangement" ? golfArrangementFee(party) : GOLF_PRICES_JPY[area as "tokyo" | "fuji"][party as 2 | 3 | 4] }));

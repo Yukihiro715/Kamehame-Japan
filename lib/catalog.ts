@@ -100,6 +100,8 @@ export interface VariantPageCopy {
     note: string;
   };
   /** The one place where the party size and the area are chosen. */
+  /** The booking service's "other area": the form asks where in Japan. */
+  otherArea?: { label: string; hint: string };
   options: {
     heading: string; golfersLegend: string; areaLegend: string;
     /** "{n} golfers" */

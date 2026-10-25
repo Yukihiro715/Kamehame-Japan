@@ -82,7 +82,9 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const n = b.guestsNumber;
   const golfers = Array.from({ length: n }, (_, i) => i + 1);
   const specific = !arrangement && b.coursePref === "preferred";
-  const namedCourse = arrangement ? wantCourse : specific;
+  // "Other area": the place is required and travels in the course field; the specific-course checkbox is implied.
+  const otherArea = arrangement && v.id === "other";
+  const namedCourse = otherArea || (arrangement ? wantCourse : specific);
   // Five golfers or more in the booking service: no published fee, quoted for the group.
   const large = arrangement && n > GOLF_FIXED_FEE_MAX;
   const total = specific || large ? null : tierTotal(v.tiers, n);
@@ -236,14 +238,18 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
 
       <fieldset className="form-step">
         <legend>{G.steps.course}</legend>
-        <label className="form-check go-check">
-          <input type="checkbox" name="specific-course" checked={namedCourse} onChange={(e) => arrangement ? setWantCourse(e.target.checked) : b.set({ coursePref: e.target.checked ? "preferred" : "recommended" })} />
-          <span><b>{G.specificCourse}</b><small>{G.specificCourseNote}</small></span>
-        </label>
+        {otherArea ? (
+          <p className="form-hint go-other-hint">{copy.otherArea?.hint}</p>
+        ) : (
+          <label className="form-check go-check">
+            <input type="checkbox" name="specific-course" checked={namedCourse} onChange={(e) => arrangement ? setWantCourse(e.target.checked) : b.set({ coursePref: e.target.checked ? "preferred" : "recommended" })} />
+            <span><b>{G.specificCourse}</b><small>{G.specificCourseNote}</small></span>
+          </label>
+        )}
         {namedCourse && (
           <div className="form-row two">
             <label>
-              <span>{G.courseName}</span>
+              <span>{otherArea ? copy.otherArea?.label ?? G.courseName : G.courseName}</span>
               <input name="course" type="text" required maxLength={160} value={b.courseName} onChange={(e) => b.set({ courseName: e.target.value })} />
             </label>
             <label>
@@ -417,7 +423,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <div><dt>{O.areaLegend}</dt><dd>{v.title}</dd></div>
           <div><dt>{O.golfersLegend}</dt><dd>{countOf(O.golfers, n)}</dd></div>
           <div><dt>{F.preferredDate}</dt><dd>{b.date ? `${fmtDate(b.date, lang)} · ${timeLabel}` : "—"}</dd></div>
-          <div><dt>{G.steps.course}</dt><dd>{specific ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
+          <div><dt>{G.steps.course}</dt><dd>{specific || otherArea ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
           <div className="go-confirm-price"><dt>{G.package}</dt><dd><b><Fx brief>{p.custom ? p.headline : p.totalShort}</Fx></b>{!p.custom && (p.leadTotal ? <small>{p.breakdown}</small> : <small><Fx>{p.perPersonRef}</Fx> · {G.perPersonRef}</small>)}</dd></div>
           {clubDiscount > 0 && totalWithClubs !== null && <div className="go-confirm-discount"><dt>{G.ownClubsTotal}</dt><dd><b><Fx brief>{yen(totalWithClubs)}</Fx></b><small><Fx>{ownClubsLine}</Fx></small></dd></div>}
           {designatedCount > 0 && <div><dt>{C.optionShort}</dt><dd>{designatedLine}</dd></div>}

@@ -116,7 +116,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
           <>
             <fieldset className="go-size">
               <legend>{copy.areaLegend}</legend>
-              <div className="go-seg two">
+              <div className={`go-seg${variants.length === 2 ? " two" : ""}`}>
                 {variants.map((v) => (
                   <label key={v.id} className={`go-seg-opt${b.variant === v.id ? " on" : ""}`}>
                     <input type="radio" name="area" value={v.id} checked={b.variant === v.id} onChange={() => b.set({ variant: v.id })} />
@@ -248,7 +248,7 @@ export function GolfQuickPick({ variants, copy, parties, name }: {
       </fieldset>
       <fieldset className="go-size">
         <legend>{copy.areaLegend}</legend>
-        <div className="go-seg two">
+        <div className={`go-seg${variants.length === 2 ? " two" : ""}`}>
           {variants.map((v) => (
             <label key={v.id} className={`go-seg-opt${b.variant === v.id ? " on" : ""}`}>
               <input type="radio" name={`${name}-area`} value={v.id} checked={b.variant === v.id} onChange={() => b.set({ variant: v.id })} />

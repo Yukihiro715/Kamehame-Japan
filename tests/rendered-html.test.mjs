@@ -73,6 +73,7 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.match(text, /¥20,000\s*fee\s*¥15,000 \+ ¥5,000 × 1 additional golfer(?!s)/, "the fee for two, then its breakdown");
   assert.equal(html.split('class="go-fee"').length - 1, 1, "the options panel shows the fee once, under the area pills, not per area card");
   assert.equal(html.split('class="go-area').length - 1 - html.split('class="go-area-line"').length + 1, 0, "no area cards in the booking service");
+  assert.ok(html.includes('name="area" value="other"') && text.includes("Anywhere in Japan"), "a third area pill: anywhere in Japan");
   for (const price of ["¥15,000", "¥20,000", "¥25,000", "¥30,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
   assert.ok(text.includes("¥15,000 for the first golfer, ¥5,000 for each additional golfer") && !text.includes("× 3 additional"), "fee table: the rule once, the figures alone");
   assert.ok(!/xp-sub-h">How booking works/.test(html), "no duplicate booking-steps list in the booking service");
@@ -263,6 +264,9 @@ test("golf request: the server validates the choice against the price master", a
   assert.equal(withSet.status, 503, "a chosen set from the catalogue is accepted");
   const badSet = await post({ ...base, area_id: "fuji", party: "2", course_mode: "recommended", rental_keys: "designated:right:unchosen,own" });
   assert.equal(badSet.status, 400, "an unknown set id is refused");
+  // "other" (anywhere in Japan, 2026-10-25) is a real area in the booking service; an unknown id still is not
+  const other = await post({ ...base, area_id: "other", party: "2", course_mode: "specific", course: "Hokkaido" });
+  assert.equal(other.status, 503, "another area in Japan is accepted");
   for (const bad of [{ area_id: "osaka", party: "2" }, { area_id: "fuji", party: "13" }, { area_id: "fuji", party: "0" }]) {
     const r = await post({ ...base, ...bad });
     assert.equal(r.status, 400, `rejects ${JSON.stringify(bad)}`);
