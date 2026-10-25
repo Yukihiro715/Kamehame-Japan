@@ -1,4 +1,5 @@
 import { attributionNote, channel } from "@/lib/attribution";
+import { clubSetById, clubSetName, GOLF_CLUB_RENTAL_JPY } from "@/lib/golf-club-rental";
 // The team's own copy of an enquiry: the notification email that lands in
 // the hello@ mailbox. Written in Japanese whatever language the visitor used,
 // since the people reading it work in Japanese; the visitor's free text is
@@ -41,9 +42,10 @@ function rentalJa(keys: string, areaId?: string): string | undefined {
   const F = golfCopyJa(areaId).form;
   if (!F) return undefined;
   return keys.split(",").map((k, i) => {
-    const [rental, handed] = k.split(":") as [keyof typeof F.rentalOpts, keyof typeof F.handedOpts | undefined];
+    const [rental, handed, setId] = k.split(":") as [keyof typeof F.rentalOpts | "designated", keyof typeof F.handedOpts | undefined, string | undefined];
     const who = F.golferN.replace("{n}", String(i + 1));
-    return `${who}: ${F.rentalOpts[rental] ?? rental}${handed ? `(${F.handedOpts[handed] ?? handed})` : ""}`;
+    const what = rental === "designated" ? `指定セット ${(() => { const set = clubSetById(setId); return set ? clubSetName(set) : "未選択"; })()}` : F.rentalOpts[rental] ?? rental;
+    return `${who}: ${what}${handed ? `(${F.handedOpts[handed] ?? handed})` : ""}`;
   }).join(" · ");
 }
 
@@ -108,6 +110,7 @@ export function slackSummary(e: Enquiry, jaTitle: string | undefined, ja: Partia
         ["ゴルフ経験", level],
         ["レンタルクラブ", rental],
         ["レンタルシューズ", e.shoeKeys ? shoesJa(e.shoeKeys, e.areaId) ?? e.shoes : e.shoes],
+        ["指定レンタル", e.clubRentalCount ? `${e.clubRentalCount}セット × ${yen(GOLF_CLUB_RENTAL_JPY)}（${e.clubSets ?? ""}）` : undefined],
         ["クラブの希望", t("clubs", e.clubs)],
         ["お迎え場所", t("pickup", e.pickup)],
         ["送迎都県", e.pickupRegion],
@@ -154,6 +157,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ...(e.levelKey ? [["ゴルフ経験", level] as [string, string | undefined]] : t("ゴルフ経験", "level", level)),
     ...(e.rentalKeys ? [["レンタルクラブ", rental] as [string, string | undefined]] : t("レンタルクラブ", "rental", rental)),
     ["レンタルシューズ", e.shoeKeys ? shoesJa(e.shoeKeys, e.areaId) ?? e.shoes : e.shoes],
+    ["指定レンタル", e.clubRentalCount ? `${e.clubRentalCount}セット × ${yen(GOLF_CLUB_RENTAL_JPY)}（${e.clubSets ?? ""}）。提案承認後に提携先へ発注、発送後は返金なし。` : undefined],
     ...t("クラブの希望", "clubs", e.clubs),
     ...t("お迎え場所", "pickup", e.pickup),
     ["送迎都県", e.pickupRegion],

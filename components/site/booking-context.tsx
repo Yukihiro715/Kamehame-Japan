@@ -83,6 +83,8 @@ export interface BookingState {
   coursePref: "recommended" | "preferred";
   courseName: string;
   courseUrl: string;
+  /** Golf booking service: golfers who take the chosen-set club rental (lib/golf-club-rental.ts). */
+  clubRentals: number;
 }
 
 interface Booking extends BookingState {
@@ -163,6 +165,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     guests: String(Math.min(Math.max(experience.minGuests, experience.defaultGuests ?? 2), maxGuests)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
     variant: initialVariant, coursePref: "recommended", courseName: "", courseUrl: "",
+    clubRentals: 0,
   });
   // Until the guest picks a time, switching variant moves to that variant's usual departure.
   const [timeTouched, setTimeTouched] = useState(false);

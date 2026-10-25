@@ -1784,3 +1784,55 @@ body[data-kh-modal] .sticky-request { display:none; }
 .ofk-offer li { display:flex; gap:8px; font-size:14px; line-height:1.55; }
 .ofk-offer li .tick { color:var(--kame); flex:0 0 auto; }
 .xp-pricing td s { color:var(--muted); font-weight:400; margin-right:8px; }
+
+/* Golf: the chosen-model club rental (unlisted preview while under review) */
+.gcr-lede { margin:0 0 18px; font-size:15px; line-height:1.7; color:var(--ink); max-width:60ch; }
+.gcr-ways { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:28px; }
+.gcr-way { display:grid; gap:4px; padding:16px; border:1px solid #e6e1d6; border-radius:14px; background:var(--white); }
+.gcr-way-on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; }
+.gcr-way-icon { width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:#faf8f3; color:var(--ink); margin-bottom:4px; }
+.gcr-way-on .gcr-way-icon { background:var(--ink); color:var(--white); }
+.gcr-way b { font-size:15px; line-height:1.3; }
+.gcr-way em { font-style:normal; font-size:13px; font-weight:600; color:#3d3a34; }
+.gcr-way p { margin:4px 0 0; font-size:13px; line-height:1.6; color:#4a463e; }
+.gcr-grid { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
+.gcr-card { display:grid; gap:2px; width:100%; padding:10px 10px 12px; border:1px solid #e6e1d6; border-radius:14px; background:var(--white); text-align:left; cursor:pointer; font:inherit; color:var(--ink); transition:border-color .15s, box-shadow .15s; }
+.gcr-card:hover, .gcr-card:focus-visible { border-color:var(--ink); outline:none; }
+.gcr-photo { display:block; aspect-ratio:2 / 3; border-radius:10px; overflow:hidden; background:#f3efe6; margin-bottom:6px; }
+.gcr-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.gcr-brand { font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.gcr-model { font-size:14.5px; font-weight:600; line-height:1.3; }
+.gcr-tags { font-size:12px; color:#5c584f; line-height:1.4; }
+.gcr-more { margin-top:4px; font-size:12px; font-weight:600; color:var(--kame); text-decoration:underline; text-underline-offset:3px; }
+.gcr-note { margin:14px 0 0; font-size:12.5px; line-height:1.6; color:var(--muted); }
+.gcr-facts { margin:12px 0 0; padding:0 0 0 18px; font-size:13px; line-height:1.7; color:#3d3a34; }
+.gcr-facts li + li { margin-top:2px; }
+.gcr-sheet { position:fixed; inset:0; z-index:110; background:rgba(10,12,9,.6); display:grid; place-items:end center; padding:0; }
+.gcr-sheet-box { position:relative; width:100%; max-width:720px; max-height:92vh; overflow-y:auto; background:var(--paper); border-radius:18px 18px 0 0; padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px)); display:grid; grid-template-columns:minmax(0,220px) minmax(0,1fr); gap:16px; align-items:start; }
+.gcr-sheet-box > img { width:100%; height:auto; border-radius:12px; background:#f3efe6; }
+.gcr-sheet-text { display:grid; gap:8px; padding-top:4px; }
+.gcr-sheet-text > b { font-size:18px; line-height:1.3; padding-right:36px; }
+.gcr-sheet-text p { margin:0; font-size:13.5px; line-height:1.65; color:#3d3a34; }
+.gcr-fine { font-size:12px !important; color:var(--muted) !important; }
+.gcr-close { position:absolute; top:10px; right:10px; width:36px; height:36px; display:grid; place-items:center; border:1px solid #d9d3c7; border-radius:50%; background:var(--white); color:var(--ink); cursor:pointer; }
+.gcr-pick { margin-top:6px; min-height:46px; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+.gcr-pick.on { background:var(--ink); }
+.gcr-picker-box { display:block; max-width:560px; padding:0 0 calc(16px + env(safe-area-inset-bottom,0px)); }
+.gcr-picker-bar { position:sticky; top:0; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px; background:var(--paper); border-bottom:1px solid var(--border); }
+.gcr-picker-bar b { font-size:15px; }
+.gcr-picker-bar .gcr-close { position:static; }
+.gcr-pick-list { list-style:none; margin:0; padding:8px 12px; display:grid; gap:6px; }
+.gcr-pick-row { display:grid; grid-template-columns:48px minmax(0,1fr) auto; align-items:center; gap:12px; width:100%; padding:8px 10px; border:1px solid #e6e1d6; border-radius:12px; background:var(--white); text-align:left; font:inherit; color:var(--ink); cursor:pointer; }
+.gcr-pick-row.on { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; background:#faf8f3; }
+.gcr-pick-row img { width:48px; height:72px; object-fit:cover; border-radius:8px; background:#f3efe6; }
+.gcr-pick-row span { display:grid; gap:2px; min-width:0; }
+.gcr-pick-row b { font-size:14px; line-height:1.3; }
+.gcr-pick-row small { font-size:12px; color:#5c584f; }
+.gcr-pick-row em { font-style:normal; font-size:12px; font-weight:600; color:var(--kame); text-decoration:underline; text-underline-offset:3px; padding:6px; }
+.gcr-picker-note { margin:4px 16px 0; }
+.go-rental-set { grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:8px 10px; border:1px dashed #cfc9bd; border-radius:10px; font-size:13px; }
+.go-rental-set b { font-weight:600; }
+.go-rental-set button { font:inherit; font-size:13px; font-weight:600; color:var(--kame); background:none; border:0; padding:0; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+.go-rental-set small { color:var(--muted); }
+@media(max-width:1100px){ .gcr-grid { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+@media(max-width:700px){ .gcr-ways { grid-template-columns:1fr; } .gcr-grid { grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; } .gcr-card { padding:6px 6px 8px; } .gcr-photo { aspect-ratio:3 / 4; } .gcr-brand { font-size:10px; } .gcr-model { font-size:12.5px; } .gcr-tags { font-size:10.5px; } .gcr-more { font-size:11px; } .gcr-sheet-box { grid-template-columns:minmax(0,150px) minmax(0,1fr); gap:12px; padding:14px 12px calc(16px + env(safe-area-inset-bottom,0px)); } .gcr-sheet-text > b { font-size:16px; } }

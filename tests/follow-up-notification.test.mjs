@@ -137,6 +137,16 @@ test("arrangement enquiries send new HTML through Resend even when package autom
   assert.doesNotMatch(ack.html + follow.html, /book\.stripe\.com|Proceed to payment/);
 });
 
+test("a chosen-set club rental is priced on top of the fee and named for the team", async (t) => {
+  const calls = await submit(t, { experience: "mt-fuji-golf-day", area: "Mt. Fuji", area_id: "fuji", course_mode: "recommended", party: "2", assistant: "none", caddie: "none", rental_keys: "designated:right:taylormade-qi10-s,required:left", rental: "Golfer 1: Chosen set: TaylorMade Qi10 (S) (Right-handed) · Golfer 2: Please reserve (Left-handed)" });
+  const [internal, ack] = calls[calls.length - 1].body;
+  assert.match(internal.text, /指定レンタル: 1セット × ¥15,000（1: TaylorMade Qi10 \(S\)）/);
+  assert.match(internal.text, /概算: ¥35,000/);
+  assert.match(internal.text, /club-rental-2026-10-25/);
+  assert.match(internal.text, /ゴルファー1: 指定セット TaylorMade Qi10 \(S\)\(右利き\)/);
+  assert.match(ack.text, /35,000/);
+});
+
 test("as shipped, the follow-up is paused: no scheduling call, and the team notification says so", async (t) => {
   const { POST: postShipped } = await asShipped.ssrLoadModule("/app/api/contact/route.ts");
   const { FOLLOW_UP_ENABLED } = await asShipped.ssrLoadModule("/lib/contact.ts");

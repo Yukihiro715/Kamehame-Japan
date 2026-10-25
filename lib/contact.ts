@@ -61,6 +61,9 @@ export interface Enquiry {
   levelKey?: string;
   handicap?: string;
   rentalKeys?: string;
+  /** The chosen-set club rental (lib/golf-club-rental.ts): the sets, named by the server from the keys, and how many. */
+  clubSets?: string;
+  clubRentalCount?: number;
   /** "Golfer 1: 26.5 cm · Golfer 2: Own shoes" and the keys ("26.5,own") behind it. */
   shoes?: string;
   shoeKeys?: string;

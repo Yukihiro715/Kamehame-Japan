@@ -1,7 +1,7 @@
 "use client";
 
 import { readAttribution } from "@/lib/attribution-client";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { Experience, ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
@@ -17,9 +17,13 @@ import { isBookable, timesFor, useBooking } from "@/components/site/booking-cont
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
 import { GOLF_FIXED_FEE_MAX, GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs, isArrangement } from "@/lib/golf-prices";
+import { CLUB_RENTAL_COPY } from "@/lib/golf-club-rental";
+import { ClubSetPicker, clubSetLabel } from "@/components/site/golf-club-rental";
+import { useClubRental } from "@/components/site/club-rental-context";
 
 type Status = "idle" | "sending" | "sent" | "failed";
-type Rental = "required" | "own" | "unsure";
+/** "designated": the chosen-set rental (lib/golf-club-rental.ts), offered only while the option is on. */
+type Rental = "required" | "designated" | "own" | "unsure";
 type Handed = "right" | "left" | "unsure";
 /** Shoe sizes offered, in cm (Japanese courses size rental shoes in cm). */
 const SHOE_SIZES = Array.from({ length: 19 }, (_, i) => (22 + i * 0.5).toFixed(1).replace(/\.0$/, ""));
@@ -56,10 +60,20 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const [wantCourse, setWantCourse] = useState(false);
   const [rental, setRental] = useState<Record<number, Rental>>({});
   const [handed, setHanded] = useState<Record<number, Handed>>({});
+  // The chosen-set rental: the set per golfer, and which golfer's picker is open.
+  const clubRental = useClubRental();
+  const C = CLUB_RENTAL_COPY[lang];
+  const [sets, setSets] = useState<Record<number, string>>({});
+  const [picking, setPicking] = useState<number | null>(null);
   const [shoes, setShoes] = useState<Record<number, string>>({});
   const started = useRef(false);
   const requestId = useRef({ key: "", id: "" });
   const processCopy = golfProcessCopy(lang);
+  // Golfers taking the chosen-set rental, within the current party; the panel and the sticky bar read the count from the booking state.
+  const designatedCount = clubRental ? Object.entries(rental).filter(([i, r]) => r === "designated" && Number(i) <= (b?.guestsNumber ?? 0)).length : 0;
+  useEffect(() => {
+    if (b && clubRental && b.clubRentals !== designatedCount) b.set({ clubRentals: designatedCount });
+  }, [b, clubRental, designatedCount]);
   if (!b) return null;
   const x = b.experience;
   const v = b.variantView ?? variants[0];
@@ -70,12 +84,14 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   // Five golfers or more in the booking service: no published fee, quoted for the group.
   const large = arrangement && n > GOLF_FIXED_FEE_MAX;
   const total = specific || large ? null : tierTotal(v.tiers, n);
-  const p = golfPriceParts(O, total, n, large);
+  const p = golfPriceParts(O, total, n, large, designatedCount, C);
   const rentalOf = (i: number): Rental => rental[i] ?? "required";
   const handedOf = (i: number): Handed => handed[i] ?? "right";
   const shoeOf = (i: number): string => shoes[i] ?? "";
   const shoeText = (i: number) => { const k = shoeOf(i); return k === "own" ? G.shoeOpts.own : !k || k === "unsure" ? G.shoeOpts.unsure : G.shoeSize.replace("{n}", k); };
   const anyRental = golfers.some((i) => rentalOf(i) !== "own");
+  const rentalLabel = (i: number) => rentalOf(i) === "designated" ? `${C.optionShort}: ${clubSetLabel(lang, sets[i])}` : G.rentalOpts[rentalOf(i) as keyof typeof G.rentalOpts];
+  const designatedLine = golfers.filter((i) => rentalOf(i) === "designated").map((i) => `${countOf(G.golferN, i)}: ${clubSetLabel(lang, sets[i])}`).join(" · ");
   // Own clubs: ¥5,000 less per golfer, shown as soon as a golfer picks it (the server recomputes the same figure).
   const ownCount = golfers.filter((i) => rentalOf(i) === "own").length;
   const clubDiscount = !arrangement && total !== null && ownCount > 0 ? GOLF_OWN_CLUBS_DISCOUNT_JPY * ownCount : 0;
@@ -113,12 +129,14 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       dates: `${b.date} ${timeLabel}`,
       pickup: hotelUndecided ? [G.hotelUndecided, data["hotel-area"]].filter(Boolean).join(" — ") : data.pickup,
       level: [G.experienceOpts[level], data.handicap && `${G.handicap.replace(/\s*[(（].*$/, "")}: ${data.handicap}`].filter(Boolean).join(" · "),
-      rental: golfers.map((i) => `${countOf(G.golferN, i)}: ${G.rentalOpts[rentalOf(i)]}${rentalOf(i) !== "own" ? ` (${G.handedOpts[handedOf(i)]})` : ""}`).join(" · "),
+      rental: golfers.map((i) => `${countOf(G.golferN, i)}: ${rentalLabel(i)}${rentalOf(i) !== "own" ? ` (${G.handedOpts[handedOf(i)]})` : ""}`).join(" · "),
       clubs: anyRental ? data.clubs : "",
       shoes: golfers.map((i) => `${countOf(G.golferN, i)}: ${shoeText(i)}`).join(" · "),
       // The same choices as keys, for the team's Japanese notification.
       level_key: level, handicap: data.handicap,
-      rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
+      // "designated:right:<set id>" carries the chosen set; the server validates the id against the catalog.
+      rental_keys: golfers.map((i) => (rentalOf(i) === "own" ? "own" : rentalOf(i) === "designated" ? `designated:${handedOf(i)}:${sets[i] ?? "unchosen"}` : `${rentalOf(i)}:${handedOf(i)}`)).join(","),
+      club_rental_sets: String(designatedCount),
       own_clubs: String(ownCount),
       shoe_keys: golfers.map((i) => shoeOf(i) || "unsure").join(","),
       addons: chosenAddOns.map(addOnLine).join(", "),
@@ -300,8 +318,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           {golfers.map((i) => (
             <div className="go-rental-row" key={i}>
               <b>{countOf(G.golferN, i)}</b>
-              <select name={`rental-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.rental}`} value={rentalOf(i)} onChange={(e) => setRental((r) => ({ ...r, [i]: e.target.value as Rental }))}>
-                {(Object.keys(G.rentalOpts) as Rental[]).map((k) => <option key={k} value={k}>{G.rentalOpts[k]}</option>)}
+              <select name={`rental-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.rental}`} value={rentalOf(i)} onChange={(e) => { const r = e.target.value as Rental; setRental((all) => ({ ...all, [i]: r })); if (r === "designated" && !sets[i]) setPicking(i); }}>
+                <option value="required">{G.rentalOpts.required}</option>
+                {clubRental && <option value="designated">{C.option}</option>}
+                <option value="own">{G.rentalOpts.own}</option>
+                <option value="unsure">{G.rentalOpts.unsure}</option>
               </select>
               {rentalOf(i) !== "own" ? (
                 <select name={`handed-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.handed}`} value={handedOf(i)} onChange={(e) => setHanded((h) => ({ ...h, [i]: e.target.value as Handed }))}>
@@ -314,9 +335,20 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
                 <option value="own">{G.shoeOpts.own}</option>
                 <option value="unsure">{G.shoeOpts.unsure}</option>
               </select>
+              {clubRental && rentalOf(i) === "designated" && (
+                <div className="go-rental-set">
+                  <span>{C.optionShort}: <b>{clubSetLabel(lang, sets[i])}</b></span>
+                  <button type="button" onClick={() => setPicking(i)}>{sets[i] ? C.change : C.choose}</button>
+                  <small>{C.deadline}</small>
+                </div>
+              )}
             </div>
           ))}
         </div>
+        {picking !== null && (
+          <ClubSetPicker lang={lang} hand={handedOf(picking) === "left" ? "left" : handedOf(picking) === "right" ? "right" : "unsure"} value={sets[picking]} golferLabel={countOf(G.golferN, picking)}
+            onChange={(id) => setSets((all) => ({ ...all, [picking]: id }))} onClose={() => setPicking(null)} />
+        )}
         {anyRental && (
           <label className="form-row">
             <span>{G.clubSpecs}</span>
@@ -384,6 +416,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           <div><dt>{G.steps.course}</dt><dd>{specific ? (b.courseName || G.specificCourse) : G.recommendedCourse}</dd></div>
           <div className="go-confirm-price"><dt>{G.package}</dt><dd><b><Fx brief>{p.custom ? p.headline : p.totalShort}</Fx></b>{!p.custom && (p.leadTotal ? <small>{p.breakdown}</small> : <small><Fx>{p.perPersonRef}</Fx> · {G.perPersonRef}</small>)}</dd></div>
           {clubDiscount > 0 && totalWithClubs !== null && <div className="go-confirm-discount"><dt>{G.ownClubsTotal}</dt><dd><b><Fx brief>{yen(totalWithClubs)}</Fx></b><small><Fx>{ownClubsLine}</Fx></small></dd></div>}
+          {designatedCount > 0 && <div><dt>{C.optionShort}</dt><dd>{designatedLine}</dd></div>}
           {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd><Fx>{addOnLine(a)}</Fx></dd></div>)}
         </dl>
         <small>{G.confirmNote}</small>

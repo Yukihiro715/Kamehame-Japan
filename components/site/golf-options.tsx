@@ -4,6 +4,8 @@ import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
 import { GOLF_FIXED_FEE_MAX, isArrangement } from "@/lib/golf-prices";
+import { clubRentalTotal, CLUB_RENTAL_COPY, GOLF_CLUB_RENTAL_JPY, type ClubRentalCopy } from "@/lib/golf-club-rental";
+import { useClubRental } from "@/components/site/club-rental-context";
 import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
@@ -20,19 +22,28 @@ type OptionsCopy = VariantPageCopy["options"];
  *  group fee and puts its breakdown ("¥15,000 + ¥5,000 × 1 additional golfer") under
  *  it, since the fee is not a per-golfer amount. `total` is the price for `n`
  *  golfers; null means the request is quoted individually. */
-export function golfPriceParts(copy: OptionsCopy, total: number | null, n: number, large = false) {
+export function golfPriceParts(copy: OptionsCopy, total: number | null, n: number, large = false, rentals = 0, rentalCopy?: ClubRentalCopy) {
   if (total === null) {
     return large
       ? { custom: true as const, headline: copy.largePartyQuote ?? copy.customQuote, line: countOf(copy.largePartyLine ?? copy.customQuoteLine, n) }
       : { custom: true as const, headline: copy.customQuote, line: countOf(copy.customQuoteLine, n) };
   }
+  // The booking service's chosen-set club rental: added to the fee, named in the breakdown.
+  const rental = isArrangement() && rentalCopy ? clubRentalTotal(rentals) : 0;
+  const fee = total;
+  total = fee + rental;
   const { perPerson, approximate } = perPersonOf(total, n);
   const totalWords = copy.total.replace("{n}", String(n)).split("{total}").map((x) => x.trim());
   const shortWords = copy.totalShort.split("{total}").map((x) => x.trim());
   const ppWords = copy.perPersonRef.split("{price}").map((x) => x.trim());
   return {
     /** The booking service: the group fee leads and `breakdown` is the small line */
-    leadTotal: isArrangement(), breakdown: isArrangement() ? golfFeeBreakdown(copy, n) : "",
+    leadTotal: isArrangement(),
+    breakdown: rental > 0 && rentalCopy
+      ? rentalCopy.total.replace("{fee}", yen(fee)).replace("{rental}", yen(GOLF_CLUB_RENTAL_JPY)).replace("{n}", String(rentals))
+      : isArrangement() ? golfFeeBreakdown(copy, n) : "",
+    /** The fee alone and the rental on top, for the confirmation's lines */
+    fee, rental,
     /** The words of `perPersonRef` before the figure ("1名あたり", "每位") and after it ("/ person") */
     ppPrefix: ppWords[0], ppUnit: ppWords[1],
     /** "¥87,500 / person" — beside a fixed total */
@@ -67,6 +78,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
 }) {
   const b = useBooking();
   const { usdActive } = useCurrency();
+  const clubRental = useClubRental();
   if (!b) return null;
   const n = b.guestsNumber;
   // Five golfers or more in the booking service: no published fee, quoted for the group.
@@ -97,7 +109,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
         // The booking service charges the same fee in both areas, so the area is a pair of pills
         // (as in the form) and the fee is shown once under them (owner, 2026-10-24).
         const chosen = variants.find((v) => v.id === b.variant) ?? variants[0];
-        const p = golfPriceParts(copy, custom ? null : tierTotal(chosen.tiers, n), n, large);
+        const p = golfPriceParts(copy, custom ? null : tierTotal(chosen.tiers, n), n, large, clubRental ? b.clubRentals : 0, CLUB_RENTAL_COPY[lang]);
         return (
           <>
             <fieldset className="go-size">

@@ -110,6 +110,25 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.ok(list.includes("¥15,000") && list.includes("/ group") && list.includes("then ¥5,000 for each additional golfer") && !list.includes("¥330,000"), "listing card shows the fee for the group with its rule");
 });
 
+test("golf club-rental option: on the unlisted preview only, thirteen sets, the fee lines, the supplier unnamed", { skip: GOLF_MODE !== "arrangement" }, async () => {
+  const res = await render("/previews/golf-club-rental-7c3e9a51b2/?lang=en");
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  const text = html.replace(/<[^>]+>/g, "");
+  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive"\/>/, "unlisted");
+  assert.ok(text.includes("Rental clubs: two ways") && text.includes("¥15,000 per set, paid with our fee") && text.includes("Order by 7 days before your round."), "the section with the two ways, the fee and the deadline");
+  assert.equal(html.split('class="gcr-card"').length - 1, 13, "thirteen sets");
+  assert.ok(text.includes("Can I choose the make and model of the rental clubs?") && text.includes("Chosen-set club rental (¥15,000 per set)"), "FAQ entry and terms paragraph");
+  assert.doesNotMatch(html, /rentalgolfsm|レンタルゴルフショップ|rgolfsm/i, "the supplier is never named");
+  for (const [lang, needle] of [["ja", "レンタルクラブは2通り"], ["es", "Palos de alquiler: dos opciones"], ["fr", "Clubs de location : deux façons"], ["zh-tw", "租借球桿：兩種方式"]]) {
+    const t = (await (await render(`/previews/golf-club-rental-7c3e9a51b2/?lang=${lang}`)).text()).replace(/<[^>]+>/g, "");
+    assert.ok(t.includes(needle), `${lang} copy`);
+  }
+  // the live golf page does not carry the option yet
+  const live = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
+  assert.ok(!live.includes('class="gcr-card"') && !live.includes("Rental clubs: two ways"), "not on the live page");
+});
+
 test("golf page (package): two areas, published prices for 2–4 golfers, one options panel, one form", { skip: GOLF_MODE !== "package" }, async () => {
   const html = await (await render("/en/tokyo/mt-fuji-golf-day/")).text();
 
@@ -239,6 +258,11 @@ test("golf request: the server validates the choice against the price master", a
   // five golfers or more: accepted as a quote (the booking service, 2026-10-23), so it reaches delivery too
   const large = await post({ ...base, area_id: "fuji", party: "6", course_mode: "recommended" });
   assert.equal(large.status, 503, "a party of six is accepted and quoted");
+  // the chosen-set club rental: a catalogued set id passes, an unknown one is refused (2026-10-25)
+  const withSet = await post({ ...base, area_id: "fuji", party: "2", course_mode: "recommended", rental_keys: "designated:right:taylormade-qi10-s,own" });
+  assert.equal(withSet.status, 503, "a chosen set from the catalogue is accepted");
+  const badSet = await post({ ...base, area_id: "fuji", party: "2", course_mode: "recommended", rental_keys: "designated:right:unchosen,own" });
+  assert.equal(badSet.status, 400, "an unknown set id is refused");
   for (const bad of [{ area_id: "osaka", party: "2" }, { area_id: "fuji", party: "13" }, { area_id: "fuji", party: "0" }]) {
     const r = await post({ ...base, ...bad });
     assert.equal(r.status, 400, `rejects ${JSON.stringify(bad)}`);

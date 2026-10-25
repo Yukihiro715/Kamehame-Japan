@@ -5,6 +5,8 @@ import { quoteCopy } from "./quote-request-switch";
 import { useBooking } from "@/components/site/booking-context";
 import { useCurrency } from "@/components/site/currency-context";
 import { golfPriceParts } from "@/components/site/golf-options";
+import { CLUB_RENTAL_COPY } from "@/lib/golf-club-rental";
+import { useClubRental } from "@/components/site/club-rental-context";
 import { GOLF_FIXED_FEE_MAX, isArrangement } from "@/lib/golf-prices";
 import { countOf, tierTotal, yen } from "@/lib/pricing";
 import { Fx, Yen } from "@/components/site/money";
@@ -26,6 +28,7 @@ export function StickyRequestBar({
   const [typing, setTyping] = useState(false);
   const b = useBooking();
   const { usdActive } = useCurrency();
+  const clubRental = useClubRental();
   const D = lang ? t(lang).detail : undefined;
 
   useEffect(() => {
@@ -59,7 +62,7 @@ export function StickyRequestBar({
     const n = b.guestsNumber;
     // Five golfers or more in the booking service: quoted for the group, same words as the panel.
     const large = isArrangement() && n > GOLF_FIXED_FEE_MAX;
-    const p = golfPriceParts(golf, b.customQuote || large ? null : tierTotal(variant.tiers, n), n, large);
+    const p = golfPriceParts(golf, b.customQuote || large ? null : tierTotal(variant.tiers, n), n, large, clubRental ? b.clubRentals : 0, lang ? CLUB_RENTAL_COPY[lang] : undefined);
     return (
       <div className={`sticky-request sticky-golf ${show ? "show" : ""}`} aria-hidden={!show}>
         <div className="sticky-price">

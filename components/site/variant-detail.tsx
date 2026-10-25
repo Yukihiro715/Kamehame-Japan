@@ -13,6 +13,8 @@ import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { GolfInclusions } from "@/components/site/golf-inclusions";
 import { GolfTransfer } from "@/components/site/golf-transfer";
+import { GolfClubRental } from "@/components/site/golf-club-rental";
+import { CLUB_RENTAL_COPY } from "@/lib/golf-club-rental";
 import { isArrangement } from "@/lib/golf-prices";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
@@ -30,7 +32,8 @@ import { productJsonLd } from "@/lib/seo";
  *  how the day goes, FAQ with the read-only price table, the single request
  *  form, the terms. The panel, the sticky bar and the form share one booking
  *  state, so the area and the party size are chosen once. */
-export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
+/** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
+export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experience; lang: Lang; clubRental?: boolean }) {
   const T = t(lang);
   const D = T.detail;
   const vc = exp.variantCopy!;
@@ -51,7 +54,8 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const size = exp.partySize ?? { min: 2, max: 4 };
   const parties = Array.from({ length: size.max - size.min + 1 }, (_, i) => size.min + i);
   const flow = exp.flow ?? D.flow;
-  const faq = exp.faq ?? [];
+  const R = CLUB_RENTAL_COPY[lang];
+  const faq = [...(exp.faq ?? []), ...(clubRental ? [{ q: R.faqQ, a: R.faqA }] : [])];
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const totals = variants.flatMap((v) => v.tiers.map((x) => x.total));
   // The booking service charges the same fee in both areas, so its table has one "Fee" column.
@@ -112,6 +116,9 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
 
             {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}
             <GolfInclusions copy={vc.inclusions} />
+
+            {/* 3a'. The chosen-model club rental (preview) */}
+            {clubRental && <GolfClubRental lang={lang} />}
 
             {/* 3b. The private car, the driver and the assistant */}
             <GolfTransfer copy={vc.transfer} />
@@ -224,6 +231,7 @@ export function VariantDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
             <section className="xp-section" id="terms">
               <h2>{H.terms}</h2>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
+              {clubRental && <p className="xp-cancel">{R.terms}</p>}
               {avail && <p className="vh-note vh-known"><Clock3 size={14} /> {D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</p>}
             </section>
 

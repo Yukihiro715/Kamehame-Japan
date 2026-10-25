@@ -7,6 +7,10 @@ import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
 import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isArrangement, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
+import { clubRentalTotal, clubSetById, clubSetName, GOLF_CLUB_RENTAL_CUTOFF_DAYS, GOLF_CLUB_RENTAL_JPY, GOLF_CLUB_RENTAL_VERSION, isClubSetId } from "@/lib/golf-club-rental";
+
+/** One key per golfer, up to twelve: "required:right", "own", "unsure", or "designated:left:<set id>" for the chosen-set rental. */
+const RENTAL_KEYS = /^(required|own|unsure|designated)(:(right|left|unsure))?(:[a-z0-9-]{1,60})?(,(required|own|unsure|designated)(:(right|left|unsure))?(:[a-z0-9-]{1,60})?){0,11}$/;
 import { yen } from "@/lib/pricing";
 import { normalizePhone } from "@/lib/phone";
 import { golfPriceNoteJa, notificationBody, slackSummary } from "@/lib/notification";
@@ -171,7 +175,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
   // The golf page: the choice is validated against the price master and the
   // reference price is read from it here — what the browser sends is the
   // area, the party size and the course mode, never an amount.
-  let golf: Pick<Enquiry, "areaId" | "courseMode" | "estimate" | "priceNote"> = {};
+  let golf: Pick<Enquiry, "areaId" | "courseMode" | "estimate" | "priceNote" | "clubSets" | "clubRentalCount"> = {};
   if (area || body.area_id !== undefined) {
     const areaId = body.area_id;
     const golfers = Number(party);
@@ -180,12 +184,19 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     if (!isGolfArea(areaId) || !isGolfGolfers(golfers)) return null;
     const price = golfPackagePrice(areaId, golfers, mode);
     // Golfers bringing their own clubs pay ¥5,000 less each; the keys are validated below, the count is read here.
-    const own = /^(required|own|unsure)(:(right|left|unsure))?(,(required|own|unsure)(:(right|left|unsure))?){0,3}$/.test(String(body.rental_keys ?? "")) ? ownClubsCount(String(body.rental_keys), golfers) : 0;
-    const estimateTotal = price ? golfTotalWithOwnClubs(price.groupTotal, own) : null;
+    const keysOk = RENTAL_KEYS.test(String(body.rental_keys ?? ""));
+    const own = keysOk ? ownClubsCount(String(body.rental_keys), golfers) : 0;
+    // The chosen-set club rental (booking service): every "designated" key must name a catalogued set.
+    const chosenSets = keysOk ? String(body.rental_keys).split(",").filter((k) => k.startsWith("designated:")).map((k) => k.split(":")[2]) : [];
+    if (chosenSets.length > 0 && (!isArrangement() || !chosenSets.every(isClubSetId))) return null;
+    const rentalTotal = clubRentalTotal(chosenSets.length);
+    const estimateTotal = price ? golfTotalWithOwnClubs(price.groupTotal, own) + rentalTotal : null;
     golf = {
       areaId, courseMode: mode,
       estimate: estimateTotal !== null ? yen(estimateTotal) : undefined,
-      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (isArrangement() ? ` 表示返金規定: ${GOLF_ARRANGEMENT_POLICY_VERSION}（申込送信は有料調査の同意ではありません。決済前に書面合意を確認）。` : "") + (price && own > 0 && !isArrangement() ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : ""),
+      priceNote: golfPriceNoteJa(areaId, golfers, price, GOLF_PRICE_VERSION) + (isArrangement() ? ` 表示返金規定: ${GOLF_ARRANGEMENT_POLICY_VERSION}（申込送信は有料調査の同意ではありません。決済前に書面合意を確認）。` : "") + (price && own > 0 && !isArrangement() ? ` クラブ持参${own}名: −${yen(GOLF_OWN_CLUBS_DISCOUNT_JPY * own)} → 割引後 ${yen(estimateTotal!)}。` : "") + (chosenSets.length > 0 ? ` 指定レンタル${chosenSets.length}セット: +${yen(rentalTotal)}（1セット${yen(GOLF_CLUB_RENTAL_JPY)}、${GOLF_CLUB_RENTAL_VERSION}）→ 合計 ${price ? yen(estimateTotal!) : "手配料は個別見積"}。提案承認後・プレー${GOLF_CLUB_RENTAL_CUTOFF_DAYS}日前までに提携先へ発注。` : ""),
+      clubSets: chosenSets.length > 0 ? chosenSets.map((id, i) => `${i + 1}: ${clubSetName(clubSetById(id)!)}`).join(" · ") : undefined,
+      clubRentalCount: chosenSets.length || undefined,
     };
   }
   return {
@@ -218,9 +229,11 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     pickup: clean(body.pickup, MAX.pickup) || undefined,
     whatsapp: normalizePhone(clean(body.whatsapp, MAX.whatsapp)).value || undefined,
     priceNote: golf.priceNote,
+    clubSets: golf.clubSets,
+    clubRentalCount: golf.clubRentalCount,
     levelKey: golf.areaId ? clean(body.level_key, 20) || undefined : undefined,
     handicap: golf.areaId ? clean(body.handicap, 60) || undefined : undefined,
-    rentalKeys: golf.areaId && /^(required|own|unsure)(:(right|left|unsure))?(,(required|own|unsure)(:(right|left|unsure))?){0,3}$/.test(String(body.rental_keys ?? "")) ? String(body.rental_keys) : undefined,
+    rentalKeys: golf.areaId && RENTAL_KEYS.test(String(body.rental_keys ?? "")) ? String(body.rental_keys) : undefined,
     shoes: golf.areaId ? clean(body.shoes, 240) || undefined : undefined,
     shoeKeys: golf.areaId && /^(own|unsure|\d{2}(\.5)?)(,(own|unsure|\d{2}(\.5)?)){0,3}$/.test(String(body.shoe_keys ?? "")) ? String(body.shoe_keys) : undefined,
     lang: clean(body.lang, 5) || "en",
