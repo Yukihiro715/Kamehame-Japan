@@ -34,8 +34,20 @@ import { productJsonLd } from "@/lib/seo";
  *  state, so the area and the party size are chosen once. */
 /** A paragraph as its sentences: split after "。" in Japanese and Chinese, after ". " elsewhere. */
 function sentences(text: string, lang: Lang): string[] {
-  const parts = lang === "ja" || lang === "zh-tw" ? text.split(/(?<=[。])/) : text.split(/(?<=[.!?])\s+(?=[A-ZÀ-Ý¥])/);
-  return parts.map((x) => x.trim()).filter(Boolean);
+  if (lang === "ja" || lang === "zh-tw") {
+    // Split after "。" only outside brackets, so "（税込。2名20,000円…）" stays in one bullet.
+    const out: string[] = [];
+    let cur = "", depth = 0;
+    for (const ch of text) {
+      cur += ch;
+      if (ch === "（" || ch === "(") depth++;
+      else if (ch === "）" || ch === ")") depth = Math.max(0, depth - 1);
+      else if (ch === "。" && depth === 0) { out.push(cur); cur = ""; }
+    }
+    if (cur.trim()) out.push(cur);
+    return out.map((x) => x.trim()).filter(Boolean);
+  }
+  return text.split(/(?<=[.!?])\s+(?=[A-ZÀ-Ý¥])/).map((x) => x.trim()).filter(Boolean);
 }
 
 /** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
