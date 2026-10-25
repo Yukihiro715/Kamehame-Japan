@@ -1,5 +1,6 @@
 "use client";
 import "./provisional-consent.css";
+import { readAttribution } from "@/lib/attribution-client";
 import { QuoteRequestSwitch, quoteCopy } from "./quote-request-switch";
 
 import { useRef, useState, type FormEvent } from "react";
@@ -117,16 +118,16 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug }),
+        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug, attribution: readAttribution() }),
       });
-      const json = (await res.json()) as { ok: boolean };
+      const json = (await res.json()) as { ok: boolean; request_id?: string };
       if (!json.ok) { setStatus("failed"); return; }
       {
         // GTM turns this into the GA4 / Ads conversion; no tag IDs live here.
         const event = {
           // Unique per submission: Google Ads uses it as the transaction ID so a
           // double submit or a reload never counts twice.
-          enquiry_id: eventId("enq"),
+          enquiry_id: json.request_id || eventId("enq"),
           // Enhanced conversions / Meta advanced matching: GTM's tags read this and
           // it leaves the browser hashed. Only after an explicit Accept, not the
           // regional default (see acceptedExplicitly).

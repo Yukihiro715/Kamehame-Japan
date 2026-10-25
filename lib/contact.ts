@@ -19,6 +19,7 @@ export const FOLLOW_UP_ENABLED = false;
 export type EnquiryKind = "guest" | "trade";
 
 export interface Enquiry {
+  attribution?: import("./attribution").Attribution;
   requestId?: string;
   pickupRegion?: "tokyo" | "saitama" | "chiba" | "other";
   caddie?: "none" | "required" | "unsure";

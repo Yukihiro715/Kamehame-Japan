@@ -1,11 +1,12 @@
 "use client";
 
+import { readAttribution } from "@/lib/attribution-client";
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { Experience, ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 import { Fx, FxNote } from "@/components/site/money";
-import { eventId, track } from "@/lib/analytics";
+import { track } from "@/lib/analytics";
 import { acceptedExplicitly } from "@/lib/consent";
 import { SENT_KEY, type SentEnquiry } from "@/components/site/thanks-view";
 import { countOf, tierTotal, yen } from "@/lib/pricing";
@@ -126,14 +127,14 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
     if (requestId.current.key !== key) requestId.current = { key, id: crypto.randomUUID() };
     setStatus("sending");
     try {
-      const res = await fetch("/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: requestId.current.id }) });
+      const res = await fetch("/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: requestId.current.id, attribution: readAttribution() }) });
       const json = (await res.json()) as { ok: boolean };
       if (!json.ok) { setStatus("failed"); return; }
       // GTM turns this into the GA4 / Ads conversion once the confirmation page
       // has loaded. The choice, the size and the package amount — no names,
       // hotels or free text.
       const event = {
-        enquiry_id: eventId("enq"),
+        enquiry_id: requestId.current.id,
         user_data: data.email && acceptedExplicitly() ? { email: data.email.trim().toLowerCase() } : undefined,
         enquiry_kind: "guest",
         experience: experience.slug,

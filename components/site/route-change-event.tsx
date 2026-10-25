@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { readAttribution } from "@/lib/attribution-client";
 import { track } from "@/lib/analytics";
 
 let lastPath: string | null = null;
@@ -12,6 +13,7 @@ let lastPath: string | null = null;
 export function RouteChangeEvent() {
   const path = usePathname();
   useEffect(() => {
+    readAttribution();
     if (lastPath !== null && lastPath !== path) track("route_change", { page_path: path });
     lastPath = path;
   }, [path]);
