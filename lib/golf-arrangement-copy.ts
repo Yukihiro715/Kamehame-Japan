@@ -106,7 +106,7 @@ const en: ArrangementCopy = {
     { q: "What is the cancellation policy?", a: "Before we send a proposal: full refund. After the proposal, before the booking is confirmed: we keep ¥5,000 and refund the rest. After written confirmation: our fee is not refunded. Full terms under Cancellation below." },
     { q: "How far ahead should we book?", a: "Two to four weeks ahead is ideal; requests close at 6:00 pm JST three days before." },
   ],
-  benefits: ["Your tee time, booked in English", `From ${FEE} per group`, "No markup on green fees"],
+  benefits: ["Courses anywhere in Japan", `From ${FEE} per group`, "Transfers arranged on request"],
   crumb: "Golf Course Booking",
   photoNote: "Example courses in both areas; yours is confirmed with your reservation.",
   inclusions: {
@@ -269,7 +269,7 @@ const ja: ArrangementCopy = {
     { q: "キャンセル規定は?", a: "ご提案前の取消は全額返金。ご提案後・予約確定前は5,000円を頂戴し残額を返金。確定通知後は手配料の返金はありません。詳細は下の「キャンセル」をご覧ください。" },
     { q: "どれくらい前に予約すべきですか?", a: "2〜4週間前が理想です。受付は開催3日前の18時（日本時間）まで。" },
   ],
-  benefits: ["ティータイム予約を英語で代行", `1組 ${FEE}〜`, "プレー代に上乗せなし"],
+  benefits: ["全国のゴルフ場を手配可能", `1組 ${FEE}〜`, "送迎のご紹介も可能"],
   crumb: "ゴルフ場予約手配",
   photoNote: "両エリアのコース例です。実際のコースは予約確定時にご案内します。",
   inclusions: {
@@ -432,7 +432,7 @@ const es: ArrangementCopy = {
     { q: "¿Cuál es la política de cancelación?", a: "Antes de enviar una propuesta: reembolso íntegro. Tras la propuesta, antes de confirmar la reserva: retenemos ¥5,000 y devolvemos el resto. Tras la confirmación escrita: la tarifa no se devuelve. Condiciones completas en Cancelación, más abajo." },
     { q: "¿Con cuánta antelación reservar?", a: "Lo ideal es con dos a cuatro semanas; las solicitudes cierran a las 18:00 JST tres días antes." },
   ],
-  benefits: ["Tu salida, reservada en inglés", `Desde ${FEE} por grupo`, "Green fees sin recargo"],
+  benefits: ["Campos en todo Japón", `Desde ${FEE} por grupo`, "Traslados a petición"],
   crumb: "Reserva de campo de golf",
   photoNote: "Campos de ejemplo en ambas zonas; el tuyo se confirma con la reserva.",
   inclusions: {
@@ -595,7 +595,7 @@ const fr: ArrangementCopy = {
     { q: "Quelles sont les conditions d'annulation ?", a: "Avant l'envoi d'une proposition : remboursement intégral. Après la proposition, avant la confirmation de la réservation : nous retenons ¥5,000 et remboursons le reste. Après la confirmation écrite : nos frais ne sont pas remboursés. Conditions complètes sous Annulation, ci-dessous." },
     { q: "Combien de temps à l'avance réserver ?", a: "Deux à quatre semaines à l'avance est idéal ; les demandes ferment à 18 h JST trois jours avant." },
   ],
-  benefits: ["Votre départ, réservé en anglais", `Dès ${FEE} par groupe`, "Green fees sans majoration"],
+  benefits: ["Parcours dans tout le Japon", `Dès ${FEE} par groupe`, "Transfert sur demande"],
   crumb: "Réservation de parcours",
   photoNote: "Parcours donnés en exemple dans les deux régions ; le vôtre est confirmé avec la réservation.",
   inclusions: {
@@ -758,7 +758,7 @@ const zh: ArrangementCopy = {
     { q: "取消政策是什麼？", a: "提案寄出前取消：全額退款。提案後、預約確認前：保留 ¥5,000，退還其餘。書面確認後：代辦費不退。完整條款見下方「取消」。" },
     { q: "應該提前多久預約？", a: "提前 2 至 4 週最理想；申請於日期前 3 天的 18:00（日本時間）截止。" },
   ],
-  benefits: ["開球時間代訂，全程英文", `每組 ${FEE} 起`, "果嶺費不加價"],
+  benefits: ["全日本球場皆可代訂", `每組 ${FEE} 起`, "可介紹接送服務"],
   crumb: "球場預約代辦",
   photoNote: "兩個區域的球場範例；實際球場於預約確認時告知。",
   inclusions: {
