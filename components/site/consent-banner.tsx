@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { readAttribution } from "@/lib/attribution-client";
 import { CONSENT_KEY } from "@/lib/consent";
 import { t, type Lang } from "@/lib/i18n";
 
@@ -39,6 +40,7 @@ function update(choice: Choice) {
   fbq?.("consent", choice === "granted" ? "grant" : "revoke");
   w.dataLayer.push({ event: "consent_choice", consent_choice: choice });
   try { localStorage.setItem(CONSENT_KEY, choice); } catch { /* private mode */ }
+  readAttribution();
 }
 
 export function ConsentBanner({ lang }: { lang: Lang }) {

@@ -1,3 +1,4 @@
+import { attributionNote } from "@/lib/attribution";
 // The booking ledger (a Google Sheet) gets a row for every enquiry.
 //
 // The sheet is owned by the team and edited by hand, so the Worker never
@@ -19,6 +20,8 @@ const CATEGORY_JA: Record<string, string> = {
 };
 
 export interface LedgerRecord {
+  requestId?: string;
+  attribution?: Enquiry["attribution"];
   receivedAt: string;
   kind: Enquiry["kind"];
   name: string;
@@ -81,6 +84,8 @@ export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, str
   const receivedAt = `${now.toISOString().slice(0, 10)} ${now.toISOString().slice(11, 16)}`;
   return {
     receivedAt,
+    requestId: e.requestId,
+    attribution: e.attribution,
     kind: e.kind,
     name: e.name,
     email: e.email,
@@ -109,7 +114,7 @@ export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, str
     interpreter: e.interpreter,
     estimate: e.estimate,
     priceNote: e.priceNote,
-    message: e.message || undefined,
+    message: [e.message, `申込ID: ${e.requestId || "未取得"}`, attributionNote(e.attribution)].filter(Boolean).join("\n"),
     messageJa: ja.message,
     company: e.company,
     country: e.country,

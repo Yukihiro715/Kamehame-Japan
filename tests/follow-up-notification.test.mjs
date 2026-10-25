@@ -159,3 +159,13 @@ test("as shipped, the follow-up is paused: no scheduling call, and the team noti
   assert.doesNotMatch(internal.text, /自動送信できていません|停止・状況確認/);
   assert.match(ack.text, /20,000/, "the acknowledgement still goes out");
 });
+
+const { ledgerRecord } = await vite.ssrLoadModule("/lib/ledger.ts");
+test("internal mail and legacy ledger retain the same inquiry and source", () => {
+  const touch={landing:"https://example.com/golf",referrer:"",at:Date.now(),utm_source:"meta",utm_medium:"paid_social"};
+  const e={...enquiry,requestId:"12345678-1234-1234-1234-123456789abc",attribution:{version:1,first:touch,last:touch}};
+  const mail=notificationBody(e,"Golf",{});
+  assert.ok(mail.includes(e.requestId));assert.ok(mail.includes("meta / paid_social"));
+  const record=ledgerRecord(e,{}, {ackSent:false,followUpScheduled:false});
+  assert.equal(record.requestId,e.requestId);assert.ok(record.message.includes(e.requestId));assert.ok(record.message.includes("meta / paid_social"));
+});

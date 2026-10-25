@@ -1,3 +1,4 @@
+import { attributionNote } from "@/lib/attribution";
 // The team's own copy of an enquiry: the notification email that lands in
 // the hello@ mailbox. Written in Japanese whatever language the visitor used,
 // since the people reading it work in Japanese; the visitor's free text is
@@ -136,6 +137,8 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     value ? [[label, value], ...(needsJa ? [[`${label}(日本語訳)`, ja[field] ?? "(自動翻訳できませんでした)"] as [string, string]] : [])] : [[label, undefined]];
   const rows: [string, string | undefined][] = [
     ["お名前", e.name],
+    ["申込ID", e.requestId],
+    ["流入記録", attributionNote(e.attribution)],
     ["種別", trade ? "取引先からの問い合わせ" : "お客様からの予約リクエスト"],
     ["体験", e.experience && `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}`],
     ["メール", e.email],

@@ -1,3 +1,4 @@
+import { sanitizeAttribution } from "@/lib/attribution";
 import { GOLF_ARRANGEMENT_POLICY_VERSION } from "@/lib/golf-arrangement-policy";
 import { CONTACT_EMAIL, FOLLOW_UP_ENABLED, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
 import { threadSubject } from "@/lib/mail-copy";
@@ -188,6 +189,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     };
   }
   return {
+    attribution: sanitizeAttribution(body.attribution),
     requestId: typeof body.request_id === "string" && /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(body.request_id) ? body.request_id : crypto.randomUUID(),
     pickupRegion: ["tokyo", "saitama", "chiba", "other"].includes(String(body.pickup_region)) ? body.pickup_region as Enquiry["pickupRegion"] : undefined,
     caddie: ["none", "required", "unsure"].includes(String(body.caddie)) ? body.caddie as Enquiry["caddie"] : undefined,
@@ -261,7 +263,7 @@ export async function POST(request: Request): Promise<Response> {
   if (!enquiry) return Response.json({ ok: false, error: "invalid" }, { status: 400 });
 
   // A filled honeypot is a bot. Answer as if it worked so it moves on.
-  if (enquiry.website) return Response.json({ ok: true });
+  if (enquiry.website) return Response.json({ ok: true, request_id: enquiry.requestId });
 
   const fallback = enquiry.kind === "trade" ? TRADE_EMAIL : CONTACT_EMAIL;
   const cf = await bindings();
@@ -293,7 +295,7 @@ export async function POST(request: Request): Promise<Response> {
       const result = await submitGolfAutomation(cf.env, enquiry, titleFor(enquiry), record,
         ledgerRecord(enquiry, ja, { ackSent: false, followUpScheduled: false }));
       await alert(!!result.ackSent);
-      return Response.json({ ok: true, reference: result.id });
+      return Response.json({ ok: true, request_id: enquiry.requestId, reference: result.id });
     } catch {
       // The queue may have accepted the request before a network timeout. The
       // same request ID safely retries; NEVER fall back to a second sender.
@@ -307,7 +309,7 @@ export async function POST(request: Request): Promise<Response> {
     try {
       const { followUpScheduled } = await sendViaResend(resendKey, recipients, enquiry, ja);
       await Promise.all([alert(true), ledger(true, followUpScheduled)]);
-      return Response.json({ ok: true });
+      return Response.json({ ok: true, request_id: enquiry.requestId });
     } catch (err) {
       console.error("contact: resend failed, trying send_email", err);
     }
@@ -316,7 +318,7 @@ export async function POST(request: Request): Promise<Response> {
     try {
       await cf.env.EMAIL.send(new cf.EmailMessage(FROM, to, raw(enquiry, to, ja)));
       await Promise.all([alert(true), ledger(false, false)]);
-      return Response.json({ ok: true });
+      return Response.json({ ok: true, request_id: enquiry.requestId });
     } catch (err) {
       console.error("contact: send_email failed", err);
     }
