@@ -117,7 +117,8 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
               {vc.benefits.map((x) => <li key={x}><Check size={13} /> {x}</li>)}
               {clubRental && <li><a href="#rental-clubs"><Check size={13} /> {R.fvBenefit}</a></li>}
             </ul>
-            <p className="gg-note">{vc.photoNote}</p>
+            {/* The photo note is dropped from the booking service page (owner, 2026-10-25) */}
+            {!isArrangement() && <p className="gg-note">{vc.photoNote}</p>}
           </section>
 
           {/* 2. The one place to choose the party size and the area */}
