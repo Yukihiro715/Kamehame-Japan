@@ -34,7 +34,9 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
   total = fee + rental;
   const { perPerson, approximate } = perPersonOf(total, n);
   const totalWords = copy.total.replace("{n}", String(n)).split("{total}").map((x) => x.trim());
-  const shortWords = copy.totalShort.split("{total}").map((x) => x.trim());
+  // With the club rental added, the headline is a grand total, not the fee: "総額 ¥35,000" / "¥35,000 total".
+  const shortTemplate = rental > 0 && rentalCopy ? rentalCopy.grandTotal : copy.totalShort;
+  const shortWords = shortTemplate.split("{total}").map((x) => x.trim());
   const ppWords = copy.perPersonRef.split("{price}").map((x) => x.trim());
   return {
     /** The booking service: the group fee leads and `breakdown` is the small line */
@@ -64,7 +66,7 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
     /** The word of `totalShort` ("total" / "1組合計") and whether it follows the figure */
     totalWord: shortWords[1] || shortWords[0], totalWordAfter: !!shortWords[1],
     /** "¥290,000 total" */
-    totalShort: copy.totalShort.replace("{total}", yen(total)),
+    totalShort: shortTemplate.replace("{total}", yen(total)),
     total,
   };
 }

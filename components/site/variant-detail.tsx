@@ -32,6 +32,12 @@ import { productJsonLd } from "@/lib/seo";
  *  how the day goes, FAQ with the read-only price table, the single request
  *  form, the terms. The panel, the sticky bar and the form share one booking
  *  state, so the area and the party size are chosen once. */
+/** A paragraph as its sentences: split after "。" in Japanese and Chinese, after ". " elsewhere. */
+function sentences(text: string, lang: Lang): string[] {
+  const parts = lang === "ja" || lang === "zh-tw" ? text.split(/(?<=[。])/) : text.split(/(?<=[.!?])\s+(?=[A-ZÀ-Ý¥])/);
+  return parts.map((x) => x.trim()).filter(Boolean);
+}
+
 /** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
 export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experience; lang: Lang; clubRental?: boolean }) {
   const T = t(lang);
@@ -231,8 +237,15 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
             {/* 8. Terms, linked from under the form's button */}
             <section className="xp-section" id="terms">
               <h2>{H.terms}</h2>
-              <CancellationTable exp={exp} text={cancellation} lang={lang} />
-              {clubRental && <p className="xp-cancel">{R.terms}</p>}
+              {isArrangement() ? (
+                // The booking service's terms, one sentence per bullet (owner, 2026-10-25), the club-rental terms after them
+                <ul className="xp-cancel-list">
+                  {sentences(cancellation, lang).map((x) => <li key={x}>{x}</li>)}
+                  {clubRental && sentences(R.terms, lang).map((x) => <li key={x} className="xp-cancel-rental">{x}</li>)}
+                </ul>
+              ) : (
+                <CancellationTable exp={exp} text={cancellation} lang={lang} />
+              )}
               {avail && <p className="vh-note vh-known"><Clock3 size={14} /> {D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</p>}
             </section>
 

@@ -16,6 +16,8 @@ export const GOLF_CLUB_RENTAL_JPY = 15000;
 /** The supplier needs the order four business days before use and we order only once the
  *  course is confirmed, so the option closes this many days before the round. */
 export const GOLF_CLUB_RENTAL_CUTOFF_DAYS = 7;
+/** Free to change or cancel the set until this many days before the round (owner, 2026-10-25); no refund after. */
+export const GOLF_CLUB_RENTAL_FREE_UNTIL_DAYS = 5;
 /** Stamped on requests that carry the option, beside the fee's price version. */
 export const GOLF_CLUB_RENTAL_VERSION = "club-rental-2026-10-25";
 
@@ -87,11 +89,14 @@ export interface ClubRentalCopy {
   fvBenefit: string; inclusionNote: string; perSet: string; remove: string;
   /** The rental select starts empty: its placeholder; the swipe hint over the set slider */
   pickRental: string; swipe: string;
+  /** "{total} total": the headline word when the rental is added to the fee */
+  grandTotal: string;
 }
 
 const yen = (n: number) => `¥${n.toLocaleString("en-US")}`;
 const FEE = yen(GOLF_CLUB_RENTAL_JPY);
 const D = GOLF_CLUB_RENTAL_CUTOFF_DAYS;
+const F = GOLF_CLUB_RENTAL_FREE_UNTIL_DAYS;
 
 export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
   en: {
@@ -102,7 +107,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     gridH: "Sets you can choose",
     gridNote: "Examples from our supplier's current line-up. Availability is confirmed with your proposal; if a set is out we offer an equivalent one.",
     deadline: `Order by ${D} days before your round.`,
-    cancel: "Free to change or cancel until the set is shipped (about three days before); no refund of the set fee after that.",
+    cancel: `Free to change or cancel until ${F} days before your round; no refund of the set fee after that.`,
     returns: "A driver, fairway wood, hybrid, irons, wedges, putter and a caddie bag. All sets are used and in good playing condition.",
     details: "Details", close: "Close",
     hand: { right: "Right-handed", left: "Left-handed" }, gender: { men: "Men's", ladies: "Ladies'" }, tier: { entry: "Entry", standard: "Standard", premium: "Premium" }, flex: "Flex",
@@ -113,11 +118,12 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     line: `Club rental × {n}`, total: "{fee} fee + {rental} club rental × {n}", feeWord: "fee",
     faqQ: "Can I choose the make and model of the rental clubs?",
     faqA: `Yes. Course rental sets are the club's choice. For ${FEE} per set we order the set you pick and have it delivered to the course the day before; you hand it back at the front desk after the round. Order by ${D} days before your round.`,
-    terms: `Chosen-set club rental (${FEE} per set): ordered once your booking is confirmed and no later than ${D} days before the round. Changes and cancellation are free until the set is shipped, about three days before the round; after shipment the set fee is not refunded, including when the course closes for weather. Lost or damaged clubs are charged at the supplier's rate.`,
+    terms: `Chosen-set club rental (${FEE} per set): ordered once your booking is confirmed and no later than ${D} days before the round. Changes and cancellation are free until ${F} days before the round; after that the set fee is not refunded, including when the course closes for weather. Lost or damaged clubs are charged at the supplier's rate.`,
     fvBenefit: "Rental clubs of your choice: TaylorMade, Callaway, PING, XXIO",
     inclusionNote: `Course rental, or choose the set (TaylorMade, Callaway, PING…) for ${FEE}`,
     perSet: `+${FEE} per set, paid with our fee`, remove: "Remove",
     pickRental: "Rental clubs: choose…", swipe: "Swipe to see all {n} sets",
+    grandTotal: "{total} total",
   },
   ja: {
     heading: "レンタルクラブは2通り",
@@ -127,7 +133,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     gridH: "選べるセット",
     gridNote: "提携先の現在のラインナップの一例です。在庫はご提案時に確認し、欠品の場合は同等のセットをご案内します。",
     deadline: `お申し込みはプレー${D}日前まで。`,
-    cancel: "発送（プレー約3日前）までは変更・取消無料。発送後はセット料金の返金はありません。",
+    cancel: `プレー${F}日前までは変更・取消無料。以降はセット料金の返金はありません。`,
     returns: "ドライバー、フェアウェイウッド、ユーティリティ、アイアン、ウェッジ、パター、キャディバッグ。いずれも中古で、プレーに支障のない状態です。",
     details: "詳細", close: "閉じる",
     hand: { right: "右利き", left: "左利き" }, gender: { men: "メンズ", ladies: "レディース" }, tier: { entry: "エントリー", standard: "スタンダード", premium: "プレミアム" }, flex: "フレックス",
@@ -138,11 +144,12 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     line: "指定レンタル × {n}", total: "手配料 {fee} + 指定レンタル {rental} × {n}", feeWord: "手配料",
     faqQ: "レンタルクラブのメーカーやモデルは選べますか?",
     faqA: `はい。ゴルフ場のレンタルはゴルフ場任せですが、1セット${FEE}で選んだセットを手配し、前日にゴルフ場へ届けます。プレー後はフロントで返送。お申し込みはプレー${D}日前までです。`,
-    terms: `指定セットのレンタル（1セット${FEE}）は、予約確定後かつプレー${D}日前までに手配します。発送（プレー約3日前）までは変更・取消無料、発送後はセット料金の返金はありません（天候によるクローズ時も同様）。紛失・破損は提携先の規定額をご負担いただきます。`,
+    terms: `指定セットのレンタル（1セット${FEE}）は、予約確定後かつプレー${D}日前までに手配します。プレー${F}日前までは変更・取消無料、以降はセット料金の返金はありません（天候によるクローズ時も同様）。紛失・破損は提携先の規定額をご負担いただきます。`,
     fvBenefit: "レンタルクラブはモデルを指定可: テーラーメイド、キャロウェイ、PING、XXIO",
     inclusionNote: `ゴルフ場のレンタル、または指定モデル（テーラーメイド、キャロウェイ、PING…）を1セット${FEE}で`,
     perSet: `+${FEE}／セット、手配料と一緒にお支払い`, remove: "取り消す",
     pickRental: "レンタルクラブを選択…", swipe: "横にスワイプで全{n}セット",
+    grandTotal: "総額 {total}",
   },
   es: {
     heading: "Palos de alquiler: dos opciones",
@@ -152,7 +159,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     gridH: "Sets que puedes elegir",
     gridNote: "Ejemplos de la gama actual de nuestro proveedor. La disponibilidad se confirma con la propuesta; si falta un set ofrecemos uno equivalente.",
     deadline: `Pídelo hasta ${D} días antes de la vuelta.`,
-    cancel: "Cambio o cancelación gratis hasta el envío (unos tres días antes); después no se devuelve el importe del set.",
+    cancel: `Cambio o cancelación gratis hasta ${F} días antes de la vuelta; después no se devuelve el importe del set.`,
     returns: "Driver, madera de calle, híbrido, hierros, wedges, putter y bolsa. Todos los sets son usados y en buen estado de juego.",
     details: "Detalles", close: "Cerrar",
     hand: { right: "Diestro", left: "Zurdo" }, gender: { men: "Hombre", ladies: "Mujer" }, tier: { entry: "Básico", standard: "Estándar", premium: "Premium" }, flex: "Flex",
@@ -163,11 +170,12 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     line: "Alquiler de palos × {n}", total: "{fee} de tarifa + {rental} alquiler de palos × {n}", feeWord: "tarifa",
     faqQ: "¿Puedo elegir la marca y el modelo de los palos de alquiler?",
     faqA: `Sí. Los sets del campo los elige el club. Por ${FEE} por set pedimos el que elijas y llega al campo el día anterior; lo entregas en recepción tras la vuelta. Pídelo hasta ${D} días antes.`,
-    terms: `Alquiler de set elegido (${FEE} por set): se pide una vez confirmada la reserva y como máximo ${D} días antes de la vuelta. Cambios y cancelación gratis hasta el envío, unos tres días antes; tras el envío no se devuelve el importe del set, tampoco si el campo cierra por el tiempo. Pérdida o daños se cobran según la tarifa del proveedor.`,
+    terms: `Alquiler de set elegido (${FEE} por set): se pide una vez confirmada la reserva y como máximo ${D} días antes de la vuelta. Cambios y cancelación gratis hasta ${F} días antes de la vuelta; después no se devuelve el importe del set, tampoco si el campo cierra por el tiempo. Pérdida o daños se cobran según la tarifa del proveedor.`,
     fvBenefit: "Palos de alquiler a tu elección: TaylorMade, Callaway, PING, XXIO",
     inclusionNote: `Alquiler del campo, o el set que elijas (TaylorMade, Callaway, PING…) por ${FEE}`,
     perSet: `+${FEE} por set, se paga con nuestra tarifa`, remove: "Quitar",
     pickRental: "Palos de alquiler: elige…", swipe: "Desliza para ver los {n} sets",
+    grandTotal: "{total} en total",
   },
   fr: {
     heading: "Clubs de location : deux façons",
@@ -177,7 +185,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     gridH: "Sets au choix",
     gridNote: "Exemples de la gamme actuelle de notre fournisseur. La disponibilité est confirmée avec la proposition ; si un set manque, nous proposons un équivalent.",
     deadline: `À commander jusqu'à ${D} jours avant la partie.`,
-    cancel: "Modification ou annulation gratuite jusqu'à l'expédition (environ trois jours avant) ; ensuite, le prix du set n'est pas remboursé.",
+    cancel: `Modification ou annulation gratuite jusqu'à ${F} jours avant la partie ; ensuite, le prix du set n'est pas remboursé.`,
     returns: "Driver, bois de parcours, hybride, fers, wedges, putter et sac. Tous les sets sont d'occasion et en bon état de jeu.",
     details: "Détails", close: "Fermer",
     hand: { right: "Droitier", left: "Gaucher" }, gender: { men: "Homme", ladies: "Femme" }, tier: { entry: "Entrée", standard: "Standard", premium: "Premium" }, flex: "Flex",
@@ -188,11 +196,12 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     line: "Location de clubs × {n}", total: "{fee} de frais + {rental} location de clubs × {n}", feeWord: "frais",
     faqQ: "Puis-je choisir la marque et le modèle des clubs de location ?",
     faqA: `Oui. Les sets du parcours sont au choix du club. Pour ${FEE} par set, nous commandons celui que vous choisissez et il est livré au parcours la veille ; vous le rendez à l'accueil après la partie. À commander jusqu'à ${D} jours avant.`,
-    terms: `Location d'un set choisi (${FEE} par set) : commandée une fois la réservation confirmée et au plus tard ${D} jours avant la partie. Modification et annulation gratuites jusqu'à l'expédition, environ trois jours avant ; après expédition, le prix du set n'est pas remboursé, y compris si le parcours ferme pour cause de météo. Perte ou dommages facturés au tarif du fournisseur.`,
+    terms: `Location d'un set choisi (${FEE} par set) : commandée une fois la réservation confirmée et au plus tard ${D} jours avant la partie. Modification et annulation gratuites jusqu'à ${F} jours avant la partie ; ensuite, le prix du set n'est pas remboursé, y compris si le parcours ferme pour cause de météo. Perte ou dommages facturés au tarif du fournisseur.`,
     fvBenefit: "Clubs de location au choix : TaylorMade, Callaway, PING, XXIO",
     inclusionNote: `Location du parcours, ou le set de votre choix (TaylorMade, Callaway, PING…) pour ${FEE}`,
     perSet: `+${FEE} par set, réglés avec nos frais`, remove: "Retirer",
     pickRental: "Clubs de location : choisir…", swipe: "Faites défiler pour voir les {n} sets",
+    grandTotal: "{total} au total",
   },
   "zh-tw": {
     heading: "租借球桿：兩種方式",
@@ -202,7 +211,7 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     gridH: "可選的球桿組",
     gridNote: "合作供應商現有產品的範例。可用性於提案時確認；若缺貨將提供同等球桿組。",
     deadline: `請於開球 ${D} 天前申請。`,
-    cancel: "出貨前（約開球前 3 天）可免費更改或取消；出貨後球桿組費用不退。",
+    cancel: `開球 ${F} 天前可免費更改或取消；之後球桿組費用不退。`,
     returns: "一號木、球道木、混合桿、鐵桿、挖起桿、推桿與球袋。皆為二手，狀態良好可正常使用。",
     details: "詳細", close: "關閉",
     hand: { right: "右手", left: "左手" }, gender: { men: "男士", ladies: "女士" }, tier: { entry: "入門", standard: "標準", premium: "高階" }, flex: "硬度",
@@ -213,10 +222,11 @@ export const CLUB_RENTAL_COPY: Record<Lang, ClubRentalCopy> = {
     line: "指定租借 × {n}", total: "代辦費 {fee} + 指定租借 {rental} × {n}", feeWord: "代辦費",
     faqQ: "可以指定租借球桿的品牌與型號嗎？",
     faqA: `可以。球場的租借球桿由球場決定；每組 ${FEE}，我們代訂你選的球桿組並於前一天送到球場，打完後交給櫃檯即可。請於開球 ${D} 天前申請。`,
-    terms: `指定球桿組租借（每組 ${FEE}）：於預約確認後、最遲開球 ${D} 天前代訂。出貨前（約開球前 3 天）可免費更改或取消；出貨後球桿組費用不退，球場因天候關閉亦同。遺失或損壞依供應商規定收費。`,
+    terms: `指定球桿組租借（每組 ${FEE}）：於預約確認後、最遲開球 ${D} 天前代訂。開球 ${F} 天前可免費更改或取消；之後球桿組費用不退，球場因天候關閉亦同。遺失或損壞依供應商規定收費。`,
     fvBenefit: "租借球桿可指定型號：TaylorMade、Callaway、PING、XXIO",
     inclusionNote: `球場租借，或指定球桿組（TaylorMade、Callaway、PING…）每組 ${FEE}`,
     perSet: `+${FEE}／組，與代辦費一起支付`, remove: "取消選擇",
     pickRental: "租借球桿：請選擇…", swipe: "左右滑動查看全部 {n} 組",
+    grandTotal: "總額 {total}",
   },
 };
