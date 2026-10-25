@@ -1,4 +1,4 @@
-import { attributionNote } from "@/lib/attribution";
+import { attributionNote, channel } from "@/lib/attribution";
 // The team's own copy of an enquiry: the notification email that lands in
 // the hello@ mailbox. Written in Japanese whatever language the visitor used,
 // since the people reading it work in Japanese; the visitor's free text is
@@ -120,6 +120,8 @@ export function slackSummary(e: Enquiry, jaTitle: string | undefined, ja: Partia
         ["WhatsApp", e.whatsapp],
         ["備考", t("message", e.message || undefined)],
       ];
+  // The lead ID that the ledger and the mailbox carry too, and the last campaign the browser reported (short form).
+  rows.push(["申込ID", e.requestId], ["流入", e.attribution ? channel(e.attribution.last) : undefined]);
   return rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`).join("\n");
 }
 
