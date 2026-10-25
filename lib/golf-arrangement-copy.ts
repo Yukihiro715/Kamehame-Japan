@@ -44,6 +44,8 @@ interface ArrangementCopy {
   form: Pick<VariantPageCopy["form"], "steps" | "departure" | "specificCourse" | "specificCourseNote" | "specificCourseQuote" | "courseName" | "courseUrl" | "pickup" | "pickupHint" | "rentalH" | "rental" | "rentalOpts" | "rentalNote" | "requestsHint" | "confirmNote" | "package" | "perPersonRef" | "recommendedCourse" | "cta">;
   headings: VariantPageCopy["headings"];
   process: ArrangementProcess;
+  /** Phones: the short card under the photos (the full panel stays beside them on wide screens), and the three-line check above the form. */
+  summary: { lines: string[]; beforeH: string; before: string[] };
 }
 
 const FEE = yen(GOLF_ARRANGEMENT_FEE_JPY);
@@ -198,6 +200,11 @@ const en: ArrangementCopy = {
     cta: "Send Tee-Time Request",
   },
   headings: { about: "About this service", included: "What the fee covers", day: "Your golf day", faq: "Questions", terms: "Cancellation", request: "Request a tee time" },
+  summary: {
+    lines: [`Fee from ${FEE} per group`, "Green fees and rentals paid at the club", "Courses anywhere in Japan · transfers on request"],
+    beforeH: "Three things before you send",
+    before: ["Green fees, cart and rentals are paid at the club, not to us.", "The fee is paid after we agree your requirements, before we research courses.", "Five golfers or more are quoted for the group."],
+  },
   process: {
     received: arrangementPolicy["en"].request,
     proposal: arrangementPolicy["en"].beforePayment,
@@ -362,6 +369,11 @@ const ja: ArrangementCopy = {
     cta: "ティータイムをリクエストする",
   },
   headings: { about: "このサービスについて", included: "手配料に含まれるもの", day: "当日の流れ", faq: "よくあるご質問", terms: "キャンセルについて", request: "ティータイムをリクエスト" },
+  summary: {
+    lines: [`手配料 1組 ${FEE}〜`, "プレー代・レンタルはゴルフ場払い", "全国対応 · 送迎のご紹介可"],
+    beforeH: "送る前に3つだけ",
+    before: ["プレー代・カート・レンタルはゴルフ場でのお支払いです。", "手配料は条件の合意後、コース調査の前にお支払いいただきます。", "5名以上はグループでお見積もりします。"],
+  },
   process: {
     received: arrangementPolicy["ja"].request,
     proposal: arrangementPolicy["ja"].beforePayment,
@@ -526,6 +538,11 @@ const es: ArrangementCopy = {
     cta: "Enviar solicitud de hora de salida",
   },
   headings: { about: "Sobre este servicio", included: "Qué cubre la tarifa", day: "Tu día de golf", faq: "Preguntas", terms: "Cancelación", request: "Solicitar una hora de salida" },
+  summary: {
+    lines: [`Tarifa desde ${FEE} por grupo`, "Green fees y alquileres se pagan en el club", "Campos en todo Japón · traslados a petición"],
+    beforeH: "Tres cosas antes de enviar",
+    before: ["Green fees, carrito y alquileres se pagan en el club, no a nosotros.", "La tarifa se paga tras acordar tus requisitos, antes de investigar campos.", "Cinco golfistas o más se presupuestan por grupo."],
+  },
   process: {
     received: arrangementPolicy["es"].request,
     proposal: arrangementPolicy["es"].beforePayment,
@@ -690,6 +707,11 @@ const fr: ArrangementCopy = {
     cta: "Envoyer la demande de départ",
   },
   headings: { about: "À propos de ce service", included: "Ce que couvrent les frais", day: "Votre journée de golf", faq: "Questions", terms: "Annulation", request: "Demander un départ" },
+  summary: {
+    lines: [`Frais dès ${FEE} par groupe`, "Green fees et locations réglés au club", "Parcours dans tout le Japon · transfert sur demande"],
+    beforeH: "Trois choses avant d'envoyer",
+    before: ["Green fees, voiturette et locations se règlent au club, pas chez nous.", "Les frais sont réglés après accord sur vos exigences, avant la recherche de parcours.", "À partir de cinq golfeurs, devis pour le groupe."],
+  },
   process: {
     received: arrangementPolicy["fr"].request,
     proposal: arrangementPolicy["fr"].beforePayment,
@@ -854,6 +876,11 @@ const zh: ArrangementCopy = {
     cta: "送出開球時間申請",
   },
   headings: { about: "關於這項服務", included: "代辦費包含的內容", day: "你的高爾夫日", faq: "常見問題", terms: "取消政策", request: "申請開球時間" },
+  summary: {
+    lines: [`代辦費每組 ${FEE} 起`, "果嶺費與租借在球場支付", "全日本球場 · 可介紹接送"],
+    beforeH: "送出前的 3 件事",
+    before: ["果嶺費、球車與租借在球場支付，不是付給我們。", "代辦費在合意條件後、調查球場前支付。", "5 位以上依團體報價。"],
+  },
   process: {
     received: arrangementPolicy["zh-tw"].request,
     proposal: arrangementPolicy["zh-tw"].beforePayment,
@@ -909,6 +936,7 @@ export function applyGolfArrangement(e: Experience, lang: Lang): Experience {
       transfer: { heading: c.transfer.heading, body: c.transfer.body, photo: vc.transfer.photo, points: c.transfer.points, note: c.transfer.note },
       options: { ...vc.options, ...c.options, from: "", approx: vc.options.approx },
       otherArea: c.otherArea,
+      summary: c.summary,
       intro: c.intro,
       day: c.day,
       prices: c.prices,

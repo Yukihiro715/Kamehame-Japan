@@ -1879,3 +1879,18 @@ body[data-kh-modal] .sticky-request { display:none; }
 .xp-variant .gi-notes .gi-foot { color:#3d3a34; }
 
 .go-other-hint { margin:0 0 10px; }
+
+/* Golf booking service: the short card on phones, the full panel on wide screens (owner, 2026-10-25) */
+.go-brief { display:none; gap:12px; }
+.go-brief-lines { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.go-brief-lines li { display:flex; align-items:center; gap:8px; font-size:14px; line-height:1.4; color:var(--ink); }
+.go-brief-lines li:first-child { font-size:16px; font-weight:600; }
+.go-brief-lines svg { color:var(--kame); flex:none; }
+.go-brief .bk-cta { min-height:52px; }
+@media(max-width:980px){ .go-brief { display:grid; } .go-card.go-wide { display:none; } }
+.go-jump { margin:-6px 0 0; text-align:right; }
+.go-jump a { font-size:13px; font-weight:600; color:var(--kame); text-decoration:underline; text-underline-offset:3px; }
+.go-before { margin:0 0 18px; padding:12px 14px; border:1px solid #e9e4da; border-radius:12px; background:#f7f4ec; }
+.go-before b { display:block; font-size:13.5px; color:var(--ink); margin-bottom:6px; }
+.go-before ul { margin:0; padding:0 0 0 18px; list-style:disc; font-size:13px; line-height:1.6; color:#3d3a34; }
+.go-before li + li { margin-top:2px; }

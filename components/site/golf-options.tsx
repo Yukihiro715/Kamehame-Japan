@@ -75,8 +75,8 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
  *  chosen (beside the photos on wide screens, under them on phones). Every
  *  other display — the sticky bar, the request form — reads the same state;
  *  nothing else on the page asks for these two choices again. */
-export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
-  variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[];
+export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary }: {
+  variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[]; summary?: VariantPageCopy["summary"];
 }) {
   const b = useBooking();
   const { usdActive } = useCurrency();
@@ -98,7 +98,18 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
     d.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   return (
-    <section className="bk-card go-card" id="golf-options" aria-labelledby="go-heading">
+    <div id="golf-options">
+    {isArrangement() && summary && (
+      // Phones: a short card instead of the full panel, so the page below gets read; the choices wait in the form (owner, 2026-10-25).
+      <section className="bk-card go-brief" aria-label={copy.heading}>
+        <ul className="go-brief-lines">
+          {summary.lines.map((x) => <li key={x}><Check size={14} aria-hidden="true" />{x}</li>)}
+        </ul>
+        <a className="bk-cta" href="#request-form" onClick={jump}>{ctaLabel} <ArrowRight size={16} /></a>
+        <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>
+      </section>
+    )}
+    <section className={`bk-card go-card${isArrangement() && summary ? " go-wide" : ""}`} aria-labelledby="go-heading">
       <h2 id="go-heading" className="go-h">{copy.heading}</h2>
       <RatingSummary experience={b.experience.slug} lang={lang} href="#reviews" size={13} />
 
@@ -195,6 +206,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties }: {
       <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>
       <a className="go-all-prices" href="#prices" onClick={showPrices}>{copy.allPrices}</a>
     </section>
+    </div>
   );
 }
 

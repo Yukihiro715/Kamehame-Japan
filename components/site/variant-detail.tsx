@@ -83,6 +83,8 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
   const addOns = exp.addOns ?? [];
   const ctaLabel = exp.cta?.label ?? D.requestCta;
   const stop = lang === "ja" || lang === "zh-tw" ? "。" : ".";
+  // The booking service: a quiet link to the form after each section, so a reader can enquire at any point.
+  const jump = isArrangement() ? <p className="go-jump"><a href="#request-form">{ctaLabel} →</a></p> : null;
 
   const booking: BookingExperience = {
     slug: exp.slug, title: exp.title,
@@ -123,7 +125,7 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
 
           {/* 2. The one place to choose the party size and the area */}
           <aside className="xp-side vh-side">
-            <GolfOptions variants={variants} copy={O} lang={lang} ctaLabel={ctaLabel} parties={parties} />
+            <GolfOptions variants={variants} copy={O} lang={lang} ctaLabel={ctaLabel} parties={parties} summary={vc.summary} />
           </aside>
 
           <div className="xp-main">
@@ -136,12 +138,14 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
 
             {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}
             <GolfInclusions copy={clubRental ? { ...vc.inclusions, items: vc.inclusions.items.map((it) => (it.id === "clubs" ? { ...it, note: R.inclusionNote } : it)) } : vc.inclusions} />
+            {jump}
 
             {/* 3a'. The chosen-model club rental (preview) */}
-            {clubRental && <GolfClubRental lang={lang} />}
+            {clubRental && <><GolfClubRental lang={lang} />{jump}</>}
 
             {/* 3b. The private car, the driver and the assistant */}
             <GolfTransfer copy={vc.transfer} />
+            {jump}
 
             {/* 4. Reviews (as supplied; not rewritten for the new packages) */}
             {hasReviews && (
@@ -179,6 +183,7 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
                   </ol>
                 </>
               )}
+              {jump}
             </section>
 
             {/* 6. FAQ, with the read-only price table (no choices here) */}
@@ -244,6 +249,12 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
             <section className="xp-section xp-request" id="request">
               <h2 id="request-form">{H.request}</h2>
               <p className="xp-note">{exp.cta?.lead ?? D.requestLead}</p>
+              {isArrangement() && vc.summary && (
+                <div className="go-before">
+                  <b>{vc.summary.beforeH}</b>
+                  <ul>{vc.summary.before.map((x) => <li key={x}>{x}</li>)}</ul>
+                </div>
+              )}
               <GolfRequestForm lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} variants={variants} copy={vc} addOns={addOns} parties={parties} />
             </section>
 
