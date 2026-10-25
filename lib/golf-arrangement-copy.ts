@@ -111,7 +111,7 @@ const en: ArrangementCopy = {
   ],
   benefits: ["Courses anywhere in Japan", `From ${FEE} per group`, "Transfers arranged on request"],
   crumb: "Golf Course Booking",
-  photoNote: "Example courses in both areas; yours is confirmed with your reservation.",
+  photoNote: "Example courses; yours is confirmed with your reservation.",
   inclusions: {
     heading: "What the fee covers",
     sub: "One fee for the group. The day itself is paid at the club, as for every golfer in Japan.",
@@ -275,7 +275,7 @@ const ja: ArrangementCopy = {
   ],
   benefits: ["全国のゴルフ場を手配可能", `1組 ${FEE}〜`, "送迎のご紹介も可能"],
   crumb: "ゴルフ場予約手配",
-  photoNote: "両エリアのコース例です。実際のコースは予約確定時にご案内します。",
+  photoNote: "コースの一例です。実際のコースは予約確定時にご案内します。",
   inclusions: {
     heading: "手配料に含まれるもの",
     sub: "手配料は1組の金額です。当日の費用は日本のゴルファーと同じようにゴルフ場でお支払いいただきます。",
@@ -439,7 +439,7 @@ const es: ArrangementCopy = {
   ],
   benefits: ["Campos en todo Japón", `Desde ${FEE} por grupo`, "Traslados a petición"],
   crumb: "Reserva de campo de golf",
-  photoNote: "Campos de ejemplo en ambas zonas; el tuyo se confirma con la reserva.",
+  photoNote: "Campos de ejemplo; el tuyo se confirma con la reserva.",
   inclusions: {
     heading: "Qué cubre la tarifa",
     sub: "Una tarifa por grupo. El día en sí se paga en el club, como cualquier golfista en Japón.",
@@ -603,7 +603,7 @@ const fr: ArrangementCopy = {
   ],
   benefits: ["Parcours dans tout le Japon", `Dès ${FEE} par groupe`, "Transfert sur demande"],
   crumb: "Réservation de parcours",
-  photoNote: "Parcours donnés en exemple dans les deux régions ; le vôtre est confirmé avec la réservation.",
+  photoNote: "Parcours donnés en exemple ; le vôtre est confirmé avec la réservation.",
   inclusions: {
     heading: "Ce que couvrent les frais",
     sub: "Un forfait par groupe. La journée elle-même se règle au club, comme pour tout golfeur au Japon.",
@@ -767,7 +767,7 @@ const zh: ArrangementCopy = {
   ],
   benefits: ["全日本球場皆可代訂", `每組 ${FEE} 起`, "可介紹接送服務"],
   crumb: "球場預約代辦",
-  photoNote: "兩個區域的球場範例；實際球場於預約確認時告知。",
+  photoNote: "球場範例；實際球場於預約確認時告知。",
   inclusions: {
     heading: "代辦費包含的服務",
     sub: "一筆團體代辦費。當天費用在球場支付，與日本球友相同。",
