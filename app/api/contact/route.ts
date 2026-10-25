@@ -8,7 +8,7 @@ import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isArrangement, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
 import { yen } from "@/lib/pricing";
 import { normalizePhone } from "@/lib/phone";
-import { golfPriceNoteJa, notificationBody } from "@/lib/notification";
+import { golfPriceNoteJa, notificationBody, slackSummary } from "@/lib/notification";
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
 import { automationConfigured, submitGolfAutomation } from "@/lib/golf-automation";
 import { ledgerRecord, postToLedger } from "@/lib/ledger";
@@ -278,9 +278,9 @@ export async function POST(request: Request): Promise<Response> {
   // What the visitor typed, in Japanese for the team (best effort, see lib/translate.ts).
   const ja = await translateForTeam(cf.env.AI, enquiry);
 
-  // The team's Slack alert, in Japanese, with the full record attached.
+  // The full Japanese record (for the package automation's sheet) and the short Slack alert.
   const record = notificationBody(enquiry, jaTitle(enquiry), { ack: null, followUp: null, ja }).split("\n").filter((l) => !l.startsWith("自動返信") && !l.startsWith("フォローアップ")).join("\n");
-  const alert = (delivered: boolean) => notifySlack(cf.env.SLACK_WEBHOOK_URL, slackMessage(enquiry, jaTitle(enquiry), delivered, record));
+  const alert = (delivered: boolean) => notifySlack(cf.env.SLACK_WEBHOOK_URL, slackMessage(enquiry, jaTitle(enquiry), delivered, slackSummary(enquiry, jaTitle(enquiry), ja)));
   // The team copy goes to the mailbox and to the archive address, if any.
   const recipients = [...new Set([to, cf.env.ARCHIVE_TO].filter((a): a is string => !!a && a.includes("@")))];
 

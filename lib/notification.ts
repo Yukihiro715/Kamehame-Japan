@@ -81,6 +81,47 @@ export interface NotificationExtras {
   ja?: Partial<Record<TranslatedField, string>>;
 }
 
+/** The short Japanese record for the team's Slack alert (owner, 2026-10-25: one glance, no
+ *  duplicates). One line per answer; what the visitor typed in another language is followed by
+ *  its translation in brackets; the automatic-mail and follow-up status lines, the price memo
+ *  and the proposal-policy memo stay in the mailbox copy (notificationBody). */
+export function slackSummary(e: Enquiry, jaTitle: string | undefined, ja: Partial<Record<TranslatedField, string>> = {}): string {
+  const trade = e.kind === "trade";
+  const needsJa = e.lang !== "ja";
+  const t = (field: TranslatedField, value: string | undefined) =>
+    value ? (needsJa && ja[field] && ja[field] !== value ? `${value} (${ja[field]})` : value) : undefined;
+  const level = e.levelKey ? levelJa(e.levelKey, e.handicap, e.areaId) ?? e.level : t("level", e.level);
+  const rental = e.rentalKeys ? rentalJa(e.rentalKeys, e.areaId) ?? e.rental : t("rental", e.rental);
+  const course = e.courseMode && (e.courseMode === "specific" ? `希望コース指定${e.course ? ` — ${t("course", e.course)}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}` : "おすすめコース");
+  const rows: [string, string | undefined][] = trade
+    ? [["会社", e.company], ["国", e.country], ["お名前", e.name], ["メール", e.email], ["日程", t("dates", e.dates)], ["人数", t("party", e.party)], ["備考", t("message", e.message || undefined)]]
+    : [
+        ["体験名", e.experience ? `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}` : "一般のお問い合わせ"],
+        ["お名前", e.name],
+        ["メール", e.email],
+        ["日程", e.dates],
+        ["人数", e.party],
+        ["プラン", t("plan", e.plan)],
+        ["エリア", e.areaId ? `${golfAreaJa(e.areaId)} (${e.areaId})` : e.area],
+        ["コース", course || undefined],
+        ["ゴルフ経験", level],
+        ["レンタルクラブ", rental],
+        ["レンタルシューズ", e.shoeKeys ? shoesJa(e.shoeKeys, e.areaId) ?? e.shoes : e.shoes],
+        ["クラブの希望", t("clubs", e.clubs)],
+        ["お迎え場所", t("pickup", e.pickup)],
+        ["送迎都県", e.pickupRegion],
+        ["キャディ", e.areaId ? (e.caddie === "required" ? "あり希望" : e.caddie === "none" ? "なし" : "未確認") : undefined],
+        ["アシスタント同行", e.assistant ? (e.assistant === "required" ? "希望(別途見積)" : e.assistant === "none" ? "不要" : "相談したい") : undefined],
+        ["送迎(提携会社紹介)", e.transfer ? (e.transfer === "introduce" ? "希望" : e.transfer === "none" ? "不要" : "相談したい") : undefined],
+        ["通訳", t("interpreter", e.interpreter)],
+        ["オプション", t("addons", e.addons)],
+        ["概算", e.estimate],
+        ["WhatsApp", e.whatsapp],
+        ["備考", t("message", e.message || undefined)],
+      ];
+  return rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`).join("\n");
+}
+
 export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras: NotificationExtras = {}): string {
   const { ack = null, followUp = null, ja = {} } = extras;
   const trade = e.kind === "trade";
