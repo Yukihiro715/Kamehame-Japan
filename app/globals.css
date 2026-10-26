@@ -1888,7 +1888,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 .go-brief-lines svg { color:var(--kame); flex:none; }
 .go-brief .bk-cta { min-height:52px; }
 @media(max-width:980px){ .go-brief { display:grid; } .go-card.go-wide { display:none; } }
-.go-jump { margin:-6px 0 0; text-align:right; }
+.go-jump { margin:14px 0 0; text-align:right; }
 .go-jump a { font-size:13px; font-weight:600; color:var(--kame); text-decoration:underline; text-underline-offset:3px; }
 .go-before { margin:0 0 18px; padding:12px 14px; border:1px solid #e9e4da; border-radius:12px; background:#f7f4ec; }
 .go-before b { display:block; font-size:13.5px; color:var(--ink); margin-bottom:6px; }

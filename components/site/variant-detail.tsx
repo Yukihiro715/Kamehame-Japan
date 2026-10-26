@@ -133,7 +133,7 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
             <section className="xp-section" id="about">
               <h2>{H.about}</h2>
               {exp.overview?.[0] && <p className="xp-lede">{exp.overview[0]}</p>}
-              <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>
+              {vc.intro.guideNote && <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>}
             </section>
 
             {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}

@@ -162,7 +162,7 @@ const en: ArrangementCopy = {
   },
   intro: {
     heading: "Your tee time in Japan, arranged.",
-    guideNote: "We add nothing to the club's prices. An English-speaking assistant can join you on the day for a separate fee.",
+    guideNote: "", // dropped from the page (owner, 2026-10-26); the FAQ answers the mark-up question
   },
   day: {
     steps: [
@@ -331,7 +331,7 @@ const ja: ArrangementCopy = {
   },
   intro: {
     heading: "日本でのティータイムを、あなたの名前で。",
-    guideNote: "ゴルフ場の料金に上乗せはしません。当日の英語アシスタント同行は別途お見積もりです。",
+    guideNote: "", // dropped from the page (owner, 2026-10-26); the FAQ answers the mark-up question
   },
   day: {
     steps: [
@@ -500,7 +500,7 @@ const es: ArrangementCopy = {
   },
   intro: {
     heading: "Tu hora de salida en Japón, gestionada.",
-    guideNote: "No añadimos nada a los precios del club. Un asistente de habla inglesa puede acompañarte ese día por una tarifa aparte.",
+    guideNote: "", // dropped from the page (owner, 2026-10-26); the FAQ answers the mark-up question
   },
   day: {
     steps: [
@@ -669,7 +669,7 @@ const fr: ArrangementCopy = {
   },
   intro: {
     heading: "Votre départ au Japon, organisé.",
-    guideNote: "Nous n'ajoutons rien aux tarifs du club. Un assistant anglophone peut vous accompagner le jour J, sur devis séparé.",
+    guideNote: "", // dropped from the page (owner, 2026-10-26); the FAQ answers the mark-up question
   },
   day: {
     steps: [
@@ -838,7 +838,7 @@ const zh: ArrangementCopy = {
   },
   intro: {
     heading: "你在日本的開球時間，由我們安排。",
-    guideNote: "我們不在球場價格上加價。當天可加購英文助理，另行報價。",
+    guideNote: "", // dropped from the page (owner, 2026-10-26); the FAQ answers the mark-up question
   },
   day: {
     steps: [
