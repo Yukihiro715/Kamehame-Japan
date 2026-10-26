@@ -41,7 +41,13 @@ test('server prices: minimum charge, allowed quantities, adult eligibility and t
 });
 
 test('enabled non-golf experiences support their priced party range and correct city return URL',()=>{
-  const products=catalogFor('en').experiences.filter(x=>x.category!=='golf' && x.slug!=='evening-with-geiko');
+  const enquiryOnly = new Set(['evening-with-geiko', 'nihonbashi-kendo-experience', 'nihonbashi-bushido-experience']);
+  const published=catalogFor('en').experiences.filter(x=>x.category!=='golf');
+  for (const x of published.filter(x=>enquiryOnly.has(x.slug))) {
+    assert.equal(EXPERIENCE_PRODUCTS[x.slug],undefined);
+    assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:2,time:'10:00',adultOnly:true},now),null);
+  }
+  const products=published.filter(x=>!enquiryOnly.has(x.slug));
   assert.equal(products.length,10);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
