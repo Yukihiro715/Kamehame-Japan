@@ -1640,7 +1640,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 
 @media(max-width:980px){
   .vh-cols { display:block; }
-  .vh-side { margin:0 0 28px; }
+  .vh-side { margin:16px 0 28px; }
   .vh-cols .xp-main { padding-top:0; }
   .gg-track { display:flex; height:auto; aspect-ratio:4/3; gap:0; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
   .gg-track::-webkit-scrollbar { display:none; }
