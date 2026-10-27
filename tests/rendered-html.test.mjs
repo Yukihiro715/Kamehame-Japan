@@ -351,10 +351,10 @@ test("kendo tours are published after approval; unapproved partners remain in pr
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     assert.ok(text.includes(price), `price on ${path}`);
-    const approved = path.includes("-kendo-experience-tour/");
+    const approved = path.includes("-kendo-experience-tour/") || path.includes("/nihonbashi-");
     assert.equal(text.includes(PREVIEW_BANNER), !approved, `publication status on ${path}`);
     if (approved) {
-      assert.ok(text.includes("for groups of up to five, two days before is accepted"));
+      if (path.includes("-kendo-experience-tour/")) assert.ok(text.includes("for groups of up to five, two days before is accepted"));
       assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
     }
     assert.doesNotMatch(html, /Kendo Spirit|Umino|海野|Kobunach|浜町|SEC Nihonbashi|Watanabe|有庵|r_cafe|Airbnb|SAMURAI TRIP|Nagamatsu|永松|パークフォーアス|Park For Us|samuraitrip|誠道館|Seidokan|4-7-2/i, `partner names stay private on ${path}`);

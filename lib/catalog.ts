@@ -852,7 +852,7 @@ export const experiences: Experience[] = [
     // founder's name stay off the page so guests cannot book around us.
     // 2026-10-18: re-checked against the partner's public pages; the child
     // (6–15: ¥15,000) and senior (65+: ¥18,000) public rates are now in the FAQ.
-    slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
+    slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "live",
     title: "Kendo Experience in a Nihonbashi Dojo, Tokyo",
     tagline: "Put on the armour, take up the shinai and train in a working Tokyo dojo: the history and etiquette of kendo, footwork, the swing, striking practice and a match to finish — against the other guests, then the instructor. Two hours, taught in English, from age six.",
     overview: [
@@ -941,7 +941,7 @@ export const experiences: Experience[] = [
   {
     // Kendo Spirit's second programme in the same dojo: the Nihon Kendo Kata
     // and the words of the samurai, one hour, no sparring. Same placeholders.
-    slug: "nihonbashi-bushido-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "preview",
+    slug: "nihonbashi-bushido-experience", city: "tokyo", category: "kendo", bookingType: "request", status: "live",
     title: "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata",
     tagline: "An hour in a working Nihonbashi dojo with the Nihon Kendo Kata — formal sword forms that preserve principles inherited from Japan's swordsmanship traditions — and the words the samurai left behind. No armour, no sparring, no single right answer: a quiet hour to find your own.",
     overview: [
@@ -1041,10 +1041,10 @@ export const experiences: Experience[] = [
       "The ninety minutes follow the shape of a real gathering. You meet at the gallery in Yotsuya, learn how the ceremony came to be and the etiquette of a guest, enter the tearoom the traditional way, and watch the host prepare tea — every movement with a reason. Then you whisk a bowl yourself, under her guidance, and sit for a short meditation before questions and photographs. In English, for a group of up to ten, with socks the only thing to bring.",
     ],
     duration: "About 1.5 hours", price: "¥17,000", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
-    img: "/images/tea-yotsuya-class.jpg", alt: "The host in a kimono guiding a class of guests whisking matcha at a long wooden table",
+    img: "/images/tea-yotsuya-host.jpg", alt: "Portrait of the host smiling in a white kimono",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "The host kneeling before guests seated on the tatami of the tearoom" },
-      { img: "/images/tea-yotsuya-host.jpg", alt: "The host in a white kimono beside the iron kettle" },
+      { img: "/images/tea-yotsuya-class.jpg", alt: "The host in a kimono guiding a class of guests whisking matcha at a long wooden table" },
       { img: "/images/tea-yotsuya-whisking.jpg", alt: "Guests whisking their own bowls of matcha at the table" },
       { img: "/images/tea-yotsuya-bowl.jpg", alt: "A bowl of freshly whisked matcha on the tatami" },
       { img: "/images/tea-yotsuya-drink.jpg", alt: "A guest drinking matcha in the tearoom" },
@@ -1103,7 +1103,7 @@ export const experiences: Experience[] = [
       { q: "Do I need to know anything about tea?", a: "No. The host explains the history and the etiquette as you go, and the session is built for first-time guests." },
       { q: "What do we actually do?", a: "Learn the history and the etiquette, enter the tearoom the traditional way, watch the host's full performance, whisk a bowl of matcha yourself, then sit for a short meditation before questions and photographs." },
       { q: "Which language is the session in?", a: "English." },
-      { q: "Can children join?", a: "Yes, from age 5. Tell us their ages in your request." },
+      { q: "Can children join?", a: "Yes, from age 5. For guests aged 5–18, tell us their ages so we can quote the applicable child or youth rate before payment." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
       { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,000 for one guest, ¥15,500 per person for two to four guests, and ¥14,000 per person for five to ten guests. Tax is included." },
