@@ -42,7 +42,9 @@ const localBindingConfig = {
   // ARCHIVE_TO (optional secret) would add a second recipient to the team
   // notification; the booking ledger (lib/ledger.ts) is the record instead.
   d1_databases: ledgerD1Id
-    ? [{ binding: "DB", database_name: ledgerD1Name, database_id: ledgerD1Id, migrations_dir: "migrations" }]
+    // wrangler resolves migrations_dir from the generated config in dist/server/, so
+    // point back at the repository's migrations/ rather than copying them into the bundle.
+    ? [{ binding: "DB", database_name: ledgerD1Name, database_id: ledgerD1Id, migrations_dir: "../../migrations" }]
     : d1
     ? [
         {
