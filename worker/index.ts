@@ -2,10 +2,17 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { publishCheckoutReady, type ReadyStateKv } from "../lib/experience-checkout";
+import { d1Db, isD1Like } from "../lib/referral/db";
+import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
 
 interface Env {
   ASSETS: Fetcher;
-  DB: D1Database;
+  /** D1 (the commission ledger, lib/referral). Absent until the deploy workflow has created the database. */
+  DB?: unknown;
+  /** "staging" on the verification Worker: every page behind Basic auth, noindex everywhere. */
+  KH_ENV?: string;
+  /** "user:password" for the staging gate (a Worker secret on the staging Worker only). */
+  STAGING_BASIC_AUTH?: string;
   /** Checkout readiness published by the cron (vite.config.ts kv_namespaces); absent until the namespace exists. */
   READY_STATE?: ReadyStateKv;
   IMAGES: {
@@ -63,6 +70,47 @@ const SECURITY_TXT = [
 const PRIVATE_PAGE = /^\/(en|es|ja|fr|zh-tw)\/(booked|thanks)\/?$/;
 
 const HTML_END = "</body></html>";
+
+/** Staging: nothing is served without the shared Basic credentials, except the
+ *  provider webhooks, which authenticate with their own signatures. */
+async function stagingGate(request: Request, env: Env, url: URL): Promise<Response | null> {
+  if (env.KH_ENV !== "staging" || url.pathname.startsWith("/api/webhooks/")) return null;
+  const expected = env.STAGING_BASIC_AUTH;
+  const challenge = (status: number, text: string) => new Response(text, { status, headers: { "www-authenticate": 'Basic realm="KAMEHAME staging"', "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex, nofollow" } });
+  if (!expected || !expected.includes(":")) return challenge(503, "staging locked: STAGING_BASIC_AUTH is not set");
+  const given = request.headers.get("authorization") ?? "";
+  let ok = false;
+  if (given.startsWith("Basic ")) {
+    try {
+      const enc = new TextEncoder();
+      const [a, b] = await Promise.all([crypto.subtle.digest("SHA-256", enc.encode(atob(given.slice(6)))), crypto.subtle.digest("SHA-256", enc.encode(expected))]);
+      const x = new Uint8Array(a), y = new Uint8Array(b);
+      let diff = 0;
+      for (let i = 0; i < x.length; i++) diff |= x[i] ^ y[i];
+      ok = diff === 0;
+    } catch { ok = false; }
+  }
+  return ok ? null : challenge(401, "staging: sign in");
+}
+
+/** A hotel's QR code or link: record the arrival, set the referral session
+ *  cookie and send the visitor to the page the link points at (lib/referral/links). */
+async function referralArrival(request: Request, env: Env, url: URL): Promise<Response> {
+  const token = url.pathname.match(REFERRAL_PATH)![1];
+  const headers = new Headers({ "cache-control": "no-store", "x-robots-tag": "noindex, nofollow" });
+  let location = "/en/";
+  if (isD1Like(env.DB)) {
+    try {
+      const r = await handleReferralArrival(d1Db(env.DB), { token, userAgent: request.headers.get("user-agent"), test: url.searchParams.get("kh_test") === "1", secure: url.protocol === "https:" });
+      location = r.redirect;
+      if (r.setCookie) headers.append("set-cookie", r.setCookie);
+    } catch (err) {
+      console.error("referral: arrival not recorded", err instanceof Error ? err.message : err);
+    }
+  }
+  headers.set("location", new URL(location, url.origin).toString());
+  return new Response(null, { status: 302, headers });
+}
 
 /**
  * vinext streams the RSC payload as inline <script> tags after React has
@@ -124,6 +172,11 @@ const worker = {
       return withSecurityHeaders(new Response(null, { status: 301, headers: { location: url.toString() } }));
     }
 
+    const gate = await stagingGate(request, env, url);
+    if (gate) return withSecurityHeaders(gate);
+
+    if (REFERRAL_PATH.test(url.pathname)) return withSecurityHeaders(await referralArrival(request, env, url));
+
     if (url.pathname === "/.well-known/security.txt" || url.pathname === "/security.txt") {
       return withSecurityHeaders(new Response(SECURITY_TXT, {
         headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=86400" },
@@ -148,7 +201,7 @@ const worker = {
     const req = lang ? new Request(request, { headers: new Headers([...request.headers, ["x-kh-lang", lang]]) }) : request;
     const res = await handler.fetch(req, env, ctx);
     const out = withSecurityHeaders(closeDocumentLast(res));
-    if (PRIVATE_PAGE.test(url.pathname)) out.headers.set("x-robots-tag", "noindex, nofollow");
+    if (PRIVATE_PAGE.test(url.pathname) || env.KH_ENV === "staging") out.headers.set("x-robots-tag", "noindex, nofollow");
     return out;
   },
 };

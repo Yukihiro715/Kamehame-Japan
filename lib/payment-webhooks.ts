@@ -1,9 +1,11 @@
 import type { GolfAutomationEnv } from "@/lib/golf-automation";
 import type { MailQueueEnv } from "@/lib/mail-queue";
 import { experienceReference, handleExperienceEvent, type ExperienceCheckoutEnv } from "@/lib/experience-checkout";
+import { referralDb } from "@/lib/referral/attach";
+import { recordStripeEvent } from "@/lib/referral/stripe-events";
 
 type Provider = "resend" | "stripe";
-type Env = GolfAutomationEnv & MailQueueEnv & ExperienceCheckoutEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string };
+type Env = GolfAutomationEnv & MailQueueEnv & ExperienceCheckoutEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string; DB?: unknown };
 const RESEND_EVENTS = ["email.sent", "email.delivered", "email.delivery_delayed", "email.bounced", "email.failed", "email.suppressed", "email.complained", "email.opened", "email.clicked"];
 const gasUrl = (url: string | undefined) => !!url?.startsWith("https://script.google.com/macros/s/");
 
@@ -60,7 +62,6 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
   const secrets = (provider === "resend" ? [env.RESEND_WEBHOOK_SECRET] :
     [env.STRIPE_WEBHOOK_SECRET, env.STRIPE_EXPERIENCE_WEBHOOK_SECRET]).filter((s): s is string => !!s);
   if (!secrets.length) return Response.json({ ok: false }, { status: 503 });
-  if (provider === "stripe" && (!env.GOLF_AUTOMATION_TOKEN || !gasUrl(env.GOLF_AUTOMATION_URL))) return Response.json({ ok: false }, { status: 503 });
   const raw = await request.text();
   if (raw.length > 512_000) return new Response(null, { status: 413 });
   const verified = await Promise.all(secrets.map(secret => verifyWebhook(provider, raw, request.headers, secret)));
@@ -69,6 +70,14 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
     const event = JSON.parse(raw);
     const eventId = provider === "resend" ? request.headers.get("svix-id") : event.id;
     if (!eventId || !event.data) return Response.json({ ok: false }, { status: 400 });
+    if (provider === "stripe") {
+      // The commission ledger sees every verified Stripe event once (payments,
+      // refunds, disputes), whatever happens to the forwarding below.
+      const db = referralDb(env);
+      if (db) { try { await recordStripeEvent(db, event); } catch (err) { console.error("referral: stripe event not recorded", err instanceof Error ? err.message : err); } }
+      // The Sheets automation is where the event goes next; without it, ask Stripe to retry later.
+      if (!env.GOLF_AUTOMATION_TOKEN || !gasUrl(env.GOLF_AUTOMATION_URL)) return Response.json({ ok: false }, { status: 503 });
+    }
     let url = env.GOLF_AUTOMATION_URL!, token = env.GOLF_AUTOMATION_TOKEN!, action: "event" | "mail_event" = "event";
     if (provider === "resend") {
       const tags = (event.data.tags && typeof event.data.tags === "object" ? event.data.tags : {}) as Record<string, unknown>;

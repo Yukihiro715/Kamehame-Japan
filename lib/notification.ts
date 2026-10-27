@@ -124,7 +124,7 @@ export function slackSummary(e: Enquiry, jaTitle: string | undefined, ja: Partia
         ["備考", t("message", e.message || undefined)],
       ];
   // The lead ID that the ledger and the mailbox carry too, and the last campaign the browser reported (short form).
-  rows.push(["申込ID", e.requestId], ["流入", e.attribution ? channel(e.attribution.last) : undefined]);
+  rows.push(["申込ID", e.requestId], ["紹介元ホテル", e.referralHotel], ["流入", e.attribution ? channel(e.attribution.last) : undefined]);
   return rows.filter((r): r is [string, string] => !!r[1]).map(([k, v]) => `${k}: ${v}`).join("\n");
 }
 
@@ -143,6 +143,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
   const rows: [string, string | undefined][] = [
     ["お名前", e.name],
     ["申込ID", e.requestId],
+    ["紹介元ホテル", e.referralHotel],
     ["流入記録", attributionNote(e.attribution)],
     ["種別", trade ? "取引先からの問い合わせ" : "お客様からの予約リクエスト"],
     ["体験", e.experience && `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}`],

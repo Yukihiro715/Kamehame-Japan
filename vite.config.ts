@@ -8,6 +8,16 @@ const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
 
 const { d1, r2 } = hostingConfig;
 
+// The commission ledger's D1 database (lib/referral, migrations/). The deploy
+// workflows create it and pass its id in KAMEHAME_D1_ID; a local build uses a
+// placeholder id so wrangler dev/miniflare can run the migrations locally. In
+// CI without an id (the API token cannot manage D1 yet) the binding is left out
+// and the referral features stay off, so a deploy never points at a database
+// that does not exist.
+const LOCAL_D1_PLACEHOLDER_ID = "00000000-0000-4000-8000-00000000d1d1";
+const ledgerD1Id = process.env.KAMEHAME_D1_ID || (process.env.CI ? undefined : LOCAL_D1_PLACEHOLDER_ID);
+const ledgerD1Name = process.env.KAMEHAME_D1_NAME || "kamehame-ledger";
+
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
@@ -31,7 +41,9 @@ const localBindingConfig = {
     : [],
   // ARCHIVE_TO (optional secret) would add a second recipient to the team
   // notification; the booking ledger (lib/ledger.ts) is the record instead.
-  d1_databases: d1
+  d1_databases: ledgerD1Id
+    ? [{ binding: "DB", database_name: ledgerD1Name, database_id: ledgerD1Id, migrations_dir: "migrations" }]
+    : d1
     ? [
         {
           binding: d1,

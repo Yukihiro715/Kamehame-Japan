@@ -21,6 +21,8 @@ export type EnquiryKind = "guest" | "trade";
 export interface Enquiry {
   attribution?: import("./attribution").Attribution;
   requestId?: string;
+  /** The partner hotel whose QR/link this visit came from (lib/referral), for the team's notification. */
+  referralHotel?: string;
   pickupRegion?: "tokyo" | "saitama" | "chiba" | "other";
   caddie?: "none" | "required" | "unsure";
   /** Booking service: an English-speaking assistant for the day, quoted separately. */

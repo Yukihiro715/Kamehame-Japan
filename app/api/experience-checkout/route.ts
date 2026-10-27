@@ -1,4 +1,5 @@
 import { checkoutReady, openExperienceCheckout, parseExperienceOrder, publishCheckoutReady } from "@/lib/experience-checkout";
+import { attachExperienceOrder } from "@/lib/referral/attach";
 const headers = { "cache-control": "no-store" };
 /** A fresh answer from the ledger, published to KV for the page renders (the cron does the same every five minutes). */
 export async function GET() {
@@ -18,6 +19,9 @@ export async function POST(request: Request) {
     if (!order) return Response.json({ ok: false, error: "invalid" }, { status: 400, headers });
     const { env } = await import("cloudflare:workers");
     if (!await checkoutReady(env)) return Response.json({ ok: false, error: "unavailable" }, { status: 503, headers });
+    // The commission ledger: the reservation and its referral are fixed before the payment page opens.
+    const referral = await attachExperienceOrder(env, request, order);
+    if (referral) order.referral = { reservationId: referral.reservationId, hotelPublicId: referral.hotelPublicId };
     const result = await openExperienceCheckout(env, order);
     return Response.json(result, { status: result.ok ? 200 : 409, headers });
   } catch {

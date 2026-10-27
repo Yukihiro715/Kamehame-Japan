@@ -24,6 +24,8 @@ export interface ExperienceOrder {
   date: string; time: string; guests: number; quantity: number; price: string; amount: number;
   city?: string; chargeUnit?: "group" | "guest"; plan?: string; interpreter?: string;
   policyVersion: string; consent: true;
+  /** Set by the route once the commission ledger has the reservation (lib/referral/attach). */
+  referral?: { reservationId: string; hotelPublicId: string | null };
 }
 const ORIGIN = "https://kamehame-japan.com";
 const VERSION = "2026-08-26.dahlia";
@@ -213,6 +215,7 @@ export function checkoutParameters(order: ExperienceOrder, reference: string, cr
     "custom_text[submit][message]": `${c.note} ${c.refund}`,
     "adaptive_pricing[enabled]": "false",
     integration_identifier: "kamehame_provisional_qmtzvlpa",
+    ...(order.referral ? { "metadata[reservation_id]": order.referral.reservationId, "metadata[referral_hotel]": order.referral.hotelPublicId ?? "" } : {}),
   });
 }
 

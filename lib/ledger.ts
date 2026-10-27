@@ -114,7 +114,7 @@ export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, str
     interpreter: e.interpreter,
     estimate: e.estimate,
     priceNote: e.priceNote,
-    message: [e.message, `申込ID: ${e.requestId || "未取得"}`, attributionNote(e.attribution)].filter(Boolean).join("\n"),
+    message: [e.message, `申込ID: ${e.requestId || "未取得"}`, e.referralHotel && `紹介元ホテル: ${e.referralHotel}`, attributionNote(e.attribution)].filter(Boolean).join("\n"),
     messageJa: ja.message,
     company: e.company,
     country: e.country,

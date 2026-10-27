@@ -1,0 +1,72 @@
+name: Deploy to Cloudflare Workers (staging)
+
+# The verification Worker: same code, its own name, D1 database and KV
+# namespace, deployed from the `staging` branch. It runs with KH_ENV=staging,
+# which puts every page behind Basic auth (secret STAGING_BASIC_AUTH on the
+# staging Worker) and marks everything noindex. Secrets (Stripe test mode,
+# Resend, Slack) are set on the staging Worker by hand and never shared with
+# production. See docs/HOTEL_REFERRAL.md.
+
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+env:
+  WORKER_NAME: kamehame-japan-staging
+  D1_NAME: kamehame-ledger-staging
+  KV_TITLE: READY_STATE_STAGING
+  CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ensure the KV namespace
+        continue-on-error: true
+        run: |
+          set -u
+          id=$(npx wrangler kv namespace list 2>/dev/null | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const l=JSON.parse(s);const n=l.find(x=>x.title.endsWith(process.env.KV_TITLE));console.log(n?n.id:"")}catch{console.log("")}})')
+          if [ -z "$id" ]; then
+            out=$(npx wrangler kv namespace create "$KV_TITLE" 2>&1) || { echo "could not create the namespace:"; echo "$out"; exit 1; }
+            id=$(echo "$out" | grep -oE '[0-9a-f]{32}' | head -1)
+          fi
+          [ -n "$id" ] && echo "READY_STATE_KV_ID=$id" >> "$GITHUB_ENV" && echo "KV namespace: $id" || { echo "no namespace id"; exit 1; }
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Ensure the D1 database
+        continue-on-error: true
+        run: bash scripts/ensure-d1.sh "$D1_NAME"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Build
+        run: npm run build
+        env:
+          KAMEHAME_D1_NAME: ${{ env.D1_NAME }}
+
+      - name: Apply D1 migrations
+        if: env.KAMEHAME_D1_ID != ''
+        run: npx wrangler d1 migrations apply "$D1_NAME" --remote --config dist/server/wrangler.json
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Deploy
+        run: npx wrangler deploy --config dist/server/wrangler.json --name "$WORKER_NAME" --var KH_ENV:staging
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

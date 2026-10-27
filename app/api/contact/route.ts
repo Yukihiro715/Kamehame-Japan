@@ -17,6 +17,7 @@ import { golfPriceNoteJa, notificationBody, slackSummary } from "@/lib/notificat
 import { translateForTeam, type TranslatedField } from "@/lib/translate";
 import { automationConfigured, submitGolfAutomation } from "@/lib/golf-automation";
 import { ledgerRecord, postToLedger } from "@/lib/ledger";
+import { attachEnquiry } from "@/lib/referral/attach";
 
 // The cloudflare:* modules exist only inside the Worker runtime. They are
 // imported lazily so the Node preview server (`vinext start`) and the test
@@ -280,6 +281,10 @@ export async function POST(request: Request): Promise<Response> {
 
   const fallback = enquiry.kind === "trade" ? TRADE_EMAIL : CONTACT_EMAIL;
   const cf = await bindings();
+  // The commission ledger (lib/referral): the reservation and the hotel it was
+  // referred by, fixed now, before any mail goes out. Idempotent on the request ID.
+  const referral = await attachEnquiry(cf?.env, request, enquiry);
+  if (referral?.hotelName) enquiry.referralHotel = referral.hotelName;
   const to = cf?.env.CONTACT_TO;
   const resendKey = cf?.env.RESEND_API_KEY;
 
