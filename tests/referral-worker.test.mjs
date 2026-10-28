@@ -65,6 +65,9 @@ test("staging gate: locked without the secret, 401 without credentials, open wit
   assert.equal(wrong.status, 401);
   const right = await page({ KH_ENV: "staging", STAGING_BASIC_AUTH: "kame:hame" }, { authorization: `Basic ${btoa("kame:hame")}` });
   assert.equal(right.status, 200);
+  // a bare password means the user "kame"
+  assert.equal((await page({ KH_ENV: "staging", STAGING_BASIC_AUTH: "hame" }, { authorization: `Basic ${btoa("kame:hame")}` })).status, 200);
+  assert.equal((await page({ KH_ENV: "staging", STAGING_BASIC_AUTH: " hame " }, { authorization: `Basic ${btoa("kame:hame")}` })).status, 200, "surrounding spaces are ignored");
   assert.equal(right.headers.get("x-robots-tag"), "noindex, nofollow", "staging pages are never indexed");
   const hook = await w.fetch(new Request("https://staging.example/api/webhooks/stripe", { method: "POST", body: "{}" }), { ASSETS: assets, KH_ENV: "staging", STAGING_BASIC_AUTH: "kame:hame" }, ctx);
   assert.notEqual(hook.status, 401, "webhooks authenticate with their own signatures");

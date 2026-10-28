@@ -75,9 +75,11 @@ const HTML_END = "</body></html>";
  *  provider webhooks, which authenticate with their own signatures. */
 async function stagingGate(request: Request, env: Env, url: URL): Promise<Response | null> {
   if (env.KH_ENV !== "staging" || url.pathname.startsWith("/api/webhooks/")) return null;
-  const expected = env.STAGING_BASIC_AUTH;
+  const raw = env.STAGING_BASIC_AUTH?.trim();
   const challenge = (status: number, text: string) => new Response(text, { status, headers: { "www-authenticate": 'Basic realm="KAMEHAME staging"', "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex, nofollow" } });
-  if (!expected || !expected.includes(":")) return challenge(503, "staging locked: STAGING_BASIC_AUTH is not set");
+  if (!raw) return challenge(503, "staging locked: STAGING_BASIC_AUTH is not set");
+  // "user:password", or just a password for the user "kame".
+  const expected = raw.includes(":") ? raw : `kame:${raw}`;
   const given = request.headers.get("authorization") ?? "";
   let ok = false;
   if (given.startsWith("Basic ")) {
