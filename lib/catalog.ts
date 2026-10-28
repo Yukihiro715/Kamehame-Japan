@@ -284,6 +284,8 @@ export interface Experience {
     /** Every start time the product uses (for dated products: the union of the dates' times). */
     startTimes: string[];
     cutoffDays: number; cutoffTime: string;
+    /** Exact booking cutoff measured in hours before each session. */
+    cutoffHours?: number;
     /** Pre-selected start time in the booking box (default: 18:00 if offered, else the first). */
     defaultTime?: string;
     closed?: { from: string; to: string }[];
@@ -304,9 +306,8 @@ export interface Experience {
   taxIncluded?: boolean;
   /** Localised line for closures (e.g. "Closed over the New Year holidays"). */
   availabilityNote?: string;
-  /** Approximate pin for the map when the exact address is only shared after
-   *  booking: a public landmark in the same district, never the venue itself. */
-  map?: { lat: number; lng: number; zoom?: number };
+  /** Approximate landmark coordinates or an operator-approved exact place/address query. */
+  map?: { lat: number; lng: number; zoom?: number } | { query: string; zoom?: number };
   /** Two-plan pages: the alternatives, the pre-selected one and the page copy. */
   variants?: ExperienceVariant[];
   defaultVariant?: string;
@@ -3132,17 +3133,18 @@ export const experiences: Experience[] = [
         windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
       },
     },
-    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 1, cutoffTime: "00:00", cutoffHours: 24 },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions at 11:00, 13:00, 15:00 and 17:00 all year, and also at 10:00, 12:00, 14:00 and 16:00 from March to November. Sundays are not available in winter.",
     scheduleNote: "Timings counted from the start of your session; the session runs about 50 minutes.",
     interpreter: false,
     langTag: "In English",
     skipSiteFaq: true,
-    map: { lat: 35.0345, lng: 135.7182, zoom: 15 },
-    mapNote: "The pin marks Ryoan-ji temple; the teahouse is a few minutes' walk from it. The exact address comes with your confirmation.",
-    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price is charged. If the teahouse has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
+    taxIncluded: true,
+    map: { query: "Tea Ceremony Camellia GARDEN, 18 Ryoanji Ikenoshitacho, Ukyo-ku, Kyoto 616-8003", zoom: 17 },
+    mapNote: "The pin marks the Garden Teahouse at the address confirmed by the operator. Detailed arrival directions follow with your booking confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 3 days before; from 2 days before, including the day itself and no-shows, the full price is charged. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "Private 50-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
     highlights: [
       { icon: "group", title: "Your group only", body: "A private session in a teahouse with its own garden: no other guests, and the host's attention on you." },
@@ -3187,7 +3189,7 @@ export const experiences: Experience[] = [
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
       { q: "Is the teahouse accessible?", a: "Yes, it is wheelchair accessible; please tell us when you request so the room can be arranged." },
       { q: "Can we rent a kimono?", a: "Not at this teahouse. Kimono rental is offered at the operator's Higashiyama teahouses." },
-      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date; from 2 days before, including no-shows, the full price. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Watch a full tea ceremony prepared for your group", "Taste a seasonal sweet and the matcha your host prepares", "Whisk your own bowl of matcha", "Walk the teahouse garden"],
@@ -3232,19 +3234,20 @@ export const experiences: Experience[] = [
     addOns: [
       // Operator's kimono studio next door: ¥6,000 per person all year, dressing
       // from an hour before the session, last dressing 16:00, return by 17:00.
-      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Cancellation follows the terms of the session.", price: 6000, perGuest: true },
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. The standard session policy applies for up to seven kimono rentals. Groups renting eight or more have a separate seven-day free-cancellation deadline, confirmed before payment.", price: 6000, perGuest: true },
     ],
-    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 1, cutoffTime: "00:00", cutoffHours: 24 },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions every hour from 10:00 to 17:00.",
     scheduleNote: "Timings counted from the start of your session; the session runs about 45 minutes.",
     interpreter: false,
     langTag: "In English",
     skipSiteFaq: true,
-    map: { lat: 34.9988, lng: 135.7797, zoom: 16 },
-    mapNote: "The pin marks Yasaka Pagoda; the teahouse is a short walk from it. The exact address comes with your confirmation.",
-    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price is charged. The same terms apply to kimono rental booked with the session. If the teahouse has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
+    taxIncluded: true,
+    map: { query: "Tea Ceremony Camellia FLOWER, 349-12 Masuyacho, Higashiyama-ku, Kyoto 605-0826", zoom: 17 },
+    mapNote: "The pin marks the Flower Teahouse at the address confirmed by the operator. Detailed arrival directions follow with your booking confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 3 days before; from 2 days before, including the day itself and no-shows, the full price is charged. Standard kimono rental follows the session terms. Groups renting eight or more kimono have a separate seven-day free-cancellation deadline, confirmed before payment. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "45-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
     highlights: [
       { icon: "chat", title: "Explained in English", body: "The host explains the utensils, the sweet and the etiquette as the ceremony happens." },
@@ -3286,7 +3289,7 @@ export const experiences: Experience[] = [
       { q: "Do we sit on the floor?", a: "Mostly, yes, on tatami. A limited number of chairs and tables can be requested." },
       { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Tell us how many women's and men's kimono you need." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
-      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time. The same terms apply to kimono rental booked with the session." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date; from 2 days before, including no-shows, the full price. Days are counted in Japan time. Standard kimono rental follows the session terms. Groups renting eight or more kimono have a separate seven-day free-cancellation deadline, confirmed before payment." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Watch a tea ceremony explained in English", "Taste a seasonal sweet and a bowl of matcha", "Whisk your own bowl", "Wear a kimono for it, if you like"],
@@ -3328,19 +3331,20 @@ export const experiences: Experience[] = [
       },
     },
     addOns: [
-      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Cancellation follows the terms of the session.", price: 6000, perGuest: true },
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. The standard session policy applies for up to seven kimono rentals. Groups renting eight or more have a separate seven-day free-cancellation deadline, confirmed before payment.", price: 6000, perGuest: true },
     ],
-    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 1, cutoffTime: "00:00", cutoffHours: 24 },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions every hour from 10:00 to 17:00.",
     scheduleNote: "Timings counted from the start of your session; the session runs about 45 minutes.",
     interpreter: false,
     langTag: "In English",
     skipSiteFaq: true,
-    map: { lat: 34.9988, lng: 135.7797, zoom: 16 },
-    mapNote: "The pin marks Yasaka Pagoda; the teahouse is a short walk from it. The exact address comes with your confirmation.",
-    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price is charged. The same terms apply to kimono rental booked with the session. If the teahouse has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
+    taxIncluded: true,
+    map: { query: "Tea Ceremony Camellia FLOWER, 349-12 Masuyacho, Higashiyama-ku, Kyoto 605-0826", zoom: 17 },
+    mapNote: "The pin marks the Flower Teahouse at the address confirmed by the operator. Detailed arrival directions follow with your booking confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 3 days before; from 2 days before, including the day itself and no-shows, the full price is charged. Standard kimono rental follows the session terms. Groups renting eight or more kimono have a separate seven-day free-cancellation deadline, confirmed before payment. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "Private 45-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
     highlights: [
       { icon: "group", title: "Your group only", body: "The room and the host for your party alone, from one to five guests." },
@@ -3382,7 +3386,7 @@ export const experiences: Experience[] = [
       { q: "Why does a solo session cost more?", a: "A private session for one guest is a flat ¥25,000 (¥27,500 in peak season); from two guests the price is ¥16,500 per person (¥19,000 in peak season)." },
       { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Tell us how many women's and men's kimono you need." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
-      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time. The same terms apply to kimono rental booked with the session." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date; from 2 days before, including no-shows, the full price. Days are counted in Japan time. Standard kimono rental follows the session terms. Groups renting eight or more kimono have a separate seven-day free-cancellation deadline, confirmed before payment." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Watch a tea ceremony prepared for your group alone", "Taste a seasonal sweet and a bowl of matcha", "Whisk your own bowl", "Wear a kimono for it, if you like"],
@@ -3427,19 +3431,20 @@ export const experiences: Experience[] = [
       },
     },
     addOns: [
-      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. Cancellation follows the terms of the session.", price: 6000, perGuest: true },
+      { id: "kimono", name: "Kimono for the ceremony", description: "Dressed at the studio next door an hour before your session and worn for the ceremony; return by 17:00 (straight after a 17:00 session). ¥6,000 per person, all year. Hairstyling for women is available on the day. Not for pregnant guests, who are offered a haori set instead. The standard session policy applies for up to seven kimono rentals. Groups renting eight or more have a separate seven-day free-cancellation deadline, confirmed before payment.", price: 6000, perGuest: true },
     ],
-    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00" },
+    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 1, cutoffTime: "00:00", cutoffHours: 24 },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions every hour from 10:00 to 17:00.",
     scheduleNote: "Timings counted from the start of your session; the session runs about 45 minutes.",
     interpreter: false,
     langTag: "In English",
     skipSiteFaq: true,
-    map: { lat: 34.9988, lng: 135.7797, zoom: 16 },
-    mapNote: "The pin marks Yasaka Pagoda; the annex is a short walk from it. The exact address comes with your confirmation.",
-    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 7 days before; from 6 days before, including the day itself and no-shows, the full price is charged. The same terms apply to kimono rental booked with the session. If the teahouse has to cancel, you receive a full refund to your original payment method.",
-    cancellationTiers: [{ until: 7, rate: 0 }, { until: 0, rate: 100 }],
+    taxIncluded: true,
+    map: { query: "Tea Ceremony Camellia FLOWER, 349-12 Masuyacho, Higashiyama-ku, Kyoto 605-0826", zoom: 17 },
+    mapNote: "The pin marks the Flower Teahouse address; the annex is nearby. Detailed annex entrance directions follow with your booking confirmation.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 3 days before; from 2 days before, including the day itself and no-shows, the full price is charged. Standard kimono rental follows the session terms. Groups renting eight or more kimono have a separate seven-day free-cancellation deadline, confirmed before payment. If the teahouse has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 3, rate: 0 }, { until: 0, rate: 100 }],
     includedShort: "Private 45-minute ceremony · Matcha and a seasonal sweet · The bowl you whisk yourself",
     highlights: [
       { icon: "group", title: "Your group only", body: "A private tatami session for two to five, or the tables-and-chairs room for groups of nine to twenty." },
@@ -3481,7 +3486,7 @@ export const experiences: Experience[] = [
       { q: "What is the difference between regular and peak season?", a: "Peak season is March, April, October and November, and the New Year holiday from 28 December to 3 January, when the private rate is ¥21,500 per person instead of ¥19,000 and the group rate ¥12,500 instead of ¥11,500. Choose a date to see the rate." },
       { q: "Can we wear a kimono?", a: "Yes. Add kimono rental when you request (¥6,000 per person). You are dressed at the studio next door an hour before the session; the last dressing is at 16:00 and kimono are returned by 17:00, or straight after a 17:00 session. Larger groups may be dressed at a neighbouring partner studio to save time." },
       { q: "Are the sweets suitable for allergies?", a: "The sweets are vegan, nut-free and gluten-free. Tell us about other allergies when you request." },
-      { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time. The same terms apply to kimono rental booked with the session." },
+      { q: "What is the cancellation policy?", a: "Free until 3 days before the date; from 2 days before, including no-shows, the full price. Days are counted in Japan time. Standard kimono rental follows the session terms. Groups renting eight or more kimono have a separate seven-day free-cancellation deadline, confirmed before payment." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
     whatYoullDo: ["Watch a tea ceremony prepared for your group alone", "Taste a seasonal sweet and a bowl of matcha", "Whisk your own bowl", "Bring a larger group to the tables-and-chairs room"],

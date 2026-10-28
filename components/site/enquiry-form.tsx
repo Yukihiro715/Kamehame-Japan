@@ -207,7 +207,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
             <div className="field">
               <label htmlFor="enq-date">{F.preferredDate}</label>
               <DatePicker id="enq-date" name="date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} required closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
-              {firstOpenDate(x, b.minDate) && <small className="form-hint">{F.earliestDate(fmtDate(firstOpenDate(x, b.minDate)!, lang), x.leadDays, x.cutoffTime)}</small>}
+              {firstOpenDate(x, b.minDate) && <small className="form-hint">{x.cutoffHours ? D.availCutoffHours(x.cutoffHours) : F.earliestDate(fmtDate(firstOpenDate(x, b.minDate)!, lang), x.leadDays, x.cutoffTime)}</small>}
             </div>
             {x.startTimes?.length ? (
               <label>

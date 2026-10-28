@@ -148,7 +148,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         {(!open || !x.provisionalCheckout || b.largeParty || b.quoteRequested) && <li><ShieldCheck size={14} /> {x.provisionalCheckout && (b.largeParty || b.quoteRequested) ? D.noPaymentNow : x.ctaNote ?? D.noPaymentNow}</li>}
         {x.provisionalCheckout && !b.largeParty && !b.quoteRequested && !open && <li><ShieldCheck size={14} /> <strong>{provisionalCopy(lang).refund}</strong></li>}
         <li><Clock3 size={14} /> {x.provisionalCheckout && !b.largeParty && !b.quoteRequested ? provisionalCopy(lang).flow[2].title : x.replyNote ?? D.replyIn24}</li>
-        <li><CalendarDays size={14} /> {D.availCutoff(x.leadDays, x.cutoffTime)}</li>
+        <li><CalendarDays size={14} /> {x.cutoffHours ? D.availCutoffHours(x.cutoffHours) : D.availCutoff(x.leadDays, x.cutoffTime)}</li>
       </ul>
     </div>
   );

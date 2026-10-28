@@ -188,7 +188,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
     provisionalCheckout: provisional, weekdaysOnly: provisional && !!EXPERIENCE_PRODUCTS[exp.slug].adultOnly,
     weekendsOnly: avail?.weekendsOnly, openFrom: avail?.openFrom, closedWeekdays: avail?.closedWeekdays,
     cancellationText: cancellation, cancellationTiers: exp.cancellationTiers,
-    leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00",
+    leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00", cutoffHours: avail?.cutoffHours,
     startTimes: provisional && !avail?.startTimes ? ["10:00"] : avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
     listedMax: provisional ? EXPERIENCE_PRODUCTS[exp.slug].max : eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),
@@ -252,7 +252,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                 {avail && <li><CalendarDays size={15} /><span>{[avail.dates ? D.availSelected : avail.daily ? D.availDaily : "", `${exp.timeLabel ?? D.availStart} ${avail.startTimes.length > 3 ? `${avail.startTimes[0]}–${avail.startTimes[avail.startTimes.length - 1]}` : avail.startTimes.join(" / ")}`].filter(Boolean).join(" · ")}</span></li>}
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
                 {exp.taxIncluded && <li><ShieldCheck size={15} /><span>{D.taxIncluded}</span></li>}
-                {avail && <li><Clock3 size={15} /><span>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
+                {avail && <li><Clock3 size={15} /><span>{avail.cutoffHours ? D.availCutoffHours(avail.cutoffHours) : D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
                 {plans.length > 0 && <li><Users size={15} /><span>{D.performerNote}</span></li>}
               </ul>
               {exp.overviewFigure && (
@@ -458,7 +458,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                       <div><dt>{D.availDays}</dt><dd>{[avail.daily ? D.availDaily : "", exp.availabilityNote ?? ""].filter(Boolean).join(" · ") || "—"}</dd></div>
                     )}
                     {!avail.dates && <div><dt>{exp.timeLabel ?? D.availStart}</dt><dd className="xp-times">{avail.startTimes.map((st) => <span key={st}>{st}</span>)}</dd></div>}
-                    <div><dt>{D.availCutoffH}</dt><dd>{D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</dd></div>
+                    <div><dt>{D.availCutoffH}</dt><dd>{avail.cutoffHours ? D.availCutoffHours(avail.cutoffHours) : D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</dd></div>
                   </dl>
                 </div>
               </section>
@@ -472,7 +472,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                 {exp.map && (
                   <figure className="xp-map">
                     <iframe
-                      src={`https://maps.google.com/maps?q=${exp.map.lat},${exp.map.lng}&z=${exp.map.zoom ?? 15}&hl=${lang === "zh-tw" ? "zh-TW" : lang}&output=embed`}
+                      src={`https://maps.google.com/maps?q=${"query" in exp.map ? encodeURIComponent(exp.map.query) : `${exp.map.lat},${exp.map.lng}`}&z=${exp.map.zoom ?? 15}&hl=${lang === "zh-tw" ? "zh-TW" : lang}&output=embed`}
                       title={D.venueH} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen
                     />
                     <figcaption><MapPin size={13} /> {exp.mapNote ?? D.mapNote}</figcaption>

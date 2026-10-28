@@ -31,6 +31,8 @@ export interface BookingExperience {
   leadDays: number;
   /** Clock time (Japan) by which a request must be in, e.g. "17:00". */
   cutoffTime: string;
+  /** Rolling reservation deadline relative to the selected session start. */
+  cutoffHours?: number;
   startTimes?: string[];
   /** Pre-selected start time (default: 18:00 if offered, else the first). */
   defaultTime?: string;
@@ -109,18 +111,18 @@ const Ctx = createContext<Booking | null>(null);
 
 /** True when a guest can pick `iso`: an announced date for dated products,
  *  otherwise any day outside the closed windows. */
-export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays">) {
+export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays" | "cutoffHours" | "startTimes">) {
   if (x.openFrom && iso < x.openFrom) return false;
   const day = new Date(`${iso}T00:00:00Z`).getUTCDay();
   if (x.weekdaysOnly && [0,6].includes(day)) return false;
   if (x.weekendsOnly && ![0,6].includes(day)) return false;
   if (x.closedWeekdays?.includes(day)) return false;
-  if (x.dates) return x.dates.some((d) => d.date === iso);
-  return !isClosed(iso, x.closed);
+  if (x.dates ? !x.dates.some((d) => d.date === iso) : isClosed(iso, x.closed)) return false;
+  return !x.cutoffHours || timesFor(x, iso).length > 0;
 }
 
 /** The first selectable date after the cutoff, respecting weekdays and closures. */
-export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays">, min?: string): string | undefined {
+export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays" | "cutoffHours" | "startTimes">, min?: string): string | undefined {
   if (!min) return undefined;
   if (x.dates) return x.dates.filter(d => d.times.length > 0).map(d => d.date).sort().find(d => d >= min && isBookable(d, x));
   const day = new Date(`${min}T00:00:00Z`);
@@ -133,9 +135,14 @@ export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "w
 }
 
 /** Start times offered on `iso` (all of them when no date is chosen yet). */
-export function timesFor(x: Pick<BookingExperience, "dates" | "startTimes">, iso?: string): string[] {
-  if (x.dates && iso) return x.dates.find((d) => d.date === iso)?.times ?? [];
-  return x.startTimes ?? [];
+export function timesFor(x: Pick<BookingExperience, "dates" | "startTimes" | "cutoffHours">, iso?: string): string[] {
+  const offered = x.dates && iso ? x.dates.find((d) => d.date === iso)?.times ?? [] : x.startTimes ?? [];
+  if (!x.cutoffHours || !iso) return offered;
+  const earliest = Date.now() + x.cutoffHours * 60 * 60 * 1000;
+  return offered.filter((time) => {
+    const start = new Date(`${iso}T${time}:00+09:00`).getTime();
+    return Number.isFinite(start) && start >= earliest;
+  });
 }
 
 /** True when the month-day of `iso` falls inside a closed window (windows may wrap the year end). */
@@ -176,13 +183,19 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
   // today no longer counts.
   const [minDate, setMinDate] = useState<string>();
   useEffect(() => {
+    if (experience.cutoffHours) {
+      const earliestJst = new Date(Date.now() + (experience.cutoffHours + 9) * 3600 * 1000);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only clock
+      setMinDate(earliestJst.toISOString().slice(0, 10));
+      return;
+    }
     const [ch, cm] = experience.cutoffTime.split(":").map(Number);
     const jst = new Date(Date.now() + 9 * 3600 * 1000);
     const past = jst.getUTCHours() * 60 + jst.getUTCMinutes() >= ch * 60 + cm;
     jst.setUTCDate(jst.getUTCDate() + experience.leadDays + (past ? 1 : 0));
     // eslint-disable-next-line react-hooks/set-state-in-effect -- depends on the clock, so it cannot be an initial state
     setMinDate(jst.toISOString().slice(0, 10));
-  }, [experience.leadDays, experience.cutoffTime]);
+  }, [experience.leadDays, experience.cutoffTime, experience.cutoffHours]);
 
   // Two-plan pages: an advert may pre-select the area and party size with
   // ?area=tokyo&golfers=3. Read once after mount (the server render cannot
@@ -229,7 +242,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
           const next = { ...s, ...patch };
           // On dated products a date carries its own start times: keep the chosen
           // time when that date offers it, otherwise move to the date's first slot.
-          if (experience.dates) {
+          if (experience.dates || experience.cutoffHours) {
             if (patch.date !== undefined && patch.date) {
               const ts = timesFor(experience, patch.date);
               if (ts.length && !ts.includes(next.time)) next.time = ts[0];
