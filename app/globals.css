@@ -1894,3 +1894,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 .go-before b { display:block; font-size:13.5px; color:var(--ink); margin-bottom:6px; }
 .go-before ul { margin:0; padding:0 0 0 18px; list-style:disc; font-size:13px; line-height:1.6; color:#3d3a34; }
 .go-before li + li { margin-top:2px; }
+
+/* Keep budget and currency together on phones; hints span the row below. */
+.form-row.two.golf-budget-row { grid-template-columns:minmax(0, 2fr) minmax(100px, 1fr); align-items:start; }
+.golf-budget-row > label, .golf-budget-row input, .golf-budget-row select { min-width:0; width:100%; }

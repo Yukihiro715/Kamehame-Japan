@@ -12,7 +12,7 @@ const e={kind:'guest',experience:'mt-fuji-golf-day',lang:'en',name:'Example',par
 test('planning information survives in acknowledgement notes without assuming currency conversion or transport inclusion',()=>{
  const notes=golfPlanningNotes({golf_budget:'250',golf_currency:'USD',golf_budget_transport:'separate',golf_journey:'2 hours',golf_equipment:'US men 9.5',message:'Prefer morning'});
  const mail=golfCustomerEmail('ack',{...e,message:notes});
- for(const value of ['USD 250','transport: separate','2 hours','US men 9.5','Prefer morning'])assert.ok(mail.text.includes(value));
+ for(const value of ['USD 250','transport: separate','US men 9.5','Prefer morning'])assert.ok(mail.text.includes(value));
  assert.equal(golfPlanningNotes({message:'Existing enquiry'}),'Existing enquiry');
  assert.ok(golfPlanningNotes({golf_budget:'100000000',golf_currency:'TWD',golf_journey:'x'.repeat(120),golf_equipment:'x'.repeat(300),message:'x'.repeat(3000)}).length<4000);
 });

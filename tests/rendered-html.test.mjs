@@ -85,17 +85,17 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.doesNotMatch(text, /−¥5,000|Bringing own \(/, "no own-clubs deduction in the booking service");
   // what we arrange vs what is not part of the service
   assert.ok(text.includes("What the fee covers"), "inclusions heading");
-  assert.equal(html.split('class="gi-card"').length - 1, 9, "nine arranged items (ten cards: no driver or lunch card)");
+  assert.equal(html.split('class="gi-card"').length - 1, 8, "eight arranged items plus golf wear; no assistant card");
   assert.equal(html.split('class="gi-card gi-no"').length - 1, 1, "only golf wear is outside the service");
   assert.match(html, /gi-card"[\s\S]{0,900}Private Transfer[\s\S]{0,300}We introduce a licensed transfer company/, "the transfer partner is something we arrange");
-  assert.match(html, /gi-card"[\s\S]{0,900}English Assistant[\s\S]{0,200}Optional/, "the assistant is an option");
+  assert.ok(!/gi-label">English Assistant</.test(html), "no standalone assistant offering");
   assert.ok(!/gi-label">(Driver|Lunch)</.test(html), "no driver or lunch card");
   assert.ok(text.includes("Getting There: Your Choice") && !text.includes("Travel in Comfort"), "the getting-there section replaces the transfer section");
   assert.ok(text.includes("introduce a licensed private transfer partner"), "the partner is introduced, not named");
   assert.doesNotMatch(html, /Rion/i, "the transfer partner is never named");
   assert.ok(text.includes("No payment to enquire"), "reassurance under the options");
-  // the form: tee time, optional base, no pick-up prefecture, an assistant choice
-  assert.ok(html.includes("Preferred tee time") && html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
+  // the form: tee time, optional base, no pick-up prefecture or assistant choice
+  assert.ok(html.includes("Preferred tee time") && !html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
   // the transfer choice: not ours to sell, the partner introduced on request
   assert.ok(html.includes('name="transfer"') && html.includes("please introduce the transfer partner") && html.includes("we can introduce our partner, whom you book and pay directly"), "transfer choice with the partner note");
   assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");
@@ -632,15 +632,18 @@ test("golf planning: all five languages expose optional budget and travel inputs
     const res = await render(`/${lang}/tokyo/mt-fuji-golf-day/`);
     assert.equal(res.status, 200);
     const html = await res.text();
-    for (const name of ["golf_budget", "golf_currency", "golf_budget_transport", "golf_journey", "golf_equipment"]) {
+    for (const name of ["golf_budget", "golf_currency", "golf_budget_transport", "golf_equipment"]) {
       assert.ok(html.includes(`name="${name}"`), `${lang}: ${name}`);
       const tag = html.match(new RegExp(`<[^>]+name="${name}"[^>]*>`))?.[0];
       assert.ok(tag && !/\brequired\b/.test(tag), `${name} stays optional`);
     }
     assert.ok(html.includes('id="terms"'));
+    assert.ok(html.includes("golf-budget-row"));
+    assert.ok(!html.includes('name="golf_journey"'));
+    assert.ok(!html.includes('name="assistant"'));
     if (lang === "en") {
       assert.ok(html.includes("Plan your golf day with confidence"));
-      assert.ok(html.includes("Do I need an English-speaking assistant?"));
+      assert.ok(html.includes("Support on your golf day"));
       assert.ok(html.includes("¥5,000 covers research and a suitable proposal"));
     }
   }

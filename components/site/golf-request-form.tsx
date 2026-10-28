@@ -18,7 +18,7 @@ import { isBookable, timesFor, useBooking } from "@/components/site/booking-cont
 import { golfProcessCopy } from "@/lib/golf-booking-copy";
 import { GolfQuickPick, golfPriceParts } from "@/components/site/golf-options";
 import { GOLF_FIXED_FEE_MAX, GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs, isArrangement } from "@/lib/golf-prices";
-import { CLUB_RENTAL_COPY } from "@/lib/golf-club-rental";
+import { CLUB_RENTAL_COPY, GOLF_CLUB_RENTAL_JPY } from "@/lib/golf-club-rental";
 import { ClubSetPicker, clubSetLabel } from "@/components/site/golf-club-rental";
 import { useClubRental } from "@/components/site/club-rental-context";
 
@@ -96,7 +96,9 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   const shoeOf = (i: number): string => shoes[i] ?? "";
   const shoeText = (i: number) => { const k = shoeOf(i); return k === "own" ? G.shoeOpts.own : !k || k === "unsure" ? G.shoeOpts.unsure : G.shoeSize.replace("{n}", k); };
   const anyRental = golfers.some((i) => rentalOf(i) !== "own");
-  const rentalLabel = (i: number) => rentalOf(i) === "designated" ? `${C.optionShort}: ${clubSetLabel(lang, sets[i])}` : G.rentalOpts[(rentalOf(i) || "unsure") as keyof typeof G.rentalOpts];
+  const standardRentalLabel = arrangement ? P.standardRental : G.rentalOpts.required;
+  const chosenRentalLabel = P.chosenRental.replace("{price}", yen(GOLF_CLUB_RENTAL_JPY));
+  const rentalLabel = (i: number) => rentalOf(i) === "designated" ? `${chosenRentalLabel}: ${clubSetLabel(lang, sets[i])}` : rentalOf(i) === "required" ? standardRentalLabel : G.rentalOpts[(rentalOf(i) || "unsure") as keyof typeof G.rentalOpts];
   const designatedLine = golfers.filter((i) => rentalOf(i) === "designated").map((i) => `${countOf(G.golferN, i)}: ${clubSetLabel(lang, sets[i])}`).join(" · ");
   // Own clubs: ¥5,000 less per golfer, shown as soon as a golfer picks it (the server recomputes the same figure).
   const ownCount = golfers.filter((i) => rentalOf(i) === "own").length;
@@ -131,7 +133,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
       area: v.title, area_id: v.id, party: String(n),
       course_mode: specific ? "specific" : "recommended",
       course: namedCourse ? b.courseName : "", course_url: namedCourse ? b.courseUrl : "",
-      assistant: data.assistant, transfer: data.transfer,
+      transfer: data.transfer,
       dates: `${b.date} ${timeLabel}`,
       pickup: hotelUndecided ? [G.hotelUndecided, data["hotel-area"]].filter(Boolean).join(" — ") : data.pickup,
       level: [G.experienceOpts[level], data.handicap && `${G.handicap.replace(/\s*[(（].*$/, "")}: ${data.handicap}`].filter(Boolean).join(" · "),
@@ -272,12 +274,12 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
               <span>{G.pickup}</span>
               <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
             </label>
-            <div className="form-row two">
-              <label><span>{P.budget}</span><input name="golf_budget" type="number" min="1" max="100000000" step="any" inputMode="decimal" /><small>{P.budgetHint}</small></label>
+            <div className="form-row two keep golf-budget-row">
+              <label><span>{P.budget}</span><input name="golf_budget" type="number" min="1" max="100000000" step="any" inputMode="decimal" aria-describedby="golf-budget-hint" /></label>
               <label><span>{P.currency}</span><select name="golf_currency" defaultValue="JPY">{["JPY", "USD", "GBP", "EUR", "AUD", "CAD", "SGD", "HKD", "TWD"].map(c => <option key={c}>{c}</option>)}</select></label>
             </div>
+            <small id="golf-budget-hint" className="form-hint">{P.budgetHint}</small>
             <label><span>{P.transport}</span><select name="golf_budget_transport" defaultValue="unsure"><option value="unsure">{P.unsure}</option><option value="included">{P.included}</option><option value="separate">{P.separate}</option></select></label>
-            <label><span>{P.journey}</span><input name="golf_journey" maxLength={120} placeholder={P.journeyHint} /></label>
             <label><span>{P.equipment}</span><input name="golf_equipment" maxLength={300} placeholder={P.equipmentHint} /></label>
             {processCopy.transfer && processCopy.transfers && (
               <label><span>{processCopy.transfer}</span>
@@ -331,14 +333,14 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         </div>
         <div className="go-rental" role="group" aria-label={G.rental}>
           <span className="go-rental-h">{G.rentalH}</span>
-          <small className="form-hint go-rental-note">{G.rentalNote}</small>
+          <small className="form-hint go-rental-note">{arrangement ? P.rentalComparison : G.rentalNote}</small>
           {golfers.map((i) => (
             <div className="go-rental-row" key={i}>
               <b>{countOf(G.golferN, i)}</b>
               <select name={`rental-${i}`} aria-label={`${countOf(G.golferN, i)} — ${G.rental}`} value={rentalOf(i)} required={clubRental} className={clubRental && !rentalOf(i) ? "go-rental-pick" : undefined} onChange={(e) => { const r = e.target.value as Rental; setRental((all) => ({ ...all, [i]: r })); if (r === "designated" && !sets[i]) setPicking(i); }}>
                 {clubRental && <option value="" disabled>{C.pickRental}</option>}
-                <option value="required">{G.rentalOpts.required}</option>
-                {clubRental && <option value="designated">{C.option}</option>}
+                <option value="required">{standardRentalLabel}</option>
+                {clubRental && <option value="designated">{chosenRentalLabel}</option>}
                 <option value="own">{G.rentalOpts.own}</option>
                 <option value="unsure">{G.rentalOpts.unsure}</option>
               </select>
@@ -404,13 +406,6 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.caddies[i]}</option>)}
           </select><small>{processCopy.caddieNote}</small>
         </label>
-        {arrangement && processCopy.assistant && processCopy.assistants && (
-          <label><span>{processCopy.assistant}</span>
-            <select name="assistant" defaultValue="none">
-              {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.assistants![i]}</option>)}
-            </select><small>{processCopy.assistantNote}</small>
-          </label>
-        )}
         {addOns.length > 0 && (
           <fieldset className="go-extras">
             <legend>{G.extras}</legend>

@@ -51,8 +51,8 @@ interface ArrangementCopy {
 
 const FEE = yen(GOLF_ARRANGEMENT_FEE_JPY);
 const EXTRA = yen(GOLF_ARRANGEMENT_EXTRA_JPY);
-/** Ten cards: the driver (part of the partner's car) and lunch (ordered at the club) are not listed (owner, 2026-10-17). */
-const ITEM_ORDER: GolfInclusionId[] = ["round", "clubs", "shoes", "transfer", "assistant", "cart", "locker", "bath", "taxes", "wear"];
+/** No standalone assistant card; driver and lunch are not separate offerings. */
+const ITEM_ORDER: GolfInclusionId[] = ["round", "clubs", "shoes", "transfer", "cart", "locker", "bath", "taxes", "wear"];
 
 const en: ArrangementCopy = {
   title: "Japan Golf Course Booking Service",
@@ -900,6 +900,15 @@ const zh: ArrangementCopy = {
 };
 
 export const GOLF_ARRANGEMENT_COPY: Record<Lang, ArrangementCopy> = { en, ja, es, fr, "zh-tw": zh };
+// On-day support is confirmed individually, not sold as a standalone language guarantee.
+for (const lang of Object.keys(GOLF_ARRANGEMENT_COPY) as Lang[]) {
+  const c = GOLF_ARRANGEMENT_COPY[lang];
+  const p = golfPlanningCopy[lang];
+  c.faq[3] = { q: p.assistantQ, a: p.assistantA };
+  c.notIncluded = c.notIncluded.filter((_, i) => i !== 2);
+  c.prices.notes = c.prices.notes.filter((_, i) => i !== 1);
+}
+
 
 /** The golf page as the booking service: every text and the structure that goes with it
  *  (party sizes from one, the fee tiers, tee times instead of departures, no add-ons).
@@ -929,7 +938,7 @@ export function applyGolfArrangement(e: Experience, lang: Lang): Experience {
     langTag: undefined,
     venue: e.venue ? { ...e.venue, known: c.venue.known, afterBooking: c.venue.afterBooking } : e.venue,
     flow: c.process.steps.map((title, i) => ({ title, body: [c.process.received, c.process.proposal, `${c.process.arrange} ${c.process.protection}`][i] })),
-    faq: [...c.faq, { q: golfPlanningCopy[lang].assistantQ, a: golfPlanningCopy[lang].assistantA }, { q: golfPlanningCopy[lang].practicalQ, a: golfPlanningCopy[lang].practicalA }],
+    faq: [...c.faq, { q: golfPlanningCopy[lang].practicalQ, a: golfPlanningCopy[lang].practicalA }],
     variantCopy: vc ? {
       ...vc,
       benefits: c.benefits, crumb: c.crumb, photoNote: c.photoNote,

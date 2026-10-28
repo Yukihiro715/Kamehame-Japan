@@ -6,7 +6,7 @@ For new enquiries. Preserve existing individual agreements. No automatic follow-
 
 Use `golfFirstReplyTemplate` in `lib/golf-first-reply.ts` for a reviewed English draft for 1–4 golfers. Recommend one direction that fits the request. Ask at most three unanswered questions; do not repeat information in the form. For larger groups, use an individual fee quote. Never imply a held tee time without supplier confirmation.
 
-Priority questions: total budget per golfer with currency and transport scope; accommodation and maximum one-way travel time; any essential requirement. Separate preferences from requirements. Club flex can be “no preference”; accept international shoe sizes and verify with the club rather than promising an exact conversion.
+Priority questions: total budget per golfer with currency and transport scope; accommodation (we estimate travel time); any essential requirement. Separate preferences from requirements. Club flex can be “no preference”; accept international shoe sizes and verify with the club rather than promising an exact conversion.
 
 ## Before payment
 
@@ -16,7 +16,7 @@ This preliminary discussion is not a paid, qualifying course proposal. Do not de
 
 ## Proposal and payment
 
-Present one recommendation and, only if useful, one fallback. Include accommodation-to-course travel duration, expected arrival time (allowing for check-in), tee-time status, itemised costs, rental availability and the customer's outstanding decision. Explain assistant versus caddie. Answer rain/closure rules directly rather than substituting a weather forecast. Check dress code; suggest advance shopping only if relevant.
+Present one recommendation and, only if useful, one fallback. Include accommodation-to-course travel duration, expected arrival time (allowing for check-in), tee-time status, itemised costs, rental availability and the customer's outstanding decision. Confirm on-day support and language availability individually; do not promise a standalone English-speaking assistant. Answer rain/closure rules directly rather than substituting a weather forecast. Check dress code; suggest advance shopping only if relevant.
 
 Once requirements and terms are agreed, send the existing reviewed booking-fee payment invitation. Pay now / pay at club / transport paid separately must be explicit. Do not use false scarcity or an invented booking hold.
 
@@ -31,3 +31,5 @@ Record request, first human reply, indicative proposal, customer agreement, paym
 ### Draft command
 
 Run `node scripts/prepare-golf-first-reply.mjs input.json output-directory` with `{ "enquiry": <existing enquiry>, "review": { "recommendation": "<one reviewed recommendation>", "missingQuestions": ["<only unanswered questions, max three>"] } }`. The output is a text draft, not a sent email. No customer data should be committed to this repository.
+
+2026-10-28 form refinement: budget and currency stay side by side on mobile. No journey-limit or standalone assistant selector. Standard club rental is shown as approximately ¥5,000 (varies by club), distinct from chosen-model rental at the price master rate.
