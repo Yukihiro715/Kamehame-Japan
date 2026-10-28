@@ -481,7 +481,7 @@ export const experiences: Experience[] = [
     gallery: [],
     galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
     partySize: { min: 1, max: 3, default: 2 },
-    availability: { daily: true, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
+    availability: { daily: false, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions start at 11:00 or 16:30; closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
     scheduleNote: "The order is the spa's; the staff set the pace. Please be at the building entrance 5 to 10 minutes before your start time.",
@@ -671,7 +671,7 @@ export const experiences: Experience[] = [
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen a few minutes from Shibuya.",
     overview: [
       "Ramen is Japan's everyday comfort food, and this is the quickest way to understand it: make it. In a small teaching kitchen near Shibuya you turn flour and water into noodles by hand, pass the dough through a noodle machine, and finish three small bowls so you can compare the three great broths in one sitting.",
-      "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan versions can be arranged at no extra cost, and a halal-friendly broth with advance notice (a supplement is confirmed with your quote); tell us when you request your date.",
+      "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan options are offered as separate plans rather than included in the standard price; let us know your preference so we can confirm the available plan and its price before payment. A halal-friendly broth may also be arranged with advance notice, with any supplement quoted separately.",
     ],
     duration: "90 minutes", price: "¥26,500", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Tokyo (a few minutes from Shibuya)",
     img: "/images/ramen-noodle-machine.jpg", alt: "Two guests feeding a sheet of dough through a hand-cranked noodle machine, fresh noodles falling into the tray",
@@ -696,7 +696,7 @@ export const experiences: Experience[] = [
       { icon: "brush", title: "Noodles from scratch", body: "Flour, water and your own hands: knead the dough, roll it through the noodle machine and cut your noodles." },
       { icon: "meal", title: "Three bowls, three styles", body: "Tonkotsu, shoyu and miso in small bowls, finished with chicken chashu and toppings, so you can taste the differences side by side." },
       { icon: "chat", title: "Taught in English", body: "A small kitchen, an instructor who explains each step in English, and no experience needed." },
-      { icon: "group", title: "Vegetarian, vegan and halal-friendly on request", body: "Say so when you request your date: vegetarian and vegan at no extra cost, a halal-friendly broth with advance notice and a supplement confirmed with your quote." },
+      { icon: "group", title: "Vegetarian, vegan and halal-friendly on request", body: "Tell us your dietary needs before booking. Vegetarian and vegan options have separate plan prices, confirmed before payment; a halal-friendly broth may be arranged in advance with a separately quoted supplement." },
     ],
     included: [
       "A 90-minute hands-on class in English",
@@ -733,7 +733,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any cooking experience?", a: "No. The instructor shows every step, and the dough is forgiving. If you can knead, you can make noodles." },
       { q: "What do we actually make?", a: "Fresh noodles from scratch, chicken chashu, and three small bowls — tonkotsu, shoyu and miso — finished with toppings, so you can taste the three styles side by side. Vegetarian, vegan and halal-friendly bowls differ in content." },
-      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes. Vegetarian and vegan bowls are arranged at no extra cost. A halal-friendly broth can be arranged with advance notice; the supplement is confirmed with your quote. Tell us when you request your date." },
+      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes, but vegetarian and vegan options are separate plans, not included in the standard class price. We confirm their availability and price before payment. A halal-friendly broth may be possible with advance notice and a separately quoted supplement; tell us when requesting your date." },
       { q: "Which language is the class in?", a: "English. The instructor runs the class in English and Japanese." },
       { q: "Can children join?", a: "From about age 6. Younger children cannot take part but may watch alongside a parent; the kitchen is stroller accessible. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
@@ -762,9 +762,9 @@ export const experiences: Experience[] = [
     tagline: "Knead, roll and cut fresh noodles, prepare chicken chashu, then finish three small bowls — tonkotsu, shoyu and miso — and taste them side by side. A 90-minute hands-on class in a small ramen kitchen in the middle of Dotonbori.",
     overview: [
       "Ramen is Japan's everyday comfort food, and this is the quickest way to understand it: make it. In a small teaching kitchen in Dotonbori, Osaka's loudest food street, you turn flour and water into noodles by hand, pass the dough through a noodle machine, and finish three small bowls so you can compare the three great broths in one sitting.",
-      "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan versions can be arranged at no extra cost, and a halal-friendly broth with advance notice (a supplement is confirmed with your quote); tell us when you request your date.",
+      "The class is run in English and takes about 90 minutes. Everything is provided — ingredients, aprons, tools — and you eat what you make at the end. Vegetarian and vegan options are offered as separate plans rather than included in the standard price; let us know your preference so we can confirm the available plan and its price before payment. A halal-friendly broth may also be arranged with advance notice, with any supplement quoted separately.",
     ],
-    duration: "90 minutes", price: "¥26,500", priceUnit: "person", group: "Small class · 1–16 guests", ages: "Ages 6+ (younger children may watch with a parent)", area: "Osaka (Dotonbori)",
+    duration: "90 minutes", price: "¥26,500", priceUnit: "person", group: "1–16 in a regular class · 17+ guests by enquiry", ages: "Ages 6+ (younger children may watch with a parent)", area: "Osaka (Dotonbori)",
     img: "/images/ramen-osaka-boiling.jpg", alt: "Two guests lifting freshly boiled noodles from the baskets at the counter of the teaching kitchen",
     gallery: [
       { img: "/images/ramen-osaka-toppings.jpg", alt: "Trays of toppings laid out for the bowls: soft-boiled eggs, bamboo shoots, nori, sweetcorn and spring onion" },
@@ -788,7 +788,7 @@ export const experiences: Experience[] = [
       { icon: "brush", title: "Noodles from scratch", body: "Flour, water and your own hands: knead the dough, roll it through the noodle machine and cut your noodles." },
       { icon: "meal", title: "Three bowls, three styles", body: "Tonkotsu, shoyu and miso in small bowls, finished with chicken chashu and toppings, so you can taste the differences side by side." },
       { icon: "chat", title: "Taught in English", body: "A small kitchen, an instructor who explains each step in English, and no experience needed." },
-      { icon: "group", title: "Vegetarian, vegan and halal-friendly on request", body: "Say so when you request your date: vegetarian and vegan at no extra cost, a halal-friendly broth with advance notice and a supplement confirmed with your quote." },
+      { icon: "group", title: "Vegetarian, vegan and halal-friendly on request", body: "Tell us your dietary needs before booking. Vegetarian and vegan options have separate plan prices, confirmed before payment; a halal-friendly broth may be arranged in advance with a separately quoted supplement." },
     ],
     included: [
       "A 90-minute hands-on class in English",
@@ -825,11 +825,11 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any cooking experience?", a: "No. The instructor shows every step, and the dough is forgiving. If you can knead, you can make noodles." },
       { q: "What do we actually make?", a: "Fresh noodles from scratch, chicken chashu, and three small bowls — tonkotsu, shoyu and miso — finished with toppings, so you can taste the three styles side by side. Vegetarian, vegan and halal-friendly bowls differ in content." },
-      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes. Vegetarian and vegan bowls are arranged at no extra cost. A halal-friendly broth can be arranged with advance notice; the supplement is confirmed with your quote. Tell us when you request your date." },
+      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes, but vegetarian and vegan options are separate plans, not included in the standard class price. We confirm their availability and price before payment. A halal-friendly broth may be possible with advance notice and a separately quoted supplement; tell us when requesting your date." },
       { q: "Which language is the class in?", a: "English. The instructor runs the class in English and Japanese." },
       { q: "Can children join?", a: "From about age 6. Younger children cannot take part but may watch alongside a parent; the kitchen is not stroller accessible. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
-      { q: "Can groups book?", a: "Up to 16 guests share a session. Larger groups and private sessions are quoted individually." },
+      { q: "Can groups book?", a: "Yes. Regular online requests cover 1–16 guests. For 17 or more guests, please contact us for a group quotation rather than choosing 16 in the form. The venue can accommodate groups of approximately 40, subject to date, staffing and arrangements; private sessions are quoted individually." },
       { q: "Can we book at short notice?", a: "Yes, until 6:00 pm JST the day before, if the session still has room. Sessions run every day at 11:00, 13:30, 16:00 and 18:30." },
       { q: "What is the cancellation policy?", a: "Free cancellation ends 30 days before the class; from 29 to 14 days before, half the price; from 13 days before, the full price. The date can be changed once, free, up to 14 days before if another session has room. Private sessions and groups of 20 or more: free cancellation ends 45 days before; from 44 to 29 days before, half the price; from 28 days before, the full price, with one free date change up to 29 days before." },
       { q: "I have a wheat or gluten allergy.", a: "The class is not recommended for anyone with coeliac disease or a severe wheat or gluten allergy: there is flour in the air and the equipment is shared." },
@@ -840,7 +840,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Knead, roll and cut fresh noodles", "Prepare chicken chashu and the toppings", "Finish three small bowls: tonkotsu, shoyu and miso", "Eat what you made"],
     master: { title: "Your instructor", bio: "A ramen cook who teaches small classes in English in a dedicated kitchen in Dotonbori.", quote: "" },
     itinerary: ["0:00 — Welcome and aprons on", "0:10 — The dough", "0:30 — Roll and cut", "0:50 — Chashu and toppings", "1:05 — Three bowls", "1:15 — Eat", "1:30 — End of the class"],
-    goodToKnow: ["About 90 minutes; every day at 11:00, 13:30, 16:00 and 18:30; arrive 15 minutes early.", "From about age 6; younger children may watch with a parent. Children pay the adult price.", "Not recommended for coeliac disease or a severe wheat or gluten allergy.", "Taught in English."],
+    goodToKnow: ["About 90 minutes; every day at 11:00, 13:30, 16:00 and 18:30; arrive 15 minutes early.", "From about age 6; younger children may watch with a parent. Children pay the adult price.", "Not recommended for coeliac disease or a severe wheat or gluten allergy.", "Taught in English.", "For parties of 17 or more, ask us for a quote; groups of approximately 40 can be considered subject to confirmation."],
     story: { heading: "Three broths, one bowl at a time", body: "Tonkotsu, shoyu and miso are the three words every ramen menu in Japan turns on. Making the noodles yourself and tasting the three side by side is the fastest way to know which one is yours." },
   },
   {
