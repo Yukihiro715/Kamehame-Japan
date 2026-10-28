@@ -371,6 +371,14 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               </div>
             </section>
 
+            {/* Artist introductions for the three Amazing Japan Lounge programmes. */}
+            {(["nihonbashi-japanese-dance-salon", "nihonbashi-english-rakugo-salon", "nihonbashi-shamisen-salon"].includes(exp.slug)) && exp.master?.bio && (
+              <section className="xp-section" id="artists">
+                <h2>{exp.master.title}</h2>
+                <p className="xp-overview-p">{exp.master.bio}</p>
+              </section>
+            )}
+
             {/* ⑥′ The teacher, in their own words */}
             {exp.teacher && (
               <section className="xp-section" id="teacher">
