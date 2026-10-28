@@ -3102,7 +3102,7 @@ export const experiences: Experience[] = [
     // (regular / peak season); no partner terms yet, so the page is a
     // preview and the operator's brand stays off it. Photos come from the
     // operator's public media gallery linked in its guides.
-    slug: "kyoto-garden-teahouse-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    slug: "kyoto-garden-teahouse-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Private Tea Ceremony in a Garden Teahouse, West Kyoto",
     tagline: "A fifty-minute tea ceremony for your group alone, in a traditional teahouse with its own garden near Ryoan-ji. The host explains each step in English, serves a seasonal sweet and a bowl of matcha, then teaches you to whisk your own. Up to ten guests, from age four.",
     overview: [
@@ -3202,7 +3202,7 @@ export const experiences: Experience[] = [
     // Camellia Tea Ceremony, Kyoto: the Flower Teahouse in Higashiyama
     // (Masuya-cho, near Yasaka Pagoda), shared sessions. Built 2026-10-22 from
     // the operator's guides; public rates, no partner terms yet, preview.
-    slug: "kyoto-higashiyama-shared-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    slug: "kyoto-higashiyama-shared-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Tea Ceremony in a Higashiyama Teahouse, Kyoto",
     tagline: "A forty-five-minute tea ceremony in a small teahouse in the lanes below Yasaka Pagoda, shared with up to eight guests. The host explains in English, serves a seasonal sweet and matcha, then shows you how to whisk your own. Hourly from 10:00 to 17:00; children from six.",
     overview: [
@@ -3302,7 +3302,7 @@ export const experiences: Experience[] = [
     // Camellia Tea Ceremony, Kyoto: the Flower Teahouse in Higashiyama,
     // private sessions. Built 2026-10-22 from the operator's guides; public
     // rates, no partner terms yet, preview.
-    slug: "kyoto-higashiyama-private-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    slug: "kyoto-higashiyama-private-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto",
     tagline: "The same teahouse below Yasaka Pagoda, reserved for your group: a forty-five-minute ceremony in English for one to five guests, with a seasonal sweet, matcha, and a bowl you whisk yourself. Hourly from 10:00 to 17:00; from age four.",
     overview: [
@@ -3400,7 +3400,7 @@ export const experiences: Experience[] = [
     // sessions for 2–5 (6 on request) and a ryurei (chairs) group room for
     // 9–20. Built 2026-10-22 from the operator's guides; public rates, no
     // partner terms yet, preview.
-    slug: "kyoto-higashiyama-annex-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    slug: "kyoto-higashiyama-annex-tea-ceremony", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto",
     tagline: "A newly built tearoom a few doors from the Higashiyama teahouse, reserved for your group: a forty-five-minute ceremony in English for two to five guests, and a tables-and-chairs room for groups of nine to twenty. Hourly from 10:00 to 17:00; from age four.",
     overview: [
