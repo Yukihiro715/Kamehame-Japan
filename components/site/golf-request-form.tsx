@@ -280,7 +280,6 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             </div>
             <small id="golf-budget-hint" className="form-hint">{P.budgetHint}</small>
             <label><span>{P.transport}</span><select name="golf_budget_transport" defaultValue="unsure"><option value="unsure">{P.unsure}</option><option value="included">{P.included}</option><option value="separate">{P.separate}</option></select></label>
-            <label><span>{P.equipment}</span><input name="golf_equipment" maxLength={300} placeholder={P.equipmentHint} /></label>
             {processCopy.transfer && processCopy.transfers && (
               <label><span>{processCopy.transfer}</span>
                 <select name="transfer" defaultValue="none">
