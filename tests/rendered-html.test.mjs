@@ -626,3 +626,22 @@ test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seve
   const { readFileSync } = await import("node:fs");
   assert.ok(!readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8").includes("/previews/"), "not in the sitemap");
 });
+
+test("golf planning: all five languages expose optional budget and travel inputs, support and terms", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const res = await render(`/${lang}/tokyo/mt-fuji-golf-day/`);
+    assert.equal(res.status, 200);
+    const html = await res.text();
+    for (const name of ["golf_budget", "golf_currency", "golf_budget_transport", "golf_journey", "golf_equipment"]) {
+      assert.ok(html.includes(`name="${name}"`), `${lang}: ${name}`);
+      const tag = html.match(new RegExp(`<[^>]+name="${name}"[^>]*>`))?.[0];
+      assert.ok(tag && !/\brequired\b/.test(tag), `${name} stays optional`);
+    }
+    assert.ok(html.includes('id="terms"'));
+    if (lang === "en") {
+      assert.ok(html.includes("Plan your golf day with confidence"));
+      assert.ok(html.includes("Do I need an English-speaking assistant?"));
+      assert.ok(html.includes("¥5,000 covers research and a suitable proposal"));
+    }
+  }
+});

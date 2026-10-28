@@ -1,3 +1,4 @@
+import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 import Link from "next/link";
 import { Check, Clock3, Wine } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
@@ -133,6 +134,7 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
             <section className="xp-section" id="about">
               <h2>{H.about}</h2>
               {exp.overview?.[0] && <p className="xp-lede">{exp.overview[0]}</p>}
+              {isArrangement() && <div className="xp-note"><h3>{golfPlanningCopy[lang].heading}</h3><p>{golfPlanningCopy[lang].support}</p><h3>{golfPlanningCopy[lang].budgetHeading}</h3><p>{golfPlanningCopy[lang].budgetExplainer}</p></div>}
               {vc.intro.guideNote && <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>}
             </section>
 

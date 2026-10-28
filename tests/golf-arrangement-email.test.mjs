@@ -195,7 +195,8 @@ test("all public languages and automatic mails use the staged terms and keep pri
     assert.doesNotMatch(JSON.stringify(c), /seven days before|7日前|siete días antes|sept jours avant|7 天前|Option 2/);
     for (const kind of ["ack", "follow-up"]) {
       const mail = golfCustomerEmail(kind, { ...e, lang });
-      assert.ok(mail.text.includes(p.terms));
+      assert.ok(!mail.text.includes(p.terms), "receipt and reminder link to full terms instead of repeating them");
+      assert.ok(mail.text.includes(`/${lang}/tokyo/mt-fuji-golf-day/#terms`));
       assert.doesNotMatch(mail.text, /Option 2|Private golf day with premium/);
     }
   }
