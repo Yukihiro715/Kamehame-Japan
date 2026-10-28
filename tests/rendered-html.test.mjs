@@ -632,7 +632,7 @@ test("golf planning: all five languages expose optional budget and travel inputs
     const res = await render(`/${lang}/tokyo/mt-fuji-golf-day/`);
     assert.equal(res.status, 200);
     const html = await res.text();
-    for (const name of ["golf_budget", "golf_currency", "golf_budget_transport", "golf_equipment"]) {
+    for (const name of ["golf_budget", "golf_currency", "golf_budget_transport"]) {
       assert.ok(html.includes(`name="${name}"`), `${lang}: ${name}`);
       const tag = html.match(new RegExp(`<[^>]+name="${name}"[^>]*>`))?.[0];
       assert.ok(tag && !/\brequired\b/.test(tag), `${name} stays optional`);
@@ -640,6 +640,7 @@ test("golf planning: all five languages expose optional budget and travel inputs
     assert.ok(html.includes('id="terms"'));
     assert.ok(html.includes("golf-budget-row"));
     assert.ok(!html.includes('name="golf_journey"'));
+    assert.ok(!html.includes('name="golf_equipment"'));
     assert.ok(!html.includes('name="assistant"'));
     if (lang === "en") {
       assert.ok(html.includes("Plan your golf day with confidence"));
