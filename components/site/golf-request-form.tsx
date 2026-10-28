@@ -1,4 +1,5 @@
 "use client";
+import { golfPlanningCopy, golfPlanningNotes } from "@/lib/golf-planning-copy";
 
 import { readAttribution } from "@/lib/attribution-client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -50,6 +51,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   lang: Lang; fallbackEmail: string; experience: { slug: string; title: string };
   variants: ExperienceVariant[]; copy: VariantPageCopy; addOns: AddOn[]; parties: number[];
 }) {
+  const P = golfPlanningCopy[lang];
   const T = t(lang);
   const F = T.form;
   const G = copy.form;
@@ -125,7 +127,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
     const payload = {
       pickup_region: data.pickup_region, caddie: data.caddie, addon_ids: chosenAddOns.map((a) => a.id),
       kind: "guest", lang, experience: experience.slug,
-      name: data.name, email: data.email, whatsapp: data.whatsapp, message: data.message, website: data.website,
+      name: data.name, email: data.email, whatsapp: data.whatsapp, message: arrangement ? golfPlanningNotes(data) : data.message, website: data.website,
       area: v.title, area_id: v.id, party: String(n),
       course_mode: specific ? "specific" : "recommended",
       course: namedCourse ? b.courseName : "", course_url: namedCourse ? b.courseUrl : "",
@@ -270,6 +272,13 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
               <span>{G.pickup}</span>
               <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
             </label>
+            <div className="form-row two">
+              <label><span>{P.budget}</span><input name="golf_budget" type="number" min="1" max="100000000" step="any" inputMode="decimal" /><small>{P.budgetHint}</small></label>
+              <label><span>{P.currency}</span><select name="golf_currency" defaultValue="JPY">{["JPY", "USD", "GBP", "EUR", "AUD", "CAD", "SGD", "HKD", "TWD"].map(c => <option key={c}>{c}</option>)}</select></label>
+            </div>
+            <label><span>{P.transport}</span><select name="golf_budget_transport" defaultValue="unsure"><option value="unsure">{P.unsure}</option><option value="included">{P.included}</option><option value="separate">{P.separate}</option></select></label>
+            <label><span>{P.journey}</span><input name="golf_journey" maxLength={120} placeholder={P.journeyHint} /></label>
+            <label><span>{P.equipment}</span><input name="golf_equipment" maxLength={300} placeholder={P.equipmentHint} /></label>
             {processCopy.transfer && processCopy.transfers && (
               <label><span>{processCopy.transfer}</span>
                 <select name="transfer" defaultValue="none">
@@ -388,7 +397,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         </div>
         <label className="form-row">
           <span>{G.requests}</span>
-          <textarea name="message" rows={4} maxLength={4000} placeholder={G.requestsHint} />
+          <textarea name="message" rows={4} maxLength={arrangement ? 3000 : 4000} placeholder={G.requestsHint} />
         </label>
         <label><span>{processCopy.caddie}</span>
           <select name="caddie" defaultValue="none">

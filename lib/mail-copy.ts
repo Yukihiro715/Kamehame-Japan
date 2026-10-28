@@ -1,3 +1,4 @@
+import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 import { arrangementPolicy } from "@/lib/golf-arrangement-policy";
 // Copy for the automatic acknowledgement a visitor receives right after
 // sending an enquiry. Text is the source for both text and HTML alternatives.
@@ -250,10 +251,10 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
   const text = [
     c.hello(e.name),
     "",
-    trade ? c.thanksTrade : e.areaId ? golfProcessCopy(isLang(e.lang) ? e.lang : "en").received : c.thanks(experienceTitle),
+    arrangement ? golfPlanningCopy[lang].ack : trade ? c.thanksTrade : e.areaId ? golfProcessCopy(isLang(e.lang) ? e.lang : "en").received : c.thanks(experienceTitle),
     "",
-    ...(trade ? [] : [e.areaId ? [golfProcessCopy(isLang(e.lang) ? e.lang : "en").arrange, golfProcessCopy(isLang(e.lang) ? e.lang : "en").protection].join("\n\n") : c.notYet, ""]),
-    ...(arrangement ? [arrangementPolicy[lang].beforePayment, "", arrangementMailCopy[lang].paymentSplit, "", arrangementPolicy[lang].terms, ""] : []),
+    ...(trade || arrangement ? [] : [e.areaId ? [golfProcessCopy(isLang(e.lang) ? e.lang : "en").arrange, golfProcessCopy(isLang(e.lang) ? e.lang : "en").protection].join("\n\n") : c.notYet, ""]),
+    ...(arrangement ? [golfPlanningCopy[lang].support, "", arrangementPolicy[lang].confirmation, "", `${golfPlanningCopy[lang].termsLink}: https://kamehame-japan.com/${lang}/tokyo/mt-fuji-golf-day/#terms`, ""] : []),
     ...(echo.length ? [c.echoH, ...echo.map((l) => `  ${l}`), ""] : []),
     c.addMore,
     "",
@@ -275,8 +276,7 @@ export function followUp(e: Enquiry, experienceTitle?: string): { subject: strin
   const c = COPY[isLang(e.lang) ? e.lang : "en"];
   const f = c.followUp;
   const arrangement = e.kind === "guest" && e.experience === "mt-fuji-golf-day" && isArrangement();
-  const a = arrangementMailCopy[isLang(e.lang) ? e.lang : "en"];
-  const body = arrangement ? `${a.followUp}\n\n${a.paymentSplit}\n\n${arrangementPolicy[isLang(e.lang) ? e.lang : "en"].terms}` : e.areaId ? f.golf() : f.other(experienceTitle ?? e.experience ?? "");
+  const body = arrangement ? `${golfPlanningCopy[isLang(e.lang) ? e.lang : "en"].follow}\n\n${golfPlanningCopy[isLang(e.lang) ? e.lang : "en"].termsLink}: https://kamehame-japan.com/${isLang(e.lang) ? e.lang : "en"}/tokyo/mt-fuji-golf-day/#terms` : e.areaId ? f.golf() : f.other(experienceTitle ?? e.experience ?? "");
   const text = [c.hello(e.name), "", f.intro, "", body, "", f.wait, "", f.reply, "", f.sign].join("\n");
   return { subject: threadSubject(e, experienceTitle), text };
 }

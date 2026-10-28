@@ -1,3 +1,4 @@
+import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 // The golf page as a course-booking service (GOLF_MODE "arrangement", 2026-10-17).
 //
 // A group fee (¥15,000 for the first golfer, ¥5,000 per additional golfer) for choosing the course, reserving the tee time and handling the
@@ -89,7 +90,7 @@ const en: ArrangementCopy = {
   scheduleNote: "A typical day; the tee time and the lunch pattern depend on the course.",
   timeLabel: "Preferred tee time",
   cta: { label: "Check Tee Times", note: "No payment required to enquire.", heading: "Request a Tee Time", lead: "Your date, your golfers, your area. No payment now." },
-  variants: { tokyo: { title: "Tokyo Area", short: "Tokyo Area", tagline: "Courses within 1–1.5 hours of Tokyo" }, fuji: { title: "Mt. Fuji Area", short: "Mt. Fuji Area", tagline: "Courses with Mt. Fuji on the horizon" }, other: { title: "Other Area", short: "Other", tagline: "Anywhere in Japan: tell us where in the form. Same fee." } },
+  variants: { tokyo: { title: "Tokyo Area", short: "Tokyo Area", tagline: "Courses selected around your travel plans" }, fuji: { title: "Mt. Fuji Area", short: "Mt. Fuji Area", tagline: "Courses with Mt. Fuji on the horizon" }, other: { title: "Other Area", short: "Other", tagline: "Anywhere in Japan: tell us where in the form. Same fee." } },
   otherArea: { label: "Where would you like to play?", hint: "Prefecture, city or course name, e.g. Hokkaido, Karuizawa, Miyazaki" },
   venue: {
     known: ["The fee for your group", "Meet at the course, or a transfer through the partner we introduce"],
@@ -140,7 +141,7 @@ const en: ArrangementCopy = {
     heading: "Getting There: Your Choice",
     body: "No transfer is built into the fee. Drive, take the train and a taxi, or ask us to introduce a licensed private transfer partner, booked and paid directly with them.",
     points: [
-      { title: "Meet at the course", body: "We send the address, route and arrival time. Tokyo-area courses are 1–1.5 hours by car; Mt. Fuji about 2." },
+      { title: "Meet at the course", body: "We send the address, route and arrival time. Journey times depend on your accommodation, course and transport; we discuss the estimate before payment." },
       { title: "Private car through our partner", body: "A minivan with a driver, hotel to clubhouse and back. You book and pay the partner directly." },
       { title: "Train and taxi", body: "Some courses are near a station with taxis waiting; we tell you which." },
     ],
@@ -928,7 +929,7 @@ export function applyGolfArrangement(e: Experience, lang: Lang): Experience {
     langTag: undefined,
     venue: e.venue ? { ...e.venue, known: c.venue.known, afterBooking: c.venue.afterBooking } : e.venue,
     flow: c.process.steps.map((title, i) => ({ title, body: [c.process.received, c.process.proposal, `${c.process.arrange} ${c.process.protection}`][i] })),
-    faq: c.faq,
+    faq: [...c.faq, { q: golfPlanningCopy[lang].assistantQ, a: golfPlanningCopy[lang].assistantA }, { q: golfPlanningCopy[lang].practicalQ, a: golfPlanningCopy[lang].practicalA }],
     variantCopy: vc ? {
       ...vc,
       benefits: c.benefits, crumb: c.crumb, photoNote: c.photoNote,
