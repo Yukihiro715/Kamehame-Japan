@@ -103,7 +103,7 @@ async function referralArrival(request: Request, env: Env, url: URL): Promise<Re
   let location = "/en/";
   if (isD1Like(env.DB)) {
     try {
-      const r = await handleReferralArrival(d1Db(env.DB), { token, userAgent: request.headers.get("user-agent"), test: url.searchParams.get("kh_test") === "1", secure: url.protocol === "https:" });
+      const r = await handleReferralArrival(d1Db(env.DB), { token, userAgent: request.headers.get("user-agent"), test: url.searchParams.get("kh_test") === "1", secure: url.protocol === "https:", cookie: request.headers.get("cookie") });
       location = r.redirect;
       if (r.setCookie) headers.append("set-cookie", r.setCookie);
     } catch (err) {

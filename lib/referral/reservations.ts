@@ -30,6 +30,13 @@ export async function policyFor(db: SqlDb, slug: string, now = Date.now()): Prom
 
 export interface CreateResult { id: string; created: boolean; referral?: ReferralStatus }
 
+/** "R-7KX4QM": what a hotel sees for a booking. No vowels or look-alikes, never an internal id. */
+export function newHotelRef(): string {
+  const alphabet = "23456789BCDFGHJKMNPQRSTVWXZ";
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  return "R-" + Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
+}
+
 /** Create the reservation (idempotent on requestId) with its lines, and fix
  *  the referral it arrived with, all in one batch. */
 export async function createReservation(db: SqlDb, r: NewReservation, ref: ReferralContext | null, now = Date.now()): Promise<CreateResult> {
@@ -38,9 +45,9 @@ export async function createReservation(db: SqlDb, r: NewReservation, ref: Refer
   const id = randomId(), at = new Date(now).toISOString();
   const policy = ref ? await policyFor(db, r.experienceSlug, now) : null;
   const statements: SqlStatement[] = [{
-    sql: `INSERT INTO reservations (id, request_id, external_ref, flow, experience_slug, experience_date, guests, lang, status, payment_status, amount_status, created_at, updated_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'provisional', 'unpaid', ?, ?, ?)`,
-    params: [id, r.requestId, r.externalRef ?? null, r.flow, r.experienceSlug, r.experienceDate ?? null, r.guests ?? null, r.lang ?? null, r.amountPending || r.lines.length === 0 ? "pending" : "known", at, at],
+    sql: `INSERT INTO reservations (id, request_id, external_ref, flow, experience_slug, experience_date, guests, lang, status, payment_status, amount_status, created_at, updated_at, hotel_ref)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'provisional', 'unpaid', ?, ?, ?, ?)`,
+    params: [id, r.requestId, r.externalRef ?? null, r.flow, r.experienceSlug, r.experienceDate ?? null, r.guests ?? null, r.lang ?? null, r.amountPending || r.lines.length === 0 ? "pending" : "known", at, at, newHotelRef()],
   }];
   r.lines.forEach((l, i) => {
     const tax = l.taxRateBp ?? policy?.tax_rate_bp ?? 1000;

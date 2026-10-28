@@ -1,8 +1,8 @@
-# ホテル紹介管理（段階2）: 紹介リンク・帰属・紹介料台帳
+# ホテル紹介管理（段階2・3）: 紹介リンク・帰属・紹介料台帳・ホテル画面・運営画面
 
-要件書 v1.1 の段階2。段階1の調査は `docs/HOTEL_REFERRAL_STAGE1.md`。
-ここでは、何ができるようになったか、オーナーが一度だけ行う設定、運用で使う SQL、確認方法をまとめる。
-ホテル画面・運営画面・精算書は段階3・4（未実装）。
+要件書 v1.1 の段階2と3。段階1の調査は `docs/HOTEL_REFERRAL_STAGE1.md`。
+ここでは、何ができるようになったか、オーナーが一度だけ行う設定、運用の手順、確認方法をまとめる。
+精算書・四半期締め・支払バッチは段階4（未実装）。
 
 ## できるようになったこと
 
@@ -20,6 +20,34 @@
 
 変わらないもの: 既存のメール、Slack、Google シート台帳、Apps Script への転送はそのまま。D1 が無い環境では紹介機能が静かに無効になり、予約は従来どおり通る。
 
+## 段階3: ホテル画面と運営画面（2026-10-28）
+
+| 画面 | URL | 内容 |
+|---|---|---|
+| ホテル向け | `/hotel/`（サインイン `/hotel/login/`） | 実績（期間別の集客・予約状況と、実施後の確定実績・現在の未払残高）、紹介予約一覧（照合番号、個人情報なし）、体験一覧と紹介条件、QR・リンク（全体験一覧と体験別、SVG/PNG、コピー用URL）、精算（残高と設定の案内） |
+| 運営 | `/ops/`（サインイン `/ops/login/`） | 概要、例外一覧（料率未設定・精算先未設定・金額未確定・実施確認待ち・返金配賦・紛争・未突合）、予約一覧と詳細（実施確認、予約確定/キャンセル/未実施、紹介元訂正、明細入力、入金の手動登録、返金配賦）、ホテル・契約法人・精算設定の登録、担当者招待、媒体別リンク発行と停止、料率の登録・改定、運営メンバー、操作履歴、CSV出力、設定 |
+
+- サインインは **メールの6桁コード**（10分有効、5回まで）。パスワードはない。セッションはホテル 30 日、運営 12 時間。
+- 権限は毎回サーバーで `memberships` から判定する。ホテル担当者は自分の施設だけ。複数施設をまとめた精算設定は、全施設に請求権限がある担当者にだけ見える（段階4で精算書に適用）。
+- 役割: 管理者（すべて）、予約運営（実施確認・訂正・リンク・ホテル登録）、経理（料率・明細・入金・返金配賦・CSV）、ホテルの閲覧担当者／請求担当者。
+- 状態変更の API は同一オリジンの `Origin` と `x-kh-portal: 1` ヘッダーが必須（CSRF 対策）。CSV は数式インジェクション対策済み。
+- 検証環境（`KH_ENV=staging`）では、メールが送れないときにサインインコードを画面に表示する（Basic 認証の内側）。本番では表示しない。
+- ホテルへのメール（招待・コード）は Resend で送る。検証環境では `NOTIFY_ALLOWLIST`（例 `info@example.com,@prosent.co.jp`）にある宛先にだけ送る。
+
+### 最初の運営アカウント
+
+運営メンバーがひとりもいない間だけ、Worker の変数 `PORTAL_BOOTSTRAP_ADMIN` に入れたメールアドレスが `/ops/login/` でサインインすると管理者になる。以後はこの変数は何もしない（管理者は画面から追加する）。
+
+Cloudflare → Workers & Pages → `kamehame-japan`（本番）と `kamehame-japan-staging` → Settings → Variables and Secrets → `PORTAL_BOOTSTRAP_ADMIN` = オーナーのメールアドレス → デプロイ。
+
+### 運用の流れ
+
+1. 運営 → ホテル・法人 → 契約法人を登録 → 施設を登録（施設ごとの精算設定が自動でできる）。
+2. 施設の詳細 → 担当者を招待（メールでサインイン手順が届く）→ 媒体別のQRを発行（パンフレット、客室TV、フロント）。ホテル自身も「QR・リンク」から全体験一覧・体験別のQRを取れる。
+3. 料率 → 体験ごとに料率を登録（未設定の体験は紹介対象外のまま）。
+4. 予約が入ると、紹介元のある予約は運営の予約一覧に出る。体験後に「実施済みを登録」すると紹介料が確定する。例外一覧に出たものを順に処理する。
+5. 四半期締め・精算書・支払は段階4。
+
 ## オーナーが一度だけ行う設定
 
 1. **Cloudflare API トークンに D1 の権限を追加**（決定 D1）
@@ -36,9 +64,9 @@
 5. **プライバシーポリシーへの追記**（決定 D4）
    `kh_ref` は「提携ホテルからのご紹介を記録するための第一者 Cookie（30 日）。個人を特定せず、広告には使いません」。段階3で `app/[lang]/privacy` に 5 言語で追記する。
 
-## 運用（段階3の画面ができるまで）
+## 運用（画面を使わない場合の代替）
 
-ホテル・リンク・料率の登録は、当面 `wrangler d1 execute` で行う。実行は本番の D1 を直接書き換えるので、まず `--local` または検証環境で試す。
+ホテル・リンク・料率の登録は運営画面で行う。緊急時は `wrangler d1 execute` でも可。実行は本番の D1 を直接書き換えるので、まず `--local` または検証環境で試す。
 
 ```bash
 # 例: 法人・施設・精算設定・リンク・料率（値は差し替える）
@@ -59,13 +87,14 @@ INSERT INTO experience_referral_policies (id, experience_slug, rate_bp, tax_rate
 
 ## 確認方法
 
-- 単体: `node --test tests/referral-money.test.mjs tests/referral-ledger.test.mjs`（node:sqlite に実際の移行を適用して実行）。
+- 単体: `node --test tests/referral-money.test.mjs tests/referral-ledger.test.mjs tests/portal-api.test.mjs`（node:sqlite に実際の移行を適用して実行。portal-api はサインイン、権限、QR、集計、運営操作、CSV）。
+- ローカルで画面ごと動かす: `npm run build` → `npx wrangler d1 migrations apply kamehame-ledger --local --config dist/server/wrangler.json` → `npx wrangler dev --local --config dist/server/wrangler.json --port 8788 --var KH_ENV:staging --var STAGING_BASIC_AUTH:kame:test --var PORTAL_BOOTSTRAP_ADMIN:you@example.com`。
 - Worker: `npm test`（`tests/referral-worker.test.mjs` が `/r/<token>` と検証環境のゲートを確認）。
 - 本番での疎通: D1 が紐付いたら `https://kamehame-japan.com/r/<token>?kh_test=1` にアクセスし、302 と `Set-Cookie: kh_ref=…` を確認。`referral_events` に `ua_class = 'test'` の行が入る。
 
 ## 受入テストの対応（段階2で自動化したもの）
 
-T04, T05, T06, T07, T08, T10, T13, T14, T15, T16, T17, T23（リンク側）, T25, T26 を `tests/referral-ledger.test.mjs` と `tests/referral-money.test.mjs` で確認。T09, T11, T12 の計算部分も同上。残りは段階3・4。
+T04, T05, T06, T07, T08, T10, T13, T14, T15, T16, T17, T23（リンク側）, T25, T26 を `tests/referral-ledger.test.mjs` と `tests/referral-money.test.mjs` で確認。T09, T11, T12 の計算部分も同上。T02, T03, T22, T24（権限、精算設定の公開範囲、集計と明細の一致、CSRF・偽造 Cookie・個人情報非表示・CSV）を `tests/portal-api.test.mjs` で確認。残り（T11, T12, T18〜T21, T27〜T30 の精算処理）は段階4。
 
 ## 設計上の注意
 

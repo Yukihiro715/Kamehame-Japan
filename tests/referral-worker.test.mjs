@@ -74,3 +74,17 @@ test("staging gate: locked without the secret, 401 without credentials, open wit
   // production is untouched
   assert.equal((await page({})).status, 200);
 });
+
+test("portal pages: never indexed, nothing hotel-specific in the HTML, sign-in shell served without a database", async () => {
+  const w = await worker();
+  for (const path of ["/hotel/login/", "/hotel/", "/ops/login/", "/ops/reservations/"]) {
+    const res = await w.fetch(new Request(`https://kamehame-japan.com${path}`, { headers: { accept: "text/html" } }), { ASSETS: assets }, ctx);
+    assert.equal(res.status, 200, path);
+    const html = await res.text();
+    assert.match(html, /<meta name="robots" content="noindex/i, `${path} is noindex`);
+    assert.ok(!/HP-\d{4}|R-[2-9A-Z]{6}|kh_sess/.test(html), `${path} carries no portal data`);
+  }
+  // the API refuses everything without the ledger, and state changes without the portal header
+  const api = await w.fetch(new Request("https://kamehame-japan.com/api/portal/ops/me"), { ASSETS: assets }, ctx);
+  assert.equal(api.status, 503);
+});

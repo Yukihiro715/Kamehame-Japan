@@ -19,7 +19,7 @@ export interface PrivacyCopy {
   };
 }
 
-const UPDATED = "2026-10-13";
+const UPDATED = "2026-10-28";
 
 const PRIVACY: Record<Lang, PrivacyCopy> = {
   en: {
@@ -87,6 +87,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       intro: "In the EEA, the United Kingdom and Switzerland only the first four entries can be set before you choose, and the rest arrive only if you accept. Elsewhere the rest are set by default unless you turn measurement off with the Cookie settings link in the footer.",
       cols: ["Name", "What it does", "Kept for"],
       rows: [
+        ["kh_ref (kamehame-japan.com)", "Set only when you arrive through a partner hotel's QR code or link. Records that the visit came from that hotel so the hotel can be credited for a booking you make; it holds a random reference, not your identity, and is never used for advertising.", "30 days"],
         ["kh-consent-2", "Remembers your cookie choice so you are not asked again.", "6 months"],
         ["kh-checkout-session (browser storage, this tab only)", "Holds the Stripe reference of your payment so the confirmation page can check it without keeping it in the page address.", "Until you close the tab"],
         ["kh-enquiry-sent (browser storage, this tab only)", "Carries a summary of your enquiry to the confirmation page, which deletes it once read.", "Until the confirmation page opens"],
@@ -166,6 +167,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       intro: "EEA・英国・スイスでは、お選びいただく前に保存されうるのは最初の4つだけで、残りは同意された場合にのみ保存されます。それ以外の地域では、フッターの「Cookie設定」で計測を無効にしない限り、残りも保存されます。",
       cols: ["名称", "用途", "保存期間"],
       rows: [
+        ["kh_ref (kamehame-japan.com)", "提携ホテルのQRコードやリンクから来た場合にだけ置かれます。そのホテルからのご紹介であることを記録し、ご予約があった際にホテルに紹介実績を付けるためのものです。中身はランダムな番号で、お客様個人を特定するものではなく、広告には使いません。", "30日"],
         ["kh-consent-2", "Cookieの選択を記憶し、繰り返し確認しないようにします。", "6か月"],
         ["kh-checkout-session(ブラウザのストレージ、このタブのみ)", "確認ページがお支払いを照会できるよう、Stripeのお支払いの識別番号を、ページのアドレスに残さずに保持します。", "タブを閉じるまで"],
         ["kh-enquiry-sent(ブラウザのストレージ、このタブのみ)", "お問い合わせの概要を確認ページに引き継ぎます。確認ページが読み込んだ時点で削除されます。", "確認ページが開くまで"],
@@ -245,6 +247,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       intro: "En el EEE, el Reino Unido y Suiza solo las cuatro primeras entradas pueden guardarse antes de su elección y el resto llega únicamente si acepta. En los demás países el resto se guarda por defecto, salvo que desactive la medición con el enlace «Configuración de cookies» del pie de página.",
       cols: ["Nombre", "Para qué sirve", "Duración"],
       rows: [
+        ["kh_ref (kamehame-japan.com)", "Solo se instala cuando llega a través del código QR o el enlace de un hotel asociado. Registra que la visita procede de ese hotel para que se le reconozca una reserva suya; contiene una referencia aleatoria, no su identidad, y nunca se usa para publicidad.", "30 días"],
         ["kh-consent-2", "Recuerda su elección sobre cookies para no volver a preguntar.", "6 meses"],
         ["kh-checkout-session (almacenamiento del navegador, solo esta pestaña)", "Guarda la referencia de Stripe de su pago para que la página de confirmación pueda comprobarlo sin dejarla en la dirección de la página.", "Hasta que cierre la pestaña"],
         ["kh-enquiry-sent (almacenamiento del navegador, solo esta pestaña)", "Lleva un resumen de su consulta a la página de confirmación, que lo borra tras leerlo.", "Hasta que se abre la página de confirmación"],
@@ -324,6 +327,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       intro: "Dans l'EEE, au Royaume-Uni et en Suisse, seules les quatre premières entrées peuvent être déposées avant votre choix, et les autres n'arrivent que si vous acceptez. Ailleurs, les autres sont déposées par défaut, sauf si vous désactivez la mesure avec le lien « Paramètres des cookies » en bas de page.",
       cols: ["Nom", "Rôle", "Durée"],
       rows: [
+        ["kh_ref (kamehame-japan.com)", "Déposé uniquement si vous arrivez par le QR code ou le lien d'un hôtel partenaire. Il enregistre que la visite vient de cet hôtel afin que celui-ci soit crédité d'une réservation que vous feriez ; il contient une référence aléatoire, pas votre identité, et ne sert jamais à la publicité.", "30 jours"],
         ["kh-consent-2", "Mémorise votre choix pour ne plus vous le demander.", "6 mois"],
         ["kh-checkout-session (stockage du navigateur, cet onglet uniquement)", "Conserve la référence Stripe de votre paiement pour que la page de confirmation puisse le vérifier sans la laisser dans l'adresse de la page.", "Jusqu'à la fermeture de l'onglet"],
         ["kh-enquiry-sent (stockage du navigateur, cet onglet uniquement)", "Transmet un résumé de votre demande à la page de confirmation, qui l'efface après l'avoir lu.", "Jusqu'à l'ouverture de la page de confirmation"],
@@ -403,6 +407,7 @@ const PRIVACY: Record<Lang, PrivacyCopy> = {
       intro: "在歐洲經濟區、英國與瑞士，只有前四項可能在您選擇之前儲存，其餘僅在您同意後才會出現；在其他地區，除非您透過頁尾的「Cookie 設定」關閉成效衡量，其餘項目會預設儲存。",
       cols: ["名稱", "用途", "保存期間"],
       rows: [
+        ["kh_ref (kamehame-japan.com)", "只有在您透過合作飯店的 QR Code 或連結造訪時才會設定。它記錄此次造訪來自該飯店，以便您預約時為飯店計入介紹實績；內容是隨機參照碼，不是您的身分，也絕不用於廣告。", "30 天"],
         ["kh-consent-2", "記住您對 Cookie 的選擇，以免重複詢問。", "6 個月"],
         ["kh-checkout-session（瀏覽器儲存空間，僅限此分頁）", "保存您付款的 Stripe 參考編號，讓確認頁不必將其留在頁面網址中即可查詢。", "至您關閉分頁為止"],
         ["kh-enquiry-sent（瀏覽器儲存空間，僅限此分頁）", "將您的詢問摘要帶到確認頁，確認頁讀取後即刪除。", "至確認頁開啟為止"],

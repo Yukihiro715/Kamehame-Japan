@@ -50,7 +50,10 @@ export function referralCookie(sessionId: string, secure = true): string {
     : `${REFERRAL_COOKIE}=; Max-Age=0; ${attrs}`;
 }
 
-export interface ArrivalInput { token: string; userAgent?: string | null; test?: boolean; now?: number; secure?: boolean }
+/** Two arrivals within this window, through the same link, count as one visit (要件 12). */
+export const VISIT_WINDOW_MS = 30 * 60000;
+
+export interface ArrivalInput { token: string; userAgent?: string | null; test?: boolean; now?: number; secure?: boolean; /** The request's Cookie header, to recognise a repeat scan. */ cookie?: string | null }
 export interface ArrivalResult { redirect: string; setCookie?: string; recorded: boolean; uaClass: UaClass; linkId?: string }
 
 interface LinkRow { id: string; hotel_id: string | null; chain_profile_id: string | null; target_path: string; medium: string; status: string; hotel_status: string | null }
@@ -70,12 +73,23 @@ export async function handleReferralArrival(db: SqlDb, input: ArrivalInput): Pro
   const excluded = uaClass !== "human" || !live;
   const at = new Date(now).toISOString();
   const lang = target.match(/^\/(en|es|ja|fr|zh-tw)/)?.[1] ?? null;
-  const sessionId = excluded ? null : randomId();
+  // A repeat arrival through the same link within the visit window keeps its session.
+  let reused = false, sessionId: string | null = null;
+  if (!excluded) {
+    const prior = readCookie(input.cookie, REFERRAL_COOKIE);
+    const existing = prior && /^[A-Za-z0-9_-]{16,64}$/.test(prior)
+      ? await db.first<{ id: string; last_seen_at: string; expires_at: string }>(`SELECT id, last_seen_at, expires_at FROM referral_sessions WHERE id = ? AND link_id = ? AND revoked = 0`, [prior, link.id])
+      : null;
+    if (existing && now - Date.parse(existing.last_seen_at) <= VISIT_WINDOW_MS && Date.parse(existing.expires_at) > now) { sessionId = existing.id; reused = true; }
+    else sessionId = randomId();
+  }
   const statements = [
     { sql: `INSERT INTO referral_events (id, link_id, hotel_id, session_id, at, ua_class, excluded, lang) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       params: [randomId(), link.id, link.hotel_id, sessionId, at, uaClass, excluded ? 1 : 0, lang] },
   ];
-  if (sessionId) {
+  if (sessionId && reused) {
+    statements.push({ sql: `UPDATE referral_sessions SET last_seen_at = ? WHERE id = ?`, params: [at, sessionId] });
+  } else if (sessionId) {
     statements.push({ sql: `INSERT INTO referral_sessions (id, hotel_id, link_id, created_at, last_seen_at, expires_at, revoked) VALUES (?, ?, ?, ?, ?, ?, 0)`,
       params: [sessionId, link.hotel_id, link.id, at, at, new Date(now + REFERRAL_TTL_MS).toISOString()] });
   }

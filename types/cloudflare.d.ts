@@ -38,6 +38,9 @@ declare module "cloudflare:workers" {
     /** "staging" on the verification Worker (worker/index.ts gate). */
     KH_ENV?: string;
     STAGING_BASIC_AUTH?: string;
+    /** Portal (lib/portal): the first operator's e-mail, and the staging mail allowlist. */
+    PORTAL_BOOTSTRAP_ADMIN?: string;
+    NOTIFY_ALLOWLIST?: string;
     /** KV namespace the readiness cron publishes to (vite.config.ts); absent until the deploy workflow has created it. */
     READY_STATE?: { get(key: string, type: "json"): Promise<unknown>; put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void> };
     /** Workers AI binding (translation for the team's notification). */
