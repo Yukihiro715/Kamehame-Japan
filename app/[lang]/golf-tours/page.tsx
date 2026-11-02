@@ -54,6 +54,13 @@ export default async function GolfToursPage({ params }: Props) {
             <ul className="gb-features">
               {C.landFeatures.map((f, i) => { const Icon = icons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
             </ul>
+            <a className="gb-btn gb-btn-big gb-hero-cta" href="#choose">{C.landCta}</a>
+          </div>
+        </section>
+
+        <section className="gl-options" id="choose" aria-labelledby="gl-opt-h">
+          <div className="gb-wrap">
+            <h2 id="gl-opt-h">{C.twoWaysH}</h2>
             <div className="gl-hero-cards">
               <Link className="gl-hcard gl-hcard-custom" href={customHref}>
                 <span className="gl-hcard-tag">{C.heroCustomTag}</span>
@@ -65,11 +72,11 @@ export default async function GolfToursPage({ params }: Props) {
                 <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><span className="gb-btn gb-btn-small gb-btn-outline">{C.sharedCta} <ArrowRight size={14} /></span></div>
               </Link>
             </div>
-            <p className="gl-hero-note">{C.heroCardsNote}</p>
+            <p className="gl-options-note">{C.heroCardsNote}</p>
           </div>
         </section>
 
-        <section className="gl-compare" aria-labelledby="gl-cmp-h" id="choose">
+        <section className="gl-compare" aria-labelledby="gl-cmp-h">
           <div className="gb-wrap">
             <h2 id="gl-cmp-h">{C.compareH}</h2>
             <p className="gb-lede">{C.compareLede}</p>

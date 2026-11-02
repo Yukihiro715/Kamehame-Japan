@@ -2185,3 +2185,26 @@ body[data-kh-modal] .sticky-request { display:none; }
   .gl-hcard-tag { font-size:9.5px; padding:3px 7px; top:7px; left:7px; }
   .gl-hero-note { font-size:12px; }
 }
+
+/* ---- Landing: the two options right under the hero (not inside it) ---- */
+.gl-hero { min-height:min(62vh,520px); }
+.gl-hero .gb-hero-text { padding:110px clamp(20px,5vw,48px) 40px; }
+.gl-hero .gb-features { display:flex; }
+.gl-options { padding:36px 0 8px; background:var(--white); border-bottom:1px solid #ece7dc; }
+.gl-options h2 { margin:0 0 16px; }
+.gl-options .gl-hero-cards { margin-top:0; }
+.gl-options .gl-hcard { box-shadow:0 2px 10px rgba(0,0,0,.06); border:2px solid #e6e1d6; background:var(--paper); }
+.gl-options .gl-hcard-custom { border-color:var(--kame); }
+.gl-options .gl-hcard:hover { box-shadow:0 10px 28px rgba(0,0,0,.12); transform:translateY(-2px); transition:box-shadow .2s, transform .2s; }
+.gl-options .gl-hcard .gb-btn { width:100%; justify-content:center; }
+.gl-options-note { margin:14px 0 20px; font-size:13.5px; color:#3d3a34; }
+@media (max-width:700px) {
+  .gl-hero { min-height:0; }
+  .gl-hero .gb-hero-text { padding:96px 20px 28px; }
+  .gl-hero .gb-features { display:none; }
+  .gl-options { padding:24px 0 4px; }
+  .gl-options h2 { font-size:26px; margin-bottom:12px; }
+  .gl-options .gl-hcard .gb-btn { padding:9px 6px; font-size:11.5px; }
+}
+.gl-hcard h2 { font-family:inherit; font-weight:700; text-transform:none; letter-spacing:0; font-size:17px; }
+@media (max-width:700px) { .gl-hcard h2 { font-size:14.5px; } }
