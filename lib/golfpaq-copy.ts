@@ -43,9 +43,9 @@ export interface BusCopy {
   summaryPerPerson: string; summaryRental: string; summaryTotal: string; taxIncluded: string;
   doneH: string; doneLines: string[]; doneRef: string; doneAgain: string;
   errors: Record<string, string>;
-  departure: string; departs: string; lunchIncluded: string; lunchSubsidy: string; lunchNot: string; throughPlay: string; cartIncluded: string; scheduleH: string; highlightsH: string; notesH: string; back: string; details: string;
+  departure: string; departs: string; lunchIncluded: string; lunchSubsidy: string; lunchNot: string; throughPlay: string; throughPlayShort: string; cartIncluded: string; scheduleH: string; highlightsH: string; notesH: string; back: string; details: string;
   /** The details sheet: confirmed facts, then the partner's text in the page's language when we have it. */
-  close: string; sheetDate: string; sheetPlay: string; selfPlay: string; sheetLunch: string; sheetCart: string; cartNot: string; sheetSeats: string; sheetPrice: string; enPending: string;
+  close: string; sheetDate: string; sheetPlay: string; selfPlay: string; sheetLunch: string; sheetLunchExtra: string; sheetLunchThrough: string; sheetCart: string; cartNot: string; sheetSeats: string; sheetPrice: string; enPending: string;
   departureNotes: Record<"separate_groups" | "sunset" | "west" | "east", string>;
   customLinkH: string; customLinkBtn: string; compareBtn: string;
 }
@@ -210,8 +210,8 @@ const en: BusCopy = {
   doneLines: ["We have received your request.", "Our travel partner will contact you by email with the purchase details and next steps.", "Your booking is not yet confirmed, and no payment has been taken."],
   doneRef: "Your enquiry reference", doneAgain: "Enquire about another tour",
   errors: { availability_changed: "This tour no longer has enough seats for your group. Please choose another date.", availability_unavailable: "The live schedule is temporarily unavailable. Please try again in a few minutes.", invalid: "Please check the form and try again.", default: "We could not send your enquiry. Please try again or email hello@kamehame-japan.com." },
-  departure: "Departure", departs: "departs", lunchIncluded: "Lunch included", lunchSubsidy: "Lunch voucher included", lunchNot: "Lunch not included", throughPlay: "Through play (no lunch break)", cartIncluded: "Cart included", scheduleH: "The day", highlightsH: "About the course", notesH: "Conditions", back: "Back to tours", details: "Details",
-  close: "Close", sheetDate: "Date", sheetPlay: "Play", selfPlay: "18 holes, self-play with a riding cart", sheetLunch: "Lunch", sheetCart: "Cart", cartNot: "No cart on this course", sheetSeats: "Seats", sheetPrice: "Price",
+  departure: "Departure", departs: "departs", lunchIncluded: "Lunch included", lunchSubsidy: "Lunch voucher included", lunchNot: "Lunch available · pay at the clubhouse", throughPlay: "No lunch break (through play)", throughPlayShort: "Through play", cartIncluded: "Cart included", scheduleH: "The day", highlightsH: "About the course", notesH: "Conditions", back: "Back to tours", details: "Details",
+  close: "Close", sheetDate: "Date", sheetPlay: "Play", selfPlay: "18 holes, self-play with a riding cart", sheetLunch: "Lunch", sheetLunchExtra: "Available at the clubhouse, paid on the day (about ¥1,500–¥2,500)", sheetLunchThrough: "No lunch break; food and drinks at the clubhouse are at your own cost", sheetCart: "Cart", cartNot: "No cart on this course", sheetSeats: "Seats", sheetPrice: "Price",
   enPending: "The English description of this course is being prepared. The details above are confirmed.",
   departureNotes: { separate_groups: "Golfers from the other departure point play in separate groups", sunset: "Late start: the round may finish near sunset", west: "WEST course", east: "EAST course" },
   customLinkH: "Prefer your own course and date?", customLinkBtn: "See Custom Golf Booking", compareBtn: "Compare both options",
@@ -377,8 +377,8 @@ const ja: BusCopy = {
   doneLines: ["お問い合わせを受け付けました。", "お問い合わせ完了後、提携旅行会社より購入方法とお支払いについてメールでご案内します。当サイトでのお支払いは不要です。", "お問い合わせのみでは予約は確定しません。"],
   doneRef: "受付番号", doneAgain: "別のツアーについて問い合わせる",
   errors: { availability_changed: "このツアーはご希望の人数分の空きがなくなりました。別の日程をお選びください。", availability_unavailable: "ただいま日程を表示できません。数分後にもう一度お試しください。", invalid: "入力内容をご確認のうえ、もう一度お試しください。", default: "送信できませんでした。もう一度お試しいただくか、hello@kamehame-japan.com までご連絡ください。" },
-  departure: "出発", departs: "出発", lunchIncluded: "昼食つき", lunchSubsidy: "昼食補助つき", lunchNot: "昼食別", throughPlay: "スループレー（昼食休憩なし）", cartIncluded: "カート込み", scheduleH: "当日の流れ", highlightsH: "コースについて", notesH: "条件", back: "ツアー一覧へ戻る", details: "詳細",
-  close: "閉じる", sheetDate: "日程", sheetPlay: "プレー", selfPlay: "18ホール・セルフプレー（乗用カート）", sheetLunch: "昼食", sheetCart: "カート", cartNot: "カートなし", sheetSeats: "残席", sheetPrice: "料金",
+  departure: "出発", departs: "出発", lunchIncluded: "昼食つき", lunchSubsidy: "昼食補助つき", lunchNot: "昼食はクラブハウスで当日払い", throughPlay: "昼食休憩なし（スループレー）", throughPlayShort: "スループレー", cartIncluded: "カート込み", scheduleH: "当日の流れ", highlightsH: "コースについて", notesH: "条件", back: "ツアー一覧へ戻る", details: "詳細",
+  close: "閉じる", sheetDate: "日程", sheetPlay: "プレー", selfPlay: "18ホール・セルフプレー（乗用カート）", sheetLunch: "昼食", sheetLunchExtra: "クラブハウスで当日払い（目安 ¥1,500〜2,500）", sheetLunchThrough: "昼食休憩なし。クラブハウスでの飲食は各自負担", sheetCart: "カート", cartNot: "カートなし", sheetSeats: "残席", sheetPrice: "料金",
   enPending: "コース紹介は準備中です。上記の内容は確定情報です。",
   departureNotes: { separate_groups: "別の出発地の参加者とは別組になります", sunset: "遅めのスタートのため日没近くまでかかる場合があります", west: "WESTコース", east: "EASTコース" },
   customLinkH: "コースや日程を自分で決めたい方は", customLinkBtn: "カスタムゴルフ手配を見る", compareBtn: "2つの方法を比べる",

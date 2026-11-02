@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, UtensilsCrossed, X } from "lucide-react";
+import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, Utensils, X } from "lucide-react";
 import { GOLFPAQ_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
 import type { BusCopy } from "@/lib/golfpaq-copy";
 import type { Lang } from "@/lib/i18n";
@@ -22,9 +22,11 @@ const dateLabel = (d: string, lang: Lang) => {
 };
 const monthLabel = (m: string, lang: Lang) => { const [y, mm] = m.split("-").map(Number); return lang === "ja" ? `${y}年${mm}月` : new Date(Date.UTC(y, mm - 1, 1)).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }); };
 
+/** The lunch tag: included, a voucher, no lunch break (through play), or available at the clubhouse for pay. */
 function Lunch({ t, C }: { t: PublicTour; C: BusCopy }) {
-  const label = t.departure.lunch === "included" ? C.lunchIncluded : t.departure.lunch === "subsidy" ? C.lunchSubsidy : C.lunchNot;
-  return <span className="gb-tag"><UtensilsCrossed size={12} /> {label}</span>;
+  const { lunch, throughPlay } = t.departure;
+  const label = lunch === "included" ? C.lunchIncluded : lunch === "subsidy" ? C.lunchSubsidy : throughPlay ? C.throughPlay : C.lunchNot;
+  return <span className="gb-tag"><Utensils size={12} /> {label}</span>;
 }
 
 /** The calendar, the filters, the catalogue, the enquiry form and the thank-you screen. */
@@ -83,7 +85,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
                           <h3>{courseName(t, lang)}</h3>
                           {lang !== "ja" && t.area && <p className="gb-area">{t.area}</p>}
                           <p className="gb-meta"><Bus size={14} /> {areaOf(t.departure.area, C)}{viaOf(t.departure.via, C)}{t.departure.time ? ` · ${C.departs} ${t.departure.time}` : ""}</p>
-                          <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && <span className="gb-tag">{C.throughPlay}</span>}</div>
+                          <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && t.departure.lunch !== "not_included" && <span className="gb-tag">{C.throughPlay}</span>}</div>
                           <p className="gb-price"><b>{yen(t.perPersonYen)}</b> <span>{C.perPerson}</span></p>
                           <p className="gb-incl">{C.includesLine}</p>
                           {t.soldOut ? <button type="button" className="gb-btn gb-btn-sold" disabled aria-disabled="true">{C.soldOut}</button> : <button type="button" className="gb-btn" onClick={() => { setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }}>{C.enquireBtn}</button>}
@@ -163,7 +165,7 @@ function TourSheet({ tour, lang, C, onClose, onEnquire }: { tour: PublicTour; la
   const highlights = ja ? tour.highlights : tour.highlightsEn;
   const schedule = ja ? tour.schedule : tour.scheduleEn;
   const notes = ja ? tour.notes : tour.notesEn;
-  const lunch = tour.departure.lunch === "included" ? C.lunchIncluded : tour.departure.lunch === "subsidy" ? C.lunchSubsidy : C.lunchNot;
+  const lunch = tour.departure.lunch === "included" ? C.lunchIncluded : tour.departure.lunch === "subsidy" ? C.lunchSubsidy : tour.departure.throughPlay ? C.sheetLunchThrough : C.sheetLunchExtra;
   return (
     <div className="gb-sheet" role="dialog" aria-modal="true" aria-label={courseName(tour, lang)} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="gb-sheet-box">
@@ -174,7 +176,7 @@ function TourSheet({ tour, lang, C, onClose, onEnquire }: { tour: PublicTour; la
         <dl className="gb-facts">
           <dt>{C.sheetDate}</dt><dd>{dateLabel(tour.date, lang)}</dd>
           <dt>{C.departure}</dt><dd>{areaOf(tour.departure.area, C)}{viaOf(tour.departure.via, C)}{tour.departure.time ? ` · ${C.departs} ${tour.departure.time}` : ""}</dd>
-          <dt>{C.sheetPlay}</dt><dd>{C.selfPlay}{tour.departure.throughPlay ? ` · ${C.throughPlay}` : ""}</dd>
+          <dt>{C.sheetPlay}</dt><dd>{C.selfPlay}{tour.departure.throughPlay ? ` · ${C.throughPlayShort}` : ""}</dd>
           <dt>{C.sheetLunch}</dt><dd>{lunch}</dd>
           <dt>{C.sheetCart}</dt><dd>{tour.cartIncluded ? C.cartIncluded : C.cartNot}</dd>
           <dt>{C.sheetSeats}</dt><dd>{tour.soldOut ? C.soldOut : seatsText(C.seatsLeft, tour.seats)}</dd>
