@@ -73,6 +73,17 @@ export default async function CollectionPage({ params }: Props) {
       </section>
 
       <section className="collection-body">
+        {collection === "golf" || collection === "sports" ? (
+          <div style={{border:"1px solid #d8ded8",padding:"24px",marginBottom:"32px",background:"#f8f8f5"}}>
+            <h2>Choose your golf experience</h2>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,marginTop:15}}>
+              <div><h3>1. Shared Bus Golf Tour</h3><p>18-hole golf with round-trip shared coach transfers. Perfect for solo golfers and pairs. See published dates and prices.</p>
+                <Link className="underlined-link" href={`/${lang}/golf-bus/`}>Explore bus tours <ArrowRight size={15}/></Link></div>
+              <div><h3>2. Custom Golf Booking</h3><p>Choose your course and tee time. Travel independently or request an introduction to a private-transfer provider. Arrangement fees remain unchanged.</p>
+                <Link className="underlined-link" href={`/${lang}/tokyo/mt-fuji-golf-day/`}>Explore custom booking <ArrowRight size={15}/></Link></div>
+            </div>
+          </div>
+        ):null}
         <p className="collection-lead">{data.lead}</p>
 
         <div className="refine-row" aria-label={T.refine}>
