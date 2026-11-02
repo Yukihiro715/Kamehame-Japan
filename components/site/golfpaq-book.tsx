@@ -5,6 +5,7 @@ import { GOLFPAQ_RENTAL_JPY } from "@/lib/golfpaq";
 
 const yen=(n:number)=>"¥"+n.toLocaleString("en-US");
 export function GolfpaqBook({ tours, lang, updatedAt }: {tours:GolfpaqTour[];lang:string;updatedAt:string}) {
+ const isPreview=typeof window!=="undefined" && window.location.hostname.includes("-staging.");
  const [date,setDate]=useState("");
  const [people,setPeople]=useState(1);
  const [chosen,setChosen]=useState<GolfpaqTour|null>(null);
@@ -18,7 +19,7 @@ export function GolfpaqBook({ tours, lang, updatedAt }: {tours:GolfpaqTour[];lan
  const filtered=useMemo(()=>tours.filter(t=>(!date||t.date===date)&&t.seats>=people),[tours,date,people]);
  const total=chosen ? chosen.perPersonYen*people+rentals*GOLFPAQ_RENTAL_JPY:0;
  async function submit(e:React.FormEvent) {
-  e.preventDefault();if(!chosen||!agreed)return;setStatus("sending");setError("");
+  e.preventDefault();if(isPreview||!chosen||!agreed)return;setStatus("sending");setError("");
   try{
    const r=await fetch("/api/golfpaq/enquiry",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:chosen.id,date:chosen.date,people,rentals,name,email,note,lang,consent:agreed,requestId:crypto.randomUUID()})});
    const j=await r.json() as {ok?:boolean;error?:string};
@@ -29,6 +30,7 @@ export function GolfpaqBook({ tours, lang, updatedAt }: {tours:GolfpaqTour[];lan
  return <div style={{maxWidth:1100,margin:"auto",padding:"30px 20px 70px"}}>
   <p style={{textTransform:"uppercase",letterSpacing:3,fontSize:12,color:"#888"}}>KAMEHAME JAPAN · GOLF</p>
   <h1 style={{fontFamily:"serif",fontSize:"clamp(32px,5vw,54px)",margin:"12px 0"}}>Shared Bus Golf Tours</h1>
+  {isPreview?<p role="status" style={{padding:12,background:"#f9efe6",fontWeight:600}}>Design preview — requests and payments are disabled</p>:null}
   <p>Play 18 holes with round-trip shared coach transport from Tokyo. Suitable for solo golfers and pairs. Your party may be paired with other golfers. No private English-speaking guide or hotel pickup is included.</p>
   <p style={{marginTop:8,color:"#555"}}><strong>From ¥29,000+/person</strong> · Includes our ¥15,000/person arrangement fee · Club rental ¥5,500/person when selected</p>
   <div style={{display:"flex",gap:12,flexWrap:"wrap",margin:"25px 0"}}>
@@ -57,7 +59,7 @@ export function GolfpaqBook({ tours, lang, updatedAt }: {tours:GolfpaqTour[];lan
     <label>Email <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} maxLength={200} style={{display:"block",width:"100%",padding:10}} /></label>
     <label>Rental needs, phone number or other notes (optional)<textarea value={note} onChange={e=>setNote(e.target.value)} maxLength={1000} style={{display:"block",width:"100%",padding:10}} /></label>
     <label><input type="checkbox" required checked={agreed} onChange={e=>setAgreed(e.target.checked)}/> I understand that availability is not guaranteed, payment will be requested separately, and cancellation terms will be provided before payment.</label>
-    <button disabled={status==="sending"} type="submit" style={{padding:14,background:"#1d3426",color:"#fff",border:0}}>{status==="sending"?"Sending…":"Send request"}</button>
+    <button disabled={isPreview||status==="sending"} type="submit" style={{padding:14,background:"#1d3426",color:"#fff",border:0}}>{status==="sending"?"Sending…":"Send request"}</button>
     {error?<p role="alert">{error}</p>:null}
    </form>}
   </section>:null}
