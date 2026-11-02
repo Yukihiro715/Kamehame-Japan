@@ -2,9 +2,15 @@
 
 Staging only until the owner releases it. Production shows the page only when the Worker variable `GOLFPAQ_LIVE` is `true`; on staging (`KH_ENV=staging`) it is always on.
 
+## Pages
+- `/{lang}/golf-tours/`: the landing page for advertising. Hero, the two options (Shared Bus Tour → `/golf-bus/`, Custom Booking → `/tokyo/mt-fuji-golf-day/`), a comparison table (who it suits, dates, transport, courses, price, the day, how to book) and a "not sure?" pair of CTAs.
+- `/{lang}/golf-bus/`: the shared-bus page. Hero with the operator's coach, "How the tour works" (meeting points in Shinjuku and Oimachi, the day step by step, how you play, what the price covers / what is extra, cancellation as published by the operator), then the calendar and the tour list, enquiry form, steps, included / not included, Good to Know, FAQ.
+- The golf collection page and the custom golf page carry a small "Two ways" cross-link to both while the bus page is visible.
+- Photos: the hero and the landing card use the operator's own coach photos (public/images/golf-bus/, from the operator's fleet page). Tour cards use a photo per course taken from the course's official website (lib/golf-course-images.ts keeps the source URL per course for the rights check; public/images/golf-courses/); a course without an entry shows the KAMEHAME fallback. The partner's listing photos are never shown (they carry a text banner).
+
 ## What the visitor sees
-- `/{lang}/golf-bus/` (en, ja, es, fr, zh-tw; EN copy is the reference, JA is translated, the others fall back to EN).
-- Hero, "Two ways to play golf in Japan" (shared bus tour vs. custom booking), the tour list with filters, "How booking works", five steps, what is included, Good to Know, FAQ.
+- Languages: en, ja, es, fr, zh-tw; EN copy is the reference, JA is translated, the others fall back to EN.
+- Calendar: a month grid of the published dates (green = seats available, grey = every tour that day sold out); tapping a day filters the list; golfers and departure filters stay.
 - The golf collection page and the custom golf page carry a small "Two ways" cross-link only while the bus page is visible.
 - Each card: course, date, photo (the partner's photo hotlinked with no referrer; a KAMEHAME photo when there is none), seats left or a SOLD OUT badge, departure area / time, lunch and through-play tags, the price as **one tax-inclusive total per person**, the enquiry button (disabled when sold out) and "No payment is required to enquire."
 - Enquiry form: golfers (1–8, never more than the seats shown), the unchecked "Add Rental Clubs (+¥5,500 per person)" box with a renters count for groups, a live summary with the total, name / email / phone / notes, the data-sharing consent, then a thank-you with the reference (`GP-XXXXXX`).

@@ -2031,3 +2031,85 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-card.sold .gb-photo img { filter:grayscale(.85) brightness(.82); }
 .gb-card.sold .gb-body h3, .gb-card.sold .gb-price b { color:#6f6a62; }
 .gb-btn-sold, .gb-btn-sold:hover { background:#d9d3c7; color:#5d574e; cursor:not-allowed; box-shadow:none; transform:none; }
+
+/* ---- Golf landing (/golf-tours/): the two options compared ---- */
+.gl-cards { display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+.gl-card { display:grid; grid-template-rows:auto 1fr; background:var(--white); border:1px solid #e6e1d6; border-radius:16px; overflow:hidden; color:var(--ink); text-decoration:none; transition:box-shadow .2s, transform .2s; }
+.gl-card:hover { box-shadow:0 10px 30px rgba(0,0,0,.08); transform:translateY(-2px); }
+.gl-card img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+.gl-card > div { padding:18px 20px 22px; display:grid; gap:10px; align-content:start; position:relative; }
+.gl-num { position:absolute; top:-22px; left:20px; width:44px; height:44px; border-radius:50%; background:var(--kame); color:#fff; display:grid; place-items:center; font-family:var(--font-display); font-size:22px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+.gl-card h3 { margin:18px 0 0; font-size:22px; display:flex; align-items:center; gap:8px; }
+.gl-card p { margin:0; font-size:14.5px; line-height:1.55; color:#3d3a34; }
+.gl-card .gb-btn { width:auto; justify-self:start; display:inline-flex; align-items:center; gap:6px; }
+.gb-btn-outline { background:transparent; color:var(--kame); border:2px solid var(--kame); }
+.gb-btn-outline:hover { background:var(--kame); color:#fff; }
+.gl-compare { padding:40px 0 16px; }
+.gl-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.gl-table { width:100%; border-collapse:collapse; background:var(--white); border:1px solid #e6e1d6; border-radius:14px; overflow:hidden; font-size:14.5px; }
+.gl-table th, .gl-table td { padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid #ece7dc; }
+.gl-table thead th { background:#f6f2e9; font-size:15px; }
+.gl-table thead th svg { vertical-align:-3px; color:var(--kame); }
+.gl-table tbody th { width:22%; color:var(--muted); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+.gl-table td:nth-child(2) { background:rgba(238,124,24,.04); }
+.gl-choose { padding:16px 0 64px; }
+.gl-choose-grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+.gl-choose-card { background:var(--white); border:1px solid #e6e1d6; border-radius:14px; padding:20px; display:grid; gap:14px; align-content:space-between; }
+.gl-choose-card p { margin:0; font-size:15px; line-height:1.55; }
+.gl-choose-card .gb-btn { width:auto; justify-self:start; display:inline-flex; align-items:center; gap:6px; }
+@media (max-width:700px) {
+  .gl-table { font-size:13px; } .gl-table th, .gl-table td { padding:9px 10px; } .gl-table tbody th { width:26%; font-size:11.5px; }
+}
+
+/* ---- Bus page: how the tour works ---- */
+.gb-hero-bus::after { background:linear-gradient(180deg, rgba(10,12,18,.35) 0%, rgba(10,12,18,.25) 40%, rgba(10,12,18,.85) 100%); }
+.gb-about { padding:48px 0 24px; background:var(--white); border-bottom:1px solid #ece7dc; }
+.gb-about-grid { display:grid; gap:28px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); margin:8px 0 28px; }
+.gb-about-block { display:grid; gap:10px; align-content:start; }
+.gb-about h3, .gb-about-h3 { display:flex; align-items:center; gap:8px; font-size:20px; margin:22px 0 8px; } .gb-about h3 svg, .gb-about-h3 svg { color:var(--kame); }
+.gb-about-block h3 { margin-top:0; }
+.gb-about p { font-size:14.5px; line-height:1.6; }
+.gb-meet { display:grid; gap:10px; }
+.gb-meet-card { background:var(--paper); border:1px solid #e6e1d6; border-radius:12px; padding:12px 14px; display:grid; gap:4px; }
+.gb-meet-card p { margin:0; }
+.gb-note { display:flex; gap:8px; align-items:flex-start; background:#fff7ee; border:1px solid #f3dcc4; border-radius:10px; padding:10px 12px; font-size:13.5px; margin:8px 0 0; } .gb-note svg { flex:none; margin-top:3px; color:var(--kame); }
+.gb-day { list-style:none; margin:0; padding:0; display:grid; gap:0; }
+.gb-day li { display:grid; grid-template-columns:96px 1fr; gap:12px; padding:10px 0; border-bottom:1px dashed #e6e1d6; }
+.gb-day li:last-child { border-bottom:0; }
+.gb-day-time { font-weight:700; color:var(--kame); font-size:13px; padding-top:2px; }
+.gb-day b { display:block; margin-bottom:2px; } .gb-day p { margin:0; font-size:13.5px; color:#3d3a34; }
+.gb-cost { margin-top:6px; } .gb-cost h4 { margin:0 0 8px; font-size:15px; }
+.gb-cost-table { width:100%; border-collapse:collapse; font-size:13.5px; }
+.gb-cost-table th, .gb-cost-table td { padding:8px 6px; border-bottom:1px solid #ece7dc; vertical-align:top; text-align:left; }
+.gb-cost-table th { width:42%; font-weight:700; white-space:nowrap; } .gb-cost-table th svg { vertical-align:-2px; color:#1f5f33; margin-right:2px; }
+.gb-cost-extra th svg { color:var(--muted); }
+.gb-cost-table td { color:#3d3a34; }
+.gb-cancel { margin:4px 0 10px; }
+.gb-crosslink { margin-top:18px; font-size:14px; } .gb-crosslink a { color:var(--kame); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+@media (max-width:600px) { .gb-day li { grid-template-columns:78px 1fr; } .gb-cost-table th { white-space:normal; width:40%; } }
+
+/* ---- Calendar date picker ---- */
+.gb-cal { background:var(--white); border:1px solid #e6e1d6; border-radius:14px; padding:14px 14px 10px; margin:0 0 16px; max-width:520px; }
+.gb-cal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; font-size:16px; }
+.gb-cal-nav { background:transparent; border:1px solid #d9d3c7; border-radius:8px; width:34px; height:34px; display:grid; place-items:center; cursor:pointer; color:var(--ink); }
+.gb-cal-nav:disabled { opacity:.3; cursor:default; }
+.gb-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.gb-cal-wd { text-align:center; font-size:11px; font-weight:700; color:var(--muted); padding:2px 0 4px; }
+.gb-cal-wd:nth-child(6) { color:#2d5fb0; } .gb-cal-wd:nth-child(7) { color:#b3261e; }
+.gb-cal-empty { aspect-ratio:1; }
+.gb-cal-day { position:relative; aspect-ratio:1; border-radius:10px; border:1px solid transparent; background:transparent; font:inherit; font-size:14px; display:grid; place-items:center; cursor:pointer; color:var(--ink); padding:0; }
+.gb-cal-day span { line-height:1; } .gb-cal-day i { position:absolute; bottom:4px; font-style:normal; font-size:9.5px; font-weight:700; line-height:1; }
+.gb-cal-day.none { color:#c3bdb1; cursor:default; }
+.gb-cal-day.open { background:#e4f3e8; border-color:#bfe0c8; color:#1d3b2a; font-weight:700; } .gb-cal-day.open i { color:#1f5f33; }
+.gb-cal-day.sold { background:#f1ede6; color:#9a948a; text-decoration:line-through; }
+.gb-cal-day.on { outline:2px solid var(--kame); outline-offset:1px; background:var(--kame); color:#fff; text-decoration:none; } .gb-cal-day.on i { color:#fff; }
+.gb-cal-day.open:hover:not(.on) { background:#cfe9d6; }
+.gb-cal-legend { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin-top:10px; font-size:12.5px; color:var(--muted); }
+.gb-cal-legend i { display:inline-block; width:12px; height:12px; border-radius:4px; vertical-align:-2px; margin-right:4px; } .gb-cal-legend i.open { background:#e4f3e8; border:1px solid #bfe0c8; } .gb-cal-legend i.sold { background:#f1ede6; }
+.gb-chip { margin-left:auto; font:inherit; font-size:12.5px; padding:5px 10px; border-radius:999px; border:1px solid #d9d3c7; background:#fff; cursor:pointer; } .gb-chip.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+.gb-showing { font-size:14px; margin:0 0 12px; } .gb-showing .gb-link { font-size:13px; }
+
+.gb-pick { display:flex; flex-wrap:wrap; gap:20px 28px; align-items:flex-start; margin-bottom:4px; }
+.gb-pick .gb-cal { flex:0 1 480px; margin:0; }
+.gb-pick .gb-filters { flex:1 1 260px; align-content:start; margin:0; padding-top:4px; }
+.gb-pick .gb-updated { flex-basis:100%; }

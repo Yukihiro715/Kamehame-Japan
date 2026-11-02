@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bus, Check, ChevronLeft, ShieldCheck, Users, UtensilsCrossed } from "lucide-react";
+import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, UtensilsCrossed } from "lucide-react";
 import { GOLFPAQ_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
 import type { BusCopy } from "@/lib/golfpaq-copy";
 import type { Lang } from "@/lib/i18n";
@@ -24,13 +24,13 @@ function Lunch({ t, C }: { t: PublicTour; C: BusCopy }) {
 
 /** The catalogue, the filters, the enquiry form and the thank-you screen. */
 export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; updatedAt: string | null; lang: Lang; C: BusCopy }) {
-  const [month, setMonth] = useState(""), [people, setPeople] = useState(1), [area, setArea] = useState("");
+  const [day, setDay] = useState(""), [people, setPeople] = useState(1), [area, setArea] = useState("");
   const [chosen, setChosen] = useState<PublicTour | null>(null);
   const [open, setOpen] = useState<PublicTour | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const months = useMemo(() => [...new Set(tours.map((t) => t.date.slice(0, 7)))].sort(), [tours]);
   const areas = useMemo(() => [...new Set(tours.map((t) => t.departure.area))].sort(), [tours]);
-  const filtered = useMemo(() => tours.filter((t) => (!month || t.date.startsWith(month)) && (!area || t.departure.area === area) && (t.soldOut || t.seats >= people)), [tours, month, area, people]);
+  const filtered = useMemo(() => tours.filter((t) => (!day || t.date === day) && (!area || t.departure.area === area) && (t.soldOut || t.seats >= people)), [tours, day, area, people]);
   useEffect(() => { if (chosen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [chosen]);
   const updatedText = updatedAt ? new Date(updatedAt).toLocaleString(lang === "ja" ? "ja-JP" : "en-GB", { timeZone: "Asia/Tokyo", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + " JST" : null;
 
@@ -39,16 +39,19 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
       <div className="gb-wrap">
         <h2 id="gb-tours-h">{C.toursH}</h2>
         <p className="gb-lede">{C.toursLede}</p>
+        <div className="gb-pick">
+        {tours.length > 0 && <Calendar tours={tours} months={months} day={day} onPick={setDay} lang={lang} C={C} />}
         <div className="gb-filters">
-          <label><span>{C.filterMonth}</span><select value={month} onChange={(e) => setMonth(e.target.value)}><option value="">{C.allMonths}</option>{months.map((m) => <option key={m} value={m}>{monthLabel(m, lang)}</option>)}</select></label>
           <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: MAX_PEOPLE }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
           <label><span>{C.filterDeparture}</span><select value={area} onChange={(e) => setArea(e.target.value)}><option value="">{C.allDepartures}</option>{areas.map((a) => <option key={a} value={a}>{a}</option>)}</select></label>
           {updatedText && <span className="gb-updated">{C.updated}: {updatedText}</span>}
+        </div>
         </div>
         <div className="gb-how">
           <b><ShieldCheck size={16} /> {C.howH}</b>
           <p>{C.howBody} {C.howAvailability}</p>
         </div>
+        {day && <p className="gb-showing">{C.calShowing} <b>{dateLabel(day, lang)}</b> · <button type="button" className="gb-link" onClick={() => setDay("")}>{C.calAny}</button></p>}
         {tours.length === 0 ? <p className="gb-empty">{C.unavailable}</p> : filtered.length === 0 ? <p className="gb-empty">{C.noMatch}</p> : (
           <ul className="gb-grid">
             {filtered.map((t) => (
@@ -74,6 +77,47 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
       </div>
       {open && <TourSheet tour={open} lang={lang} C={C} onClose={() => setOpen(null)} />}
     </section>
+  );
+}
+
+/** A month grid of the published dates: green when seats are available, grey
+ *  when every tour that day is sold out; a tap filters the list to that day. */
+function Calendar({ tours, months, day, onPick, lang, C }: { tours: PublicTour[]; months: string[]; day: string; onPick: (d: string) => void; lang: Lang; C: BusCopy }) {
+  const [month, setMonth] = useState(() => (day ? day.slice(0, 7) : months[0]));
+  const byDay = useMemo(() => {
+    const m = new Map<string, { open: number; sold: number }>();
+    for (const t of tours) { const e = m.get(t.date) ?? { open: 0, sold: 0 }; if (t.soldOut) e.sold++; else e.open++; m.set(t.date, e); }
+    return m;
+  }, [tours]);
+  const idx = months.indexOf(month);
+  const [y, mm] = month.split("-").map(Number);
+  const first = new Date(Date.UTC(y, mm - 1, 1));
+  const lead = (first.getUTCDay() + 6) % 7; // Monday first
+  const daysInMonth = new Date(Date.UTC(y, mm, 0)).getUTCDate();
+  const cells: (string | null)[] = [...Array<null>(lead).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => `${month}-${String(i + 1).padStart(2, "0")}`)];
+  while (cells.length % 7) cells.push(null);
+  return (
+    <div className="gb-cal" role="group" aria-label={C.calH}>
+      <div className="gb-cal-head">
+        <button type="button" className="gb-cal-nav" onClick={() => setMonth(months[idx - 1])} disabled={idx <= 0} aria-label={C.calPrev}><ChevronLeft size={18} /></button>
+        <b>{monthLabel(month, lang)}</b>
+        <button type="button" className="gb-cal-nav" onClick={() => setMonth(months[idx + 1])} disabled={idx < 0 || idx >= months.length - 1} aria-label={C.calNext}><ChevronRight size={18} /></button>
+      </div>
+      <div className="gb-cal-grid">
+        {C.weekdays.map((w) => <span key={w} className="gb-cal-wd">{w}</span>)}
+        {cells.map((d, i) => {
+          if (!d) return <span key={`e${i}`} className="gb-cal-empty" />;
+          const e = byDay.get(d);
+          const cls = !e ? "gb-cal-day none" : e.open > 0 ? "gb-cal-day open" : "gb-cal-day sold";
+          const label = e ? `${dateLabel(d, lang)}: ${e.open > 0 ? seatsText(C.seatsLeft, e.open).replace(/\D*(\d+).*/, "$1") + " " + C.calLegendOpen.toLowerCase() : C.calLegendSold}` : dateLabel(d, lang);
+          return <button key={d} type="button" className={`${cls}${day === d ? " on" : ""}`} disabled={!e} aria-pressed={day === d} aria-label={label} onClick={() => onPick(day === d ? "" : d)}><span>{Number(d.slice(8))}</span>{e && <i>{e.open > 0 ? e.open : ""}</i>}</button>;
+        })}
+      </div>
+      <div className="gb-cal-legend">
+        <span><i className="open" /> {C.calLegendOpen}</span><span><i className="sold" /> {C.calLegendSold}</span>
+        <button type="button" className={`gb-chip${day ? "" : " on"}`} onClick={() => onPick("")}>{C.calAny}</button>
+      </div>
+    </div>
   );
 }
 

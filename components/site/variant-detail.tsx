@@ -113,7 +113,7 @@ export function VariantDetail({ exp, lang, clubRental = false, busTours = false 
         {busTours && exp.slug === "mt-fuji-golf-day" && <section className="gb-two-inline vh-two" aria-label="Two ways to play golf in Japan">
           <p className="eyebrow"><span /> Two ways to play golf in Japan</p>
           <div className="gb-two-inline-grid">
-            <div><h2>1. Shared Bus Golf Tours</h2><p>18-hole golf with round-trip shared bus from Tokyo on published dates. Ideal for solo golfers and pairs. No private guide.</p><Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices →</Link></div>
+            <div><h2>1. Shared Bus Golf Tours</h2><p>18-hole golf with round-trip shared bus from Tokyo on published dates. Ideal for solo golfers and pairs. No private guide.</p><Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices →</Link> · <Link className="underlined-link" href={`/${lang}/golf-tours/`}>Compare both →</Link></div>
             <div><h2>2. Custom Golf Booking</h2><p>Choose your own course and tee time. Travel independently, or ask us for a private-transfer introduction. The usual arrangement fee applies.</p><a className="underlined-link" href="#request-form">Plan my round →</a></div>
           </div>
         </section>}

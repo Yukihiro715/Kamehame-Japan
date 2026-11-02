@@ -78,7 +78,7 @@ async function stagingGate(request: Request, env: Env, url: URL): Promise<Respon
   if (env.KH_ENV !== "staging" || url.pathname.startsWith("/api/webhooks/")) return null;
   // Read-only, explicitly public preview of the new golf page and its JS/CSS assets.
   // All other pages stay behind staging authentication; customer submissions stay disabled.
-  if (/^\/(en|ja|es|fr|zh-tw)\/golf-bus\/?$/.test(url.pathname) || url.pathname === "/api/golfpaq/enquiry" || url.pathname.startsWith("/assets/") || url.pathname.startsWith("/images/") || url.pathname.startsWith("/fonts/") || url.pathname === "/favicon.ico") return null;
+  if (/^\/(en|ja|es|fr|zh-tw)\/(golf-bus|golf-tours)\/?$/.test(url.pathname) || url.pathname === "/api/golfpaq/enquiry" || url.pathname.startsWith("/assets/") || url.pathname.startsWith("/images/") || url.pathname.startsWith("/fonts/") || url.pathname === "/favicon.ico") return null;
   const raw = env.STAGING_BASIC_AUTH?.trim();
   const challenge = (status: number, text: string) => new Response(text, { status, headers: { "www-authenticate": 'Basic realm="KAMEHAME staging"', "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex, nofollow" } });
   if (!raw) return challenge(503, "staging locked: STAGING_BASIC_AUTH is not set");

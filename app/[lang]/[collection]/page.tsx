@@ -80,7 +80,7 @@ export default async function CollectionPage({ params }: Props) {
             <p className="eyebrow"><span /> Two ways to play golf in Japan</p>
             <div className="gb-two-inline-grid">
               <div><h2>1. Shared Bus Golf Tours</h2><p>18-hole golf with round-trip shared bus from Tokyo on published dates. Ideal for solo golfers and pairs. No private guide.</p>
-                <Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices <ArrowRight size={15}/></Link></div>
+                <Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices <ArrowRight size={15}/></Link> · <Link className="underlined-link" href={`/${lang}/golf-tours/`}>Compare both <ArrowRight size={15}/></Link></div>
               <div><h2>2. Custom Golf Booking</h2><p>Choose your own course and tee time. Travel independently or ask us for a private-transfer introduction.</p>
                 <Link className="underlined-link" href={`/${lang}/tokyo/mt-fuji-golf-day/`}>Plan a custom round <ArrowRight size={15}/></Link></div>
             </div>
