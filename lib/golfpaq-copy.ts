@@ -30,6 +30,7 @@ export interface BusCopy {
   toursH: string; toursLede: string; updated: string; unavailable: string; noMatch: string; filterGolfers: string; filterDeparture: string; allDepartures: string;
   calH: string; calAny: string; calLegendOpen: string; calLegendSold: string; calPrev: string; calNext: string; weekdays: string[]; calShowing: string;
   /** "{n}" = number of tours; "|" separates singular and plural. */ calShow: string; calNone: string; calHint: string;
+  /** Under each date: "{n}" tours in all, "{open}" with seats. */ dayCount: string;
   perPerson: string; includesLine: string; /** "{n}" is replaced by the number; "|" separates the singular and plural forms. */ seatsLeft: string; soldOut: string; enquireBtn: string; noPayment: string;
   howH: string; howBody: string; howAvailability: string;
   stepsH: string; steps: { n: string; title: string; body: string }[];
@@ -162,7 +163,7 @@ const en: BusCopy = {
   updated: "Schedule updated", unavailable: "The live schedule is temporarily unavailable. Please try again shortly or contact us and we will send you the upcoming dates.", noMatch: "No tours match these filters. Try another date, departure point or group size.",
   filterGolfers: "Golfers", filterDeparture: "Departure", allDepartures: "All departures",
   calH: "Pick a date", calAny: "Show all dates", calLegendOpen: "Seats available", calLegendSold: "Sold out", calPrev: "Previous month", calNext: "Next month", weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"], calShowing: "Showing tours on",
-  calShow: "Show 1 tour on {d}|Show {n} tours on {d}", calNone: "Tap a date to see its tours", calHint: "Green dates have seats; the number is how many tours leave that day.",
+  dayCount: "{n} tours · {open} with seats", calShow: "Show 1 tour on {d}|Show {n} tours on {d}", calNone: "Tap a date to see its tours", calHint: "Green dates have seats; the number is how many tours leave that day.",
   perPerson: "/person", includesLine: "Includes golf and round-trip bus · tax included", seatsLeft: "1 seat left|{n} seats left", soldOut: "Sold out", enquireBtn: "Enquire About This Tour", noPayment: "No payment is required to enquire.",
   howH: "How booking works", howBody: "After submitting your enquiry, our travel partner will email you the purchase details and payment instructions. No payment is collected on this website.", howAvailability: "Availability is subject to final confirmation.",
   stepsH: "How It Works",
@@ -326,7 +327,7 @@ const ja: BusCopy = {
   updated: "日程更新", unavailable: "ただいま日程を表示できません。しばらくしてからもう一度お試しいただくか、お問い合わせください。直近の日程をお送りします。", noMatch: "条件に合うツアーがありません。日付・出発地・人数を変えてお試しください。",
   filterGolfers: "人数", filterDeparture: "出発地", allDepartures: "すべての出発地",
   calH: "日付を選ぶ", calAny: "すべての日程を表示", calLegendOpen: "空きあり", calLegendSold: "完売", calPrev: "前の月", calNext: "次の月", weekdays: ["月", "火", "水", "木", "金", "土", "日"], calShowing: "表示中の日付",
-  calShow: "{d}のツアー {n}件を表示|{d}のツアー {n}件を表示", calNone: "日付をタップするとその日のツアーを表示します", calHint: "緑の日は空きあり。数字はその日に出発するツアーの本数です。",
+  dayCount: "{n}本・空き {open}本", calShow: "{d}のツアー {n}件を表示|{d}のツアー {n}件を表示", calNone: "日付をタップするとその日のツアーを表示します", calHint: "緑の日は空きあり。数字はその日に出発するツアーの本数です。",
   perPerson: "/人", includesLine: "ゴルフと往復バスを含む・税込", seatsLeft: "残り{n}席", soldOut: "完売", enquireBtn: "このツアーについて問い合わせる", noPayment: "お問い合わせにお支払いは不要です。",
   howH: "ご予約の流れ", howBody: "お問い合わせ完了後、提携旅行会社より購入方法とお支払いについてメールでご案内します。当サイトでのお支払いは不要です。", howAvailability: "お問い合わせのみでは予約は確定しません。",
   stepsH: "ご利用の流れ",

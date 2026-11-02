@@ -81,7 +81,7 @@ export default async function GolfToursPage({ params }: Props) {
               </Link>
               <Link className="gl-hcard" href={busHref}>
                 <img src="/images/golf-bus/bus-card.webp" alt="" fetchPriority="high" />
-                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><ItemList items={C.heroBusItems} C={C} /><span className="gb-btn gb-btn-small gb-btn-dark">{C.sharedCta} <ArrowRight size={14} /></span></div>
+                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><ItemList items={C.heroBusItems} C={C} /><span className="gb-btn gb-btn-small">{C.sharedCta} <ArrowRight size={14} /></span></div>
               </Link>
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>

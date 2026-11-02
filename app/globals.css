@@ -2241,3 +2241,16 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-row > .gb-card { flex:0 0 300px; scroll-snap-align:start; }
 .gb-row::after { content:""; flex:0 0 1px; }
 @media (max-width:700px) { .gb-row > .gb-card { flex-basis:min(78vw,300px); } .gb-row { gap:10px; } }
+/* Landing cards: same button on both; the custom card keeps only its tag */
+.gl-options .gl-hcard-custom { border-color:#e6e1d6; }
+/* Tour rows: the last card scrolls fully into view; card buttons line up */
+.gb-row { padding-right:0; }
+.gb-row::after { content:""; flex:0 0 clamp(20px,5vw,48px); }
+.gb-row > .gb-card { display:flex; flex-direction:column; }
+.gb-row > .gb-card .gb-body { display:flex; flex-direction:column; flex:1; }
+.gb-row > .gb-card .gb-price { margin-top:auto; }
+.gb-day-h span { font-weight:600; background:transparent; padding:0; color:var(--muted); font-size:12.5px; }
+/* The date group must not grow with its row, or the row never scrolls */
+.gb-days { grid-template-columns:minmax(0,1fr); }
+.gb-day-group { min-width:0; }
+.gb-results { min-width:0; }

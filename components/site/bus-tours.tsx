@@ -38,7 +38,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const maxSeats = useMemo(() => Math.min(MAX_PEOPLE, Math.max(1, ...tours.filter((t) => !t.soldOut).map((t) => t.seats))), [tours]);
   const filtered = useMemo(() => tours.filter((t) => (!day || t.date === day) && (!area || t.departure.area === area) && (t.soldOut || t.seats >= people)), [tours, day, area, people]);
   /** Cards bundled per date, each date a horizontally scrolling row. */
-  const groups = useMemo(() => { const m = new Map<string, PublicTour[]>(); for (const t of filtered) { (m.get(t.date) ?? m.set(t.date, []).get(t.date)!).push(t); } return [...m.entries()].sort(([a], [b]) => (a < b ? -1 : 1)); }, [filtered]);
+  const groups = useMemo(() => { const m = new Map<string, PublicTour[]>(); for (const t of filtered) { (m.get(t.date) ?? m.set(t.date, []).get(t.date)!).push(t); } return [...m.entries()].sort(([a], [b]) => (a < b ? -1 : 1)).map(([d, list]) => [d, [...list].sort((a, b) => Number(a.soldOut) - Number(b.soldOut))] as [string, PublicTour[]]); }, [filtered]);
   useEffect(() => { if (chosen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [chosen]);
   useEffect(() => { if (!flash) return; const id = setTimeout(() => setFlash(0), 700); return () => clearTimeout(id); }, [flash]);
   const updatedText = updatedAt ? new Date(updatedAt).toLocaleString(lang === "ja" ? "ja-JP" : "en-GB", { timeZone: "Asia/Tokyo", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + " JST" : null;
@@ -71,7 +71,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
             <div className="gb-days">
               {groups.map(([d, list]) => (
                 <section key={d} className="gb-day-group" aria-label={dateLabel(d, lang)}>
-                  <h3 className="gb-day-h">{dateLabel(d, lang)} <span>{list.length}</span></h3>
+                  <h3 className="gb-day-h">{dateLabel(d, lang)} <span>{C.dayCount.replace("{n}", String(list.length)).replace("{open}", String(list.filter((t) => !t.soldOut).length))}</span></h3>
                   <ul className="gb-row">
                     {list.map((t) => (
                       <li key={t.id} className={`gb-card${chosen?.id === t.id ? " on" : ""}${t.soldOut ? " sold" : ""}`}>
