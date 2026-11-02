@@ -15,9 +15,13 @@
 export const GOLFPAQ_SOURCE = "https://www.golfpaq.net";
 /** Added per person on top of the partner's price (internal; never shown). */
 export const GOLFPAQ_FEE_JPY = 15000;
+/** Availability shown to visitors: a tour within this many days of today (JST) is sold out whatever the partner shows... */
+export const GOLFPAQ_SOLD_OUT_DAYS = 3;
+/** ...and within this many days it is sold out once only one seat is left (owner's rule, 2026-11-02). */
+export const GOLFPAQ_LOW_SEAT_DAYS = 7;
 /** Rental clubs, per golfer who needs them (shown as an option). */
 export const GOLFPAQ_RENTAL_JPY = 5500;
-export const GOLFPAQ_SNAPSHOT_KEY = "golfpaq:self-rounds:v2";
+export const GOLFPAQ_SNAPSHOT_KEY = "golfpaq:self-rounds:v3";
 export const GOLFPAQ_DETAIL_PREFIX = "golfpaq:detail:v1:";
 export const GOLFPAQ_REFRESH_MS = 3 * 60 * 60 * 1000;
 export const GOLFPAQ_MAX_AGE_MS = 6 * 60 * 60 * 1000;
@@ -48,6 +52,8 @@ export interface GolfpaqTour {
   perPersonYen: number;
   seats: number;
   capacity: number;
+  /** The partner marks the card sold out or closed (完売 / 受付終了 / 満席). */
+  closed?: boolean;
   detailUrl: string;
   imageUrl?: string;
   details?: GolfpaqTourDetails;
@@ -61,8 +67,10 @@ export interface PublicTour {
   pickup: string;
   departure: { area: string; via?: string; time?: string; lunch: "included" | "subsidy" | "not_included"; throughPlay: boolean; note?: string };
   perPersonYen: number;
+  /** Seats a visitor may enquire for; 0 when sold out. */
   seats: number;
   capacity: number;
+  soldOut: boolean;
   imageUrl?: string;
   highlights?: string;
   schedule?: string;
@@ -104,7 +112,15 @@ export function plusDays(day: string, n: number): string {
   return new Date(Date.parse(day + "T00:00:00Z") + n * 86400_000).toISOString().slice(0, 10);
 }
 /** The first date shown: a week out, Japan time (要件 5). */
-export function firstPublicDay(now = new Date()): string { return plusDays(japanToday(now), 7); }
+/** The first date shown: today in Japan. Near dates are shown as sold out (availabilityOf). */
+export function firstPublicDay(now = new Date()): string { return japanToday(now); }
+const dayDiff = (date: string, today: string) => Math.round((Date.parse(`${date}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86400000);
+/** What a visitor may still enquire for: nothing within 3 days, nothing within 7 days when a single seat is left, nothing the partner closed. */
+export function availabilityOf(t: { date: string; seats: number; closed?: boolean }, now = new Date()): { soldOut: boolean; seats: number } {
+  const days = dayDiff(t.date, japanToday(now));
+  const soldOut = !!t.closed || t.seats <= 0 || days <= GOLFPAQ_SOLD_OUT_DAYS || (days <= GOLFPAQ_LOW_SEAT_DAYS && t.seats <= 1);
+  return { soldOut, seats: soldOut ? 0 : t.seats };
+}
 
 // ---- parsing ----------------------------------------------------------------
 
@@ -122,8 +138,9 @@ function validPicture(source: string): string | undefined {
   } catch { return undefined; }
 }
 
-/** Open, ordinary 18-hole self-play rounds from a monthly listing. Sold-out
- *  (完売), closed (受付終了) and zero-seat cards are left out. */
+/** Ordinary 18-hole self-play rounds from a monthly listing. Sold-out (完売),
+ *  closed (受付終了) and zero-seat cards are kept, flagged `closed`, so the
+ *  page can show them as sold out; cancelled (中止) cards are left out. */
 export function parseGolfpaqListing(html: string, fromDate: string, throughDate: string): GolfpaqTour[] {
   const cards = html.split(/<div\s+class=["']col-lg-4 mb-5["']\s*>/i).slice(1);
   const found: GolfpaqTour[] = [];
@@ -131,7 +148,8 @@ export function parseGolfpaqListing(html: string, fromDate: string, throughDate:
     const kind = strip(card.match(/<h5[^>]*>([\s\S]*?)<\/h5>/i)?.[1] ?? "");
     if (kind !== "セルフプレーラウンド") continue;
     const badge = strip(card.match(/rounded-pill[^>]*>([\s\S]*?)<\/div>/i)?.[1] ?? "");
-    if (/完売|受付終了|満席|中止/.test(badge)) continue;
+    if (/中止/.test(badge)) continue;
+    const closed = /完売|受付終了|満席/.test(badge);
     const dateValue = field(card, "日程：");
     const matchDate = dateValue.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
     if (!matchDate) continue;
@@ -145,8 +163,8 @@ export function parseGolfpaqListing(html: string, fromDate: string, throughDate:
     const id = detailUrl.match(/\/plan\/show\/(\d+\/\d+\/\d+)/)?.[1]?.replace(/\//g, "-") ?? "";
     const pickup = strip(card.match(/<p\s+class=["']mb-0["'][^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? "").slice(0, 180);
     const imageUrl = validPicture(card.match(/<img\s+class=["']card-img-top["']\s+src=["']([^"']+)["']/i)?.[1] ?? "");
-    if (!id || !course || !pickup || seats <= 0 || sourceYen < 5000 || sourceYen > 100000) continue;
-    found.push({ id, date, course, pickup, sourceYen, perPersonYen: customerPricePerPerson(sourceYen), seats, capacity, detailUrl, ...(imageUrl ? { imageUrl } : {}) });
+    if (!id || !course || !pickup || sourceYen < 5000 || sourceYen > 100000) continue;
+    found.push({ id, date, course, pickup, sourceYen, perPersonYen: customerPricePerPerson(sourceYen), seats: Math.max(seats, 0), capacity, ...(closed ? { closed: true } : {}), detailUrl, ...(imageUrl ? { imageUrl } : {}) });
   }
   return found;
 }
@@ -191,13 +209,14 @@ export function describePickup(pickup: string): PublicTour["departure"] {
 }
 
 /** The public projection: everything a visitor may see, nothing about the partner's price or page. */
-export function toPublicTour(t: GolfpaqTour): PublicTour {
+export function toPublicTour(t: GolfpaqTour, now = new Date()): PublicTour {
+  const availability = availabilityOf(t, now);
   const d = t.details;
   const departure = describePickup(t.pickup);
   if (d?.departureTime) departure.time = d.departureTime;
   if (d && departure.lunch === "not_included" && d.lunchIncluded) departure.lunch = "included";
   return {
-    id: t.id, date: t.date, course: t.course, pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: t.seats, capacity: t.capacity,
+    id: t.id, date: t.date, course: t.course, pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: availability.seats, capacity: t.capacity, soldOut: availability.soldOut,
     ...(t.imageUrl ? { imageUrl: t.imageUrl } : {}),
     ...(d?.features ? { highlights: d.features.replace(/\*?別途昼食代がかかります。?|ランチは別料金となります。各自ご精算ください。?/g, "").trim() } : {}),
     ...(d?.schedule ? { schedule: d.schedule } : {}),
@@ -263,7 +282,7 @@ export function snapshotIsFresh(snapshot: GolfpaqSnapshot | null, now = Date.now
 export function publicToursFrom(snapshot: GolfpaqSnapshot | null, now = new Date()): { tours: PublicTour[]; updatedAt: string | null; through: string | null } {
   if (!snapshotIsFresh(snapshot, now.getTime())) return { tours: [], updatedAt: null, through: null };
   const first = firstPublicDay(now);
-  return { tours: snapshot!.tours.filter((t) => t.date >= first && t.date <= snapshot!.through && t.seats > 0).map(toPublicTour), updatedAt: snapshot!.updatedAt, through: snapshot!.through };
+  return { tours: snapshot!.tours.filter((t) => t.date >= first && t.date <= snapshot!.through).map((t) => toPublicTour(t, now)), updatedAt: snapshot!.updatedAt, through: snapshot!.through };
 }
 
 /** Runs in the existing Cloudflare cron, at most once every three hours:

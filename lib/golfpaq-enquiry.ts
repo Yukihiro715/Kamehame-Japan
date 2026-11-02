@@ -51,8 +51,8 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   const snapshot = await readGolfpaqSnapshot(env.READY_STATE);
   if (!snapshotIsFresh(snapshot, now.getTime())) return json({ ok: false, error: "availability_unavailable" }, 503);
   const tour = snapshot!.tours.find((t) => t.id === id && t.date === date);
-  if (!tour || tour.seats < people) return json({ ok: false, error: "availability_changed" }, 409);
-  const pub = toPublicTour(tour);
+  const pub = tour ? toPublicTour(tour, now) : null;
+  if (!tour || !pub || pub.soldOut || pub.seats < people) return json({ ok: false, error: "availability_changed" }, 409);
   const money = enquiryTotal(tour.perPersonYen, people, renters);
   const db = isD1Like(env.DB) ? d1Db(env.DB) : null;
 
@@ -64,13 +64,13 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   const reference = newReference(), at = now.toISOString();
   const facts: InternalFacts = {
     reference, tour: pub, people, renters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, totalYen: money.total,
-    name, email, phone: phone || undefined, note: note || undefined, lang, sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: tour.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
+    name, email, phone: phone || undefined, note: note || undefined, lang, sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
   };
   if (db) {
     await db.run(
       `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, note, lang, status, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
-      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, money.total, tour.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, at, at]);
+      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, at, at]);
   }
   const from = "KAMEHAME JAPAN <hello@kamehame-japan.com>";
   const [customerMail, staffMail, partnerMail] = await Promise.all([

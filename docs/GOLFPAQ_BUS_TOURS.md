@@ -6,7 +6,7 @@ Staging only until the owner releases it. Production shows the page only when th
 - `/{lang}/golf-bus/` (en, ja, es, fr, zh-tw; EN copy is the reference, JA is translated, the others fall back to EN).
 - Hero, "Two ways to play golf in Japan" (shared bus tour vs. custom booking), the tour list with filters, "How booking works", five steps, what is included, Good to Know, FAQ.
 - The golf collection page and the custom golf page carry a small "Two ways" cross-link only while the bus page is visible.
-- Each card: course, date, photo (the partner's photo hotlinked with no referrer; a KAMEHAME photo when there is none), departure area / time, lunch and through-play tags, seats left, the price as **one tax-inclusive total per person**, the enquiry button and "No payment is required to enquire."
+- Each card: course, date, photo (the partner's photo hotlinked with no referrer; a KAMEHAME photo when there is none), seats left or a SOLD OUT badge, departure area / time, lunch and through-play tags, the price as **one tax-inclusive total per person**, the enquiry button (disabled when sold out) and "No payment is required to enquire."
 - Enquiry form: golfers (1–8, never more than the seats shown), the unchecked "Add Rental Clubs (+¥5,500 per person)" box with a renters count for groups, a live summary with the total, name / email / phone / notes, the data-sharing consent, then a thank-you with the reference (`GP-XXXXXX`).
 
 ## Pricing rules (要件)
@@ -16,8 +16,9 @@ Staging only until the owner releases it. Production shows the page only when th
 - No link to the partner's product pages anywhere public. The partner is not named to the customer; who sells the tour is stated in the purchase instructions.
 
 ## Data
-- Source: the partner's public monthly listing pages and detail pages, read by the Worker's cron (`refreshGolfpaqSnapshot`) at most every 3 hours, stored in KV `READY_STATE` (`golfpaq:self-rounds:v2`, detail cache per tour for 14 days).
-- Window: JST today + 7 days through the last published calendar date. Sold-out / closed / cancelled tours and seats ≤ 0 are dropped.
+- Source: the partner's public monthly listing pages and detail pages, read by the Worker's cron (`refreshGolfpaqSnapshot`) at most every 3 hours, stored in KV `READY_STATE` (`golfpaq:self-rounds:v3`, detail cache per tour for 14 days).
+- Window: JST today through the last published calendar date. Cancelled (中止) tours are dropped; sold-out and closed ones are kept and shown as sold out.
+- Sold-out rules (owner, 2026-11-02), applied on the server for the page and the enquiry API alike: a tour within 3 days of today is sold out whatever the partner shows; within 7 days it is sold out once only one seat is left; a partner-closed (完売 / 受付終了 / 満席) or zero-seat tour is sold out. Open tours show the seats left on the photo.
 - If the snapshot is older than 6 hours (feed failing), the page shows the "temporarily unavailable" notice and the enquiry API answers 503. Nothing stale is shown as bookable.
 - Tests: `tests/golfpaq.test.mjs` (parsing, projection, pricing, window, refresh) and `tests/golfpaq-enquiry.test.mjs` (guards, ledger row, mail contents, allowlist) against saved fixtures in `tests/fixtures/golfpaq/`.
 

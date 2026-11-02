@@ -12,11 +12,14 @@ after(() => vite.close());
 const g = await vite.ssrLoadModule("/lib/golfpaq.ts");
 const fx = (name) => readFileSync(new URL(`./fixtures/golfpaq/${name}`, import.meta.url), "utf8");
 
-test("listing: only open self-play rounds inside the window; sold-out and closed cards are dropped", () => {
+test("listing: self-play rounds inside the window; sold-out and closed cards are kept and flagged, cancelled ones dropped", () => {
   const tours = g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-11-09", "2027-01-09");
-  assert.ok(tours.length >= 20 && tours.length <= 40, `open tours from 11-09 in November: ${tours.length}`);
+  assert.ok(tours.length >= 40 && tours.length <= 70, `tours from 11-09 in November: ${tours.length}`);
+  assert.ok(tours.filter((t) => !t.closed && t.seats > 0).length >= 20, "open ones among them");
+  assert.ok(tours.filter((t) => t.closed).length >= 10, "sold-out ones among them");
   for (const t of tours) {
-    assert.ok(t.seats > 0 && t.capacity > 0, "seats and capacity");
+    assert.ok(t.seats >= 0 && t.capacity > 0, "seats and capacity");
+    if (!t.closed) assert.ok(t.seats > 0, "an open card has seats");
     assert.ok(t.date >= "2026-11-09" && t.date <= "2026-11-30", t.date);
     assert.match(t.id, /^\d+-\d+-\d+$/);
     assert.ok(t.sourceYen >= 13200 && t.sourceYen <= 23100, `partner price ${t.sourceYen}`);
@@ -24,8 +27,8 @@ test("listing: only open self-play rounds inside the window; sold-out and closed
     assert.match(t.detailUrl, /^https:\/\/www\.golfpaq\.net\/booking\/plan\/show\//);
     if (t.imageUrl) assert.match(t.imageUrl, /^https:\/\/www\.golfpaq\.net\/booking\/storage\/images\/course\//);
   }
-  // the closed card (受付終了, 3 seats shown) is not offered; the window cuts the first week
-  assert.ok(!tours.some((t) => t.id === "1-1066-30821"), "受付終了 is excluded even with seats shown");
+  // the closed card (受付終了, 3 seats shown) is kept but flagged, so the page shows it as sold out
+  assert.equal(g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-11-01", "2026-11-30").find((t) => t.id === "1-1066-30821")?.closed, true, "受付終了 is flagged even with seats shown");
   assert.ok(g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-11-01", "2026-11-08").length > 0, "earlier dates exist but are outside the window");
   assert.equal(g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-12-01", "2026-12-31").length, 0, "nothing outside the month");
 });
@@ -72,13 +75,24 @@ test("pricing: ¥15,400 → ¥30,400 per person; rental ¥5,500 per renter; tota
   assert.equal(g.yen(30400), "¥30,400");
 });
 
-test("snapshot window: a week out in Japan time, nothing when the feed is stale", () => {
+test("snapshot window: from today in Japan time with the sold-out rules, nothing when the feed is stale", () => {
   const now = new Date("2026-11-02T20:00:00Z"); // 05:00 JST on 11-03
   assert.equal(g.japanToday(now), "2026-11-03");
-  assert.equal(g.firstPublicDay(now), "2026-11-10");
-  const tours = g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-11-10", "2026-11-30");
-  const fresh = { updatedAt: new Date(now.getTime() - 3600000).toISOString(), first: "2026-11-10", through: "2027-01-09", tours, months: ["2026-11"], fetchedMonths: 1, failedMonths: 0, detailsPending: 0 };
-  assert.equal(g.publicToursFrom(fresh, now).tours.length, tours.length);
+  assert.equal(g.firstPublicDay(now), "2026-11-03");
+  // the owner's rules: within 3 days everything is sold out; within 7 days one seat left is sold out; closed cards are sold out
+  const open = (date, seats, closed) => !g.availabilityOf({ date, seats, closed }, now).soldOut;
+  assert.equal(open("2026-11-03", 10, false), false); assert.equal(open("2026-11-06", 10, false), false);
+  assert.equal(open("2026-11-07", 1, false), false); assert.equal(open("2026-11-07", 2, false), true);
+  assert.equal(open("2026-11-10", 1, false), false); assert.equal(open("2026-11-11", 1, false), true);
+  assert.equal(open("2026-11-20", 5, true), false); assert.equal(open("2026-11-20", 0, false), false);
+  assert.deepEqual(g.availabilityOf({ date: "2026-11-20", seats: 3, closed: true }, now), { soldOut: true, seats: 0 });
+  const tours = g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-11-01", "2026-11-30");
+  const fresh = { updatedAt: new Date(now.getTime() - 3600000).toISOString(), first: "2026-11-03", through: "2027-01-09", tours, months: ["2026-11"], fetchedMonths: 1, failedMonths: 0, detailsPending: 0 };
+  const shown = g.publicToursFrom(fresh, now).tours;
+  assert.ok(shown.every((t) => t.date >= "2026-11-03"), "past dates are gone");
+  assert.ok(shown.filter((t) => t.date <= "2026-11-06").every((t) => t.soldOut && t.seats === 0), "the next three days are sold out");
+  assert.ok(shown.some((t) => t.soldOut) && shown.some((t) => !t.soldOut && t.seats > 1), "both states appear");
+  assert.ok(!("sourceYen" in shown[0]) && !("closed" in shown[0]) && !("detailUrl" in shown[0]), "internal fields stay out");
   const stale = { ...fresh, updatedAt: new Date(now.getTime() - 7 * 3600000).toISOString() };
   assert.deepEqual(g.publicToursFrom(stale, now), { tours: [], updatedAt: null, through: null });
   assert.deepEqual(g.publicToursFrom(null, now).tours, []);

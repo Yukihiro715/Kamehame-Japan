@@ -7,7 +7,7 @@ export interface BusCopy {
   heroTitle: string; heroLede: string; features: string[]; heroCta: string;
   twoWaysH: string; sharedH: string; sharedBody: string; sharedCta: string; customH: string; customBody: string; customCta: string;
   toursH: string; toursLede: string; updated: string; unavailable: string; noMatch: string; filterMonth: string; filterGolfers: string; filterDeparture: string; allMonths: string; allDepartures: string;
-  perPerson: string; includesLine: string; /** "{n}" is replaced by the number; "|" separates the singular and plural forms. */ seatsLeft: string; enquireBtn: string; noPayment: string;
+  perPerson: string; includesLine: string; /** "{n}" is replaced by the number; "|" separates the singular and plural forms. */ seatsLeft: string; soldOut: string; enquireBtn: string; noPayment: string;
   howH: string; howBody: string; howAvailability: string;
   stepsH: string; steps: { n: string; title: string; body: string }[];
   includedH: string; included: string[]; notIncludedH: string; notIncluded: string[];
@@ -31,7 +31,7 @@ const en: BusCopy = {
   toursH: "Available Golf Tours", toursLede: "Dates and prices come from our tour partner's published schedule and are refreshed through the day. Pick a date, tell us how many golfers, and send a free enquiry.",
   updated: "Schedule updated", unavailable: "The live schedule is temporarily unavailable. Please try again shortly or contact us and we will send you the upcoming dates.", noMatch: "No tours match these filters. Try another month, departure point or group size.",
   filterMonth: "Month", filterGolfers: "Golfers", filterDeparture: "Departure", allMonths: "All months", allDepartures: "All departures",
-  perPerson: "/person", includesLine: "Includes golf and round-trip bus · tax included", seatsLeft: "1 seat left|{n} seats left", enquireBtn: "Enquire About This Tour", noPayment: "No payment is required to enquire.",
+  perPerson: "/person", includesLine: "Includes golf and round-trip bus · tax included", seatsLeft: "1 seat left|{n} seats left", soldOut: "Sold out", enquireBtn: "Enquire About This Tour", noPayment: "No payment is required to enquire.",
   howH: "How booking works", howBody: "After submitting your enquiry, our travel partner will email you the purchase details and payment instructions. No payment is collected on this website.", howAvailability: "Availability is subject to final confirmation.",
   stepsH: "How It Works",
   steps: [
@@ -85,7 +85,7 @@ const ja: BusCopy = {
   toursH: "開催中のゴルフツアー", toursLede: "日程と料金は提携ツアー会社の公開スケジュールから取得し、日中に更新しています。日程と人数を選んで、無料でお問い合わせください。",
   updated: "スケジュール更新", unavailable: "現在スケジュールを取得できません。しばらくしてから再度お試しいただくか、お問い合わせください。", noMatch: "条件に合うツアーがありません。月・出発地・人数を変えてお試しください。",
   filterMonth: "月", filterGolfers: "人数", filterDeparture: "出発地", allMonths: "すべての月", allDepartures: "すべての出発地",
-  perPerson: "/人", includesLine: "ゴルフと往復バスを含む・税込", seatsLeft: "残り{n}席", enquireBtn: "このツアーについて問い合わせる", noPayment: "お問い合わせにお支払いは不要です。",
+  perPerson: "/人", includesLine: "ゴルフと往復バスを含む・税込", seatsLeft: "残り{n}席", soldOut: "完売", enquireBtn: "このツアーについて問い合わせる", noPayment: "お問い合わせにお支払いは不要です。",
   howH: "ご予約・お支払いについて", howBody: "お問い合わせ完了後、提携旅行会社より購入方法とお支払いについてメールでご案内します。当サイトでのお支払いは不要です。お問い合わせのみでは予約は確定しません。", howAvailability: "空席は最終確認の結果によります。",
   stepsH: "ご利用の流れ",
   steps: [

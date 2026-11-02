@@ -30,7 +30,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const formRef = useRef<HTMLDivElement>(null);
   const months = useMemo(() => [...new Set(tours.map((t) => t.date.slice(0, 7)))].sort(), [tours]);
   const areas = useMemo(() => [...new Set(tours.map((t) => t.departure.area))].sort(), [tours]);
-  const filtered = useMemo(() => tours.filter((t) => (!month || t.date.startsWith(month)) && (!area || t.departure.area === area) && t.seats >= people), [tours, month, area, people]);
+  const filtered = useMemo(() => tours.filter((t) => (!month || t.date.startsWith(month)) && (!area || t.departure.area === area) && (t.soldOut || t.seats >= people)), [tours, month, area, people]);
   useEffect(() => { if (chosen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [chosen]);
   const updatedText = updatedAt ? new Date(updatedAt).toLocaleString(lang === "ja" ? "ja-JP" : "en-GB", { timeZone: "Asia/Tokyo", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + " JST" : null;
 
@@ -52,16 +52,16 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
         {tours.length === 0 ? <p className="gb-empty">{C.unavailable}</p> : filtered.length === 0 ? <p className="gb-empty">{C.noMatch}</p> : (
           <ul className="gb-grid">
             {filtered.map((t) => (
-              <li key={t.id} className={`gb-card${chosen?.id === t.id ? " on" : ""}`}>
-                <div className="gb-photo"><img src={t.imageUrl ?? FALLBACK_IMG} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" /><span className="gb-date">{dateLabel(t.date, lang)}</span></div>
+              <li key={t.id} className={`gb-card${chosen?.id === t.id ? " on" : ""}${t.soldOut ? " sold" : ""}`}>
+                <div className="gb-photo"><img src={t.imageUrl ?? FALLBACK_IMG} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" /><span className="gb-date">{dateLabel(t.date, lang)}</span>{t.soldOut ? <span className="gb-seats gb-seats-sold">{C.soldOut}</span> : <span className="gb-seats"><Users size={13} /> {seatsText(C.seatsLeft, t.seats)}</span>}</div>
                 <div className="gb-body">
                   <h3>{t.course}</h3>
                   <p className="gb-meta"><Bus size={14} /> {t.departure.area}{t.departure.via ? ` · ${t.departure.via}` : ""}{t.departure.time ? ` · ${C.departs} ${t.departure.time}` : ""}</p>
-                  <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && <span className="gb-tag">{C.throughPlay}</span>}<span className="gb-tag"><Users size={12} /> {seatsText(C.seatsLeft, t.seats)}</span></div>
+                  <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && <span className="gb-tag">{C.throughPlay}</span>}</div>
                   <p className="gb-price"><b>{yen(t.perPersonYen)}</b> <span>{C.perPerson}</span></p>
                   <p className="gb-incl">{C.includesLine}</p>
-                  <button type="button" className="gb-btn" onClick={() => { setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }}>{C.enquireBtn}</button>
-                  <p className="gb-nopay">{C.noPayment}</p>
+                  {t.soldOut ? <button type="button" className="gb-btn gb-btn-sold" disabled aria-disabled="true">{C.soldOut}</button> : <button type="button" className="gb-btn" onClick={() => { setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }}>{C.enquireBtn}</button>}
+                  <p className="gb-nopay">{t.soldOut ? "\u00a0" : C.noPayment}</p>
                   {(t.highlights || t.schedule) && <button type="button" className="gb-link" onClick={() => setOpen(t)}>{C.details}</button>}
                 </div>
               </li>

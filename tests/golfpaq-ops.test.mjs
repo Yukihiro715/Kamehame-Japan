@@ -28,7 +28,7 @@ test("ops: list, detail with breakdown, transitions, note, partner re-send, draf
   const real = globalThis.fetch;
   globalThis.fetch = async (url, init) => { sent.push({ url: String(url), body: JSON.parse(init.body) }); return new Response(JSON.stringify({ id: "m" }), { status: 200, headers: { "content-type": "application/json" } }); };
   try {
-    const t = tours.find((x) => x.seats >= 2);
+    const t = tours.find((x) => !x.closed && x.seats >= 2 && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
     // first without a partner address: status stays received
     const env = { READY_STATE: kv, DB: db.d1, RESEND_API_KEY: "re_test", CONTACT_TO: "team@example.com" };
     const res = await handleGolfpaqEnquiry(new Request(`${ORIGIN}/api/golfpaq/enquiry`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: JSON.stringify({ id: t.id, date: t.date, people: 2, rental: true, renters: 2, name: "Ops Test", email: "guest@example.com", lang: "en", consent: true, request_id: "11111111-2222-4333-8444-000000000009" }) }), env, NOW);

@@ -2024,3 +2024,10 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-two-inline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px 28px; }
 .gb-two-inline-grid h2 { font-size: 20px; margin: 0 0 6px; }
 .gb-two-inline-grid p { margin: 0 0 8px; font-size: 15px; line-height: 1.55; }
+
+/* Seats left on the photo, and sold-out cards (within 3 days, or within 7 days with one seat left, or closed by the partner) */
+.gb-seats { position:absolute; right:10px; bottom:10px; display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; background:rgba(255,255,255,.94); color:#1d3b2a; font-size:12.5px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.18); }
+.gb-seats-sold { background:#b3261e; color:#fff; letter-spacing:.06em; text-transform:uppercase; }
+.gb-card.sold .gb-photo img { filter:grayscale(.85) brightness(.82); }
+.gb-card.sold .gb-body h3, .gb-card.sold .gb-price b { color:#6f6a62; }
+.gb-btn-sold, .gb-btn-sold:hover { background:#d9d3c7; color:#5d574e; cursor:not-allowed; box-shadow:none; transform:none; }

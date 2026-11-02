@@ -44,8 +44,11 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
   const mock = mailMock();
   try {
     const env = { READY_STATE: kv, DB: db.d1, RESEND_API_KEY: "re_test", CONTACT_TO: "team@example.com", GOLFPAQ_PARTNER_TO: "partner@example.com", SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/x" };
-    const t = tours.find((x) => x.seats >= 3 && x.seats <= 7);
-    assert.ok(t, "a tour with a few seats");
+    const t = tours.find((x) => !x.closed && x.seats >= 3 && x.seats <= 7 && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
+    assert.ok(t, "an open tour with a few seats beyond the first week");
+    const near = tours.find((x) => !x.closed && x.seats >= 3 && x.date <= g.plusDays(g.firstPublicDay(NOW), 3));
+    const closed = tours.find((x) => x.closed && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
+    assert.ok(near && closed, "a near tour and a closed tour");
     const base = { id: t.id, date: t.date, people: 2, rental: true, renters: 1, name: "Test Guest", email: "guest@example.com", phone: "+81 90 0000 0000", note: "Right-handed", lang: "en", consent: true, request_id: uuid(1) };
     // guards
     assert.equal((await post(base, env, { origin: "https://evil.example" })).status, 403);
@@ -54,6 +57,8 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     assert.equal((await post({ ...base, renters: 3 }, env)).status, 400, "more renters than golfers");
     assert.equal((await post({ ...base, id: "9-9-9" }, env)).status, 409, "a tour not in the feed");
     assert.equal((await post({ ...base, people: t.seats + 1, renters: 0, rental: false }, env)).status, 409, "more golfers than seats shown");
+    assert.equal((await post({ ...base, id: near.id, date: near.date, renters: 0, rental: false, people: 1 }, env)).status, 409, "within three days: sold out whatever the partner shows");
+    assert.equal((await post({ ...base, id: closed.id, date: closed.date, renters: 0, rental: false, people: 1 }, env)).status, 409, "closed by the partner: sold out");
     assert.equal((await post(base, { ...env, READY_STATE: { get: async () => null, put: async () => {} } })).status, 503, "no fresh feed, no enquiry");
     // the real one
     const res = await post(base, env);
@@ -89,7 +94,7 @@ test("staging: mail to addresses outside the allowlist is blocked and recorded; 
   const mock = mailMock();
   try {
     const env = { KH_ENV: "staging", NOTIFY_ALLOWLIST: "team@example.com", READY_STATE: kv, DB: db.d1, RESEND_API_KEY: "re_test", CONTACT_TO: "team@example.com", GOLFPAQ_PARTNER_TO: "partner@example.com" };
-    const t = tours.find((x) => x.seats >= 1);
+    const t = tours.find((x) => !x.closed && x.seats >= 2 && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
     const res = await post({ id: t.id, date: t.date, people: 1, rental: false, name: "A", email: "someone@hotel.example", lang: "ja", consent: true, request_id: uuid(2) }, env);
     const body = await res.json();
     assert.equal(res.status, 200); assert.equal(body.customerMail, "blocked");
