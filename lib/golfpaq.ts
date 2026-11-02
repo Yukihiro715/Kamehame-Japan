@@ -1,8 +1,8 @@
 /**
  * GOLFPAQ's public day pages (partner-approved information use).
- * Dates run from seven days after today through the end of the third
- * published calendar month. A scheduled job snapshots the data to KV;
- * customer-facing requests never crawl the entire partner site.
+ * Dates run from JST today + 7 days through the last published calendar
+ * date on the partner's home page. Only monthly self-play listings are fetched;
+ * customer-facing requests never crawl the partner site.
  */
 export const GOLFPAQ_SOURCE = "https://www.golfpaq.net";
 export const GOLFPAQ_FEE_JPY = 15000;
@@ -37,11 +37,6 @@ export function plusDays(day: string, n: number): string {
   return new Date(Date.parse(day + "T00:00:00Z") + n * 86400_000).toISOString().slice(0, 10);
 }
 export function firstPublicDay(now = new Date()): string { return plusDays(japanToday(now), 7); }
-export function lastPublishedDay(now = new Date()): string {
-  const [year, month] = japanToday(now).split("-").map(Number);
-  // The partner calendar shows the current and next two calendar months.
-  return new Date(Date.UTC(year, month + 2, 0)).toISOString().slice(0, 10);
-}
 const strip = (s: string) => s.replace(/<[^>]*>/g, " ").replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, " ").trim();
 const field = (html: string, label: string) => {
   const at = html.indexOf(label);
@@ -57,7 +52,7 @@ function validPicture(source: string): string | undefined {
 }
 
 /** Returns only ordinary, available 18-hole self-play rounds, not lessons, caddies or shuttles. */
-export function parseGolfpaqDay(html: string, expectedDate: string): GolfpaqTour[] {
+export function parseGolfpaqListing(html: string, fromDate: string, throughDate: string): GolfpaqTour[] {
   const cards = html.split(/<div\s+class=["']col-lg-4 mb-5["']\s*>/i).slice(1);
   const found: GolfpaqTour[] = [];
   for (const card of cards) {
@@ -67,7 +62,7 @@ export function parseGolfpaqDay(html: string, expectedDate: string): GolfpaqTour
     const matchDate = dateValue.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
     if (!matchDate) continue;
     const date = matchDate[1] + "-" + matchDate[2].padStart(2, "0") + "-" + matchDate[3].padStart(2, "0");
-    if (date !== expectedDate) continue;
+    if (date < fromDate || date > throughDate) continue;
     const course = strip(card.match(/<p\s+class=["']small mb-1["'][^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? "").slice(0, 130);
     const sourceYen = Number(strip(card.match(/<h6[^>]*>([\s\S]*?)<\/h6>/i)?.[1] ?? "").match(/([\d,]+)円/)?.[1]?.replace(/,/g, "") ?? 0);
     const seats = Number(field(card, "残数：").match(/(\d+)名/)?.[1] ?? 0);
@@ -80,21 +75,46 @@ export function parseGolfpaqDay(html: string, expectedDate: string): GolfpaqTour
   }
   return found;
 }
-export function golfpaqDayUrl(date: string): string {
-  const [y, m, d] = date.split("-").map(Number);
-  return `${GOLFPAQ_SOURCE}/booking/plan/index/${y}/${m}/${d}`;
+/** One public calendar listing tells us how far ahead this partner currently sells. */
+export function publishedDatesFromIndex(html: string): string[] {
+  const dates = [...html.matchAll(/\/booking\/plan\/index\/(\d{4})\/(\d{1,2})\/(\d{1,2})(?=[\s"'?#<])/g)]
+    .map((m) => m[1] + "-" + m[2].padStart(2, "0") + "-" + m[3].padStart(2, "0"))
+    .filter((s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s + "T00:00:00Z")));
+  return [...new Set(dates)].sort();
 }
-export async function fetchGolfpaqDay(date: string): Promise<GolfpaqTour[]> {
-  const res = await fetch(golfpaqDayUrl(date), {
+export async function publishedSchedule(now = new Date()): Promise<{ first: string; through: string; months: string[] }> {
+  const res = await fetch(GOLFPAQ_SOURCE + "/booking/", {
     headers: { "user-agent": "KAMEHAME-JAPAN partner tour catalog (hello@kamehame-japan.com)" },
-    signal: AbortSignal.timeout(8500),
+    signal: AbortSignal.timeout(12000),
     cache: "no-store",
   });
-  if (!res.ok) throw Error("golfpaq_http_" + res.status);
+  if (!res.ok) throw Error("golfpaq_index_http_" + res.status);
   const html = await res.text();
-  // A login, maintenance or bot-challenge page must not be mistaken for an empty schedule.
-  if (!html.includes("GOLFPAQ") || !html.includes("件数")) throw Error("golfpaq_page_changed");
-  return parseGolfpaqDay(html, date);
+  if (!html.includes("GOLFPAQ") || !html.includes("件数")) throw Error("golfpaq_index_changed");
+  const first = firstPublicDay(now);
+  const published = publishedDatesFromIndex(html).filter((d) => d >= first && d <= plusDays(japanToday(now), 365));
+  const through = published[published.length - 1];
+  if (!through) return { first, through: first, months: [] };
+  const months: string[] = [];
+  for (let month = first.slice(0, 7); month <= through.slice(0, 7); ) {
+    months.push(month);
+    const [year, m] = month.split("-").map(Number);
+    month = new Date(Date.UTC(year, m, 1)).toISOString().slice(0, 7);
+  }
+  return { first, through, months };
+}
+/** Monthly self-play schedules need only a handful of calls instead of daily pages. */
+export async function fetchGolfpaqMonth(month: string, first: string, through: string): Promise<GolfpaqTour[]> {
+  const [y, m] = month.split("-").map(Number);
+  const res = await fetch(GOLFPAQ_SOURCE + "/booking/coursecategory/1/" + y + "/" + m, {
+    headers: { "user-agent": "KAMEHAME-JAPAN partner tour catalog (hello@kamehame-japan.com)" },
+    signal: AbortSignal.timeout(12000),
+    cache: "no-store",
+  });
+  if (!res.ok) throw Error("golfpaq_month_http_" + res.status);
+  const html = await res.text();
+  if (!html.includes("GOLFPAQ") || !html.includes("セルフプレーラウンド")) throw Error("golfpaq_month_page_changed");
+  return parseGolfpaqListing(html, first, through);
 }
 export async function readGolfpaqSnapshot(kv?: GolfpaqKv | null): Promise<GolfpaqSnapshot | null> {
   if (!kv) return null;
@@ -111,22 +131,14 @@ export async function refreshGolfpaqSnapshot(kv?: GolfpaqKv | null, now = new Da
   if (!kv) return;
   const previous = await readGolfpaqSnapshot(kv);
   if (previous && now.getTime() - Date.parse(previous.updatedAt) < GOLFPAQ_REFRESH_MS) return;
-  const first = firstPublicDay(now), through = lastPublishedDay(now);
-  const dates: string[] = [];
-  for (let d = first; d <= through; d = plusDays(d, 1)) dates.push(d);
-  if (!dates.length) return;
+  const { first, through, months } = await publishedSchedule(now);
   const tours: GolfpaqTour[] = [];
-  let fetchedDays = 0, failedDays = 0;
-  // Limit concurrency out of respect for our tour partner.
-  for (let i = 0; i < dates.length; i += 4) {
-    const batch = await Promise.allSettled(dates.slice(i, i + 4).map(fetchGolfpaqDay));
-    for (const item of batch) {
-      if (item.status === "fulfilled") { fetchedDays++; tours.push(...item.value); }
-      else failedDays++;
-    }
+  let fetchedMonths = 0;
+  const jobs = await Promise.allSettled(months.map(month => fetchGolfpaqMonth(month, first, through)));
+  for (const job of jobs) {
+    if (job.status === "fulfilled") { fetchedMonths++; tours.push(...job.value); }
   }
-  // Do not replace a useful snapshot with a predominantly failed crawl.
-  if (fetchedDays < Math.ceil(dates.length * 0.8)) throw Error("golfpaq_refresh_incomplete");
+  if (fetchedMonths !== months.length) throw Error("golfpaq_refresh_incomplete");
   const unique = [...new Map(tours.map(t => [t.id, t])).values()].sort((a,b) => a.date.localeCompare(b.date) || a.perPersonYen - b.perPersonYen);
-  await kv.put(GOLFPAQ_SNAPSHOT_KEY, JSON.stringify({ updatedAt: now.toISOString(), through, tours: unique, fetchedDays, failedDays } satisfies GolfpaqSnapshot), { expirationTtl: 48 * 3600 });
+  await kv.put(GOLFPAQ_SNAPSHOT_KEY, JSON.stringify({ updatedAt: now.toISOString(), through, tours: unique, fetchedDays: fetchedMonths, failedDays: 0 } satisfies GolfpaqSnapshot), { expirationTtl: 48 * 3600 });
 }
