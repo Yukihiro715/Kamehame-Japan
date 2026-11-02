@@ -30,7 +30,8 @@ export interface BusCopy {
   toursH: string; toursLede: string; updated: string; unavailable: string; noMatch: string; filterGolfers: string; filterDeparture: string; allDepartures: string;
   calH: string; calAny: string; calLegendOpen: string; calLegendSold: string; calPrev: string; calNext: string; weekdays: string[]; calShowing: string;
   /** "{n}" = number of tours; "|" separates singular and plural. */ calShow: string; calNone: string; calHint: string;
-  /** Under each date: "{n}" tours in all, "{open}" with seats. */ dayCount: string;
+  /** Under each date: "{n}" tours in all, "{open}" with seats; "|" separates singular and plural. */ dayCount: string;
+  /** Departure points and via-stops as the feed names them (English keys), in the page language. */ areaNames: Record<string, string>; viaNames: Record<string, string>;
   perPerson: string; includesLine: string; /** "{n}" is replaced by the number; "|" separates the singular and plural forms. */ seatsLeft: string; soldOut: string; enquireBtn: string; noPayment: string;
   howH: string; howBody: string; howAvailability: string;
   stepsH: string; steps: { n: string; title: string; body: string }[];
@@ -43,7 +44,10 @@ export interface BusCopy {
   doneH: string; doneLines: string[]; doneRef: string; doneAgain: string;
   errors: Record<string, string>;
   departure: string; departs: string; lunchIncluded: string; lunchSubsidy: string; lunchNot: string; throughPlay: string; cartIncluded: string; scheduleH: string; highlightsH: string; notesH: string; back: string; details: string;
-  customLink: string;
+  /** The details sheet: confirmed facts, then the partner's text in the page's language when we have it. */
+  close: string; sheetDate: string; sheetPlay: string; selfPlay: string; sheetLunch: string; sheetCart: string; cartNot: string; sheetSeats: string; sheetPrice: string; enPending: string;
+  departureNotes: Record<"separate_groups" | "sunset" | "west" | "east", string>;
+  customLinkH: string; customLinkBtn: string; compareBtn: string;
 }
 
 const en: BusCopy = {
@@ -163,7 +167,7 @@ const en: BusCopy = {
   updated: "Schedule updated", unavailable: "The live schedule is temporarily unavailable. Please try again shortly or contact us and we will send you the upcoming dates.", noMatch: "No tours match these filters. Try another date, departure point or group size.",
   filterGolfers: "Golfers", filterDeparture: "Departure", allDepartures: "All departures",
   calH: "Pick a date", calAny: "Show all dates", calLegendOpen: "Seats available", calLegendSold: "Sold out", calPrev: "Previous month", calNext: "Next month", weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"], calShowing: "Showing tours on",
-  dayCount: "{n} tours · {open} with seats", calShow: "Show 1 tour on {d}|Show {n} tours on {d}", calNone: "Tap a date to see its tours", calHint: "Green dates have seats; the number is how many tours leave that day.",
+  dayCount: "1 tour · {open} with seats|{n} tours · {open} with seats", areaNames: {}, viaNames: {}, calShow: "Show 1 tour on {d}|Show {n} tours on {d}", calNone: "Tap a date to see its tours", calHint: "Green dates have seats; the number is how many tours leave that day.",
   perPerson: "/person", includesLine: "Includes golf and round-trip bus · tax included", seatsLeft: "1 seat left|{n} seats left", soldOut: "Sold out", enquireBtn: "Enquire About This Tour", noPayment: "No payment is required to enquire.",
   howH: "How booking works", howBody: "After submitting your enquiry, our travel partner will email you the purchase details and payment instructions. No payment is collected on this website.", howAvailability: "Availability is subject to final confirmation.",
   stepsH: "How It Works",
@@ -207,7 +211,10 @@ const en: BusCopy = {
   doneRef: "Your enquiry reference", doneAgain: "Enquire about another tour",
   errors: { availability_changed: "This tour no longer has enough seats for your group. Please choose another date.", availability_unavailable: "The live schedule is temporarily unavailable. Please try again in a few minutes.", invalid: "Please check the form and try again.", default: "We could not send your enquiry. Please try again or email hello@kamehame-japan.com." },
   departure: "Departure", departs: "departs", lunchIncluded: "Lunch included", lunchSubsidy: "Lunch voucher included", lunchNot: "Lunch not included", throughPlay: "Through play (no lunch break)", cartIncluded: "Cart included", scheduleH: "The day", highlightsH: "About the course", notesH: "Conditions", back: "Back to tours", details: "Details",
-  customLink: "Prefer your own course and date? See Custom Golf Booking",
+  close: "Close", sheetDate: "Date", sheetPlay: "Play", selfPlay: "18 holes, self-play with a riding cart", sheetLunch: "Lunch", sheetCart: "Cart", cartNot: "No cart on this course", sheetSeats: "Seats", sheetPrice: "Price",
+  enPending: "The English description of this course is being prepared. The details above are confirmed.",
+  departureNotes: { separate_groups: "Golfers from the other departure point play in separate groups", sunset: "Late start: the round may finish near sunset", west: "WEST course", east: "EAST course" },
+  customLinkH: "Prefer your own course and date?", customLinkBtn: "See Custom Golf Booking", compareBtn: "Compare both options",
 };
 
 const ja: BusCopy = {
@@ -327,7 +334,7 @@ const ja: BusCopy = {
   updated: "日程更新", unavailable: "ただいま日程を表示できません。しばらくしてからもう一度お試しいただくか、お問い合わせください。直近の日程をお送りします。", noMatch: "条件に合うツアーがありません。日付・出発地・人数を変えてお試しください。",
   filterGolfers: "人数", filterDeparture: "出発地", allDepartures: "すべての出発地",
   calH: "日付を選ぶ", calAny: "すべての日程を表示", calLegendOpen: "空きあり", calLegendSold: "完売", calPrev: "前の月", calNext: "次の月", weekdays: ["月", "火", "水", "木", "金", "土", "日"], calShowing: "表示中の日付",
-  dayCount: "{n}本・空き {open}本", calShow: "{d}のツアー {n}件を表示|{d}のツアー {n}件を表示", calNone: "日付をタップするとその日のツアーを表示します", calHint: "緑の日は空きあり。数字はその日に出発するツアーの本数です。",
+  dayCount: "{n}本・空き {open}本|{n}本・空き {open}本", areaNames: { "Shinjuku (Tokyo)": "新宿（東京）", "Oimachi (Tokyo)": "大井町（東京）", "Tokyo": "東京" }, viaNames: { "via Tokyo Station": "東京駅経由", "via Ikebukuro": "池袋経由", "via Oji": "王子経由" }, calShow: "{d}のツアー {n}件を表示|{d}のツアー {n}件を表示", calNone: "日付をタップするとその日のツアーを表示します", calHint: "緑の日は空きあり。数字はその日に出発するツアーの本数です。",
   perPerson: "/人", includesLine: "ゴルフと往復バスを含む・税込", seatsLeft: "残り{n}席", soldOut: "完売", enquireBtn: "このツアーについて問い合わせる", noPayment: "お問い合わせにお支払いは不要です。",
   howH: "ご予約の流れ", howBody: "お問い合わせ完了後、提携旅行会社より購入方法とお支払いについてメールでご案内します。当サイトでのお支払いは不要です。", howAvailability: "お問い合わせのみでは予約は確定しません。",
   stepsH: "ご利用の流れ",
@@ -371,7 +378,10 @@ const ja: BusCopy = {
   doneRef: "受付番号", doneAgain: "別のツアーについて問い合わせる",
   errors: { availability_changed: "このツアーはご希望の人数分の空きがなくなりました。別の日程をお選びください。", availability_unavailable: "ただいま日程を表示できません。数分後にもう一度お試しください。", invalid: "入力内容をご確認のうえ、もう一度お試しください。", default: "送信できませんでした。もう一度お試しいただくか、hello@kamehame-japan.com までご連絡ください。" },
   departure: "出発", departs: "出発", lunchIncluded: "昼食つき", lunchSubsidy: "昼食補助つき", lunchNot: "昼食別", throughPlay: "スループレー（昼食休憩なし）", cartIncluded: "カート込み", scheduleH: "当日の流れ", highlightsH: "コースについて", notesH: "条件", back: "ツアー一覧へ戻る", details: "詳細",
-  customLink: "コースや日程を自分で決めたい方はカスタムゴルフ手配へ",
+  close: "閉じる", sheetDate: "日程", sheetPlay: "プレー", selfPlay: "18ホール・セルフプレー（乗用カート）", sheetLunch: "昼食", sheetCart: "カート", cartNot: "カートなし", sheetSeats: "残席", sheetPrice: "料金",
+  enPending: "コース紹介は準備中です。上記の内容は確定情報です。",
+  departureNotes: { separate_groups: "別の出発地の参加者とは別組になります", sunset: "遅めのスタートのため日没近くまでかかる場合があります", west: "WESTコース", east: "EASTコース" },
+  customLinkH: "コースや日程を自分で決めたい方は", customLinkBtn: "カスタムゴルフ手配を見る", compareBtn: "2つの方法を比べる",
 };
 
 export const busCopy = (lang: Lang): BusCopy => (lang === "ja" ? ja : en);

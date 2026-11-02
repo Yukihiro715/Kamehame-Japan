@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst } from "../client";
 import { Badge, Button, Card, Loading, Notice } from "../ui";
 
-interface Row { name: string; tours: number; name_en: string | null; name_ja?: string | null; name_es?: string | null; name_fr?: string | null; name_zh_tw?: string | null; area: string | null; note?: string | null; updated_at?: string; updated_by?: string | null; missingEn: boolean; inSchedule: boolean; seed: { en: string; area: string } | null }
+interface Row { name: string; tours: number; name_en: string | null; name_ja?: string | null; name_es?: string | null; name_fr?: string | null; name_zh_tw?: string | null; area: string | null; note?: string | null; updated_at?: string; updated_by?: string | null; missingEn: boolean; autoEn: boolean; inSchedule: boolean; seed: { en: string; area: string } | null }
 interface Data { courses: Row[]; updatedAt: string | null }
 const AREAS = ["Chiba", "Ibaraki", "Tochigi", "Saitama", "Gunma", "Kanagawa", "Tokyo", "Shizuoka", "Yamanashi"];
 
@@ -35,7 +35,7 @@ export function OpsGolfCourses() {
       <p className="pt-note-box">提携先の日程に出てくるゴルフ場名（日本語）と、サイトで表示する名前です。英語名が空のコースは英語ページでも日本語のまま表示されます。保存するとすぐ反映されます（配備不要）。日程データ更新: {data.updatedAt ? jst(data.updatedAt) : "—"}</p>
       {missing > 0 && <Notice tone="warn">英語名が未設定のコースが {missing} 件あります。</Notice>}
       {data.courses.map((r) => (
-        <Card key={r.name} title={<span>{r.name} {r.inSchedule ? <Badge tone="info">掲載中 {r.tours}本</Badge> : <Badge>日程なし</Badge>} {r.missingEn && <Badge tone="warn">英語名なし</Badge>}</span>}>
+        <Card key={r.name} title={<span>{r.name} {r.inSchedule ? <Badge tone="info">掲載中 {r.tours}本</Badge> : <Badge>日程なし</Badge>} {r.missingEn && <Badge tone="warn">英語名なし</Badge>} {r.autoEn && <Badge tone="warn">英語名は自動翻訳（要確認）</Badge>}</span>}>
           <div className="pt-grid-3">
             <label className="pt-field"><span className="pt-field-l">英語名（English）</span><input value={val(r, "name_en")} onChange={(e) => set(r, "name_en", e.target.value)} placeholder={r.seed?.en ?? ""} /></label>
             <label className="pt-field"><span className="pt-field-l">日本語表示名（空なら取得名）</span><input value={val(r, "name_ja")} onChange={(e) => set(r, "name_ja", e.target.value)} placeholder={r.name} /></label>

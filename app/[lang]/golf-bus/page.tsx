@@ -37,7 +37,7 @@ export default async function GolfBusPage({ params }: Props) {
   try { env = (await import("cloudflare:workers")).env as Record<string, unknown>; } catch { env = null; }
   if (!golfpaqVisible(env as { KH_ENV?: string; GOLFPAQ_LIVE?: string } | null)) notFound();
   const snapshot = await readGolfpaqSnapshot(env?.READY_STATE as Parameters<typeof readGolfpaqSnapshot>[0]);
-  const names = await loadCourseNames(isD1Like(env?.DB) ? d1Db(env!.DB) : null);
+  const names = await loadCourseNames(isD1Like(env?.DB) ? d1Db(env!.DB) : null, env?.READY_STATE as Parameters<typeof readGolfpaqSnapshot>[0]);
   const { tours: rawTours, updatedAt } = publicToursFrom(snapshot, new Date(), names);
   // courseEn carries the name for the page's language (the component shows the Japanese name on /ja/).
   const tours = rawTours.map((t) => ({ ...t, courseEn: displayCourseName(t.course, lang, names) }));
@@ -166,7 +166,10 @@ export default async function GolfBusPage({ params }: Props) {
             <h2 id="gb-faq-h">{C.faqH}</h2>
             {C.faq.map((f) => <details key={f.q}><summary>{f.q}</summary><p>{f.a}</p></details>)}
             <p className="gb-small gb-legal">{lang === "ja" ? "ツアーの契約・販売主体、旅行業登録情報、適用される旅行条件・取消規定は、購入案内に記載します。" : "The seller of the tour, its travel-agency registration and the travel conditions and cancellation rules that apply are stated in the purchase instructions you receive."}</p>
-            <p className="gb-crosslink"><Link href={`/${lang}/tokyo/mt-fuji-golf-day/`}>{C.customLink} →</Link> · <Link href={`/${lang}/golf-tours/`}>{C.twoWaysH} →</Link></p>
+            <div className="gb-cta-row">
+              <div className="gb-cta-card"><b>{C.customLinkH}</b><Link className="gb-btn gb-btn-outline" href={`/${lang}/tokyo/mt-fuji-golf-day/`}>{C.customLinkBtn} →</Link></div>
+              <div className="gb-cta-card"><b>{C.twoWaysH}</b><Link className="gb-btn gb-btn-ghost" href={`/${lang}/golf-tours/`}>{C.compareBtn} →</Link></div>
+            </div>
           </div>
         </section>
       </main>

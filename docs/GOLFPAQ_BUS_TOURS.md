@@ -10,6 +10,7 @@ Released to production on 2026-11-02 (owner's approval). Production shows the pa
 
 ## What the visitor sees
 - Languages: en, ja, es, fr, zh-tw; EN copy is the reference, JA is translated, the others fall back to EN.
+- Details sheet per card: the confirmed facts (date, departure point and time, play style, lunch, cart, seats, price), then the partner's course description, day schedule and conditions in the page's language. On non-Japanese pages that text appears once the cron has translated it; until then the sheet says the English description is being prepared.
 - Calendar: a month grid of the published dates (green = seats available, grey = every tour that day sold out); tapping a day filters the list; golfers and departure filters stay.
 - The golf collection page and the custom golf page carry a small "Two ways" cross-link only while the bus page is visible.
 - Each card: course, date, photo (the partner's photo hotlinked with no referrer; a KAMEHAME photo when there is none), seats left or a SOLD OUT badge, departure area / time, lunch and through-play tags, the price as **one tax-inclusive total per person**, the enquiry button (disabled when sold out) and "No payment is required to enquire."
@@ -23,9 +24,10 @@ Released to production on 2026-11-02 (owner's approval). Production shows the pa
 
 ## Data
 - Source: the partner's public monthly listing pages and detail pages, read by the Worker's cron (`refreshGolfpaqSnapshot`) at most every 3 hours, stored in KV `READY_STATE` (`golfpaq:self-rounds:v3`, detail cache per tour for 14 days).
-- Window: JST today through the last published calendar date. Cancelled (中止) tours are dropped; sold-out and closed ones are kept and shown as sold out.
+- Window: JST the day after tomorrow through the last published calendar date (owner, 2026-11-03: today and tomorrow are not shown). Cancelled (中止) tours are dropped; sold-out and closed ones are kept and shown as sold out.
 - Sold-out rules (owner, 2026-11-02), applied on the server for the page and the enquiry API alike: a tour within 3 days of today is sold out whatever the partner shows; within 7 days it is sold out once only one seat is left; a partner-closed (完売 / 受付終了 / 満席) or zero-seat tour is sold out. Open tours show the seats left on the photo.
 - If the snapshot is older than 6 hours (feed failing), the page shows the "temporarily unavailable" notice and the enquiry API answers 503. Nothing stale is shown as bookable.
+- English for the partner's text: the cron (every 5 minutes, only while the pages are on) sends up to 8 tours' details per tick to Workers AI (`lib/golfpaq-translate.ts`, llama-3.3-70b) and keeps the result with the cached detail in KV, so each text is translated once (about 3 calls per tour; a few hundred calls in all for a full schedule). Partner names, phone numbers, addresses and links are stripped before and after. Courses that neither the code map nor the ops table names get an English name the same way, stored in KV (`golfpaq:course-names:v1`) and flagged "自動翻訳（要確認）" on `/ops/golf-courses/` until someone saves a name.
 - Tests: `tests/golfpaq.test.mjs` (parsing, projection, pricing, window, refresh) and `tests/golfpaq-enquiry.test.mjs` (guards, ledger row, mail contents, allowlist) against saved fixtures in `tests/fixtures/golfpaq/`.
 
 ## Enquiry flow (no payment on the site)

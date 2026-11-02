@@ -15,7 +15,7 @@ import * as ops from "./ops";
 import { busEnquiryDetail, busEnquiryList, busEnquiryResendPartner, busEnquirySetNote, busEnquirySetStatus } from "@/lib/golfpaq-ops";
 import type { GolfpaqEnquiryEnv } from "@/lib/golfpaq-enquiry";
 import { readGolfpaqSnapshot } from "@/lib/golfpaq";
-import { courseList, saveCourse } from "@/lib/golf-courses-db";
+import { courseList, loadAutoNames, saveCourse } from "@/lib/golf-courses-db";
 import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, str } from "./util";
 import type { PortalMailEnv } from "./mail";
@@ -183,7 +183,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const snapshot = await readGolfpaqSnapshot(ctx.env.READY_STATE);
       const counts = new Map<string, number>();
       for (const t of snapshot?.tours ?? []) counts.set(t.course, (counts.get(t.course) ?? 0) + 1);
-      return json({ ok: true, courses: await courseList(ctx.db, [...counts].map(([name, tours]) => ({ name, tours }))), updatedAt: snapshot?.updatedAt ?? null });
+      return json({ ok: true, courses: await courseList(ctx.db, [...counts].map(([name, tours]) => ({ name, tours })), await loadAutoNames(ctx.env.READY_STATE)), updatedAt: snapshot?.updatedAt ?? null });
     }
     if (post) {
       const p = await requireOps(ctx, ...BOOKING);

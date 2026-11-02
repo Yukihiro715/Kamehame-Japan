@@ -24,6 +24,8 @@ export const GOLFPAQ_LOW_SEAT_DAYS = 7;
 export const GOLFPAQ_RENTAL_JPY = 5500;
 export const GOLFPAQ_SNAPSHOT_KEY = "golfpaq:self-rounds:v3";
 export const GOLFPAQ_DETAIL_PREFIX = "golfpaq:detail:v1:";
+/** English names the cron produced for courses nobody has named yet (lib/golfpaq-translate.ts). */
+export const GOLFPAQ_COURSE_NAMES_KEY = "golfpaq:course-names:v1";
 export const GOLFPAQ_REFRESH_MS = 3 * 60 * 60 * 1000;
 export const GOLFPAQ_MAX_AGE_MS = 6 * 60 * 60 * 1000;
 const DETAIL_TTL_SEC = 14 * 24 * 3600;
@@ -40,6 +42,8 @@ export interface GolfpaqTourDetails {
   lunchIncluded: boolean;
   cartIncluded: boolean;
   fetchedAt: string;
+  /** English of features / schedule / notes, made by the cron (lib/golfpaq-translate.ts). */
+  en?: { features?: string; schedule?: string; notes?: string[]; at: string; tries?: number; incomplete?: boolean };
 }
 
 /** Internal record (KV). Carries the partner's price and the detail URL. */
@@ -69,7 +73,7 @@ export interface PublicTour {
   courseEn: string;
   area?: string;
   pickup: string;
-  departure: { area: string; via?: string; time?: string; lunch: "included" | "subsidy" | "not_included"; throughPlay: boolean; note?: string };
+  departure: { area: string; via?: string; time?: string; lunch: "included" | "subsidy" | "not_included"; throughPlay: boolean; note?: string; noteKeys?: DepartureNoteKey[] };
   perPersonYen: number;
   /** Seats a visitor may enquire for; 0 when sold out. */
   seats: number;
@@ -80,7 +84,12 @@ export interface PublicTour {
   schedule?: string;
   cartIncluded: boolean;
   notes?: string[];
+  /** The same three in English, when the cron has translated them. */
+  highlightsEn?: string;
+  scheduleEn?: string;
+  notesEn?: string[];
 }
+export type DepartureNoteKey = "separate_groups" | "sunset" | "west" | "east";
 
 export interface GolfpaqSnapshot {
   updatedAt: string;
@@ -116,8 +125,8 @@ export function plusDays(day: string, n: number): string {
   return new Date(Date.parse(day + "T00:00:00Z") + n * 86400_000).toISOString().slice(0, 10);
 }
 /** The first date shown: a week out, Japan time (要件 5). */
-/** The first date shown: today in Japan. Near dates are shown as sold out (availabilityOf). */
-export function firstPublicDay(now = new Date()): string { return japanToday(now); }
+/** The first date shown: the day after tomorrow in Japan (owner, 2026-11-03). Near dates are shown as sold out (availabilityOf). */
+export function firstPublicDay(now = new Date()): string { return plusDays(japanToday(now), 2); }
 const dayDiff = (date: string, today: string) => Math.round((Date.parse(`${date}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86400000);
 /** What a visitor may still enquire for: nothing within 3 days, nothing within 7 days when a single seat is left, nothing the partner closed. */
 export function availabilityOf(t: { date: string; seats: number; closed?: boolean }, now = new Date()): { soldOut: boolean; seats: number } {
@@ -205,12 +214,21 @@ export function describePickup(pickup: string): PublicTour["departure"] {
   const area = /大井町/.test(pickup) ? "Oimachi (Tokyo)" : /新宿/.test(pickup) ? "Shinjuku (Tokyo)" : "Tokyo";
   const via = /東京経由/.test(pickup) ? "via Tokyo Station" : /池袋経由/.test(pickup) ? "via Ikebukuro" : /王子経由/.test(pickup) ? "via Oji" : undefined;
   const lunch: PublicTour["departure"]["lunch"] = /昼食(つき|付き)/.test(pickup) ? "included" : /昼食補助/.test(pickup) ? "subsidy" : "not_included";
-  const noteBits: string[] = [];
-  if (/同組不可/.test(pickup)) noteBits.push("Golfers from the other departure point are grouped separately");
-  if (/日没了承/.test(pickup)) noteBits.push("Late tee time: the round may finish near sunset");
-  if (/WEST/i.test(pickup)) noteBits.push("WEST course"); if (/EAST/i.test(pickup)) noteBits.push("EAST course");
-  return { area, ...(via ? { via } : {}), lunch, throughPlay: /スループレー/.test(pickup), ...(noteBits.length ? { note: noteBits.join(". ") } : {}) };
+  const noteBits: string[] = [], noteKeys: DepartureNoteKey[] = [];
+  if (/同組不可/.test(pickup)) { noteBits.push("Golfers from the other departure point are grouped separately"); noteKeys.push("separate_groups"); }
+  if (/日没了承/.test(pickup)) { noteBits.push("Late tee time: the round may finish near sunset"); noteKeys.push("sunset"); }
+  if (/WEST/i.test(pickup)) { noteBits.push("WEST course"); noteKeys.push("west"); }
+  if (/EAST/i.test(pickup)) { noteBits.push("EAST course"); noteKeys.push("east"); }
+  return { area, ...(via ? { via } : {}), lunch, throughPlay: /スループレー/.test(pickup), ...(noteBits.length ? { note: noteBits.join(". "), noteKeys } : {}) };
 }
+
+/** Lines that would name the partner, a phone number, an address or a link are never shown. */
+export function scrubPartnerText(text: string | undefined | null): string {
+  if (!text) return "";
+  return text.split(/\r?\n/).filter((l) => !/golfpaq|boxgolf|box\s*tour|ボックス\s*(ゴルフ|ツアー)|ゴルフパック|\d{2,4}[-‐－]\d{2,4}[-‐－]\d{3,4}|https?:\/\/|www\.|@|〒|住所|電話|tel[:：]/i.test(l)).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+/** The partner's conditions a visitor may see: not the anti-gang clause, not the partner's own rental price. */
+export const publicNotes = (notes: string[] | undefined): string[] => (notes ?? []).filter((n) => !/暴力団|レンタルクラブは/.test(n)).map((n) => scrubPartnerText(n)).filter(Boolean);
 
 /** The public projection: everything a visitor may see, nothing about the partner's price or page. */
 export function toPublicTour(t: GolfpaqTour, now = new Date(), names: Record<string, { en?: string; area?: string }> = {}): PublicTour {
@@ -219,14 +237,20 @@ export function toPublicTour(t: GolfpaqTour, now = new Date(), names: Record<str
   const d = t.details;
   const departure = describePickup(t.pickup);
   if (d?.departureTime) departure.time = d.departureTime;
+  const highlights = scrubPartnerText(d?.features.replace(/\*?別途昼食代がかかります。?|ランチは別料金となります。各自ご精算ください。?/g, ""));
+  const schedule = scrubPartnerText(d?.schedule);
+  const notes = publicNotes(d?.notes);
   if (d && departure.lunch === "not_included" && d.lunchIncluded) departure.lunch = "included";
   return {
     id: t.id, date: t.date, course: t.course, courseEn: named?.en || courseNameEn(t.course), ...((named?.area || courseArea(t.course)) ? { area: named?.area || courseArea(t.course) } : {}), pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: availability.seats, capacity: t.capacity, soldOut: availability.soldOut,
     ...(courseImage(t.course) ? { imageUrl: courseImage(t.course) } : {}),
-    ...(d?.features ? { highlights: d.features.replace(/\*?別途昼食代がかかります。?|ランチは別料金となります。各自ご精算ください。?/g, "").trim() } : {}),
-    ...(d?.schedule ? { schedule: d.schedule } : {}),
+    ...(highlights ? { highlights } : {}),
+    ...(schedule ? { schedule } : {}),
     cartIncluded: d ? d.cartIncluded : true,
-    ...(d?.notes?.length ? { notes: d.notes.filter((n) => !/暴力団|レンタルクラブは/.test(n)) } : {}),
+    ...(notes.length ? { notes } : {}),
+    ...(d?.en?.features ? { highlightsEn: scrubPartnerText(d.en.features) } : {}),
+    ...(d?.en?.schedule ? { scheduleEn: scrubPartnerText(d.en.schedule) } : {}),
+    ...(d?.en?.notes?.length ? { notesEn: d.en.notes.map((n) => scrubPartnerText(n)).filter(Boolean) } : {}),
   };
 }
 

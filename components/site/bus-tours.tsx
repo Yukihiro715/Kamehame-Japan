@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, UtensilsCrossed } from "lucide-react";
+import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, UtensilsCrossed, X } from "lucide-react";
 import { GOLFPAQ_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
 import type { BusCopy } from "@/lib/golfpaq-copy";
 import type { Lang } from "@/lib/i18n";
@@ -12,6 +12,9 @@ const FALLBACK_IMG = "/images/golf-gallery-10-golf-course.webp";
 const MAX_PEOPLE = 8;
 /** The course name for the page's language: English names on the English pages. */
 const courseName = (t: PublicTour, lang: Lang) => (lang === "ja" ? t.course : t.courseEn || t.course);
+/** Departure point and via-stop in the page language (the feed names them in English). */
+const areaOf = (a: string, C: BusCopy) => C.areaNames[a] ?? a;
+const viaOf = (v: string | undefined, C: BusCopy) => (v ? ` · ${C.viaNames[v] ?? v}` : "");
 
 const dateLabel = (d: string, lang: Lang) => {
   const x = new Date(`${d}T00:00:00Z`);
@@ -57,7 +60,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
         {tours.length > 0 && <Calendar tours={tours} months={months} day={day} people={people} area={area} onPick={pick} lang={lang} C={C} />}
         <div className="gb-filters">
           <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: maxSeats }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
-          <label><span>{C.filterDeparture}</span><select value={area} onChange={(e) => setArea(e.target.value)}><option value="">{C.allDepartures}</option>{areas.map((a) => <option key={a} value={a}>{a}</option>)}</select></label>
+          <label><span>{C.filterDeparture}</span><select value={area} onChange={(e) => setArea(e.target.value)}><option value="">{C.allDepartures}</option>{areas.map((a) => <option key={a} value={a}>{areaOf(a, C)}</option>)}</select></label>
           {updatedText && <span className="gb-updated">{C.updated}: {updatedText}</span>}
         </div>
         </div>
@@ -71,7 +74,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
             <div className="gb-days">
               {groups.map(([d, list]) => (
                 <section key={d} className="gb-day-group" aria-label={dateLabel(d, lang)}>
-                  <h3 className="gb-day-h">{dateLabel(d, lang)} <span>{C.dayCount.replace("{n}", String(list.length)).replace("{open}", String(list.filter((t) => !t.soldOut).length))}</span></h3>
+                  <h3 className="gb-day-h">{dateLabel(d, lang)} <span>{seatsText(C.dayCount, list.length).replace("{open}", String(list.filter((t) => !t.soldOut).length))}</span></h3>
                   <ul className="gb-row">
                     {list.map((t) => (
                       <li key={t.id} className={`gb-card${chosen?.id === t.id ? " on" : ""}${t.soldOut ? " sold" : ""}`}>
@@ -79,13 +82,13 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
                         <div className="gb-body">
                           <h3>{courseName(t, lang)}</h3>
                           {lang !== "ja" && t.area && <p className="gb-area">{t.area}</p>}
-                          <p className="gb-meta"><Bus size={14} /> {t.departure.area}{t.departure.via ? ` · ${t.departure.via}` : ""}{t.departure.time ? ` · ${C.departs} ${t.departure.time}` : ""}</p>
+                          <p className="gb-meta"><Bus size={14} /> {areaOf(t.departure.area, C)}{viaOf(t.departure.via, C)}{t.departure.time ? ` · ${C.departs} ${t.departure.time}` : ""}</p>
                           <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && <span className="gb-tag">{C.throughPlay}</span>}</div>
                           <p className="gb-price"><b>{yen(t.perPersonYen)}</b> <span>{C.perPerson}</span></p>
                           <p className="gb-incl">{C.includesLine}</p>
                           {t.soldOut ? <button type="button" className="gb-btn gb-btn-sold" disabled aria-disabled="true">{C.soldOut}</button> : <button type="button" className="gb-btn" onClick={() => { setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }}>{C.enquireBtn}</button>}
                           <p className="gb-nopay">{t.soldOut ? " " : C.noPayment}</p>
-                          {(t.highlights || t.schedule) && <button type="button" className="gb-link" onClick={() => setOpen(t)}>{C.details}</button>}
+                          <button type="button" className="gb-btn gb-btn-ghost gb-btn-small" onClick={() => setOpen(t)}>{C.details}</button>
                         </div>
                       </li>
                     ))}
@@ -99,7 +102,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
           {chosen && <Enquiry key={chosen.id} tour={chosen} initialPeople={people} lang={lang} C={C} onBack={() => setChosen(null)} />}
         </div>
       </div>
-      {open && <TourSheet tour={open} lang={lang} C={C} onClose={() => setOpen(null)} />}
+      {open && <TourSheet tour={open} lang={lang} C={C} onClose={() => setOpen(null)} onEnquire={(t) => { setOpen(null); setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }} />}
     </section>
   );
 }
@@ -152,18 +155,40 @@ function Calendar({ tours, months, day, people, area, onPick, lang, C }: { tours
   );
 }
 
-function TourSheet({ tour, lang, C, onClose }: { tour: PublicTour; lang: Lang; C: BusCopy; onClose: () => void }) {
+function TourSheet({ tour, lang, C, onClose, onEnquire }: { tour: PublicTour; lang: Lang; C: BusCopy; onClose: () => void; onEnquire: (t: PublicTour) => void }) {
   useEffect(() => { const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); }; document.addEventListener("keydown", onKey); return () => document.removeEventListener("keydown", onKey); }, [onClose]);
+  useEffect(() => { const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = prev; }; }, []);
+  const ja = lang === "ja";
+  // The partner's text in the page's language; on non-Japanese pages only once the cron has translated it.
+  const highlights = ja ? tour.highlights : tour.highlightsEn;
+  const schedule = ja ? tour.schedule : tour.scheduleEn;
+  const notes = ja ? tour.notes : tour.notesEn;
+  const lunch = tour.departure.lunch === "included" ? C.lunchIncluded : tour.departure.lunch === "subsidy" ? C.lunchSubsidy : C.lunchNot;
   return (
     <div className="gb-sheet" role="dialog" aria-modal="true" aria-label={courseName(tour, lang)} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="gb-sheet-box">
-        <button type="button" className="gb-close" onClick={onClose} aria-label="Close">×</button>
+        <button type="button" className="gb-close" onClick={onClose} aria-label={C.close}><X size={18} /></button>
         <img src={tour.imageUrl ?? FALLBACK_IMG} alt="" />
         <h3>{courseName(tour, lang)}</h3>
-        <p className="gb-meta">{dateLabel(tour.date, lang)} · {tour.departure.area}{tour.departure.time ? ` · ${C.departs} ${tour.departure.time}` : ""} · <b>{yen(tour.perPersonYen)}</b> {C.perPerson}</p>
-        {tour.highlights && <><h4>{C.highlightsH}</h4><p className="gb-pre">{tour.highlights}</p></>}
-        {tour.schedule && <><h4>{C.scheduleH}</h4><p className="gb-pre">{tour.schedule}</p></>}
-        {tour.notes?.length ? <><h4>{C.notesH}</h4><ul>{tour.notes.map((n, i) => <li key={i}>{n}</li>)}</ul></> : null}
+        {!ja && tour.area && <p className="gb-area">{tour.area}</p>}
+        <dl className="gb-facts">
+          <dt>{C.sheetDate}</dt><dd>{dateLabel(tour.date, lang)}</dd>
+          <dt>{C.departure}</dt><dd>{areaOf(tour.departure.area, C)}{viaOf(tour.departure.via, C)}{tour.departure.time ? ` · ${C.departs} ${tour.departure.time}` : ""}</dd>
+          <dt>{C.sheetPlay}</dt><dd>{C.selfPlay}{tour.departure.throughPlay ? ` · ${C.throughPlay}` : ""}</dd>
+          <dt>{C.sheetLunch}</dt><dd>{lunch}</dd>
+          <dt>{C.sheetCart}</dt><dd>{tour.cartIncluded ? C.cartIncluded : C.cartNot}</dd>
+          <dt>{C.sheetSeats}</dt><dd>{tour.soldOut ? C.soldOut : seatsText(C.seatsLeft, tour.seats)}</dd>
+          <dt>{C.sheetPrice}</dt><dd><b>{yen(tour.perPersonYen)}</b> {C.perPerson} · {C.includesLine}</dd>
+        </dl>
+        {tour.departure.noteKeys?.length ? <ul className="gb-sheet-notes">{tour.departure.noteKeys.map((k) => <li key={k}>{C.departureNotes[k]}</li>)}</ul> : null}
+        {highlights && <><h4>{C.highlightsH}</h4><p className="gb-pre">{highlights}</p></>}
+        {schedule && <><h4>{C.scheduleH}</h4><p className="gb-pre">{schedule}</p></>}
+        {notes?.length ? <><h4>{C.notesH}</h4><ul>{notes.map((n, i) => <li key={i}>{n}</li>)}</ul></> : null}
+        {!ja && !highlights && !schedule && (tour.highlights || tour.schedule) && <p className="gb-small gb-pending">{C.enPending}</p>}
+        <div className="gb-sheet-actions">
+          {tour.soldOut ? <button type="button" className="gb-btn gb-btn-sold" disabled aria-disabled="true">{C.soldOut}</button> : <button type="button" className="gb-btn" onClick={() => onEnquire(tour)}>{C.enquireBtn}</button>}
+          <button type="button" className="gb-btn gb-btn-ghost" onClick={onClose}>{C.close}</button>
+        </div>
       </div>
     </div>
   );
@@ -209,15 +234,15 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
         {C.doneLines.map((l) => <p key={l}>{l}</p>)}
         <p className="gb-ref">{C.doneRef}: <code>{reference}</code></p>
         <p className="gb-small">{courseName(tour, lang)} · {dateLabel(tour.date, lang)} · {people} {C.golfers.toLowerCase()}{renters ? ` · ${C.summaryRental} ×${renters}` : ""} · {C.summaryTotal} <b>{yen(money.total)}</b></p>
-        <button type="button" className="gb-link" onClick={onBack}>{C.doneAgain}</button>
+        <button type="button" className="gb-btn gb-btn-outline gb-btn-small gb-done-again" onClick={onBack}>{C.doneAgain}</button>
       </div>
     );
   }
   return (
     <form className="gb-form" onSubmit={submit} id="enquiry">
-      <button type="button" className="gb-link gb-back" onClick={onBack}><ChevronLeft size={14} /> {C.back}</button>
+      <button type="button" className="gb-btn gb-btn-ghost gb-btn-small gb-back" onClick={onBack}><ChevronLeft size={16} /> {C.back}</button>
       <h3>{C.formH}</h3>
-      <p className="gb-chosen"><b>{courseName(tour, lang)}</b> · {dateLabel(tour.date, lang)} · {tour.departure.area}{tour.departure.time ? ` · ${C.departs} ${tour.departure.time}` : ""}</p>
+      <p className="gb-chosen"><b>{courseName(tour, lang)}</b> · {dateLabel(tour.date, lang)} · {areaOf(tour.departure.area, C)}{viaOf(tour.departure.via, C)}{tour.departure.time ? ` · ${C.departs} ${tour.departure.time}` : ""}</p>
       <div className="gb-fields">
         <label><span>{C.golfers}</span><select name="people" value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: maxPeople }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select><small>{C.golfersMax.replace("{n}", String(tour.seats))}</small></label>
       </div>

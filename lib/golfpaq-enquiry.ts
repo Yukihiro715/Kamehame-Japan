@@ -55,7 +55,7 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   const snapshot = await readGolfpaqSnapshot(env.READY_STATE);
   if (!snapshotIsFresh(snapshot, now.getTime())) return json({ ok: false, error: "availability_unavailable" }, 503);
   const tour = snapshot!.tours.find((t) => t.id === id && t.date === date);
-  const names = await loadCourseNames(isD1Like(env.DB) ? d1Db(env.DB) : null);
+  const names = await loadCourseNames(isD1Like(env.DB) ? d1Db(env.DB) : null, env.READY_STATE);
   const pub = tour ? toPublicTour(tour, now, names) : null;
   if (!tour || !pub || pub.soldOut || pub.seats < people) return json({ ok: false, error: "availability_changed" }, 409);
   const money = enquiryTotal(tour.perPersonYen, people, renters);

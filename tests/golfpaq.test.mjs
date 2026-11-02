@@ -78,7 +78,7 @@ test("pricing: ¥15,400 → ¥30,400 per person; rental ¥5,500 per renter; tota
 test("snapshot window: from today in Japan time with the sold-out rules, nothing when the feed is stale", () => {
   const now = new Date("2026-11-02T20:00:00Z"); // 05:00 JST on 11-03
   assert.equal(g.japanToday(now), "2026-11-03");
-  assert.equal(g.firstPublicDay(now), "2026-11-03");
+  assert.equal(g.firstPublicDay(now), "2026-11-05", "shown from the day after tomorrow");
   // the owner's rules: within 3 days everything is sold out; within 7 days one seat left is sold out; closed cards are sold out
   const open = (date, seats, closed) => !g.availabilityOf({ date, seats, closed }, now).soldOut;
   assert.equal(open("2026-11-03", 10, false), false); assert.equal(open("2026-11-06", 10, false), false);
@@ -87,9 +87,9 @@ test("snapshot window: from today in Japan time with the sold-out rules, nothing
   assert.equal(open("2026-11-20", 5, true), false); assert.equal(open("2026-11-20", 0, false), false);
   assert.deepEqual(g.availabilityOf({ date: "2026-11-20", seats: 3, closed: true }, now), { soldOut: true, seats: 0 });
   const tours = g.parseGolfpaqListing(fx("month-2026-11.html"), "2026-11-01", "2026-11-30");
-  const fresh = { updatedAt: new Date(now.getTime() - 3600000).toISOString(), first: "2026-11-03", through: "2027-01-09", tours, months: ["2026-11"], fetchedMonths: 1, failedMonths: 0, detailsPending: 0 };
+  const fresh = { updatedAt: new Date(now.getTime() - 3600000).toISOString(), first: "2026-11-05", through: "2027-01-09", tours, months: ["2026-11"], fetchedMonths: 1, failedMonths: 0, detailsPending: 0 };
   const shown = g.publicToursFrom(fresh, now).tours;
-  assert.ok(shown.every((t) => t.date >= "2026-11-03"), "past dates are gone");
+  assert.ok(shown.every((t) => t.date >= "2026-11-05"), "today and tomorrow are not shown");
   assert.ok(shown.filter((t) => t.date <= "2026-11-06").every((t) => t.soldOut && t.seats === 0), "the next three days are sold out");
   assert.ok(shown.some((t) => t.soldOut) && shown.some((t) => !t.soldOut && t.seats > 1), "both states appear");
   assert.ok(!("sourceYen" in shown[0]) && !("closed" in shown[0]) && !("detailUrl" in shown[0]), "internal fields stay out");
@@ -141,4 +141,40 @@ test("course names: the English pages use the map, the database overrides it, sp
   assert.equal(c.displayCourseName("ジェイゴルフ霞ヶ浦", "ja", names), "ジェイゴルフ霞ヶ浦", "Japanese keeps the partner's name unless overridden");
   assert.equal(c.displayCourseName("未知のゴルフ倶楽部", "en"), "未知のゴルフ倶楽部", "unknown courses keep their name");
   assert.equal(c.displayCourseArea("白帆カントリークラブ"), "Ibaraki");
+});
+
+test("translation: the cron adds English to the cached details and names unknown courses, without touching the snapshot's age", async () => {
+  const T = await vite.ssrLoadModule("/lib/golfpaq-translate.ts");
+  const now = new Date("2026-11-02T03:00:00Z");
+  const tours = g.parseGolfpaqListing(fx("month-2026-11.html"), g.firstPublicDay(now), "2027-01-31").slice(0, 3);
+  tours[0].details = { ...g.parseGolfpaqDetail(fx("detail-30821.html"), now), features: "丘陵コース。\nお問い合わせは GOLFPAQ 03-1234-5678 まで\n3188Y(東 OUT)" };
+  tours[1].details = { ...g.parseGolfpaqDetail(fx("detail-30821.html"), now), en: { features: "Already there", at: "2026-11-01T00:00:00Z", tries: 1 } };
+  tours[2].course = "架空の森ゴルフ倶楽部";
+  const updatedAt = new Date(now.getTime() - 600000).toISOString();
+  const store = new Map([[g.GOLFPAQ_SNAPSHOT_KEY, JSON.stringify({ updatedAt, first: g.firstPublicDay(now), through: "2027-01-31", tours, months: ["2026-11"], fetchedMonths: 1, failedMonths: 0, detailsPending: 0 })]]);
+  const kv = { get: async (k) => (store.has(k) ? JSON.parse(store.get(k)) : null), put: async (k, v) => { store.set(k, v); } };
+  const calls = [];
+  const ai = { run: async (model, input) => {
+    const text = input.messages[1].content; calls.push(text);
+    if (/英語名|golf course as the club/.test(input.messages[0].content)) return { response: "Fictional Forest Golf Club" };
+    if (/^1\. /.test(text)) return { response: text.split("\n").map((l, i) => `${i + 1}. EN ${l.replace(/^\d+\. /, "")}`).join("\n") };
+    return { response: "EN: " + text.replace(/\n/g, " / ") };
+  } };
+  const done = await T.translatePendingGolfpaq(kv, ai, { now, maxDetails: 5, hasName: () => false });
+  assert.deepEqual(done, { details: 1, names: 1 });
+  const snap = JSON.parse(store.get(g.GOLFPAQ_SNAPSHOT_KEY));
+  assert.equal(snap.updatedAt, updatedAt, "translation never makes the feed look fresher");
+  const en = snap.tours[0].details.en;
+  assert.match(en.features, /^EN: 丘陵コース。 \/ 3188Y/); assert.ok(!/GOLFPAQ|03-1234/.test(en.features), "partner line and phone stripped before translation");
+  assert.ok(en.notes.length > 0 && en.notes.every((n) => n.startsWith("EN ")), "notes come back one per line without numbering");
+  assert.equal(JSON.parse(store.get(g.GOLFPAQ_DETAIL_PREFIX + tours[0].id)).en.features, en.features, "the detail cache carries it for the next refresh");
+  assert.equal(snap.tours[1].details.en.features, "Already there", "done ones are left alone");
+  assert.ok(!calls.some((c) => /GOLFPAQ/.test(c)), "nothing sent to the model names the partner");
+  const auto = JSON.parse(store.get(g.GOLFPAQ_COURSE_NAMES_KEY));
+  assert.equal(Object.values(auto)[0].en, "Fictional Forest Golf Club");
+  // the public projection: English fields, and the facts a visitor sees carry no phone numbers
+  const pub = g.toPublicTour(snap.tours[0], now);
+  assert.equal(pub.highlightsEn, en.features); assert.ok(!/03-1234|GOLFPAQ/.test(pub.highlights ?? ""));
+  const names = await (await vite.ssrLoadModule("/lib/golf-courses-db.ts")).loadCourseNames(null, kv);
+  assert.equal(names[(await vite.ssrLoadModule("/lib/golf-course-images.ts")).normaliseCourseName("架空の森ゴルフ倶楽部")]?.en, "Fictional Forest Golf Club");
 });
