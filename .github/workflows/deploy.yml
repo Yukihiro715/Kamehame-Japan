@@ -64,7 +64,9 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
 
       - name: Deploy
-        run: npx wrangler deploy
+        # GOLFPAQ_LIVE switches the golf landing and shared-bus pages on in production
+        # (docs/GOLFPAQ_BUS_TOURS.md); the variable is set here so a deploy never drops it.
+        run: npx wrangler deploy --var GOLFPAQ_LIVE:true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           # Account ID is visible in the dashboard and not a secret.

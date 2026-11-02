@@ -1,6 +1,6 @@
 # Shared Bus Golf Tours (GOLFPAQ) — how the page, the enquiry and the operations work
 
-Staging only until the owner releases it. Production shows the page only when the Worker variable `GOLFPAQ_LIVE` is `true`; on staging (`KH_ENV=staging`) it is always on.
+Released to production on 2026-11-02 (owner's approval). Production shows the pages because the deploy workflow passes `GOLFPAQ_LIVE=true` to `wrangler deploy`; remove that flag to hide them again without touching the code. On staging (`KH_ENV=staging`) they are always on.
 
 ## Pages
 - `/{lang}/golf-tours/`: the landing page for advertising. The hero holds the two options side by side on every screen size, Custom Booking first and marked "Recommended for groups" with who it suits and a per-person price line, the Shared Bus Tour second with the lowest open price from the feed; then a comparison table (who it suits, dates, transport, courses, price, the day, how to book), a per-person cost example for custom booking with four golfers (fee only / with the private transfer, Tokyo and Mt. Fuji areas) and a "not sure?" pair of CTAs.
@@ -42,7 +42,7 @@ Initial operation: KAMEHAME phones the partner to hold the seats; the partner (o
 ## Environment (Worker secrets / variables; never in the repo)
 | Name | Where | Meaning |
 |---|---|---|
-| `GOLFPAQ_LIVE` | production var | `true` shows the page on production. Unset = hidden. |
+| `GOLFPAQ_LIVE` | production var, set by .github/workflows/deploy.yml | `true` shows the pages on production. Remove the flag from the deploy step to hide them. |
 | `GOLFPAQ_PARTNER_TO` | secret | The travel partner's hand-over address. Unset = partner mail "unconfigured", status stays `received`. |
 | `CONTACT_TO`, `RESEND_API_KEY`, `SLACK_WEBHOOK_URL` | existing secrets | Staff mail, mail provider, Slack. |
 | `NOTIFY_ALLOWLIST` | staging | Comma-separated addresses staging may mail; everything else is recorded as `blocked`. |
@@ -52,4 +52,3 @@ Initial operation: KAMEHAME phones the partner to hold the seats; the partner (o
 - Seller identity: the licensed travel company that sells the tour, its registration number and contact, for the purchase instructions and the legal line.
 - Cancellation / refund terms aligned with the partner's rules, and the refund scope after payment (the page says only that a tour that cannot be secured after payment is refunded in full).
 - The partner's hand-over address (`GOLFPAQ_PARTNER_TO`) and the agreed mail route for purchase instructions.
-- Set `GOLFPAQ_LIVE=true` on production only after the above.
