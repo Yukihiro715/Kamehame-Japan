@@ -67,7 +67,6 @@ export default async function GolfToursPage({ params }: Props) {
             <ul className="gb-features">
               {C.landFeatures.map((f, i) => { const Icon = icons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
             </ul>
-            <a className="gb-btn gb-btn-big gb-hero-cta" href="#choose">{C.landCta}</a>
           </div>
         </section>
 

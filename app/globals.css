@@ -2232,3 +2232,12 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gl-hcard-lh { margin:4px 0 2px; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
 .gl-hcard-lists .gl-hcard-items { margin-bottom:2px; }
 .gl-hcard-items li.opt span { color:var(--kame); } .gl-hcard-items li.opt { color:#3d3a34; }
+
+/* ---- Tour list: one row per date, cards scroll sideways ---- */
+.gb-days { display:grid; gap:22px; }
+.gb-day-h { margin:0 0 8px; font-size:17px; display:flex; align-items:center; gap:8px; }
+.gb-day-h span { font-size:12px; font-weight:700; color:var(--kame); background:#fff1e4; border-radius:999px; padding:2px 8px; }
+.gb-row { list-style:none; margin:0 calc(-1 * clamp(20px,5vw,48px)); padding:2px clamp(20px,5vw,48px) 10px; display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
+.gb-row > .gb-card { flex:0 0 300px; scroll-snap-align:start; }
+.gb-row::after { content:""; flex:0 0 1px; }
+@media (max-width:700px) { .gb-row > .gb-card { flex-basis:min(78vw,300px); } .gb-row { gap:10px; } }

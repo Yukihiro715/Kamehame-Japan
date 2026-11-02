@@ -37,6 +37,8 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   // The golfers filter never offers more than the largest open tour can take.
   const maxSeats = useMemo(() => Math.min(MAX_PEOPLE, Math.max(1, ...tours.filter((t) => !t.soldOut).map((t) => t.seats))), [tours]);
   const filtered = useMemo(() => tours.filter((t) => (!day || t.date === day) && (!area || t.departure.area === area) && (t.soldOut || t.seats >= people)), [tours, day, area, people]);
+  /** Cards bundled per date, each date a horizontally scrolling row. */
+  const groups = useMemo(() => { const m = new Map<string, PublicTour[]>(); for (const t of filtered) { (m.get(t.date) ?? m.set(t.date, []).get(t.date)!).push(t); } return [...m.entries()].sort(([a], [b]) => (a < b ? -1 : 1)); }, [filtered]);
   useEffect(() => { if (chosen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [chosen]);
   useEffect(() => { if (!flash) return; const id = setTimeout(() => setFlash(0), 700); return () => clearTimeout(id); }, [flash]);
   const updatedText = updatedAt ? new Date(updatedAt).toLocaleString(lang === "ja" ? "ja-JP" : "en-GB", { timeZone: "Asia/Tokyo", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + " JST" : null;
@@ -66,24 +68,31 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
         <div ref={listRef} className={`gb-results${flash ? " flash" : ""}`} aria-live="polite">
           {day && <p className="gb-showing">{C.calShowing} <b>{dateLabel(day, lang)}</b> · <button type="button" className="gb-link" onClick={() => pick("")}>{C.calAny}</button></p>}
           {tours.length === 0 ? <p className="gb-empty">{C.unavailable}</p> : filtered.length === 0 ? <p className="gb-empty">{C.noMatch}</p> : (
-            <ul className="gb-grid">
-              {filtered.map((t) => (
-                <li key={t.id} className={`gb-card${chosen?.id === t.id ? " on" : ""}${t.soldOut ? " sold" : ""}`}>
-                  <div className="gb-photo"><img src={t.imageUrl ?? FALLBACK_IMG} alt="" loading="lazy" decoding="async" /><span className="gb-date">{dateLabel(t.date, lang)}</span>{t.soldOut ? <span className="gb-seats gb-seats-sold">{C.soldOut}</span> : <span className="gb-seats"><Users size={13} /> {seatsText(C.seatsLeft, t.seats)}</span>}</div>
-                  <div className="gb-body">
-                    <h3>{courseName(t, lang)}</h3>
-                    {lang !== "ja" && t.area && <p className="gb-area">{t.area}</p>}
-                    <p className="gb-meta"><Bus size={14} /> {t.departure.area}{t.departure.via ? ` · ${t.departure.via}` : ""}{t.departure.time ? ` · ${C.departs} ${t.departure.time}` : ""}</p>
-                    <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && <span className="gb-tag">{C.throughPlay}</span>}</div>
-                    <p className="gb-price"><b>{yen(t.perPersonYen)}</b> <span>{C.perPerson}</span></p>
-                    <p className="gb-incl">{C.includesLine}</p>
-                    {t.soldOut ? <button type="button" className="gb-btn gb-btn-sold" disabled aria-disabled="true">{C.soldOut}</button> : <button type="button" className="gb-btn" onClick={() => { setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }}>{C.enquireBtn}</button>}
-                    <p className="gb-nopay">{t.soldOut ? " " : C.noPayment}</p>
-                    {(t.highlights || t.schedule) && <button type="button" className="gb-link" onClick={() => setOpen(t)}>{C.details}</button>}
-                  </div>
-                </li>
+            <div className="gb-days">
+              {groups.map(([d, list]) => (
+                <section key={d} className="gb-day-group" aria-label={dateLabel(d, lang)}>
+                  <h3 className="gb-day-h">{dateLabel(d, lang)} <span>{list.length}</span></h3>
+                  <ul className="gb-row">
+                    {list.map((t) => (
+                      <li key={t.id} className={`gb-card${chosen?.id === t.id ? " on" : ""}${t.soldOut ? " sold" : ""}`}>
+                        <div className="gb-photo"><img src={t.imageUrl ?? FALLBACK_IMG} alt="" loading="lazy" decoding="async" /><span className="gb-date">{dateLabel(t.date, lang)}</span>{t.soldOut ? <span className="gb-seats gb-seats-sold">{C.soldOut}</span> : <span className="gb-seats"><Users size={13} /> {seatsText(C.seatsLeft, t.seats)}</span>}</div>
+                        <div className="gb-body">
+                          <h3>{courseName(t, lang)}</h3>
+                          {lang !== "ja" && t.area && <p className="gb-area">{t.area}</p>}
+                          <p className="gb-meta"><Bus size={14} /> {t.departure.area}{t.departure.via ? ` · ${t.departure.via}` : ""}{t.departure.time ? ` · ${C.departs} ${t.departure.time}` : ""}</p>
+                          <div className="gb-tags"><Lunch t={t} C={C} />{t.departure.throughPlay && <span className="gb-tag">{C.throughPlay}</span>}</div>
+                          <p className="gb-price"><b>{yen(t.perPersonYen)}</b> <span>{C.perPerson}</span></p>
+                          <p className="gb-incl">{C.includesLine}</p>
+                          {t.soldOut ? <button type="button" className="gb-btn gb-btn-sold" disabled aria-disabled="true">{C.soldOut}</button> : <button type="button" className="gb-btn" onClick={() => { setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }}>{C.enquireBtn}</button>}
+                          <p className="gb-nopay">{t.soldOut ? " " : C.noPayment}</p>
+                          {(t.highlights || t.schedule) && <button type="button" className="gb-link" onClick={() => setOpen(t)}>{C.details}</button>}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               ))}
-            </ul>
+            </div>
           )}
         </div>
         <div ref={formRef}>
