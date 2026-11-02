@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLang(lang)) return {};
   return withAlternates(
-    socialMeta({ lang, title: "Shared Bus Golf Tours from Tokyo | KAMEHAME JAPAN", description: "18-hole golf with a round-trip shared coach from Shinjuku or Oimachi. Pick a date on the calendar, see the all-in price, send a free enquiry; our travel partner emails you the purchase details.", path: `/${lang}/golf-bus/` }),
+    socialMeta({ lang, title: "Shared Bus Golf Tours from Tokyo | KAMEHAME JAPAN", description: "18-hole golf with a round-trip shared bus from Shinjuku or Oimachi. Pick a date on the calendar, see the all-in price, send a free enquiry; our travel partner emails you the purchase details.", path: `/${lang}/golf-bus/` }),
     Object.fromEntries(LANGS.map((l) => [l, `/${l}/golf-bus/`])),
   );
 }
