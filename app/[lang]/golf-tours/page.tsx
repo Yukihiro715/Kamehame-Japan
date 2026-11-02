@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { busCopy } from "@/lib/golfpaq-copy";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
+import { publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
 import { isLang, LANGS } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -31,6 +32,14 @@ export default async function GolfToursPage({ params }: Props) {
   if (!(await golfpaqEnabled())) notFound();
   const C = busCopy(lang);
   const icons = [Flag, UserRound, Languages, CheckCircle2];
+  // The lowest open bus-tour price for the hero card; a rounded figure when the feed is not available.
+  let fromPrice = "¥30,000";
+  try {
+    const { env } = await import("cloudflare:workers");
+    const { tours } = publicToursFrom(await readGolfpaqSnapshot((env as { READY_STATE?: Parameters<typeof readGolfpaqSnapshot>[0] }).READY_STATE));
+    const open = tours.filter((t) => !t.soldOut).map((t) => t.perPersonYen);
+    if (open.length) fromPrice = yen(Math.min(...open));
+  } catch { /* keep the rounded figure */ }
   const busHref = `/${lang}/golf-bus/`, customHref = `/${lang}/tokyo/mt-fuji-golf-day/`;
   return (
     <>
@@ -45,27 +54,22 @@ export default async function GolfToursPage({ params }: Props) {
             <ul className="gb-features">
               {C.landFeatures.map((f, i) => { const Icon = icons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
             </ul>
-            <a className="gb-btn gb-btn-big gb-hero-cta" href="#choose">{C.landCta}</a>
-          </div>
-        </section>
-
-        <section className="gb-two gl-two" id="choose" aria-labelledby="gl-two-h">
-          <div className="gb-wrap">
-            <h2 id="gl-two-h">{C.twoWaysH}</h2>
-            <div className="gl-cards">
-              <Link className="gl-card" href={busHref}>
-                <img src="/images/golf-bus/bus-card.webp" alt="" loading="lazy" />
-                <div><span className="gl-num">1</span><h3><Bus size={20} /> {C.sharedH}</h3><p>{C.sharedBody}</p><span className="gb-btn">{C.sharedCta} <ArrowRight size={16} /></span></div>
+            <div className="gl-hero-cards">
+              <Link className="gl-hcard gl-hcard-custom" href={customHref}>
+                <span className="gl-hcard-tag">{C.heroCustomTag}</span>
+                <img src="/images/golf-gallery-07-fuji-fairway.webp" alt="" fetchPriority="high" />
+                <div><h2><Flag size={16} /> {C.customH}</h2><p className="gl-hcard-who">{C.heroCustomWho}</p><p className="gl-hcard-price">{C.heroCustomPrice}</p><span className="gb-btn gb-btn-small">{C.customCta} <ArrowRight size={14} /></span></div>
               </Link>
-              <Link className="gl-card" href={customHref}>
-                <img src="/images/golf-gallery-07-fuji-fairway.webp" alt="" loading="lazy" />
-                <div><span className="gl-num">2</span><h3><Flag size={20} /> {C.customH}</h3><p>{C.customBody}</p><span className="gb-btn gb-btn-outline">{C.customCta} <ArrowRight size={16} /></span></div>
+              <Link className="gl-hcard" href={busHref}>
+                <img src="/images/golf-bus/bus-card.webp" alt="" fetchPriority="high" />
+                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><span className="gb-btn gb-btn-small gb-btn-outline">{C.sharedCta} <ArrowRight size={14} /></span></div>
               </Link>
             </div>
+            <p className="gl-hero-note">{C.heroCardsNote}</p>
           </div>
         </section>
 
-        <section className="gl-compare" aria-labelledby="gl-cmp-h">
+        <section className="gl-compare" aria-labelledby="gl-cmp-h" id="choose">
           <div className="gb-wrap">
             <h2 id="gl-cmp-h">{C.compareH}</h2>
             <p className="gb-lede">{C.compareLede}</p>
