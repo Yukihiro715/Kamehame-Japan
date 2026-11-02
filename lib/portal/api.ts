@@ -12,11 +12,13 @@ import { canSeeHotel, hotelIdsOf, inviteMember, opsRole, principalFromRequest, r
 import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
+import { busEnquiryDetail, busEnquiryList, busEnquiryResendPartner, busEnquirySetNote, busEnquirySetStatus } from "@/lib/golfpaq-ops";
+import type { GolfpaqEnquiryEnv } from "@/lib/golfpaq-enquiry";
 import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, str } from "./util";
 import type { PortalMailEnv } from "./mail";
 
-export type PortalEnv = PortalMailEnv & { DB?: unknown };
+export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & { DB?: unknown };
 const PUBLIC_ORIGIN = "https://kamehame-japan.com";
 
 export async function handlePortalApi(request: Request, env: PortalEnv, path: string[]): Promise<Response> {
@@ -172,6 +174,20 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, id, action] = path;
   const get = ctx.method === "GET", post = ctx.method === "POST";
   if (head === "me" && get) { const p = await requireOps(ctx); return json({ ok: true, user: { email: p.email, name: p.name }, roles: p.memberships.map((m) => m.role) }); }
+  if (head === "bus-tours") {
+    // Shared-bus golf tour enquiries (docs/GOLFPAQ_BUS_TOURS.md): list, detail, status, note, partner re-send.
+    if (!id && get) { await requireOps(ctx); return json({ ok: true, ...(await busEnquiryList(ctx.db, { status: q(ctx, "status"), q: q(ctx, "q"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) }); }
+    if (id && !action && get) { await requireOps(ctx); return json({ ok: true, ...(await busEnquiryDetail(ctx.db, id)) }); }
+    if (id && action && post) {
+      const p = await requireOps(ctx, ...BOOKING);
+      const b = await readJson(ctx.request);
+      if (action === "status") await busEnquirySetStatus(ctx.db, id, { status: b.status, reason: b.reason, by: p.email });
+      else if (action === "note") await busEnquirySetNote(ctx.db, id, { note: b.note, by: p.email });
+      else if (action === "resend-partner") await busEnquiryResendPartner(ctx.db, ctx.env, id, p.email);
+      else throw notFound();
+      return json({ ok: true, ...(await busEnquiryDetail(ctx.db, id)) });
+    }
+  }
   if (head === "overview" && get) { await requireOps(ctx); return json({ ok: true, ...(await ops.overview(ctx.db)) }); }
   if (head === "exceptions" && get) { await requireOps(ctx); return json({ ok: true, ...(await ops.exceptions(ctx.db)) }); }
   if (head === "audit" && get) { await requireOps(ctx); return json({ ok: true, rows: await ops.auditList(ctx.db, { limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined, targetType: q(ctx, "type"), q: q(ctx, "q") }) }); }

@@ -53,7 +53,7 @@ function sentences(text: string, lang: Lang): string[] {
 }
 
 /** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
-export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experience; lang: Lang; clubRental?: boolean }) {
+export function VariantDetail({ exp, lang, clubRental = false, busTours = false }: { exp: Experience; lang: Lang; clubRental?: boolean; busTours?: boolean }) {
   const T = t(lang);
   const D = T.detail;
   const vc = exp.variantCopy!;
@@ -110,11 +110,11 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
 
       <BookingProvider experience={booking} pricings={pricings} lang={lang}>
         {/* 1. Title block: a short H1 and one line, then straight to the photos */}
-        {exp.slug === "mt-fuji-golf-day" && <section style={{margin:"18px 5% 25px",padding:24,background:"#f6f7f3",border:"1px solid #d9e0d7"}}>
-          <p style={{textTransform:"uppercase",letterSpacing:2,fontSize:12}}>Two ways to play golf in Japan</p>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:20}}>
-            <div><h2 style={{fontSize:22}}>1. Shared Bus Golf Tours</h2><p>18-hole rounds, shared return coach transfers, fixed published dates. Ideal for solo travellers and pairs. No private guide.</p><Link href={`/${lang}/golf-bus/`}>Browse dates & prices →</Link></div>
-            <div><h2 style={{fontSize:22}}>2. Custom Golf Booking</h2><p>Choose your preferred course and tee time. Travel independently, or request an introduction to a separate private-transfer provider. Existing arrangement fees apply.</p><a href="#request-form">Plan my round →</a></div>
+        {busTours && exp.slug === "mt-fuji-golf-day" && <section className="gb-two-inline vh-two" aria-label="Two ways to play golf in Japan">
+          <p className="eyebrow"><span /> Two ways to play golf in Japan</p>
+          <div className="gb-two-inline-grid">
+            <div><h2>1. Shared Bus Golf Tours</h2><p>18-hole golf with round-trip shared bus from Tokyo on published dates. Ideal for solo golfers and pairs. No private guide.</p><Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices →</Link></div>
+            <div><h2>2. Custom Golf Booking</h2><p>Choose your own course and tee time. Travel independently, or ask us for a private-transfer introduction. The usual arrangement fee applies.</p><a className="underlined-link" href="#request-form">Plan my round →</a></div>
           </div>
         </section>}
         <header className="xp-head vh-head">

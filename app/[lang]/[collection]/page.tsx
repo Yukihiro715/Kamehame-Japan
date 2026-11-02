@@ -9,6 +9,7 @@ import { ListingCard } from "@/components/site/listing-card";
 import { articleDate, articlesForCollection } from "@/lib/articles";
 import { catalogFor } from "@/lib/catalog";
 import { collectionSlugs, getCollection } from "@/lib/collections";
+import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -41,6 +42,7 @@ export default async function CollectionPage({ params }: Props) {
   const data = getCollection(collection, lang);
   if (!data) notFound();
   const T = t(lang);
+  const busTours = (collection === "golf" || collection === "sports") && await golfpaqEnabled();
 
   // Articles attached to any experience in this city or category.
   const { experiences, cities } = catalogFor(lang);
@@ -73,17 +75,17 @@ export default async function CollectionPage({ params }: Props) {
       </section>
 
       <section className="collection-body">
-        {collection === "golf" || collection === "sports" ? (
-          <div style={{border:"1px solid #d8ded8",padding:"24px",marginBottom:"32px",background:"#f8f8f5"}}>
-            <h2>Choose your golf experience</h2>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,marginTop:15}}>
-              <div><h3>1. Shared Bus Golf Tour</h3><p>18-hole golf with round-trip shared coach transfers. Perfect for solo golfers and pairs. See published dates and prices.</p>
-                <Link className="underlined-link" href={`/${lang}/golf-bus/`}>Explore bus tours <ArrowRight size={15}/></Link></div>
-              <div><h3>2. Custom Golf Booking</h3><p>Choose your course and tee time. Travel independently or request an introduction to a private-transfer provider. Arrangement fees remain unchanged.</p>
-                <Link className="underlined-link" href={`/${lang}/tokyo/mt-fuji-golf-day/`}>Explore custom booking <ArrowRight size={15}/></Link></div>
+        {busTours && (collection === "golf" || collection === "sports") ? (
+          <div className="gb-two-inline">
+            <p className="eyebrow"><span /> Two ways to play golf in Japan</p>
+            <div className="gb-two-inline-grid">
+              <div><h2>1. Shared Bus Golf Tours</h2><p>18-hole golf with round-trip shared bus from Tokyo on published dates. Ideal for solo golfers and pairs. No private guide.</p>
+                <Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices <ArrowRight size={15}/></Link></div>
+              <div><h2>2. Custom Golf Booking</h2><p>Choose your own course and tee time. Travel independently or ask us for a private-transfer introduction.</p>
+                <Link className="underlined-link" href={`/${lang}/tokyo/mt-fuji-golf-day/`}>Plan a custom round <ArrowRight size={15}/></Link></div>
             </div>
           </div>
-        ):null}
+        ) : null}
         <p className="collection-lead">{data.lead}</p>
 
         <div className="refine-row" aria-label={T.refine}>
