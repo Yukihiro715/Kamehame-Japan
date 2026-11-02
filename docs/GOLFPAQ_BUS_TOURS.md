@@ -3,17 +3,17 @@
 Staging only until the owner releases it. Production shows the page only when the Worker variable `GOLFPAQ_LIVE` is `true`; on staging (`KH_ENV=staging`) it is always on.
 
 ## Pages
-- `/{lang}/golf-tours/`: the landing page for advertising. Hero, the two options (Shared Bus Tour → `/golf-bus/`, Custom Booking → `/tokyo/mt-fuji-golf-day/`), a comparison table (who it suits, dates, transport, courses, price, the day, how to book) and a "not sure?" pair of CTAs.
-- `/{lang}/golf-bus/`: the shared-bus page. Hero with the operator's coach, "How the tour works" (meeting points in Shinjuku and Oimachi, the day step by step, how you play, what the price covers / what is extra, cancellation as published by the operator), then the calendar and the tour list, enquiry form, steps, included / not included, Good to Know, FAQ.
+- `/{lang}/golf-tours/`: the landing page for advertising. Hero, the two options (Shared Bus Tour → `/golf-bus/`, Custom Booking → `/tokyo/mt-fuji-golf-day/`), a comparison table (who it suits, dates, transport, courses, price, the day, how to book), a per-person cost example for custom booking with four golfers (fee only / with the private transfer, Tokyo and Mt. Fuji areas) and a "not sure?" pair of CTAs.
+- `/{lang}/golf-bus/`: the shared-bus page. Hero (fairway + the operator's coach, a portrait composite on phones), a four-point "at a glance" strip, the calendar and the tour list, the enquiry form, then "How the tour works, in detail" as collapsible sections (meeting points in Shinjuku and Oimachi, the day step by step, how you play, what the price covers / what is extra, cancellation as published by the operator), steps, included / not included, Good to Know, FAQ. Course names are shown in English on the English pages (lib/golf-course-images.ts).
 - The golf collection page and the custom golf page carry a small "Two ways" cross-link to both while the bus page is visible.
-- Photos: the hero and the landing card use the operator's own coach photos (public/images/golf-bus/, from the operator's fleet page). Tour cards use a photo per course taken from the course's official website (lib/golf-course-images.ts keeps the source URL per course for the rights check; public/images/golf-courses/); a course without an entry shows the KAMEHAME fallback. The partner's listing photos are never shown (they carry a text banner).
+- Photos: the hero and the landing card use the operator's own coach photos (public/images/golf-bus/, from the operator's fleet page). Tour cards use one photo per course (public/images/golf-courses/, mapped with the English course name in lib/golf-course-images.ts); a course without a photo shows the KAMEHAME fallback. The partner's listing photos are never shown (they carry a text banner). Photo rights are handled by the owner outside the repository.
 
 ## What the visitor sees
 - Languages: en, ja, es, fr, zh-tw; EN copy is the reference, JA is translated, the others fall back to EN.
 - Calendar: a month grid of the published dates (green = seats available, grey = every tour that day sold out); tapping a day filters the list; golfers and departure filters stay.
 - The golf collection page and the custom golf page carry a small "Two ways" cross-link only while the bus page is visible.
 - Each card: course, date, photo (the partner's photo hotlinked with no referrer; a KAMEHAME photo when there is none), seats left or a SOLD OUT badge, departure area / time, lunch and through-play tags, the price as **one tax-inclusive total per person**, the enquiry button (disabled when sold out) and "No payment is required to enquire."
-- Enquiry form: golfers (1–8, never more than the seats shown), the unchecked "Add Rental Clubs (+¥5,500 per person)" box with a renters count for groups, a live summary with the total, name / email / phone / notes, the data-sharing consent, then a thank-you with the reference (`GP-XXXXXX`).
+- Enquiry form: golfers (1–8, never more than the seats shown on that tour), one row per golfer (name, rental clubs +¥5,500 with right/left hand, rental shoes with size; shoe rental is requested from the course and paid there), a live summary with the total, email / phone / notes, the data-sharing consent, then a thank-you with the reference (`GP-XXXXXX`). The rows are kept as `golfers_json` (migration 0004) and listed in every mail and on the ops detail page.
 
 ## Pricing rules (要件)
 - Customer price per person = partner price + ¥15,000, shown only as one tax-inclusive figure (e.g. partner ¥15,400 → "¥30,400 /person").
@@ -52,5 +52,4 @@ Initial operation: KAMEHAME phones the partner to hold the seats; the partner (o
 - Seller identity: the licensed travel company that sells the tour, its registration number and contact, for the purchase instructions and the legal line.
 - Cancellation / refund terms aligned with the partner's rules, and the refund scope after payment (the page says only that a tour that cannot be secured after payment is refunded in full).
 - The partner's hand-over address (`GOLFPAQ_PARTNER_TO`) and the agreed mail route for purchase instructions.
-- Licensed photos: the cards use the partner's course photos as published on their listing; confirm the licence or replace with KAMEHAME photos.
 - Set `GOLFPAQ_LIVE=true` on production only after the above.

@@ -5,7 +5,7 @@ import { api, errorText, jst, yen } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, ReasonAction, Table } from "../ui";
 
 type Rec = Record<string, unknown>;
-interface Enquiry extends Rec { id: string; reference: string; status: string; statusJa: string; next: string[]; internal_note: string | null; people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; total_yen: number; marginYen: number; name: string; email: string; phone: string | null; note: string | null; lang: string }
+interface Enquiry extends Rec { id: string; reference: string; status: string; statusJa: string; next: string[]; internal_note: string | null; people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; total_yen: number; marginYen: number; name: string; email: string; phone: string | null; note: string | null; lang: string; golfers: { name: string; clubs: boolean; hand?: string; shoes: boolean; shoeSize?: string }[] }
 interface Detail { enquiry: Enquiry; logs: Rec[]; draft: { subject: string; text: string } }
 
 const s = (v: unknown) => (v === null || v === undefined || v === "" ? "—" : String(v));
@@ -47,6 +47,12 @@ export function OpsBusTourDetail({ id }: { id: string }) {
         </dl>
       </Card>
 
+      {e.golfers.length > 0 && (
+        <Card title="参加者">
+          <Table head={["#", "お名前", "クラブ", "利き手", "シューズ", "サイズ"]} rows={e.golfers.map((g, i) => [i + 1, g.name || "—", g.clubs ? "レンタル" : "持参", g.clubs ? (g.hand === "left" ? "左" : "右") : "—", g.shoes ? "レンタル希望" : "—", g.shoeSize ?? "—"])} compact />
+          <p className="pt-small">シューズレンタルはゴルフ場の在庫・料金次第です。提携先への引き継ぎメールにも同じ内容を載せています。</p>
+        </Card>
+      )}
       <Card title="料金（社内内訳・非公開）">
         <p className="pt-note-box">お客様が見ているのは「ツアー料金 {yen(e.per_person_yen)} /人（税込）」「レンタル ¥5,500 /人」「合計 {yen(e.total_yen)}」だけです。仕入価格・上乗せ分・粗利は公開ページ・お客様向けメールには出しません。</p>
         <Table head={["項目", "単価", "数量", "金額"]} rows={[

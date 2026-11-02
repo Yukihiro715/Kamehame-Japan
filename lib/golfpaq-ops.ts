@@ -6,7 +6,8 @@ import { randomId, type SqlDb } from "@/lib/referral/db";
 import { bad, notFound, str } from "@/lib/portal/util";
 import { describePickup, GOLFPAQ_FEE_JPY } from "./golfpaq";
 import { sendGolfpaqMail, type GolfpaqEnquiryEnv } from "./golfpaq-enquiry";
-import { partnerHandover, purchaseGuidanceDraft, type InternalFacts } from "./golfpaq-mail";
+import { partnerHandover, purchaseGuidanceDraft, type Golfer, type InternalFacts } from "./golfpaq-mail";
+import { courseNameEn } from "./golf-course-images";
 
 export const BUS_STATUSES = ["received", "handed_over", "guidance_sent", "purchased", "confirmed", "cancelled", "unavailable"] as const;
 export type BusStatus = (typeof BUS_STATUSES)[number];
@@ -25,7 +26,7 @@ export const nextStatuses = (s: string): BusStatus[] => NEXT[s as BusStatus] ?? 
 export interface BusEnquiryRow {
   id: string; reference: string; request_id: string; tour_id: string; tour_date: string; course: string; pickup: string; departure_area: string | null; departure_time: string | null;
   people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; total_yen: number; seats_shown: number | null; snapshot_updated_at: string | null;
-  name: string; email: string; phone: string | null; note: string | null; lang: string; status: string; customer_mail: string | null; staff_mail: string | null; partner_mail: string | null; internal_note: string | null; created_at: string; updated_at: string;
+  name: string; email: string; phone: string | null; note: string | null; lang: string; golfers_json?: string | null; status: string; customer_mail: string | null; staff_mail: string | null; partner_mail: string | null; internal_note: string | null; created_at: string; updated_at: string;
 }
 const nowIso = () => new Date().toISOString();
 const audit = (db: SqlDb, actor: string, action: string, id: string, reason: string | null, after?: unknown) =>
@@ -42,7 +43,8 @@ export async function busEnquiryList(db: SqlDb, f: { status?: string; q?: string
   return { rows: rows.map(withLabels), counts: Object.fromEntries(counts.map((c) => [c.status, c.n])) as Record<string, number> };
 }
 
-const withLabels = (r: BusEnquiryRow) => ({ ...r, statusJa: BUS_STATUS_JA[r.status as BusStatus] ?? r.status, marginYen: r.fee_yen * r.people, next: nextStatuses(r.status) });
+export function golfersOf(r: { golfers_json?: string | null }): Golfer[] { try { const g = r.golfers_json ? JSON.parse(r.golfers_json) : null; return Array.isArray(g) ? g : []; } catch { return []; } }
+const withLabels = (r: BusEnquiryRow) => ({ ...r, golfers: golfersOf(r), statusJa: BUS_STATUS_JA[r.status as BusStatus] ?? r.status, marginYen: r.fee_yen * r.people, next: nextStatuses(r.status) });
 
 export async function busEnquiryGet(db: SqlDb, id: string): Promise<BusEnquiryRow> {
   const row = await db.first<BusEnquiryRow>(`SELECT * FROM bus_tour_enquiries WHERE id = ? OR reference = ?`, [id, id]);
@@ -60,7 +62,7 @@ export function toFacts(r: BusEnquiryRow): InternalFacts {
   const departure = describePickup(r.pickup);
   if (r.departure_time) departure.time = r.departure_time;
   return {
-    reference: r.reference, tour: { course: r.course, date: r.tour_date, pickup: r.pickup, departure }, people: r.people, renters: r.renters,
+    reference: r.reference, tour: { course: r.course, courseEn: courseNameEn(r.course), date: r.tour_date, pickup: r.pickup, departure }, people: r.people, renters: r.renters, golfers: golfersOf(r),
     perPersonYen: r.per_person_yen, toursYen: r.tours_yen, rentalsYen: r.rentals_yen, totalYen: r.total_yen, name: r.name, email: r.email, phone: r.phone ?? undefined, note: r.note ?? undefined, lang: r.lang,
     sourceYen: r.source_yen, feeYen: r.fee_yen || GOLFPAQ_FEE_JPY, seatsShown: r.seats_shown, snapshotUpdatedAt: r.snapshot_updated_at, tourId: r.tour_id,
   };

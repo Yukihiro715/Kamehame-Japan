@@ -1,4 +1,4 @@
-import { courseImage } from "./golf-course-images";
+import { courseArea, courseImage, courseNameEn } from "./golf-course-images";
 /**
  * GOLFPAQ shared-bus golf tours: the partner's public schedule as the
  * catalogue for "Shared Bus Golf Tours" (docs/GOLFPAQ_BUS_TOURS.md).
@@ -65,6 +65,9 @@ export interface PublicTour {
   id: string;
   date: string;
   course: string;
+  /** The English course name for the English pages. */
+  courseEn: string;
+  area?: string;
   pickup: string;
   departure: { area: string; via?: string; time?: string; lunch: "included" | "subsidy" | "not_included"; throughPlay: boolean; note?: string };
   perPersonYen: number;
@@ -217,7 +220,7 @@ export function toPublicTour(t: GolfpaqTour, now = new Date()): PublicTour {
   if (d?.departureTime) departure.time = d.departureTime;
   if (d && departure.lunch === "not_included" && d.lunchIncluded) departure.lunch = "included";
   return {
-    id: t.id, date: t.date, course: t.course, pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: availability.seats, capacity: t.capacity, soldOut: availability.soldOut,
+    id: t.id, date: t.date, course: t.course, courseEn: courseNameEn(t.course), ...(courseArea(t.course) ? { area: courseArea(t.course) } : {}), pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: availability.seats, capacity: t.capacity, soldOut: availability.soldOut,
     ...(courseImage(t.course) ? { imageUrl: courseImage(t.course) } : {}),
     ...(d?.features ? { highlights: d.features.replace(/\*?別途昼食代がかかります。?|ランチは別料金となります。各自ご精算ください。?/g, "").trim() } : {}),
     ...(d?.schedule ? { schedule: d.schedule } : {}),

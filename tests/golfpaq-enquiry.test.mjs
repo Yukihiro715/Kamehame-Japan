@@ -49,16 +49,18 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     const near = tours.find((x) => !x.closed && x.seats >= 3 && x.date <= g.plusDays(g.firstPublicDay(NOW), 3));
     const closed = tours.find((x) => x.closed && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
     assert.ok(near && closed, "a near tour and a closed tour");
-    const base = { id: t.id, date: t.date, people: 2, rental: true, renters: 1, name: "Test Guest", email: "guest@example.com", phone: "+81 90 0000 0000", note: "Right-handed", lang: "en", consent: true, request_id: uuid(1) };
+    const golfers = [{ name: "Test Guest", clubs: true, hand: "left", shoes: true, shoeSize: "26.5 cm" }, { name: "Second Golfer", clubs: false, shoes: false }];
+    const base = { id: t.id, date: t.date, people: 2, golfers, name: "Test Guest", email: "guest@example.com", phone: "+81 90 0000 0000", note: "Right-handed", lang: "en", consent: true, request_id: uuid(1) };
     // guards
     assert.equal((await post(base, env, { origin: "https://evil.example" })).status, 403);
     assert.equal((await post({ ...base, consent: false }, env)).status, 400);
     assert.equal((await post({ ...base, people: 9 }, env)).status, 400);
-    assert.equal((await post({ ...base, renters: 3 }, env)).status, 400, "more renters than golfers");
+    assert.equal((await post({ ...base, golfers: [golfers[0]] }, env)).status, 400, "one row per golfer");
+    assert.equal((await post({ ...base, golfers: undefined, rental: true, renters: 3 }, env)).status, 400, "more renters than golfers (older form)");
     assert.equal((await post({ ...base, id: "9-9-9" }, env)).status, 409, "a tour not in the feed");
-    assert.equal((await post({ ...base, people: t.seats + 1, renters: 0, rental: false }, env)).status, 409, "more golfers than seats shown");
-    assert.equal((await post({ ...base, id: near.id, date: near.date, renters: 0, rental: false, people: 1 }, env)).status, 409, "within three days: sold out whatever the partner shows");
-    assert.equal((await post({ ...base, id: closed.id, date: closed.date, renters: 0, rental: false, people: 1 }, env)).status, 409, "closed by the partner: sold out");
+    assert.equal((await post({ ...base, people: t.seats + 1, golfers: undefined, renters: 0, rental: false }, env)).status, 409, "more golfers than seats shown");
+    assert.equal((await post({ ...base, id: near.id, date: near.date, golfers: [golfers[0]], people: 1 }, env)).status, 409, "within three days: sold out whatever the partner shows");
+    assert.equal((await post({ ...base, id: closed.id, date: closed.date, golfers: [golfers[0]], people: 1 }, env)).status, 409, "closed by the partner: sold out");
     assert.equal((await post(base, { ...env, READY_STATE: { get: async () => null, put: async () => {} } })).status, 503, "no fresh feed, no enquiry");
     // the real one
     const res = await post(base, env);
@@ -68,7 +70,8 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     assert.equal(body.total, t.perPersonYen * 2 + 5500);
     const row = await db.first(`SELECT * FROM bus_tour_enquiries WHERE reference = ?`, [body.reference]);
     assert.equal(row.source_yen, t.sourceYen); assert.equal(row.fee_yen, 15000); assert.equal(row.per_person_yen, t.sourceYen + 15000);
-    assert.equal(row.total_yen, body.total); assert.equal(row.renters, 1); assert.equal(row.status, "handed_over"); assert.equal(row.partner_mail, "sent");
+    assert.equal(row.total_yen, body.total); assert.equal(row.renters, 1, "renters counted from the golfer rows"); assert.equal(row.status, "handed_over"); assert.equal(row.partner_mail, "sent");
+    assert.deepEqual(JSON.parse(row.golfers_json), [{ name: "Test Guest", clubs: true, hand: "left", shoes: true, shoeSize: "26.5 cm" }, { name: "Second Golfer", clubs: false, shoes: false }]);
     // mails: customer gets totals only; staff and partner get the breakdown
     const customer = mock.sent.find((m) => m.to?.[0] === "guest@example.com");
     const staff = mock.sent.find((m) => m.to?.[0] === "team@example.com");
@@ -77,6 +80,9 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     assert.match(customer.text, /Your booking is not yet confirmed, and no payment has been taken/);
     assert.match(customer.text, new RegExp(`¥${(t.sourceYen + 15000).toLocaleString("en-US")} /person × 2`));
     assert.match(customer.text, /Rental clubs: ¥5,500 \/person × 1/);
+    assert.match(customer.text, /1\. Test Guest · rental clubs \(left-handed\) · shoe rental size 26\.5 cm/); assert.match(customer.text, /2\. Second Golfer · own clubs/);
+    assert.ok(!customer.text.includes(t.course) || /[A-Za-z]/.test(t.course), "the English mail names the course in English");
+    assert.match(partner.text, /参加者:/); assert.match(partner.text, /レンタルクラブ（左利き）／シューズレンタル 26\.5 cm/);
     assert.match(customer.text, new RegExp(`Total \\(tax included\\): ¥${body.total.toLocaleString("en-US")}`));
     assert.ok(!customer.text.includes(String(t.sourceYen)) && !/15,000|GOLFPAQ|golfpaq\.net/.test(customer.text), "no partner price, no fee, no partner name or link to the customer");
     assert.match(staff.text, /GOLFPAQ価格/); assert.match(partner.text, /追加分: ¥15,000/);

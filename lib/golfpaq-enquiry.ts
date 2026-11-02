@@ -6,7 +6,7 @@ import { d1Db, isD1Like, randomId } from "@/lib/referral/db";
 import { recipientAllowed, type PortalMailEnv } from "@/lib/portal/mail";
 import { notifySlack } from "@/lib/slack";
 import { GOLFPAQ_FEE_JPY, enquiryTotal, firstPublicDay, readGolfpaqSnapshot, snapshotIsFresh, toPublicTour, type GolfpaqKv } from "./golfpaq";
-import { customerConfirmation, partnerHandover, staffNotification, type InternalFacts } from "./golfpaq-mail";
+import { customerConfirmation, partnerHandover, staffNotification, type Golfer, type InternalFacts } from "./golfpaq-mail";
 
 export interface GolfpaqEnquiryEnv extends PortalMailEnv {
   READY_STATE?: GolfpaqKv; DB?: unknown; CONTACT_TO?: string; SLACK_WEBHOOK_URL?: string;
@@ -42,10 +42,13 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   try { b = JSON.parse(bodyText); } catch { return json({ ok: false, error: "invalid" }, 400); }
   const id = clean(b.id, 80), date = clean(b.date, 12), name = clean(b.name, 120), email = clean(b.email, 200).toLowerCase(), phone = clean(b.phone, 40), note = typeof b.note === "string" ? b.note.trim().slice(0, 1000) : "";
   const lang = ["en", "ja", "es", "fr", "zh-tw"].includes(String(b.lang)) ? String(b.lang) : "en";
-  const people = Number(b.people), renters = b.rental === true ? Number(b.renters ?? people) : 0;
+  const people = Number(b.people);
+  // One row per golfer when the form sends them; otherwise the older rental checkbox + count.
+  const golfers: Golfer[] | null = Array.isArray(b.golfers) ? b.golfers.slice(0, MAX_PEOPLE).map((g) => { const x = (g ?? {}) as Record<string, unknown>; return { name: clean(x.name, 80), clubs: x.clubs === true, ...(x.clubs === true ? { hand: x.hand === "left" ? "left" as const : "right" as const } : {}), shoes: x.shoes === true, ...(x.shoes === true && clean(x.shoeSize, 12) ? { shoeSize: clean(x.shoeSize, 12) } : {}) }; }) : null;
+  const renters = golfers ? golfers.filter((g) => g.clubs).length : b.rental === true ? Number(b.renters ?? people) : 0;
   const requestId = typeof b.request_id === "string" && UUID.test(b.request_id) ? b.request_id.toLowerCase() : null;
   if (b.website) return json({ ok: true, reference: newReference() }); // honeypot: pretend
-  if (!/^\d+-\d+-\d+$/.test(id) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || date < firstPublicDay(now) || !Number.isInteger(people) || people < 1 || people > MAX_PEOPLE || !Number.isInteger(renters) || renters < 0 || renters > people || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || b.consent !== true || !requestId) {
+  if (!/^\d+-\d+-\d+$/.test(id) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || date < firstPublicDay(now) || !Number.isInteger(people) || people < 1 || people > MAX_PEOPLE || !Number.isInteger(renters) || renters < 0 || renters > people || (golfers && golfers.length !== people) || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || b.consent !== true || !requestId) {
     return json({ ok: false, error: "invalid" }, 400);
   }
   const snapshot = await readGolfpaqSnapshot(env.READY_STATE);
@@ -64,13 +67,13 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   const reference = newReference(), at = now.toISOString();
   const facts: InternalFacts = {
     reference, tour: pub, people, renters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, totalYen: money.total,
-    name, email, phone: phone || undefined, note: note || undefined, lang, sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
+    name, email, phone: phone || undefined, note: note || undefined, lang, ...(golfers ? { golfers } : {}), sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
   };
   if (db) {
     await db.run(
-      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, note, lang, status, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
-      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, at, at]);
+      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, note, lang, golfers_json, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
+      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
   }
   const from = "KAMEHAME JAPAN <hello@kamehame-japan.com>";
   const [customerMail, staffMail, partnerMail] = await Promise.all([

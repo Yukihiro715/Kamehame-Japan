@@ -3,11 +3,17 @@
  *  the amount added per person appear in staff and partner mail alone. */
 import { yen, type PublicTour } from "./golfpaq";
 
+/** One golfer in the party, as entered on the form. */
+export interface Golfer { name: string; clubs: boolean; hand?: "right" | "left"; shoes: boolean; shoeSize?: string }
 export interface EnquiryFacts {
-  reference: string; tour: Pick<PublicTour, "course" | "date" | "departure" | "pickup">;
+  reference: string; tour: Pick<PublicTour, "course" | "date" | "departure" | "pickup"> & { courseEn?: string };
   people: number; renters: number; perPersonYen: number; toursYen: number; rentalsYen: number; totalYen: number;
   name: string; email: string; phone?: string; note?: string; lang: string;
+  golfers?: Golfer[];
 }
+const courseEn = (f: EnquiryFacts) => f.tour.courseEn ?? f.tour.course;
+const golferLinesEn = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "Golfers:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "(name to follow)"}${g.clubs ? ` · rental clubs (${g.hand === "left" ? "left" : "right"}-handed)` : " · own clubs"}${g.shoes ? ` · shoe rental${g.shoeSize ? ` size ${g.shoeSize}` : ""}` : ""}`)] : []);
+const golferLinesJa = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "参加者:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "（未記入）"}${g.clubs ? `／レンタルクラブ（${g.hand === "left" ? "左" : "右"}利き）` : "／クラブ持参"}${g.shoes ? `／シューズレンタル${g.shoeSize ? ` ${g.shoeSize}` : ""}` : ""}`)] : []);
 export interface InternalFacts extends EnquiryFacts { sourceYen: number; feeYen: number; seatsShown: number | null; snapshotUpdatedAt: string | null; tourId: string }
 
 const dateEn = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -38,11 +44,12 @@ export function customerConfirmation(f: EnquiryFacts): { subject: string; text: 
     `Your booking is not yet confirmed, and no payment has been taken.`,
     ``,
     `Enquiry reference: ${f.reference}`,
-    `Tour: ${f.tour.course}`,
+    `Tour: ${courseEn(f)}`,
     `Date: ${dateEn(f.tour.date)}`,
     `Departure: ${departureEn(f.tour)}`,
     `Golfers: ${f.people}${f.renters ? ` (rental clubs for ${f.renters})` : ""}`,
     ...priceLinesEn(f),
+    ...golferLinesEn(f),
     ``,
     `The price includes the round of golf and round-trip bus transportation. Availability is subject to final confirmation.`,
     ``,
@@ -68,10 +75,11 @@ export function customerConfirmation(f: EnquiryFacts): { subject: string; text: 
     `出発: ${f.tour.pickup}${f.tour.departure.time ? ` ${f.tour.departure.time}発` : ""}`,
     `人数: ${f.people}名${f.renters ? `（レンタルクラブ ${f.renters}名）` : ""}`,
     ...priceLinesJa(f),
+    ...golferLinesJa(f),
     ``,
     `料金にはゴルフのプレーと往復バスが含まれます。空席は最終確認の結果によります。`,
   ] : [];
-  return { subject: `Your enquiry ${f.reference}: ${f.tour.course}, ${f.tour.date} | KAMEHAME JAPAN`, text: [...en, ...ja].join("\n") };
+  return { subject: `Your enquiry ${f.reference}: ${courseEn(f)}, ${f.tour.date} | KAMEHAME JAPAN`, text: [...en, ...ja].join("\n") };
 }
 
 /** Staff copy (internal: includes the breakdown). */
@@ -97,6 +105,7 @@ export function staffNotification(f: InternalFacts): { subject: string; text: st
       `電話: ${f.phone || "—"}`,
       `備考: ${f.note || "—"}`,
       `言語: ${f.lang}`,
+      ...golferLinesJa(f),
       ``,
       `次: 提携旅行会社へ引き継ぎ → 購入案内メール → 購入 → 予約確定。運営画面 /ops/bus-tours/ で状態を更新してください。`,
     ].join("\n"),
@@ -128,6 +137,7 @@ export function partnerHandover(f: InternalFacts): { subject: string; text: stri
       `電話: ${f.phone || "—"}`,
       `備考: ${f.note || "—"}`,
       `希望言語: ${f.lang}`,
+      ...golferLinesJa(f),
       ``,
       `お客様には「提携旅行会社から購入方法のご案内が届く」「問い合わせのみでは予約確定・決済は発生しない」と案内済みです。`,
       `購入案内には、ツアー・開催日、人数・レンタル、最新料金、契約・販売会社名、購入方法・支払い先、予約成立条件、キャンセル・返金条件、問い合わせ先を含めてください。`,
@@ -144,11 +154,12 @@ export function purchaseGuidanceDraft(f: EnquiryFacts, seller: { name: string; r
       ``,
       `Thank you for your enquiry through KAMEHAME JAPAN. Here is how to complete your purchase.`,
       ``,
-      `Tour: ${f.tour.course}`,
+      `Tour: ${courseEn(f)}`,
       `Date: ${dateEn(f.tour.date)}`,
       `Departure: ${departureEn(f.tour)}`,
       `Golfers: ${f.people}${f.renters ? ` (rental clubs for ${f.renters})` : ""}`,
       ...priceLinesEn(f),
+      ...golferLinesEn(f),
       ``,
       `Seller: ${seller.name} (travel agency registration ${seller.registration})`,
       `How to pay: [購入方法・支払い先]`,

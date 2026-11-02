@@ -78,6 +78,20 @@ export default async function GolfToursPage({ params }: Props) {
           </div>
         </section>
 
+        <section className="gl-estimate" aria-labelledby="gl-est-h">
+          <div className="gb-wrap">
+            <h2 id="gl-est-h">{C.estimateH}</h2>
+            <p className="gb-lede">{C.estimateLede}</p>
+            <div className="gl-table-wrap">
+              <table className="gl-table gl-table-est">
+                <thead><tr><th scope="col"></th><th scope="col">{C.estimateCols[0]}</th><th scope="col">{C.estimateCols[1]}</th></tr></thead>
+                <tbody>{C.estimateRows.map((r, i) => <tr key={r.label} className={i >= C.estimateRows.length - 2 ? "total" : ""}><th scope="row">{r.label}</th><td>{r.feeOnly}</td><td>{r.withTransfer}</td></tr>)}</tbody>
+              </table>
+            </div>
+            <p className="gb-small">{C.estimateNote}</p>
+          </div>
+        </section>
+
         <section className="gl-choose" aria-labelledby="gl-ch-h">
           <div className="gb-wrap">
             <h2 id="gl-ch-h">{C.chooseH}</h2>

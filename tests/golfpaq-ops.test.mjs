@@ -31,13 +31,15 @@ test("ops: list, detail with breakdown, transitions, note, partner re-send, draf
     const t = tours.find((x) => !x.closed && x.seats >= 2 && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
     // first without a partner address: status stays received
     const env = { READY_STATE: kv, DB: db.d1, RESEND_API_KEY: "re_test", CONTACT_TO: "team@example.com" };
-    const res = await handleGolfpaqEnquiry(new Request(`${ORIGIN}/api/golfpaq/enquiry`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: JSON.stringify({ id: t.id, date: t.date, people: 2, rental: true, renters: 2, name: "Ops Test", email: "guest@example.com", lang: "en", consent: true, request_id: "11111111-2222-4333-8444-000000000009" }) }), env, NOW);
+    const res = await handleGolfpaqEnquiry(new Request(`${ORIGIN}/api/golfpaq/enquiry`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: JSON.stringify({ id: t.id, date: t.date, people: 2, golfers: [{ name: "Ops Test", clubs: true, hand: "right", shoes: false }, { name: "Friend", clubs: true, hand: "left", shoes: true, shoeSize: "US 9" }], name: "Ops Test", email: "guest@example.com", lang: "en", consent: true, request_id: "11111111-2222-4333-8444-000000000009" }) }), env, NOW);
     const { reference } = await res.json();
     const sql = d1Db(db.d1);
     const list = await O.busEnquiryList(sql, { status: "open" });
     assert.equal(list.rows.length, 1); assert.equal(list.rows[0].status, "received"); assert.equal(list.rows[0].marginYen, 30000); assert.equal(list.counts.received, 1);
     const id = list.rows[0].id;
     const detail = await O.busEnquiryDetail(sql, id);
+    assert.equal(detail.enquiry.golfers.length, 2); assert.equal(detail.enquiry.golfers[1].shoeSize, "US 9");
+    assert.match(detail.draft.text, /2\. Friend · rental clubs \(left-handed\) · shoe rental size US 9/);
     assert.equal(detail.enquiry.source_yen, t.sourceYen); assert.equal(detail.enquiry.total_yen, (t.sourceYen + 15000) * 2 + 11000);
     assert.deepEqual(detail.enquiry.next, ["handed_over", "guidance_sent", "cancelled", "unavailable"]);
     assert.match(detail.draft.text, /Total \(tax included\)/); assert.ok(!/15,000|GOLFPAQ/.test(detail.draft.text) && !detail.draft.text.includes(String(t.sourceYen)));

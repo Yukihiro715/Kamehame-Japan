@@ -12,6 +12,8 @@ export interface BusCopy {
   twoWaysH: string; sharedH: string; sharedBody: string; sharedCta: string; customH: string; customBody: string; customCta: string;
   compareH: string; compareLede: string; compareCols: [string, string]; compare: { label: string; shared: string; custom: string }[];
   chooseH: string; chooseShared: string; chooseCustom: string;
+  /** Per-person estimate for a party of four with custom booking (fee + club fees, with and without the private transfer). */
+  estimateH: string; estimateLede: string; estimateCols: [string, string]; estimateRows: { label: string; feeOnly: string; withTransfer: string }[]; estimateNote: string;
   // Bus page hero and the tour explained
   heroTitle: string; heroLede: string; features: string[]; heroCta: string;
   aboutH: string; aboutLede: string;
@@ -20,16 +22,20 @@ export interface BusCopy {
   playH: string; play: { title: string; body: string }[];
   costH: string; costLede: string; costIncludedH: string; costIncluded: { item: string; note: string }[]; costExtraH: string; costExtra: { item: string; note: string }[]; costNote: string;
   cancelH: string; cancelLede: string; cancel: string[]; cancelNote: string;
+  /** The short strip above the calendar; the full sections sit below the list. */
+  glanceH: string; glance: { title: string; body: string }[]; glanceMore: string; detailsH: string;
   // Calendar and list
   toursH: string; toursLede: string; updated: string; unavailable: string; noMatch: string; filterGolfers: string; filterDeparture: string; allDepartures: string;
   calH: string; calAny: string; calLegendOpen: string; calLegendSold: string; calPrev: string; calNext: string; weekdays: string[]; calShowing: string;
+  /** "{n}" = number of tours; "|" separates singular and plural. */ calShow: string; calNone: string; calHint: string;
   perPerson: string; includesLine: string; /** "{n}" is replaced by the number; "|" separates the singular and plural forms. */ seatsLeft: string; soldOut: string; enquireBtn: string; noPayment: string;
   howH: string; howBody: string; howAvailability: string;
   stepsH: string; steps: { n: string; title: string; body: string }[];
   includedH: string; included: string[]; notIncludedH: string; notIncluded: string[];
   goodH: string; good: { title: string; body: string }[];
   faqH: string; faq: { q: string; a: string }[];
-  formH: string; golfers: string; rentalLabel: string; rentalCount: string; rentalCountHint: string; name: string; email: string; phone: string; notes: string; notesHint: string; consent: string; send: string; sending: string;
+  formH: string; golfers: string; golfersMax: string; rentalLabel: string; rentalCount: string; rentalCountHint: string;
+  partyH: string; partyLede: string; golferN: string; golferName: string; golferLead: string; golferClubs: string; golferHand: string; handRight: string; handLeft: string; golferShoes: string; golferShoeSize: string; shoeSizeHint: string; shoesNote: string; name: string; email: string; phone: string; notes: string; notesHint: string; consent: string; send: string; sending: string;
   summaryPerPerson: string; summaryRental: string; summaryTotal: string; taxIncluded: string;
   doneH: string; doneLines: string[]; doneRef: string; doneAgain: string;
   errors: Record<string, string>;
@@ -60,6 +66,17 @@ const en: BusCopy = {
   chooseH: "Not sure which to choose?",
   chooseShared: "Pick the Shared Bus Tour if you are travelling light, don't mind company on the course and want the easiest, best-priced day of golf from Tokyo.",
   chooseCustom: "Pick Custom Booking if you have a course or a date in mind, want to play as your own group, or would like Mt. Fuji on the horizon.",
+  estimateH: "What custom booking costs, for four golfers",
+  estimateLede: "A worked example per person, tax included, based on the club fees we usually see. The shared bus tour, by comparison, is one price of about ¥30,000–¥38,000 per person with the coach included.",
+  estimateCols: ["Arrangement fee only", "With private transfer"],
+  estimateRows: [
+    { label: "Our arrangement fee (¥30,000 for four)", feeOnly: "¥7,500", withTransfer: "¥7,500" },
+    { label: "Green fee, cart and tax at the club (Tokyo area, typical)", feeOnly: "about ¥17,000", withTransfer: "about ¥17,000" },
+    { label: "Private minivan with driver, hotel to course and back (about ¥90,000 per group)", feeOnly: "—", withTransfer: "about ¥22,500" },
+    { label: "Per person, Tokyo area", feeOnly: "about ¥24,500", withTransfer: "about ¥47,000" },
+    { label: "Per person, Mt. Fuji area (green fee about ¥23,000)", feeOnly: "about ¥30,500", withTransfer: "about ¥53,000" },
+  ],
+  estimateNote: "Green fees vary by course and day (weekends cost more) and are paid at the club; the transfer is booked and paid directly with the transfer partner. Rental clubs and lunch are extra in both cases. For two golfers the per-person figures are higher, because the fee and the vehicle are shared by fewer people.",
 
   heroTitle: "Shared Bus Golf Tours from Tokyo",
   heroLede: "A coach from Shinjuku or Oimachi, 18 holes of self-play golf at a country club in the Kanto hills, and a seat back to Tokyo the same evening. One price per person, tax included.",
@@ -111,7 +128,7 @@ const en: BusCopy = {
     { item: "Travel to the meeting point", note: "Your own transport to Shinjuku or Oimachi" },
     { item: "Travel insurance", note: "Recommended, as for any day out" },
   ],
-  costNote: "Any registration or administrative fee the tour seller applies is stated in the purchase instructions you receive before paying.",
+  costNote: "",
   cancelH: "Cancellation",
   cancelLede: "The tour seller's terms apply and are sent to you before you pay. As published by the tour operator, they currently are:",
   cancel: [
@@ -123,11 +140,21 @@ const en: BusCopy = {
     "Cancellations are accepted by telephone only, during the operator's hours",
   ],
   cancelNote: "Tours run in rain. If the course closes, the tour price is refunded. Bank and card fees on refunds are deducted. If a tour cannot be secured after you pay, you are offered another date or a full refund of that purchase.",
+  glanceH: "The tour at a glance",
+  glance: [
+    { title: "Meet in Tokyo", body: "Shinjuku (Shinjuku-sanchome) or Oimachi, around 06:30–07:00. Back at the same spot by about 18:00–19:30." },
+    { title: "18 holes, self-play", body: "Riding cart, groups of 3–4 formed by the tour leader. No caddie." },
+    { title: "One price, tax included", body: "Golf, cart and the round-trip coach. Lunch, rental clubs and shoes are extra." },
+    { title: "Free to enquire", body: "No payment here. Our travel partner emails you the purchase details; cancellation terms come with them." },
+  ],
+  glanceMore: "Full details: meeting points, the day, costs and cancellation",
+  detailsH: "How the tour works, in detail",
 
   toursH: "Available Golf Tours", toursLede: "Dates and prices come from the tour operator's published schedule and are refreshed through the day. Pick a date on the calendar, tell us how many golfers, and send a free enquiry.",
   updated: "Schedule updated", unavailable: "The live schedule is temporarily unavailable. Please try again shortly or contact us and we will send you the upcoming dates.", noMatch: "No tours match these filters. Try another date, departure point or group size.",
   filterGolfers: "Golfers", filterDeparture: "Departure", allDepartures: "All departures",
   calH: "Pick a date", calAny: "Show all dates", calLegendOpen: "Seats available", calLegendSold: "Sold out", calPrev: "Previous month", calNext: "Next month", weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"], calShowing: "Showing tours on",
+  calShow: "Show 1 tour on {d}|Show {n} tours on {d}", calNone: "Tap a date to see its tours", calHint: "Green dates have seats; the number is how many tours leave that day.",
   perPerson: "/person", includesLine: "Includes golf and round-trip bus · tax included", seatsLeft: "1 seat left|{n} seats left", soldOut: "Sold out", enquireBtn: "Enquire About This Tour", noPayment: "No payment is required to enquire.",
   howH: "How booking works", howBody: "After submitting your enquiry, our travel partner will email you the purchase details and payment instructions. No payment is collected on this website.", howAvailability: "Availability is subject to final confirmation.",
   stepsH: "How It Works",
@@ -159,7 +186,9 @@ const en: BusCopy = {
     { q: "Can beginners join?", a: "Tours are for golfers who have played a round before. The pace is relaxed, but you should be comfortable playing 18 holes." },
     { q: "Can I bring my own clubs?", a: "Yes. Clubs travel in the coach's luggage hold. If you would rather not carry them, add rental clubs to your enquiry." },
   ],
-  formH: "Enquire about this tour", golfers: "Golfers", rentalLabel: "Add Rental Clubs (+¥5,500 per person)", rentalCount: "How many golfers need rental clubs?", rentalCountHint: "Add which hand (right/left) and your heights in the notes.",
+  formH: "Enquire about this tour", golfers: "Golfers", golfersMax: "up to {n} seats left on this tour", rentalLabel: "Add Rental Clubs (+¥5,500 per person)", rentalCount: "How many golfers need rental clubs?", rentalCountHint: "Add which hand (right/left) and your heights in the notes.",
+  partyH: "Your party", partyLede: "One line per golfer. Rental clubs are ¥5,500 per person and are added to the total; shoe rental is requested from the course and paid there on the day.",
+  golferN: "Golfer {n}", golferName: "Name", golferLead: "Lead golfer (you)", golferClubs: "Rental clubs (+¥5,500)", golferHand: "Hand", handRight: "Right", handLeft: "Left", golferShoes: "Rental shoes", golferShoeSize: "Shoe size", shoeSizeHint: "e.g. 26.5 cm, US 9, EU 42", shoesNote: "Shoe rental depends on the course's stock and is paid at the club.",
   name: "Your name", email: "Email", phone: "Phone or WhatsApp (optional)", notes: "Notes (optional)", notesHint: "Hotel area, handedness and height for rental clubs, dietary needs, anything else.",
   consent: "I understand that this is a free enquiry, not a booking, and that KAMEHAME JAPAN will share these details with its travel partner so they can email me the purchase instructions.",
   send: "Send Enquiry", sending: "Sending…",
@@ -195,6 +224,17 @@ const ja: BusCopy = {
   chooseH: "迷ったら",
   chooseShared: "身軽に、同組でも構わない、東京から一番手軽でお得な1日ゴルフなら乗合バスツアー。",
   chooseCustom: "行きたいコースや日程が決まっている、自分たちだけで回りたい、富士山を眺めたいならカスタム手配。",
+  estimateH: "カスタム手配の費用の目安（4名の場合）",
+  estimateLede: "よくあるゴルフ場料金をもとにした1人あたり（税込）の試算です。乗合バスツアーはバス込みで1人 ¥30,000〜¥38,000ほどです。",
+  estimateCols: ["手配料のみ", "送迎つき"],
+  estimateRows: [
+    { label: "手配料（4名で ¥30,000）", feeOnly: "¥7,500", withTransfer: "¥7,500" },
+    { label: "ゴルフ場のプレー代・カート・税（東京近郊の目安）", feeOnly: "約 ¥17,000", withTransfer: "約 ¥17,000" },
+    { label: "ドライバー付きミニバン送迎・ホテル往復（1組 約 ¥90,000）", feeOnly: "—", withTransfer: "約 ¥22,500" },
+    { label: "1人あたり（東京近郊）", feeOnly: "約 ¥24,500", withTransfer: "約 ¥47,000" },
+    { label: "1人あたり（富士山エリア・プレー代 約 ¥23,000）", feeOnly: "約 ¥30,500", withTransfer: "約 ¥53,000" },
+  ],
+  estimateNote: "プレー代はコース・曜日で変わり（週末は高め）、ゴルフ場でお支払い。送迎は送迎事業者と直接契約・お支払い。レンタルクラブと昼食はどちらも別途。2名の場合は手配料と車両を少人数で分けるため1人あたりは高くなります。",
 
   heroTitle: "東京発・乗合バスゴルフツアー",
   heroLede: "新宿または大井町からバスで関東のカントリークラブへ。18ホールのセルフプレーのあと、同じ日の夕方に東京へ戻ります。1人あたりの総額表示（税込）。",
@@ -246,7 +286,7 @@ const ja: BusCopy = {
     { item: "集合場所までの交通費", note: "新宿または大井町までご自身で" },
     { item: "旅行保険", note: "任意ですが加入をおすすめします" },
   ],
-  costNote: "販売会社が登録料や事務手数料を設けている場合は、お支払い前にお届けする購入案内に明記されます。",
+  costNote: "",
   cancelH: "キャンセル",
   cancelLede: "販売会社の規定が適用され、お支払い前にお送りします。運行会社が現在公開している規定は次のとおりです。",
   cancel: [
@@ -258,11 +298,21 @@ const ja: BusCopy = {
     "キャンセルは運行会社の受付時間内に電話のみ",
   ],
   cancelNote: "雨天決行です。ゴルフ場がクローズした場合はツアー代金が返金されます。返金時の銀行・カード手数料は差し引かれます。お支払い後にツアーを確保できなかった場合は、別日程のご案内または全額返金となります。",
+  glanceH: "ツアーの概要",
+  glance: [
+    { title: "東京集合", body: "新宿（新宿三丁目）または大井町に6:30〜7:00ごろ集合。18:00〜19:30ごろ同じ場所に戻ります。" },
+    { title: "18ホール・セルフプレー", body: "乗用カート、添乗員が3〜4名の組を編成。キャディなし。" },
+    { title: "総額表示（税込）", body: "ゴルフ・カート・往復バス込み。昼食、レンタルクラブ、シューズは別途。" },
+    { title: "問い合わせは無料", body: "当サイトでの支払いなし。提携旅行会社から購入案内が届き、キャンセル規定もそこに記載されます。" },
+  ],
+  glanceMore: "詳しく見る：集合場所・1日の流れ・費用・キャンセル",
+  detailsH: "ツアーのしくみ（詳細）",
 
   toursH: "ツアー日程", toursLede: "日程と料金は運行会社の公開スケジュールから取得し、随時更新しています。カレンダーで日付を選び、人数を指定して、無料でお問い合わせください。",
   updated: "日程更新", unavailable: "ただいま日程を表示できません。しばらくしてからもう一度お試しいただくか、お問い合わせください。直近の日程をお送りします。", noMatch: "条件に合うツアーがありません。日付・出発地・人数を変えてお試しください。",
   filterGolfers: "人数", filterDeparture: "出発地", allDepartures: "すべての出発地",
   calH: "日付を選ぶ", calAny: "すべての日程を表示", calLegendOpen: "空きあり", calLegendSold: "完売", calPrev: "前の月", calNext: "次の月", weekdays: ["月", "火", "水", "木", "金", "土", "日"], calShowing: "表示中の日付",
+  calShow: "{d}のツアー {n}件を表示|{d}のツアー {n}件を表示", calNone: "日付をタップするとその日のツアーを表示します", calHint: "緑の日は空きあり。数字はその日に出発するツアーの本数です。",
   perPerson: "/人", includesLine: "ゴルフと往復バスを含む・税込", seatsLeft: "残り{n}席", soldOut: "完売", enquireBtn: "このツアーについて問い合わせる", noPayment: "お問い合わせにお支払いは不要です。",
   howH: "ご予約の流れ", howBody: "お問い合わせ完了後、提携旅行会社より購入方法とお支払いについてメールでご案内します。当サイトでのお支払いは不要です。", howAvailability: "お問い合わせのみでは予約は確定しません。",
   stepsH: "ご利用の流れ",
@@ -294,7 +344,9 @@ const ja: BusCopy = {
     { q: "初心者でも参加できますか？", a: "ラウンド経験のある方向けです。のんびりしたペースですが、18ホールを回れることが前提です。" },
     { q: "自分のクラブを持ち込めますか？", a: "はい。クラブはバスの荷物室に積みます。持ち運びを避けたい場合はお問い合わせでレンタルクラブを追加してください。" },
   ],
-  formH: "このツアーについて問い合わせる", golfers: "人数", rentalLabel: "レンタルクラブを追加（1人 +¥5,500）", rentalCount: "レンタルクラブが必要な人数", rentalCountHint: "右利き・左利きと身長を備考欄にお書きください。",
+  formH: "このツアーについて問い合わせる", golfers: "人数", golfersMax: "このツアーの残席は{n}席です", rentalLabel: "レンタルクラブを追加（1人 +¥5,500）", rentalCount: "レンタルクラブが必要な人数", rentalCountHint: "右利き・左利きと身長を備考欄にお書きください。",
+  partyH: "参加者", partyLede: "参加者ごとに1行ずつ。レンタルクラブは1人 ¥5,500で合計に加算。シューズレンタルはゴルフ場に依頼し、当日現地でお支払いです。",
+  golferN: "参加者 {n}", golferName: "お名前", golferLead: "代表者（あなた）", golferClubs: "レンタルクラブ（+¥5,500）", golferHand: "利き手", handRight: "右", handLeft: "左", golferShoes: "レンタルシューズ", golferShoeSize: "シューズサイズ", shoeSizeHint: "例: 26.5 cm", shoesNote: "シューズレンタルはゴルフ場の在庫次第で、料金は現地払いです。",
   name: "お名前", email: "メールアドレス", phone: "電話番号またはWhatsApp（任意）", notes: "備考（任意）", notesHint: "ご滞在ホテルのエリア、レンタルクラブの利き手と身長、食事のご要望など。",
   consent: "これは無料のお問い合わせであり予約ではないこと、また購入案内をメールでお送りするためにKAMEHAME JAPANがこの内容を提携旅行会社と共有することを理解しました。",
   send: "問い合わせを送る", sending: "送信中…",
