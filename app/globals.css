@@ -2215,3 +2215,11 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gl-hcard-price { margin-bottom:8px; }
 .gl-hcard .gb-btn { border:2px solid transparent; } .gl-hcard .gb-btn-outline { border-color:var(--kame); }
 @media (max-width:700px) { .gl-hcard .gb-btn { white-space:nowrap; font-size:11px; letter-spacing:.02em; padding:9px 4px; } }
+/* Option cards: what the price covers, as a ○ / ✕ list; both buttons filled */
+.gl-hcard-price { margin:2px 0 2px; }
+.gl-hcard-items { list-style:none; margin:0 0 10px; padding:0; display:grid; gap:3px; }
+.gl-hcard-items li { display:flex; gap:6px; align-items:flex-start; font-size:12.5px; line-height:1.4; color:#3d3a34; }
+.gl-hcard-items li span { flex:none; width:16px; font-weight:700; text-align:center; }
+.gl-hcard-items li.ok span { color:#1f5f33; } .gl-hcard-items li.no span { color:#b3261e; } .gl-hcard-items li.no { color:#6f6a62; }
+.gb-btn-dark { background:var(--ink); color:#fff; } .gb-btn-dark:hover { background:#000; }
+@media (max-width:700px) { .gl-hcard-items li { font-size:11.5px; gap:4px; } .gl-hcard-items li span { width:13px; } }

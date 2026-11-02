@@ -65,11 +65,11 @@ export default async function GolfToursPage({ params }: Props) {
               <Link className="gl-hcard gl-hcard-custom" href={customHref}>
                 <span className="gl-hcard-tag">{C.heroCustomTag}</span>
                 <img src="/images/golf-gallery-07-fuji-fairway.webp" alt="" fetchPriority="high" />
-                <div><h2><Flag size={16} /> {C.customH}</h2><p className="gl-hcard-who">{C.heroCustomWho}</p><p className="gl-hcard-price">{C.heroCustomPrice}</p><span className="gb-btn gb-btn-small">{C.customCta} <ArrowRight size={14} /></span></div>
+                <div><h2><Flag size={16} /> {C.customH}</h2><p className="gl-hcard-who">{C.heroCustomWho}</p><p className="gl-hcard-price">{C.heroCustomPrice}</p><ul className="gl-hcard-items">{C.heroCustomItems.map((it) => <li key={it.text} className={it.ok ? "ok" : "no"}><span aria-hidden="true">{it.ok ? "○" : "✕"}</span>{it.text}</li>)}</ul><span className="gb-btn gb-btn-small">{C.customCta} <ArrowRight size={14} /></span></div>
               </Link>
               <Link className="gl-hcard" href={busHref}>
                 <img src="/images/golf-bus/bus-card.webp" alt="" fetchPriority="high" />
-                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><span className="gb-btn gb-btn-small gb-btn-outline">{C.sharedCta} <ArrowRight size={14} /></span></div>
+                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><ul className="gl-hcard-items">{C.heroBusItems.map((it) => <li key={it.text} className={it.ok ? "ok" : "no"}><span aria-hidden="true">{it.ok ? "○" : "✕"}</span>{it.text}</li>)}</ul><span className="gb-btn gb-btn-small gb-btn-dark">{C.sharedCta} <ArrowRight size={14} /></span></div>
               </Link>
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>
