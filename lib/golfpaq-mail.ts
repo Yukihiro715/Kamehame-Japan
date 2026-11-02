@@ -10,7 +10,7 @@ export interface EnquiryFacts {
   people: number; renters: number; perPersonYen: number; toursYen: number; rentalsYen: number; totalYen: number;
   /** Rental shoes (¥2,200 each, in the total); absent on enquiries from before the option. */
   shoeRenters?: number; shoesYen?: number;
-  name: string; email: string; phone?: string; note?: string; lang: string;
+  name: string; email: string; phone?: string; hotel?: string; note?: string; lang: string;
   golfers?: Golfer[];
 }
 const courseEn = (f: EnquiryFacts) => f.tour.courseEn ?? f.tour.course;
@@ -18,7 +18,7 @@ const courseEn = (f: EnquiryFacts) => f.tour.courseEn ?? f.tour.course;
 const rentalsEn = (f: EnquiryFacts) => { const x = [f.renters ? `rental clubs for ${f.renters}` : "", f.shoeRenters ? `rental shoes for ${f.shoeRenters}` : ""].filter(Boolean); return x.length ? ` (${x.join(", ")})` : ""; };
 const rentalsJa = (f: EnquiryFacts) => { const x = [f.renters ? `レンタルクラブ ${f.renters}名` : "", f.shoeRenters ? `レンタルシューズ ${f.shoeRenters}名` : ""].filter(Boolean); return x.length ? `（${x.join("、")}）` : ""; };
 const golferLinesEn = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "Golfers:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "(name to follow)"}${g.clubs ? ` · rental clubs (${g.hand === "left" ? "left" : "right"}-handed)` : " · own clubs"}${g.shoes ? ` · shoe rental${g.shoeSize ? ` size ${g.shoeSize}` : ""}` : ""}`)] : []);
-const golferLinesJa = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "参加者:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "（未記入）"}${g.clubs ? `／レンタルクラブ（${g.hand === "left" ? "左" : "右"}利き）` : "／クラブ持参"}${g.shoes ? `／シューズレンタル${g.shoeSize ? ` ${g.shoeSize}` : ""}` : ""}`)] : []);
+export const golferLinesJa = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "参加者:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "（未記入）"}${g.clubs ? `／レンタルクラブ（${g.hand === "left" ? "左" : "右"}利き）` : "／クラブ持参"}${g.shoes ? `／シューズレンタル${g.shoeSize ? ` ${g.shoeSize}` : ""}` : ""}`)] : []);
 export interface InternalFacts extends EnquiryFacts { sourceYen: number; feeYen: number; seatsShown: number | null; snapshotUpdatedAt: string | null; tourId: string }
 
 const dateEn = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -55,6 +55,7 @@ export function customerConfirmation(f: EnquiryFacts): { subject: string; text: 
     `Date: ${dateEn(f.tour.date)}`,
     `Departure: ${departureEn(f.tour)}`,
     `Golfers: ${f.people}${rentalsEn(f)}`,
+    ...(f.hotel ? [`Hotel: ${f.hotel}`] : []),
     ...priceLinesEn(f),
     ...golferLinesEn(f),
     ``,
@@ -81,6 +82,7 @@ export function customerConfirmation(f: EnquiryFacts): { subject: string; text: 
     `日程: ${dateJa(f.tour.date)}`,
     `出発: ${f.tour.pickup}${f.tour.departure.time ? ` ${f.tour.departure.time}発` : ""}`,
     `人数: ${f.people}名${rentalsJa(f)}`,
+    ...(f.hotel ? [`宿泊ホテル: ${f.hotel}`] : []),
     ...priceLinesJa(f),
     ...golferLinesJa(f),
     ``,
@@ -111,6 +113,7 @@ export function staffNotification(f: InternalFacts): { subject: string; text: st
       `お名前: ${f.name}`,
       `メール: ${f.email}`,
       `電話: ${f.phone || "—"}`,
+      `宿泊ホテル: ${f.hotel || "—"}`,
       `備考: ${f.note || "—"}`,
       `言語: ${f.lang}`,
       ...golferLinesJa(f),
@@ -144,6 +147,7 @@ export function partnerHandover(f: InternalFacts): { subject: string; text: stri
       `お名前: ${f.name}`,
       `メール: ${f.email}`,
       `電話: ${f.phone || "—"}`,
+      `宿泊ホテル: ${f.hotel || "—"}`,
       `備考: ${f.note || "—"}`,
       `希望言語: ${f.lang}`,
       ...golferLinesJa(f),

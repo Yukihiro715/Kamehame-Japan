@@ -14,7 +14,7 @@ Released to production on 2026-11-02 (owner's approval). Production shows the pa
 - Calendar: a month grid of the published dates (green = seats available, grey = every tour that day sold out); tapping a day filters the list; golfers and departure filters stay.
 - The golf collection page and the custom golf page carry a small "Two ways" cross-link only while the bus page is visible.
 - Each card: course, date, photo (the partner's photo hotlinked with no referrer; a KAMEHAME photo when there is none), seats left or a SOLD OUT badge, departure area / time, a lunch tag (lunch included, a voucher included, no lunch break on a through-play tour, otherwise "available at the clubhouse, pay on the day": lunch is never shown as simply "not included"), the price as **one tax-inclusive total per person**, the enquiry button (disabled when sold out) and "No payment is required to enquire."
-- Enquiry form: golfers (1–8, never more than the seats shown on that tour), one row per golfer (name, rental clubs +¥5,500 with right/left hand, rental shoes +¥2,200 with size; both rentals are added to the total, migration 0006 keeps the shoe count and amount), a live summary with the total, email / phone / notes, the data-sharing consent, then a thank-you with the reference (`GP-XXXXXX`). The rows are kept as `golfers_json` (migration 0004) and listed in every mail and on the ops detail page.
+- Enquiry form: golfers (1–8, never more than the seats shown on that tour), one row per golfer (name, rental clubs +¥5,500 with right/left hand, rental shoes +¥2,200 with size; both rentals are added to the total, migration 0006 keeps the shoe count and amount), a live summary with the total, email / phone / hotel (optional, migration 0007) / notes, the data-sharing consent, then a thank-you with the reference (`GP-XXXXXX`). The rows are kept as `golfers_json` (migration 0004) and listed in every mail and on the ops detail page.
 
 ## Pricing rules (要件)
 - Customer price per person = partner price + ¥15,000, shown only as one tax-inclusive figure (e.g. partner ¥15,400 → "¥30,400 /person").
@@ -33,7 +33,7 @@ Released to production on 2026-11-02 (owner's approval). Production shows the pa
 ## Enquiry flow (no payment on the site)
 1. The browser posts to `/api/golfpaq/enquiry` (same origin, JSON, honeypot, UUID request id for idempotency).
 2. The server re-reads the fresh snapshot, rejects tours that are gone or have fewer seats (409), prices the enquiry itself and inserts a `bus_tour_enquiries` row (migration `0003_bus_tours.sql`).
-3. Mail, via Resend: customer acknowledgement (totals only, "not yet confirmed, no payment taken"), staff notification to `CONTACT_TO` (with the breakdown), partner hand-over to `GOLFPAQ_PARTNER_TO` (with the breakdown). Slack gets a short line.
+3. Mail, via Resend: customer acknowledgement (totals only, "not yet confirmed, no payment taken"), staff notification to `CONTACT_TO` (with the breakdown), partner hand-over to `GOLFPAQ_PARTNER_TO` (with the breakdown). Slack gets the party (rentals and shoe sizes), hotel, notes and the mail results, naming the partner (internal only).
 4. Status starts at `received`, becomes `handed_over` when the partner mail is sent; operations move it on from `/ops/bus-tours/`.
 
 Initial operation: KAMEHAME phones the partner to hold the seats; the partner (or operations on the partner's approved route) sends the purchase instructions; the customer pays the seller directly; operations mark `purchased` then `confirmed`.

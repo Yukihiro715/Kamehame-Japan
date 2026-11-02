@@ -50,7 +50,7 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     const closed = tours.find((x) => x.closed && x.date >= g.plusDays(g.firstPublicDay(NOW), 8));
     assert.ok(near && closed, "a near tour and a closed tour");
     const golfers = [{ name: "Test Guest", clubs: true, hand: "left", shoes: true, shoeSize: "26.5 cm" }, { name: "Second Golfer", clubs: false, shoes: false }];
-    const base = { id: t.id, date: t.date, people: 2, golfers, name: "Test Guest", email: "guest@example.com", phone: "+81 90 0000 0000", note: "Right-handed", lang: "en", consent: true, request_id: uuid(1) };
+    const base = { id: t.id, date: t.date, people: 2, golfers, name: "Test Guest", email: "guest@example.com", phone: "+81 90 0000 0000", hotel: "Park Hotel Shinjuku", note: "Right-handed", lang: "en", consent: true, request_id: uuid(1) };
     // guards
     assert.equal((await post(base, env, { origin: "https://evil.example" })).status, 403);
     assert.equal((await post({ ...base, consent: false }, env)).status, 400);
@@ -87,7 +87,9 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     assert.match(customer.text, new RegExp(`Total \\(tax included\\): ¥${body.total.toLocaleString("en-US")}`));
     assert.ok(!customer.text.includes(String(t.sourceYen)) && !/15,000|GOLFPAQ|golfpaq\.net/.test(customer.text), "no partner price, no fee, no partner name or link to the customer");
     assert.match(staff.text, /GOLFPAQ価格/); assert.match(partner.text, /追加分: ¥15,000/);
-    assert.ok(mock.sent.some((m) => m.slack && m.slack.includes(body.reference)));
+    assert.match(customer.text, /Hotel: Park Hotel Shinjuku/); assert.match(partner.text, /宿泊ホテル: Park Hotel Shinjuku/); assert.equal(row.hotel, "Park Hotel Shinjuku");
+    const slack = mock.sent.find((m) => m.slack && m.slack.includes(body.reference)).slack;
+    assert.match(slack, /1\. Test Guest／レンタルクラブ（左利き）／シューズレンタル 26\.5 cm/); assert.match(slack, /宿泊ホテル: Park Hotel Shinjuku/); assert.match(slack, /備考: Right-handed/); assert.match(slack, /提携先（GOLFPAQ）: 送信済み/);
     // the same request id again is the same enquiry
     const again = await (await post(base, env)).json();
     assert.equal(again.reference, body.reference); assert.equal(again.duplicate, true);

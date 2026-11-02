@@ -27,7 +27,7 @@ export const nextStatuses = (s: string): BusStatus[] => NEXT[s as BusStatus] ?? 
 export interface BusEnquiryRow {
   id: string; reference: string; request_id: string; tour_id: string; tour_date: string; course: string; pickup: string; departure_area: string | null; departure_time: string | null;
   people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; shoe_renters?: number; shoes_yen?: number; total_yen: number; seats_shown: number | null; snapshot_updated_at: string | null;
-  name: string; email: string; phone: string | null; note: string | null; lang: string; golfers_json?: string | null; status: string; customer_mail: string | null; staff_mail: string | null; partner_mail: string | null; internal_note: string | null; created_at: string; updated_at: string;
+  name: string; email: string; phone: string | null; hotel?: string | null; note: string | null; lang: string; golfers_json?: string | null; status: string; customer_mail: string | null; staff_mail: string | null; partner_mail: string | null; internal_note: string | null; created_at: string; updated_at: string;
 }
 const nowIso = () => new Date().toISOString();
 const audit = (db: SqlDb, actor: string, action: string, id: string, reason: string | null, after?: unknown) =>
@@ -66,7 +66,7 @@ export function toFacts(r: BusEnquiryRow): InternalFacts {
   if (r.departure_time) departure.time = r.departure_time;
   return {
     reference: r.reference, tour: { course: r.course, courseEn: courseNameEn(r.course), date: r.tour_date, pickup: r.pickup, departure }, people: r.people, renters: r.renters, shoeRenters: r.shoe_renters ?? 0, golfers: golfersOf(r),
-    perPersonYen: r.per_person_yen, toursYen: r.tours_yen, rentalsYen: r.rentals_yen, shoesYen: r.shoes_yen ?? 0, totalYen: r.total_yen, name: r.name, email: r.email, phone: r.phone ?? undefined, note: r.note ?? undefined, lang: r.lang,
+    perPersonYen: r.per_person_yen, toursYen: r.tours_yen, rentalsYen: r.rentals_yen, shoesYen: r.shoes_yen ?? 0, totalYen: r.total_yen, name: r.name, email: r.email, phone: r.phone ?? undefined, hotel: r.hotel ?? undefined, note: r.note ?? undefined, lang: r.lang,
     sourceYen: r.source_yen, feeYen: r.fee_yen || GOLFPAQ_FEE_JPY, seatsShown: r.seats_shown, snapshotUpdatedAt: r.snapshot_updated_at, tourId: r.tour_id,
   };
 }

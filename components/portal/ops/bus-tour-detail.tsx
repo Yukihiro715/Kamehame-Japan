@@ -5,7 +5,7 @@ import { api, errorText, jst, yen } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, ReasonAction, Table } from "../ui";
 
 type Rec = Record<string, unknown>;
-interface Enquiry extends Rec { id: string; reference: string; status: string; statusJa: string; next: string[]; internal_note: string | null; people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; shoe_renters?: number; shoes_yen?: number; total_yen: number; marginYen: number; name: string; email: string; phone: string | null; note: string | null; lang: string; golfers: { name: string; clubs: boolean; hand?: string; shoes: boolean; shoeSize?: string }[] }
+interface Enquiry extends Rec { id: string; reference: string; status: string; statusJa: string; next: string[]; internal_note: string | null; people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; shoe_renters?: number; shoes_yen?: number; total_yen: number; marginYen: number; name: string; email: string; phone: string | null; hotel?: string | null; note: string | null; lang: string; golfers: { name: string; clubs: boolean; hand?: string; shoes: boolean; shoeSize?: string }[] }
 interface Detail { enquiry: Enquiry; logs: Rec[]; draft: { subject: string; text: string } }
 
 const s = (v: unknown) => (v === null || v === undefined || v === "" ? "—" : String(v));
@@ -42,6 +42,7 @@ export function OpsBusTourDetail({ id }: { id: string }) {
           <dt>受付日時</dt><dd>{jst(String(e.created_at))}</dd>
           <dt>表示残席 / データ更新</dt><dd>{s(e.seats_shown)} / {e.snapshot_updated_at ? jst(String(e.snapshot_updated_at)) : "—"}</dd>
           <dt>お客様</dt><dd>{e.name} · {e.email} · {s(e.phone)} · 言語 {e.lang}</dd>
+          <dt>宿泊ホテル</dt><dd>{s(e.hotel)}</dd>
           <dt>備考（お客様記入）</dt><dd>{s(e.note)}</dd>
           <dt>メール</dt><dd>顧客 {MAIL[String(e.customer_mail)] ?? "—"} / 社内 {MAIL[String(e.staff_mail)] ?? "—"} / 提携先 {MAIL[String(e.partner_mail)] ?? "—"}</dd>
         </dl>

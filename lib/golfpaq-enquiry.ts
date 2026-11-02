@@ -7,7 +7,7 @@ import { loadCourseNames } from "./golf-courses-db";
 import { recipientAllowed, type PortalMailEnv } from "@/lib/portal/mail";
 import { notifySlack } from "@/lib/slack";
 import { GOLFPAQ_FEE_JPY, enquiryTotal, firstPublicDay, readGolfpaqSnapshot, snapshotIsFresh, toPublicTour, type GolfpaqKv } from "./golfpaq";
-import { customerConfirmation, partnerHandover, staffNotification, type Golfer, type InternalFacts } from "./golfpaq-mail";
+import { customerConfirmation, golferLinesJa, partnerHandover, staffNotification, type Golfer, type InternalFacts } from "./golfpaq-mail";
 
 export interface GolfpaqEnquiryEnv extends PortalMailEnv {
   READY_STATE?: GolfpaqKv; DB?: unknown; CONTACT_TO?: string; SLACK_WEBHOOK_URL?: string;
@@ -41,7 +41,7 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   if (bodyText.length > 8000) return json({ ok: false }, 413);
   let b: Record<string, unknown>;
   try { b = JSON.parse(bodyText); } catch { return json({ ok: false, error: "invalid" }, 400); }
-  const id = clean(b.id, 80), date = clean(b.date, 12), name = clean(b.name, 120), email = clean(b.email, 200).toLowerCase(), phone = clean(b.phone, 40), note = typeof b.note === "string" ? b.note.trim().slice(0, 1000) : "";
+  const id = clean(b.id, 80), date = clean(b.date, 12), name = clean(b.name, 120), email = clean(b.email, 200).toLowerCase(), phone = clean(b.phone, 40), hotel = clean(b.hotel, 120), note = typeof b.note === "string" ? b.note.trim().slice(0, 1000) : "";
   const lang = ["en", "ja", "es", "fr", "zh-tw"].includes(String(b.lang)) ? String(b.lang) : "en";
   const people = Number(b.people);
   // One row per golfer when the form sends them; otherwise the older rental checkbox + count.
@@ -70,13 +70,13 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   const reference = newReference(), at = now.toISOString();
   const facts: InternalFacts = {
     reference, tour: pub, people, renters, shoeRenters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, shoesYen: money.shoes, totalYen: money.total,
-    name, email, phone: phone || undefined, note: note || undefined, lang, ...(golfers ? { golfers } : {}), sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
+    name, email, phone: phone || undefined, hotel: hotel || undefined, note: note || undefined, lang, ...(golfers ? { golfers } : {}), sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
   };
   if (db) {
     await db.run(
-      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, shoe_renters, shoes_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, note, lang, golfers_json, status, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
-      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, shoeRenters, money.shoes, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
+      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, shoe_renters, shoes_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, hotel, note, lang, golfers_json, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
+      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, shoeRenters, money.shoes, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, hotel || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
   }
   const from = "KAMEHAME JAPAN <hello@kamehame-japan.com>";
   const [customerMail, staffMail, partnerMail] = await Promise.all([
@@ -88,6 +88,18 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
     await db.run(`UPDATE bus_tour_enquiries SET customer_mail = ?, staff_mail = ?, partner_mail = ?, status = ?, updated_at = ? WHERE reference = ?`,
       [customerMail, staffMail, partnerMail, partnerMail === "sent" ? "handed_over" : "received", new Date().toISOString(), reference]);
   }
-  try { await notifySlack(env.SLACK_WEBHOOK_URL, { text: `⛳ 乗合ゴルフ問い合わせ ${reference}\n${tour.date} ${tour.course} / ${people}名（レンタルクラブ${renters}・シューズ${shoeRenters}）/ 総額 ¥${money.total.toLocaleString("en-US")}\n顧客メール: ${customerMail} / 提携先: ${partnerMail}` }); } catch { /* best effort */ }
+  // Slack (internal): who, what they rent, where they stay and what they wrote, plus whether each mail went out.
+  const mailJa: Record<string, string> = { sent: "送信済み", blocked: "送信制限（検証環境）", failed: "送信失敗", unconfigured: "未設定（宛先なし）" };
+  const slackLines = [
+    `⛳ 乗合ゴルフ問い合わせ ${reference}`,
+    `${tour.date} ${tour.course} / ${tour.pickup}${pub.departure.time ? ` ${pub.departure.time}発` : ""}`,
+    `${people}名 / 総額 ¥${money.total.toLocaleString("en-US")}（レンタルクラブ ${renters}名 ¥${money.rentals.toLocaleString("en-US")}・レンタルシューズ ${shoeRenters}名 ¥${money.shoes.toLocaleString("en-US")}）`,
+    ...golferLinesJa(facts).filter(Boolean),
+    `お名前: ${name} / メール: ${email} / 電話: ${phone || "—"} / 言語: ${lang}`,
+    `宿泊ホテル: ${hotel || "—"}`,
+    `備考: ${note || "—"}`,
+    `顧客メール: ${mailJa[customerMail] ?? customerMail} / 社内: ${mailJa[staffMail] ?? staffMail} / 提携先（GOLFPAQ）: ${mailJa[partnerMail] ?? partnerMail}`,
+  ];
+  try { await notifySlack(env.SLACK_WEBHOOK_URL, { text: slackLines.join("\n") }); } catch { /* best effort */ }
   return json({ ok: true, reference, total: money.total, customerMail });
 }

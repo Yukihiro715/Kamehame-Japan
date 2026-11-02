@@ -203,7 +203,7 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
   const maxPeople = Math.max(1, Math.min(MAX_PEOPLE, tour.seats));
   const [people, setPeople] = useState(Math.min(Math.max(initialPeople, 1), maxPeople));
   const [golfers, setGolfers] = useState<GolferRow[]>(() => Array.from({ length: MAX_PEOPLE }, emptyGolfer));
-  const [name, setName] = useState(""), [email, setEmail] = useState(""), [phone, setPhone] = useState(""), [note, setNote] = useState(""), [consent, setConsent] = useState(false), [website, setWebsite] = useState("");
+  const [name, setName] = useState(""), [email, setEmail] = useState(""), [phone, setPhone] = useState(""), [hotel, setHotel] = useState(""), [note, setNote] = useState(""), [consent, setConsent] = useState(false), [website, setWebsite] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle"), [error, setError] = useState<string | null>(null), [reference, setReference] = useState("");
   const [requestId] = useState(() => (typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : ""));
   // The party is the first `people` rows; the lead golfer's name is the contact name.
@@ -222,7 +222,7 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
     setStatus("sending"); setError(null);
     try {
       const payload = {
-        id: tour.id, date: tour.date, people, rental: renters > 0, renters, name, email, phone, note, lang, consent, request_id: requestId, website,
+        id: tour.id, date: tour.date, people, rental: renters > 0, renters, name, email, phone, hotel, note, lang, consent, request_id: requestId, website,
         golfers: party.map((g) => ({ name: g.name.trim(), clubs: g.clubs, hand: g.hand, shoes: g.shoes, shoeSize: g.shoes ? g.shoeSize.trim() : "" })),
       };
       const r = await fetch("/api/golfpaq/enquiry", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
@@ -285,6 +285,7 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
       <div className="gb-fields">
         <label><span>{C.email}</span><input required type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={200} autoComplete="email" /></label>
         <label><span>{C.phone}</span><input name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={40} autoComplete="tel" /></label>
+        <label className="gb-full"><span>{C.hotel}</span><input name="hotel" value={hotel} onChange={(e) => setHotel(e.target.value)} maxLength={120} placeholder={C.hotelHint} /></label>
         <label className="gb-full"><span>{C.notes}</span><textarea name="note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000} rows={3} placeholder={C.notesHint} /></label>
         <label className="gb-hp" aria-hidden="true"><input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label>
       </div>

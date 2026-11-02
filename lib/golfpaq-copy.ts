@@ -39,7 +39,7 @@ export interface BusCopy {
   goodH: string; good: { title: string; body: string }[];
   faqH: string; faq: { q: string; a: string }[];
   formH: string; golfers: string; golfersMax: string; rentalLabel: string; rentalCount: string; rentalCountHint: string;
-  partyH: string; partyLede: string; golferN: string; golferName: string; golferLead: string; golferClubs: string; golferHand: string; handRight: string; handLeft: string; golferShoes: string; golferShoeSize: string; shoeSizeHint: string; shoesNote: string; name: string; email: string; phone: string; notes: string; notesHint: string; consent: string; send: string; sending: string;
+  partyH: string; partyLede: string; golferN: string; golferName: string; golferLead: string; golferClubs: string; golferHand: string; handRight: string; handLeft: string; golferShoes: string; golferShoeSize: string; shoeSizeHint: string; shoesNote: string; name: string; email: string; phone: string; hotel: string; hotelHint: string; notes: string; notesHint: string; consent: string; send: string; sending: string;
   summaryPerPerson: string; summaryRental: string; summaryShoes: string; summaryTotal: string; taxIncluded: string;
   doneH: string; doneLines: string[]; doneRef: string; doneAgain: string;
   errors: Record<string, string>;
@@ -202,7 +202,7 @@ const en: BusCopy = {
   formH: "Enquire about this tour", golfers: "Golfers", golfersMax: "up to {n} seats left on this tour", rentalLabel: "Add Rental Clubs (+¥5,500 per person)", rentalCount: "How many golfers need rental clubs?", rentalCountHint: "Add which hand (right/left) and your heights in the notes.",
   partyH: "Your party", partyLede: "One line per golfer. Rental clubs are ¥5,500 and rental shoes ¥2,200 per person, both added to the total. Give the shoe size in cm, US or EU.",
   golferN: "Golfer {n}", golferName: "Name", golferLead: "Lead golfer (you)", golferClubs: "Rental clubs (+¥5,500)", golferHand: "Hand", handRight: "Right", handLeft: "Left", golferShoes: "Rental shoes (+¥2,200)", golferShoeSize: "Shoe size", shoeSizeHint: "e.g. 26.5 cm, US 9, EU 42", shoesNote: "Rental shoes are arranged in the size you give; availability is confirmed with your booking.",
-  name: "Your name", email: "Email", phone: "Phone or WhatsApp (optional)", notes: "Notes (optional)", notesHint: "Hotel area, handedness and height for rental clubs, dietary needs, anything else.",
+  name: "Your name", email: "Email", phone: "Phone or WhatsApp (optional)", hotel: "Hotel in Japan (optional)", hotelHint: "Where you are staying, so the travel partner can advise on getting to the departure point", notes: "Notes (optional)", notesHint: "Height for rental clubs, dietary needs, anything else.",
   consent: "I understand that this is a free enquiry, not a booking, and that KAMEHAME JAPAN will share these details with its travel partner so they can email me the purchase instructions.",
   send: "Send Enquiry", sending: "Sending…",
   summaryPerPerson: "Tour price", summaryRental: "Rental clubs", summaryShoes: "Rental shoes", summaryTotal: "Total", taxIncluded: "tax included",
@@ -369,7 +369,7 @@ const ja: BusCopy = {
   formH: "このツアーについて問い合わせる", golfers: "人数", golfersMax: "このツアーの残席は{n}席です", rentalLabel: "レンタルクラブを追加（1人 +¥5,500）", rentalCount: "レンタルクラブが必要な人数", rentalCountHint: "右利き・左利きと身長を備考欄にお書きください。",
   partyH: "参加者", partyLede: "参加者ごとに1行ずつ。レンタルクラブは1人 ¥5,500、レンタルシューズは1人 ¥2,200 で、いずれも合計に加算します。シューズサイズはcmでご記入ください。",
   golferN: "参加者 {n}", golferName: "お名前", golferLead: "代表者（あなた）", golferClubs: "レンタルクラブ（+¥5,500）", golferHand: "利き手", handRight: "右", handLeft: "左", golferShoes: "レンタルシューズ（+¥2,200）", golferShoeSize: "シューズサイズ", shoeSizeHint: "例: 26.5 cm", shoesNote: "レンタルシューズはご記入のサイズで手配します。ご用意の可否は予約時にご案内します。",
-  name: "お名前", email: "メールアドレス", phone: "電話番号またはWhatsApp（任意）", notes: "備考（任意）", notesHint: "ご滞在ホテルのエリア、レンタルクラブの利き手と身長、食事のご要望など。",
+  name: "お名前", email: "メールアドレス", phone: "電話番号またはWhatsApp（任意）", hotel: "ご滞在ホテル（任意）", hotelHint: "集合場所までの行き方をご案内するため", notes: "備考（任意）", notesHint: "レンタルクラブの身長、食事のご要望など。",
   consent: "これは無料のお問い合わせであり予約ではないこと、また購入案内をメールでお送りするためにKAMEHAME JAPANがこの内容を提携旅行会社と共有することを理解しました。",
   send: "問い合わせを送る", sending: "送信中…",
   summaryPerPerson: "ツアー料金", summaryRental: "レンタルクラブ", summaryShoes: "レンタルシューズ", summaryTotal: "合計", taxIncluded: "税込",
