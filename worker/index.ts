@@ -2,6 +2,7 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { publishCheckoutReady, type ReadyStateKv } from "../lib/experience-checkout";
+import { refreshGolfpaqSnapshot } from "../lib/golfpaq";
 import { d1Db, isD1Like } from "../lib/referral/db";
 import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
 
@@ -213,6 +214,7 @@ const scheduled = {
    *  checkout is ready and publish the answer to KV for the page renders. */
   async scheduled(_event: unknown, env: Env, ctx: ExecutionContext) {
     ctx.waitUntil(publishCheckoutReady(env as unknown as Parameters<typeof publishCheckoutReady>[0]));
+    ctx.waitUntil(refreshGolfpaqSnapshot(env.READY_STATE).catch((e) => console.error("golfpaq refresh:", e instanceof Error ? e.message : "unavailable")));
   },
 };
 
