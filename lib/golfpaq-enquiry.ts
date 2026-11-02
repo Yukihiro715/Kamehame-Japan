@@ -47,6 +47,7 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   // One row per golfer when the form sends them; otherwise the older rental checkbox + count.
   const golfers: Golfer[] | null = Array.isArray(b.golfers) ? b.golfers.slice(0, MAX_PEOPLE).map((g) => { const x = (g ?? {}) as Record<string, unknown>; return { name: clean(x.name, 80), clubs: x.clubs === true, ...(x.clubs === true ? { hand: x.hand === "left" ? "left" as const : "right" as const } : {}), shoes: x.shoes === true, ...(x.shoes === true && clean(x.shoeSize, 12) ? { shoeSize: clean(x.shoeSize, 12) } : {}) }; }) : null;
   const renters = golfers ? golfers.filter((g) => g.clubs).length : b.rental === true ? Number(b.renters ?? people) : 0;
+  const shoeRenters = golfers ? golfers.filter((g) => g.shoes).length : 0;
   const requestId = typeof b.request_id === "string" && UUID.test(b.request_id) ? b.request_id.toLowerCase() : null;
   if (b.website) return json({ ok: true, reference: newReference() }); // honeypot: pretend
   if (!/^\d+-\d+-\d+$/.test(id) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || date < firstPublicDay(now) || !Number.isInteger(people) || people < 1 || people > MAX_PEOPLE || !Number.isInteger(renters) || renters < 0 || renters > people || (golfers && golfers.length !== people) || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || b.consent !== true || !requestId) {
@@ -58,7 +59,7 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   const names = await loadCourseNames(isD1Like(env.DB) ? d1Db(env.DB) : null, env.READY_STATE);
   const pub = tour ? toPublicTour(tour, now, names) : null;
   if (!tour || !pub || pub.soldOut || pub.seats < people) return json({ ok: false, error: "availability_changed" }, 409);
-  const money = enquiryTotal(tour.perPersonYen, people, renters);
+  const money = enquiryTotal(tour.perPersonYen, people, renters, shoeRenters);
   const db = isD1Like(env.DB) ? d1Db(env.DB) : null;
 
   // Idempotent on the browser's request id.
@@ -68,14 +69,14 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   }
   const reference = newReference(), at = now.toISOString();
   const facts: InternalFacts = {
-    reference, tour: pub, people, renters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, totalYen: money.total,
+    reference, tour: pub, people, renters, shoeRenters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, shoesYen: money.shoes, totalYen: money.total,
     name, email, phone: phone || undefined, note: note || undefined, lang, ...(golfers ? { golfers } : {}), sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
   };
   if (db) {
     await db.run(
-      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, note, lang, golfers_json, status, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
-      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
+      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, shoe_renters, shoes_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, note, lang, golfers_json, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
+      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, shoeRenters, money.shoes, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
   }
   const from = "KAMEHAME JAPAN <hello@kamehame-japan.com>";
   const [customerMail, staffMail, partnerMail] = await Promise.all([
@@ -87,6 +88,6 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
     await db.run(`UPDATE bus_tour_enquiries SET customer_mail = ?, staff_mail = ?, partner_mail = ?, status = ?, updated_at = ? WHERE reference = ?`,
       [customerMail, staffMail, partnerMail, partnerMail === "sent" ? "handed_over" : "received", new Date().toISOString(), reference]);
   }
-  try { await notifySlack(env.SLACK_WEBHOOK_URL, { text: `⛳ 乗合ゴルフ問い合わせ ${reference}\n${tour.date} ${tour.course} / ${people}名（レンタル${renters}）/ 総額 ¥${money.total.toLocaleString("en-US")}\n顧客メール: ${customerMail} / 提携先: ${partnerMail}` }); } catch { /* best effort */ }
+  try { await notifySlack(env.SLACK_WEBHOOK_URL, { text: `⛳ 乗合ゴルフ問い合わせ ${reference}\n${tour.date} ${tour.course} / ${people}名（レンタルクラブ${renters}・シューズ${shoeRenters}）/ 総額 ¥${money.total.toLocaleString("en-US")}\n顧客メール: ${customerMail} / 提携先: ${partnerMail}` }); } catch { /* best effort */ }
   return json({ ok: true, reference, total: money.total, customerMail });
 }

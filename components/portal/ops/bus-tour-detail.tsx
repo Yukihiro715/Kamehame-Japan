@@ -5,7 +5,7 @@ import { api, errorText, jst, yen } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, ReasonAction, Table } from "../ui";
 
 type Rec = Record<string, unknown>;
-interface Enquiry extends Rec { id: string; reference: string; status: string; statusJa: string; next: string[]; internal_note: string | null; people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; total_yen: number; marginYen: number; name: string; email: string; phone: string | null; note: string | null; lang: string; golfers: { name: string; clubs: boolean; hand?: string; shoes: boolean; shoeSize?: string }[] }
+interface Enquiry extends Rec { id: string; reference: string; status: string; statusJa: string; next: string[]; internal_note: string | null; people: number; renters: number; source_yen: number; fee_yen: number; per_person_yen: number; tours_yen: number; rentals_yen: number; shoe_renters?: number; shoes_yen?: number; total_yen: number; marginYen: number; name: string; email: string; phone: string | null; note: string | null; lang: string; golfers: { name: string; clubs: boolean; hand?: string; shoes: boolean; shoeSize?: string }[] }
 interface Detail { enquiry: Enquiry; logs: Rec[]; draft: { subject: string; text: string } }
 
 const s = (v: unknown) => (v === null || v === undefined || v === "" ? "—" : String(v));
@@ -38,7 +38,7 @@ export function OpsBusTourDetail({ id }: { id: string }) {
         <dl className="pt-kv">
           <dt>ツアー</dt><dd>{s(e.course)}（ID {s(e.tour_id)}）</dd>
           <dt>開催日 / 出発</dt><dd>{s(e.tour_date)} / {s(e.pickup)}{e.departure_time ? `（${String(e.departure_time)}発）` : ""}</dd>
-          <dt>人数 / レンタル</dt><dd>{e.people}名 / {e.renters ? `${e.renters}名` : "なし"}</dd>
+          <dt>人数 / レンタル</dt><dd>{e.people}名 / クラブ {e.renters ? `${e.renters}名` : "なし"} · シューズ {e.shoe_renters ? `${e.shoe_renters}名` : "なし"}</dd>
           <dt>受付日時</dt><dd>{jst(String(e.created_at))}</dd>
           <dt>表示残席 / データ更新</dt><dd>{s(e.seats_shown)} / {e.snapshot_updated_at ? jst(String(e.snapshot_updated_at)) : "—"}</dd>
           <dt>お客様</dt><dd>{e.name} · {e.email} · {s(e.phone)} · 言語 {e.lang}</dd>
@@ -49,17 +49,18 @@ export function OpsBusTourDetail({ id }: { id: string }) {
 
       {e.golfers.length > 0 && (
         <Card title="参加者">
-          <Table head={["#", "お名前", "クラブ", "利き手", "シューズ", "サイズ"]} rows={e.golfers.map((g, i) => [i + 1, g.name || "—", g.clubs ? "レンタル" : "持参", g.clubs ? (g.hand === "left" ? "左" : "右") : "—", g.shoes ? "レンタル希望" : "—", g.shoeSize ?? "—"])} compact />
-          <p className="pt-small">シューズレンタルはゴルフ場の在庫・料金次第です。提携先への引き継ぎメールにも同じ内容を載せています。</p>
+          <Table head={["#", "お名前", "クラブ", "利き手", "シューズ", "サイズ"]} rows={e.golfers.map((g, i) => [i + 1, g.name || "—", g.clubs ? "レンタル" : "持参", g.clubs ? (g.hand === "left" ? "左" : "右") : "—", g.shoes ? "レンタル（¥2,200）" : "—", g.shoeSize ?? "—"])} compact />
+          <p className="pt-small">レンタルシューズは1人 ¥2,200 でお客様総額に加算済みです。サイズを含め、提携先への引き継ぎメールにも同じ内容を載せています。</p>
         </Card>
       )}
       <Card title="料金（社内内訳・非公開）">
-        <p className="pt-note-box">お客様が見ているのは「ツアー料金 {yen(e.per_person_yen)} /人（税込）」「レンタル ¥5,500 /人」「合計 {yen(e.total_yen)}」だけです。仕入価格・上乗せ分・粗利は公開ページ・お客様向けメールには出しません。</p>
+        <p className="pt-note-box">お客様が見ているのは「ツアー料金 {yen(e.per_person_yen)} /人（税込）」「レンタルクラブ ¥5,500 /人」「レンタルシューズ ¥2,200 /人」「合計 {yen(e.total_yen)}」だけです。仕入価格・上乗せ分・粗利は公開ページ・お客様向けメールには出しません。</p>
         <Table head={["項目", "単価", "数量", "金額"]} rows={[
           ["GOLFPAQ価格（仕入）", yen(e.source_yen), `${e.people}名`, yen(e.source_yen * e.people)],
           ["KAMEHAME上乗せ分", yen(e.fee_yen), `${e.people}名`, yen(e.marginYen)],
           ["お客様表示ツアー料金", yen(e.per_person_yen), `${e.people}名`, yen(e.tours_yen)],
           ["レンタルクラブ", "¥5,500", `${e.renters}名`, yen(e.rentals_yen)],
+          ["レンタルシューズ", "¥2,200", `${e.shoe_renters ?? 0}名`, yen(e.shoes_yen ?? 0)],
           [<b key="t">お客様総額（税込）</b>, "", "", <b key="v">{yen(e.total_yen)}</b>],
         ]} compact />
       </Card>

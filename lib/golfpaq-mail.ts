@@ -8,10 +8,15 @@ export interface Golfer { name: string; clubs: boolean; hand?: "right" | "left";
 export interface EnquiryFacts {
   reference: string; tour: Pick<PublicTour, "course" | "date" | "departure" | "pickup"> & { courseEn?: string };
   people: number; renters: number; perPersonYen: number; toursYen: number; rentalsYen: number; totalYen: number;
+  /** Rental shoes (¥2,200 each, in the total); absent on enquiries from before the option. */
+  shoeRenters?: number; shoesYen?: number;
   name: string; email: string; phone?: string; note?: string; lang: string;
   golfers?: Golfer[];
 }
 const courseEn = (f: EnquiryFacts) => f.tour.courseEn ?? f.tour.course;
+/** " (rental clubs for 2, rental shoes for 1)" or "". */
+const rentalsEn = (f: EnquiryFacts) => { const x = [f.renters ? `rental clubs for ${f.renters}` : "", f.shoeRenters ? `rental shoes for ${f.shoeRenters}` : ""].filter(Boolean); return x.length ? ` (${x.join(", ")})` : ""; };
+const rentalsJa = (f: EnquiryFacts) => { const x = [f.renters ? `レンタルクラブ ${f.renters}名` : "", f.shoeRenters ? `レンタルシューズ ${f.shoeRenters}名` : ""].filter(Boolean); return x.length ? `（${x.join("、")}）` : ""; };
 const golferLinesEn = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "Golfers:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "(name to follow)"}${g.clubs ? ` · rental clubs (${g.hand === "left" ? "left" : "right"}-handed)` : " · own clubs"}${g.shoes ? ` · shoe rental${g.shoeSize ? ` size ${g.shoeSize}` : ""}` : ""}`)] : []);
 const golferLinesJa = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "参加者:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "（未記入）"}${g.clubs ? `／レンタルクラブ（${g.hand === "left" ? "左" : "右"}利き）` : "／クラブ持参"}${g.shoes ? `／シューズレンタル${g.shoeSize ? ` ${g.shoeSize}` : ""}` : ""}`)] : []);
 export interface InternalFacts extends EnquiryFacts { sourceYen: number; feeYen: number; seatsShown: number | null; snapshotUpdatedAt: string | null; tourId: string }
@@ -24,12 +29,14 @@ const departureEn = (t: EnquiryFacts["tour"]) => `${t.departure.area}${t.departu
 export function priceLinesEn(f: EnquiryFacts): string[] {
   const lines = [`Tour price: ${yen(f.perPersonYen)} /person × ${f.people} = ${yen(f.toursYen)}`];
   if (f.renters > 0) lines.push(`Rental clubs: ¥5,500 /person × ${f.renters} = ${yen(f.rentalsYen)}`);
+  if (f.shoeRenters) lines.push(`Rental shoes: ¥2,200 /person × ${f.shoeRenters} = ${yen(f.shoesYen ?? 0)}`);
   lines.push(`Total (tax included): ${yen(f.totalYen)}`);
   return lines;
 }
 export function priceLinesJa(f: EnquiryFacts): string[] {
   const lines = [`ツアー料金: ${yen(f.perPersonYen)} /人 × ${f.people}名 = ${yen(f.toursYen)}`];
   if (f.renters > 0) lines.push(`レンタルクラブ: ¥5,500 /人 × ${f.renters}名 = ${yen(f.rentalsYen)}`);
+  if (f.shoeRenters) lines.push(`レンタルシューズ: ¥2,200 /人 × ${f.shoeRenters}名 = ${yen(f.shoesYen ?? 0)}`);
   lines.push(`合計（税込）: ${yen(f.totalYen)}`);
   return lines;
 }
@@ -47,7 +54,7 @@ export function customerConfirmation(f: EnquiryFacts): { subject: string; text: 
     `Tour: ${courseEn(f)}`,
     `Date: ${dateEn(f.tour.date)}`,
     `Departure: ${departureEn(f.tour)}`,
-    `Golfers: ${f.people}${f.renters ? ` (rental clubs for ${f.renters})` : ""}`,
+    `Golfers: ${f.people}${rentalsEn(f)}`,
     ...priceLinesEn(f),
     ...golferLinesEn(f),
     ``,
@@ -73,7 +80,7 @@ export function customerConfirmation(f: EnquiryFacts): { subject: string; text: 
     `ツアー: ${f.tour.course}`,
     `日程: ${dateJa(f.tour.date)}`,
     `出発: ${f.tour.pickup}${f.tour.departure.time ? ` ${f.tour.departure.time}発` : ""}`,
-    `人数: ${f.people}名${f.renters ? `（レンタルクラブ ${f.renters}名）` : ""}`,
+    `人数: ${f.people}名${rentalsJa(f)}`,
     ...priceLinesJa(f),
     ...golferLinesJa(f),
     ``,
@@ -90,13 +97,14 @@ export function staffNotification(f: InternalFacts): { subject: string; text: st
       `受付番号: ${f.reference}`,
       `ツアー: ${f.tour.course}（${f.tourId}）`,
       `日程: ${f.tour.date} / 出発: ${f.tour.pickup}${f.tour.departure.time ? ` ${f.tour.departure.time}` : ""}`,
-      `人数: ${f.people}名 / レンタル: ${f.renters}名 / 表示残席: ${f.seatsShown ?? "?"}（データ更新 ${f.snapshotUpdatedAt ?? "?"}）`,
+      `人数: ${f.people}名 / レンタルクラブ: ${f.renters}名 / レンタルシューズ: ${f.shoeRenters ?? 0}名 / 表示残席: ${f.seatsShown ?? "?"}（データ更新 ${f.snapshotUpdatedAt ?? "?"}）`,
       ``,
       `【社内内訳・非公開】`,
       `GOLFPAQ価格: ${yen(f.sourceYen)} /人`,
       `KAMEHAME追加分: ${yen(f.feeYen)} /人`,
       `お客様表示: ${yen(f.perPersonYen)} /人 × ${f.people} = ${yen(f.toursYen)}`,
-      `レンタル: ¥5,500 × ${f.renters} = ${yen(f.rentalsYen)}`,
+      `レンタルクラブ: ¥5,500 × ${f.renters} = ${yen(f.rentalsYen)}`,
+      `レンタルシューズ: ¥2,200 × ${f.shoeRenters ?? 0} = ${yen(f.shoesYen ?? 0)}`,
       `お客様総額: ${yen(f.totalYen)}`,
       `粗利相当（レンタル除く）: ${yen(f.feeYen * f.people)}`,
       ``,
@@ -125,7 +133,8 @@ export function partnerHandover(f: InternalFacts): { subject: string; text: stri
       `出発プラン: ${f.tour.pickup}${f.tour.departure.time ? `（${f.tour.departure.time}発）` : ""}`,
       `参加人数: ${f.people}名`,
       `レンタルクラブ希望: ${f.renters}名`,
-      `お客様表示料金: ${yen(f.perPersonYen)} /人（税込）、レンタル ¥5,500 /人`,
+      `レンタルシューズ希望: ${f.shoeRenters ?? 0}名（サイズは参加者欄）`,
+      `お客様表示料金: ${yen(f.perPersonYen)} /人（税込）、レンタルクラブ ¥5,500 /人、レンタルシューズ ¥2,200 /人`,
       `お客様総額: ${yen(f.totalYen)}（税込）`,
       ``,
       `【内訳（お客様には非表示）】`,
@@ -157,7 +166,7 @@ export function purchaseGuidanceDraft(f: EnquiryFacts, seller: { name: string; r
       `Tour: ${courseEn(f)}`,
       `Date: ${dateEn(f.tour.date)}`,
       `Departure: ${departureEn(f.tour)}`,
-      `Golfers: ${f.people}${f.renters ? ` (rental clubs for ${f.renters})` : ""}`,
+      `Golfers: ${f.people}${rentalsEn(f)}`,
       ...priceLinesEn(f),
       ...golferLinesEn(f),
       ``,

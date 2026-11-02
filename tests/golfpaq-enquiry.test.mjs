@@ -67,10 +67,10 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.match(body.reference, /^GP-[2-9A-Z]{6}$/);
-    assert.equal(body.total, t.perPersonYen * 2 + 5500);
+    assert.equal(body.total, t.perPersonYen * 2 + 5500 + 2200, "clubs for one, shoes for one");
     const row = await db.first(`SELECT * FROM bus_tour_enquiries WHERE reference = ?`, [body.reference]);
     assert.equal(row.source_yen, t.sourceYen); assert.equal(row.fee_yen, 15000); assert.equal(row.per_person_yen, t.sourceYen + 15000);
-    assert.equal(row.total_yen, body.total); assert.equal(row.renters, 1, "renters counted from the golfer rows"); assert.equal(row.status, "handed_over"); assert.equal(row.partner_mail, "sent");
+    assert.equal(row.total_yen, body.total); assert.equal(row.renters, 1, "renters counted from the golfer rows"); assert.equal(row.shoe_renters, 1); assert.equal(row.shoes_yen, 2200); assert.equal(row.status, "handed_over"); assert.equal(row.partner_mail, "sent");
     assert.deepEqual(JSON.parse(row.golfers_json), [{ name: "Test Guest", clubs: true, hand: "left", shoes: true, shoeSize: "26.5 cm" }, { name: "Second Golfer", clubs: false, shoes: false }]);
     // mails: customer gets totals only; staff and partner get the breakdown
     const customer = mock.sent.find((m) => m.to?.[0] === "guest@example.com");
@@ -79,7 +79,8 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     assert.ok(customer && staff && partner);
     assert.match(customer.text, /Your booking is not yet confirmed, and no payment has been taken/);
     assert.match(customer.text, new RegExp(`¥${(t.sourceYen + 15000).toLocaleString("en-US")} /person × 2`));
-    assert.match(customer.text, /Rental clubs: ¥5,500 \/person × 1/);
+    assert.match(customer.text, /Rental clubs: ¥5,500 \/person × 1/); assert.match(customer.text, /Rental shoes: ¥2,200 \/person × 1 = ¥2,200/); assert.match(customer.text, /Golfers: 2 \(rental clubs for 1, rental shoes for 1\)/);
+    assert.match(partner.text, /レンタルシューズ希望: 1名/);
     assert.match(customer.text, /1\. Test Guest · rental clubs \(left-handed\) · shoe rental size 26\.5 cm/); assert.match(customer.text, /2\. Second Golfer · own clubs/);
     assert.ok(!customer.text.includes(t.course) || /[A-Za-z]/.test(t.course), "the English mail names the course in English");
     assert.match(partner.text, /参加者:/); assert.match(partner.text, /レンタルクラブ（左利き）／シューズレンタル 26\.5 cm/);

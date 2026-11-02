@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, Utensils, X } from "lucide-react";
-import { GOLFPAQ_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
+import { GOLFPAQ_RENTAL_JPY, GOLFPAQ_SHOE_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
 import type { BusCopy } from "@/lib/golfpaq-copy";
 import type { Lang } from "@/lib/i18n";
 import { track } from "@/lib/analytics";
@@ -208,8 +208,12 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
   const [requestId] = useState(() => (typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : ""));
   // The party is the first `people` rows; the lead golfer's name is the contact name.
   const party = golfers.slice(0, people).map((g, i) => (i === 0 ? { ...g, name: name } : g));
-  const renters = party.filter((g) => g.clubs).length;
-  const money = enquiryTotal(tour.perPersonYen, people, renters);
+  const renters = party.filter((g) => g.clubs).length, shoeRenters = party.filter((g) => g.shoes).length;
+  const money = enquiryTotal(tour.perPersonYen, people, renters, shoeRenters);
+  // The thank-you replaces a long form, so bring it into view; an error likewise (the submit button sits at the bottom).
+  const doneRef = useRef<HTMLDivElement>(null), errorRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => { if (status === "done") doneRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }); }, [status]);
+  useEffect(() => { if (error) errorRef.current?.scrollIntoView({ block: "center", behavior: "smooth" }); }, [error]);
   const setGolfer = (i: number, patch: Partial<GolferRow>) => setGolfers((rows) => rows.map((g, k) => (k === i ? { ...g, ...patch } : g)));
 
   async function submit(e: React.FormEvent) {
@@ -225,17 +229,17 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
       const j = (await r.json().catch(() => ({}))) as { ok?: boolean; reference?: string; error?: string };
       if (!r.ok || !j.ok) { setError(C.errors[j.error ?? ""] ?? C.errors.default); setStatus("idle"); return; }
       setReference(j.reference ?? ""); setStatus("done");
-      track("bus_tour_enquiry", { tour_id: tour.id, date: tour.date, golfers: people, rentals: renters, value: money.total, currency: "JPY" });
+      track("bus_tour_enquiry", { tour_id: tour.id, date: tour.date, golfers: people, rentals: renters, shoes: shoeRenters, value: money.total, currency: "JPY" });
     } catch { setError(C.errors.default); setStatus("idle"); }
   }
 
   if (status === "done") {
     return (
-      <div className="gb-form gb-done" role="status">
+      <div className="gb-form gb-done" role="status" ref={doneRef}>
         <h3>{C.doneH}</h3>
         {C.doneLines.map((l) => <p key={l}>{l}</p>)}
         <p className="gb-ref">{C.doneRef}: <code>{reference}</code></p>
-        <p className="gb-small">{courseName(tour, lang)} · {dateLabel(tour.date, lang)} · {people} {C.golfers.toLowerCase()}{renters ? ` · ${C.summaryRental} ×${renters}` : ""} · {C.summaryTotal} <b>{yen(money.total)}</b></p>
+        <p className="gb-small">{courseName(tour, lang)} · {dateLabel(tour.date, lang)} · {people} {C.golfers.toLowerCase()}{renters ? ` · ${C.summaryRental} ×${renters}` : ""}{shoeRenters ? ` · ${C.summaryShoes} ×${shoeRenters}` : ""} · {C.summaryTotal} <b>{yen(money.total)}</b></p>
         <button type="button" className="gb-btn gb-btn-outline gb-btn-small gb-done-again" onClick={onBack}>{C.doneAgain}</button>
       </div>
     );
@@ -274,6 +278,7 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
       <dl className="gb-summary" aria-live="polite">
         <dt>{C.summaryPerPerson}</dt><dd>{yen(tour.perPersonYen)} {C.perPerson} × {people} = <b>{yen(money.tours)}</b></dd>
         {renters > 0 && <><dt>{C.summaryRental}</dt><dd>{yen(GOLFPAQ_RENTAL_JPY)} {C.perPerson} × {renters} = <b>{yen(money.rentals)}</b></dd></>}
+        {shoeRenters > 0 && <><dt>{C.summaryShoes}</dt><dd>{yen(GOLFPAQ_SHOE_RENTAL_JPY)} {C.perPerson} × {shoeRenters} = <b>{yen(money.shoes)}</b></dd></>}
         <dt className="gb-total">{C.summaryTotal}</dt><dd className="gb-total"><b>{yen(money.total)}</b> <small>{C.taxIncluded}</small></dd>
       </dl>
       <p className="gb-small">{C.includesLine}. {C.howAvailability}</p>
@@ -285,7 +290,7 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
       </div>
       <label className="gb-check gb-consent"><input type="checkbox" name="consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} required /> <span>{C.consent}</span></label>
       <div className="gb-how gb-how-form"><b><ShieldCheck size={16} /> {C.howH}</b><p>{C.howBody}</p></div>
-      {error && <p className="gb-error" role="alert">{error}</p>}
+      {error && <p className="gb-error" role="alert" ref={errorRef}>{error}</p>}
       <button type="submit" className="gb-btn gb-btn-big" disabled={status === "sending" || !consent}>{status === "sending" ? C.sending : C.send}</button>
       <p className="gb-nopay"><Check size={13} /> {C.noPayment}</p>
     </form>

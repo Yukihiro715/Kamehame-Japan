@@ -22,6 +22,8 @@ export const GOLFPAQ_SOLD_OUT_DAYS = 3;
 export const GOLFPAQ_LOW_SEAT_DAYS = 7;
 /** Rental clubs, per golfer who needs them (shown as an option). */
 export const GOLFPAQ_RENTAL_JPY = 5500;
+/** Rental shoes, per golfer who needs them (owner's price, 2026-11-02); added to the total like clubs. */
+export const GOLFPAQ_SHOE_RENTAL_JPY = 2200;
 export const GOLFPAQ_SNAPSHOT_KEY = "golfpaq:self-rounds:v3";
 export const GOLFPAQ_DETAIL_PREFIX = "golfpaq:detail:v1:";
 /** English names the cron produced for courses nobody has named yet (lib/golfpaq-translate.ts). */
@@ -110,9 +112,10 @@ export interface GolfpaqKv {
 // ---- money ------------------------------------------------------------------
 
 export const customerPricePerPerson = (sourceYen: number) => sourceYen + GOLFPAQ_FEE_JPY;
-/** The quoted total: golfers × per-person price, plus rental clubs for those who need them. */
-export function enquiryTotal(perPersonYen: number, people: number, renters: number) {
-  return { tours: perPersonYen * people, rentals: GOLFPAQ_RENTAL_JPY * renters, total: perPersonYen * people + GOLFPAQ_RENTAL_JPY * renters };
+/** The quoted total: golfers × per-person price, plus rental clubs and rental shoes for those who need them. */
+export function enquiryTotal(perPersonYen: number, people: number, renters: number, shoeRenters = 0) {
+  const tours = perPersonYen * people, rentals = GOLFPAQ_RENTAL_JPY * renters, shoes = GOLFPAQ_SHOE_RENTAL_JPY * shoeRenters;
+  return { tours, rentals, shoes, total: tours + rentals + shoes };
 }
 export const yen = (n: number) => `¥${n.toLocaleString("en-US")}`;
 

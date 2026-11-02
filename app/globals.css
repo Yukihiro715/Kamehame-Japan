@@ -2156,6 +2156,8 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-golfer-fields input:not([type=checkbox]), .gb-golfer-fields select { font:inherit; font-size:14px; padding:7px 9px; border:1px solid #d9d3c7; border-radius:8px; background:#fff; }
 .gb-golfer-name { flex:1 1 200px; } .gb-golfer-size input { width:140px; }
 @media (max-width:600px) { .gb-golfer-fields { gap:6px 12px; } .gb-golfer-name { flex-basis:100%; } }
+/* 16px fields on phones: iOS Safari zooms the page into any smaller input on focus */
+@media (max-width:700px) { .gb-fields input, .gb-fields select, .gb-fields textarea, .gb-golfer-fields input:not([type=checkbox]), .gb-golfer-fields select, .gb-filters select, .gb-sub select { font-size:16px; } }
 
 /* ---- Landing hero: the two options side by side, custom first ---- */
 .gl-hero { min-height:0; }

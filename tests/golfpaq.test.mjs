@@ -69,9 +69,10 @@ test("public projection: no partner price, no partner link, readable departure",
 
 test("pricing: ¥15,400 → ¥30,400 per person; rental ¥5,500 per renter; totals add up", () => {
   assert.equal(g.customerPricePerPerson(15400), 30400);
-  assert.deepEqual(g.enquiryTotal(30400, 1, 0), { tours: 30400, rentals: 0, total: 30400 });
-  assert.deepEqual(g.enquiryTotal(30400, 1, 1), { tours: 30400, rentals: 5500, total: 35900 });
-  assert.deepEqual(g.enquiryTotal(30400, 3, 2), { tours: 91200, rentals: 11000, total: 102200 });
+  assert.deepEqual(g.enquiryTotal(30400, 1, 0), { tours: 30400, rentals: 0, shoes: 0, total: 30400 });
+  assert.deepEqual(g.enquiryTotal(30400, 1, 1), { tours: 30400, rentals: 5500, shoes: 0, total: 35900 });
+  assert.deepEqual(g.enquiryTotal(30400, 3, 2), { tours: 91200, rentals: 11000, shoes: 0, total: 102200 });
+  assert.deepEqual(g.enquiryTotal(30400, 3, 2, 1), { tours: 91200, rentals: 11000, shoes: 2200, total: 104400 });
   assert.equal(g.yen(30400), "¥30,400");
 });
 

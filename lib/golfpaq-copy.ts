@@ -40,7 +40,7 @@ export interface BusCopy {
   faqH: string; faq: { q: string; a: string }[];
   formH: string; golfers: string; golfersMax: string; rentalLabel: string; rentalCount: string; rentalCountHint: string;
   partyH: string; partyLede: string; golferN: string; golferName: string; golferLead: string; golferClubs: string; golferHand: string; handRight: string; handLeft: string; golferShoes: string; golferShoeSize: string; shoeSizeHint: string; shoesNote: string; name: string; email: string; phone: string; notes: string; notesHint: string; consent: string; send: string; sending: string;
-  summaryPerPerson: string; summaryRental: string; summaryTotal: string; taxIncluded: string;
+  summaryPerPerson: string; summaryRental: string; summaryShoes: string; summaryTotal: string; taxIncluded: string;
   doneH: string; doneLines: string[]; doneRef: string; doneAgain: string;
   errors: Record<string, string>;
   departure: string; departs: string; lunchIncluded: string; lunchSubsidy: string; lunchNot: string; throughPlay: string; throughPlayShort: string; cartIncluded: string; scheduleH: string; highlightsH: string; notesH: string; back: string; details: string;
@@ -76,7 +76,7 @@ const en: BusCopy = {
   heroCustomTag: "Recommended for groups", heroCustomWho: "3+ golfers · families & friends · your own course or date", heroCustomPrice: "About ¥24,500 /person (4 golfers)",
   heroCustomItems: [{ ok: true, text: "Our arrangement fee" }, { ok: true, text: "Green fee & cart (paid at the club)" }, { ok: false, text: "Private transfer, hotel to course (about +¥22,500 /person)" }, { ok: false, text: "Lunch at the clubhouse" }, { ok: false, text: "Rental clubs" }],
   heroBusWho: "1–2 golfers · solo welcome · fixed dates from Tokyo", heroBusPrice: "From {price} /person",
-  heroBusItems: [{ ok: true, text: "Green fee & cart" }, { ok: true, text: "Round-trip coach from Tokyo" }, { ok: true, text: "Tax" }, { ok: false, text: "Lunch at the clubhouse" }, { ok: false, text: "Rental clubs (+¥5,500 /person)" }],
+  heroBusItems: [{ ok: true, text: "Green fee & cart" }, { ok: true, text: "Round-trip coach from Tokyo" }, { ok: true, text: "Tax" }, { ok: false, text: "Lunch at the clubhouse" }, { ok: false, text: "Rental clubs (+¥5,500) and shoes (+¥2,200) /person" }],
   heroIncludedH: "Included", heroOptionalH: "Optional, extra",
   heroCardsNote: "Both: 18 holes on a well-kept Japanese course, English support, nothing to pay to enquire.",
   estimateH: "What custom booking costs, for four golfers",
@@ -136,7 +136,7 @@ const en: BusCopy = {
   costExtra: [
     { item: "Lunch and drinks", note: "At the clubhouse restaurant, roughly ¥1,500–¥2,500, unless the card says lunch is included" },
     { item: "Rental clubs", note: "¥5,500 per person through our enquiry form, or ask us about the course's own sets" },
-    { item: "Golf shoes, glove, balls", note: "Bring your own; some courses rent shoes for a small fee" },
+    { item: "Rental shoes", note: "¥2,200 per person through our enquiry form, in your size; bring your own glove and balls" },
     { item: "Locker and bath", note: "Most courses include them; a few charge a small locker fee" },
     { item: "Travel to the meeting point", note: "Your own transport to Shinjuku or Oimachi" },
     { item: "Travel insurance", note: "Recommended, as for any day out" },
@@ -181,7 +181,7 @@ const en: BusCopy = {
   includedH: "What’s Included",
   included: ["Round-trip shared coach from the departure point in Tokyo", "18 holes of self-play golf (green fee)", "Riding cart where the course provides one", "Tour leader on the day (Japanese-speaking)", "Our English guide with the meeting details after confirmation", "Rental clubs, when you add them to your enquiry (+¥5,500 per person)"],
   notIncludedH: "Not included",
-  notIncluded: ["Lunch and drinks at the clubhouse, unless the tour says lunch is included", "Golf shoes and gloves (bring your own)", "Hotel pick-up and a private guide (see Custom Golf Booking)"],
+  notIncluded: ["Lunch and drinks at the clubhouse, unless the tour says lunch is included", "Golf shoes (rental ¥2,200 per person) and gloves", "Hotel pick-up and a private guide (see Custom Golf Booking)"],
   goodH: "Good to Know",
   good: [
     { title: "Shared rounds", body: "You may be paired with other golfers on the tour. Groups are formed by the tour leader on the day." },
@@ -193,19 +193,19 @@ const en: BusCopy = {
   faq: [
     { q: "Is my tour booked when I send the enquiry?", a: "No. An enquiry is free and takes no payment. Our travel partner emails you the purchase details; your booking is confirmed only after you complete the purchase with them and receive a confirmation." },
     { q: "Who do I pay?", a: "The travel partner named in the purchase instructions. KAMEHAME JAPAN does not collect payment for shared bus tours." },
-    { q: "What does the price include?", a: "The round of golf, the cart and the round-trip coach, tax included. Rental clubs are an option at ¥5,500 per person. Lunch is extra unless the tour says it is included." },
+    { q: "What does the price include?", a: "The round of golf, the cart and the round-trip coach, tax included. Rental clubs (¥5,500) and rental shoes (¥2,200) are options per person. Lunch is extra unless the tour says it is included." },
     { q: "Can I cancel?", a: "Cancellation terms are set by the tour seller and sent to you before you purchase. As published today: free 7 or more days before, ¥2,000 per person 3–6 days before, 50% 1–2 days before, and no refund on the day." },
     { q: "What if the tour is full after I pay?", a: "Seats shown on this site can change before your purchase is processed. If a tour cannot be secured after payment, you will be offered an alternative date or a full refund of that purchase." },
     { q: "Can beginners join?", a: "Tours are for golfers who have played a round before. The pace is relaxed, but you should be comfortable playing 18 holes." },
     { q: "Can I bring my own clubs?", a: "Yes. Clubs travel in the coach's luggage hold. If you would rather not carry them, add rental clubs to your enquiry." },
   ],
   formH: "Enquire about this tour", golfers: "Golfers", golfersMax: "up to {n} seats left on this tour", rentalLabel: "Add Rental Clubs (+¥5,500 per person)", rentalCount: "How many golfers need rental clubs?", rentalCountHint: "Add which hand (right/left) and your heights in the notes.",
-  partyH: "Your party", partyLede: "One line per golfer. Rental clubs are ¥5,500 per person and are added to the total; shoe rental is requested from the course and paid there on the day.",
-  golferN: "Golfer {n}", golferName: "Name", golferLead: "Lead golfer (you)", golferClubs: "Rental clubs (+¥5,500)", golferHand: "Hand", handRight: "Right", handLeft: "Left", golferShoes: "Rental shoes", golferShoeSize: "Shoe size", shoeSizeHint: "e.g. 26.5 cm, US 9, EU 42", shoesNote: "Shoe rental depends on the course's stock and is paid at the club.",
+  partyH: "Your party", partyLede: "One line per golfer. Rental clubs are ¥5,500 and rental shoes ¥2,200 per person, both added to the total. Give the shoe size in cm, US or EU.",
+  golferN: "Golfer {n}", golferName: "Name", golferLead: "Lead golfer (you)", golferClubs: "Rental clubs (+¥5,500)", golferHand: "Hand", handRight: "Right", handLeft: "Left", golferShoes: "Rental shoes (+¥2,200)", golferShoeSize: "Shoe size", shoeSizeHint: "e.g. 26.5 cm, US 9, EU 42", shoesNote: "Rental shoes are arranged in the size you give; availability is confirmed with your booking.",
   name: "Your name", email: "Email", phone: "Phone or WhatsApp (optional)", notes: "Notes (optional)", notesHint: "Hotel area, handedness and height for rental clubs, dietary needs, anything else.",
   consent: "I understand that this is a free enquiry, not a booking, and that KAMEHAME JAPAN will share these details with its travel partner so they can email me the purchase instructions.",
   send: "Send Enquiry", sending: "Sending…",
-  summaryPerPerson: "Tour price", summaryRental: "Rental clubs", summaryTotal: "Total", taxIncluded: "tax included",
+  summaryPerPerson: "Tour price", summaryRental: "Rental clubs", summaryShoes: "Rental shoes", summaryTotal: "Total", taxIncluded: "tax included",
   doneH: "Thank you for your enquiry!",
   doneLines: ["We have received your request.", "Our travel partner will contact you by email with the purchase details and next steps.", "Your booking is not yet confirmed, and no payment has been taken."],
   doneRef: "Your enquiry reference", doneAgain: "Enquire about another tour",
@@ -303,7 +303,7 @@ const ja: BusCopy = {
   costExtra: [
     { item: "昼食・飲み物", note: "クラブハウスのレストランで目安 ¥1,500〜¥2,500。「昼食つき」のツアーを除く" },
     { item: "レンタルクラブ", note: "お問い合わせフォームで1人 ¥5,500。コースのレンタルについてもご相談ください" },
-    { item: "シューズ・グローブ・ボール", note: "ご持参ください。一部コースはシューズの有料レンタルあり" },
+    { item: "レンタルシューズ", note: "お問い合わせフォームで1人 ¥2,200、サイズ指定で手配。グローブ・ボールはご持参ください" },
     { item: "ロッカー・浴場", note: "多くのコースは無料。少額のロッカー代がかかるコースもあります" },
     { item: "集合場所までの交通費", note: "新宿または大井町までご自身で" },
     { item: "旅行保険", note: "任意ですが加入をおすすめします" },
@@ -348,7 +348,7 @@ const ja: BusCopy = {
   includedH: "含まれるもの",
   included: ["東京の出発地からの往復乗合バス", "18ホールのセルフプレー（グリーンフィー）", "乗用カート（コースが提供する場合）", "当日の添乗員（日本語）", "予約確定後の英語ガイド（集合場所の詳細つき）", "レンタルクラブ（お問い合わせで追加した場合、1人 +¥5,500）"],
   notIncludedH: "含まれないもの",
-  notIncluded: ["クラブハウスでの昼食・飲み物（「昼食つき」のツアーを除く）", "ゴルフシューズ・グローブ（ご持参ください）", "ホテル送迎・専属ガイド（カスタムゴルフ手配をご覧ください）"],
+  notIncluded: ["クラブハウスでの昼食・飲み物（「昼食つき」のツアーを除く）", "ゴルフシューズ（レンタル1人 ¥2,200）・グローブ", "ホテル送迎・専属ガイド（カスタムゴルフ手配をご覧ください）"],
   goodH: "知っておきたいこと",
   good: [
     { title: "同組について", body: "ツアーの他の参加者と同じ組になることがあります。組み分けは当日添乗員が行います。" },
@@ -360,19 +360,19 @@ const ja: BusCopy = {
   faq: [
     { q: "問い合わせを送ると予約になりますか？", a: "いいえ。お問い合わせは無料で、お支払いも発生しません。提携旅行会社から購入案内が届き、購入手続きと確定のご連絡をもって予約成立です。" },
     { q: "支払先はどこですか？", a: "購入案内に記載の提携旅行会社です。乗合バスツアーの代金をKAMEHAME JAPANが受け取ることはありません。" },
-    { q: "料金には何が含まれますか？", a: "ラウンド、カート、往復バス（税込）。レンタルクラブは1人 ¥5,500のオプション。昼食は「昼食つき」のツアーを除き別途です。" },
+    { q: "料金には何が含まれますか？", a: "ラウンド、カート、往復バス（税込）。レンタルクラブ（1人 ¥5,500）とレンタルシューズ（1人 ¥2,200）はオプション。昼食は「昼食つき」のツアーを除き別途です。" },
     { q: "キャンセルはできますか？", a: "キャンセル規定は販売会社が定め、購入前にお送りします。現在の公開規定では、7日前まで無料、3〜6日前は1人 ¥2,000、前日・前々日は50%、当日は返金なしです。" },
     { q: "支払い後に満席だったら？", a: "表示の残席は購入手続きの前に変わることがあります。お支払い後にツアーを確保できなかった場合は、別日程のご案内またはその購入分の全額返金となります。" },
     { q: "初心者でも参加できますか？", a: "ラウンド経験のある方向けです。のんびりしたペースですが、18ホールを回れることが前提です。" },
     { q: "自分のクラブを持ち込めますか？", a: "はい。クラブはバスの荷物室に積みます。持ち運びを避けたい場合はお問い合わせでレンタルクラブを追加してください。" },
   ],
   formH: "このツアーについて問い合わせる", golfers: "人数", golfersMax: "このツアーの残席は{n}席です", rentalLabel: "レンタルクラブを追加（1人 +¥5,500）", rentalCount: "レンタルクラブが必要な人数", rentalCountHint: "右利き・左利きと身長を備考欄にお書きください。",
-  partyH: "参加者", partyLede: "参加者ごとに1行ずつ。レンタルクラブは1人 ¥5,500で合計に加算。シューズレンタルはゴルフ場に依頼し、当日現地でお支払いです。",
-  golferN: "参加者 {n}", golferName: "お名前", golferLead: "代表者（あなた）", golferClubs: "レンタルクラブ（+¥5,500）", golferHand: "利き手", handRight: "右", handLeft: "左", golferShoes: "レンタルシューズ", golferShoeSize: "シューズサイズ", shoeSizeHint: "例: 26.5 cm", shoesNote: "シューズレンタルはゴルフ場の在庫次第で、料金は現地払いです。",
+  partyH: "参加者", partyLede: "参加者ごとに1行ずつ。レンタルクラブは1人 ¥5,500、レンタルシューズは1人 ¥2,200 で、いずれも合計に加算します。シューズサイズはcmでご記入ください。",
+  golferN: "参加者 {n}", golferName: "お名前", golferLead: "代表者（あなた）", golferClubs: "レンタルクラブ（+¥5,500）", golferHand: "利き手", handRight: "右", handLeft: "左", golferShoes: "レンタルシューズ（+¥2,200）", golferShoeSize: "シューズサイズ", shoeSizeHint: "例: 26.5 cm", shoesNote: "レンタルシューズはご記入のサイズで手配します。ご用意の可否は予約時にご案内します。",
   name: "お名前", email: "メールアドレス", phone: "電話番号またはWhatsApp（任意）", notes: "備考（任意）", notesHint: "ご滞在ホテルのエリア、レンタルクラブの利き手と身長、食事のご要望など。",
   consent: "これは無料のお問い合わせであり予約ではないこと、また購入案内をメールでお送りするためにKAMEHAME JAPANがこの内容を提携旅行会社と共有することを理解しました。",
   send: "問い合わせを送る", sending: "送信中…",
-  summaryPerPerson: "ツアー料金", summaryRental: "レンタルクラブ", summaryTotal: "合計", taxIncluded: "税込",
+  summaryPerPerson: "ツアー料金", summaryRental: "レンタルクラブ", summaryShoes: "レンタルシューズ", summaryTotal: "合計", taxIncluded: "税込",
   doneH: "お問い合わせありがとうございます。",
   doneLines: ["お問い合わせを受け付けました。", "お問い合わせ完了後、提携旅行会社より購入方法とお支払いについてメールでご案内します。当サイトでのお支払いは不要です。", "お問い合わせのみでは予約は確定しません。"],
   doneRef: "受付番号", doneAgain: "別のツアーについて問い合わせる",

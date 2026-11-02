@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { api, errorText, jst, yen } from "../client";
 import { Badge, Card, Loading, Notice, Table } from "../ui";
 
-interface Row { id: string; reference: string; tour_date: string; course: string; departure_area: string | null; departure_time: string | null; people: number; renters: number; total_yen: number; marginYen: number; name: string; email: string; status: string; statusJa: string; customer_mail: string | null; partner_mail: string | null; created_at: string }
+interface Row { id: string; reference: string; tour_date: string; course: string; departure_area: string | null; departure_time: string | null; people: number; renters: number; shoe_renters?: number; total_yen: number; marginYen: number; name: string; email: string; status: string; statusJa: string; customer_mail: string | null; partner_mail: string | null; created_at: string }
 interface Data { rows: Row[]; counts: Record<string, number> }
 
 const TONE: Record<string, "neutral" | "ok" | "warn" | "bad" | "info"> = { received: "warn", handed_over: "info", guidance_sent: "info", purchased: "ok", confirmed: "ok", cancelled: "neutral", unavailable: "bad" };
@@ -31,7 +31,7 @@ export function OpsBusTours() {
           <Table head={["受付番号", "受付日時", "開催日", "コース", "出発", "人数", "レンタル", "お客様総額", "粗利相当", "お客様", "状態", "顧客メール", "提携先メール"]}
             rows={data.rows.map((r) => [
               <a key="a" href={`/ops/bus-tours/${r.id}/`}>{r.reference}</a>, jst(r.created_at), r.tour_date, r.course, `${r.departure_area ?? "—"}${r.departure_time ? ` ${r.departure_time}` : ""}`,
-              `${r.people}名`, r.renters ? `${r.renters}名` : "—", yen(r.total_yen), yen(r.marginYen), <span key="n">{r.name}<br /><small>{r.email}</small></span>,
+              `${r.people}名`, [r.renters ? `クラブ${r.renters}` : "", r.shoe_renters ? `靴${r.shoe_renters}` : ""].filter(Boolean).join(" ") || "—", yen(r.total_yen), yen(r.marginYen), <span key="n">{r.name}<br /><small>{r.email}</small></span>,
               <Badge key="s" tone={TONE[r.status] ?? "neutral"}>{r.statusJa}</Badge>, MAIL[r.customer_mail ?? ""] ?? "—", MAIL[r.partner_mail ?? ""] ?? "—",
             ])} empty="問い合わせはまだありません。" compact />
         </Card>

@@ -40,7 +40,7 @@ test("ops: list, detail with breakdown, transitions, note, partner re-send, draf
     const detail = await O.busEnquiryDetail(sql, id);
     assert.equal(detail.enquiry.golfers.length, 2); assert.equal(detail.enquiry.golfers[1].shoeSize, "US 9");
     assert.match(detail.draft.text, /2\. Friend · rental clubs \(left-handed\) · shoe rental size US 9/);
-    assert.equal(detail.enquiry.source_yen, t.sourceYen); assert.equal(detail.enquiry.total_yen, (t.sourceYen + 15000) * 2 + 11000);
+    assert.equal(detail.enquiry.source_yen, t.sourceYen); assert.equal(detail.enquiry.total_yen, (t.sourceYen + 15000) * 2 + 11000 + 2200, "two club rentals, one pair of shoes"); assert.equal(detail.enquiry.shoe_renters, 1);
     assert.deepEqual(detail.enquiry.next, ["handed_over", "guidance_sent", "cancelled", "unavailable"]);
     assert.match(detail.draft.text, /Total \(tax included\)/); assert.ok(!/15,000|GOLFPAQ/.test(detail.draft.text) && !detail.draft.text.includes(String(t.sourceYen)));
     // partner re-send once the address exists moves received → handed_over
