@@ -2213,3 +2213,4 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gl-hcard > div { display:flex; flex-direction:column; gap:5px; height:100%; }
 .gl-hcard > div .gb-btn { margin-top:auto; }
 .gl-hcard-price { margin-bottom:8px; }
+.gl-hcard .gb-btn { border:2px solid transparent; } .gl-hcard .gb-btn-outline { border-color:var(--kame); }
