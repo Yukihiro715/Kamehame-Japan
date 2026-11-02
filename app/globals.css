@@ -2226,3 +2226,5 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gl-hcard-items li.ok span { font-size:14px; line-height:1.2; }
 .gl-hcard-items li span { display:inline-flex; align-items:center; justify-content:center; height:18px; width:16px; font-size:inherit; }
 .gl-hcard-items li.ok span { font-size:inherit; }
+.gl-hcard-items li span svg { width:13px; height:13px; min-width:0; flex:none; }
+.gl-hcard-items li { align-items:center; }
