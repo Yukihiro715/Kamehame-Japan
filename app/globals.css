@@ -2208,3 +2208,8 @@ body[data-kh-modal] .sticky-request { display:none; }
 }
 .gl-hcard h2 { font-family:inherit; font-weight:700; text-transform:none; letter-spacing:0; font-size:17px; }
 @media (max-width:700px) { .gl-hcard h2 { font-size:14.5px; } }
+/* The two option cards: same photo height, buttons on one line at the bottom */
+.gl-hcard-custom img { aspect-ratio:16/9; }
+.gl-hcard > div { display:flex; flex-direction:column; gap:5px; height:100%; }
+.gl-hcard > div .gb-btn { margin-top:auto; }
+.gl-hcard-price { margin-bottom:8px; }
