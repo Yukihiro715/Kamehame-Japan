@@ -130,3 +130,15 @@ test("refresh: months and details come from the fetcher, details are cached in K
     assert.equal(s2.tours.filter((t) => t.details).length, 6, "three cached plus three new");
   } finally { globalThis.fetch = realFetch; }
 });
+
+test("course names: the English pages use the map, the database overrides it, spacing and width variants match", async () => {
+  const c = await vite.ssrLoadModule("/lib/golf-courses-db.ts");
+  const names = { [ (await vite.ssrLoadModule("/lib/golf-course-images.ts")).normaliseCourseName("ジェイゴルフ霞ヶ浦") ]: { en: "J-Golf Kasumigaura (DB)", area: "Ibaraki" } };
+  assert.equal(c.displayCourseName("ゴルフ５カントリーサニーフィールド", "en"), "Golf5 Country Sunny Field", "full-width digit matches the map");
+  assert.equal(c.displayCourseName("ピートダイGC VIPコース", "en"), "Pete Dye Golf Club, VIP Course");
+  assert.equal(c.displayCourseName("ジェイゴルフ霞ヶ浦", "en", names), "J-Golf Kasumigaura (DB)", "the database wins");
+  assert.equal(c.displayCourseName("ジェイゴルフ霞ヶ浦", "fr", names), "J-Golf Kasumigaura (DB)", "other languages fall back to English");
+  assert.equal(c.displayCourseName("ジェイゴルフ霞ヶ浦", "ja", names), "ジェイゴルフ霞ヶ浦", "Japanese keeps the partner's name unless overridden");
+  assert.equal(c.displayCourseName("未知のゴルフ倶楽部", "en"), "未知のゴルフ倶楽部", "unknown courses keep their name");
+  assert.equal(c.displayCourseArea("白帆カントリークラブ"), "Ibaraki");
+});

@@ -30,9 +30,19 @@ export const COURSES: Record<string, CourseInfo> = {
   "ワイルドダックカントリークラブ": { en: "Wild Duck Country Club", area: "Ibaraki", file: "course-62654715.webp" },
   "霞台カントリークラブ": { en: "Kasumidai Country Club", area: "Ibaraki", file: "course-5779953e.webp" },
   "鶴舞カントリークラブ": { en: "Tsurumai Country Club", area: "Chiba", file: "course-47bacfa3.webp" },
+  "長南カントリークラブ": { en: "Chonan Country Club", area: "Chiba" },
+  "ロイヤルスターゴルフクラブ": { en: "Royal Star Golf Club", area: "Chiba" },
+  "ジェイゴルフ霞ヶ浦": { en: "J Golf Kasumigaura", area: "Ibaraki" },
+  "太平洋クラブ市原コース": { en: "Taiheiyo Club Ichihara Course", area: "Chiba" },
+  "千葉新日本ゴルフ倶楽部": { en: "Chiba Shin-Nihon Golf Club", area: "Chiba" },
+  "白帆カントリークラブ": { en: "Shiraho Country Club", area: "Ibaraki" },
+  "南茂原カントリークラブ": { en: "Minami-Mobara Country Club", area: "Chiba" },
+  "ゴルフ5カントリーオークビレッヂ": { en: "Golf5 Country Oak Village", area: "Chiba" },
 };
 
-const normalise = (name: string) => name.replace(/\s+/g, "").replace(/倶楽部/g, "クラブ").replace(/ＧＣ|GC/g, "ゴルフクラブ").replace(/ＰＧＡ/g, "PGA");
+/** Names as the partner writes them vary in spacing, full-width digits and 倶楽部 / クラブ. */
+export const normaliseCourseName = (name: string) => name.replace(/\s+/g, "").replace(/[０-９]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 0xfee0)).replace(/倶楽部/g, "クラブ").replace(/ＧＣ|GC/g, "ゴルフクラブ").replace(/ＰＧＡ/g, "PGA").replace(/ヴィレッジ|ビレッヂ/g, "ビレッジ");
+const normalise = normaliseCourseName;
 const lookup = (course: string): CourseInfo | undefined => COURSES[course] ?? Object.entries(COURSES).find(([k]) => normalise(k) === normalise(course))?.[1];
 
 /** The local photo for a course name as the partner publishes it, if we have one. */

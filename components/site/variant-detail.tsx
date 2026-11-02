@@ -53,7 +53,7 @@ function sentences(text: string, lang: Lang): string[] {
 }
 
 /** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
-export function VariantDetail({ exp, lang, clubRental = false, busTours = false }: { exp: Experience; lang: Lang; clubRental?: boolean; busTours?: boolean }) {
+export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experience; lang: Lang; clubRental?: boolean }) {
   const T = t(lang);
   const D = T.detail;
   const vc = exp.variantCopy!;
@@ -110,13 +110,6 @@ export function VariantDetail({ exp, lang, clubRental = false, busTours = false 
 
       <BookingProvider experience={booking} pricings={pricings} lang={lang}>
         {/* 1. Title block: a short H1 and one line, then straight to the photos */}
-        {busTours && exp.slug === "mt-fuji-golf-day" && <section className="gb-two-inline vh-two" aria-label="Two ways to play golf in Japan">
-          <p className="eyebrow"><span /> Two ways to play golf in Japan</p>
-          <div className="gb-two-inline-grid">
-            <div><h2>1. Shared Bus Golf Tours</h2><p>18-hole golf with round-trip shared bus from Tokyo on published dates. Ideal for solo golfers and pairs. No private guide.</p><Link className="underlined-link" href={`/${lang}/golf-bus/`}>Browse dates &amp; prices →</Link> · <Link className="underlined-link" href={`/${lang}/golf-tours/`}>Compare both →</Link></div>
-            <div><h2>2. Custom Golf Booking</h2><p>Choose your own course and tee time. Travel independently, or ask us for a private-transfer introduction. The usual arrangement fee applies.</p><a className="underlined-link" href="#request-form">Plan my round →</a></div>
-          </div>
-        </section>}
         <header className="xp-head vh-head">
           <h1>{exp.title}</h1>
         </header>

@@ -1,4 +1,4 @@
-import { courseArea, courseImage, courseNameEn } from "./golf-course-images";
+import { courseArea, courseImage, courseNameEn, normaliseCourseName } from "./golf-course-images";
 /**
  * GOLFPAQ shared-bus golf tours: the partner's public schedule as the
  * catalogue for "Shared Bus Golf Tours" (docs/GOLFPAQ_BUS_TOURS.md).
@@ -213,14 +213,15 @@ export function describePickup(pickup: string): PublicTour["departure"] {
 }
 
 /** The public projection: everything a visitor may see, nothing about the partner's price or page. */
-export function toPublicTour(t: GolfpaqTour, now = new Date()): PublicTour {
+export function toPublicTour(t: GolfpaqTour, now = new Date(), names: Record<string, { en?: string; area?: string }> = {}): PublicTour {
+  const named = names[normaliseCourseName(t.course)];
   const availability = availabilityOf(t, now);
   const d = t.details;
   const departure = describePickup(t.pickup);
   if (d?.departureTime) departure.time = d.departureTime;
   if (d && departure.lunch === "not_included" && d.lunchIncluded) departure.lunch = "included";
   return {
-    id: t.id, date: t.date, course: t.course, courseEn: courseNameEn(t.course), ...(courseArea(t.course) ? { area: courseArea(t.course) } : {}), pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: availability.seats, capacity: t.capacity, soldOut: availability.soldOut,
+    id: t.id, date: t.date, course: t.course, courseEn: named?.en || courseNameEn(t.course), ...((named?.area || courseArea(t.course)) ? { area: named?.area || courseArea(t.course) } : {}), pickup: t.pickup, departure, perPersonYen: t.perPersonYen, seats: availability.seats, capacity: t.capacity, soldOut: availability.soldOut,
     ...(courseImage(t.course) ? { imageUrl: courseImage(t.course) } : {}),
     ...(d?.features ? { highlights: d.features.replace(/\*?別途昼食代がかかります。?|ランチは別料金となります。各自ご精算ください。?/g, "").trim() } : {}),
     ...(d?.schedule ? { schedule: d.schedule } : {}),
@@ -283,10 +284,10 @@ export function snapshotIsFresh(snapshot: GolfpaqSnapshot | null, now = Date.now
   return !!snapshot && Number.isFinite(Date.parse(snapshot.updatedAt)) && now - Date.parse(snapshot.updatedAt) <= GOLFPAQ_MAX_AGE_MS && now >= Date.parse(snapshot.updatedAt);
 }
 /** The tours a page may show now: fresh snapshot, dates inside the window, public fields only. */
-export function publicToursFrom(snapshot: GolfpaqSnapshot | null, now = new Date()): { tours: PublicTour[]; updatedAt: string | null; through: string | null } {
+export function publicToursFrom(snapshot: GolfpaqSnapshot | null, now = new Date(), names: Record<string, { en?: string; area?: string }> = {}): { tours: PublicTour[]; updatedAt: string | null; through: string | null } {
   if (!snapshotIsFresh(snapshot, now.getTime())) return { tours: [], updatedAt: null, through: null };
   const first = firstPublicDay(now);
-  return { tours: snapshot!.tours.filter((t) => t.date >= first && t.date <= snapshot!.through).map((t) => toPublicTour(t, now)), updatedAt: snapshot!.updatedAt, through: snapshot!.through };
+  return { tours: snapshot!.tours.filter((t) => t.date >= first && t.date <= snapshot!.through).map((t) => toPublicTour(t, now, names)), updatedAt: snapshot!.updatedAt, through: snapshot!.through };
 }
 
 /** Runs in the existing Cloudflare cron, at most once every three hours:

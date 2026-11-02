@@ -105,3 +105,5 @@
 .pt-pre { white-space: pre-wrap; font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; background: #faf8f4; border: 1px solid #e6e0d4; padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
 .pt-filters { flex-wrap: wrap; gap: 6px; margin-bottom: 14px; align-items: center; }
 .pt-filters form input { font: inherit; padding: 5px 9px; border: 1px solid #d9d3c7; border-radius: 6px; min-width: 220px; }
+.pt-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 14px; }
+.pt-grid-3 input, .pt-field input { width: 100%; box-sizing: border-box; }

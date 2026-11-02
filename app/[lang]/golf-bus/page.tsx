@@ -7,6 +7,8 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { busCopy } from "@/lib/golfpaq-copy";
 import { golfpaqVisible, publicToursFrom, readGolfpaqSnapshot } from "@/lib/golfpaq";
+import { displayCourseName, loadCourseNames } from "@/lib/golf-courses-db";
+import { d1Db, isD1Like } from "@/lib/referral/db";
 import { isLang, LANGS } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -35,7 +37,10 @@ export default async function GolfBusPage({ params }: Props) {
   try { env = (await import("cloudflare:workers")).env as Record<string, unknown>; } catch { env = null; }
   if (!golfpaqVisible(env as { KH_ENV?: string; GOLFPAQ_LIVE?: string } | null)) notFound();
   const snapshot = await readGolfpaqSnapshot(env?.READY_STATE as Parameters<typeof readGolfpaqSnapshot>[0]);
-  const { tours, updatedAt } = publicToursFrom(snapshot);
+  const names = await loadCourseNames(isD1Like(env?.DB) ? d1Db(env!.DB) : null);
+  const { tours: rawTours, updatedAt } = publicToursFrom(snapshot, new Date(), names);
+  // courseEn carries the name for the page's language (the component shows the Japanese name on /ja/).
+  const tours = rawTours.map((t) => ({ ...t, courseEn: displayCourseName(t.course, lang, names) }));
   const C = busCopy(lang);
   const stepIcons = [Search, Send, Mail, CreditCard, BadgeCheck];
   const featureIcons = [Bus, UserRound, Flag, CheckCircle2];

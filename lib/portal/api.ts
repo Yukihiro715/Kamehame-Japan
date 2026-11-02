@@ -14,6 +14,8 @@ import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
 import { busEnquiryDetail, busEnquiryList, busEnquiryResendPartner, busEnquirySetNote, busEnquirySetStatus } from "@/lib/golfpaq-ops";
 import type { GolfpaqEnquiryEnv } from "@/lib/golfpaq-enquiry";
+import { readGolfpaqSnapshot } from "@/lib/golfpaq";
+import { courseList, saveCourse } from "@/lib/golf-courses-db";
 import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, str } from "./util";
 import type { PortalMailEnv } from "./mail";
@@ -174,6 +176,23 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, id, action] = path;
   const get = ctx.method === "GET", post = ctx.method === "POST";
   if (head === "me" && get) { const p = await requireOps(ctx); return json({ ok: true, user: { email: p.email, name: p.name }, roles: p.memberships.map((m) => m.role) }); }
+  if (head === "golf-courses") {
+    // Display names for the courses on the shared-bus schedule (docs/GOLFPAQ_BUS_TOURS.md).
+    if (get) {
+      await requireOps(ctx);
+      const snapshot = await readGolfpaqSnapshot(ctx.env.READY_STATE);
+      const counts = new Map<string, number>();
+      for (const t of snapshot?.tours ?? []) counts.set(t.course, (counts.get(t.course) ?? 0) + 1);
+      return json({ ok: true, courses: await courseList(ctx.db, [...counts].map(([name, tours]) => ({ name, tours }))), updatedAt: snapshot?.updatedAt ?? null });
+    }
+    if (post) {
+      const p = await requireOps(ctx, ...BOOKING);
+      const b = await readJson(ctx.request);
+      try { await saveCourse(ctx.db, { name: b.name, name_en: b.name_en, name_ja: b.name_ja, name_es: b.name_es, name_fr: b.name_fr, name_zh_tw: b.name_zh_tw, area: b.area, note: b.note, by: p.email }); }
+      catch (e) { throw bad(e instanceof Error ? e.message : "bad_request"); }
+      return json({ ok: true });
+    }
+  }
   if (head === "bus-tours") {
     // Shared-bus golf tour enquiries (docs/GOLFPAQ_BUS_TOURS.md): list, detail, status, note, partner re-send.
     if (!id && get) { await requireOps(ctx); return json({ ok: true, ...(await busEnquiryList(ctx.db, { status: q(ctx, "status"), q: q(ctx, "q"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) }); }

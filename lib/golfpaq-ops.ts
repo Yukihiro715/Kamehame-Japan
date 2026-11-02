@@ -8,6 +8,7 @@ import { describePickup, GOLFPAQ_FEE_JPY } from "./golfpaq";
 import { sendGolfpaqMail, type GolfpaqEnquiryEnv } from "./golfpaq-enquiry";
 import { partnerHandover, purchaseGuidanceDraft, type Golfer, type InternalFacts } from "./golfpaq-mail";
 import { courseNameEn } from "./golf-course-images";
+import { loadCourseNames, displayCourseName } from "./golf-courses-db";
 
 export const BUS_STATUSES = ["received", "handed_over", "guidance_sent", "purchased", "confirmed", "cancelled", "unavailable"] as const;
 export type BusStatus = (typeof BUS_STATUSES)[number];
@@ -54,7 +55,9 @@ export async function busEnquiryGet(db: SqlDb, id: string): Promise<BusEnquiryRo
 export async function busEnquiryDetail(db: SqlDb, id: string) {
   const row = await busEnquiryGet(db, id);
   const logs = await db.all(`SELECT at, actor, action, reason, after_json FROM audit_logs WHERE target_type = 'bus_tour_enquiry' AND target_id = ? ORDER BY at DESC`, [row.id]);
-  const draft = purchaseGuidanceDraft(toFacts(row));
+  const facts = toFacts(row);
+  facts.tour.courseEn = displayCourseName(row.course, "en", await loadCourseNames(db));
+  const draft = purchaseGuidanceDraft(facts);
   return { enquiry: withLabels(row), logs, draft };
 }
 
