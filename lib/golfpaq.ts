@@ -90,7 +90,7 @@ export async function publishedSchedule(now = new Date()): Promise<{ first: stri
   });
   if (!res.ok) throw Error("golfpaq_index_http_" + res.status);
   const html = await res.text();
-  if (!html.includes("GOLFPAQ") || !html.includes("件数")) throw Error("golfpaq_index_changed");
+  if (!html.includes("GOLFPAQ") || !html.includes("/booking/plan/index/")) throw Error("golfpaq_index_changed");
   const first = firstPublicDay(now);
   const published = publishedDatesFromIndex(html).filter((d) => d >= first && d <= plusDays(japanToday(now), 365));
   const through = published[published.length - 1];
