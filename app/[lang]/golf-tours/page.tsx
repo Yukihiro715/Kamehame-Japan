@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Bus, CheckCircle2, Flag, UserRound, Languages, ArrowRight, Circle, X } from "lucide-react";
+import { Bus, CheckCircle2, Flag, UserRound, Languages, ArrowRight, Circle, Plus } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { busCopy } from "@/lib/golfpaq-copy";
+import { busCopy, type BusCopy } from "@/lib/golfpaq-copy";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
 import { isLang, LANGS } from "@/lib/i18n";
@@ -23,6 +23,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return withAlternates(
     socialMeta({ lang, title: "Golf in Japan, Made Easy | KAMEHAME JAPAN", description: "Two ways to play golf near Tokyo: a shared bus tour on a published date, or a course and tee time booked for your group. Compare and choose.", path: `/${lang}/golf-tours/` }),
     Object.fromEntries(LANGS.map((l) => [l, `/${l}/golf-tours/`])),
+  );
+}
+
+/** "Included" with a circle, then "Optional, extra" with a plus: what the price covers and what can be added. */
+function ItemList({ items, C }: { items: { ok: boolean; text: string }[]; C: BusCopy }) {
+  const inc = items.filter((i) => i.ok), opt = items.filter((i) => !i.ok);
+  return (
+    <div className="gl-hcard-lists">
+      <p className="gl-hcard-lh">{C.heroIncludedH}</p>
+      <ul className="gl-hcard-items">{inc.map((it) => <li key={it.text} className="ok"><span aria-hidden="true"><Circle size={13} strokeWidth={2.75} /></span>{it.text}</li>)}</ul>
+      {opt.length > 0 && <><p className="gl-hcard-lh">{C.heroOptionalH}</p>
+      <ul className="gl-hcard-items">{opt.map((it) => <li key={it.text} className="opt"><span aria-hidden="true"><Plus size={13} strokeWidth={3} /></span>{it.text}</li>)}</ul></>}
+    </div>
   );
 }
 
@@ -65,11 +78,11 @@ export default async function GolfToursPage({ params }: Props) {
               <Link className="gl-hcard gl-hcard-custom" href={customHref}>
                 <span className="gl-hcard-tag">{C.heroCustomTag}</span>
                 <img src="/images/golf-gallery-07-fuji-fairway.webp" alt="" fetchPriority="high" />
-                <div><h2><Flag size={16} /> {C.customH}</h2><p className="gl-hcard-who">{C.heroCustomWho}</p><p className="gl-hcard-price">{C.heroCustomPrice}</p><ul className="gl-hcard-items">{C.heroCustomItems.map((it) => <li key={it.text} className={it.ok ? "ok" : "no"}><span aria-hidden="true">{it.ok ? <Circle size={13} strokeWidth={2.75} /> : <X size={13} strokeWidth={2.75} />}</span>{it.text}</li>)}</ul><span className="gb-btn gb-btn-small">{C.customCta} <ArrowRight size={14} /></span></div>
+                <div><h2><Flag size={16} /> {C.customH}</h2><p className="gl-hcard-who">{C.heroCustomWho}</p><p className="gl-hcard-price">{C.heroCustomPrice}</p><ItemList items={C.heroCustomItems} C={C} /><span className="gb-btn gb-btn-small">{C.customCta} <ArrowRight size={14} /></span></div>
               </Link>
               <Link className="gl-hcard" href={busHref}>
                 <img src="/images/golf-bus/bus-card.webp" alt="" fetchPriority="high" />
-                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><ul className="gl-hcard-items">{C.heroBusItems.map((it) => <li key={it.text} className={it.ok ? "ok" : "no"}><span aria-hidden="true">{it.ok ? <Circle size={13} strokeWidth={2.75} /> : <X size={13} strokeWidth={2.75} />}</span>{it.text}</li>)}</ul><span className="gb-btn gb-btn-small gb-btn-dark">{C.sharedCta} <ArrowRight size={14} /></span></div>
+                <div><h2><Bus size={16} /> {C.sharedH}</h2><p className="gl-hcard-who">{C.heroBusWho}</p><p className="gl-hcard-price">{C.heroBusPrice.replace("{price}", fromPrice)}</p><ItemList items={C.heroBusItems} C={C} /><span className="gb-btn gb-btn-small gb-btn-dark">{C.sharedCta} <ArrowRight size={14} /></span></div>
               </Link>
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>

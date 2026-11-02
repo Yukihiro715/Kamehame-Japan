@@ -13,7 +13,7 @@ export interface BusCopy {
   compareH: string; compareLede: string; compareCols: [string, string]; compare: { label: string; shared: string; custom: string }[];
   chooseH: string; chooseShared: string; chooseCustom: string;
   /** The two cards inside the landing hero: custom first, with who each one suits and a price line. "{price}" = lowest bus price. */
-  heroCustomTag: string; heroCustomWho: string; heroCustomPrice: string; heroCustomItems: { ok: boolean; text: string }[]; heroBusWho: string; heroBusPrice: string; heroBusItems: { ok: boolean; text: string }[]; heroCardsNote: string;
+  heroCustomTag: string; heroCustomWho: string; heroCustomPrice: string; heroCustomItems: { ok: boolean; text: string }[]; heroBusWho: string; heroBusPrice: string; heroBusItems: { ok: boolean; text: string }[]; heroIncludedH: string; heroOptionalH: string; heroCardsNote: string;
   /** Per-person estimate for a party of four with custom booking (fee + club fees, with and without the private transfer). */
   estimateH: string; estimateLede: string; estimateCols: [string, string]; estimateRows: { label: string; feeOnly: string; withTransfer: string }[]; estimateNote: string;
   // Bus page hero and the tour explained
@@ -69,9 +69,10 @@ const en: BusCopy = {
   chooseShared: "Pick the Shared Bus Tour if you are travelling light, don't mind company on the course and want the easiest, best-priced day of golf from Tokyo.",
   chooseCustom: "Pick Custom Booking if you have a course or a date in mind, want to play as your own group, or would like Mt. Fuji on the horizon.",
   heroCustomTag: "Recommended for groups", heroCustomWho: "3+ golfers · families & friends · your own course or date", heroCustomPrice: "About ¥24,500 /person (4 golfers)",
-  heroCustomItems: [{ ok: true, text: "Our arrangement fee" }, { ok: true, text: "Green fee & cart, paid at the club" }, { ok: false, text: "Travel to the course (private transfer about +¥22,500 /person)" }, { ok: true, text: "Lunch at the clubhouse, paid on the day" }, { ok: true, text: "Rental clubs available for an extra fee" }],
+  heroCustomItems: [{ ok: true, text: "Our arrangement fee" }, { ok: true, text: "Green fee & cart (paid at the club)" }, { ok: false, text: "Private transfer, hotel to course (about +¥22,500 /person)" }, { ok: false, text: "Lunch at the clubhouse" }, { ok: false, text: "Rental clubs" }],
   heroBusWho: "1–2 golfers · solo welcome · fixed dates from Tokyo", heroBusPrice: "From {price} /person",
-  heroBusItems: [{ ok: true, text: "Green fee & cart" }, { ok: true, text: "Round-trip coach from Tokyo" }, { ok: true, text: "Tax included" }, { ok: true, text: "Lunch at the clubhouse, paid on the day" }, { ok: true, text: "Rental clubs available (+¥5,500 /person)" }],
+  heroBusItems: [{ ok: true, text: "Green fee & cart" }, { ok: true, text: "Round-trip coach from Tokyo" }, { ok: true, text: "Tax" }, { ok: false, text: "Lunch at the clubhouse" }, { ok: false, text: "Rental clubs (+¥5,500 /person)" }],
+  heroIncludedH: "Included", heroOptionalH: "Optional, extra",
   heroCardsNote: "Both: 18 holes on a well-kept Japanese course, English support, nothing to pay to enquire.",
   estimateH: "What custom booking costs, for four golfers",
   estimateLede: "A worked example per person, tax included, based on the club fees we usually see. The shared bus tour, by comparison, is one price of about ¥30,000–¥38,000 per person with the coach included.",
@@ -232,9 +233,10 @@ const ja: BusCopy = {
   chooseShared: "身軽に、同組でも構わない、東京から一番手軽でお得な1日ゴルフなら乗合バスツアー。",
   chooseCustom: "行きたいコースや日程が決まっている、自分たちだけで回りたい、富士山を眺めたいならカスタム手配。",
   heroCustomTag: "グループにおすすめ", heroCustomWho: "3名以上・家族や友人と・コースや日程を自分で決めたい", heroCustomPrice: "1人 約 ¥24,500（4名の場合）",
-  heroCustomItems: [{ ok: true, text: "手配料" }, { ok: true, text: "プレー代・カート（ゴルフ場で精算）" }, { ok: false, text: "コースまでの交通費（送迎つきは1人 約+¥22,500）" }, { ok: true, text: "昼食はクラブハウスで当日払い" }, { ok: true, text: "レンタルクラブは追加料金で可" }],
+  heroCustomItems: [{ ok: true, text: "手配料" }, { ok: true, text: "プレー代・カート（ゴルフ場で精算）" }, { ok: false, text: "ホテル往復の送迎（1人 約+¥22,500）" }, { ok: false, text: "クラブハウスでの昼食" }, { ok: false, text: "レンタルクラブ" }],
   heroBusWho: "1〜2名・おひとり様歓迎・東京発の決まった日程", heroBusPrice: "1人 {price}〜",
-  heroBusItems: [{ ok: true, text: "プレー代・カート" }, { ok: true, text: "東京発着の往復バス" }, { ok: true, text: "税込" }, { ok: true, text: "昼食はクラブハウスで当日払い" }, { ok: true, text: "レンタルクラブは追加料金で可（1人 +¥5,500）" }],
+  heroBusItems: [{ ok: true, text: "プレー代・カート" }, { ok: true, text: "東京発着の往復バス" }, { ok: true, text: "税" }, { ok: false, text: "クラブハウスでの昼食" }, { ok: false, text: "レンタルクラブ（1人 +¥5,500）" }],
+  heroIncludedH: "含まれる", heroOptionalH: "追加で選べる（別料金）",
   heroCardsNote: "どちらも手入れの行き届いた日本のコースで18ホール。英語サポートつき、問い合わせは無料です。",
   estimateH: "カスタム手配の費用の目安（4名の場合）",
   estimateLede: "よくあるゴルフ場料金をもとにした1人あたり（税込）の試算です。乗合バスツアーはバス込みで1人 ¥30,000〜¥38,000ほどです。",

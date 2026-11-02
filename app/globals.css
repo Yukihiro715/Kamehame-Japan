@@ -2228,3 +2228,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gl-hcard-items li.ok span { font-size:inherit; }
 .gl-hcard-items li span svg { width:13px; height:13px; min-width:0; flex:none; }
 .gl-hcard-items li { align-items:center; }
+.gl-hcard-lists { display:grid; gap:2px; margin-bottom:10px; }
+.gl-hcard-lh { margin:4px 0 2px; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.gl-hcard-lists .gl-hcard-items { margin-bottom:2px; }
+.gl-hcard-items li.opt span { color:var(--kame); } .gl-hcard-items li.opt { color:#3d3a34; }
