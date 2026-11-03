@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HomePage } from "@/components/site/home-page";
+import { golfpaqEnabled } from "@/lib/golfpaq-env";
+import { popularExperiences } from "@/lib/popular";
+import { d1Db, isD1Like } from "@/lib/referral/db";
 import { isLang, LANGS, type Lang } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -46,5 +49,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LangHome({ params }: Props) {
   const { lang } = await params;
   if (!isLang(lang)) notFound();
-  return <HomePage lang={lang} />;
+  // The demand ledger for "Popular right now"; absent at build time and in tests, when the default order is used.
+  let db = null;
+  try { const { env } = await import("cloudflare:workers"); const e = env as { DB?: unknown }; db = isD1Like(e.DB) ? d1Db(e.DB) : null; } catch { db = null; }
+  const [popular, golfLanding] = await Promise.all([popularExperiences(db, lang), golfpaqEnabled()]);
+  return <HomePage lang={lang} popular={popular} golfLanding={golfLanding} />;
 }

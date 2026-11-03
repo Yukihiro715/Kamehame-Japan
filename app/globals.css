@@ -2284,3 +2284,22 @@ body[data-kh-modal] .sticky-request { display:none; }
   .gb-sheet-actions { grid-template-columns:1fr; }
 }
 .gb-sheet-notes { list-style:disc; }
+
+/* ---- Home: "Popular right now" (lib/popular.ts) ---- */
+.popular-section { padding:90px clamp(24px,7vw,120px) 100px; background:var(--paper); border-top:1px solid #e6e1d6; }
+.popular-section .eyebrow svg { vertical-align:-2px; color:var(--kame); }
+.popular-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; margin-top:48px; }
+.popular-card { display:flex; flex-direction:column; background:var(--white); border:1px solid #e6e1d6; border-radius:14px; overflow:hidden; text-decoration:none; color:var(--ink); transition:transform .25s,box-shadow .25s; }
+.popular-card:hover { transform:translateY(-3px); box-shadow:0 14px 30px rgba(0,0,0,.09); }
+.popular-art { position:relative; aspect-ratio:4 / 3; overflow:hidden; background:#e9e4da; }
+.popular-art img { width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+.popular-card:hover .popular-art img { transform:scale(1.04); }
+.popular-rank { position:absolute; left:12px; top:12px; padding:5px 10px; border-radius:999px; background:var(--ink); color:var(--white); font-family:var(--font-display); font-size:12px; letter-spacing:.08em; }
+.popular-copy { padding:16px 18px 18px; display:grid; gap:6px; }
+.popular-copy .experience-city { margin:0; font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:5px; }
+.popular-copy h3 { margin:0; font-family:var(--font-display); font-weight:400; font-size:19px; letter-spacing:.03em; text-transform:uppercase; line-height:1.15; }
+.popular-copy .listing-price { margin:4px 0 0; font-size:13px; color:var(--muted); } .popular-copy .listing-price b { color:var(--ink); font-size:15px; }
+:is([lang="ja"], [lang="zh-tw"]) .popular-copy h3 { text-transform:none; letter-spacing:.02em; font-size:17px; font-weight:700; }
+.gb-ways-inline { padding:0 clamp(24px,7vw,120px) 70px; } .gb-ways-inline .gb-cta-row { margin-top:0; } .gb-ways-inline .gb-cta-card p { margin:0; }
+@media (max-width:900px) { .popular-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } }
+@media (max-width:700px) { .popular-section { padding:70px 22px 76px; } .popular-grid { margin-top:34px; } .popular-copy { padding:12px 12px 14px; } .popular-copy h3 { font-size:16px; } .gb-ways-inline { padding:0 22px 60px; } }

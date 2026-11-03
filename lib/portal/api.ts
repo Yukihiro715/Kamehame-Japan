@@ -7,6 +7,7 @@
  *    (no cross-site form or fetch can add it);
  *  - the signed-in user comes from the session cookie and their memberships,
  *    read fresh each time; hotel users only ever see their own hotels. */
+import { popularOverview, savePopularSetting } from "@/lib/popular";
 import { d1Db, isD1Like, type SqlDb } from "@/lib/referral/db";
 import { canSeeHotel, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
@@ -191,6 +192,16 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       try { await saveCourse(ctx.db, { name: b.name, name_en: b.name_en, name_ja: b.name_ja, name_es: b.name_es, name_fr: b.name_fr, name_zh_tw: b.name_zh_tw, area: b.area, note: b.note, by: p.email }); }
       catch (e) { throw bad(e instanceof Error ? e.message : "bad_request"); }
       return json({ ok: true });
+    }
+  }
+  if (head === "popular") {
+    // The home page's "Popular right now" order (lib/popular.ts).
+    if (get) { await requireOps(ctx); return json({ ok: true, ...(await popularOverview(ctx.db)) }); }
+    if (post) {
+      const p = await requireOps(ctx, ...BOOKING);
+      const b = await readJson(ctx.request);
+      try { await savePopularSetting(ctx.db, { mode: b.mode, slugs: b.slugs, by: p.email }); } catch (e) { throw bad(e instanceof Error ? e.message : "bad_request"); }
+      return json({ ok: true, ...(await popularOverview(ctx.db)) });
     }
   }
   if (head === "bus-tours") {

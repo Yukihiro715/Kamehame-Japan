@@ -21,6 +21,7 @@ import { CancellationTable } from "@/components/site/cancellation-table";
 import { VariantDetail } from "@/components/site/variant-detail";
 import { ClubRentalProvider } from "@/components/site/club-rental-context";
 import { GOLF_CLUB_RENTAL_LIVE } from "@/lib/golf-club-rental";
+import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { isArrangement } from "@/lib/golf-prices";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
@@ -127,7 +128,9 @@ export default async function DetailPage({ params }: Props) {
   if (exp!.variants) {
     // The golf booking service's chosen-model club rental (lib/golf-club-rental.ts), on since 2026-10-25.
     const clubRental = GOLF_CLUB_RENTAL_LIVE && isArrangement() && exp!.slug === "mt-fuji-golf-day";
-    return <ClubRentalProvider enabled={clubRental}><VariantDetail exp={exp!} lang={lang} clubRental={clubRental} /></ClubRentalProvider>;
+    // The custom golf page points back to the shared-bus tours and the landing that compares the two, once those are live.
+    const golfWays = exp!.slug === "mt-fuji-golf-day" && (await golfpaqEnabled());
+    return <ClubRentalProvider enabled={clubRental}><VariantDetail exp={exp!} lang={lang} clubRental={clubRental} golfWays={golfWays} /></ClubRentalProvider>;
   }
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }

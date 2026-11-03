@@ -18,6 +18,7 @@ import { GolfTransfer } from "@/components/site/golf-transfer";
 import { GolfClubRental } from "@/components/site/golf-club-rental";
 import { CLUB_RENTAL_COPY } from "@/lib/golf-club-rental";
 import { isArrangement } from "@/lib/golf-prices";
+import { busCopy } from "@/lib/golfpaq-copy";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, tierTotal, yen } from "@/lib/pricing";
 import { Fx, FxNote } from "@/components/site/money";
@@ -53,7 +54,9 @@ function sentences(text: string, lang: Lang): string[] {
 }
 
 /** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
-export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experience; lang: Lang; clubRental?: boolean }) {
+/** golfWays: show the cards to the shared-bus tours and the landing that compares the two (only while those pages are live). */
+export function VariantDetail({ exp, lang, clubRental = false, golfWays = false }: { exp: Experience; lang: Lang; clubRental?: boolean; golfWays?: boolean }) {
+  const W = golfWays ? busCopy(lang) : null;
   const T = t(lang);
   const D = T.detail;
   const vc = exp.variantCopy!;
@@ -295,6 +298,15 @@ export function VariantDetail({ exp, lang, clubRental = false }: { exp: Experien
         </div>
         <StickyRequestBar price={yen(minPrice)} condition={countOf(O.golfers, size.min)} label={ctaLabel} lang={lang} watchHero="#golf-options" watchTarget="#request" golf={O} />
       </BookingProvider>
+
+      {W && (
+        <section className="gb gb-ways-inline" aria-label={W.twoWaysH}>
+          <div className="gb-cta-row">
+            <div className="gb-cta-card"><b>{W.sharedH}</b><p className="gb-small">{W.heroBusWho}</p><Link className="gb-btn gb-btn-outline" href={`/${lang}/golf-bus/`}>{W.sharedCta} →</Link></div>
+            <div className="gb-cta-card"><b>{W.twoWaysH}</b><p className="gb-small">{W.compareLede}</p><Link className="gb-btn gb-btn-ghost" href={`/${lang}/golf-tours/`}>{W.compareBtn} →</Link></div>
+          </div>
+        </section>
+      )}
 
       {moreInCity.length > 0 && (
         <section className="more-in">
