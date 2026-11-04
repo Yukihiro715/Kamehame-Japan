@@ -20,18 +20,18 @@ const {EnquiryForm}=await vite.ssrLoadModule('/components/site/enquiry-form.tsx'
 const {CurrencyProvider}=await vite.ssrLoadModule('/components/site/currency-context.tsx');
 const {receiveWebhook}=await vite.ssrLoadModule('/lib/payment-webhooks.ts');
 const now=Date.parse('2026-10-22T08:00:00Z');
-const base={request_id:'11111111-2222-4333-8444-555555555555',experience:'kanji-name-calligraphy',lang:'en',name:'Example Guest',email:'guest@example.com',date:'2026-11-02',time:'10:30',guests:1,message:'',consent:true,standard:true};
+const base={request_id:'11111111-2222-4333-8444-555555555555',experience:'kanji-name-calligraphy',lang:'en',name:'Example Guest',email:'guest@example.com',date:'2026-11-02',time:'10:30',guests:2,message:'',consent:true,standard:true};
 const order=m.parseExperienceOrder(base,now);
 const reference='KJ-E-11111111222243338444555555555555';
 const env={EXPERIENCE_CHECKOUT_ENABLED:'true',STRIPE_CHECKOUT_KEY:'rk_live_example',STRIPE_READ_KEY:'rk_live_read',STRIPE_WEBHOOK_SECRET:'whsec_example',GOLF_AUTOMATION_URL:'https://script.google.com/macros/s/example/exec',GOLF_AUTOMATION_TOKEN:'test-token'};
 
 test('server prices: minimum charge, allowed quantities, adult eligibility and tampered prices',()=>{
-  assert.equal(order.amount,39600);assert.equal(order.quantity,2);assert.equal(order.guests,1);
+  assert.equal(order.amount,39600);assert.equal(order.quantity,2);assert.equal(order.guests,2);
   for(const guests of [2,3,4])assert.equal(m.parseExperienceOrder({...base,guests},now).amount,19800*guests);
   assert.equal(m.parseExperienceOrder({...base,guests:5},now),null);
   assert.equal(m.parseExperienceOrder({...base,amount:1,price:'price_fake'},now).amount,39600);
   assert.equal(m.parseExperienceOrder({...base,experience:'mt-fuji-golf-day'},now),null);
-  for(const change of [{guests:1.5},{consent:false},{standard:false},{date:'2026-02-30'},{time:'03:00'},{date:'2026-10-22'},{email:'bad'},{name:'Header\r\nInjected'},{request_id:'invalid'}])assert.equal(m.parseExperienceOrder({...base,...change},now),null);
+  for(const change of [{guests:1},{guests:1.5},{consent:false},{standard:false},{date:'2026-02-30'},{time:'03:00'},{date:'2026-10-22'},{email:'bad'},{name:'Header\r\nInjected'},{request_id:'invalid'}])assert.equal(m.parseExperienceOrder({...base,...change},now),null);
   assert.equal(m.parseExperienceOrder({...base,date:'2026-10-23'},Date.parse('2026-10-22T09:00:00Z')),null,'18:00 JST cutoff');
   const k={...base,experience:'tokyo-kendo-experience-tour',time:'10:00',guests:2};
   assert.equal(m.parseExperienceOrder(k,now),null);
@@ -41,19 +41,19 @@ test('server prices: minimum charge, allowed quantities, adult eligibility and t
 });
 
 test('enabled non-golf experiences support their priced party range and correct city return URL',()=>{
-  const enquiryOnly = new Set(['evening-with-geiko', 'nihonbashi-kendo-experience', 'nihonbashi-bushido-experience']);
+  const enquiryOnly = new Set(catalogFor('en').experiences.filter(x=>!EXPERIENCE_PRODUCTS[x.slug]).map(x=>x.slug));
   const published=catalogFor('en').experiences.filter(x=>x.category!=='golf');
   for (const x of published.filter(x=>enquiryOnly.has(x.slug))) {
     assert.equal(EXPERIENCE_PRODUCTS[x.slug],undefined);
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:2,time:'10:00',adultOnly:true},now),null);
   }
   const products=published.filter(x=>!enquiryOnly.has(x.slug));
-  assert.equal(products.length,10);
+  assert.equal(products.length,12);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
     const product=EXPERIENCE_PRODUCTS[x.slug];
     for(let guests=product.min;guests<=product.max;guests++) {
-      const input={...base,experience:x.slug,guests,time:x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':'',interpreter:'fr'};
+      const input={...base,experience:x.slug,guests,time:product.timeOnConfirmation?'':x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':'',interpreter:'fr'};
       const o=m.parseExperienceOrder(input,now);
       assert.ok(o,x.slug+' '+guests);
       assert.equal(o.city,x.city);
@@ -203,7 +203,7 @@ test('signed experience webhook is routed separately; invalid signatures and fai
 test('enabled request form renders paid-provisional copy, charge minimum and consent in all languages',()=>{
   for(const lang of ['en','ja','es','fr','zh-tw']){
     const x=catalogFor(lang).experiences.find(x=>x.slug==='kanji-name-calligraphy');
-    const b={slug:x.slug,title:x.title,provisionalCheckout:true,leadDays:1,cutoffTime:'18:00',minGuests:1,defaultGuests:1,listedMax:4,maxGuests:4,startTimes:x.availability.startTimes,interpreter:false,cancellationText:x.cancellation,cancellationTiers:x.cancellationTiers};
+    const b={slug:x.slug,title:x.title,provisionalCheckout:true,leadDays:1,cutoffTime:'18:00',minGuests:2,defaultGuests:2,listedMax:4,maxGuests:4,startTimes:x.availability.startTimes,interpreter:false,cancellationText:x.cancellation,cancellationTiers:x.cancellationTiers};
     const html=renderToStaticMarkup(React.createElement(CurrencyProvider,null,React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang),lang},React.createElement(EnquiryForm,{kind:'guest',lang,fallbackEmail:'hello@kamehame-japan.com',experience:x}))));
     assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_consent'));assert.ok(html.includes('39,600'));assert.ok(html.includes('required=""'));
     assert.ok(!html.includes('No payment now'));
@@ -261,4 +261,21 @@ test('earliest displayed date skips weekends, closures and empty announced slots
   assert.equal(firstOpenDate({dates:[{date:'2026-10-25',times:[]},{date:'2026-10-26',times:['10:00']}]},'2026-10-25'),'2026-10-26');
   assert.equal(firstOpenDate({dates:[]},'2026-10-25'),undefined);
   assert.equal(firstOpenDate({},'2026-10-25'),'2026-10-25');
+});
+
+
+test('Nihonbashi validates party limits, eligibility and date-only requests including weekends',()=>{
+  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,20000],['nihonbashi-bushido-experience',2,10000]]) {
+    const input={...base,experience:slug,date:'2026-11-07',time:'',guests:min,adultOnly:true};
+    const o=m.parseExperienceOrder(input,now);
+    assert.equal(o.amount,amount*min);assert.equal(o.time,'To be confirmed');
+    for(const patch of [{adultOnly:false},{guests:min-1},{guests:9},{time:'10:00'}]) assert.equal(m.parseExperienceOrder({...input,...patch},now),null);
+    for(const lang of ['en','ja','es','fr','zh-tw']) {
+      const x=catalogFor(lang).experiences.find(e=>e.slug===slug);
+      const b={slug,title:x.title,provisionalCheckout:true,minGuests:min,defaultGuests:min,listedMax:8,maxGuests:8,interpreter:false};
+      const html=renderToStaticMarkup(React.createElement(CurrencyProvider,{lang},React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang)},React.createElement(EnquiryForm,{lang,card:true}))));
+      assert.ok(html.includes('checkout_adult'));assert.ok(!html.includes('name="time"'));
+    }
+  }
+  for(const lang of ['en','ja','es','fr','zh-tw']) assert.equal(catalogFor(lang).experiences.find(e=>e.slug==='kanji-name-calligraphy').partySize.min,2);
 });

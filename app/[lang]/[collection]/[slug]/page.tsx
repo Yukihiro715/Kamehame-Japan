@@ -192,7 +192,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
     weekendsOnly: avail?.weekendsOnly, openFrom: avail?.openFrom, closedWeekdays: avail?.closedWeekdays,
     cancellationText: cancellation, cancellationTiers: exp.cancellationTiers,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00", cutoffHours: avail?.cutoffHours,
-    startTimes: provisional && !avail?.startTimes ? ["10:00"] : avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
+    startTimes: provisional && !EXPERIENCE_PRODUCTS[exp.slug].timeOnConfirmation && !avail?.startTimes ? ["10:00"] : avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
     listedMax: provisional ? EXPERIENCE_PRODUCTS[exp.slug].max : eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),
     maxGuests: exp.partySize?.max,

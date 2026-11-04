@@ -158,7 +158,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const product = EXPERIENCE_PRODUCTS[slug];
   const x = product && catalogFor("en").experiences.find(x => x.slug === slug && x.status === "live");
   if (!x || !product || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
-  if (product.adultOnly && body.adultOnly !== true) return null;
+  if ((product.adultOnly || product.eligibilityRequired) && body.adultOnly !== true) return null;
   if (product.groupPricing && body.adultOnly !== true) return null;
   if (body.addOns !== undefined && (!Array.isArray(body.addOns) || body.addOns.length)) return null;
   const name = typeof body.name === "string" ? body.name.trim() : "";
@@ -176,7 +176,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   today.setUTCDate(today.getUTCDate() + (a?.cutoffDays ?? 3) + (today.getUTCHours()*60 + today.getUTCMinutes() >= cutoff[0]*60 + cutoff[1] ? 1 : 0));
   if (date < today.toISOString().slice(0,10) || d.getTime() > now + 366*86400000) return null;
   const times = a?.dates ? a.dates.find(v => v.date === date)?.times ?? [] : a?.startTimes ?? ["10:00"];
-  if (!times.includes(time)) return null;
+  if (product.timeOnConfirmation ? time !== "" : !times.includes(time)) return null;
   if (a?.closed?.some(w => w.from <= w.to ? date.slice(5) >= w.from && date.slice(5) <= w.to : date.slice(5) >= w.from || date.slice(5) <= w.to)) return null;
   if (product.adultOnly && [0,6].includes(d.getUTCDay())) return null;
   const quantity = product.groupPricing ? 1 : Math.max(product.minCharge, guests);
@@ -195,7 +195,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   } else if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
   return { requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
     city: x.city, chargeUnit: product.groupPricing ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
-    date, time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
+    date, time: product.timeOnConfirmation ? "To be confirmed" : time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
 }
 
 export function checkoutParameters(order: ExperienceOrder, reference: string, createdAt: number) {
