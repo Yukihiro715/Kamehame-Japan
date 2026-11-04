@@ -54,7 +54,14 @@ const localBindingConfig = {
         },
       ]
     : [],
-  r2_buckets: r2
+  // Guest photos and videos from the review form (lib/review-media.ts). The
+  // deploy workflows find or create the bucket and pass its name in
+  // KAMEHAME_R2_BUCKET; a local build uses a placeholder name so wrangler dev
+  // keeps the files on disk. In CI without a name the binding is left out and
+  // the form falls back to photos by email.
+  r2_buckets: process.env.KAMEHAME_R2_BUCKET || !process.env.CI
+    ? [{ binding: "MEDIA", bucket_name: process.env.KAMEHAME_R2_BUCKET || "kamehame-media" }]
+    : r2
     ? [
         {
           binding: r2,

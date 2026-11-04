@@ -107,3 +107,9 @@
 .pt-filters form input { font: inherit; padding: 5px 9px; border: 1px solid #d9d3c7; border-radius: 6px; min-width: 220px; }
 .pt-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 14px; }
 .pt-grid-3 input, .pt-field input { width: 100%; box-sizing: border-box; }
+
+/* Review media (ops): thumbnails and inline video */
+.pt-media-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-top:10px; }
+.pt-media { margin:0; display:grid; gap:4px; }
+.pt-media img, .pt-media video { width:100%; aspect-ratio:4 / 3; object-fit:cover; border-radius:8px; background:#eee; display:block; }
+.pt-media figcaption { font-size:12px; color:#555; overflow-wrap:anywhere; }

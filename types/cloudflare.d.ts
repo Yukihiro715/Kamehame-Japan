@@ -35,6 +35,8 @@ declare module "cloudflare:workers" {
     STRIPE_EXPERIENCE_WEBHOOK_SECRET?: string;
     /** D1 binding: the commission ledger (lib/referral, migrations/). Present once the deploy workflow has created the database. */
     DB?: unknown;
+    /** R2: guest photos and videos from the review form (lib/review-media.ts). Absent until the deploy workflow has created the bucket. */
+    MEDIA?: unknown;
     /** "staging" on the verification Worker (worker/index.ts gate). */
     KH_ENV?: string;
     STAGING_BASIC_AUTH?: string;

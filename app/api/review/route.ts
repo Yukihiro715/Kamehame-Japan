@@ -3,6 +3,7 @@
 // booking, and is then added to lib/reviews.ts by hand.
 
 import { CONTACT_EMAIL } from "@/lib/contact";
+import { isBucket, isMediaKeyFor, writeReviewMeta, MAX_FILES, type MediaItem } from "@/lib/review-media";
 
 async function bindings() {
   try {
@@ -15,6 +16,7 @@ async function bindings() {
 
 const FROM = "enquiries@kamehame-japan.com";
 const MAX = { title: 90, body: 2000, name: 40, email: 200, country: 60, party: 20, date: 10, ref: 40, experience: 80, lang: 5 };
+const UPLOAD_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const MAX_PHOTOS = 3;
 const MAX_PHOTO_BYTES = 2_500_000; // base64 length; ~1.8 MB decoded
 
@@ -22,6 +24,8 @@ interface ReviewSubmission {
   experience: string; rating: number; title?: string; body: string; name: string; email: string; country: string;
   party?: string; date?: string; ref?: string; lang: string; consent: boolean; website?: string;
   photos: { name: string; type: string; data: string }[];
+  /** Files already in the MEDIA bucket (lib/review-media.ts) and the permission to use them on the site and social media. */
+  uploadId?: string; media: MediaItem[]; mediaConsent: boolean;
 }
 
 const clean = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/[\r\n]+/g, " ").trim().slice(0, max) : "");
@@ -42,14 +46,23 @@ function parse(b: Record<string, unknown>): ReviewSubmission | null {
     return [{ name: clean(n, 80) || "photo.jpg", type: type === "image/png" ? "image/png" : "image/jpeg", data }];
   });
   if (photos.length !== photosIn.length) return null;
+  const uploadId = typeof b.uploadId === "string" && UPLOAD_ID.test(b.uploadId) ? b.uploadId.toLowerCase() : undefined;
+  const mediaIn = Array.isArray(b.media) ? (b.media as unknown[]).slice(0, MAX_FILES) : [];
+  const media: MediaItem[] = uploadId ? mediaIn.flatMap((m) => {
+    if (!m || typeof m !== "object") return [];
+    const { key, name: n, type, size } = m as Record<string, unknown>;
+    if (typeof key !== "string" || !isMediaKeyFor(key, uploadId)) return [];
+    return [{ key, name: clean(n, 80) || "file", type: clean(type, 40), size: Number(size) || 0 }];
+  }) : [];
   return {
     experience: clean(b.experience, MAX.experience), rating, title: clean(b.title, MAX.title) || undefined, body, name, email, country,
     party: clean(b.party, MAX.party) || undefined, date: clean(b.date, MAX.date) || undefined, ref: clean(b.ref, MAX.ref) || undefined,
     lang: clean(b.lang, MAX.lang) || "en", consent: b.consent === "yes" || b.consent === true, website: clean(b.website, 200) || undefined, photos,
+    uploadId, media, mediaConsent: b.mediaConsent === "yes" || b.mediaConsent === true,
   };
 }
 
-function text(r: ReviewSubmission): string {
+function text(r: ReviewSubmission, stored: string | null): string {
   return [
     `Experience: ${r.experience}`,
     `Rating:     ${r.rating} / 5`,
@@ -62,7 +75,11 @@ function text(r: ReviewSubmission): string {
     r.ref && `Booking:    ${r.ref}`,
     `Language:   ${r.lang}`,
     `Consent:    ${r.consent ? "yes" : "no"}`,
-    `Photos:     ${r.photos.length}`,
+    `Photos:     ${r.photos.length} attached`,
+    `Media:      ${r.media.length ? `${r.media.length} file(s) in the MEDIA bucket · https://kamehame-japan.com/ops/reviews/` : "none uploaded"}`,
+    ...r.media.map((m) => `            - ${m.name} (${m.type}, ${(m.size / 1048576).toFixed(1)} MB) ${m.key}`),
+    `Site/SNS use of photos & videos: ${r.mediaConsent ? "PERMITTED by the guest" : "not permitted (review text only)"}`,
+    stored ? `Stored:     ${stored}` : (r.media.length ? "Stored:     (bucket unavailable: the file list above could not be confirmed)" : undefined),
     "",
     r.body,
     "",
@@ -83,14 +100,21 @@ export async function POST(request: Request): Promise<Response> {
     console.error("review: CONTACT_TO secret, or both RESEND_API_KEY and the send_email binding, missing");
     return Response.json({ ok: false, error: "unconfigured", fallback: CONTACT_EMAIL }, { status: 503 });
   }
-  const subject = `[Review] ${r.experience} — ${r.rating}★ — ${r.name}${r.ref ? ` — ${r.ref}` : ""}`;
+  const subject = `[Review] ${r.experience} — ${r.rating}★ — ${r.name}${r.ref ? ` — ${r.ref}` : ""}${r.media.length ? ` — ${r.media.length} media` : ""}`;
+  // The submission beside its files, so /ops/reviews/ can list it with the permissions given.
+  let stored: string | null = null;
+  if (r.uploadId && isBucket(cf.env.MEDIA)) {
+    try {
+      stored = await writeReviewMeta(cf.env.MEDIA, { id: r.uploadId, at: new Date().toISOString(), experience: r.experience, rating: r.rating, title: r.title, body: r.body, name: r.name, email: r.email || undefined, country: r.country || undefined, party: r.party, date: r.date, ref: r.ref, lang: r.lang, consent: r.consent, mediaConsent: r.mediaConsent, media: r.media });
+    } catch (err) { console.error("review: meta", err instanceof Error ? err.message : err); }
+  }
 
   if (key) {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: `KAMEHAME JAPAN Site <${FROM}>`, to: [to], ...(r.email ? { reply_to: r.email } : {}), subject, text: text(r),
+        from: `KAMEHAME JAPAN Site <${FROM}>`, to: [to], ...(r.email ? { reply_to: r.email } : {}), subject, text: text(r, stored),
         attachments: r.photos.map((p, i) => ({ filename: `${i + 1}-${p.name}`, content: p.data, content_type: p.type })),
         tags: [{ name: "kind", value: "review" }],
       }),
@@ -112,7 +136,7 @@ export async function POST(request: Request): Promise<Response> {
       `Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,
       `MIME-Version: 1.0`, `Content-Type: multipart/mixed; boundary="${boundary}"`, "",
       `--${boundary}`, `Content-Type: text/plain; charset=UTF-8`, `Content-Transfer-Encoding: base64`, "",
-      wrap(encode(text(r))),
+      wrap(encode(text(r, stored))),
       ...r.photos.flatMap((p, i) => [
         `--${boundary}`, `Content-Type: ${p.type}`,
         `Content-Disposition: attachment; filename="photo-${i + 1}.${p.type === "image/png" ? "png" : "jpg"}"`,

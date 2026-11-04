@@ -51,6 +51,16 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
 
+      # Guest photos and videos from the review form (lib/review-media.ts).
+      # Found or created here and bound as MEDIA; if the token cannot manage R2,
+      # the build goes on without the binding and the form keeps photos by email.
+      - name: Ensure the R2 bucket
+        continue-on-error: true
+        run: bash scripts/ensure-r2.sh kamehame-media
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
+
       - name: Build
         run: npm run build
 

@@ -22,6 +22,8 @@ interface Env {
   /** Workers AI: English for the shared-bus tour details (lib/golfpaq-translate.ts). */
   AI?: { run(model: string, input: Record<string, unknown>): Promise<unknown> };
   GOLFPAQ_LIVE?: string;
+  /** R2: guest photos and videos from the review form (lib/review-media.ts). */
+  MEDIA?: unknown;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {

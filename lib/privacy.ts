@@ -19,7 +19,7 @@ export interface PrivacyCopy {
   };
 }
 
-const UPDATED = "2026-11-02";
+const UPDATED = "2026-11-04";
 
 const PRIVACY: Record<Lang, PrivacyCopy> = {
   en: {
@@ -435,5 +435,13 @@ const BOOKING_MAIL = {
   fr: { heading: "E-mails de réservation et paiements", body: ["Nous utilisons Resend pour les e-mails, les services Google pour la correspondance et les dossiers de réservation, et Stripe pour les paiements. Nous pouvons enregistrer les erreurs de distribution, les chargements d’images et les clics sur les liens de paiement, et rapprocher les paiements de votre référence de réservation afin de suivre les préparatifs. Les ouvertures et clics sont indicatifs, car les protections de confidentialité et les scanners de sécurité peuvent les modifier. Notre registre ne conserve pas les adresses IP ni les identifiants de navigateur des clics. La durée de conservation des demandes indiquée ci-dessus s’applique. Pour toute question ou un autre moyen de contact : hello@kamehame-japan.com."] },
   "zh-tw": { heading: "預約郵件與付款紀錄", body: ["我們使用Resend寄送預約郵件、Google服務管理往來郵件與預約紀錄，並透過Stripe處理付款。為確認付款通知的寄達情況及後續安排，我們可能記錄寄送錯誤、郵件圖片載入及付款連結點擊，並以案件編號核對付款。開信與點擊僅為參考，可能受郵件隱私功能及安全掃描影響。預約台帳不儲存點擊時的IP位址或瀏覽器識別資訊。保存期限與上述詢問資料相同。如有疑問或希望改用其他聯絡方式，請聯絡hello@kamehame-japan.com。"] },
 } satisfies Record<Lang, { heading: string; body: string[] }>;
-export const privacyFor = (lang: Lang): PrivacyCopy => ({ ...PRIVACY[lang], sections: [...PRIVACY[lang].sections, BOOKING_MAIL[lang]] });
+const GUEST_MEDIA = {
+  en: { heading: "Photos and videos you send with a review", body: ["Files you add to the review form are stored in our Cloudflare account (R2) in a private store without a public address, together with your review and the permissions you ticked. We show them on this website, or on our social-media accounts, only if you ticked the permission on the form; otherwise staff use them solely to match your review to a booking. You can withdraw the permission or ask for the files to be deleted at any time by emailing hello@kamehame-japan.com."] },
+  ja: { heading: "ご感想と一緒にお送りいただく写真・動画", body: ["レビューフォームで添付したファイルは、公開URLのない当社のCloudflare(R2)の保管領域に、ご感想と選択いただいた許諾内容とともに保存します。ウェブサイトやSNSへの掲載は、フォームで許諾にチェックをいただいた場合に限ります。それ以外は、ご予約との照合のためにスタッフが確認するだけです。許諾の撤回やファイルの削除は、いつでも hello@kamehame-japan.com までご連絡ください。"] },
+  es: { heading: "Fotos y vídeos que envías con una opinión", body: ["Los archivos que añades al formulario de opinión se guardan en nuestra cuenta de Cloudflare (R2), en un almacén privado sin dirección pública, junto con tu opinión y los permisos que marcaste. Solo los mostramos en esta web o en nuestras redes sociales si marcaste el permiso en el formulario; en caso contrario, el equipo los usa únicamente para asociar tu opinión a una reserva. Puedes retirar el permiso o pedir que se borren los archivos en cualquier momento escribiendo a hello@kamehame-japan.com."] },
+  fr: { heading: "Photos et vidéos envoyées avec un avis", body: ["Les fichiers ajoutés au formulaire d'avis sont conservés dans notre compte Cloudflare (R2), dans un espace privé sans adresse publique, avec votre avis et les autorisations cochées. Nous ne les montrons sur ce site ou sur nos réseaux sociaux que si vous avez coché l'autorisation sur le formulaire ; sinon, l'équipe s'en sert uniquement pour rapprocher votre avis d'une réservation. Vous pouvez retirer l'autorisation ou demander la suppression des fichiers à tout moment en écrivant à hello@kamehame-japan.com."] },
+  "zh-tw": { heading: "隨評論提交的照片與影片", body: ["您在評論表單中附加的檔案，會與您的評論及勾選的授權一起儲存在我們 Cloudflare 帳戶（R2）中沒有公開網址的私人儲存空間。只有在您於表單勾選授權時，我們才會將其刊登於本網站或我們的社群媒體帳號；否則僅供工作人員核對預約之用。您可隨時來信 hello@kamehame-japan.com 撤回授權或要求刪除檔案。"] },
+} satisfies Record<Lang, { heading: string; body: string[] }>;
+
+export const privacyFor = (lang: Lang): PrivacyCopy => ({ ...PRIVACY[lang], sections: [...PRIVACY[lang].sections, BOOKING_MAIL[lang], GUEST_MEDIA[lang]] });
 export const privacyUpdated = UPDATED;

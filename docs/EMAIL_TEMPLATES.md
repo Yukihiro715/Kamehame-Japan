@@ -198,19 +198,21 @@ See you tomorrow evening.
 
 ---
 
-## E. お礼と口コミのお願い(体験翌日)
+## E. お礼と口コミ・写真動画のお願い(体験翌日)
 
-**件名:** `Thank you for last night — one small favour`
+**件名:** `Thank you for last night — could you help us with one small thing?`
 
 ```
 Hello {name},
 
 Thank you for spending the evening with us. We hope {geiko/maiko name, if shared} and the house made it one to remember.
 
-One favour: would you leave a short review? It takes two minutes, and it helps the next guests decide.
+KAMEHAME JAPAN has only just started, and we have a small favour to ask. Would you leave a short review, and, if you took any, add a few photos or a short video from the evening? It takes a few minutes, and nothing helps the next guests, or us, more than the real thing.
 https://kamehame-japan.com/en/review/?experience=evening-with-geiko&ref={予約番号}   (日本語ページは /ja/review/、他言語も同様)
 
-Only guests with a confirmed booking can review, and we publish reviews as written. A photo from the evening is welcome if you'd like to add one.
+On the form you can tick whether we may use your photos and videos on our website and social media (Instagram, Facebook, YouTube); we show only your first name, and you can withdraw it any time by email. If you would rather we did not, simply leave that box unticked: your review is just as welcome.
+
+Only guests with a confirmed booking can review, and we publish reviews as written.
 
 If anything fell short, please tell us directly by replying to this email — we read every message.
 
@@ -220,14 +222,15 @@ KAMEHAME JAPAN · Prosent Inc.
 ```
 
 **日本語対訳**
-> 昨夜はありがとうございました。二分ほどで書ける口コミをお願いできますか({予約ごとのフォームリンク})。
-> 予約確認済みの方だけが投稿でき、内容は手を加えずに掲載します。写真も歓迎です。
-> 至らない点があれば、このメールへの返信で直接お知らせください。
+> 昨夜はありがとうございました。KAMEHAME JAPAN はまだ始まったばかりのサービスで、ひとつお願いがあります。短い口コミと、もしあれば当日の写真や短い動画を({予約ごとのフォームリンク})から送っていただけませんか。実際の写真・動画ほど、次のお客様と私たちの力になるものはありません。
+> フォームでは、写真・動画をサイトやSNS(Instagram、Facebook、YouTube)で使ってよいかをチェックで選べます。表示はファーストネームのみで、メールでいつでも撤回できます。使ってほしくない場合はチェックしないままで結構です。口コミだけでも大歓迎です。
+> 予約確認済みの方だけが投稿でき、内容は手を加えずに掲載します。至らない点があれば、このメールへの返信で直接お知らせください。
 
 **予約番号のルール:** `KJ-体験日(YYMMDD)-連番`(例 `KJ-261012-01`)。入金確認時に採番し、確定通知(C)の件名・本文、口コミ依頼(E)のリンク、Stripe の決済メモに同じ番号を入れる。
 
 **口コミフォーム**(サイト内 `/{lang}/review/`。URL に体験と予約番号を入れて送る。届いた内容は写真付きで hello@ にメールされ、件名に予約番号が付く。半自動運用: 確定通知を送る際に E も書き、Gmail の「送信日時を設定」で体験翌日の朝に予約送信しておく)
-- 総合評価(1〜5)/ タイトル / 感想 / 表示名(イニシャル可)/ 国 / 利用シーン(カップル・家族・友人・ひとり・仕事)/ 写真(任意)/ 「サイトへの掲載に同意する」
+- 総合評価(1〜5)/ タイトル / 感想 / 表示名(イニシャル可)/ 国 / 利用シーン(カップル・家族・友人・ひとり・仕事)/ 写真・動画(任意、5ファイルまで。写真12MB・動画100MBまで)/ 「サイトへの掲載に同意する」(必須)/ 「写真・動画のサイト・SNS利用に同意する」(任意)
+- 写真・動画は R2 バケット MEDIA(`reviews/<月>/<送信ID>/`)に保存され、運営画面 `/ops/reviews/` で本文・許諾の有無と一緒に確認・ダウンロードできます(docs/REVIEW_MEDIA.md)。許諾なしの素材はサイト・SNSに使わない。
 - 届いたものは `lib/reviews.ts` に追加して公開(`verified: true`)。最初の1件からでも表示できます。**自作・依頼による創作は不可**(景表法のステマ規制、Google のレビューポリシー)。
 - Google のビジネスプロフィールへの投稿は、上記フォームの完了画面で任意にお願いする(サブ)。
 

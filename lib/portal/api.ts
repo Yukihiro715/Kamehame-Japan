@@ -8,6 +8,7 @@
  *  - the signed-in user comes from the session cookie and their memberships,
  *    read fresh each time; hotel users only ever see their own hotels. */
 import { popularOverview, savePopularSetting } from "@/lib/popular";
+import { isBucket, listReviewSubmissions, serveMedia } from "@/lib/review-media";
 import { d1Db, isD1Like, type SqlDb } from "@/lib/referral/db";
 import { canSeeHotel, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
@@ -21,7 +22,7 @@ import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, str } from "./util";
 import type { PortalMailEnv } from "./mail";
 
-export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & { DB?: unknown };
+export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & { DB?: unknown; MEDIA?: unknown };
 const PUBLIC_ORIGIN = "https://kamehame-japan.com";
 
 export async function handlePortalApi(request: Request, env: PortalEnv, path: string[]): Promise<Response> {
@@ -193,6 +194,18 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       catch (e) { throw bad(e instanceof Error ? e.message : "bad_request"); }
       return json({ ok: true });
     }
+  }
+  if (head === "reviews" && get) {
+    // Guest reviews with photos and videos, as kept beside the files in the MEDIA bucket (lib/review-media.ts).
+    await requireOps(ctx);
+    const bucket = isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null;
+    return json({ ok: true, configured: !!bucket, rows: bucket ? await listReviewSubmissions(bucket) : [] });
+  }
+  if (head === "media" && get) {
+    await requireOps(ctx);
+    const bucket = isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null;
+    if (!bucket) throw new ApiError(503, "media_unavailable");
+    return await serveMedia(bucket, q(ctx, "key") ?? "", q(ctx, "download") === "1");
   }
   if (head === "popular") {
     // The home page's "Popular right now" order (lib/popular.ts).
