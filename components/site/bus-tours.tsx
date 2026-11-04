@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bus, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, Utensils, X } from "lucide-react";
+import { Bus, CalendarDays, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, Utensils, X } from "lucide-react";
 import { GOLFPAQ_RENTAL_JPY, GOLFPAQ_SHOE_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
 import type { BusCopy } from "@/lib/golfpaq-copy";
 import type { Lang } from "@/lib/i18n";
@@ -37,6 +37,21 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const [flash, setFlash] = useState(0);
   const formRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const pickRef = useRef<HTMLDivElement>(null);
+  // A floating "Calendar" button while the calendar is scrolled off the top and the list is still on screen (the rows get long).
+  const [fab, setFab] = useState(false);
+  useEffect(() => {
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const pick = pickRef.current?.getBoundingClientRect(), list = listRef.current?.getBoundingClientRect();
+      setFab(!!pick && !!list && pick.bottom < 0 && list.bottom > window.innerHeight * 0.4);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(check); };
+    window.addEventListener("scroll", onScroll, { passive: true }); window.addEventListener("resize", onScroll); check();
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (raf) cancelAnimationFrame(raf); };
+  }, []);
+  const toCalendar = () => pickRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   const months = useMemo(() => [...new Set(tours.map((t) => t.date.slice(0, 7)))].sort(), [tours]);
   const areas = useMemo(() => [...new Set(tours.map((t) => t.departure.area))].sort(), [tours]);
   // The golfers filter never offers more than the largest open tour can take.
@@ -58,7 +73,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
       <div className="gb-wrap">
         <h2 id="gb-tours-h">{C.toursH}</h2>
         <p className="gb-lede">{C.toursLede}</p>
-        <div className="gb-pick">
+        <div className="gb-pick" ref={pickRef}>
         {tours.length > 0 && <Calendar tours={tours} months={months} day={day} people={people} area={area} onPick={pick} lang={lang} C={C} />}
         <div className="gb-filters">
           <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: maxSeats }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
@@ -70,6 +85,9 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
           <b><ShieldCheck size={16} /> {C.howH}</b>
           <p>{C.howBody} {C.howAvailability}</p>
         </div>
+        {fab && !chosen && !open && (
+          <button type="button" className="gb-fab" onClick={toCalendar}><CalendarDays size={18} /> <span>{day ? dateLabel(day, lang) : C.fabCalendar}</span></button>
+        )}
         <div ref={listRef} className={`gb-results${flash ? " flash" : ""}`} aria-live="polite">
           {day && <p className="gb-showing">{C.calShowing} <b>{dateLabel(day, lang)}</b> · <button type="button" className="gb-link" onClick={() => pick("")}>{C.calAny}</button></p>}
           {tours.length === 0 ? <p className="gb-empty">{C.unavailable}</p> : filtered.length === 0 ? <p className="gb-empty">{C.noMatch}</p> : (

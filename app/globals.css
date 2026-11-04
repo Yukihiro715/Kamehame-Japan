@@ -2305,3 +2305,10 @@ body[data-kh-modal] .sticky-request { display:none; }
 :is([lang="ja"], [lang="zh-tw"]) .popular-copy h3 { text-transform:none; letter-spacing:.02em; font-size:16px; font-weight:700; }
 .gb-ways-inline { padding:0 clamp(24px,7vw,120px) 70px; } .gb-ways-inline .gb-cta-row { margin-top:0; } .gb-ways-inline .gb-cta-card p { margin:0; }
 @media (max-width:700px) { .popular-section { padding:26px 0 16px; } .popular-section .section-heading { padding:0 22px; } .popular-section .section-heading h2 { font-size:34px; } .popular-row { gap:12px; margin-top:18px; padding:4px 22px 10px; scroll-padding-left:22px; } .popular-row::after { flex-basis:10px; } .popular-card { flex-basis:min(72vw,280px); } .popular-copy { padding:12px 12px 14px; } .popular-copy h3 { font-size:16px; } .gb-ways-inline { padding:0 22px 60px; } }
+
+/* Shared-bus tours: the floating button back to the calendar while the long list is on screen */
+.gb-pick { scroll-margin-top:84px; }
+.gb-fab { position:fixed; right:16px; bottom:calc(18px + env(safe-area-inset-bottom,0px)); z-index:60; display:inline-flex; align-items:center; gap:8px; padding:12px 16px; border:0; border-radius:999px; background:var(--ink); color:var(--white); font:inherit; font-size:14px; font-weight:700; box-shadow:0 10px 26px rgba(0,0,0,.28); cursor:pointer; animation:gb-fab-in .25s ease-out; }
+.gb-fab:hover { background:#000; } .gb-fab svg { color:var(--kame); }
+@keyframes gb-fab-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+@media (min-width:1100px) { .gb-fab { right:calc((100vw - 1180px) / 2 + 16px); } }
