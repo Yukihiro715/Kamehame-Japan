@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomePage } from "@/components/site/home-page";
+import { homeData } from "@/lib/home-data";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = withAlternates(
@@ -13,6 +14,7 @@ export const metadata: Metadata = withAlternates(
   { en: "/", es: "/es/", ja: "/ja/", fr: "/fr/", "zh-tw": "/zh-tw/" },
 );
 
-export default function Home() {
-  return <HomePage lang="en" />;
+export default async function Home() {
+  const { popular, golfLanding } = await homeData("en");
+  return <HomePage lang="en" popular={popular} golfLanding={golfLanding} />;
 }
