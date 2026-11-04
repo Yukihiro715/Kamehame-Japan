@@ -56,7 +56,7 @@ const COPY = {
     kicker: ["Explore by interest", (n: number) => `${n} ways into Japan`], catTitle: "Follow your curiosity.",
     catTypes: { calligraphy: "Brush & ink", golf: "Sport & scenery", kendo: "Way of the sword", ramen: "Food culture", sushi: "Food culture", sumo: "Living tradition", "tea-ceremony": "Mindful ritual", kimono: "Craft & style", geisha: "Performing arts", swordsmith: "Heritage craft", "anime-nail-art": "Pop culture" } as Record<string, string>,
     toursCard: { title: "Private tours", type: "Made for you" },
-    popEyebrow: "Popular right now", popTitle: ["What guests", "book most."], expEyebrow: "Find your Japan.", expTitle: ["Eat. Make.", "Meet. Play."], expLink: "View all experiences",
+    campaignLabel: "Campaign", popEyebrow: "Popular right now", popTitle: ["What guests", "book most."], expEyebrow: "Find your Japan.", expTitle: ["Eat. Make.", "Meet. Play."], expLink: "View all experiences",
     featureEyebrow: "Now booking", featureCta: "See the experience",
     tourEyebrow: "Private guided days", tourTitle: ["Let the experience", "become the journey."],
     tourBody: "Spend a full day with a private licensed guide in Tokyo or Kyoto. We can place any masterclass at the heart of a route shaped around your interests.",
@@ -106,7 +106,7 @@ const COPY = {
     kicker: ["Explora por interés", (n: number) => `${n} puertas a Japón`], catTitle: "Sigue tu curiosidad.",
     catTypes: { calligraphy: "Pincel y tinta", golf: "Deporte y paisaje", kendo: "La vía de la espada", ramen: "Cultura gastronómica", sushi: "Cultura gastronómica", sumo: "Tradición viva", "tea-ceremony": "Ritual consciente", kimono: "Oficio y estilo", geisha: "Artes escénicas", swordsmith: "Oficio ancestral", "anime-nail-art": "Cultura pop" } as Record<string, string>,
     toursCard: { title: "Tours privados", type: "A tu medida" },
-    popEyebrow: "Lo más popular ahora", popTitle: ["Lo que más", "se reserva."], expEyebrow: "Encuentra tu Japón.", expTitle: ["Come. Crea.", "Conoce. Juega."], expLink: "Ver todas las experiencias",
+    campaignLabel: "Campaña", popEyebrow: "Lo más popular ahora", popTitle: ["Lo que más", "se reserva."], expEyebrow: "Encuentra tu Japón.", expTitle: ["Come. Crea.", "Conoce. Juega."], expLink: "Ver todas las experiencias",
     featureEyebrow: "Reservas abiertas", featureCta: "Ver la experiencia",
     tourEyebrow: "Días privados con guía", tourTitle: ["Deja que la experiencia", "se vuelva el viaje."],
     tourBody: "Pasa un día completo con un guía privado titulado en Tokio o Kioto. Podemos poner cualquier clase magistral en el corazón de una ruta hecha a tu medida.",
@@ -156,7 +156,7 @@ const COPY = {
     kicker: ["関心から探す", (n: number) => `日本への${n}つの扉`], catTitle: "気になるものから。",
     catTypes: { calligraphy: "筆と墨", golf: "スポーツと景色", kendo: "剣の道", ramen: "食文化", sushi: "食文化", sumo: "生きた伝統", "tea-ceremony": "静かな儀礼", kimono: "技と装い", geisha: "舞と芸", swordsmith: "古来の手仕事", "anime-nail-art": "ポップカルチャー" } as Record<string, string>,
     toursCard: { title: "プライベートツアー", type: "ご要望に合わせて" },
-    popEyebrow: "いま人気の体験", popTitle: ["いちばん選ばれている", "体験。"], expEyebrow: "あなたの日本を見つける。", expTitle: ["食べる。つくる。", "会う。遊ぶ。"], expLink: "すべての体験を見る",
+    campaignLabel: "キャンペーン", popEyebrow: "いま人気の体験", popTitle: ["いちばん選ばれている", "体験。"], expEyebrow: "あなたの日本を見つける。", expTitle: ["食べる。つくる。", "会う。遊ぶ。"], expLink: "すべての体験を見る",
     featureEyebrow: "受付中の体験", featureCta: "体験の詳細を見る",
     tourEyebrow: "ガイドと過ごす一日", tourTitle: ["その体験が、", "旅そのものになる。"],
     tourBody: "東京または京都で、専属の全国通訳案内士と一日を過ごしていただけます。どのマスタークラスでも、一日の中心に据えて組み立てられます。",
@@ -206,7 +206,7 @@ const COPY = {
     kicker: ["Explorer par envie", (n: number) => `${n} portes sur le Japon`], catTitle: "Suivez votre curiosité.",
     catTypes: { calligraphy: "Pinceau et encre", golf: "Sport et paysage", kendo: "La voie du sabre", ramen: "Culture gastronomique", sushi: "Culture gastronomique", sumo: "Tradition vivante", "tea-ceremony": "Rituel attentif", kimono: "Métier et style", geisha: "Arts de la scène", swordsmith: "Métier ancestral", "anime-nail-art": "Pop culture" } as Record<string, string>,
     toursCard: { title: "Journées privées", type: "Sur mesure" },
-    popEyebrow: "Les plus demandées", popTitle: ["Ce que nos hôtes", "réservent le plus."], expEyebrow: "Trouvez votre Japon.", expTitle: ["Goûter. Créer.", "Rencontrer. Jouer."], expLink: "Voir toutes les expériences",
+    campaignLabel: "Campagne", popEyebrow: "Les plus demandées", popTitle: ["Ce que nos hôtes", "réservent le plus."], expEyebrow: "Trouvez votre Japon.", expTitle: ["Goûter. Créer.", "Rencontrer. Jouer."], expLink: "Voir toutes les expériences",
     featureEyebrow: "Réservations ouvertes", featureCta: "Voir l'expérience",
     tourEyebrow: "Journées privées avec guide", tourTitle: ["Laissez l'expérience", "devenir le voyage."],
     tourBody: "Passez une journée entière avec un guide privé agréé à Tokyo ou Kyoto. N'importe quelle masterclass peut être au cœur d'un parcours fait pour vous.",
@@ -256,7 +256,7 @@ const COPY = {
     kicker: ["依興趣探索", (n: number) => `通往日本的 ${n} 扇門`], catTitle: "跟著好奇心走。",
     catTypes: { calligraphy: "筆與墨", golf: "運動與風景", kendo: "劍之道", ramen: "飲食文化", sushi: "飲食文化", sumo: "活的傳統", "tea-ceremony": "靜心儀式", kimono: "技藝與風格", geisha: "表演藝術", swordsmith: "古老技藝", "anime-nail-art": "流行文化" } as Record<string, string>,
     toursCard: { title: "私人一日遊", type: "量身安排" },
-    popEyebrow: "目前最受歡迎", popTitle: ["最多旅客", "選擇的體驗。"], expEyebrow: "找到你的日本。", expTitle: ["吃。做。", "見。玩。"], expLink: "查看所有體驗",
+    campaignLabel: "優惠活動", popEyebrow: "目前最受歡迎", popTitle: ["最多旅客", "選擇的體驗。"], expEyebrow: "找到你的日本。", expTitle: ["吃。做。", "見。玩。"], expLink: "查看所有體驗",
     featureEyebrow: "開放預約中", featureCta: "查看體驗",
     tourEyebrow: "與導遊共度的一天", tourTitle: ["讓體驗", "成為旅程本身。"],
     tourBody: "與私人持證導遊在東京或京都度過完整的一天。任何一堂大師課都可以成為專屬路線的核心。",
@@ -355,21 +355,38 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
         </div>
       </section>
 
-      {/* The Ofukuro Dinner campaign (published 2026-10-23): one band under the hero, in every language, to the English page. */}
+      {popular.length >= 2 && (
+        <section className="popular-section" id="popular" aria-labelledby="popular-heading">
+          <div className="section-heading horizontal">
+            <div><p className="eyebrow"><span /> <Flame size={14} /> {C.popEyebrow}</p><h2 id="popular-heading">{C.popTitle[0]}<br />{C.popTitle[1]}</h2></div>
+            <Link className="underlined-link" href={p("/experiences/")}>{C.expLink} <ArrowRight /></Link>
+          </div>
+          <div className="popular-row" role="list">
+            {popular.map((item, i) => (
+              <Link role="listitem" className="popular-card" href={p(item.slug === "mt-fuji-golf-day" && golfLanding ? "/golf-tours/" : `/${item.city}/${item.slug}/`)} key={item.slug}>
+                <div className="popular-art"><img src={item.img} alt={item.alt} loading={i < 2 ? "eager" : "lazy"} /><span className="popular-rank">No.{i + 1}</span></div>
+                <div className="popular-copy">
+                  <p className="experience-city"><MapPin size={13} /> {cityTitle(item.city)} · {item.duration}</p>
+                  <h3>{item.title}</h3>
+                  <p className="listing-price"><span>{T.from} <b><Fx>{listPrice(item, lang).price}</Fx></b> {listPrice(item, lang).unit === "group" ? T.perGroupShort : T.perPerson}</span></p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* The Ofukuro Dinner campaign (published 2026-10-23): a small "Campaign" card under the popular row, in every language, to the English page. */}
       <section className="campaign-band" aria-labelledby="campaign-heading">
+        <p className="eyebrow campaign-label"><span /> {C.campaignLabel}</p>
         <Link href={OFUKURO_FOUNDING.path} className="campaign-card">
-          <div className="campaign-art">
-            <img src="/images/ofukuro-hero-table.webp" alt={OFUKURO_CAMPAIGN[lang].alt} loading="lazy" />
-            <span className="campaign-badge">{OFUKURO_CAMPAIGN[lang].badge}</span>
-          </div>
+          <div className="campaign-art"><img src="/images/ofukuro-hero-table.webp" alt={OFUKURO_CAMPAIGN[lang].alt} loading="lazy" /></div>
           <div className="campaign-copy">
-            <p className="eyebrow"><span /> {OFUKURO_CAMPAIGN[lang].eyebrow}</p>
+            <span className="campaign-badge">{OFUKURO_CAMPAIGN[lang].badge}</span>
             <h2 id="campaign-heading">{OFUKURO_CAMPAIGN[lang].title}</h2>
-            <p>{OFUKURO_CAMPAIGN[lang].line}</p>
             <p className="campaign-price"><b><Fx>{yenOf(ofukuroFoundingRows[1].founding)}</Fx></b> <s>{yenOf(ofukuroFoundingRows[1].regular)}</s> <small>{OFUKURO_CAMPAIGN[lang].priceNote}</small></p>
-            <span className="underlined-link">{OFUKURO_CAMPAIGN[lang].cta} <ArrowRight /></span>
-            {OFUKURO_CAMPAIGN[lang].note && <small className="campaign-note">{OFUKURO_CAMPAIGN[lang].note}</small>}
           </div>
+          <span className="campaign-go" aria-hidden="true"><ArrowRight size={18} /></span>
         </Link>
       </section>
 
@@ -464,27 +481,6 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
                 <ArrowDownRight size={18} />
               </Link>
             )}
-          </div>
-        </section>
-      )}
-
-      {popular.length >= 2 && (
-        <section className="popular-section" id="popular" aria-labelledby="popular-heading">
-          <div className="section-heading horizontal">
-            <div><p className="eyebrow"><span /> <Flame size={14} /> {C.popEyebrow}</p><h2 id="popular-heading">{C.popTitle[0]}<br />{C.popTitle[1]}</h2></div>
-            <Link className="underlined-link" href={p("/experiences/")}>{C.expLink} <ArrowRight /></Link>
-          </div>
-          <div className="popular-grid">
-            {popular.map((item, i) => (
-              <Link className="popular-card" href={p(item.slug === "mt-fuji-golf-day" && golfLanding ? "/golf-tours/" : `/${item.city}/${item.slug}/`)} key={item.slug}>
-                <div className="popular-art"><img src={item.img} alt={item.alt} loading={i < 2 ? "eager" : "lazy"} /><span className="popular-rank">No.{i + 1}</span></div>
-                <div className="popular-copy">
-                  <p className="experience-city"><MapPin size={13} /> {cityTitle(item.city)} · {item.duration}</p>
-                  <h3>{item.title}</h3>
-                  <p className="listing-price"><span>{T.from} <b><Fx>{listPrice(item, lang).price}</Fx></b> {listPrice(item, lang).unit === "group" ? T.perGroupShort : T.perPerson}</span></p>
-                </div>
-              </Link>
-            ))}
           </div>
         </section>
       )}
