@@ -566,7 +566,7 @@ export const experiences: Experience[] = [
     tagline: "Create a one-of-a-kind kanji artwork inspired by your own name, in a private class in Tokyo. Before the day we ask about your name and its meaning, and the teacher prepares three kanji for you; you choose the one that feels most like you and turn it into art with brush and ink.",
     overview: ["This is not a calligraphy class about writing perfectly or following strict rules. What matters is what your kanji means to you, and expressing it in your own way.", "You start by exploring how the brush moves — lines, dry-brush texture, the moods of ink. Then you choose a style, Cute, Bold or Elegant, and develop your character with one-to-one guidance from the teacher. No experience with brushes or kanji is needed.", "A red seal completes the piece, and it goes home with you: a kanji chosen for you and shaped by your own hands — a piece of art from your time in Tokyo, not just a souvenir."],
     overviewFigure: { img: "/images/kanji-styles.jpg", alt: "Style examples: six kanji brushed in the Cute, Bold and Elegant styles", caption: "The three styles to choose from — Cute, Bold and Elegant (examples)." },
-    duration: "About 2 hours", price: "¥19,800", priceUnit: "person", group: "Private · 1–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
+    duration: "About 2 hours", price: "¥19,800", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },
@@ -584,7 +584,7 @@ export const experiences: Experience[] = [
       { img: "/images/kanji-teacher-seal.jpg", alt: "The teacher with a finished piece and the box of red seals" },
       { img: "/images/kanji-studio.jpg", alt: "The bright studio with a long shared table" },
     ],
-    partySize: { min: 1, max: 4 },
+    partySize: { min: 2, max: 4 },
     pricing: { minCharge: 2 },
     // 2026-10-07: every day is open to requests (the owner wants to see
     // whether bookings come in); the teacher's calendar is checked per request.
@@ -601,7 +601,7 @@ export const experiences: Experience[] = [
       { icon: "chat", title: "Three kanji prepared for you", body: "Before the class we ask about your name and its meaning. The teacher prepares three characters for you; on the day you choose the one that feels most like you." },
       { icon: "brush", title: "Art, not a handwriting test", body: "Choose a style — Cute, Bold or Elegant — and make the character your own. No experience with brushes or kanji needed." },
       { icon: "photo", title: "A piece you take home", body: "Your final work on a shikishi board, sealed with a red stamp and set on a wooden stand — made and handed over the same day." },
-      { icon: "group", title: "Just your group", body: "Classes are not shared with other guests: one to four people, one teacher, one long table." },
+      { icon: "group", title: "Just your group", body: "Classes are not shared with other guests: two to four people, one teacher, one long table." },
     ],
     included: [
       "A two-hour class led by the teacher in simple English",
@@ -647,7 +647,7 @@ export const experiences: Experience[] = [
       { q: "What do I take home?", a: "Your final piece on a shikishi board, sealed with a red stamp, and a wooden stand to display it." },
       { q: "Which language is the class taught in?", a: "English — the teacher runs the class herself in simple English." },
       { q: "Can children join?", a: "From age 10, because the class uses real ink. Children pay the adult price." },
-      { q: "I'm travelling alone. Can I join?", a: "Yes. A class for one is priced as two guests; the booking box shows the total when you choose one guest." },
+      { q: "I'm travelling alone. Can I join?", a: "Bookings require at least two participants. The private class welcomes groups of two to four guests." },
       { q: "What should I wear?", a: "Clothes you don't mind getting ink on. Aprons are provided." },
       { q: "Can we book at short notice?", a: "Requests close at 6:00 pm JST two days before. The teacher and the studio are booked when your request comes in, so we confirm once both are free for your date — for a class in the next few days, only if they still are." },
       { q: "How does booking work?", a: "Choose a date and send a request; we reply within 24 hours with the price and conditions. Sending the request costs nothing. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },

@@ -1,7 +1,7 @@
 import type { Lang } from "@/lib/i18n";
 
 export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
-export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; groupPricing?: boolean }> = {
+export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean }> = {
   "osaka-kendo-experience-tour": { price: "price_1UTES5DpZ5Y8WoJ2IqJbx1wp", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "kyoto-kendo-experience-tour": { price: "price_1UTESBDpZ5Y8WoJ2vKiTajho", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "nagoya-kendo-experience-tour": { price: "price_1UTESIDpZ5Y8WoJ2xMeQieOF", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
@@ -11,7 +11,9 @@ export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number
   "dotonbori-ramen-class": { price: "price_1UTESxDpZ5Y8WoJ22NGPt3xy", amount: 26500, min: 1, max: 16, minCharge: 1 },
   "tokyo-kendo-experience-tour": { price: "price_1USyu1DpZ5Y8WoJ2tnGKPAdj", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "shibuya-ramen-class": { price: "price_1USyuLDpZ5Y8WoJ2Er2OtMAL", amount: 26500, min: 1, max: 16, minCharge: 1 },
-  "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 1, max: 4, minCharge: 2 },
+  "nihonbashi-kendo-experience": { price: "price_1UXwbgDpZ5Y8WoJ2h7EK23XX", amount: 20000, min: 1, max: 8, minCharge: 1, eligibilityRequired: true, timeOnConfirmation: true },
+  "nihonbashi-bushido-experience": { price: "price_1UXwbPDpZ5Y8WoJ21QAHRH7V", amount: 10000, min: 2, max: 8, minCharge: 2, eligibilityRequired: true, timeOnConfirmation: true },
+  "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 2, max: 4, minCharge: 2 },
 };
 
 const copy = {
@@ -100,4 +102,12 @@ const geikoAdultCopy: Record<Lang, string> = {
   fr: "Tous les participants ont au moins 12 ans. Pour les moins de 12 ans, demandez un devis avant de payer.",
   "zh-tw": "所有參加者皆年滿12歲。如有11歲以下兒童，請於付款前聯絡我們取得報價。",
 };
-export const checkoutAdultCopy = (lang: Lang, slug: string) => slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
+const nihonbashiEligibility: Record<Lang, { kendo: string; bushido: string; time: string }> = {
+  en: { kendo: "All participants are aged 16–64. For ages 6–15 or 65+, request a quote before paying so we can apply the correct rate.", bushido: "All participants are aged 15 or over.", time: "The start time will be arranged with the dojo after payment. Add your preferred time of day in the notes. If no suitable time is agreed, you receive a full refund." },
+  ja: { kendo: "参加者全員が16〜64歳です。6〜15歳または65歳以上の方がいる場合は、適切な料金をご案内するため決済前に個別見積もりをご依頼ください。", bushido: "参加者全員が15歳以上です。", time: "開始時刻は決済後に道場と調整します。ご希望の時間帯を備考欄にご記入ください。合意できる時刻がなければ全額返金します。" },
+  es: { kendo: "Todos los participantes tienen entre 16 y 64 años. Para edades de 6–15 o 65+, solicita un presupuesto antes de pagar para aplicar la tarifa correcta.", bushido: "Todos los participantes tienen al menos 15 años.", time: "La hora se coordina con el dojo después del pago. Indica tu horario preferido en las notas. Si no acordamos una hora adecuada, recibirás un reembolso íntegro." },
+  fr: { kendo: "Tous les participants ont entre 16 et 64 ans. Pour les 6–15 ans ou les 65 ans et plus, demandez un devis avant de payer afin d’appliquer le bon tarif.", bushido: "Tous les participants ont au moins 15 ans.", time: "L’heure sera convenue avec le dojo après le paiement. Indiquez votre préférence dans les notes. Si aucun horaire ne convient, vous serez intégralement remboursé." },
+  "zh-tw": { kendo: "所有參加者皆為16至64歲。如有6至15歲或65歲以上參加者，請先取得適用報價再付款。", bushido: "所有參加者皆年滿15歲。", time: "開始時間將於付款後與道場協調。請在備註填寫希望時段。若無法達成合適時間，將全額退款。" },
+};
+export const checkoutTimeCopy = (lang: Lang) => nihonbashiEligibility[lang].time;
+export const checkoutAdultCopy = (lang: Lang, slug: string) => slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
