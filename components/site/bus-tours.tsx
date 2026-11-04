@@ -132,11 +132,17 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
  *  under the grid says how many tours that is and jumps to the list. */
 function Calendar({ tours, months, day, people, area, onPick, lang, C }: { tours: PublicTour[]; months: string[]; day: string; people: number; area: string; onPick: (d: string, scroll?: boolean) => void; lang: Lang; C: BusCopy }) {
   const [month, setMonth] = useState(() => (day ? day.slice(0, 7) : months[0]));
+  // Per day: tours that can take the chosen party (open, enough seats, matching departure) and the seats they have between them;
+  // the cell shows the seats, so a pair can see at a glance that a "1" is not for them.
   const byDay = useMemo(() => {
-    const m = new Map<string, { open: number; sold: number }>();
-    for (const t of tours) { const e = m.get(t.date) ?? { open: 0, sold: 0 }; if (t.soldOut) e.sold++; else e.open++; m.set(t.date, e); }
+    const m = new Map<string, { open: number; seats: number; sold: number }>();
+    for (const t of tours) {
+      const e = m.get(t.date) ?? { open: 0, seats: 0, sold: 0 };
+      if (!t.soldOut && t.seats >= people && (!area || t.departure.area === area)) { e.open++; e.seats += t.seats; } else e.sold++;
+      m.set(t.date, e);
+    }
     return m;
-  }, [tours]);
+  }, [tours, people, area]);
   const idx = months.indexOf(month);
   const [y, mm] = month.split("-").map(Number);
   const first = new Date(Date.UTC(y, mm - 1, 1));
@@ -158,8 +164,8 @@ function Calendar({ tours, months, day, people, area, onPick, lang, C }: { tours
           if (!d) return <span key={`e${i}`} className="gb-cal-empty" />;
           const e = byDay.get(d);
           const cls = !e ? "gb-cal-day none" : e.open > 0 ? "gb-cal-day open" : "gb-cal-day sold";
-          const label = e ? `${dateLabel(d, lang)}: ${e.open > 0 ? `${e.open} ${C.calLegendOpen.toLowerCase()}` : C.calLegendSold}` : dateLabel(d, lang);
-          return <button key={d} type="button" className={`${cls}${day === d ? " on" : ""}`} disabled={!e} aria-pressed={day === d} aria-label={label} onClick={() => onPick(day === d ? "" : d)}><span>{Number(d.slice(8))}</span>{e && <i>{e.open > 0 ? e.open : ""}</i>}</button>;
+          const label = e ? `${dateLabel(d, lang)}: ${e.open > 0 ? seatsText(C.seatsLeft, e.seats) : C.calLegendSold}` : dateLabel(d, lang);
+          return <button key={d} type="button" className={`${cls}${day === d ? " on" : ""}`} disabled={!e} aria-pressed={day === d} aria-label={label} onClick={() => onPick(day === d ? "" : d)}><span>{Number(d.slice(8))}</span>{e && <i>{e.open > 0 ? e.seats : ""}</i>}</button>;
         })}
       </div>
       <div className="gb-cal-legend">
