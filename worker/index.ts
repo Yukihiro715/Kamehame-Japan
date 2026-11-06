@@ -9,6 +9,7 @@ import { normaliseCourseName } from "../lib/golf-course-images";
 import { d1Db, isD1Like } from "../lib/referral/db";
 import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
 import { autoAcknowledge } from "../lib/portal/settlement";
+import { expireQuotes } from "../lib/portal/cases";
 
 interface Env {
   ASSETS: Fetcher;
@@ -231,6 +232,8 @@ const scheduled = {
       // tours' details per tick while the pages are on (staging or GOLFPAQ_LIVE).
       // Settlement: issued statements past their dispute window count as acknowledged (lib/portal/settlement.ts).
       if (isD1Like(env.DB)) { try { await autoAcknowledge(d1Db(env.DB)); } catch (e) { console.error("settlement auto-acknowledge:", e instanceof Error ? e.message : e); } }
+      // Booking relay: shared quotes past their date close, and their Checkout sessions with them (lib/portal/cases.ts).
+      if (isD1Like(env.DB)) { try { await expireQuotes(d1Db(env.DB), env as unknown as Parameters<typeof expireQuotes>[1]); } catch (e) { console.error("case quotes expire:", e instanceof Error ? e.message : e); } }
       try { await refreshGolfpaqSnapshot(env.READY_STATE); } catch (e) { console.error("golfpaq refresh:", e instanceof Error ? e.message : "unavailable"); }
       if (env.AI && golfpaqVisible(env)) {
         try {

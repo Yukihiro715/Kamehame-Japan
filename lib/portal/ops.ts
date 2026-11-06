@@ -421,7 +421,7 @@ export async function settingsGet(db: SqlDb) {
 }
 export async function settingsSet(db: SqlDb, input: { values: unknown; by: string }) {
   const values = input.values && typeof input.values === "object" ? input.values as Record<string, unknown> : {};
-  const allowed = ["public_origin", "visit_window_minutes", "min_payout_jpy", "settlement_note"];
+  const allowed = ["public_origin", "visit_window_minutes", "min_payout_jpy", "settlement_note", "ops_notify_email"];
   const at = now_();
   const statements: SqlStatement[] = [];
   for (const [k, v] of Object.entries(values)) {

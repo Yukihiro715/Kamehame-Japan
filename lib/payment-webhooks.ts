@@ -3,9 +3,12 @@ import type { MailQueueEnv } from "@/lib/mail-queue";
 import { experienceReference, handleExperienceEvent, type ExperienceCheckoutEnv } from "@/lib/experience-checkout";
 import { referralDb } from "@/lib/referral/attach";
 import { recordStripeEvent } from "@/lib/referral/stripe-events";
+import { isQuoteReference, markCasePaid } from "@/lib/portal/cases";
+import { notifyCase, type NotifyEnv } from "@/lib/portal/case-notify";
+import { resolvePublicOrigin } from "@/lib/portal/util";
 
 type Provider = "resend" | "stripe";
-type Env = GolfAutomationEnv & MailQueueEnv & ExperienceCheckoutEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string; DB?: unknown };
+type Env = GolfAutomationEnv & MailQueueEnv & ExperienceCheckoutEnv & NotifyEnv & { RESEND_WEBHOOK_SECRET?: string; STRIPE_WEBHOOK_SECRET?: string; DB?: unknown };
 const RESEND_EVENTS = ["email.sent", "email.delivered", "email.delivery_delayed", "email.bounced", "email.failed", "email.suppressed", "email.complained", "email.opened", "email.clicked"];
 const gasUrl = (url: string | undefined) => !!url?.startsWith("https://script.google.com/macros/s/");
 
@@ -74,7 +77,21 @@ export async function receiveWebhook(provider: Provider, request: Request, env: 
       // The commission ledger sees every verified Stripe event once (payments,
       // refunds, disputes), whatever happens to the forwarding below.
       const db = referralDb(env);
-      if (db) { try { await recordStripeEvent(db, event); } catch (err) { console.error("referral: stripe event not recorded", err instanceof Error ? err.message : err); } }
+      let outcome: string | null = null;
+      if (db) { try { outcome = await recordStripeEvent(db, event); } catch (err) { console.error("referral: stripe event not recorded", err instanceof Error ? err.message : err); } }
+      // A partner case's quote (docs/PARTNER_PLATFORM_STAGE1.md 4.5): the payment is on
+      // the reservation now; the case follows, and nothing goes to the Sheets automation.
+      const o = event.data.object ?? {};
+      if (isQuoteReference(o.client_reference_id) || o.metadata?.booking_flow === "partner_case") {
+        if (!db) return Response.json({ ok: false }, { status: 503 });
+        if (outcome === "processed" && ["checkout.session.completed", "checkout.session.async_payment_succeeded"].includes(event.type) && o.payment_status === "paid") {
+          try {
+            const paid = await markCasePaid(db, { quoteId: isQuoteReference(o.client_reference_id) ? o.client_reference_id.slice(5) : o.metadata?.quote_id ?? null, sessionId: typeof o.id === "string" ? o.id : null });
+            if (paid) await notifyCase(db, env, paid.caseId, await resolvePublicOrigin(db, env, new URL(request.url).origin), { kind: "paid", totalJpy: Number(o.amount_total) || 0 });
+          } catch (err) { console.error("case: payment not applied", err instanceof Error ? err.message : err); }
+        }
+        return Response.json({ ok: true, outcome });
+      }
       // The Sheets automation is where the event goes next; without it, ask Stripe to retry later.
       if (!env.GOLF_AUTOMATION_TOKEN || !gasUrl(env.GOLF_AUTOMATION_URL)) return Response.json({ ok: false }, { status: 503 });
     }

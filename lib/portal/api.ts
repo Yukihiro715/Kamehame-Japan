@@ -10,10 +10,12 @@
 import { popularOverview, savePopularSetting } from "@/lib/popular";
 import { isBucket, listReviewSubmissions, serveMedia } from "@/lib/review-media";
 import { parseFeatures, requireFeature } from "./partner";
+import * as cases from "./cases";
+import { notifyCase } from "./case-notify";
 import * as settle from "./settlement";
 import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMail } from "./mail";
 import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
-import { CASE_ROLES, canSeeHotel, canSeeProfile, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
+import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
@@ -22,11 +24,10 @@ import type { GolfpaqEnquiryEnv } from "@/lib/golfpaq-enquiry";
 import { readGolfpaqSnapshot } from "@/lib/golfpaq";
 import { courseList, loadAutoNames, saveCourse } from "@/lib/golf-courses-db";
 import { qrPng, qrSvg } from "./qr";
-import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, str } from "./util";
+import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, resolvePublicOrigin, str } from "./util";
 import type { PortalMailEnv } from "./mail";
 
-export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & { DB?: unknown; MEDIA?: unknown };
-const PUBLIC_ORIGIN = "https://kamehame-japan.com";
+export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown };
 
 export async function handlePortalApi(request: Request, env: PortalEnv, path: string[]): Promise<Response> {
   try {
@@ -60,11 +61,7 @@ function period(ctx: Ctx) {
   if (from && to && from <= to) return { from, to };
   return preset ?? presetPeriod("this_month")!;
 }
-async function publicOrigin(ctx: Ctx): Promise<string> {
-  const row = await ctx.db.first<{ value: string }>(`SELECT value FROM portal_settings WHERE key = 'public_origin'`);
-  if (row?.value && /^https:\/\/[a-z0-9.-]+$/i.test(row.value)) return row.value;
-  return ctx.env.KH_ENV === "staging" ? ctx.origin : PUBLIC_ORIGIN;
-}
+const publicOrigin = (ctx: Ctx) => resolvePublicOrigin(ctx.db, ctx.env, ctx.origin);
 
 // ---- auth -------------------------------------------------------------------
 
@@ -140,8 +137,12 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     return json({ ok: true, hotel: hotelId, ...(await hotelDashboard(ctx.db, hotelId, period(ctx))) });
   }
   if (head === "experiences" && ctx.method === "GET") {
-    hotelScope(ctx, p);
-    return json({ ok: true, experiences: await experienceTerms(ctx.db) });
+    const hotelId = hotelScope(ctx, p);
+    const options = new Map(cases.experienceOptions().map((o) => [o.slug, o]));
+    const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id = ?`, [hotelId]))?.features_json);
+    const relay = features.cases && hasSiteRole(p, hotelId, ...CASE_ROLES);
+    const experiences = (await experienceTerms(ctx.db)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
+    return json({ ok: true, experiences, relay, busGolf: options.get(cases.BUS_GOLF_SLUG) ?? null });
   }
   if (head === "reservations" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
@@ -186,8 +187,65 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     if (action === "acknowledge" && ctx.method === "POST") { await settle.acknowledgeStatement(ctx.db, id, p.email); return json({ ok: true }); }
     if (action === "dispute" && ctx.method === "POST") { const b = await readJson(ctx.request); return json({ ok: true, ...(await settle.raiseDispute(ctx.db, id, { reason: b.reason, itemId: b.itemId, by: p.email })) }); }
   }
+  if (head === "case-options" && ctx.method === "GET") {
+    const hotelId = hotelScope(ctx, p);
+    await requireCaseRole(ctx, p, hotelId);
+    const members = await ctx.db.all<{ userId: string; email: string; name: string | null; role: string }>(`SELECT u.id AS userId, u.email, u.name, m.role FROM memberships m JOIN users u ON u.id = m.user_id WHERE m.scope_type = 'hotel' AND m.scope_id = ? AND m.revoked_at IS NULL AND m.role IN ('partner_agent','partner_manager') AND u.status != 'disabled' ORDER BY u.email`, [hotelId]);
+    return json({ ok: true, hotel: hotelId, experiences: cases.experienceOptions(), members, me: p.userId });
+  }
+  if (head === "cases" && !sub) {
+    if (ctx.method === "GET") {
+      const hotelId = hotelScope(ctx, p);
+      await requireCaseRole(ctx, p, hotelId);
+      const own = !hasSiteRole(p, hotelId, "partner_manager");
+      return json({ ok: true, hotel: hotelId, manager: !own, ...(await cases.listCases(ctx.db, { siteIds: [hotelId], userId: own ? p.userId : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) });
+    }
+    if (ctx.method === "POST") {
+      const b = await readJson(ctx.request);
+      const hotelId = hotelScope(ctx, p, b);
+      await requireCaseRole(ctx, p, hotelId);
+      const r = await cases.createCase(ctx.db, { ...(b as unknown as cases.NewCaseInput), siteId: hotelId, userId: p.userId, by: p.email });
+      const mails = await notifyCase(ctx.db, ctx.env, r.id, await publicOrigin(ctx), { kind: "created" });
+      return json({ ok: true, ...r, mails });
+    }
+  }
+  if (head === "cases" && sub) {
+    const [, id, action] = path;
+    const c = await cases.caseForPartner(ctx.db, p, id);
+    await requireFeature(ctx.db, c.site_id, "cases");
+    const origin = await publicOrigin(ctx);
+    if (!action && ctx.method === "GET") return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) });
+    if (ctx.method !== "POST") throw notFound();
+    const b = await readJson(ctx.request);
+    if (action === "update") { await cases.updateCase(ctx.db, id, { ...(b as Partial<cases.NewCaseInput>), by: p.email, actor: "partner" }); return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) }); }
+    if (action === "cancel") { await cases.setCaseStatus(ctx.db, id, { status: "cancelled", reason: b.reason, by: p.email, actor: "partner" }); return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) }); }
+    if (action === "message") {
+      const attachment = b.attachment && typeof b.attachment === "object" ? b.attachment as { key: string; name: string; type: string; size: number } : null;
+      await cases.addMessage(ctx.db, id, { visibility: b.visibility ?? "partner", authorKind: "partner", authorEmail: p.email, body: b.body, attachment });
+      const mails = await notifyCase(ctx.db, ctx.env, id, origin, { kind: "message", from: "partner", excerpt: str(b.body, 300), attachmentName: attachment?.name ?? null });
+      return json({ ok: true, mails, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) });
+    }
+    if (action === "upload") return json({ ok: true, file: await cases.putCaseFile(isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null, id, ctx.request) });
+    throw notFound();
+  }
+  if (head === "case-file" && ctx.method === "GET") {
+    // An attachment: the key names its case, and the message that carries it must be visible to a partner.
+    const key = q(ctx, "key") ?? "";
+    const m = await ctx.db.first<{ case_id: string; visibility: string }>(`SELECT case_id, visibility FROM case_messages WHERE attachment_key = ?`, [key]);
+    if (!m || m.visibility === "internal" || !cases.isCaseFileKeyFor(key, m.case_id)) throw notFound();
+    await cases.caseForPartner(ctx.db, p, m.case_id);
+    const bucket = isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null;
+    if (!bucket) throw new ApiError(503, "media_unavailable");
+    return await serveMedia(bucket, key, q(ctx, "download") === "1", cases.CASE_FILE_PREFIX);
+  }
   void sub;
   throw notFound();
+}
+
+/** The booking relay needs the site's `cases` feature and one of the two relay roles (docs/PARTNER_PLATFORM_STAGE1.md 4.2). */
+async function requireCaseRole(ctx: Ctx, p: Principal, hotelId: string) {
+  await requireFeature(ctx.db, hotelId, "cases");
+  if (!hasSiteRole(p, hotelId, ...CASE_ROLES)) throw forbidden();
 }
 
 async function qrResponse(text: string, format: string | undefined, name: string): Promise<Response> {
@@ -294,6 +352,56 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       }
     }
     return json({ ok: true, mails });
+  }
+  if (head === "case-options" && get) { await requireOps(ctx); return json({ ok: true, experiences: cases.experienceOptions(), statuses: cases.MANUAL_CASE_STATUSES.map((s) => ({ value: s, label: cases.CASE_STATUS_JA[s] })) }); }
+  if (head === "cases") {
+    // The booking relay (lib/portal/cases.ts): every partner's cases, the quotes and the customer's page.
+    if (!id && get) { await requireOps(ctx); return json({ ok: true, counts: await cases.opsCaseCounts(ctx.db), ...(await cases.listCases(ctx.db, { siteIds: q(ctx, "site") ? [q(ctx, "site")!] : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) }); }
+    if (id && !action && get) { await requireOps(ctx); const origin = await publicOrigin(ctx); return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "ops", origin)) }); }
+    if (id && action && post) {
+      // Money is a finance action; everything else on a case is booking operations.
+      const p = await requireOps(ctx, ...(action === "payment" ? FINANCE : BOOKING));
+      const origin = await publicOrigin(ctx);
+      const detail = () => cases.caseDetail(ctx.db, id, "ops", origin);
+      if (action === "upload") return json({ ok: true, file: await cases.putCaseFile(isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null, id, ctx.request) });
+      const b = await readJson(ctx.request);
+      switch (action) {
+        case "update": await cases.updateCase(ctx.db, id, { ...(b as Partial<cases.NewCaseInput>), assignedOps: b.assignedOps, by: p.email, actor: "ops" }); return json({ ok: true, ...(await detail()) });
+        case "status": await cases.setCaseStatus(ctx.db, id, { status: b.status, reason: b.reason, by: p.email, actor: "ops" }); return json({ ok: true, ...(await detail()) });
+        case "quote": { const r = await cases.createQuote(ctx.db, id, { ...(b as unknown as cases.QuoteInput), by: p.email }); return json({ ok: true, ...r, ...(await detail()) }); }
+        case "message": {
+          const attachment = b.attachment && typeof b.attachment === "object" ? b.attachment as { key: string; name: string; type: string; size: number } : null;
+          await cases.addMessage(ctx.db, id, { visibility: b.visibility ?? "partner", authorKind: "ops", authorEmail: p.email, body: b.body, attachment });
+          const mails = str(b.visibility, 10) === "internal" ? [] : await notifyCase(ctx.db, ctx.env, id, origin, { kind: "message", from: "ops", excerpt: str(b.body, 300), attachmentName: attachment?.name ?? null });
+          return json({ ok: true, mails, ...(await detail()) });
+        }
+        case "payment": { const r = await cases.recordExternalPayment(ctx.db, id, { amountJpy: b.amountJpy, occurredAt: b.occurredAt, reference: b.reference, reason: b.reason, by: p.email }); const d = await detail(); const q0 = d.quotes.find((x) => x.id === r?.quoteId); const mails = r ? await notifyCase(ctx.db, ctx.env, id, origin, { kind: "paid", totalJpy: q0?.totalJpy ?? 0 }) : []; return json({ ok: true, mails, ...d }); }
+        case "confirm": { await cases.confirmCase(ctx.db, id, { note: b.note, by: p.email }); const mails = await notifyCase(ctx.db, ctx.env, id, origin, { kind: "confirmed" }); return json({ ok: true, mails, ...(await detail()) }); }
+      }
+    }
+  }
+  if (head === "quotes" && id && action && post) {
+    const p = await requireOps(ctx, ...BOOKING);
+    const b = await readJson(ctx.request);
+    const q0 = await cases.getQuote(ctx.db, id);
+    const origin = await publicOrigin(ctx);
+    if (action === "share") {
+      const r = await cases.shareQuote(ctx.db, ctx.env, id, { by: p.email });
+      const d = await cases.caseDetail(ctx.db, q0.case_id, "ops", origin);
+      const shared = d.quotes.find((x) => x.id === id)!;
+      const mails = await notifyCase(ctx.db, ctx.env, q0.case_id, origin, { kind: "quote_shared", totalJpy: shared.totalJpy, validUntil: shared.validUntil, paymentModeJa: shared.paymentModeJa, shareUrl: shared.shareUrl ?? "", toCustomer: b.notifyCustomer === true });
+      return json({ ok: true, ...r, shareUrl: shared.shareUrl, mails, ...d });
+    }
+    if (action === "void") { const r = await cases.voidQuote(ctx.db, ctx.env, id, { reason: b.reason, by: p.email }); return json({ ok: true, ...r, ...(await cases.caseDetail(ctx.db, q0.case_id, "ops", origin)) }); }
+  }
+  if (head === "case-file" && get) {
+    await requireOps(ctx);
+    const key = q(ctx, "key") ?? "";
+    const m = await ctx.db.first<{ case_id: string }>(`SELECT case_id FROM case_messages WHERE attachment_key = ?`, [key]);
+    if (!m || !cases.isCaseFileKeyFor(key, m.case_id)) throw notFound();
+    const bucket = isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null;
+    if (!bucket) throw new ApiError(503, "media_unavailable");
+    return await serveMedia(bucket, key, q(ctx, "download") === "1", cases.CASE_FILE_PREFIX);
   }
   if (head === "popular") {
     // The home page's "Popular right now" order (lib/popular.ts).

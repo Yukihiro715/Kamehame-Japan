@@ -114,3 +114,40 @@ export const payoutPaidMail = (p: { entityName: string; periods: string[]; trans
     "KAMEHAME JAPAN（株式会社プロセント）",
   ].join("\n"),
 });
+
+// ---- the booking relay (docs/PARTNER_PLATFORM_STAGE1.md 4.5, E-8) -----------
+
+const SIGN = "KAMEHAME JAPAN（株式会社プロセント）";
+/** To operations: a partner opened a case. */
+export const caseCreatedMail = (p: { publicRef: string; siteName: string; experienceTitle: string; preferredDate: string | null; guests: number | null; url: string }) => ({
+  subject: `【取り次ぎ】新しい案件 ${p.publicRef}（${p.siteName}）`,
+  text: [`${p.siteName} から取り次ぎ案件が登録されました。`, "", `案件: ${p.publicRef}`, `体験: ${p.experienceTitle}`, `希望日: ${p.preferredDate ?? "未定"}　人数: ${p.guests ?? "未定"}`, "", p.url, "", SIGN].join("\n"),
+});
+/** To the partner: operations shared a quote; the customer link is on the case page. */
+export const quoteSharedMail = (p: { publicRef: string; experienceTitle: string; totalJpy: number; validUntil: string | null; paymentMode: string; url: string }) => ({
+  subject: `【KAMEHAME JAPAN】見積もりを共有しました ${p.publicRef}`,
+  text: [`案件 ${p.publicRef}（${p.experienceTitle}）の見積もりをお客様向けに用意しました。`, "", `総額: ${yenJa(p.totalJpy)}（税込）`, `有効期限: ${p.validUntil ?? "—"}`, `お支払い: ${p.paymentMode}`, "", "案件ページからお客様向け URL をコピーしてお渡しください。", p.url, "", SIGN].join("\n"),
+});
+/** To the customer, in their language (English otherwise): the quote link. Nothing about the partner or the commission. */
+export const quoteCustomerMail = (p: { lang: string; customerName: string; experienceTitle: string; totalJpy: number; validUntil: string | null; url: string }) => p.lang === "ja" ? ({
+  subject: `【KAMEHAME JAPAN】お見積もり: ${p.experienceTitle}`,
+  text: [`${p.customerName} 様`, "", `${p.experienceTitle} のお見積もりをご用意しました。内容のご確認とお支払いは、以下のページからお進みください。`, "", p.url, "", `総額: ${yenJa(p.totalJpy)}（税込）`, `有効期限: ${p.validUntil ?? "—"}`, "", "ご不明な点はこのメールへの返信でお知らせください。", "", SIGN].join("\n"),
+}) : ({
+  subject: `Your quote from KAMEHAME JAPAN: ${p.experienceTitle}`,
+  text: [`Dear ${p.customerName},`, "", `Your quote for ${p.experienceTitle} is ready. Please review the details and, if you are happy with them, pay from the page below.`, "", p.url, "", `Total: ¥${p.totalJpy.toLocaleString("en-US")} (tax included)`, `Valid until: ${p.validUntil ?? "—"}`, "", "Reply to this e-mail with any question.", "", "KAMEHAME JAPAN (Prosent Inc.)"].join("\n"),
+});
+/** To the partner and to operations: the customer paid. */
+export const casePaidMail = (p: { publicRef: string; experienceTitle: string; totalJpy: number; url: string; forOps: boolean }) => ({
+  subject: `【KAMEHAME JAPAN】決済が完了しました ${p.publicRef}`,
+  text: [`案件 ${p.publicRef}（${p.experienceTitle}）のお支払い ${yenJa(p.totalJpy)} を確認しました。`, "", p.forOps ? "空き枠を確保し、案件ページで「予約確定」を登録してください。" : "予約確定は運営が空き枠を確保したうえで登録します。確定後にあらためてお知らせします。", "", p.url, "", SIGN].join("\n"),
+});
+/** To the partner: the booking is confirmed. */
+export const caseConfirmedMail = (p: { publicRef: string; experienceTitle: string; date: string | null; url: string }) => ({
+  subject: `【KAMEHAME JAPAN】予約が確定しました ${p.publicRef}`,
+  text: [`案件 ${p.publicRef}（${p.experienceTitle}${p.date ? `、${p.date}` : ""}）の予約が確定しました。`, "", "集合場所や当日のご案内は案件ページの連絡欄に掲載します。", p.url, "", SIGN].join("\n"),
+});
+/** To the other side of a case: a new comment or file. */
+export const caseMessageMail = (p: { publicRef: string; from: "ops" | "partner"; excerpt: string; attachmentName: string | null; url: string }) => ({
+  subject: `【KAMEHAME JAPAN】案件 ${p.publicRef} に${p.from === "ops" ? "運営から" : "パートナーから"}連絡があります`,
+  text: [`案件 ${p.publicRef} に新しい連絡があります。`, "", p.excerpt, p.attachmentName ? `添付: ${p.attachmentName}` : "", "", p.url, "", SIGN].filter((l, i, a) => !(l === "" && a[i - 1] === "")).join("\n"),
+});

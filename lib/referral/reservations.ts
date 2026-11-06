@@ -6,6 +6,12 @@
  *  confirmed); once confirmed, every change is a dated adjustment. */
 import { jstDate, randomId, type SqlDb, type SqlStatement } from "./db";
 import { type ReferralContext } from "./links";
+
+/** The attribution a partner case fixes directly (docs/PARTNER_PLATFORM_STAGE1.md 4.5):
+ *  no cookie, no link; the case and its site are the source. */
+export interface CaseReferral { basis: "case"; caseId: string; hotelId: string; chainProfileId: string | null }
+export type Attribution = ReferralContext | CaseReferral;
+const isCase = (ref: Attribution): ref is CaseReferral => (ref as CaseReferral).basis === "case";
 import { allocateProportionally, commissionNet, netFromGross } from "./money";
 
 export type LineKind = "base" | "addon" | "arrangement" | "onsite";
@@ -39,7 +45,7 @@ export function newHotelRef(): string {
 
 /** Create the reservation (idempotent on requestId) with its lines, and fix
  *  the referral it arrived with, all in one batch. */
-export async function createReservation(db: SqlDb, r: NewReservation, ref: ReferralContext | null, now = Date.now()): Promise<CreateResult> {
+export async function createReservation(db: SqlDb, r: NewReservation, ref: Attribution | null, now = Date.now()): Promise<CreateResult> {
   const existing = await db.first<{ id: string }>(`SELECT id FROM reservations WHERE request_id = ?`, [r.requestId]);
   if (existing) return { id: existing.id, created: false };
   const id = randomId(), at = new Date(now).toISOString();
@@ -62,9 +68,11 @@ export async function createReservation(db: SqlDb, r: NewReservation, ref: Refer
   if (ref) {
     referral = !policy ? "rate_missing" : ref.hotelId === null && !ref.chainProfileId ? "payee_missing" : "attributed";
     statements.push({
-      sql: `INSERT INTO reservation_referrals (reservation_id, hotel_id, link_id, session_id, medium, basis, fixed_at, policy_id, policy_version, rate_bp, status)
-            VALUES (?, ?, ?, ?, ?, 'cookie', ?, ?, ?, ?, ?)`,
-      params: [id, ref.hotelId, ref.linkId, ref.sessionId, ref.medium, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral],
+      sql: `INSERT INTO reservation_referrals (reservation_id, hotel_id, link_id, session_id, medium, basis, case_id, fixed_at, policy_id, policy_version, rate_bp, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      params: isCase(ref)
+        ? [id, ref.hotelId, null, null, null, "case", ref.caseId, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral]
+        : [id, ref.hotelId, ref.linkId, ref.sessionId, ref.medium, "cookie", null, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral],
     });
     const commissionable = r.lines.filter((l) => l.commissionable).map((l) => ({ netJpy: netFromGross(l.grossJpy - (l.discountJpy ?? 0), l.taxRateBp ?? policy?.tax_rate_bp ?? 1000), rateBp: policy?.rate_bp ?? 0 }));
     statements.push({

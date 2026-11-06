@@ -2318,3 +2318,30 @@ body[data-kh-modal] .sticky-request { display:none; }
 .form-hint-warn { color:#b23b1f; }
 .review-help { display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:10px; background:#fbf4ea; border:1px solid #f0dcc3; color:#3d3a34; font-size:13.5px; line-height:1.6; }
 .review-help svg { flex:0 0 auto; margin-top:3px; color:var(--kame); } .review-help p { margin:0; }
+
+/* Customer quote page (components/site/quote-view.tsx) */
+.quote-page .detail-main h1 { margin-top: 24px; }
+.qt { display: grid; gap: 18px; }
+.qt-for { margin: 0; color: #6b675f; font-size: 14px; }
+.qt-title { margin: 0; font-size: 22px; font-weight: 700; }
+.qt-banner { border-radius: 12px; padding: 14px 18px; }
+.qt-banner b { display: block; font-size: 16px; }
+.qt-banner p { margin: 6px 0 0; }
+.qt-ok { background: #ecf7ef; border: 1px solid #bfe3c8; }
+.qt-warn { background: #fff6e8; border: 1px solid #f3d7a8; }
+.qt-facts, .qt-terms { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; font-size: 14.5px; }
+.qt-facts dt, .qt-terms dt { color: #6b675f; }
+.qt-facts dd, .qt-terms dd { margin: 0; white-space: pre-wrap; }
+.qt h3 { margin: 6px 0 0; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; }
+.qt-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.qt-table th, .qt-table td { padding: 10px 8px; border-bottom: 1px solid #ece7dc; text-align: left; vertical-align: top; }
+.qt-table th { font-size: 12px; color: #6b675f; font-weight: 600; }
+.qt-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.qt-total td { font-weight: 700; font-size: 16px; border-top: 2px solid #1b1a17; }
+.qt-onsite td { color: #6b675f; }
+.qt-pay { display: grid; gap: 8px; justify-items: start; }
+.qt-pay .gb-btn { width: auto; min-width: 280px; }
+.qt-small { margin: 0; font-size: 13px; color: #6b675f; }
+.qt-err { margin: 0; color: #b4231d; font-size: 13.5px; }
+.qt-docs ul { margin: 6px 0 0; padding-left: 18px; }
+@media (max-width: 600px) { .qt-facts, .qt-terms { grid-template-columns: 1fr; gap: 2px 0; } .qt-facts dt, .qt-terms dt { margin-top: 8px; } .qt-pay .gb-btn { width: 100%; min-width: 0; } }

@@ -134,3 +134,15 @@
   .pt-sheet-items { font-size:11px; }
   @page { size:A4; margin:16mm; }
 }
+
+/* Booking relay (components/portal/case-common.tsx) */
+.pt-quote { border: 1px solid #e6e1d6; border-radius: 10px; padding: 12px; display: grid; gap: 10px; background: #fff; }
+.pt-quote-edit { background: #fbf9f3; }
+.pt-quote .pt-table th, .pt-quote .pt-table td { white-space: normal; }
+.pt-thread { display: grid; gap: 8px; }
+.pt-msg { border: 1px solid #ece7dc; border-radius: 10px; padding: 8px 12px; background: #fff; }
+.pt-msg-ops { border-left: 4px solid var(--kame, #ee7c18); }
+.pt-msg-partner { border-left: 4px solid #3b82f6; }
+.pt-msg-internal { background: #fff5f5; border-color: #f3c7c7; }
+.pt-details summary { cursor: pointer; list-style: none; display: inline-flex; }
+.pt-details summary::-webkit-details-marker { display: none; }

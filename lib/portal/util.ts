@@ -1,5 +1,13 @@
 /** Small shared pieces for the portal API: JSON answers, body parsing, periods, CSV. */
-import { jstDate } from "@/lib/referral/db";
+import { jstDate, type SqlDb } from "@/lib/referral/db";
+
+export const PUBLIC_ORIGIN = "https://kamehame-japan.com";
+/** The origin links in mails and shared pages use: the `public_origin` setting, else the request's own origin on staging, else production. */
+export async function resolvePublicOrigin(db: SqlDb, env: { KH_ENV?: string }, requestOrigin: string): Promise<string> {
+  const row = await db.first<{ value: string }>(`SELECT value FROM portal_settings WHERE key = 'public_origin'`);
+  if (row?.value && /^https:\/\/[a-z0-9.-]+$/i.test(row.value)) return row.value;
+  return env.KH_ENV === "staging" ? requestOrigin : PUBLIC_ORIGIN;
+}
 
 export const json = (data: unknown, status = 200, headers: Record<string, string> = {}) =>
   Response.json(data, { status, headers: { "cache-control": "no-store", "x-robots-tag": "noindex, nofollow", ...headers } });

@@ -95,8 +95,8 @@ export async function listReviewSubmissions(bucket: R2Like, limit = 200): Promis
 }
 
 /** Streams one object to staff; inline for images and videos, download otherwise. */
-export async function serveMedia(bucket: R2Like, key: string, download = false): Promise<Response> {
-  if (!key.startsWith(MEDIA_PREFIX) || key.includes("..")) return new Response("not found", { status: 404 });
+export async function serveMedia(bucket: R2Like, key: string, download = false, prefix: string = MEDIA_PREFIX): Promise<Response> {
+  if (!key.startsWith(prefix) || key.includes("..")) return new Response("not found", { status: 404 });
   const o = await bucket.get(key);
   if (!o || !o.body) return new Response("not found", { status: 404 });
   const type = o.httpMetadata?.contentType ?? "application/octet-stream";

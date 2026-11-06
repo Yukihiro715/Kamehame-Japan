@@ -13,8 +13,8 @@ const Ctx = createContext<PortalState | null>(null);
 export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Error("usePortal outside PortalShell"); return c; };
 
 const NAV: Record<Kind, [string, string][]> = {
-  hotel: [["/hotel/", "実績"], ["/hotel/reservations/", "紹介予約"], ["/hotel/experiences/", "体験一覧"], ["/hotel/materials/", "QR・リンク"], ["/hotel/settlement/", "精算"]],
-  ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "提携パートナー"], ["/ops/settlement/", "精算"], ["/ops/payouts/", "支払"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
+  hotel: [["/hotel/", "実績"], ["/hotel/reservations/", "紹介予約"], ["/hotel/cases/", "取り次ぎ"], ["/hotel/experiences/", "体験一覧"], ["/hotel/materials/", "QR・リンク"], ["/hotel/settlement/", "精算"]],
+  ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/cases/", "取り次ぎ"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "提携パートナー"], ["/ops/settlement/", "精算"], ["/ops/payouts/", "支払"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
 };
 const HOTEL_KEY = "kh-portal-hotel";
 
