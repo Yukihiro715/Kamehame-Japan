@@ -34,6 +34,7 @@ export const CLOSED_CASE_STATUSES: CaseStatus[] = ["performed", "cancelled", "un
 export type QuoteStatus = "draft" | "shared" | "paid" | "superseded" | "expired" | "void";
 export const QUOTE_STATUS_JA: Record<QuoteStatus, string> = { draft: "下書き", shared: "共有中", paid: "決済済み", superseded: "旧版", expired: "期限切れ", void: "取消" };
 export type PaymentMode = "stripe" | "external" | "none";
+export const PAYMENT_MODE_EN: Record<PaymentMode, string> = { stripe: "Online card payment", external: "Paid to the partner operator (recorded by KAMEHAME)", none: "No online payment (paid on the day)" };
 export const PAYMENT_MODE_JA: Record<PaymentMode, string> = { stripe: "オンライン決済（カード）", external: "提携先への支払い（運営が決済済みを登録）", none: "決済なし（現地払いのみ）" };
 export type Visibility = "internal" | "partner" | "customer";
 export const VISIBILITY_JA: Record<Visibility, string> = { internal: "運営内部", partner: "パートナーと運営", customer: "お客様にも表示" };
@@ -65,13 +66,13 @@ export function bookingModeOf(x: Experience): BookingMode {
   if (x.pricePending || x.variants?.length) return "quote";
   return x.bookingType === "instant" ? "instant" : "request";
 }
-export interface ExperienceOption { slug: string; title: string; city: string | null; area: string | null; duration: string | null; group: string | null; price: string | null; bookingMode: BookingMode; extraFields: ExtraField[] }
+export interface ExperienceOption { slug: string; title: string; titleEn: string; city: string | null; area: string | null; duration: string | null; group: string | null; price: string | null; bookingMode: BookingMode; extraFields: ExtraField[] }
 /** What a partner may open a case for: the live catalog (in Japanese, for the portal) plus the shared-bus golf day. */
 export function experienceOptions(lang: Lang = "ja"): ExperienceOption[] {
   const live: ExperienceOption[] = catalogFor(lang).experiences.filter((x) => x.status === "live").map((x) => ({
-    slug: x.slug, title: x.title, city: x.city, area: x.area, duration: x.duration, group: x.group, price: x.pricePending ? null : x.price, bookingMode: bookingModeOf(x), extraFields: extraFieldsFor(x.slug),
+    slug: x.slug, title: x.title, titleEn: experienceTitle(x.slug, "en"), city: x.city, area: x.area, duration: x.duration, group: x.group, price: x.pricePending ? null : x.price, bookingMode: bookingModeOf(x), extraFields: extraFieldsFor(x.slug),
   }));
-  live.push({ slug: BUS_GOLF_SLUG, title: BUS_GOLF_TITLE[lang], city: "tokyo", area: "Tokyo → Mt. Fuji area", duration: null, group: null, price: null, bookingMode: "request", extraFields: GOLF_EXTRA_FIELDS });
+  live.push({ slug: BUS_GOLF_SLUG, title: BUS_GOLF_TITLE[lang], titleEn: BUS_GOLF_TITLE.en, city: "tokyo", area: "Tokyo → Mt. Fuji area", duration: null, group: null, price: null, bookingMode: "request", extraFields: GOLF_EXTRA_FIELDS });
   return live;
 }
 export function experienceTitle(slug: string | null, lang: Lang = "ja"): string {
@@ -606,7 +607,7 @@ export function displayStatus(c: Pick<CaseRow, "status">, res: ReservationSummar
   return c.status;
 }
 
-export interface CaseListRow { id: string; publicRef: string; partnerRef: string | null; siteId: string; siteName: string; kind: string; experienceSlug: string | null; experienceTitle: string; preferredDate: string | null; guests: number | null; customerName: string; status: CaseStatus; statusJa: string; assignee: string | null; assignedOps: string | null; createdAt: string; updatedAt: string; quoteVersion: number | null; totalJpy: number | null }
+export interface CaseListRow { id: string; publicRef: string; partnerRef: string | null; siteId: string; siteName: string; kind: string; experienceSlug: string | null; experienceTitle: string; experienceTitleEn: string; preferredDate: string | null; guests: number | null; customerName: string; status: CaseStatus; statusJa: string; assignee: string | null; assignedOps: string | null; createdAt: string; updatedAt: string; quoteVersion: number | null; totalJpy: number | null }
 
 export async function listCases(db: SqlDb, f: { siteIds?: string[]; userId?: string; status?: string; q?: string; open?: boolean; limit?: number; offset?: number }): Promise<{ rows: CaseListRow[]; total: number }> {
   const where: string[] = [], params: unknown[] = [];
@@ -630,7 +631,7 @@ export async function listCases(db: SqlDb, f: { siteIds?: string[]; userId?: str
     total: total?.n ?? 0,
     rows: rows.map((c) => {
       const st = displayStatus(c, c.r_status ? { id: c.reservation_id!, hotel_ref: c.r_ref, status: c.r_status, payment_status: c.r_payment!, amount_status: c.r_amount!, experience_date: null } : null, c.q_status ? { status: c.q_status, payment_mode: c.q_mode! } : null);
-      return { id: c.id, publicRef: c.public_ref, partnerRef: c.partner_ref, siteId: c.site_id, siteName: c.site_name, kind: c.kind, experienceSlug: c.experience_slug, experienceTitle: experienceTitle(c.experience_slug), preferredDate: c.preferred_date, guests: c.guests, customerName: c.customer_name, status: st, statusJa: CASE_STATUS_JA[st], assignee: c.assignee_email, assignedOps: c.assigned_ops, createdAt: c.created_at, updatedAt: c.updated_at, quoteVersion: c.q_version, totalJpy: c.q_total };
+      return { id: c.id, publicRef: c.public_ref, partnerRef: c.partner_ref, siteId: c.site_id, siteName: c.site_name, kind: c.kind, experienceSlug: c.experience_slug, experienceTitle: experienceTitle(c.experience_slug), experienceTitleEn: experienceTitle(c.experience_slug, "en"), preferredDate: c.preferred_date, guests: c.guests, customerName: c.customer_name, status: st, statusJa: CASE_STATUS_JA[st], assignee: c.assignee_email, assignedOps: c.assigned_ops, createdAt: c.created_at, updatedAt: c.updated_at, quoteVersion: c.q_version, totalJpy: c.q_total };
     }),
   };
 }
@@ -643,7 +644,7 @@ export interface QuoteView {
   commission: { baseNetJpy: number; rateBp: number | null; estimateNetJpy: number | null; policyMissing: boolean };
 }
 export interface CaseDetail {
-  case: CaseRow & { siteName: string; sitePublicId: string; entityName: string; createdBy: string | null; assignee: string | null; experienceTitle: string; altDates: string[]; extra: Record<string, string>; extraFields: ExtraField[]; statusJa: string; displayStatus: CaseStatus; displayStatusJa: string };
+  case: CaseRow & { siteName: string; sitePublicId: string; entityName: string; createdBy: string | null; assignee: string | null; experienceTitle: string; experienceTitleEn: string; altDates: string[]; extra: Record<string, string>; extraFields: ExtraField[]; statusJa: string; displayStatus: CaseStatus; displayStatusJa: string };
   quotes: QuoteView[];
   messages: (MessageRow & { visibilityJa: string })[];
   reservation: (ReservationSummary & { statusJa: string; paymentJa: string }) | null;
@@ -671,7 +672,7 @@ export async function caseDetail(db: SqlDb, id: string, viewer: "ops" | "partner
   const st = displayStatus(c, res, current);
   const { site_name, site_public_id, entity_name, created_by, assignee, ...row } = c;
   return {
-    case: { ...row, siteName: site_name, sitePublicId: site_public_id, entityName: entity_name, createdBy: created_by, assignee, experienceTitle: experienceTitle(c.experience_slug), altDates: parseJson<string[]>(c.alt_dates_json, []), extra: parseJson<Record<string, string>>(c.extra_json, {}), extraFields: extraFieldsFor(c.experience_slug), statusJa: CASE_STATUS_JA[c.status], displayStatus: st, displayStatusJa: CASE_STATUS_JA[st] },
+    case: { ...row, siteName: site_name, sitePublicId: site_public_id, entityName: entity_name, createdBy: created_by, assignee, experienceTitle: experienceTitle(c.experience_slug), experienceTitleEn: experienceTitle(c.experience_slug, "en"), altDates: parseJson<string[]>(c.alt_dates_json, []), extra: parseJson<Record<string, string>>(c.extra_json, {}), extraFields: extraFieldsFor(c.experience_slug), statusJa: CASE_STATUS_JA[c.status], displayStatus: st, displayStatusJa: CASE_STATUS_JA[st] },
     quotes: visible.map((q) => {
       const lines = parseLines(q.lines_json);
       const base = lines.filter((l) => l.commissionable).reduce((s, l) => s + netFromGross(l.grossJpy, l.taxRateBp), 0);

@@ -8,7 +8,7 @@
  *  no invitation token to leak (要件 12). */
 import { randomId, type SqlDb } from "@/lib/referral/db";
 import { readCookie } from "@/lib/referral/links";
-import { inviteMail, loginCodeMail, sendPortalMail, type PortalMailEnv } from "./mail";
+import { inviteMail, loginCodeMail, mailLangOf, sendPortalMail, type MailLang, type PortalMailEnv } from "./mail";
 
 export type PortalKind = "hotel" | "ops";
 export type Role = "ops_admin" | "ops_booking" | "ops_finance" | "hotel_viewer" | "hotel_billing" | "partner_agent" | "partner_manager";
@@ -16,6 +16,7 @@ export const OPS_ROLES: Role[] = ["ops_admin", "ops_booking", "ops_finance"];
 export const HOTEL_ROLES: Role[] = ["hotel_viewer", "hotel_billing", "partner_agent", "partner_manager"];
 /** Roles that take part in the booking relay (docs/PARTNER_PLATFORM_STAGE1.md 4.2). */
 export const CASE_ROLES: Role[] = ["partner_agent", "partner_manager"];
+export const ROLE_LABEL_EN: Record<Role, string> = { ops_admin: "Administrator", ops_booking: "Booking operations", ops_finance: "Finance", hotel_viewer: "Viewer", hotel_billing: "Billing contact", partner_agent: "Booking agent", partner_manager: "Site manager" };
 export const ROLE_LABEL: Record<Role, string> = { ops_admin: "管理者", ops_booking: "予約運営", ops_finance: "経理", hotel_viewer: "閲覧担当者", hotel_billing: "請求担当者", partner_agent: "取り次ぎ担当", partner_manager: "拠点管理者" };
 
 export const SESSION_COOKIE: Record<PortalKind, string> = { hotel: "kh_sess_hotel", ops: "kh_sess_ops" };
@@ -25,7 +26,7 @@ const CODE_MAX_ATTEMPTS = 5;
 const CODES_PER_HOUR = 5;
 
 export interface Membership { id: string; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null }
-export interface Principal { userId: string; email: string; name: string | null; kind: PortalKind; sessionId: string; memberships: Membership[] }
+export interface Principal { userId: string; email: string; name: string | null; lang: MailLang; kind: PortalKind; sessionId: string; memberships: Membership[] }
 
 export const normalizeEmail = (s: unknown) => (typeof s === "string" ? s.trim().toLowerCase() : "");
 export const validEmail = (s: string) => s.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
@@ -44,22 +45,22 @@ const sixDigits = () => String(crypto.getRandomValues(new Uint32Array(1))[0] % 1
 
 /** Memberships that let this e-mail into the portal of `kind`. */
 async function eligibleUser(db: SqlDb, email: string, kind: PortalKind) {
-  return db.first<{ id: string; status: string }>(
-    `SELECT u.id, u.status FROM users u WHERE u.email = ? AND u.status != 'disabled'
+  return db.first<{ id: string; status: string; lang: string }>(
+    `SELECT u.id, u.status, u.lang FROM users u WHERE u.email = ? AND u.status != 'disabled'
        AND EXISTS (SELECT 1 FROM memberships m WHERE m.user_id = u.id AND m.revoked_at IS NULL AND m.scope_type = ?)`,
     [email, kind === "ops" ? "ops" : "hotel"]);
 }
 
 export interface RequestCodeResult { ok: true; sent: boolean; mail?: string; devCode?: string }
 
-/** The very first operator. While no operator membership exists, the address
- *  in PORTAL_BOOTSTRAP_ADMIN (a Worker secret set by the owner) becomes
- *  ops_admin on its first sign-in request; after that the variable is inert. */
+/** The owner's operator. The address in PORTAL_BOOTSTRAP_ADMIN (a Worker
+ *  secret set by the owner) becomes ops_admin on its first sign-in request
+ *  whenever it holds no operator membership, so the owner is never locked out. */
 async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now: number) {
   const target = normalizeEmail(env.PORTAL_BOOTSTRAP_ADMIN);
   if (!target || target !== email) return;
-  const any = await db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM memberships WHERE scope_type = 'ops' AND revoked_at IS NULL`);
-  if ((any?.n ?? 0) > 0) return;
+  const has = await db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM memberships m JOIN users u ON u.id = m.user_id WHERE u.email = ? AND m.scope_type = 'ops' AND m.revoked_at IS NULL`, [email]);
+  if ((has?.n ?? 0) > 0) return;
   const at = new Date(now).toISOString();
   let user = await db.first<{ id: string }>(`SELECT id FROM users WHERE email = ?`, [email]);
   if (!user) { user = { id: randomId() }; await db.run(`INSERT INTO users (id, email, name, status, created_at, created_by) VALUES (?, ?, NULL, 'invited', ?, 'bootstrap')`, [user.id, email, at]); }
@@ -70,7 +71,7 @@ async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now:
 }
 
 /** Step one: mail a code. The answer never says whether the address is known. */
-export async function requestLoginCode(db: SqlDb, env: PortalMailEnv, input: { email: unknown; kind: PortalKind }, now = Date.now()): Promise<RequestCodeResult> {
+export async function requestLoginCode(db: SqlDb, env: PortalMailEnv, input: { email: unknown; kind: PortalKind; lang?: unknown }, now = Date.now()): Promise<RequestCodeResult> {
   const email = normalizeEmail(input.email);
   if (!validEmail(email)) return { ok: true, sent: false };
   if (input.kind === "ops") await bootstrapAdmin(db, env, email, now);
@@ -81,7 +82,9 @@ export async function requestLoginCode(db: SqlDb, env: PortalMailEnv, input: { e
   const code = sixDigits();
   await db.run(`INSERT INTO login_codes (id, email, kind, code_hash, expires_at, attempts, consumed_at, created_at) VALUES (?, ?, ?, ?, ?, 0, NULL, ?)`,
     [randomId(), email, input.kind, await sha256Hex(`${email}:${input.kind}:${code}`), new Date(now + CODE_TTL_MS).toISOString(), new Date(now).toISOString()]);
-  const outcome = await sendPortalMail(env, { to: email, ...loginCodeMail(code, input.kind) });
+  // The mail follows the language the user chose on the portal (saved on the user), else the one the sign-in page shows.
+  const lang: MailLang = user.lang === "en" || user.lang === "ja" ? user.lang as MailLang : mailLangOf(input.lang);
+  const outcome = await sendPortalMail(env, { to: email, ...loginCodeMail(code, input.kind, lang) });
   // Staging without a mail route: show the code on the page (the Worker is behind Basic auth).
   const devCode = env.KH_ENV === "staging" && outcome !== "sent" ? code : undefined;
   return { ok: true, sent: outcome === "sent", mail: outcome, ...(devCode ? { devCode } : {}) };
@@ -126,14 +129,14 @@ export async function principalFromRequest(db: SqlDb, request: Request, kind: Po
   const token = readCookie(request.headers.get("cookie"), SESSION_COOKIE[kind]);
   if (!token || !/^[A-Za-z0-9_-]{40,64}$/.test(token)) return null;
   const id = await sha256Hex(token);
-  const s = await db.first<{ id: string; user_id: string; expires_at: string; last_seen_at: string; email: string; name: string | null; status: string }>(
-    `SELECT s.id, s.user_id, s.expires_at, s.last_seen_at, u.email, u.name, u.status FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ? AND s.kind = ? AND s.revoked_at IS NULL`, [id, kind]);
+  const s = await db.first<{ id: string; user_id: string; expires_at: string; last_seen_at: string; email: string; name: string | null; status: string; lang: string }>(
+    `SELECT s.id, s.user_id, s.expires_at, s.last_seen_at, u.email, u.name, u.status, u.lang FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ? AND s.kind = ? AND s.revoked_at IS NULL`, [id, kind]);
   if (!s || Date.parse(s.expires_at) <= now || s.status === "disabled") return null;
   const rows = await db.all<{ id: string; role: Role; scope_type: "ops" | "hotel"; scope_id: string | null }>(
     `SELECT id, role, scope_type, scope_id FROM memberships WHERE user_id = ? AND revoked_at IS NULL AND scope_type = ?`, [s.user_id, kind === "ops" ? "ops" : "hotel"]);
   if (!rows.length) return null;
   if (now - Date.parse(s.last_seen_at) > 5 * 60000) await db.run(`UPDATE sessions SET last_seen_at = ? WHERE id = ?`, [new Date(now).toISOString(), s.id]);
-  return { userId: s.user_id, email: s.email, name: s.name, kind, sessionId: s.id, memberships: rows.map((r) => ({ id: r.id, role: r.role, scopeType: r.scope_type, scopeId: r.scope_id })) };
+  return { userId: s.user_id, email: s.email, name: s.name, lang: mailLangOf(s.lang), kind, sessionId: s.id, memberships: rows.map((r) => ({ id: r.id, role: r.role, scopeType: r.scope_type, scopeId: r.scope_id })) };
 }
 
 export async function signOut(db: SqlDb, request: Request, kind: PortalKind) {
@@ -158,7 +161,7 @@ export async function canSeeProfile(db: SqlDb, p: Principal, profileId: string):
 
 // ---- invitations and membership management --------------------------------
 
-export interface InviteInput { email: unknown; name?: unknown; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null; by: string; loginOrigin: string; scopeLabel: string }
+export interface InviteInput { email: unknown; name?: unknown; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null; by: string; loginOrigin: string; scopeLabel: string; lang?: unknown }
 
 /** Create (or reuse) the user, add the membership and mail the sign-in steps. */
 export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteInput, now = Date.now()): Promise<{ userId: string; membershipId: string; mail: string }> {
@@ -168,10 +171,11 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
   if (input.scopeType === "hotel" && !input.scopeId) throw new Error("hotel_required");
   const name = typeof input.name === "string" ? input.name.trim().slice(0, 120) || null : null;
   const at = new Date(now).toISOString();
+  const lang = mailLangOf(input.lang);
   let user = await db.first<{ id: string; status: string }>(`SELECT id, status FROM users WHERE email = ?`, [email]);
   if (!user) {
     const id = randomId();
-    await db.run(`INSERT INTO users (id, email, name, status, created_at, created_by) VALUES (?, ?, ?, 'invited', ?, ?)`, [id, email, name, at, input.by]);
+    await db.run(`INSERT INTO users (id, email, name, status, lang, created_at, created_by) VALUES (?, ?, ?, 'invited', ?, ?, ?)`, [id, email, name, lang, at, input.by]);
     user = { id, status: "invited" };
   } else if (user.status === "disabled") {
     await db.run(`UPDATE users SET status = 'invited' WHERE id = ?`, [user.id]);
@@ -185,7 +189,7 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
     ]);
   }
   const loginUrl = `${input.loginOrigin}/${input.scopeType === "ops" ? "ops" : "hotel"}/login/`;
-  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, roleLabel: ROLE_LABEL[input.role] }) });
+  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
   return { userId: user.id, membershipId, mail };
 }
 

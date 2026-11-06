@@ -32,7 +32,23 @@ export async function sendPortalMail(env: PortalMailEnv, mail: { to: string; sub
   }
 }
 
-export const loginCodeMail = (code: string, kind: "hotel" | "ops") => ({
+export type MailLang = "ja" | "en";
+export const mailLangOf = (v: unknown): MailLang => (v === "en" ? "en" : "ja");
+const yenEn = (n: number) => `${n < 0 ? "−" : ""}¥${Math.abs(n).toLocaleString("en-US")}`;
+const periodEn = (period: string) => { const [y, q] = period.split("-Q"); return `Q${q} ${y}`; };
+const SIGN_EN = "KAMEHAME JAPAN (Prosent Inc.)";
+
+export const loginCodeMail = (code: string, kind: "hotel" | "ops", lang: MailLang = "ja") => lang === "en" && kind === "hotel" ? ({
+  subject: `[KAMEHAME JAPAN] Your partner portal sign-in code: ${code}`,
+  text: [
+    `Sign-in code: ${code}`,
+    "",
+    "It is valid for 10 minutes. Go back to the sign-in page and enter this code.",
+    "If you did not request it, simply ignore this e-mail and never share the code.",
+    "",
+    SIGN_EN,
+  ].join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】${kind === "ops" ? "運営画面" : "ホテル向け画面"}のサインインコード: ${code}`,
   text: [
     `サインインコード: ${code}`,
@@ -44,7 +60,24 @@ export const loginCodeMail = (code: string, kind: "hotel" | "ops") => ({
   ].join("\n"),
 });
 
-export const inviteMail = (p: { name: string | null; loginUrl: string; scopeLabel: string; roleLabel: string }) => ({
+export const inviteMail = (p: { name: string | null; loginUrl: string; scopeLabel: string; roleLabel: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: "[KAMEHAME JAPAN] Your invitation to the partner portal",
+  text: [
+    `${p.name ? `Dear ${p.name},` : "Hello,"}`,
+    "",
+    `You have been registered on the KAMEHAME JAPAN partner portal (${p.scopeLabel}) as ${p.roleLabel}.`,
+    "",
+    "How to sign in:",
+    `1. Open ${p.loginUrl}`,
+    "2. Enter this e-mail address",
+    "3. Enter the six-digit code you receive",
+    "",
+    "There is no password: you sign in with an e-mailed code each time. You can switch the portal to English or Japanese at the top of the page.",
+    "Questions? Write to hello@kamehame-japan.com.",
+    "",
+    SIGN_EN,
+  ].join("\n"),
+}) : ({
   subject: "【KAMEHAME JAPAN】紹介管理画面へのご招待",
   text: [
     `${p.name ? `${p.name} 様` : "ご担当者様"}`,
@@ -67,7 +100,24 @@ const yenJa = (n: number) => `${n < 0 ? "−" : ""}${Math.abs(n).toLocaleString(
 const periodJa = (period: string) => { const [y, q] = period.split("-Q"); return `${y}年 第${q}四半期（${(Number(q) - 1) * 3 + 1}〜${Number(q) * 3}月）`; };
 
 /** A statement was issued: the partner's billing contact sees the totals and the dispute window. */
-export const statementIssuedMail = (p: { entityName: string; period: string; grossJpy: number; transferJpy: number; carriedOutJpy: number; payDate: string | null; deadline: string | null; url: string }) => ({
+export const statementIssuedMail = (p: { entityName: string; period: string; grossJpy: number; transferJpy: number; carriedOutJpy: number; payDate: string | null; deadline: string | null; url: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: `[KAMEHAME JAPAN] Commission payment notice (${periodEn(p.period)})`,
+  text: [
+    `To ${p.entityName},`,
+    "",
+    `The commission payment notice for ${periodEn(p.period)} has been issued.`,
+    "",
+    `Total including tax: ${yenEn(p.grossJpy)}`,
+    p.transferJpy > 0 ? `Transfer: ${yenEn(p.transferJpy)} (scheduled ${p.payDate ?? "—"})` : `No transfer this time (${p.carriedOutJpy >= 0 ? "below the minimum payout, carried to the next period" : "a negative balance after refunds, offset next period"}: ${yenEn(p.carriedOutJpy)})`,
+    "",
+    "Please review it on the portal (sign in with a billing account):",
+    p.url,
+    "",
+    `If anything differs, raise a dispute on that page by ${p.deadline ?? "the deadline"}. Without a reply by then, the notice counts as acknowledged and the payment proceeds.`,
+    "",
+    SIGN_EN,
+  ].join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】紹介料のお支払い通知書（${periodJa(p.period)}）`,
   text: [
     `${p.entityName} 御中`,
@@ -86,7 +136,21 @@ export const statementIssuedMail = (p: { entityName: string; period: string; gro
   ].join("\n"),
 });
 
-export const disputeResolvedMail = (p: { entityName: string; period: string; outcome: "upheld" | "rejected"; resolution: string; url: string }) => ({
+export const disputeResolvedMail = (p: { entityName: string; period: string; outcome: "upheld" | "rejected"; resolution: string; url: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: `[KAMEHAME JAPAN] Reply to your dispute (${periodEn(p.period)})`,
+  text: [
+    `To ${p.entityName},`,
+    "",
+    `Our reply to your dispute on the ${periodEn(p.period)} payment notice:`,
+    "",
+    `Outcome: ${p.outcome === "upheld" ? "corrected as you asked (a revised notice follows)" : "the notice stands as issued"}`,
+    `Details: ${p.resolution}`,
+    "",
+    p.url,
+    "",
+    SIGN_EN,
+  ].join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】異議申立てへの回答（${periodJa(p.period)}）`,
   text: [
     `${p.entityName} 御中`,
@@ -102,7 +166,18 @@ export const disputeResolvedMail = (p: { entityName: string; period: string; out
   ].join("\n"),
 });
 
-export const payoutPaidMail = (p: { entityName: string; periods: string[]; transferJpy: number; paidAt: string; reference: string | null; url: string }) => ({
+export const payoutPaidMail = (p: { entityName: string; periods: string[]; transferJpy: number; paidAt: string; reference: string | null; url: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: "[KAMEHAME JAPAN] Your commission has been transferred",
+  text: [
+    `To ${p.entityName},`,
+    "",
+    `The commission for ${p.periods.map(periodEn).join(", ")}, ${yenEn(p.transferJpy)}, was transferred on ${p.paidAt}.${p.reference ? ` (reference ${p.reference})` : ""}`,
+    "",
+    p.url,
+    "",
+    SIGN_EN,
+  ].join("\n"),
+}) : ({
   subject: "【KAMEHAME JAPAN】紹介料のお振込を完了しました",
   text: [
     `${p.entityName} 御中`,
@@ -124,7 +199,10 @@ export const caseCreatedMail = (p: { publicRef: string; siteName: string; experi
   text: [`${p.siteName} から取り次ぎ案件が登録されました。`, "", `案件: ${p.publicRef}`, `体験: ${p.experienceTitle}`, `希望日: ${p.preferredDate ?? "未定"}　人数: ${p.guests ?? "未定"}`, "", p.url, "", SIGN].join("\n"),
 });
 /** To the partner: operations shared a quote; the customer link is on the case page. */
-export const quoteSharedMail = (p: { publicRef: string; experienceTitle: string; totalJpy: number; validUntil: string | null; paymentMode: string; url: string }) => ({
+export const quoteSharedMail = (p: { publicRef: string; experienceTitle: string; totalJpy: number; validUntil: string | null; paymentMode: string; url: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: `[KAMEHAME JAPAN] A quote is ready for case ${p.publicRef}`,
+  text: [`A quote for case ${p.publicRef} (${p.experienceTitle}) is ready for your customer.`, "", `Total: ${yenEn(p.totalJpy)} (tax included)`, `Valid until: ${p.validUntil ?? "—"}`, `Payment: ${p.paymentMode}`, "", "Copy the customer link from the case page and pass it on.", p.url, "", SIGN_EN].join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】見積もりを共有しました ${p.publicRef}`,
   text: [`案件 ${p.publicRef}（${p.experienceTitle}）の見積もりをお客様向けに用意しました。`, "", `総額: ${yenJa(p.totalJpy)}（税込）`, `有効期限: ${p.validUntil ?? "—"}`, `お支払い: ${p.paymentMode}`, "", "案件ページからお客様向け URL をコピーしてお渡しください。", p.url, "", SIGN].join("\n"),
 });
@@ -137,17 +215,26 @@ export const quoteCustomerMail = (p: { lang: string; customerName: string; exper
   text: [`Dear ${p.customerName},`, "", `Your quote for ${p.experienceTitle} is ready. Please review the details and, if you are happy with them, pay from the page below.`, "", p.url, "", `Total: ¥${p.totalJpy.toLocaleString("en-US")} (tax included)`, `Valid until: ${p.validUntil ?? "—"}`, "", "Reply to this e-mail with any question.", "", "KAMEHAME JAPAN (Prosent Inc.)"].join("\n"),
 });
 /** To the partner and to operations: the customer paid. */
-export const casePaidMail = (p: { publicRef: string; experienceTitle: string; totalJpy: number; url: string; forOps: boolean }) => ({
+export const casePaidMail = (p: { publicRef: string; experienceTitle: string; totalJpy: number; url: string; forOps: boolean; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: `[KAMEHAME JAPAN] Payment received for case ${p.publicRef}`,
+  text: [`The payment of ${yenEn(p.totalJpy)} for case ${p.publicRef} (${p.experienceTitle}) has been received.`, "", "KAMEHAME JAPAN now secures the slot with the venue and confirms the booking; you will hear again once it is confirmed.", "", p.url, "", SIGN_EN].join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】決済が完了しました ${p.publicRef}`,
   text: [`案件 ${p.publicRef}（${p.experienceTitle}）のお支払い ${yenJa(p.totalJpy)} を確認しました。`, "", p.forOps ? "空き枠を確保し、案件ページで「予約確定」を登録してください。" : "予約確定は運営が空き枠を確保したうえで登録します。確定後にあらためてお知らせします。", "", p.url, "", SIGN].join("\n"),
 });
 /** To the partner: the booking is confirmed. */
-export const caseConfirmedMail = (p: { publicRef: string; experienceTitle: string; date: string | null; url: string }) => ({
+export const caseConfirmedMail = (p: { publicRef: string; experienceTitle: string; date: string | null; url: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: `[KAMEHAME JAPAN] Booking confirmed for case ${p.publicRef}`,
+  text: [`The booking for case ${p.publicRef} (${p.experienceTitle}${p.date ? `, ${p.date}` : ""}) is confirmed.`, "", "Meeting point and day-of details will be posted in the case's messages.", p.url, "", SIGN_EN].join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】予約が確定しました ${p.publicRef}`,
   text: [`案件 ${p.publicRef}（${p.experienceTitle}${p.date ? `、${p.date}` : ""}）の予約が確定しました。`, "", "集合場所や当日のご案内は案件ページの連絡欄に掲載します。", p.url, "", SIGN].join("\n"),
 });
 /** To the other side of a case: a new comment or file. */
-export const caseMessageMail = (p: { publicRef: string; from: "ops" | "partner"; excerpt: string; attachmentName: string | null; url: string }) => ({
+export const caseMessageMail = (p: { publicRef: string; from: "ops" | "partner"; excerpt: string; attachmentName: string | null; url: string; lang?: MailLang }) => p.lang === "en" ? ({
+  subject: `[KAMEHAME JAPAN] New message on case ${p.publicRef}`,
+  text: [`There is a new message on case ${p.publicRef} from ${p.from === "ops" ? "KAMEHAME JAPAN" : "the partner"}.`, "", p.excerpt, p.attachmentName ? `Attachment: ${p.attachmentName}` : "", "", p.url, "", SIGN_EN].filter((l, i, a) => !(l === "" && a[i - 1] === "")).join("\n"),
+}) : ({
   subject: `【KAMEHAME JAPAN】案件 ${p.publicRef} に${p.from === "ops" ? "運営から" : "パートナーから"}連絡があります`,
   text: [`案件 ${p.publicRef} に新しい連絡があります。`, "", p.excerpt, p.attachmentName ? `添付: ${p.attachmentName}` : "", "", p.url, "", SIGN].filter((l, i, a) => !(l === "" && a[i - 1] === "")).join("\n"),
 });

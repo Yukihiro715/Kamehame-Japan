@@ -146,3 +146,4 @@
 .pt-msg-internal { background: #fff5f5; border-color: #f3c7c7; }
 .pt-details summary { cursor: pointer; list-style: none; display: inline-flex; }
 .pt-details summary::-webkit-details-marker { display: none; }
+.pt-lang { font: inherit; font-size: 12px; padding: 4px 6px; border: 1px solid #d9d3c7; border-radius: 6px; background: #fff; }

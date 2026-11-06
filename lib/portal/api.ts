@@ -70,7 +70,7 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   if (ctx.method !== "POST") throw notFound();
   const body = await readJson(ctx.request);
   if (path[0] === "request-code") {
-    const r = await requestLoginCode(ctx.db, ctx.env, { email: body.email, kind: kind(body) });
+    const r = await requestLoginCode(ctx.db, ctx.env, { email: body.email, kind: kind(body), lang: body.lang });
     return json({ ok: true, sent: r.sent, mail: r.mail, ...(r.devCode ? { devCode: r.devCode } : {}) });
   }
   if (path[0] === "verify") {
@@ -103,14 +103,14 @@ function hotelScope(ctx: Ctx, p: Principal, body?: Record<string, unknown>): str
 }
 
 /** Billing contacts of every site a settlement profile covers, for statement notices. */
-async function billingRecipients(ctx: Ctx, profileId: string): Promise<{ emails: string[]; entityName: string }> {
-  const rows = await ctx.db.all<{ email: string }>(
-    `SELECT DISTINCT u.email FROM memberships m JOIN users u ON u.id = m.user_id
+async function billingRecipients(ctx: Ctx, profileId: string): Promise<{ emails: { to: string; lang: "ja" | "en" }[]; entityName: string }> {
+  const rows = await ctx.db.all<{ email: string; lang: string }>(
+    `SELECT DISTINCT u.email, u.lang FROM memberships m JOIN users u ON u.id = m.user_id
       WHERE m.role = 'hotel_billing' AND m.scope_type = 'hotel' AND m.revoked_at IS NULL AND u.status != 'disabled'
         AND m.scope_id IN (SELECT hotel_id FROM settlement_profile_hotels WHERE profile_id = ? AND (valid_to IS NULL OR valid_to > ?))`, [profileId, jstDate()]);
   const le = await ctx.db.first<{ name: string; contact_email: string | null }>(`SELECT le.name, le.contact_email FROM settlement_profiles p JOIN partner_legal_entities le ON le.id = p.legal_entity_id WHERE p.id = ?`, [profileId]);
-  const emails = rows.map((r) => r.email);
-  if (!emails.length && le?.contact_email) emails.push(le.contact_email);
+  const emails = rows.map((r) => ({ to: r.email, lang: r.lang === "en" ? "en" as const : "ja" as const }));
+  if (!emails.length && le?.contact_email) emails.push({ to: le.contact_email, lang: "ja" });
   return { emails, entityName: le?.name ?? "" };
 }
 const csvResponse = (csv: string, name: string) => new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="${name}"`, "cache-control": "private, no-store", "x-robots-tag": "noindex, nofollow" } });
@@ -130,7 +130,14 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   if (head === "me" && ctx.method === "GET") {
     const ids = hotelIdsOf(p);
     const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT id, name, public_id, status, brochure_url, site_kind, features_json FROM hotels WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`, ids) : [];
-    return json({ ok: true, user: { email: p.email, name: p.name }, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
+    return json({ ok: true, user: { email: p.email, name: p.name, lang: p.lang }, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
+  }
+  if (head === "lang" && ctx.method === "POST") {
+    // The language the user reads the portal and its mails in (migration 0011).
+    const b = await readJson(ctx.request);
+    const lang = b.lang === "en" ? "en" : "ja";
+    await ctx.db.run(`UPDATE users SET lang = ? WHERE id = ?`, [lang, p.userId]);
+    return json({ ok: true, lang });
   }
   if (head === "dashboard" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
@@ -315,7 +322,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const s = await settle.issueStatement(ctx.db, id, p.email);
       const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
       const origin = await publicOrigin(ctx);
-      const mails = await Promise.all(emails.map((to) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/hotel/settlement/${s.id}/` }) })));
+      const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/hotel/settlement/${s.id}/`, lang }) })));
       return json({ ok: true, statement: s, notified: emails.length, mails });
     }
     if (action === "void" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); await settle.voidStatement(ctx.db, id, { reason: b.reason, by: p.email }); return json({ ok: true }); }
@@ -328,7 +335,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     const s = await settle.getStatement(ctx.db, d.statement_id);
     const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
     const origin = await publicOrigin(ctx);
-    const mails = await Promise.all(emails.map((to) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/hotel/settlement/${s.id}/` }) })));
+    const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/hotel/settlement/${s.id}/`, lang }) })));
     return json({ ok: true, mails });
   }
   if (head === "payouts") {
@@ -348,7 +355,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
         const periods = (await ctx.db.all<{ period: string }>(`SELECT period FROM statements WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY period`, ids)).map((r) => r.period);
         const { emails, entityName } = await billingRecipients(ctx, po.profile_id);
         const origin = await publicOrigin(ctx);
-        mails = await Promise.all(emails.map((to) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/hotel/settlement/` }) })));
+        mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/hotel/settlement/`, lang }) })));
       }
     }
     return json({ ok: true, mails });
@@ -389,7 +396,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const r = await cases.shareQuote(ctx.db, ctx.env, id, { by: p.email });
       const d = await cases.caseDetail(ctx.db, q0.case_id, "ops", origin);
       const shared = d.quotes.find((x) => x.id === id)!;
-      const mails = await notifyCase(ctx.db, ctx.env, q0.case_id, origin, { kind: "quote_shared", totalJpy: shared.totalJpy, validUntil: shared.validUntil, paymentModeJa: shared.paymentModeJa, shareUrl: shared.shareUrl ?? "", toCustomer: b.notifyCustomer === true });
+      const mails = await notifyCase(ctx.db, ctx.env, q0.case_id, origin, { kind: "quote_shared", totalJpy: shared.totalJpy, validUntil: shared.validUntil, paymentModeJa: shared.paymentModeJa, paymentModeEn: cases.PAYMENT_MODE_EN[shared.paymentMode], shareUrl: shared.shareUrl ?? "", toCustomer: b.notifyCustomer === true });
       return json({ ok: true, ...r, shareUrl: shared.shareUrl, mails, ...d });
     }
     if (action === "void") { const r = await cases.voidQuote(ctx.db, ctx.env, id, { reason: b.reason, by: p.email }); return json({ ok: true, ...r, ...(await cases.caseDetail(ctx.db, q0.case_id, "ops", origin)) }); }
@@ -460,7 +467,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const h = await ctx.db.first<{ name: string }>(`SELECT name FROM hotels WHERE id = ?`, [id]);
       if (!h) throw notFound();
       if (CASE_ROLES.includes(role)) await requireFeature(ctx.db, id, "cases");
-      const r = await inviteMember(ctx.db, ctx.env, { email: b.email, name: b.name, role, scopeType: "hotel", scopeId: id, by: p.email, loginOrigin: await publicOrigin(ctx), scopeLabel: h.name });
+      const r = await inviteMember(ctx.db, ctx.env, { email: b.email, name: b.name, role, scopeType: "hotel", scopeId: id, by: p.email, loginOrigin: await publicOrigin(ctx), scopeLabel: h.name, lang: b.lang });
       return json({ ok: true, ...r });
     }
     if (id && action === "links" && post) {

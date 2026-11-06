@@ -44,7 +44,7 @@ export async function hotelDashboard(db: SqlDb, hotelId: string, period: Period,
 }
 
 export interface ExperienceTerms {
-  slug: string; title: string; tagline: string; city: string; area: string; duration: string; group: string; img: string;
+  slug: string; title: string; titleEn: string; tagline: string; city: string; area: string; areaEn: string; duration: string; durationEn: string; group: string; groupEn: string; img: string;
   basePrice: string; priceUnit: "person" | "group"; priceNote?: string;
   referable: boolean; rateBp: number | null; referenceAvgJpy: number | null; referenceNote: string | null; referenceIsEstimate: boolean;
   commissionExampleNet: number | null; policyFrom: string | null; siteStatus: string;
@@ -57,13 +57,15 @@ export async function experienceTerms(db: SqlDb, now = Date.now()): Promise<Expe
       WHERE p.valid_from <= ? AND p.valid_from = (SELECT MAX(q.valid_from) FROM experience_referral_policies q WHERE q.experience_slug = p.experience_slug AND q.valid_from <= ?)`,
     [new Date(now).toISOString(), new Date(now).toISOString()]);
   const bySlug = new Map(policies.map((p) => [p.experience_slug, p]));
+  const enBySlug = new Map(catalogFor("en").experiences.map((x) => [x.slug, x]));
   return catalogFor("ja").experiences.filter((x) => x.status === "live").map((x: Experience) => {
     const p = bySlug.get(x.slug);
+    const xe = enBySlug.get(x.slug) ?? x;
     const lp = listPrice(x, "ja");
     const referable = !!p && !!p.referral_enabled;
     const base = p?.unit_price_excl_tax_jpy ?? (p && /^¥[\d,]+$/.test(lp.price) ? netFromGross(Number(lp.price.replace(/[¥,]/g, "")), p.tax_rate_bp) : null);
     return {
-      slug: x.slug, title: x.title, tagline: x.tagline, city: x.city, area: x.area, duration: x.duration, group: x.group, img: x.img,
+      slug: x.slug, title: x.title, titleEn: xe.title, tagline: x.tagline, city: x.city, area: x.area, areaEn: xe.area, duration: x.duration, durationEn: xe.duration, group: x.group, groupEn: xe.group, img: x.img,
       basePrice: lp.price, priceUnit: lp.unit, priceNote: lp.note,
       referable, rateBp: referable ? p!.rate_bp : null,
       referenceAvgJpy: p?.reference_avg_jpy ?? null, referenceNote: p?.reference_note ?? null, referenceIsEstimate: true,
@@ -76,7 +78,7 @@ export async function experienceTerms(db: SqlDb, now = Date.now()): Promise<Expe
 export interface HotelReservationRow {
   hotelRef: string; createdAt: string; experience: string; experienceSlug: string; experienceDate: string | null; guests: number | null;
   status: string; statusJa: string; paymentStatus: string; paymentJa: string;
-  baseNet: number | null; rateBp: number | null; commissionNet: number | null; commissionGrossRef: number | null; entryStatus: string | null; entryJa: string; hold: string | null; performedOn: string | null;
+  baseNet: number | null; rateBp: number | null; commissionNet: number | null; commissionGrossRef: number | null; entryStatus: string | null; entryJa: string; hold: string | null; holdCodes: string[]; performedOn: string | null;
 }
 
 export interface ReservationFilters { from?: string; to?: string; experience?: string; status?: string; ref?: string; experienceFrom?: string; experienceTo?: string; limit?: number; offset?: number }
@@ -107,7 +109,7 @@ export async function hotelReservations(db: SqlDb, hotelId: string, f: Reservati
       baseNet: r.base_net_jpy, rateBp: r.rate_bp, commissionNet: r.commission_net_jpy,
       commissionGrossRef: r.commission_net_jpy === null ? null : r.commission_net_jpy + taxOnTotal(r.commission_net_jpy, 1000),
       entryStatus: r.entry_status, entryJa: r.entry_status ? ENTRY_STATUS_JA[r.entry_status] ?? r.entry_status : "—",
-      hold: r.hold_reason ? r.hold_reason.split(",").map((h) => HOLD_JA[h] ?? h).join("、") : null, performedOn: r.performed_on_jst,
+      hold: r.hold_reason ? r.hold_reason.split(",").map((h) => HOLD_JA[h] ?? h).join("、") : null, holdCodes: r.hold_reason ? r.hold_reason.split(",") : [], performedOn: r.performed_on_jst,
     })),
   };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { t } from "./i18n";
 
 export function Card({ title, children, actions, className = "" }: { title?: ReactNode; children: ReactNode; actions?: ReactNode; className?: string }) {
   return (
@@ -25,13 +26,13 @@ export function Badge({ children, tone = "neutral" }: { children: ReactNode; ton
   return <span className={`pt-badge pt-badge-${tone}`}>{children}</span>;
 }
 
-export function Table({ head, rows, empty = "該当するデータはありません。", compact }: { head: ReactNode[]; rows: ReactNode[][]; empty?: string; compact?: boolean }) {
+export function Table({ head, rows, empty, compact }: { head: ReactNode[]; rows: ReactNode[][]; empty?: string; compact?: boolean }) {
   return (
     <div className="pt-table-wrap">
       <table className={`pt-table${compact ? " pt-table-compact" : ""}`}>
         <thead><tr>{head.map((h, i) => <th key={i}>{h}</th>)}</tr></thead>
         <tbody>
-          {rows.length === 0 ? <tr><td colSpan={head.length} className="pt-empty">{empty}</td></tr> : rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}
+          {rows.length === 0 ? <tr><td colSpan={head.length} className="pt-empty">{empty ?? t().common.empty}</td></tr> : rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}
         </tbody>
       </table>
     </div>
@@ -50,7 +51,7 @@ export function Notice({ children, tone = "info" }: { children: ReactNode; tone?
   return <p className={`pt-notice pt-notice-${tone}`}>{children}</p>;
 }
 
-export function Loading({ text = "読み込み中…" }: { text?: string }) { return <p className="pt-loading">{text}</p>; }
+export function Loading({ text }: { text?: string }) { return <p className="pt-loading">{text ?? t().common.loading}</p>; }
 
 export const PERIODS: [string, string][] = [["this_month", "今月"], ["last_month", "先月"], ["this_quarter", "当四半期"], ["last_quarter", "前四半期"]];
 
@@ -59,12 +60,12 @@ export function PeriodPicker({ value, onChange }: { value: { period?: string; fr
   const [from, setFrom] = useState(value.from ?? ""), [to, setTo] = useState(value.to ?? "");
   return (
     <div className="pt-period">
-      {PERIODS.map(([k, label]) => <button key={k} type="button" className={`pt-chip${value.period === k && !value.from ? " on" : ""}`} onClick={() => onChange({ period: k })}>{label}</button>)}
+      {PERIODS.map(([k]) => <button key={k} type="button" className={`pt-chip${value.period === k && !value.from ? " on" : ""}`} onClick={() => onChange({ period: k })}>{(t().period as Record<string, string>)[k]}</button>)}
       <span className="pt-period-custom">
-        <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} aria-label="開始日" />
+        <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} aria-label={t().period.from} />
         <span>〜</span>
-        <input type="date" value={to} onChange={(e) => setTo(e.target.value)} aria-label="終了日" />
-        <Button kind="secondary" small onClick={() => { if (from && to && from <= to) onChange({ from, to }); }}>表示</Button>
+        <input type="date" value={to} onChange={(e) => setTo(e.target.value)} aria-label={t().period.to} />
+        <Button kind="secondary" small onClick={() => { if (from && to && from <= to) onChange({ from, to }); }}>{t().period.show}</Button>
       </span>
     </div>
   );
@@ -73,15 +74,15 @@ export function PeriodPicker({ value, onChange }: { value: { period?: string; fr
 export const periodQuery = (v: { period?: string; from?: string; to?: string }) => (v.from && v.to ? `from=${v.from}&to=${v.to}` : `period=${v.period ?? "this_month"}`);
 
 /** A dialog-free confirm: the action shows a reason box and a confirm button inline. */
-export function ReasonAction({ label, onConfirm, kind = "secondary", placeholder = "理由（必須）", confirmLabel = "実行", extra }: { label: string; onConfirm: (reason: string) => Promise<void>; kind?: "primary" | "secondary" | "danger"; placeholder?: string; confirmLabel?: string; extra?: ReactNode }) {
+export function ReasonAction({ label, onConfirm, kind = "secondary", placeholder, confirmLabel, extra }: { label: string; onConfirm: (reason: string) => Promise<void>; kind?: "primary" | "secondary" | "danger"; placeholder?: string; confirmLabel?: string; extra?: ReactNode }) {
   const [open, setOpen] = useState(false), [reason, setReason] = useState(""), [busy, setBusy] = useState(false), [err, setErr] = useState<string | null>(null);
   if (!open) return <Button kind={kind} small onClick={() => setOpen(true)}>{label}</Button>;
   return (
     <div className="pt-reason">
       {extra}
-      <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder={placeholder} maxLength={500} />
-      <Button kind={kind} small disabled={busy || !reason.trim()} onClick={async () => { setBusy(true); setErr(null); try { await onConfirm(reason.trim()); setOpen(false); setReason(""); } catch (e) { setErr(e instanceof Error ? e.message : "エラー"); } finally { setBusy(false); } }}>{confirmLabel}</Button>
-      <Button kind="link" small onClick={() => setOpen(false)}>やめる</Button>
+      <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder={placeholder ?? t().common.reasonRequired} maxLength={500} />
+      <Button kind={kind} small disabled={busy || !reason.trim()} onClick={async () => { setBusy(true); setErr(null); try { await onConfirm(reason.trim()); setOpen(false); setReason(""); } catch (e) { setErr(e instanceof Error ? e.message : "エラー"); } finally { setBusy(false); } }}>{confirmLabel ?? t().common.run}</Button>
+      <Button kind="link" small onClick={() => setOpen(false)}>{t().common.cancel}</Button>
       {err && <small className="pt-err">{err}</small>}
     </div>
   );

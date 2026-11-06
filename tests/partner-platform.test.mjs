@@ -53,9 +53,11 @@ test("after the migration an existing hotel reads as hotel / company / link refe
   const db = openTestDb(); await seed(db);
   const ops = client(db); await signIn(ops, "admin@example.com", "ops");
   const list = (await ops.call("GET", "ops/partners")).body;
-  assert.deepEqual(list.entities.map((e) => [e.partner_type, e.entity_kind]), [["hotel", "company"]]);
-  assert.deepEqual(list.hotels[0].features, { refer: true, cases: false, settlement: true, members: false });
-  assert.equal(list.hotels[0].site_kind, "hotel");
+  // Migration 0011 seeds the owner's demo site beside the test's hotel; look at the hotel alone.
+  assert.deepEqual(list.entities.filter((e) => e.id !== "le-prosent").map((e) => [e.partner_type, e.entity_kind]), [["hotel", "company"]]);
+  const hA = list.hotels.find((h) => h.id === "hA");
+  assert.deepEqual(hA.features, { refer: true, cases: false, settlement: true, members: false });
+  assert.equal(hA.site_kind, "hotel");
   assert.equal((await ops.call("POST", "ops/hotels/hA/members", { email: "front@hotel-a.example", role: "hotel_viewer" })).status, 200);
   assert.equal((await ops.call("POST", "ops/hotels/hA/members", { email: "x@hotel-a.example", role: "partner_agent" })).status, 403, "relay roles need the relay feature, whatever the type");
 });

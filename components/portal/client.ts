@@ -1,5 +1,7 @@
 "use client";
 
+import { portalLang, t } from "./i18n";
+
 /** The browser side of the portal API: same-origin JSON calls with the
  *  portal header (lib/portal/api.ts checks it), plus small formatters. */
 
@@ -24,7 +26,7 @@ export const jst = (iso: string | null | undefined, withTime = true) => {
   if (!iso) return "—";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", ...(withTime ? { hour: "2-digit", minute: "2-digit" } : {}) });
+  return d.toLocaleString(portalLang() === "en" ? "en-GB" : "ja-JP", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", ...(withTime ? { hour: "2-digit", minute: "2-digit" } : {}) });
 };
 export const ERROR_JA: Record<string, string> = {
   unauthenticated: "サインインしてください。", forbidden: "この操作の権限がありません。", not_found: "見つかりません。", ledger_unavailable: "台帳データベースに接続できません。",
@@ -33,4 +35,8 @@ export const ERROR_JA: Record<string, string> = {
   already_settled: "精算済みの紹介料です。差分台帳で処理します。", allocation_total_mismatch: "配賦の合計が返金額と一致しません。", over_refund: "明細の金額を超えています。",
   hotels_not_in_entity: "同じ契約法人の施設だけをまとめられます。", bad_role: "役割が正しくありません。", invalid_email: "メールアドレスが正しくありません。", fields_required: "必須項目が未入力です。",
 };
-export const errorText = (e: unknown) => (e instanceof PortalError ? ERROR_JA[e.code] ?? e.message ?? e.code : e instanceof Error ? e.message : "エラーが発生しました。");
+export const errorText = (e: unknown) => {
+  const errs = t().errors as Record<string, string>;
+  if (e instanceof PortalError) return (portalLang() === "ja" ? ERROR_JA[e.code] : undefined) ?? errs[e.code] ?? (e.message !== e.code ? e.message : undefined) ?? errs.generic;
+  return e instanceof Error ? e.message : errs.generic;
+};
