@@ -10,8 +10,10 @@
 import { popularOverview, savePopularSetting } from "@/lib/popular";
 import { isBucket, listReviewSubmissions, serveMedia } from "@/lib/review-media";
 import { parseFeatures, requireFeature } from "./partner";
-import { d1Db, isD1Like, type SqlDb } from "@/lib/referral/db";
-import { CASE_ROLES, canSeeHotel, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
+import * as settle from "./settlement";
+import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMail } from "./mail";
+import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
+import { CASE_ROLES, canSeeHotel, canSeeProfile, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
@@ -103,6 +105,28 @@ function hotelScope(ctx: Ctx, p: Principal, body?: Record<string, unknown>): str
   return ids[0];
 }
 
+/** Billing contacts of every site a settlement profile covers, for statement notices. */
+async function billingRecipients(ctx: Ctx, profileId: string): Promise<{ emails: string[]; entityName: string }> {
+  const rows = await ctx.db.all<{ email: string }>(
+    `SELECT DISTINCT u.email FROM memberships m JOIN users u ON u.id = m.user_id
+      WHERE m.role = 'hotel_billing' AND m.scope_type = 'hotel' AND m.revoked_at IS NULL AND u.status != 'disabled'
+        AND m.scope_id IN (SELECT hotel_id FROM settlement_profile_hotels WHERE profile_id = ? AND (valid_to IS NULL OR valid_to > ?))`, [profileId, jstDate()]);
+  const le = await ctx.db.first<{ name: string; contact_email: string | null }>(`SELECT le.name, le.contact_email FROM settlement_profiles p JOIN partner_legal_entities le ON le.id = p.legal_entity_id WHERE p.id = ?`, [profileId]);
+  const emails = rows.map((r) => r.email);
+  if (!emails.length && le?.contact_email) emails.push(le.contact_email);
+  return { emails, entityName: le?.name ?? "" };
+}
+const csvResponse = (csv: string, name: string) => new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="${name}"`, "cache-control": "private, no-store", "x-robots-tag": "noindex, nofollow" } });
+/** Sites of a statement's profile the user may see at all. */
+async function statementVisible(ctx: Ctx, p: Principal, statementId: string): Promise<{ s: settle.StatementRow; billing: boolean }> {
+  const s = await settle.getStatement(ctx.db, statementId);
+  if (s.status === "draft") throw notFound();
+  const sites = await ctx.db.all<{ hotel_id: string }>(`SELECT hotel_id FROM settlement_profile_hotels WHERE profile_id = ?`, [s.profile_id]);
+  if (!sites.some((h) => canSeeHotel(p, h.hotel_id))) throw notFound();
+  for (const h of sites) if (canSeeHotel(p, h.hotel_id)) await requireFeature(ctx.db, h.hotel_id, "settlement");
+  return { s, billing: await canSeeProfile(ctx.db, p, s.profile_id) };
+}
+
 async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   const p = await requireHotelUser(ctx);
   const [head, sub] = path;
@@ -148,9 +172,19 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     const hotelId = hotelScope(ctx, p);
     await requireFeature(ctx.db, hotelId, "settlement");
     const dash = await hotelDashboard(ctx.db, hotelId, presetPeriod("this_quarter")!);
-    const profile = await ctx.db.first<{ id: string; name: string; min_payout_jpy: number; bank_details_masked: string | null }>(
-      `SELECT p.id, p.name, p.min_payout_jpy, p.bank_details_masked FROM settlement_profile_hotels ph JOIN settlement_profiles p ON p.id = ph.profile_id WHERE ph.hotel_id = ? AND (ph.valid_to IS NULL OR ph.valid_to > ?) ORDER BY ph.valid_from DESC LIMIT 1`, [hotelId, new Date().toISOString().slice(0, 10)]);
-    return json({ ok: true, hotel: hotelId, balance: dash.balance, profile, statements: [], note: "精算書は四半期締め後にここに表示されます（段階4）。" });
+    const profile = await ctx.db.first<{ id: string; name: string; min_payout_jpy: number; bank_details_masked: string | null; dispute_days: number; fee_borne_by: string; bank_fee_jpy: number }>(
+      `SELECT p.id, p.name, p.min_payout_jpy, p.bank_details_masked, p.dispute_days, p.fee_borne_by, p.bank_fee_jpy FROM settlement_profile_hotels ph JOIN settlement_profiles p ON p.id = ph.profile_id WHERE ph.hotel_id = ? AND (ph.valid_to IS NULL OR ph.valid_to > ?) ORDER BY ph.valid_from DESC LIMIT 1`, [hotelId, jstDate()]);
+    const statements = profile ? await settle.statementsOfProfiles(ctx.db, [profile.id]) : [];
+    return json({ ok: true, hotel: hotelId, balance: dash.balance, profile, billing: profile ? await canSeeProfile(ctx.db, p, profile.id) : false, statements });
+  }
+  if (head === "statements" && sub) {
+    const [, id, action] = path;
+    const { s, billing } = await statementVisible(ctx, p, id);
+    if (!action && ctx.method === "GET") { const d = await settle.statementDetail(ctx.db, id); return json({ ok: true, ...d, billing }); }
+    if (action === "csv" && ctx.method === "GET") return csvResponse(settle.statementCsv(await settle.statementDetail(ctx.db, id)), `kamehame-statement-${s.period}.csv`);
+    if (!billing) throw forbidden();
+    if (action === "acknowledge" && ctx.method === "POST") { await settle.acknowledgeStatement(ctx.db, id, p.email); return json({ ok: true }); }
+    if (action === "dispute" && ctx.method === "POST") { const b = await readJson(ctx.request); return json({ ok: true, ...(await settle.raiseDispute(ctx.db, id, { reason: b.reason, itemId: b.itemId, by: p.email })) }); }
   }
   void sub;
   throw notFound();
@@ -209,6 +243,57 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     const bucket = isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null;
     if (!bucket) throw new ApiError(503, "media_unavailable");
     return await serveMedia(bucket, q(ctx, "key") ?? "", q(ctx, "download") === "1");
+  }
+  if (head === "settlement") {
+    // Stage 4 (lib/portal/settlement.ts): the quarter close and the statements.
+    if (get) { await requireOps(ctx); return json({ ok: true, ...(await settle.opsSettlementOverview(ctx.db)) }); }
+    if (id === "close" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); return json({ ok: true, ...(await settle.closeQuarter(ctx.db, { period: b.period, by: p.email })) }); }
+  }
+  if (head === "statements" && id) {
+    if (!action && get) { await requireOps(ctx); return json({ ok: true, ...(await settle.statementDetail(ctx.db, id)) }); }
+    if (action === "csv" && get) { await requireOps(ctx); const d = await settle.statementDetail(ctx.db, id); return csvResponse(settle.statementCsv(d), `kamehame-statement-${d.statement.period}-v${d.statement.version}.csv`); }
+    if (action === "issue" && post) {
+      const p = await requireOps(ctx, ...FINANCE);
+      const s = await settle.issueStatement(ctx.db, id, p.email);
+      const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
+      const origin = await publicOrigin(ctx);
+      const mails = await Promise.all(emails.map((to) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/hotel/settlement/${s.id}/` }) })));
+      return json({ ok: true, statement: s, notified: emails.length, mails });
+    }
+    if (action === "void" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); await settle.voidStatement(ctx.db, id, { reason: b.reason, by: p.email }); return json({ ok: true }); }
+  }
+  if (head === "disputes" && id && action === "resolve" && post) {
+    const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request);
+    const d = await ctx.db.first<{ statement_id: string }>(`SELECT statement_id FROM statement_disputes WHERE id = ?`, [id]);
+    if (!d) throw notFound();
+    await settle.resolveDispute(ctx.db, id, { outcome: b.outcome, resolution: b.resolution, by: p.email });
+    const s = await settle.getStatement(ctx.db, d.statement_id);
+    const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
+    const origin = await publicOrigin(ctx);
+    const mails = await Promise.all(emails.map((to) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/hotel/settlement/${s.id}/` }) })));
+    return json({ ok: true, mails });
+  }
+  if (head === "payouts") {
+    if (!id && get) { await requireOps(ctx, ...FINANCE); return json({ ok: true, batches: await settle.payoutBatches(ctx.db) }); }
+    if (!id && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); return json({ ok: true, ...(await settle.createPayoutBatch(ctx.db, { payDate: b.payDate, by: p.email })) }); }
+    if (id && !action && get) { await requireOps(ctx, ...FINANCE); return json({ ok: true, ...(await settle.payoutBatchDetail(ctx.db, id)) }); }
+    if (id && action === "csv" && get) { const p = await requireOps(ctx, ...FINANCE); return csvResponse(await settle.payoutCsv(ctx.db, id, p.email), `kamehame-payouts-${id}.csv`); }
+  }
+  if (head === "payout-items" && id && action === "record" && post) {
+    const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request);
+    await settle.recordPayout(ctx.db, id, { status: b.status, reference: b.reference, paidAt: b.paidAt, note: b.note, by: p.email });
+    let mails: string[] = [];
+    if (b.status === "paid") {
+      const po = await ctx.db.first<{ profile_id: string; statement_ids_json: string; transfer_jpy: number; paid_at: string | null; reference: string | null }>(`SELECT profile_id, statement_ids_json, transfer_jpy, paid_at, reference FROM payouts WHERE id = ?`, [id]);
+      if (po) {
+        const ids = JSON.parse(po.statement_ids_json) as string[];
+        const periods = (await ctx.db.all<{ period: string }>(`SELECT period FROM statements WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY period`, ids)).map((r) => r.period);
+        const { emails, entityName } = await billingRecipients(ctx, po.profile_id);
+        const origin = await publicOrigin(ctx);
+        mails = await Promise.all(emails.map((to) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/hotel/settlement/` }) })));
+      }
+    }
+    return json({ ok: true, mails });
   }
   if (head === "popular") {
     // The home page's "Popular right now" order (lib/popular.ts).

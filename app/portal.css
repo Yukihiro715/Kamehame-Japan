@@ -113,3 +113,24 @@
 .pt-media { margin:0; display:grid; gap:4px; }
 .pt-media img, .pt-media video { width:100%; aspect-ratio:4 / 3; object-fit:cover; border-radius:8px; background:#eee; display:block; }
 .pt-media figcaption { font-size:12px; color:#555; overflow-wrap:anywhere; }
+
+/* The payment notice (components/portal/statement-sheet.tsx): on screen a white sheet, in print the only thing on the page */
+.pt-sheet { background:#fff; border:1px solid #e3ded3; border-radius:12px; padding:28px 32px; margin-top:16px; font-size:13px; color:#222; }
+.pt-sheet-h { display:flex; justify-content:space-between; gap:24px; align-items:flex-start; border-bottom:2px solid #222; padding-bottom:12px; }
+.pt-sheet-h h1 { margin:0; font-size:22px; letter-spacing:.06em; }
+.pt-sheet-sub { margin:6px 0 0; color:#555; }
+.pt-sheet-meta { text-align:right; } .pt-sheet-meta p { margin:0 0 4px; }
+.pt-sheet-parties { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:18px 0; } .pt-sheet-parties p { margin:0 0 3px; }
+.pt-sheet-l { font-size:11px; color:#777; letter-spacing:.08em; }
+.pt-sheet-totals { width:100%; max-width:520px; border-collapse:collapse; margin:8px 0 20px; }
+.pt-sheet-totals th, .pt-sheet-totals td { padding:7px 10px; border-bottom:1px solid #e3ded3; text-align:left; } .pt-sheet-totals td { text-align:right; font-variant-numeric:tabular-nums; }
+.pt-sheet-grand th, .pt-sheet-grand td { font-size:16px; font-weight:700; border-top:2px solid #222; }
+.pt-sheet-items { margin-top:8px; }
+.pt-sheet-notes { margin-top:18px; font-size:11.5px; color:#444; } .pt-sheet-notes p { margin:0 0 6px; line-height:1.6; }
+@media print {
+  .pt-top, .pt-nav, .pt-foot, .no-print, .pt-notice { display:none !important; }
+  .pt-main, .pt-root { padding:0; margin:0; background:#fff; }
+  .pt-sheet { border:0; border-radius:0; padding:0; margin:0; font-size:12px; }
+  .pt-sheet-items { font-size:11px; }
+  @page { size:A4; margin:16mm; }
+}

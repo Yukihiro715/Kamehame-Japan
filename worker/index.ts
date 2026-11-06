@@ -8,6 +8,7 @@ import { loadCourseNames } from "../lib/golf-courses-db";
 import { normaliseCourseName } from "../lib/golf-course-images";
 import { d1Db, isD1Like } from "../lib/referral/db";
 import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
+import { autoAcknowledge } from "../lib/portal/settlement";
 
 interface Env {
   ASSETS: Fetcher;
@@ -228,6 +229,8 @@ const scheduled = {
     ctx.waitUntil((async () => {
       // The partner's schedule (at most every three hours), then English for a few
       // tours' details per tick while the pages are on (staging or GOLFPAQ_LIVE).
+      // Settlement: issued statements past their dispute window count as acknowledged (lib/portal/settlement.ts).
+      if (isD1Like(env.DB)) { try { await autoAcknowledge(d1Db(env.DB)); } catch (e) { console.error("settlement auto-acknowledge:", e instanceof Error ? e.message : e); } }
       try { await refreshGolfpaqSnapshot(env.READY_STATE); } catch (e) { console.error("golfpaq refresh:", e instanceof Error ? e.message : "unavailable"); }
       if (env.AI && golfpaqVisible(env)) {
         try {

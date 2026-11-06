@@ -6,6 +6,7 @@ import { listPrice } from "@/lib/pricing";
 import { type SqlDb } from "@/lib/referral/db";
 import { commissionNet, netFromGross, taxOnTotal } from "@/lib/referral/money";
 import { ENTRY_STATUS_JA, HOLD_JA, PAYMENT_STATUS_JA, RESERVATION_STATUS_JA, periodBounds } from "./util";
+import { paidTotalForHotel } from "./settlement";
 
 export interface Period { from: string; to: string }
 
@@ -38,7 +39,7 @@ export async function hotelDashboard(db: SqlDb, hotelId: string, period: Period,
     period, updatedAt: new Date(now).toISOString(),
     funnel: { accesses: n(accesses), visits: n(visits), provisional: n(provisional), confirmed: n(confirmed), paid: n(paid), fullyRefunded: n(refunded), cancelled: n(cancelled), estimatedCommissionNet: n(estimated) },
     confirmed: { count: Number(done?.c ?? 0), baseNet: Number(done?.base ?? 0), commissionNet: confirmedNet, commissionTaxRef: taxOnTotal(confirmedNet, 1000) },
-    balance: { unpaidNet, unpaidTaxRef: taxOnTotal(unpaidNet, 1000), paid: 0 },
+    balance: { unpaidNet, unpaidTaxRef: taxOnTotal(unpaidNet, 1000), paid: await paidTotalForHotel(db, hotelId) },
   };
 }
 
