@@ -11,7 +11,7 @@ export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number
   "dotonbori-ramen-class": { price: "price_1UTESxDpZ5Y8WoJ22NGPt3xy", amount: 26500, min: 1, max: 16, minCharge: 1 },
   "tokyo-kendo-experience-tour": { price: "price_1USyu1DpZ5Y8WoJ2tnGKPAdj", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "shibuya-ramen-class": { price: "price_1USyuLDpZ5Y8WoJ2Er2OtMAL", amount: 26500, min: 1, max: 16, minCharge: 1 },
-  "nihonbashi-kendo-experience": { price: "price_1UXwbgDpZ5Y8WoJ2h7EK23XX", amount: 20000, min: 1, max: 8, minCharge: 1, eligibilityRequired: true, timeOnConfirmation: true },
+  "nihonbashi-kendo-experience": { price: "price_1UYkjgDpZ5Y8WoJ27JdfWDGp", amount: 25000, min: 1, max: 8, minCharge: 1, eligibilityRequired: true, timeOnConfirmation: true },
   "nihonbashi-bushido-experience": { price: "price_1UXwbPDpZ5Y8WoJ21QAHRH7V", amount: 10000, min: 2, max: 8, minCharge: 2, eligibilityRequired: true, timeOnConfirmation: true },
   "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 2, max: 4, minCharge: 2 },
 };
