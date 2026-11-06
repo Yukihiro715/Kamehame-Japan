@@ -28,7 +28,7 @@ export function OpsPartners() {
       {msg && <Notice tone="ok">{msg}</Notice>}
       <p className="pt-note-box">提携パートナーは「契約先（精算先）→ 拠点（紹介元）→ 担当者」で管理します。種別（ホテル・旅行代理店・ガイド・その他）と、拠点ごとに使える機能（リンク紹介・予約取り次ぎ・精算・メンバー管理）は別々に設定できます。個人ガイドや支店のない代理店は「契約先の登録」で「拠点も同時に作る」を選ぶと、契約先と同名の拠点が1つできます。</p>
       <Card title="拠点（紹介元）">
-        <Table head={["拠点ID", "名称", "種別", "契約先", "機能", "状態", "紹介予約", "精算設定", ""]} rows={d.hotels.map((x) => [x.public_id, x.name, SITE_KIND_JA[x.site_kind as keyof typeof SITE_KIND_JA] ?? x.site_kind, entityName(x.legal_entity_id), FEATURE_KEYS.filter((k) => x.features?.[k]).map((k) => FEATURE_JA[k]).join("・") || "—", <Badge key="s" tone={STATUS[x.status]?.[1] ?? "neutral"}>{STATUS[x.status]?.[0] ?? x.status}</Badge>, x.referrals, d.profiles.find((pr) => pr.id === x.profileId)?.name ?? <span className="pt-muted">未設定</span>, <a key="a" href={`/ops/hotels/${x.id}/`}>詳細・担当者・リンク</a>])} empty="ホテルはまだ登録されていません。下のフォームで契約法人 → 施設の順に登録します。" />
+        <Table head={["拠点ID", "名称", "種別", "契約先", "機能", "状態", "紹介予約", "精算設定", ""]} rows={d.hotels.map((x) => [x.public_id, x.name, SITE_KIND_JA[x.site_kind as keyof typeof SITE_KIND_JA] ?? x.site_kind, entityName(x.legal_entity_id), FEATURE_KEYS.filter((k) => x.features?.[k]).map((k) => FEATURE_JA[k]).join("・") || "—", <Badge key="s" tone={STATUS[x.status]?.[1] ?? "neutral"}>{STATUS[x.status]?.[0] ?? x.status}</Badge>, x.referrals, d.profiles.find((pr) => pr.id === x.profileId)?.name ?? <span className="pt-muted">未設定</span>, <a key="a" href={`/ops/hotels/${x.id}/`}>詳細・担当者・リンク</a>])} empty="拠点はまだ登録されていません。下のフォームで契約先 → 拠点の順に登録します。" />
       </Card>
       <div className="pt-grid-2">
         <Card title="契約先（精算先）を登録">

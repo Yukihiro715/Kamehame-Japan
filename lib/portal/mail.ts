@@ -49,7 +49,7 @@ export const loginCodeMail = (code: string, kind: "hotel" | "ops", lang: MailLan
     SIGN_EN,
   ].join("\n"),
 }) : ({
-  subject: `【KAMEHAME JAPAN】${kind === "ops" ? "運営画面" : "ホテル向け画面"}のサインインコード: ${code}`,
+  subject: `【KAMEHAME JAPAN】${kind === "ops" ? "運営画面" : "パートナー向け管理画面"}のサインインコード: ${code}`,
   text: [
     `サインインコード: ${code}`,
     "",
@@ -78,11 +78,11 @@ export const inviteMail = (p: { name: string | null; loginUrl: string; scopeLabe
     SIGN_EN,
   ].join("\n"),
 }) : ({
-  subject: "【KAMEHAME JAPAN】紹介管理画面へのご招待",
+  subject: "【KAMEHAME JAPAN】パートナー向け管理画面へのご招待",
   text: [
     `${p.name ? `${p.name} 様` : "ご担当者様"}`,
     "",
-    `KAMEHAME JAPAN の紹介管理画面（${p.scopeLabel}）に、${p.roleLabel}として登録しました。`,
+    `KAMEHAME JAPAN のパートナー向け管理画面（${p.scopeLabel}）に、${p.roleLabel}として登録しました。`,
     "",
     "サインインの手順:",
     `1. ${p.loginUrl} を開く`,

@@ -42,7 +42,7 @@ export function OpsPolicies() {
           <Field label="参考予約単価（税込、任意）"><input inputMode="numeric" value={f.referenceAvg} onChange={(e) => setF({ ...f, referenceAvg: e.target.value })} /></Field>
           <Field label="参考単価の注記"><input value={f.referenceNote} onChange={(e) => setF({ ...f, referenceNote: e.target.value })} placeholder="例: 運営入力 2026-11。現地払いを含まない" /></Field>
           <Field label="適用開始日（JST、空なら今）"><input type="date" value={f.validFrom} onChange={(e) => setF({ ...f, validFrom: e.target.value })} /></Field>
-          <label className="pt-field"><span className="pt-field-l">ホテル紹介を受け付ける</span><input type="checkbox" checked={f.enabled} onChange={(e) => setF({ ...f, enabled: e.target.checked })} style={{ width: "auto" }} /></label>
+          <label className="pt-field"><span className="pt-field-l">パートナー紹介を受け付ける</span><input type="checkbox" checked={f.enabled} onChange={(e) => setF({ ...f, enabled: e.target.checked })} style={{ width: "auto" }} /></label>
           <div className="pt-row"><Button disabled={!f.experienceSlug || !f.ratePct} onClick={() => void save()}>登録</Button></div>
         </div>
       </Card>

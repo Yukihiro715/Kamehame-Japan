@@ -9,9 +9,9 @@ export const PORTAL_LANGS: PortalLang[] = ["ja", "en"];
 export const PORTAL_LANG_NAME: Record<PortalLang, string> = { ja: "日本語", en: "English" };
 
 const ja = {
-  brand: { partner: "パートナー向け", ops: "運営", loginPartner: "パートナー向け画面", loginOps: "運営画面" },
+  brand: { partner: "パートナー向け管理画面", ops: "運営", loginPartner: "パートナー向け管理画面", loginOps: "運営画面" },
   nav: { dashboard: "実績", reservations: "紹介予約", cases: "取り次ぎ", experiences: "体験一覧", materials: "QR・リンク", settlement: "精算", guide: "使い方" },
-  shell: { signOut: "サインアウト", chooseSite: "拠点を選ぶ", noSite: "閲覧できる拠点がありません。KAMEHAME JAPAN にお問い合わせください。", footer: "KAMEHAME JAPAN 紹介管理 · 株式会社プロセント · お問い合わせ hello@kamehame-japan.com", language: "言語" },
+  shell: { signOut: "サインアウト", chooseSite: "拠点を選ぶ", noSite: "閲覧できる拠点がありません。KAMEHAME JAPAN にお問い合わせください。", footer: "KAMEHAME JAPAN パートナー向け管理画面 · 株式会社プロセント · お問い合わせ hello@kamehame-japan.com", language: "言語" },
   login: { h: "サインイン", email: "メールアドレス", note: "パスワードはありません。登録されたメールアドレスに6桁のコードをお送りします。", send: "コードを送る", code: "6桁のコード", signIn: "サインイン", changeEmail: "アドレスを変える", devNote: "検証環境: メールは送らず、コードをここに表示しています。", sentNote: "登録済みのアドレスなら、6桁のコードをメールでお送りしました。届かない場合は迷惑メールもご確認ください。", codeLabel: "コード" },
   common: { loading: "読み込み中…", empty: "該当するデータはありません。", search: "検索", clear: "条件を消す", save: "保存", cancel: "やめる", open: "開く", detail: "詳細", back: "一覧へ", copy: "URL をコピー", copied: "コピーしました", send: "送信", sending: "送信中…", run: "実行", reasonRequired: "理由（必須）", reasonOptional: "理由（任意）", all: "すべて", undecided: "未定", none: "—", yes: "○", items: (n: number) => `${n} 件`, updated: "更新", created: "登録", taxIncl: "税込", taxExcl: "税抜" },
   period: { this_month: "今月", last_month: "先月", this_quarter: "当四半期", last_quarter: "前四半期", from: "開始日", to: "終了日", show: "表示" },
@@ -69,7 +69,7 @@ const ja = {
     sheet: { h: "紹介料 お支払い通知書", period: "対象期間", revision: (v: number) => `訂正版 ${v}`, no: "通知書番号", issuedOn: "発行日", unissued: "（未発行・下書き）", to: "宛先", toSuffix: " 御中", regNo: "登録番号", profile: "精算設定", payee: "振込先名義", from: "発行者", company: "株式会社プロセント",
       net: "紹介料（税抜）", tax: "消費税（10%・合計に対して1回計算）", gross: "税込合計", carriedIn: "前期からの繰越", payable: "お支払い対象額", carriedOutRefund: "返金による差額", carriedOutMin: (v: string) => `最低お支払額 ${v} 未満`, carriedOut: (why: string) => `次回への繰越（${why}）`, fee: (who: string) => `振込手数料（${who}）`, feeHotel: "貴社ご負担", feeUs: "当社負担", transfer: "お振込額", payDate: "お振込予定日", noTransfer: "今回のお振込はありません",
       itemsHead: ["区分", "実施日", "照合番号", "体験", "紹介元", "対象額（税抜）", "料率", "金額（税抜）", "備考"], noItems: "明細はありません。", entry: "紹介料", adjustment: "前期訂正",
-      note1: "紹介料は、実施確認済みの予約について、割引・返金反映後の税抜金額に契約料率を乗じ、予約ごとに1回四捨五入して算出しています。消費税は通知書の合計に対して1回計算します。", note2: (v: string) => `お支払い対象額が最低お支払額（税込 ${v}）に満たない場合、および返金等で差額がマイナスになった場合は、次回の通知書に繰り越して合算・相殺します。`, note3: (d: string) => `内容に相違がある場合は ${d} までに紹介管理画面からお知らせください。期限までにご連絡がない場合は、ご確認いただいたものとしてお支払い手続きを進めます。`, note4: "本通知書は KAMEHAME JAPAN（株式会社プロセント）が作成する支払通知書であり、貴社からの請求書のご提出は不要です。税務上の記載事項はご契約条件に従います。" },
+      note1: "紹介料は、実施確認済みの予約について、割引・返金反映後の税抜金額に契約料率を乗じ、予約ごとに1回四捨五入して算出しています。消費税は通知書の合計に対して1回計算します。", note2: (v: string) => `お支払い対象額が最低お支払額（税込 ${v}）に満たない場合、および返金等で差額がマイナスになった場合は、次回の通知書に繰り越して合算・相殺します。`, note3: (d: string) => `内容に相違がある場合は ${d} までにパートナー向け管理画面からお知らせください。期限までにご連絡がない場合は、ご確認いただいたものとしてお支払い手続きを進めます。`, note4: "本通知書は KAMEHAME JAPAN（株式会社プロセント）が作成する支払通知書であり、貴社からの請求書のご提出は不要です。税務上の記載事項はご契約条件に従います。" },
   },
   cases: {
     title: "取り次ぎ案件", newCase: "新しい案件を登録", openOnly: "進行中のみ", showAll: "終了分も表示",
@@ -87,7 +87,7 @@ const ja = {
     ledgerRow: (base: string, rate: string, c: string) => `対象額 ${base}（税抜） × ${rate} = ${c}（税抜）`,
   },
   guide: {
-    title: "使い方", lead: "KAMEHAME JAPAN の紹介管理画面は、提携パートナー（ホテル・旅行代理店・ガイド）がお客様に日本の体験を紹介し、その紹介料を受け取るための画面です。言語は右上で切り替えられ、メールも同じ言語で届きます。",
+    title: "使い方", lead: "KAMEHAME JAPAN のパートナー向け管理画面は、提携パートナー（ホテル・旅行代理店・ガイド）がお客様に日本の体験を紹介し、その紹介料を受け取るための画面です。言語は右上で切り替えられ、メールも同じ言語で届きます。",
     sections: [
       ["実績", "QR・リンク経由のアクセス、予約、決済、実施確認済みの紹介料を期間で確認します。「決済済み」は確定実績ではなく、紹介料は体験の実施確認後に確定します。"],
       ["紹介予約", "貴社の紹介で生まれた予約の一覧です。照合番号（R-XXXXXX）で運営とやり取りできます。お客様の個人情報は表示しません。"],
