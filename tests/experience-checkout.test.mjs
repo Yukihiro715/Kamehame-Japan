@@ -265,7 +265,7 @@ test('earliest displayed date skips weekends, closures and empty announced slots
 
 
 test('Nihonbashi validates party limits, eligibility and date-only requests including weekends',()=>{
-  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,20000],['nihonbashi-bushido-experience',2,10000]]) {
+  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,25000],['nihonbashi-bushido-experience',2,10000]]) {
     const input={...base,experience:slug,date:'2026-11-07',time:'',guests:min,adultOnly:true};
     const o=m.parseExperienceOrder(input,now);
     assert.equal(o.amount,amount*min);assert.equal(o.time,'To be confirmed');

@@ -860,7 +860,7 @@ export const experiences: Experience[] = [
       "Kendo is the samurai's sword turned into a discipline, and this is the real thing: a working dojo in Nihonbashi where visitors learn kendo with an instructor. You start with how kendo came to be and why every exchange begins and ends with a bow, then learn the footwork, the grip and the swing, and put them together in striking practice until spirit, sword and body land as one.",
       "The last part is a match. You face the other guests, then the instructor, in full protective armour. Nobody needs to have held a sword before; the session is built for beginners and adjusted to each person's age and fitness. The dojo lends everything — uniform, armour and shinai — and photographs the session for you.",
     ],
-    duration: "About 2 hours", price: "¥20,000", priceUnit: "person", group: "Small class · 1–8 guests", ages: "Ages 6+ (reduced rates for ages 6–15 and 65+)", area: "Tokyo (Nihonbashi)",
+    duration: "About 2 hours", price: "¥25,000", priceUnit: "person", group: "Small class · 1–8 guests", ages: "Ages 6+ (reduced rates for ages 6–15 and 65+)", area: "Tokyo (Nihonbashi)",
     img: "/images/kendo-match.jpg", alt: "A guest in kendo uniform squaring up to the armoured instructor with shinai raised, in a wooden-floored dojo",
     gallery: [
       { img: "/images/kendo-grip.jpg", alt: "The instructor correcting a guest's grip on the shinai, swords crossed" },
@@ -924,7 +924,7 @@ export const experiences: Experience[] = [
       { q: "Is everything provided?", a: "Yes. Uniform, protective armour and shinai are lent at no extra cost. Come in everyday clothes; there are changing rooms and lockers." },
       { q: "Which language is the session in?", a: "English. The instructor teaches in English and Japanese." },
       { q: "Can I join alone?", a: "Yes, from one guest. Many guests come on their own." },
-      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; children aged 6 to 15 pay ¥15,000 and guests aged 65 and over ¥18,000 (adults ¥20,000) — tell us everyone's age in your request and the quote applies it. Younger children cannot join a shared session; a private session can be arranged instead." },
+      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; children aged 6 to 15 pay ¥15,000 and guests aged 65 and over ¥18,000 (adults ¥25,000) — tell us everyone's age in your request and the quote applies it. Younger children cannot join a shared session; a private session can be arranged instead." },
       { q: "Is this a samurai show?", a: "No. It is not a costume or role-play experience. You train in a real dojo, in the kendo that is practised in Japan today, and learn where its traditions come from." },
       { q: "How large is the class?", a: "Up to eight guests share a session. Larger groups, and a private session for your party only, are quoted individually." },
       { q: "I am not sporty. Can I keep up?", a: "Yes. The session is adjusted to each person's age and fitness, and there is no need to perform every movement perfectly. Older guests join regularly; where the etiquette involves kneeling, a chair is provided." },
