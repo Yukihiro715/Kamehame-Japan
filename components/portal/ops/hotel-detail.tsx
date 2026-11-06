@@ -3,25 +3,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, ReasonAction, Table } from "../ui";
+import { ENTITY_KIND_JA, FEATURE_JA, FEATURE_KEYS, PARTNER_TYPE_JA, SITE_KIND_JA, type Features } from "@/lib/portal/partner";
 
 interface Detail {
-  hotel: { id: string; public_id: string; name: string; status: string; brochure_url: string | null; notes: string | null; created_at: string };
-  entity: { id: string; name: string; registration_status: string; registration_number: string | null; address: string | null } | null;
+  hotel: { id: string; public_id: string; name: string; status: string; brochure_url: string | null; notes: string | null; created_at: string; site_kind: string; features: Features };
+  entity: { id: string; name: string; registration_status: string; registration_number: string | null; address: string | null; partner_type: string; entity_kind: string; contact_email: string | null } | null;
   members: { membership_id: string; user_id: string; email: string; name: string | null; role: string; user_status: string; last_login_at: string | null }[];
   links: { id: string; token: string; experience_slug: string | null; medium: string; kind: string; label: string | null; status: string; created_at: string; url: string; accesses: number }[];
   profiles: { id: string; name: string; valid_from: string; valid_to: string | null }[];
 }
-const ROLE: Record<string, string> = { hotel_viewer: "閲覧担当者", hotel_billing: "請求担当者" };
-const MEDIUM: Record<string, string> = { brochure: "パンフレット", room_tv: "客室TV", front: "フロント", web: "Web", other: "共通（ホテル自身が発行）" };
+const ROLE: Record<string, string> = { hotel_viewer: "閲覧担当者", hotel_billing: "請求担当者", partner_agent: "取り次ぎ担当", partner_manager: "拠点管理者" };
+const MEDIUM: Record<string, string> = { brochure: "パンフレット", room_tv: "客室TV", front: "フロント", web: "Web", other: "共通（パートナー自身が発行）" };
 const STATUS: Record<string, [string, "ok" | "warn" | "bad"]> = { active: ["提携中", "ok"], suspended: ["一時停止", "warn"], terminated: ["提携終了", "bad"] };
 
 export function OpsHotelDetail({ id }: { id: string }) {
   const [d, setD] = useState<Detail | null>(null), [err, setErr] = useState<string | null>(null), [msg, setMsg] = useState<string | null>(null);
   const [inv, setInv] = useState({ email: "", name: "", role: "hotel_viewer" });
   const [lk, setLk] = useState({ medium: "brochure", kind: "qr", experience: "", label: "" });
-  const [edit, setEdit] = useState({ brochureUrl: "", notes: "" });
+  const [edit, setEdit] = useState({ brochureUrl: "", notes: "", siteKind: "hotel", features: { refer: true, cases: false, settlement: true, members: false } as Features });
   const [experiences, setExperiences] = useState<{ slug: string; title: string }[]>([]);
-  const load = useCallback(() => api<Detail>("GET", `ops/hotels/${id}`).then((x) => { setD(x); setEdit({ brochureUrl: x.hotel.brochure_url ?? "", notes: x.hotel.notes ?? "" }); }).catch((e) => setErr(errorText(e))), [id]);
+  const load = useCallback(() => api<Detail>("GET", `ops/hotels/${id}`).then((x) => { setD(x); setEdit({ brochureUrl: x.hotel.brochure_url ?? "", notes: x.hotel.notes ?? "", siteKind: x.hotel.site_kind, features: x.hotel.features }); }).catch((e) => setErr(errorText(e))), [id]);
   useEffect(() => { void load(); api<{ experiences: { slug: string; title: string }[] }>("GET", "ops/policies").then((x) => setExperiences(x.experiences)).catch(() => {}); }, [load]);
   const run = async (fn: () => Promise<unknown>, ok: string) => { setErr(null); setMsg(null); try { await fn(); setMsg(ok); await load(); } catch (e) { setErr(errorText(e)); throw e; } };
   if (!d) return err ? <Notice tone="bad">{err}</Notice> : <Loading />;
@@ -33,7 +34,9 @@ export function OpsHotelDetail({ id }: { id: string }) {
       <Card title={`${d.hotel.name}（${d.hotel.public_id}）`}>
         <dl className="pt-kv">
           <dt>状態</dt><dd><Badge tone={st[1]}>{st[0]}</Badge></dd>
-          <dt>契約法人</dt><dd>{d.entity?.name ?? "—"} · 登録状態 {d.entity?.registration_status ?? "—"} {d.entity?.registration_number ? `· ${d.entity.registration_number}` : ""}</dd>
+          <dt>種別</dt><dd>{SITE_KIND_JA[d.hotel.site_kind as keyof typeof SITE_KIND_JA] ?? d.hotel.site_kind} · 契約先は{PARTNER_TYPE_JA[d.entity?.partner_type as keyof typeof PARTNER_TYPE_JA] ?? "—"}（{ENTITY_KIND_JA[d.entity?.entity_kind as keyof typeof ENTITY_KIND_JA] ?? "—"}）</dd>
+          <dt>契約先</dt><dd>{d.entity?.name ?? "—"} · 登録状態 {d.entity?.registration_status ?? "—"} {d.entity?.registration_number ? `· ${d.entity.registration_number}` : ""}{d.entity?.contact_email ? ` · ${d.entity.contact_email}` : ""}</dd>
+          <dt>使える機能</dt><dd>{FEATURE_KEYS.filter((k) => d.hotel.features[k]).map((k) => FEATURE_JA[k]).join("・") || "なし"}</dd>
           <dt>精算設定</dt><dd>{d.profiles.map((p) => `${p.name}（${p.valid_from}〜${p.valid_to ?? ""}）`).join(" / ") || <span className="pt-muted">未設定</span>}</dd>
           <dt>登録日</dt><dd>{jst(d.hotel.created_at, false)}</dd>
         </dl>
@@ -42,10 +45,12 @@ export function OpsHotelDetail({ id }: { id: string }) {
           {d.hotel.status === "active" && <ReasonAction label="一時停止" onConfirm={(reason) => run(() => api("POST", `ops/hotels/${id}`, { status: "suspended", reason }), "状態を更新しました。")} />}
           {d.hotel.status !== "terminated" && <ReasonAction label="提携終了" kind="danger" onConfirm={(reason) => run(() => api("POST", `ops/hotels/${id}`, { status: "terminated", reason }), "提携を終了しました。既存予約の条件と未払額は維持されます。")} />}
         </div>
-        <p className="pt-small pt-muted">提携終了後、このホテルのQR・リンクは通常の体験一覧へ案内し、新しい紹介料は発生しません。過去の予約の紹介料と未払額は残ります。</p>
+        <p className="pt-small pt-muted">提携終了後、この拠点のQR・リンクは通常の体験一覧へ案内し、新しい紹介料は発生しません。過去の予約の紹介料と未払額は残ります。</p>
         <div className="pt-form">
+          <Field label="拠点の種別"><select value={edit.siteKind} onChange={(e) => setEdit({ ...edit, siteKind: e.target.value })}>{Object.entries(SITE_KIND_JA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></Field>
+          <div className="pt-field"><span className="pt-field-l">使える機能（種別と独立）</span><div className="pt-row">{FEATURE_KEYS.map((k) => <label key={k} className="pt-chip" style={{ cursor: "pointer" }}><input type="checkbox" checked={edit.features[k]} onChange={(e) => setEdit({ ...edit, features: { ...edit.features, [k]: e.target.checked } })} /> {FEATURE_JA[k]}</label>)}</div></div>
           <Field label="パンフレットURL（https://）"><input value={edit.brochureUrl} onChange={(e) => setEdit({ ...edit, brochureUrl: e.target.value })} /></Field>
-          <Field label="運営メモ（ホテルには表示されません）"><input value={edit.notes} onChange={(e) => setEdit({ ...edit, notes: e.target.value })} /></Field>
+          <Field label="運営メモ（パートナーには表示されません）"><input value={edit.notes} onChange={(e) => setEdit({ ...edit, notes: e.target.value })} /></Field>
           <div className="pt-row"><Button kind="secondary" onClick={() => run(() => api("POST", `ops/hotels/${id}`, edit), "保存しました。")}>保存</Button></div>
         </div>
       </Card>
@@ -55,7 +60,7 @@ export function OpsHotelDetail({ id }: { id: string }) {
         <div className="pt-form">
           <Field label="メールアドレス"><input type="email" value={inv.email} onChange={(e) => setInv({ ...inv, email: e.target.value })} /></Field>
           <Field label="氏名（任意）"><input value={inv.name} onChange={(e) => setInv({ ...inv, name: e.target.value })} /></Field>
-          <Field label="役割" hint="請求担当者だけが精算書の確認と口座登録を行えます。"><select value={inv.role} onChange={(e) => setInv({ ...inv, role: e.target.value })}><option value="hotel_viewer">閲覧担当者</option><option value="hotel_billing">請求担当者</option></select></Field>
+          <Field label="役割" hint="請求担当者だけが精算書の確認と口座登録を行えます。取り次ぎ担当・拠点管理者は「予約取り次ぎ」が有効な拠点でだけ招待できます。"><select value={inv.role} onChange={(e) => setInv({ ...inv, role: e.target.value })}><option value="hotel_viewer">閲覧担当者</option><option value="hotel_billing">請求担当者</option><option value="partner_agent" disabled={!d.hotel.features.cases}>取り次ぎ担当</option><option value="partner_manager" disabled={!d.hotel.features.cases}>拠点管理者</option></select></Field>
           <div className="pt-row"><Button disabled={!inv.email} onClick={() => run(async () => { const r = await api<{ mail: string }>("POST", `ops/hotels/${id}/members`, inv); if (r.mail !== "sent") setMsg(`登録しました（招待メールは送られていません: ${r.mail}。サインイン手順を別途伝えてください）。`); setInv({ email: "", name: "", role: "hotel_viewer" }); }, "招待しました。サインイン手順をメールで送りました。")}>招待する</Button></div>
         </div>
       </Card>

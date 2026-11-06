@@ -20,7 +20,7 @@ export function OpsOverview() {
     <>
       <Card title="紹介料台帳の状態">
         <div className="pt-grid">
-          <Stat label="提携中のホテル" value={data.activeHotels} />
+          <Stat label="提携中の拠点" value={data.activeHotels} />
           <Stat label="見込（未実施）" value={e("estimated").count} note={yen(e("estimated").net)} tone="muted" />
           <Stat label="確認待ち" value={e("pending").count} note={yen(e("pending").net)} tone="warn" />
           <Stat label="確定（未精算含む）" value={e("confirmed").count + e("adjusted").count} note={yen(e("confirmed").net + e("adjusted").net)} tone="accent" />
@@ -33,7 +33,7 @@ export function OpsOverview() {
         </div>
       </Card>
       <Card title="最近の予約" actions={<Link className="pt-btn pt-btn-secondary pt-btn-small" href="/ops/reservations/">すべて</Link>}>
-        <Table head={["照合番号", "予約日", "体験", "体験日", "ホテル", "予約", "決済", "紹介料", "状態"]} rows={data.recent.map((r) => [<a key="a" href={`/ops/reservations/${r.id}/`}>{r.hotel_ref}</a>, jst(r.created_at, false), r.experience, r.experience_date ?? "—", r.hotel_name ?? <span className="pt-muted">紹介なし</span>, r.statusJa, r.paymentJa, yen(r.commission_net_jpy), <span key="e">{r.entryJa}{r.holdJa && <Badge tone="warn">{r.holdJa}</Badge>}</span>])} />
+        <Table head={["照合番号", "予約日", "体験", "体験日", "紹介元", "予約", "決済", "紹介料", "状態"]} rows={data.recent.map((r) => [<a key="a" href={`/ops/reservations/${r.id}/`}>{r.hotel_ref}</a>, jst(r.created_at, false), r.experience, r.experience_date ?? "—", r.hotel_name ?? <span className="pt-muted">紹介なし</span>, r.statusJa, r.paymentJa, yen(r.commission_net_jpy), <span key="e">{r.entryJa}{r.holdJa && <Badge tone="warn">{r.holdJa}</Badge>}</span>])} />
       </Card>
     </>
   );

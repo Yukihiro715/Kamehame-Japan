@@ -29,7 +29,7 @@ export function OpsExceptions() {
       {Object.entries(EXCEPTION_LABEL).filter(([k]) => k !== "unmatched").map(([k, label]) => (
         <Card key={k} title={`${label}（${(data[k] ?? []).length}）`}>
           <p className="pt-note-box">{HELP[k]}</p>
-          <Table head={["照合番号", "予約日", "体験", "体験日", "ホテル", "予約状況", "決済", "保留理由"]} rows={(data[k] ?? []).map((r) => [<a key="a" href={`/ops/reservations/${r.id}/`}>{r.hotel_ref}</a>, jst(r.created_at, false), r.experience, r.experience_date ?? "—", r.hotel_name ?? "—", r.status, r.payment_status, r.hold_reason ?? "—"])} empty="なし" compact />
+          <Table head={["照合番号", "予約日", "体験", "体験日", "紹介元", "予約状況", "決済", "保留理由"]} rows={(data[k] ?? []).map((r) => [<a key="a" href={`/ops/reservations/${r.id}/`}>{r.hotel_ref}</a>, jst(r.created_at, false), r.experience, r.experience_date ?? "—", r.hotel_name ?? "—", r.status, r.payment_status, r.hold_reason ?? "—"])} empty="なし" compact />
         </Card>
       ))}
       <Card title={`${EXCEPTION_LABEL.unmatched}（${data.unmatched.length}）`}>

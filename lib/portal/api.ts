@@ -9,8 +9,9 @@
  *    read fresh each time; hotel users only ever see their own hotels. */
 import { popularOverview, savePopularSetting } from "@/lib/popular";
 import { isBucket, listReviewSubmissions, serveMedia } from "@/lib/review-media";
+import { parseFeatures, requireFeature } from "./partner";
 import { d1Db, isD1Like, type SqlDb } from "@/lib/referral/db";
-import { canSeeHotel, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
+import { CASE_ROLES, canSeeHotel, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
@@ -107,8 +108,8 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, sub] = path;
   if (head === "me" && ctx.method === "GET") {
     const ids = hotelIdsOf(p);
-    const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null }>(`SELECT id, name, public_id, status, brochure_url FROM hotels WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`, ids) : [];
-    return json({ ok: true, user: { email: p.email, name: p.name }, memberships: p.memberships, hotels });
+    const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT id, name, public_id, status, brochure_url, site_kind, features_json FROM hotels WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`, ids) : [];
+    return json({ ok: true, user: { email: p.email, name: p.name }, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
   }
   if (head === "dashboard" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
@@ -126,6 +127,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   if (head === "materials") {
     const body = ctx.method === "POST" ? await readJson(ctx.request) : {};
     const hotelId = hotelScope(ctx, p, body);
+    await requireFeature(ctx.db, hotelId, "refer");
     const origin = await publicOrigin(ctx);
     if (ctx.method === "POST") {
       // Create (or fetch) the pair of links for one target.
@@ -144,6 +146,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   }
   if (head === "settlement" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
+    await requireFeature(ctx.db, hotelId, "settlement");
     const dash = await hotelDashboard(ctx.db, hotelId, presetPeriod("this_quarter")!);
     const profile = await ctx.db.first<{ id: string; name: string; min_payout_jpy: number; bank_details_masked: string | null }>(
       `SELECT p.id, p.name, p.min_payout_jpy, p.bank_details_masked FROM settlement_profile_hotels ph JOIN settlement_profiles p ON p.id = ph.profile_id WHERE ph.hotel_id = ? AND (ph.valid_to IS NULL OR ph.valid_to > ?) ORDER BY ph.valid_from DESC LIMIT 1`, [hotelId, new Date().toISOString().slice(0, 10)]);
@@ -246,12 +249,16 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     if (post) { const p = await requireOps(ctx, ...ADMIN); await ops.settingsSet(ctx.db, { values: (await readJson(ctx.request)).values, by: p.email }); return json({ ok: true, settings: await ops.settingsGet(ctx.db) }); }
   }
   if (head === "partners" && get) { await requireOps(ctx); return json({ ok: true, ...(await ops.partnerList(ctx.db)) }); }
-  if (head === "legal-entities" && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createLegalEntity(ctx.db, { name: b.name, address: b.address, registrationNumber: b.registrationNumber, by: p.email })) }); }
+  if (head === "legal-entities" && post) {
+    const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request);
+    if (id) { await ops.updateLegalEntity(ctx.db, id, { name: b.name, address: b.address, partnerType: b.partnerType, entityKind: b.entityKind, contactEmail: b.contactEmail, registrationStatus: b.registrationStatus, registrationNumber: b.registrationNumber, by: p.email }); return json({ ok: true }); }
+    return json({ ok: true, ...(await ops.createLegalEntity(ctx.db, { name: b.name, address: b.address, registrationNumber: b.registrationNumber, partnerType: b.partnerType, entityKind: b.entityKind, contactEmail: b.contactEmail, withSite: b.withSite === true, features: b.features, by: p.email })) });
+  }
   if (head === "profiles" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createProfile(ctx.db, { legalEntityId: b.legalEntityId, name: b.name, hotelIds: b.hotelIds, validFrom: b.validFrom, by: p.email })) }); }
   if (head === "hotels") {
-    if (!id && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createHotel(ctx.db, { legalEntityId: b.legalEntityId, name: b.name, publicId: b.publicId, withProfile: b.withProfile !== false, by: p.email })) }); }
+    if (!id && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createHotel(ctx.db, { legalEntityId: b.legalEntityId, name: b.name, publicId: b.publicId, siteKind: b.siteKind, features: b.features, withProfile: b.withProfile !== false, by: p.email })) }); }
     if (id && !action && get) { await requireOps(ctx); const d = await ops.hotelDetail(ctx.db, id); const origin = await publicOrigin(ctx); return json({ ok: true, ...d, links: d.links.map((l) => ({ ...l, url: publicLinkUrl(origin, l.token) })) }); }
-    if (id && !action && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); await ops.updateHotel(ctx.db, id, { status: b.status, brochureUrl: b.brochureUrl, notes: b.notes, name: b.name, reason: b.reason, by: p.email }); return json({ ok: true }); }
+    if (id && !action && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); await ops.updateHotel(ctx.db, id, { status: b.status, brochureUrl: b.brochureUrl, notes: b.notes, name: b.name, siteKind: b.siteKind, features: b.features, reason: b.reason, by: p.email }); return json({ ok: true }); }
     if (id && action === "members" && post) {
       const p = await requireOps(ctx, ...ADMIN);
       const b = await readJson(ctx.request);
@@ -259,6 +266,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       if (!HOTEL_ROLES.includes(role)) throw bad("bad_role");
       const h = await ctx.db.first<{ name: string }>(`SELECT name FROM hotels WHERE id = ?`, [id]);
       if (!h) throw notFound();
+      if (CASE_ROLES.includes(role)) await requireFeature(ctx.db, id, "cases");
       const r = await inviteMember(ctx.db, ctx.env, { email: b.email, name: b.name, role, scopeType: "hotel", scopeId: id, by: p.email, loginOrigin: await publicOrigin(ctx), scopeLabel: h.name });
       return json({ ok: true, ...r });
     }
@@ -267,6 +275,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const b = await readJson(ctx.request);
       const medium = str(b.medium, 20) as Medium;
       if (!MEDIUMS.includes(medium)) throw bad("bad_medium");
+      await requireFeature(ctx.db, id, "refer");
       const link = await createLink(ctx.db, { hotelId: id, experienceSlug: str(b.experience, 80) || null, medium, kind: b.kind === "url" ? "url" : "qr", label: str(b.label, 120) || null, by: p.email });
       return json({ ok: true, link: { ...link, url: publicLinkUrl(await publicOrigin(ctx), link.token) } });
     }

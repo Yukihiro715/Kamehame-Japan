@@ -46,7 +46,7 @@ export function OpsReservationDetail({ id }: { id: string }) {
 
       <Card title="紹介元と紹介料">
         <dl className="pt-kv">
-          <dt>紹介元ホテル</dt><dd>{ref ? <>{s(ref.hotel_name)} ({s(ref.public_id)}) <Badge tone={ref.status === "attributed" || ref.status === "corrected" ? "ok" : "warn"}>{s(ref.status)}</Badge> · 根拠 {s(ref.basis)} · 媒体 {s(ref.medium)} · 固定 {jst(String(ref.fixed_at))}</> : <span className="pt-muted">紹介なし</span>}</dd>
+          <dt>紹介元（拠点）</dt><dd>{ref ? <>{s(ref.hotel_name)} ({s(ref.public_id)}) <Badge tone={ref.status === "attributed" || ref.status === "corrected" ? "ok" : "warn"}>{s(ref.status)}</Badge> · 根拠 {s(ref.basis)} · 媒体 {s(ref.medium)} · 固定 {jst(String(ref.fixed_at))}</> : <span className="pt-muted">紹介なし</span>}</dd>
           {ref?.previous_hotel_id ? <><dt>訂正履歴</dt><dd>前の施設 {s(ref.previous_hotel_id)} · {s(ref.correction_reason)} · {s(ref.corrected_by)} · {jst(String(ref.corrected_at))}</dd></> : null}
           <dt>適用料率 / 版</dt><dd>{pct(n(ref?.rate_bp))} / {s(ref?.policy_version)}</dd>
           <dt>紹介料</dt><dd>{e ? <>対象 {yen(n(e.base_net_jpy))} × {pct(n(e.rate_bp))} = <b>{yen(n(e.commission_net_jpy))}</b>（税抜） <Badge tone={e.status === "confirmed" || e.status === "adjusted" ? "ok" : e.status === "pending" ? "warn" : "neutral"}>{s(e.statusJa)}</Badge> {e.holdJa ? <Badge tone="warn">{s(e.holdJa)}</Badge> : null}</> : "—"}</dd>

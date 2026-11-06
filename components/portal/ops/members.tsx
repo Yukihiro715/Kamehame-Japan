@@ -19,7 +19,7 @@ export function OpsMembers() {
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
       <Card title="運営メンバー">
-        <p className="pt-note-box">管理者: すべて。予約運営: 実施確認・紹介元訂正・リンク発行・ホテル登録。経理: 料率、明細・入金の登録、返金配賦、CSV出力。口座情報と支払確定は経理と管理者だけが扱います。</p>
+        <p className="pt-note-box">管理者: すべて。予約運営: 実施確認・紹介元訂正・リンク発行・提携パートナー登録。経理: 料率、明細・入金の登録、返金配賦、CSV出力。口座情報と支払確定は経理と管理者だけが扱います。</p>
         <Table head={["メール", "氏名", "役割", "状態", "最終サインイン", ""]} rows={rows.map((m) => [m.email, m.name ?? "—", ROLE[m.role] ?? m.role, m.status, jst(m.last_login_at), <Button key="r" kind="danger" small onClick={() => { if (confirm(`${m.email} の ${ROLE[m.role]} 権限を取り消しますか？`)) void run(() => api("POST", `ops/members/${m.membership_id}/revoke`, {}), "取り消しました。"); }}>取り消す</Button>])} />
         <div className="pt-form">
           <Field label="メールアドレス"><input type="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></Field>

@@ -6,6 +6,7 @@ import { jstDate, randomId, type SqlDb, type SqlStatement } from "@/lib/referral
 import { netFromGross, taxOnTotal } from "@/lib/referral/money";
 import { allocateRefund, applyPayment, confirmAttendance, policyFor, recomputeCommission, setReservationOutcome } from "@/lib/referral/reservations";
 import { bad, int, isoDate, notFound, periodBounds, str, toCsv, ENTRY_STATUS_JA, HOLD_JA, PAYMENT_STATUS_JA, RESERVATION_STATUS_JA } from "./util";
+import { entityKindOf, featuresJson, parseFeatures, partnerTypeOf, siteKindFor, siteKindOf, FEATURE_KEYS, type Features } from "./partner";
 
 const now_ = (now?: number) => new Date(now ?? Date.now()).toISOString();
 const audit = (actor: string, action: string, targetType: string, targetId: string, reason: string | null, after?: unknown, at = now_()): SqlStatement => ({
@@ -15,29 +16,57 @@ const audit = (actor: string, action: string, targetType: string, targetId: stri
 
 // ---- partners --------------------------------------------------------------
 
-export async function createLegalEntity(db: SqlDb, input: { name: unknown; address?: unknown; registrationNumber?: unknown; by: string }) {
+/** A contracting partner (the settlement counterparty). `withSite` also creates its one site, for an individual
+ *  guide or an agency without branches, so the referral and ledger code sees the same shape as a hotel. */
+export async function createLegalEntity(db: SqlDb, input: { name: unknown; address?: unknown; registrationNumber?: unknown; partnerType?: unknown; entityKind?: unknown; contactEmail?: unknown; withSite?: unknown; features?: unknown; by: string }) {
   const name = str(input.name, 200);
   if (!name) throw bad("name_required");
   const id = randomId(), at = now_();
   const reg = str(input.registrationNumber, 20) || null;
+  const partnerType = partnerTypeOf(input.partnerType), entityKind = entityKindOf(input.entityKind);
+  const contactEmail = str(input.contactEmail, 200).toLowerCase() || null;
+  if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) throw bad("bad_email");
   await db.batch([
-    { sql: `INSERT INTO partner_legal_entities (id, name, address, registration_status, registration_number, created_at, updated_at) VALUES (?, ?, ?, 'unverified', ?, ?, ?)`, params: [id, name, str(input.address, 400) || null, reg, at, at] },
-    audit(input.by, "legal_entity.create", "legal_entity", id, null, { name }),
+    { sql: `INSERT INTO partner_legal_entities (id, name, address, registration_status, registration_number, partner_type, entity_kind, contact_email, created_at, updated_at) VALUES (?, ?, ?, 'unverified', ?, ?, ?, ?, ?, ?)`, params: [id, name, str(input.address, 400) || null, reg, partnerType, entityKind, contactEmail, at, at] },
+    audit(input.by, "legal_entity.create", "legal_entity", id, null, { name, partnerType, entityKind }),
   ]);
-  return { id };
+  let site: { id: string; publicId: string } | null = null;
+  if (input.withSite === true) site = await createHotel(db, { legalEntityId: id, name, siteKind: siteKindFor(partnerType), features: input.features, by: input.by });
+  return { id, site };
 }
 
-export async function createHotel(db: SqlDb, input: { legalEntityId: unknown; name: unknown; publicId?: unknown; by: string; withProfile?: boolean }) {
+export async function updateLegalEntity(db: SqlDb, id: string, input: { name?: unknown; address?: unknown; partnerType?: unknown; entityKind?: unknown; contactEmail?: unknown; registrationStatus?: unknown; registrationNumber?: unknown; by: string }) {
+  const le = await db.first<{ id: string }>(`SELECT id FROM partner_legal_entities WHERE id = ?`, [id]);
+  if (!le) throw notFound();
+  const sets: string[] = [], params: unknown[] = [], after: Record<string, unknown> = {};
+  if (input.name !== undefined) { const n = str(input.name, 200); if (!n) throw bad("name_required"); sets.push("name = ?"); params.push(n); after.name = n; }
+  if (input.address !== undefined) { sets.push("address = ?"); params.push(str(input.address, 400) || null); }
+  if (input.partnerType !== undefined) { const t = partnerTypeOf(input.partnerType); sets.push("partner_type = ?"); params.push(t); after.partnerType = t; }
+  if (input.entityKind !== undefined) { const k = entityKindOf(input.entityKind); sets.push("entity_kind = ?"); params.push(k); after.entityKind = k; }
+  if (input.contactEmail !== undefined) { const e = str(input.contactEmail, 200).toLowerCase(); if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) throw bad("bad_email"); sets.push("contact_email = ?"); params.push(e || null); }
+  if (input.registrationStatus !== undefined) { const s = str(input.registrationStatus, 20); if (!["registered", "unregistered", "unverified"].includes(s)) throw bad("bad_status"); sets.push("registration_status = ?"); params.push(s); after.registrationStatus = s; if (s === "registered") { sets.push("registration_verified_at = ?", "registration_verified_by = ?"); params.push(now_(), input.by); } }
+  if (input.registrationNumber !== undefined) { sets.push("registration_number = ?"); params.push(str(input.registrationNumber, 20) || null); }
+  if (!sets.length) return;
+  await db.batch([
+    { sql: `UPDATE partner_legal_entities SET ${sets.join(", ")}, updated_at = ? WHERE id = ?`, params: [...params, now_(), id] },
+    audit(input.by, "legal_entity.update", "legal_entity", id, null, after),
+  ]);
+}
+
+/** A partner site: a hotel, an agency branch, a guide, ... The `hotels` table keeps its name; `site_kind` and `features_json` say what it is and may do. */
+export async function createHotel(db: SqlDb, input: { legalEntityId: unknown; name: unknown; publicId?: unknown; siteKind?: unknown; features?: unknown; by: string; withProfile?: boolean }) {
   const legalEntityId = str(input.legalEntityId, 64), name = str(input.name, 200);
   if (!legalEntityId || !name) throw bad("fields_required");
-  const le = await db.first<{ id: string }>(`SELECT id FROM partner_legal_entities WHERE id = ?`, [legalEntityId]);
+  const le = await db.first<{ id: string; partner_type: string }>(`SELECT id, partner_type FROM partner_legal_entities WHERE id = ?`, [legalEntityId]);
   if (!le) throw bad("unknown_legal_entity");
+  const siteKind = siteKindOf(input.siteKind, siteKindFor(partnerTypeOf(le.partner_type)));
+  const features = parseFeatures(input.features && typeof input.features === "object" ? JSON.stringify(input.features) : null);
   const id = randomId(), at = now_();
   const seq = await db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM hotels`);
   const publicId = str(input.publicId, 20) || `HP-${String((seq?.n ?? 0) + 1).padStart(4, "0")}`;
   const statements: SqlStatement[] = [
-    { sql: `INSERT INTO hotels (id, legal_entity_id, public_id, name, status, created_at, updated_at) VALUES (?, ?, ?, ?, 'active', ?, ?)`, params: [id, legalEntityId, publicId, name, at, at] },
-    audit(input.by, "hotel.create", "hotel", id, null, { name, publicId }),
+    { sql: `INSERT INTO hotels (id, legal_entity_id, public_id, name, status, site_kind, features_json, created_at, updated_at) VALUES (?, ?, ?, ?, 'active', ?, ?, ?, ?)`, params: [id, legalEntityId, publicId, name, siteKind, featuresJson(features), at, at] },
+    audit(input.by, "hotel.create", "hotel", id, null, { name, publicId, siteKind, features }),
   ];
   // One settlement profile per hotel by default (要件 3.6).
   if (input.withProfile !== false) {
@@ -51,10 +80,18 @@ export async function createHotel(db: SqlDb, input: { legalEntityId: unknown; na
   return { id, publicId };
 }
 
-export async function updateHotel(db: SqlDb, hotelId: string, input: { status?: unknown; brochureUrl?: unknown; notes?: unknown; name?: unknown; by: string; reason?: unknown }) {
-  const h = await db.first<{ id: string; status: string }>(`SELECT id, status FROM hotels WHERE id = ?`, [hotelId]);
+export async function updateHotel(db: SqlDb, hotelId: string, input: { status?: unknown; brochureUrl?: unknown; notes?: unknown; name?: unknown; siteKind?: unknown; features?: unknown; by: string; reason?: unknown }) {
+  const h = await db.first<{ id: string; status: string; features_json: string | null }>(`SELECT id, status, features_json FROM hotels WHERE id = ?`, [hotelId]);
   if (!h) throw notFound();
   const sets: string[] = [], params: unknown[] = [];
+  if (input.siteKind !== undefined) { sets.push("site_kind = ?"); params.push(siteKindOf(input.siteKind)); }
+  let features: Features | undefined;
+  if (input.features !== undefined) {
+    if (!input.features || typeof input.features !== "object") throw bad("bad_features");
+    const cur = parseFeatures(h.features_json), patch = input.features as Partial<Record<string, unknown>>;
+    features = Object.fromEntries(FEATURE_KEYS.map((k) => [k, k in patch ? patch[k] === true : cur[k]])) as Features;
+    sets.push("features_json = ?"); params.push(featuresJson(features));
+  }
   if (input.status !== undefined) { const s = str(input.status, 20); if (!["active", "suspended", "terminated"].includes(s)) throw bad("bad_status"); sets.push("status = ?"); params.push(s); }
   if (input.brochureUrl !== undefined) { const u = str(input.brochureUrl, 500); if (u && !/^https:\/\//.test(u)) throw bad("bad_url"); sets.push("brochure_url = ?"); params.push(u || null); }
   if (input.notes !== undefined) { sets.push("notes = ?"); params.push(str(input.notes, 2000) || null); }
@@ -63,7 +100,7 @@ export async function updateHotel(db: SqlDb, hotelId: string, input: { status?: 
   const at = now_();
   await db.batch([
     { sql: `UPDATE hotels SET ${sets.join(", ")}, updated_at = ? WHERE id = ?`, params: [...params, at, hotelId] },
-    audit(input.by, "hotel.update", "hotel", hotelId, str(input.reason, 500) || null, { status: input.status, brochureUrl: input.brochureUrl, notes: input.notes !== undefined, name: input.name }),
+    audit(input.by, "hotel.update", "hotel", hotelId, str(input.reason, 500) || null, { status: input.status, brochureUrl: input.brochureUrl, notes: input.notes !== undefined, name: input.name, siteKind: input.siteKind, features }),
   ]);
 }
 
@@ -91,8 +128,8 @@ export async function createProfile(db: SqlDb, input: { legalEntityId: unknown; 
 
 export async function partnerList(db: SqlDb) {
   const [entities, hotels, profiles, assignments, counts] = await Promise.all([
-    db.all<{ id: string; name: string; registration_status: string; registration_number: string | null }>(`SELECT id, name, registration_status, registration_number FROM partner_legal_entities ORDER BY name`),
-    db.all<{ id: string; legal_entity_id: string; public_id: string; name: string; status: string; brochure_url: string | null }>(`SELECT id, legal_entity_id, public_id, name, status, brochure_url FROM hotels ORDER BY name`),
+    db.all<{ id: string; name: string; registration_status: string; registration_number: string | null; partner_type: string; entity_kind: string; contact_email: string | null }>(`SELECT id, name, registration_status, registration_number, partner_type, entity_kind, contact_email FROM partner_legal_entities ORDER BY name`),
+    db.all<{ id: string; legal_entity_id: string; public_id: string; name: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT id, legal_entity_id, public_id, name, status, brochure_url, site_kind, features_json FROM hotels ORDER BY name`),
     db.all<{ id: string; legal_entity_id: string; name: string; valid_from: string; valid_to: string | null; min_payout_jpy: number }>(`SELECT id, legal_entity_id, name, valid_from, valid_to, min_payout_jpy FROM settlement_profiles ORDER BY name`),
     db.all<{ profile_id: string; hotel_id: string; valid_from: string; valid_to: string | null }>(`SELECT profile_id, hotel_id, valid_from, valid_to FROM settlement_profile_hotels`),
     db.all<{ hotel_id: string; n: number }>(`SELECT hotel_id, COUNT(*) AS n FROM reservation_referrals WHERE status != 'removed' GROUP BY hotel_id`),
@@ -101,16 +138,16 @@ export async function partnerList(db: SqlDb) {
   const today = jstDate();
   return {
     entities,
-    hotels: hotels.map((h) => ({ ...h, referrals: byHotel.get(h.id) ?? 0, profileId: assignments.find((a) => a.hotel_id === h.id && a.valid_from <= today && (!a.valid_to || a.valid_to > today))?.profile_id ?? null })),
+    hotels: hotels.map((h) => ({ ...h, features: parseFeatures(h.features_json), referrals: byHotel.get(h.id) ?? 0, profileId: assignments.find((a) => a.hotel_id === h.id && a.valid_from <= today && (!a.valid_to || a.valid_to > today))?.profile_id ?? null })),
     profiles: profiles.map((p) => ({ ...p, hotelIds: assignments.filter((a) => a.profile_id === p.id && (!a.valid_to || a.valid_to > today)).map((a) => a.hotel_id) })),
   };
 }
 
 export async function hotelDetail(db: SqlDb, hotelId: string) {
-  const hotel = await db.first<{ id: string; legal_entity_id: string; public_id: string; name: string; status: string; brochure_url: string | null; notes: string | null; created_at: string }>(`SELECT id, legal_entity_id, public_id, name, status, brochure_url, notes, created_at FROM hotels WHERE id = ?`, [hotelId]);
+  const hotel = await db.first<{ id: string; legal_entity_id: string; public_id: string; name: string; status: string; brochure_url: string | null; notes: string | null; created_at: string; site_kind: string; features_json: string | null }>(`SELECT id, legal_entity_id, public_id, name, status, brochure_url, notes, created_at, site_kind, features_json FROM hotels WHERE id = ?`, [hotelId]);
   if (!hotel) throw notFound();
   const [entity, members, links, profiles] = await Promise.all([
-    db.first<{ id: string; name: string; registration_status: string; registration_number: string | null; address: string | null }>(`SELECT id, name, registration_status, registration_number, address FROM partner_legal_entities WHERE id = ?`, [hotel.legal_entity_id]),
+    db.first<{ id: string; name: string; registration_status: string; registration_number: string | null; address: string | null; partner_type: string; entity_kind: string; contact_email: string | null }>(`SELECT id, name, registration_status, registration_number, address, partner_type, entity_kind, contact_email FROM partner_legal_entities WHERE id = ?`, [hotel.legal_entity_id]),
     db.all<{ membership_id: string; user_id: string; email: string; name: string | null; role: string; user_status: string; last_login_at: string | null }>(
       `SELECT m.id AS membership_id, u.id AS user_id, u.email, u.name, m.role, u.status AS user_status, u.last_login_at FROM memberships m JOIN users u ON u.id = m.user_id WHERE m.scope_type = 'hotel' AND m.scope_id = ? AND m.revoked_at IS NULL ORDER BY u.email`, [hotelId]),
     db.all<{ id: string; token: string; experience_slug: string | null; medium: string; kind: string; label: string | null; status: string; created_at: string; target_path: string }>(`SELECT id, token, experience_slug, medium, kind, label, status, created_at, target_path FROM referral_links WHERE hotel_id = ? ORDER BY created_at DESC`, [hotelId]),
@@ -118,7 +155,7 @@ export async function hotelDetail(db: SqlDb, hotelId: string) {
   ]);
   const accessCounts = await db.all<{ link_id: string; n: number }>(`SELECT link_id, COUNT(*) AS n FROM referral_events WHERE hotel_id = ? AND excluded = 0 GROUP BY link_id`, [hotelId]);
   const byLink = new Map(accessCounts.map((c) => [c.link_id, Number(c.n)]));
-  return { hotel, entity, members, links: links.map((l) => ({ ...l, accesses: byLink.get(l.id) ?? 0 })), profiles };
+  return { hotel: { ...hotel, features: parseFeatures(hotel.features_json) }, entity, members, links: links.map((l) => ({ ...l, accesses: byLink.get(l.id) ?? 0 })), profiles };
 }
 
 // ---- policies --------------------------------------------------------------

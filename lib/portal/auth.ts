@@ -11,10 +11,12 @@ import { readCookie } from "@/lib/referral/links";
 import { inviteMail, loginCodeMail, sendPortalMail, type PortalMailEnv } from "./mail";
 
 export type PortalKind = "hotel" | "ops";
-export type Role = "ops_admin" | "ops_booking" | "ops_finance" | "hotel_viewer" | "hotel_billing";
+export type Role = "ops_admin" | "ops_booking" | "ops_finance" | "hotel_viewer" | "hotel_billing" | "partner_agent" | "partner_manager";
 export const OPS_ROLES: Role[] = ["ops_admin", "ops_booking", "ops_finance"];
-export const HOTEL_ROLES: Role[] = ["hotel_viewer", "hotel_billing"];
-export const ROLE_LABEL: Record<Role, string> = { ops_admin: "管理者", ops_booking: "予約運営", ops_finance: "経理", hotel_viewer: "閲覧担当者", hotel_billing: "請求担当者" };
+export const HOTEL_ROLES: Role[] = ["hotel_viewer", "hotel_billing", "partner_agent", "partner_manager"];
+/** Roles that take part in the booking relay (docs/PARTNER_PLATFORM_STAGE1.md 4.2). */
+export const CASE_ROLES: Role[] = ["partner_agent", "partner_manager"];
+export const ROLE_LABEL: Record<Role, string> = { ops_admin: "管理者", ops_booking: "予約運営", ops_finance: "経理", hotel_viewer: "閲覧担当者", hotel_billing: "請求担当者", partner_agent: "取り次ぎ担当", partner_manager: "拠点管理者" };
 
 export const SESSION_COOKIE: Record<PortalKind, string> = { hotel: "kh_sess_hotel", ops: "kh_sess_ops" };
 export const SESSION_TTL_MS: Record<PortalKind, number> = { hotel: 30 * 86400000, ops: 12 * 3600000 };
@@ -144,6 +146,8 @@ export async function signOut(db: SqlDb, request: Request, kind: PortalKind) {
 export const hotelIdsOf = (p: Principal) => p.memberships.filter((m) => m.scopeType === "hotel" && m.scopeId).map((m) => m.scopeId!);
 export const canSeeHotel = (p: Principal, hotelId: string) => hotelIdsOf(p).includes(hotelId);
 export const hasBillingFor = (p: Principal, hotelId: string) => p.memberships.some((m) => m.scopeType === "hotel" && m.scopeId === hotelId && m.role === "hotel_billing");
+/** Whether the user holds one of the roles at this site. */
+export const hasSiteRole = (p: Principal, hotelId: string, ...roles: Role[]) => p.memberships.some((m) => m.scopeType === "hotel" && m.scopeId === hotelId && roles.includes(m.role));
 export const opsRole = (p: Principal, ...roles: Role[]) => p.memberships.some((m) => m.scopeType === "ops" && (roles.length === 0 || roles.includes(m.role)));
 
 /** Whether this hotel user may see a settlement profile: billing rights on every hotel it covers (要件 3.6). */

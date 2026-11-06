@@ -53,10 +53,16 @@ export function referralCookie(sessionId: string, secure = true): string {
 /** Two arrivals within this window, through the same link, count as one visit (要件 12). */
 export const VISIT_WINDOW_MS = 30 * 60000;
 
+/** `features_json` of a site: link referral is on unless the JSON says otherwise. */
+export function referFeatureOn(json: string | null | undefined): boolean {
+  if (!json) return true;
+  try { const v = JSON.parse(json) as { refer?: unknown }; return !("refer" in v) || v.refer === true; } catch { return true; }
+}
+
 export interface ArrivalInput { token: string; userAgent?: string | null; test?: boolean; now?: number; secure?: boolean; /** The request's Cookie header, to recognise a repeat scan. */ cookie?: string | null }
 export interface ArrivalResult { redirect: string; setCookie?: string; recorded: boolean; uaClass: UaClass; linkId?: string }
 
-interface LinkRow { id: string; hotel_id: string | null; chain_profile_id: string | null; target_path: string; medium: string; status: string; hotel_status: string | null }
+interface LinkRow { id: string; hotel_id: string | null; chain_profile_id: string | null; target_path: string; medium: string; status: string; hotel_status: string | null; hotel_features: string | null }
 
 /** Resolve a token, record the arrival and decide the redirect. A missing
  *  token, a retired link or an ended partnership still sends the visitor to the
@@ -65,11 +71,13 @@ export async function handleReferralArrival(db: SqlDb, input: ArrivalInput): Pro
   const now = input.now ?? Date.now();
   const uaClass = classifyUserAgent(input.userAgent, input.test);
   const link = await db.first<LinkRow>(
-    `SELECT l.id, l.hotel_id, l.chain_profile_id, l.target_path, l.medium, l.status, h.status AS hotel_status
+    `SELECT l.id, l.hotel_id, l.chain_profile_id, l.target_path, l.medium, l.status, h.status AS hotel_status, h.features_json AS hotel_features
        FROM referral_links l LEFT JOIN hotels h ON h.id = l.hotel_id WHERE l.token = ?`, [input.token]);
   if (!link) return { redirect: DEFAULT_TARGET, recorded: false, uaClass };
   const target = ALLOWED_TARGET.test(link.target_path) ? link.target_path : DEFAULT_TARGET;
-  const live = link.status === "active" && (link.hotel_id === null || link.hotel_status === "active");
+  // A site whose link referral is switched off (partner features) behaves like an ended partnership: the page opens, no session.
+  const referOn = link.hotel_id === null || referFeatureOn(link.hotel_features);
+  const live = link.status === "active" && (link.hotel_id === null || link.hotel_status === "active") && referOn;
   const excluded = uaClass !== "human" || !live;
   const at = new Date(now).toISOString();
   const lang = target.match(/^\/(en|es|ja|fr|zh-tw)/)?.[1] ?? null;

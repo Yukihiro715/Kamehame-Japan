@@ -28,13 +28,13 @@ export function OpsReservations() {
       <div className="pt-form">
         <label className="pt-field"><span className="pt-field-l">予約日（から）</span><input type="date" value={f.from} onChange={(e) => setF({ ...f, from: e.target.value })} /></label>
         <label className="pt-field"><span className="pt-field-l">予約日（まで）</span><input type="date" value={f.to} onChange={(e) => setF({ ...f, to: e.target.value })} /></label>
-        <label className="pt-field"><span className="pt-field-l">ホテル</span><select value={f.hotel} onChange={(e) => setF({ ...f, hotel: e.target.value })}><option value="">すべて</option>{hotels.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select></label>
+        <label className="pt-field"><span className="pt-field-l">紹介元（拠点）</span><select value={f.hotel} onChange={(e) => setF({ ...f, hotel: e.target.value })}><option value="">すべて</option>{hotels.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select></label>
         <label className="pt-field"><span className="pt-field-l">予約状況</span><select value={f.status} onChange={(e) => setF({ ...f, status: e.target.value })}><option value="">すべて</option><option value="provisional">仮予約</option><option value="arranging">手配中</option><option value="confirmed">予約確定</option><option value="completed">実施済み</option><option value="cancelled">キャンセル</option><option value="no_show">未実施</option></select></label>
         <label className="pt-field"><span className="pt-field-l">照合番号 / 外部参照 / 申込ID</span><input value={f.q} onChange={(e) => setF({ ...f, q: e.target.value })} /></label>
         <div className="pt-row"><Button onClick={load}>検索</Button></div>
       </div>
       {!rows ? <Loading /> : (
-        <Table head={["照合番号", "予約日", "経路", "体験", "体験日", "人数", "ホテル", "予約", "決済", "金額", "紹介料", "状態"]} rows={rows.map((r) => [
+        <Table head={["照合番号", "予約日", "経路", "体験", "体験日", "人数", "紹介元", "予約", "決済", "金額", "紹介料", "状態"]} rows={rows.map((r) => [
           <a key="a" href={`/ops/reservations/${r.id}/`}>{r.hotel_ref}</a>, jst(r.created_at, false), r.flow, r.experience, r.experience_date ?? "—", r.guests ?? "—",
           r.hotel_name ? <span key="h">{r.hotel_name}{r.referral_status && r.referral_status !== "attributed" && <Badge tone="warn">{r.referral_status}</Badge>}</span> : <span key="h" className="pt-muted">紹介なし</span>,
           r.statusJa, r.paymentJa, r.amount_status === "pending" ? <Badge key="m" tone="warn">未確定</Badge> : "確定", yen(r.commission_net_jpy),

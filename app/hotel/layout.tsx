@@ -5,7 +5,7 @@ import "../portal.css";
  *  indexed, nothing hotel-specific in the HTML: every page signs in through
  *  the portal API and fetches what the signed-in user may see. */
 export const metadata: Metadata = {
-  title: "ホテル向け紹介管理 | KAMEHAME JAPAN",
+  title: "提携パートナー向け紹介管理 | KAMEHAME JAPAN",
   robots: { index: false, follow: false, noarchive: true },
 };
 

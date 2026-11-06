@@ -14,7 +14,7 @@ export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Er
 
 const NAV: Record<Kind, [string, string][]> = {
   hotel: [["/hotel/", "実績"], ["/hotel/reservations/", "紹介予約"], ["/hotel/experiences/", "体験一覧"], ["/hotel/materials/", "QR・リンク"], ["/hotel/settlement/", "精算"]],
-  ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "ホテル・法人"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
+  ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "提携パートナー"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
 };
 const HOTEL_KEY = "kh-portal-hotel";
 
@@ -56,13 +56,13 @@ export function PortalShell({ kind, children, title }: { kind: Kind; children: R
     <Ctx.Provider value={{ kind, me, hotel, setHotel, refresh: load }}>
       <div className="pt-root">
         <header className="pt-top">
-          <a className="pt-brand" href={`/${kind}/`}>KAMEHAME JAPAN <span>{kind === "hotel" ? "ホテル向け" : "運営"}</span></a>
+          <a className="pt-brand" href={`/${kind}/`}>KAMEHAME JAPAN <span>{kind === "hotel" ? "パートナー向け" : "運営"}</span></a>
           <nav className="pt-nav" aria-label="メニュー">
             {NAV[kind].map(([href, label]) => <a key={href} href={href} className={path === href || (href !== `/${kind}/` && path.startsWith(href)) ? "on" : ""}>{label}</a>)}
           </nav>
           <div className="pt-user">
             {kind === "hotel" && (me.hotels?.length ?? 0) > 1 && (
-              <select value={hotelId ?? ""} onChange={(e) => setHotel(e.target.value)} aria-label="施設を選ぶ">{me.hotels!.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select>
+              <select value={hotelId ?? ""} onChange={(e) => setHotel(e.target.value)} aria-label="拠点を選ぶ">{me.hotels!.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select>
             )}
             <span className="pt-user-mail">{me.user.name ?? me.user.email}</span>
             <Button kind="link" small onClick={async () => { await api("POST", "auth/signout", { kind }); window.location.href = `/${kind}/login/`; }}>サインアウト</Button>
@@ -70,7 +70,7 @@ export function PortalShell({ kind, children, title }: { kind: Kind; children: R
         </header>
         <main className="pt-main">
           {title && <h1 className="pt-h1">{title}</h1>}
-          {kind === "hotel" && !hotel ? <Notice tone="warn">閲覧できる施設がありません。KAMEHAME JAPAN にお問い合わせください。</Notice> : children}
+          {kind === "hotel" && !hotel ? <Notice tone="warn">閲覧できる拠点がありません。KAMEHAME JAPAN にお問い合わせください。</Notice> : children}
         </main>
         <footer className="pt-foot">KAMEHAME JAPAN 紹介管理 · 株式会社プロセント · お問い合わせ hello@kamehame-japan.com</footer>
       </div>
@@ -98,7 +98,7 @@ function Login({ kind, onDone }: { kind: Kind; onDone: () => void }) {
   return (
     <div className="pt-login">
       <div className="pt-login-box">
-        <p className="pt-brand">KAMEHAME JAPAN <span>{kind === "hotel" ? "ホテル向け画面" : "運営画面"}</span></p>
+        <p className="pt-brand">KAMEHAME JAPAN <span>{kind === "hotel" ? "パートナー向け画面" : "運営画面"}</span></p>
         <h1>サインイン</h1>
         {step === "email" ? (
           <form onSubmit={(e) => { e.preventDefault(); void request(); }}>
