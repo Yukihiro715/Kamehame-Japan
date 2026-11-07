@@ -49,13 +49,13 @@ export const THEMES: Theme[] = [
     },
   },
   {
-    slug: "pop-culture", tags: ["Pop culture"], img: "/images/cat-nail.jpg", mark: "爪",
+    slug: "wellness-beauty", tags: ["Wellness", "Pop culture"], img: "/images/nerima-herbal-bath.webp", mark: "湯",
     copy: {
-      en: { title: "Pop Culture & Beauty", sub: "Character Nails / Anime", h1: "Pop culture & beauty experiences in Japan", lead: "The culture shaping Japan today, hands-on: character nail art and more to come.", heroAlt: "Anime-inspired nail art" },
-      es: { title: "Cultura pop y belleza", sub: "Uñas de personajes / Anime", h1: "Experiencias de cultura pop y belleza en Japón", lead: "La cultura que da forma al Japón de hoy, en primera persona: nail art de personajes y más por venir.", heroAlt: "Nail art inspirado en el anime" },
-      ja: { title: "ポップカルチャー・美容", sub: "キャラクターネイル / アニメ", h1: "日本のポップカルチャー・美容の体験", lead: "いまの日本をかたちづくる文化を、手を動かして。キャラクターネイルほか、順次追加予定。", heroAlt: "アニメ風のネイルアート" },
-      fr: { title: "Pop culture et beauté", sub: "Nail art / Anime", h1: "Expériences de pop culture et de beauté au Japon", lead: "La culture qui façonne le Japon d'aujourd'hui, en pratique : nail art de personnages, et d'autres à venir.", heroAlt: "Nail art inspiré de l'anime" },
-      "zh-tw": { title: "流行文化與美容", sub: "角色美甲 / 動漫", h1: "日本的流行文化與美容體驗", lead: "親身體驗形塑今日日本的文化：角色美甲，更多陸續推出。", heroAlt: "動漫風格的美甲" },
+      en: { title: "Wellness & Beauty", sub: "Herbal bath / Nail art", h1: "Wellness & beauty experiences in Japan", lead: "Slow down the Japanese way: a private hot-spring bath with herbal blends you mix yourself, a quiet home spa that takes one party a day, and the beauty culture shaping Japan today, from character nail art to more to come.", heroAlt: "Herbal bath blends beside a private hot-spring bath" },
+      es: { title: "Bienestar y belleza", sub: "Baño de hierbas / Nail art", h1: "Experiencias de bienestar y belleza en Japón", lead: "Baja el ritmo a la japonesa: un baño termal privado con mezclas de hierbas que preparas tú, un spa doméstico tranquilo que recibe a un grupo al día, y la cultura de belleza que define el Japón de hoy, del nail art de personajes a lo que está por venir.", heroAlt: "Mezclas de hierbas para el baño junto a un baño termal privado" },
+      ja: { title: "ウェルネス・美容", sub: "薬草風呂 / ネイルアート", h1: "日本のウェルネス・美容の体験", lead: "日本流にゆっくり過ごす。自分で調合した薬草を入れる貸切の温泉、1日1組だけの静かなホームスパ、そしてキャラクターネイルをはじめ、いまの日本をかたちづくる美容の文化。", heroAlt: "貸切温泉のそばに並ぶ薬草風呂のブレンド" },
+      fr: { title: "Bien-être et beauté", sub: "Bain aux herbes / Nail art", h1: "Expériences de bien-être et de beauté au Japon", lead: "Ralentir à la japonaise : un bain thermal privé aux herbes que vous composez vous-même, un spa familial paisible qui n'accueille qu'un groupe par jour, et la culture de la beauté qui façonne le Japon d'aujourd'hui, du nail art de personnages à ce qui suivra.", heroAlt: "Mélanges d'herbes pour le bain près d'un bain thermal privé" },
+      "zh-tw": { title: "療癒與美容", sub: "藥草浴 / 美甲", h1: "日本的療癒與美容體驗", lead: "用日本的方式放慢腳步：親手調配藥草的包場溫泉、一天只接待一組的安靜家庭 SPA，以及形塑今日日本的美容文化，從角色美甲到更多即將推出的體驗。", heroAlt: "包場溫泉旁的藥草浴配方" },
     },
   },
   {
