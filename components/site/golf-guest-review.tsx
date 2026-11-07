@@ -2,16 +2,17 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import { ReviewPhotoGallery } from "./review-photo-gallery";
 import { Stars } from "@/components/site/reviews";
 import { reviewDate, reviewsFor } from "@/lib/published-reviews";
+import { reviewTranslationFor } from "@/lib/review-translations";
 import { t, type Lang } from "@/lib/i18n";
 import styles from "./golf-guest-review.module.css";
 
 const copy = {
-  en: { eyebrow: "BOOKED WITH KAMEHAME JAPAN", title: "Guest reviews", read: "Read Tyler’s review", original: "Original review in English", photos: "Photos shared by Tyler · Takane Country Club, Saitama", photoHint: "Tap a photo to enlarge", service: "Golf course booking service", own: "1 review from a verified KAMEHAME booking", alts: ["Three guests smiling together on the course at Takane Country Club", "A guest preparing a tee shot at Takane Country Club", "A tree-lined fairway at Takane Country Club"] },
-  ja: { eyebrow: "KAMEHAME JAPANでご予約のお客様", title: "お客様の口コミ", read: "Tylerさんの口コミを見る", original: "英語の原文を掲載", photos: "Tylerさん提供の写真 · 高根カントリークラブ（埼玉）", photoHint: "写真をタップすると拡大します", service: "ゴルフ場予約手配サービス", own: "KAMEHAME予約確認済みの口コミ1件", alts: ["高根カントリークラブで笑顔を見せる3人のお客様", "高根カントリークラブでティーショットを構えるお客様", "高根カントリークラブの木々に囲まれたフェアウェイ"] },
-  es: { eyebrow: "RESERVADO CON KAMEHAME JAPAN", title: "Opiniones de nuestros clientes", read: "Leer la opinión de Tyler", original: "Opinión original en inglés", photos: "Fotos de Tyler · Takane Country Club, Saitama", photoHint: "Toca una foto para ampliar", service: "Servicio de reserva de campos de golf", own: "1 opinión de una reserva verificada de KAMEHAME", alts: ["Tres visitantes sonriendo en Takane Country Club", "Una visitante preparando su golpe de salida en Takane Country Club", "Una calle rodeada de árboles en Takane Country Club"] },
-  fr: { eyebrow: "RÉSERVÉ AVEC KAMEHAME JAPAN", title: "Avis de nos clients", read: "Lire l’avis de Tyler", original: "Avis original en anglais", photos: "Photos de Tyler · Takane Country Club, Saitama", photoHint: "Touchez une photo pour agrandir", service: "Service de réservation de parcours de golf", own: "1 avis d’une réservation KAMEHAME vérifiée", alts: ["Trois visiteurs souriants au Takane Country Club", "Une visiteuse préparant son départ au Takane Country Club", "Un fairway bordé d’arbres au Takane Country Club"] },
-  "zh-tw": { eyebrow: "透過KAMEHAME JAPAN預訂的旅客", title: "旅客評價", read: "閱讀Tyler的評價", original: "英文原文評價", photos: "Tyler提供的照片 · 高根鄉村俱樂部（埼玉）", photoHint: "點擊照片放大", service: "高爾夫球場預訂服務", own: "1則KAMEHAME已驗證預訂評價", alts: ["三位旅客在高根鄉村俱樂部開心合照", "旅客在高根鄉村俱樂部準備開球", "高根鄉村俱樂部綠樹環繞的球道"] },
-} satisfies Record<Lang, { eyebrow: string; title: string; read: string; original: string; photos: string; photoHint: string; service: string; own: string; alts: string[] }>;
+  en: { eyebrow: "BOOKED WITH KAMEHAME JAPAN", title: "Guest reviews", read: "Read Tyler’s review", original: "View original in English", translated: "Translated from English", photos: "Photos shared by Tyler · Takane Country Club, Saitama", photoHint: "Tap a photo to enlarge", service: "Golf course booking service", own: "1 review from a verified KAMEHAME booking", alts: ["Three guests smiling together on the course at Takane Country Club", "A guest preparing a tee shot at Takane Country Club", "A tree-lined fairway at Takane Country Club"] },
+  ja: { eyebrow: "KAMEHAME JAPANでご予約のお客様", title: "お客様の口コミ", read: "Tylerさんの口コミを見る", original: "英語の原文を見る", translated: "英語の口コミを日本語に翻訳", photos: "Tylerさん提供の写真 · 高根カントリークラブ（埼玉）", photoHint: "写真をタップすると拡大します", service: "ゴルフ場予約手配サービス", own: "KAMEHAME予約確認済みの口コミ1件", alts: ["高根カントリークラブで笑顔を見せる3人のお客様", "高根カントリークラブでティーショットを構えるお客様", "高根カントリークラブの木々に囲まれたフェアウェイ"] },
+  es: { eyebrow: "RESERVADO CON KAMEHAME JAPAN", title: "Opiniones de nuestros clientes", read: "Leer la opinión de Tyler", original: "Ver original en inglés", translated: "Traducido del inglés", photos: "Fotos de Tyler · Takane Country Club, Saitama", photoHint: "Toca una foto para ampliar", service: "Servicio de reserva de campos de golf", own: "1 opinión de una reserva verificada de KAMEHAME", alts: ["Tres visitantes sonriendo en Takane Country Club", "Una visitante preparando su golpe de salida en Takane Country Club", "Una calle rodeada de árboles en Takane Country Club"] },
+  fr: { eyebrow: "RÉSERVÉ AVEC KAMEHAME JAPAN", title: "Avis de nos clients", read: "Lire l’avis de Tyler", original: "Voir l’original en anglais", translated: "Traduit de l’anglais", photos: "Photos de Tyler · Takane Country Club, Saitama", photoHint: "Touchez une photo pour agrandir", service: "Service de réservation de parcours de golf", own: "1 avis d’une réservation KAMEHAME vérifiée", alts: ["Trois visiteurs souriants au Takane Country Club", "Une visiteuse préparant son départ au Takane Country Club", "Un fairway bordé d’arbres au Takane Country Club"] },
+  "zh-tw": { eyebrow: "透過KAMEHAME JAPAN預訂的旅客", title: "旅客評價", read: "閱讀Tyler的評價", original: "查看英文原文", translated: "由英文原文翻譯", photos: "Tyler提供的照片 · 高根鄉村俱樂部（埼玉）", photoHint: "點擊照片放大", service: "高爾夫球場預訂服務", own: "1則KAMEHAME已驗證預訂評價", alts: ["三位旅客在高根鄉村俱樂部開心合照", "旅客在高根鄉村俱樂部準備開球", "高根鄉村俱樂部綠樹環繞的球道"] },
+} satisfies Record<Lang, { eyebrow: string; title: string; read: string; original: string; translated: string; photos: string; photoHint: string; service: string; own: string; alts: string[] }>;
 
 const guestReview = () => reviewsFor("mt-fuji-golf-day").find((r) => r.id === "tyler-takane-2026-11" && r.source === "direct" && r.verified);
 const excerpt = "the booking process was quick, easy, informative, and they got me on an awesome course!";
@@ -22,6 +23,7 @@ export function GolfGuestQuote({ lang, landing = false }: { lang: Lang; landing?
   const review = guestReview();
   if (!review) return null;
   const c = copy[lang];
+  const translation = reviewTranslationFor(review.id, lang);
   const href = landing ? `/${lang}/tokyo/mt-fuji-golf-day/#reviews` : "#reviews";
   return (
     <aside className={`${styles.quote} ${landing ? styles.landing : ""}`} aria-label={c.eyebrow}>
@@ -29,7 +31,8 @@ export function GolfGuestQuote({ lang, landing = false }: { lang: Lang; landing?
       <div>
         <p className={styles.eyebrow}>{landing ? c.service : c.eyebrow}</p>
         <Stars rating={review.rating} />
-        <blockquote lang="en">“{excerpt}”</blockquote>
+        <blockquote lang={translation ? lang : "en"}>“{translation?.excerpt ?? excerpt}”</blockquote>
+        {translation && <p className={styles.original}>{c.translated}</p>}
         <div className={styles.meta}><b>{review.author}</b><span>·</span><time dateTime={review.date}>{reviewDate(review.date!, lang)}</time><span className={styles.verified}><ShieldCheck size={13} aria-hidden="true" />{t(lang).reviewVerified}</span></div>
         <a className={styles.read} href={href}>{c.read}<ArrowRight size={14} aria-hidden="true" /></a>
       </div>
@@ -41,7 +44,8 @@ export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: stri
   const review = guestReview();
   if (!review) return null;
   const c = copy[lang];
-  const paragraphs = review.body.split("\n\n");
+  const translation = reviewTranslationFor(review.id, lang);
+  const paragraphs = (translation?.body ?? review.body).split("\n\n");
   return (
     <section className={`xp-section ${styles.feature}`} id="reviews" aria-labelledby="golf-guest-title">
       <p className={styles.eyebrow}>{c.eyebrow}</p>
@@ -51,8 +55,12 @@ export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: stri
           <div><Stars rating={review.rating} size={17} /><span className={styles.ownCount}>{c.own}</span></div>
           <div className={styles.meta}><b>{review.author}</b><span>·</span><time dateTime={review.date}>{reviewDate(review.date!, lang)}</time><span className={styles.verified}><ShieldCheck size={14} aria-hidden="true" />{t(lang).reviewVerified}</span></div>
         </header>
-        {lang !== "en" && <p className={styles.original}>{c.original}</p>}
-        <blockquote lang="en">{paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</blockquote>
+        {translation && <p className={styles.original}>{c.translated}</p>}
+        <blockquote lang={translation ? lang : "en"}>{paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</blockquote>
+        {translation && <details className={styles.originalDetails}>
+          <summary>{c.original}</summary>
+          <blockquote lang="en">{review.body.split("\n\n").map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</blockquote>
+        </details>}
         <figure className={styles.figure}>
           <ReviewPhotoGallery photos={review.photos ?? []} alts={c.alts} label={c.photos} lang={lang} />
           <figcaption>{c.photos}<span className={styles.photoHint}>{c.photoHint}</span></figcaption>
