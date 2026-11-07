@@ -920,7 +920,7 @@ button.contact-cta { border:0; cursor:pointer; font:inherit; font-family:var(--f
 
 /* --- First-view carousel, availability, map ------------------------------ */
 .hero-carousel { position:relative; height:100%; }
-.hero-track { display:flex; height:100%; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.hero-track { display:flex; height:100%; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
 .hero-track::-webkit-scrollbar { display:none; }
 .hero-slide { position:relative; flex:0 0 100%; height:100%; margin:0; scroll-snap-align:start; scroll-snap-stop:always; }
 .hero-slide > button { display:block; width:100%; height:100%; padding:0; border:0; background:var(--rice); cursor:pointer; }
@@ -2376,10 +2376,11 @@ body[data-kh-modal] .sticky-request { display:none; }
 
 .lc { display: flex; flex-direction: column; min-width: 0; }
 .lc-media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: #e9e4da; }
-.lc-photos { display: block; height: 100%; }
-.lc-track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.lc-photos { position: absolute; inset: 0; display: block; }
+/* overflow-x alone also allows vertical scrolling inside the track on iOS, which made cards jiggle up and down: pin the height and hide the other axis */
+.lc-track { position: absolute; inset: 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; touch-action: pan-x pan-y; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .lc-track::-webkit-scrollbar { display: none; }
-.lc-slide { flex: 0 0 100%; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+.lc-slide { flex: 0 0 100%; height: 100%; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
 .lc-slide img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
 .lc:hover .lc-slide img { transform: scale(1.03); }
 .lc.is-soon .lc-slide img { filter: saturate(.7); }
@@ -2431,4 +2432,53 @@ body[data-kh-modal] .sticky-request { display:none; }
   .lc-list .lc-media { aspect-ratio: 3 / 2; }
   .lc-list .lc-arrow { display: none; }
   .lg-panel { position: fixed; inset: auto 0 0 0; z-index: 40; max-height: 80vh; overflow: auto; border-radius: 16px 16px 0 0; box-shadow: 0 -12px 40px rgba(0,0,0,.25); margin: 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+}
+
+
+/* ---- Home: shorter sections, smaller area and interest tiles, the listing card for featured experiences ---- */
+.city-section { padding: 80px clamp(24px,7vw,120px) 90px; }
+.city-cards { margin-top: 40px; }
+.city-card { min-height: 380px; }
+.category-section { padding: 80px clamp(24px,7vw,120px) 90px; }
+.category-section h2 { margin: 24px 0 36px; }
+.category-card { min-height: 200px; }
+.trust-strip { padding: 80px clamp(24px,7vw,120px) 70px; }
+.craft-band { height: clamp(220px,28vw,340px); margin-top: 50px; }
+.experiences-section { background: var(--white); color: var(--ink); padding: 80px clamp(24px,7vw,120px) 90px; }
+.experiences-section .section-heading { margin-bottom: 8px; }
+.home-cards { margin-top: 28px; }
+@media (min-width: 981px) { .home-cards.lg-items-grid { grid-template-columns: repeat(3, 1fr); } }
+.journal-section { padding: 80px clamp(24px,7vw,120px); }
+.review-section { padding: 90px clamp(24px,7vw,120px); }
+@media (max-width: 700px) {
+  .city-section, .category-section, .experiences-section, .review-section, .journal-section { padding: 56px 22px; }
+  .trust-strip { padding: 56px 22px 48px; }
+  .trust-grid article { padding: 18px 0 20px; }
+  .craft-band { height: 200px; margin-top: 32px; box-shadow: 5px 5px 0 rgba(23,26,33,.85); }
+  .craft-band figcaption.craft-bubble { bottom: 14px; left: 14px; max-width: 250px; }
+  .craft-bubble p { font-size: 13px; }
+  .section-heading p { margin-top: 8px; font-size: 14px; }
+  .city-cards { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 26px; }
+  .city-card { min-height: 150px; padding: 14px; }
+  .city-card h3 { font-size: 26px; }
+  .city-card div p { display: none; }
+  .city-card .city-place { font-size: 10px; }
+  .sfx { display: none; }
+  .circle-arrow { width: 30px; height: 30px; right: 12px; bottom: 12px; }
+  .circle-arrow svg { width: 15px; height: 15px; }
+  .category-section h2 { margin: 16px 0 22px; font-size: 36px; }
+  .category-grid { grid-template-columns: repeat(3, 1fr); }
+  .category-card { min-height: 112px; padding: 10px; }
+  .category-mark { font-size: 26px; }
+  .category-card b { font-size: 13px; }
+  .category-label small, .category-card > svg { display: none; }
+  .home-cards { margin-top: 22px; }
+  .journal-grid.home { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; margin-top: 24px; }
+  .journal-grid.home::-webkit-scrollbar { display: none; }
+  .journal-grid.home .journal-card { flex: 0 0 78%; scroll-snap-align: start; }
+  .journal-grid.home .journal-card img { height: 140px; }
+  .journal-grid.home .journal-card > div { padding: 14px 16px 16px; }
+  .journal-grid.home .journal-card p:not(.journal-meta) { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .review-layout { gap: 24px; }
+  .closing-section { padding: 64px 22px; }
 }

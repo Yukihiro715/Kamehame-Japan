@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowDownRight, ArrowRight, CalendarDays, Clock3, Flame, MapPin, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/site-header";
+import { ListingCard } from "@/components/site/listing-card";
+import { getCollection } from "@/lib/collections";
 import { SiteFooter } from "@/components/site/site-footer";
 import { articleDate, latestArticles } from "@/lib/articles";
 import { featuredReviews } from "@/lib/reviews";
@@ -330,7 +332,8 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
   // The selected three avoid repeating the popular cards when there is enough choice.
   const popularSlugs = new Set(popular.map((e) => e.slug));
   const rest = live.filter((e) => !popularSlugs.has(e.slug));
-  const featured = (rest.length >= 3 ? rest : live.length >= 3 ? live : experiences).slice(0, 3);
+  // The same compact cards as the listing pages (components/site/listing-card.tsx), six of them, skipping the popular row and the campaign card.
+  const featuredCards = (getCollection("experiences", lang)?.items ?? []).filter((i) => i.slug !== "ofukuro-dinner" && !popularSlugs.has(i.slug)).slice(0, 6);
   const heroHref = p("/experiences/");
   const heroCta = C.heroCta;
   const markFor = (e: Experience) => categories.find((c) => c.slug === e.category)?.mark ?? "";
@@ -487,29 +490,14 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
 
       <section className="experiences-section" id="experiences">
         <div className="section-heading horizontal">
-          <div><p className="eyebrow"><span /> {solo ? C.featureEyebrow : C.expEyebrow}</p><h2>{C.expTitle[0]}<br />{C.expTitle[1]}</h2></div>
+          <div><p className="eyebrow dark"><span /> {solo ? C.featureEyebrow : C.expEyebrow}</p><h2>{C.expTitle[0]}<br />{C.expTitle[1]}</h2></div>
           {!solo && <Link className="underlined-link" href={p("/experiences/")}>{C.expLink} <ArrowRight /></Link>}
         </div>
         {solo ? (
           <FeaturedExperience exp={solo} lang={lang} cityTitle={cityTitle(solo.city)} mark={markFor(solo)} eyebrow={C.featureEyebrow} cta={C.featureCta} />
         ) : (
-          <div className="experience-grid">
-            {featured.map((item, i) => (
-              <Link className="experience-card" href={p(`/${item.city}/${item.slug}/`)} key={item.slug}>
-                <div className="experience-art">
-                  <img src={item.img} alt={item.alt} loading="lazy" />
-                  {!isLive(item) && <span className="soon-badge">{T.comingSoon}</span>}
-                  <span aria-hidden="true">{markFor(item)}</span>
-                  <small>{String(i + 1).padStart(2, "0")}</small>
-                </div>
-                <div className="experience-copy">
-                  <p className="experience-city"><MapPin size={14} /> {cityTitle(item.city)} · {item.langTag ?? T.interpreterIncluded}</p>
-                  <h3>{item.title}</h3>
-                  <p>{item.tagline}</p>
-                  <div className="experience-meta"><span><Clock3 size={14} /> {item.duration}</span><span className="listing-price"><span>{T.from} <b><Fx>{listPrice(item, lang).price}</Fx></b> {listPrice(item, lang).unit === "group" ? T.perGroupShort : T.perPerson}</span>{listPrice(item, lang).note && <small><Fx>{listPrice(item, lang).note}</Fx></small>}</span></div>
-                </div>
-              </Link>
-            ))}
+          <div className="lg-items lg-items-grid home-cards">
+            {featuredCards.map((item) => <ListingCard key={item.href} item={item} lang={lang} />)}
           </div>
         )}
       </section>
