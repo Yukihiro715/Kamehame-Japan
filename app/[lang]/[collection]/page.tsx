@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
-import { ListingCard } from "@/components/site/listing-card";
+import { ListingGrid } from "@/components/site/listing-grid";
 import { articleDate, articlesForCollection } from "@/lib/articles";
 import { catalogFor } from "@/lib/catalog";
 import { collectionSlugs, getCollection } from "@/lib/collections";
@@ -86,16 +86,15 @@ export default async function CollectionPage({ params }: Props) {
             </div>
           </div>
         ) : null}
-        <p className="collection-lead">{data.lead}</p>
+        {/* The listing itself: count, sort, grid/list and in-place filters (components/site/listing-grid.tsx).
+            The city and interest pages stay as crawlable links under "also explore". */}
+        <ListingGrid items={data.items} lang={lang} />
 
-        <div className="refine-row" aria-label={T.refine}>
+        <p className="collection-lead below">{data.lead}</p>
+        {/* Crawlable links to the city and interest pages this listing overlaps with. */}
+        <div className="refine-row below" aria-label={T.refine}>
           <span className="refine-label">{T.refine}</span>
           {data.refine.map((r) => <Link className="chip" key={r.href + r.label} href={r.href}>{r.label}</Link>)}
-          <span className="refine-sort">{T.sort}</span>
-        </div>
-
-        <div className="listing-grid">
-          {data.items.map((item) => <ListingCard key={item.href} item={item} lang={lang} />)}
         </div>
 
         {reading.length > 0 && (

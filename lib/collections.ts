@@ -9,6 +9,7 @@ import type { Lang } from "@/lib/i18n";
 import { listPrice } from "@/lib/pricing";
 import { THEMES, themeBySlug, themeCategories } from "@/lib/themes";
 import { OFUKURO_CAMPAIGN, OFUKURO_FOUNDING, ofukuroFoundingRows, yenOf } from "@/lib/ofukuro-dinner";
+import { aggregateFor } from "@/lib/reviews";
 
 export interface ListingItem {
   kind: "experience" | "tour";
@@ -27,7 +28,38 @@ export interface ListingItem {
   price: string;
   /** Under the price: the party size and group total the figure is based on. */
   priceNote?: string;
+  // ---- for the card and the in-place filters (components/site/listing-grid.tsx)
+  /** Up to five photos the card can swipe through; the first is `img`. */
+  photos: string[];
+  city: string;
+  cityLabel: string;
+  category: string;
+  categoryLabel: string;
+  durationLabel: string;
+  /** Parsed from the duration text; null when it cannot be read. */
+  minutes: number | null;
+  /** The "from" price in yen, for sorting and price bands; null when unknown. */
+  priceYen: number | null;
+  isPrivate: boolean;
+  bookingType: "instant" | "request";
+  rating: { average: number; count: number } | null;
 }
+
+/** "About 1.5 to 2 hours" → 90, "90 minutes" → 90, "Full day" → 480. The lower bound of a range. */
+export function parseMinutes(s: string): number | null {
+  const t = s.toLowerCase();
+  const h = t.match(/(\d+(?:\.\d+)?)\s*(?:to\s*\d+(?:\.\d+)?\s*)?(?:hours?|hrs?|h\b|時間)/);
+  if (h) return Math.round(Number(h[1]) * 60);
+  const m = t.match(/(\d+)\s*(?:minutes?|mins?|分)/);
+  if (m) return Number(m[1]);
+  if (/day|日/.test(t)) return 480;
+  return null;
+}
+export function parseYen(s: string): number | null {
+  const m = s.replace(/,/g, "").match(/(\d{3,})/);
+  return m ? Number(m[1]) : null;
+}
+const photosOf = (img: string, gallery: { img: string }[]) => [...new Set([img, ...gallery.map((g) => g.img)])].slice(0, 5);
 
 export interface Faq { q: string; a: string }
 
@@ -281,11 +313,16 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
 
   const expItem = (e: Experience): ListingItem => {
     const lp = listPrice(e, lang);
+    const isPrivate = /^priv/i.test(e.group) || /貸切|privado|privé|私人|包場/i.test(e.group);
+    const agg = aggregateFor(e.slug);
     return {
       kind: "experience", slug: e.slug, live: isLive(e), unit: lp.unit, href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
-      tags: [catBySlug(e.category)?.tag ?? "", e.group.startsWith("Priva") || e.group.startsWith("Private") ? S.privateTag : S.smallGroupTag].filter(Boolean),
+      tags: [catBySlug(e.category)?.tag ?? "", isPrivate ? S.privateTag : S.smallGroupTag].filter(Boolean),
       title: e.title, line: e.tagline,
       meta: `${cityTitle(e.city)} · ${e.duration}`, price: lp.price, priceNote: lp.note,
+      photos: photosOf(e.img, e.gallery ?? []), city: e.city, cityLabel: cityTitle(e.city), category: e.category, categoryLabel: catBySlug(e.category)?.title ?? e.category,
+      durationLabel: e.duration, minutes: parseMinutes(e.duration), priceYen: parseYen(lp.price), isPrivate, bookingType: e.bookingType === "instant" ? "instant" : "request",
+      rating: agg ? { average: agg.average, count: agg.count } : null,
     };
   };
   // The Ofukuro Dinner campaign (published 2026-10-23, English page): a card at
@@ -296,12 +333,15 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     img: "/images/ofukuro-hero-table.webp", alt: cc.alt, tags: [cc.tag, S.privateTag],
     title: cc.title, line: cc.line, meta: cc.meta,
     price: yenOf(ofukuroFoundingRows[1].founding), priceNote: cc.priceNote,
+    photos: ["/images/ofukuro-hero-table.webp"], city: "tokyo", cityLabel: cc.meta, category: "food", categoryLabel: cc.tag,
+    durationLabel: "", minutes: 120, priceYen: parseYen(yenOf(ofukuroFoundingRows[1].founding)), isPrivate: true, bookingType: "request", rating: null,
   };
   const tourItem = (tr: Tour): ListingItem => ({
     kind: "tour", slug: tr.slug, live: false, unit: "group", href: p(`/tours/${tr.slug}/`), img: tr.img, alt: tr.alt,
     tags: [S.tourTag, S.privateTag],
     title: tr.title, line: tr.tagline,
     meta: `${cityTitle(tr.city)} · ${tr.duration}`, price: tr.price,
+    photos: [tr.img], city: tr.city, cityLabel: cityTitle(tr.city), category: "tours", categoryLabel: S.tourTag, durationLabel: tr.duration, minutes: parseMinutes(tr.duration), priceYen: parseYen(tr.price), isPrivate: true, bookingType: tr.bookingType === "instant" ? "instant" : "request", rating: null,
   });
 
   const FAQ_GUIDE: Faq = { q: S.faqGuideQ, a: S.faqGuideA };
