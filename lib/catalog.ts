@@ -468,22 +468,23 @@ export const experiences: Experience[] = [
     // follow the spa's terms (options are paid in cash on the day). The operator's
     // name and address stay off the page until the owner decides; the sheet
     // allows the name. Camera monitoring of the bath is disclosed and still
-    // to be agreed. Preview until the operator approves the page.
-    slug: "nerima-herbal-bath-private-spa", city: "tokyo", category: "wellness", bookingType: "request", status: "preview",
+    // to be agreed. Listing and group prices approved by the owner, 2026-11-07.
+    slug: "nerima-herbal-bath-private-spa", city: "tokyo", category: "wellness", bookingType: "request", status: "live",
     title: "Herbal Bath Blending & Private Hot-Spring Spa in Nerima, Tokyo",
     tagline: "Make a fragrant sachet and three packs of your own herbal bath blend, steep one, and settle into a private hot-spring bath, a low-temperature herbal sauna and tea in a home spa reserved for your group alone. About three and a half hours, one group a day, in a quiet corner of Tokyo.",
     overview: [
       "A home spa in Nerima that takes one group a day. You start at the work table: a sachet of Japanese cypress and aromatic herbs, then three packs of your own herbal bath blend, mixed by hand with the staff showing you how. One pack is steeped in two litres of hot water and goes into the bath; the other two go home with you.",
       "Then the slow part. Wash, soak for about thirty minutes in the private hot-spring bath, change into a yukata, and take the rest of the time as you like: a nap, the herbal tea and spring water that come with the room, or a meal you brought along. The staff speak Japanese and work with translated materials and translation tools; a dedicated interpreter is not included.",
     ],
-    duration: "About 3.5 hours", price: "¥24,000", priceUnit: "person", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
+    duration: "About 3.5 hours", price: "¥24,000", priceUnit: "group", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
     img: "/images/nerima-herbal-bath.webp", alt: "The private bath and tea space of the home spa",
     gallery: [],
     galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
     partySize: { min: 1, max: 3, default: 2 },
+    pricing: { tiers: [{ party: 1, total: 24000 }, { party: 2, total: 42000 }, { party: 3, total: 60000 }] },
     availability: { daily: false, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
     timeLabel: "Preferred start time",
-    availabilityNote: "Sessions start at 11:00 or 16:30; closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
+    availabilityNote: "Sessions start at 11:00 or 16:30; normally closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
     scheduleNote: "The order is the spa's; the staff set the pace. Please be at the building entrance 5 to 10 minutes before your start time.",
     taxIncluded: true,
     interpreter: false,
@@ -523,7 +524,7 @@ export const experiences: Experience[] = [
       { time: "3:30", title: "End of the session" },
     ],
     venue: {
-      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "As Tokyo regulations require, an attendant is on duty and a monitoring camera watches over the bath for safety; where it points, who can see it and how the images are handled are confirmed with you before you book"],
+      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Normally closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "As Tokyo regulations require, an attendant is on duty and a monitoring camera watches over the bath for safety; where it points, who can see it and how the images are handled are confirmed with you before you book"],
       afterBooking: ["The spa's name, address and directions", "Arrival instructions and a phone number for the day"],
       img: "/images/nerima-herbal-bath.webp", alt: "The private bath",
     },
@@ -536,7 +537,7 @@ export const experiences: Experience[] = [
     ],
     faq: [
       { q: "Is this a private experience?", a: "Yes. The spa takes one group a day, of one to three guests; larger groups can be asked about." },
-      { q: "How much is it?", a: "¥24,000 per person, tax included, with the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
+      { q: "How much is it?", a: "Group totals, tax included: ¥24,000 for one guest, ¥42,000 for two guests, or ¥60,000 for three guests. Includes the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
       { q: "Is English spoken?", a: "The staff speak Japanese and use translated written materials and translation tools. An interpreter guide can be arranged for an extra charge; ask when you request." },
       { q: "Can children join?", a: "Yes, with a guardian, by prior arrangement. Tell us their ages and how many; the spa confirms participation and the price. Mixed bathing in the private bath is for children up to six." },
       { q: "Can we take the bath blends home?", a: "Yes: two of the three packs you make go home with you, packed on the day. Postal delivery is not offered." },
@@ -549,7 +550,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Make a Japanese cypress and aromatic sachet", "Blend three packs of herbal bath salts and steep one for your bath", "Soak in a private hot-spring bath, then try the low-temperature herbal sauna", "Rest in a yukata with tea, and take your blends home"],
     master: { title: "Your hosts", bio: "The spa's staff guide the workshop and explain the bath and the sauna, in Japanese with translated materials and translation tools. A dedicated interpreter is not included.", quote: "" },
     itinerary: ["0:00 — Welcome and the room", "0:15 — Your sachet", "0:40 — Three herbal bath packs", "1:15 — The bath", "2:00 — Yukata and rest", "3:25 — Change and check out", "3:30 — End of the session"],
-    goodToKnow: ["About 3.5 hours; sessions at 11:00 or 16:30, closed Tuesdays; one group a day.", "One to three guests; children with a guardian by prior arrangement, quoted individually.", "Tell us about herb or fragrance allergies, pregnancy or health conditions when you request.", "Japanese-speaking staff with translated materials. Bring a meal if you like; tea and water are provided."],
+    goodToKnow: ["About 3.5 hours; sessions at 11:00 or 16:30, normally closed Tuesdays; one group a day.", "One to three guests; children with a guardian by prior arrangement, quoted individually.", "Tell us about herb or fragrance allergies, pregnancy or health conditions when you request.", "Japanese-speaking staff with translated materials. Bring a meal if you like; tea and water are provided."],
     story: { heading: "Make, bathe, rest", body: "A slower afternoon in Tokyo: aromatic ingredients in your hands, hot-spring water, a sauna scented with the herbs you chose, and nobody else in the building." },
   },
 
@@ -1034,7 +1035,7 @@ export const experiences: Experience[] = [
     // to ¥500) because the host has given no wholesale rate: 1 guest ¥17,000,
     // 2–4 guests ¥15,500 each, 5–10 guests ¥14,000 each (the host's proposed
     // ¥8,800 / ¥7,700 / ¥6,600). Still to agree with the host.
-    slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
+    slug: "yotsuya-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Tea Ceremony in a Yotsuya Tearoom, Tokyo",
     tagline: "Ninety minutes with a tea teacher of the Sōhen school in a small Yotsuya tearoom: the history and etiquette, entering the room the traditional way, a full tea performance, then a bowl of matcha you whisk yourself and a few minutes of quiet. Taught in English, from age five.",
     overview: [
@@ -2409,8 +2410,9 @@ export const experiences: Experience[] = [
     // Partner corrections received 2026-10-20: Kabuki Dance naming,
     // daily minimum of three, two-day operating decision and exact cancellation cutoff.
     // Retail price retained; private-session price remains quote-only.
-    // Supplied photos replace placeholders. Await final listing sign-off.
-    slug: "nihonbashi-japanese-dance-salon", city: "tokyo", category: "performing-arts", bookingType: "request", status: "preview",
+    // Supplied photos replace placeholders. Partner signed off 2026-11-02;
+    // owner approved publication 2026-11-07.
+    slug: "nihonbashi-japanese-dance-salon", city: "tokyo", category: "performing-arts", bookingType: "request", status: "live",
     title: "Kabuki Dance in Nihonbashi, Tokyo: Performance and Hands-On Experience",
     tagline: "An hour in a small salon in central Tokyo: a professional dancer performs nihon buyo, the classical dance of the kabuki stage, a few metres from your seat, then teaches you a short piece with a fan and poses with you for a photo. A drink is included.",
     overview: [
@@ -2490,7 +2492,7 @@ export const experiences: Experience[] = [
   {
     // Same Nihonbashi salon: English rakugo. See the dance entry above for
     // the partner notes, pricing rule and placeholder photos.
-    slug: "nihonbashi-english-rakugo-salon", city: "tokyo", category: "rakugo", bookingType: "request", status: "preview",
+    slug: "nihonbashi-english-rakugo-salon", city: "tokyo", category: "rakugo", bookingType: "request", status: "live",
     title: "English Rakugo in a Nihonbashi Salon, Tokyo: Comic Storytelling Up Close",
     tagline: "An hour in a small salon in central Tokyo: a rakugo storyteller performs in English a few metres from your seat, then shows you how the fan and the hand towel become a whole cast of characters, and poses with you for a photo. A drink is included.",
     overview: [
@@ -2570,7 +2572,7 @@ export const experiences: Experience[] = [
   {
     // Same Nihonbashi salon: shamisen. See the dance entry above for the
     // partner notes, pricing rule and placeholder photos.
-    slug: "nihonbashi-shamisen-salon", city: "tokyo", category: "performing-arts", bookingType: "request", status: "preview",
+    slug: "nihonbashi-shamisen-salon", city: "tokyo", category: "performing-arts", bookingType: "request", status: "live",
     title: "Shamisen Up Close in Nihonbashi, Tokyo: Live Performance and a Hands-On Try",
     tagline: "An hour in a small salon in central Tokyo: a professional shamisen player performs a few metres from your seat, talks about the instrument, puts it in your hands for a first try, and poses with you for a photo. A drink is included.",
     overview: [
@@ -4093,11 +4095,18 @@ function withStructure(localized: Experience[]): Experience[] {
   });
 }
 
-/** A page in preview that has no text in a locale yet shows the English text
- *  there, so every preview URL resolves in every language for sign-off. Live
- *  pages are translated before publication, so nothing live falls through. */
+/** Keep existing review URLs available when these approved pages go live.
+ *  Japanese copy is available; other locales retain their English fallback
+ *  until their own translation is added. */
+const APPROVED_ENGLISH_FALLBACK = new Set([
+  "nerima-herbal-bath-private-spa", "yotsuya-tea-ceremony",
+  "nihonbashi-japanese-dance-salon", "nihonbashi-english-rakugo-salon", "nihonbashi-shamisen-salon",
+]);
+
+/** Preview pages and the approved entries above use English only when a
+ *  locale has no authored entry. Existing translations always take precedence. */
 function withFallback(localized: Experience[]): Experience[] {
-  const missing = experiences.filter((e) => isPreview(e) && !localized.some((l) => l.slug === e.slug));
+  const missing = experiences.filter((e) => (isPreview(e) || APPROVED_ENGLISH_FALLBACK.has(e.slug)) && !localized.some((l) => l.slug === e.slug));
   return [...withStructure(localized), ...missing];
 }
 

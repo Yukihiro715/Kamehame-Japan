@@ -20,8 +20,8 @@
     "lastmod": "2026-09-17"
   },
   "/en/experiences/": {
-    "hash": "bacd3aa6c944",
-    "lastmod": "2026-10-26"
+    "hash": "5395b9463d15",
+    "lastmod": "2026-11-07"
   },
   "/en/faq/": {
     "hash": "6475e67568b3",
@@ -76,12 +76,28 @@
     "lastmod": "2026-10-26"
   },
   "/en/kyoto/": {
-    "hash": "23a27b847580",
-    "lastmod": "2026-10-21"
+    "hash": "52c15dc98ff0",
+    "lastmod": "2026-11-07"
   },
   "/en/kyoto/evening-with-geiko/": {
     "hash": "934ee427f168",
     "lastmod": "2026-10-23"
+  },
+  "/en/kyoto/kyoto-garden-teahouse-tea-ceremony/": {
+    "hash": "ba2e1a3367d4",
+    "lastmod": "2026-11-07"
+  },
+  "/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/": {
+    "hash": "5217f7987510",
+    "lastmod": "2026-11-07"
+  },
+  "/en/kyoto/kyoto-higashiyama-private-tea-ceremony/": {
+    "hash": "61804764931f",
+    "lastmod": "2026-11-07"
+  },
+  "/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/": {
+    "hash": "9073fd0a8835",
+    "lastmod": "2026-11-07"
   },
   "/en/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "e4bb7f878eb2",
@@ -108,12 +124,20 @@
     "lastmod": "2026-10-21"
   },
   "/en/osaka/dotonbori-ramen-class/": {
-    "hash": "e7e867cc38f0",
-    "lastmod": "2026-10-16"
+    "hash": "462fe9a42250",
+    "lastmod": "2026-11-07"
   },
   "/en/osaka/osaka-kendo-experience-tour/": {
     "hash": "0582e6b2498e",
     "lastmod": "2026-10-23"
+  },
+  "/en/performing-arts/": {
+    "hash": "29d8c7bb6aef",
+    "lastmod": "2026-11-07"
+  },
+  "/en/rakugo/": {
+    "hash": "d9ec1970bab7",
+    "lastmod": "2026-11-07"
   },
   "/en/ramen/": {
     "hash": "326c6b1d8336",
@@ -123,33 +147,57 @@
     "hash": "1f464a6df080",
     "lastmod": "2026-10-22"
   },
+  "/en/tea-ceremony/": {
+    "hash": "3f6c0d887622",
+    "lastmod": "2026-11-07"
+  },
   "/en/tokyo/": {
-    "hash": "0af0ffb18023",
-    "lastmod": "2026-10-26"
+    "hash": "17b6e779fc06",
+    "lastmod": "2026-11-07"
   },
   "/en/tokyo/kanji-name-calligraphy/": {
-    "hash": "6f44f2dea584",
-    "lastmod": "2026-10-23"
+    "hash": "b12881df613d",
+    "lastmod": "2026-11-07"
   },
   "/en/tokyo/mt-fuji-golf-day/": {
     "hash": "79f15e6fb4f2",
     "lastmod": "2026-10-17"
   },
+  "/en/tokyo/nerima-herbal-bath-private-spa/": {
+    "hash": "78c0a6a070cd",
+    "lastmod": "2026-11-07"
+  },
   "/en/tokyo/nihonbashi-bushido-experience/": {
     "hash": "6415e80ad010",
     "lastmod": "2026-10-26"
   },
+  "/en/tokyo/nihonbashi-english-rakugo-salon/": {
+    "hash": "253cedb280e2",
+    "lastmod": "2026-11-07"
+  },
+  "/en/tokyo/nihonbashi-japanese-dance-salon/": {
+    "hash": "04e0151cc202",
+    "lastmod": "2026-11-07"
+  },
   "/en/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "34b46a0fe704",
-    "lastmod": "2026-10-26"
+    "hash": "faf73a568685",
+    "lastmod": "2026-11-07"
+  },
+  "/en/tokyo/nihonbashi-shamisen-salon/": {
+    "hash": "6e0fb5fd19d7",
+    "lastmod": "2026-11-07"
   },
   "/en/tokyo/shibuya-ramen-class/": {
-    "hash": "7147c38e2583",
-    "lastmod": "2026-10-16"
+    "hash": "e3800ac30ce8",
+    "lastmod": "2026-11-07"
   },
   "/en/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "e4900a76cf34",
     "lastmod": "2026-10-23"
+  },
+  "/en/tokyo/yotsuya-tea-ceremony/": {
+    "hash": "cc5d08c3a7e2",
+    "lastmod": "2026-11-07"
   },
   "/en/trade/": {
     "hash": "bca33d71434d",
@@ -158,6 +206,10 @@
   "/en/tradition/": {
     "hash": "ce6cfda595b0",
     "lastmod": "2026-10-22"
+  },
+  "/en/wellness/": {
+    "hash": "bf0e2167bff3",
+    "lastmod": "2026-11-07"
   },
   "/es/": {
     "hash": "e83249bd3ba7",
@@ -180,8 +232,8 @@
     "lastmod": "2026-09-17"
   },
   "/es/experiences/": {
-    "hash": "0104feb9e47c",
-    "lastmod": "2026-10-26"
+    "hash": "320b129e9387",
+    "lastmod": "2026-11-07"
   },
   "/es/faq/": {
     "hash": "b30dc3dba1ad",
@@ -224,8 +276,8 @@
     "lastmod": "2026-10-26"
   },
   "/es/kyoto/": {
-    "hash": "de0fa6888f50",
-    "lastmod": "2026-10-21"
+    "hash": "f5761a0ae498",
+    "lastmod": "2026-11-07"
   },
   "/es/kyoto/evening-with-geiko/": {
     "hash": "130c2751f853",
@@ -256,12 +308,20 @@
     "lastmod": "2026-10-21"
   },
   "/es/osaka/dotonbori-ramen-class/": {
-    "hash": "4f2fd848a3c1",
-    "lastmod": "2026-10-16"
+    "hash": "6131f0078be1",
+    "lastmod": "2026-11-07"
   },
   "/es/osaka/osaka-kendo-experience-tour/": {
     "hash": "14db466ed9a8",
     "lastmod": "2026-10-23"
+  },
+  "/es/performing-arts/": {
+    "hash": "ed29e332e724",
+    "lastmod": "2026-11-07"
+  },
+  "/es/rakugo/": {
+    "hash": "c91c1c35dca7",
+    "lastmod": "2026-11-07"
   },
   "/es/ramen/": {
     "hash": "2c2328c5ade6",
@@ -271,13 +331,17 @@
     "hash": "9e4d7ddadc5e",
     "lastmod": "2026-10-22"
   },
+  "/es/tea-ceremony/": {
+    "hash": "527af7ae786c",
+    "lastmod": "2026-11-07"
+  },
   "/es/tokyo/": {
-    "hash": "0f15aeafe468",
-    "lastmod": "2026-10-26"
+    "hash": "8fdf0a62854a",
+    "lastmod": "2026-11-07"
   },
   "/es/tokyo/kanji-name-calligraphy/": {
-    "hash": "4e73569c9f75",
-    "lastmod": "2026-10-23"
+    "hash": "ab4c09667763",
+    "lastmod": "2026-11-07"
   },
   "/es/tokyo/mt-fuji-golf-day/": {
     "hash": "e8550f13f591",
@@ -288,16 +352,20 @@
     "lastmod": "2026-10-26"
   },
   "/es/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "4096c078b7f3",
-    "lastmod": "2026-10-26"
+    "hash": "49946681e569",
+    "lastmod": "2026-11-07"
   },
   "/es/tokyo/shibuya-ramen-class/": {
-    "hash": "2f6ac3d0bf79",
-    "lastmod": "2026-10-16"
+    "hash": "d5780c07e1a7",
+    "lastmod": "2026-11-07"
   },
   "/es/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "fb3611e49354",
     "lastmod": "2026-10-23"
+  },
+  "/es/tokyo/yotsuya-tea-ceremony/": {
+    "hash": "6c231751989f",
+    "lastmod": "2026-11-07"
   },
   "/es/trade/": {
     "hash": "59ca02ce7072",
@@ -306,6 +374,10 @@
   "/es/tradition/": {
     "hash": "dcb2b8adffcf",
     "lastmod": "2026-10-22"
+  },
+  "/es/wellness/": {
+    "hash": "20b1e5f5391d",
+    "lastmod": "2026-11-07"
   },
   "/fr/": {
     "hash": "e83249bd3ba7",
@@ -328,8 +400,8 @@
     "lastmod": "2026-09-17"
   },
   "/fr/experiences/": {
-    "hash": "57a1936abf8b",
-    "lastmod": "2026-10-26"
+    "hash": "55c5cc22d16c",
+    "lastmod": "2026-11-07"
   },
   "/fr/faq/": {
     "hash": "02b9560a1a76",
@@ -372,8 +444,8 @@
     "lastmod": "2026-10-26"
   },
   "/fr/kyoto/": {
-    "hash": "bf7fcc7be019",
-    "lastmod": "2026-10-21"
+    "hash": "c1317ee9a3a8",
+    "lastmod": "2026-11-07"
   },
   "/fr/kyoto/evening-with-geiko/": {
     "hash": "fa094726d20e",
@@ -404,12 +476,20 @@
     "lastmod": "2026-10-21"
   },
   "/fr/osaka/dotonbori-ramen-class/": {
-    "hash": "0884b798a69d",
-    "lastmod": "2026-10-16"
+    "hash": "3995c76631e2",
+    "lastmod": "2026-11-07"
   },
   "/fr/osaka/osaka-kendo-experience-tour/": {
     "hash": "cf2b12bbb034",
     "lastmod": "2026-10-23"
+  },
+  "/fr/performing-arts/": {
+    "hash": "49e8b97122f4",
+    "lastmod": "2026-11-07"
+  },
+  "/fr/rakugo/": {
+    "hash": "8683d0f093b5",
+    "lastmod": "2026-11-07"
   },
   "/fr/ramen/": {
     "hash": "26dc2bd16b82",
@@ -419,13 +499,17 @@
     "hash": "ab48f38453a0",
     "lastmod": "2026-10-22"
   },
+  "/fr/tea-ceremony/": {
+    "hash": "191bda7b781c",
+    "lastmod": "2026-11-07"
+  },
   "/fr/tokyo/": {
-    "hash": "9c63349fe1e2",
-    "lastmod": "2026-10-26"
+    "hash": "974958e6e133",
+    "lastmod": "2026-11-07"
   },
   "/fr/tokyo/kanji-name-calligraphy/": {
-    "hash": "da1f988304e8",
-    "lastmod": "2026-10-23"
+    "hash": "9cbdf45e13d5",
+    "lastmod": "2026-11-07"
   },
   "/fr/tokyo/mt-fuji-golf-day/": {
     "hash": "2ce045e3e9d9",
@@ -436,16 +520,20 @@
     "lastmod": "2026-10-26"
   },
   "/fr/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "c0e05c1f8678",
-    "lastmod": "2026-10-26"
+    "hash": "151144f245c4",
+    "lastmod": "2026-11-07"
   },
   "/fr/tokyo/shibuya-ramen-class/": {
-    "hash": "8b65ef9a49e4",
-    "lastmod": "2026-10-16"
+    "hash": "6febbca3b487",
+    "lastmod": "2026-11-07"
   },
   "/fr/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "614bef35eb50",
     "lastmod": "2026-10-23"
+  },
+  "/fr/tokyo/yotsuya-tea-ceremony/": {
+    "hash": "13989de7a636",
+    "lastmod": "2026-11-07"
   },
   "/fr/trade/": {
     "hash": "49a39b3d05ef",
@@ -454,6 +542,10 @@
   "/fr/tradition/": {
     "hash": "397751d862b3",
     "lastmod": "2026-10-22"
+  },
+  "/fr/wellness/": {
+    "hash": "15b5fa5799d9",
+    "lastmod": "2026-11-07"
   },
   "/ja/": {
     "hash": "e83249bd3ba7",
@@ -476,8 +568,8 @@
     "lastmod": "2026-09-17"
   },
   "/ja/experiences/": {
-    "hash": "bd3e62448aa8",
-    "lastmod": "2026-10-26"
+    "hash": "035c6f125ee9",
+    "lastmod": "2026-11-07"
   },
   "/ja/faq/": {
     "hash": "4938be2962f9",
@@ -532,8 +624,8 @@
     "lastmod": "2026-10-26"
   },
   "/ja/kyoto/": {
-    "hash": "cda03d3421ad",
-    "lastmod": "2026-10-21"
+    "hash": "0b2f319c5853",
+    "lastmod": "2026-11-07"
   },
   "/ja/kyoto/evening-with-geiko/": {
     "hash": "0214ec3c7e36",
@@ -564,12 +656,20 @@
     "lastmod": "2026-10-21"
   },
   "/ja/osaka/dotonbori-ramen-class/": {
-    "hash": "9ff7a7789315",
-    "lastmod": "2026-10-16"
+    "hash": "1e3dbc8c7742",
+    "lastmod": "2026-11-07"
   },
   "/ja/osaka/osaka-kendo-experience-tour/": {
     "hash": "c35ed909e26c",
     "lastmod": "2026-10-23"
+  },
+  "/ja/performing-arts/": {
+    "hash": "37071c15ee56",
+    "lastmod": "2026-11-07"
+  },
+  "/ja/rakugo/": {
+    "hash": "aa17e87c2619",
+    "lastmod": "2026-11-07"
   },
   "/ja/ramen/": {
     "hash": "b5e227ee1cd9",
@@ -579,33 +679,57 @@
     "hash": "fbbf64127b87",
     "lastmod": "2026-10-22"
   },
+  "/ja/tea-ceremony/": {
+    "hash": "8b430a6d028b",
+    "lastmod": "2026-11-07"
+  },
   "/ja/tokyo/": {
-    "hash": "000eb55bb43c",
-    "lastmod": "2026-10-26"
+    "hash": "be4c80851dc8",
+    "lastmod": "2026-11-07"
   },
   "/ja/tokyo/kanji-name-calligraphy/": {
-    "hash": "76e17b4f4532",
-    "lastmod": "2026-10-23"
+    "hash": "8453a46beca0",
+    "lastmod": "2026-11-07"
   },
   "/ja/tokyo/mt-fuji-golf-day/": {
     "hash": "79924e6273eb",
     "lastmod": "2026-10-17"
   },
+  "/ja/tokyo/nerima-herbal-bath-private-spa/": {
+    "hash": "dd189885656f",
+    "lastmod": "2026-11-07"
+  },
   "/ja/tokyo/nihonbashi-bushido-experience/": {
     "hash": "e9d5cb650eee",
     "lastmod": "2026-10-26"
   },
+  "/ja/tokyo/nihonbashi-english-rakugo-salon/": {
+    "hash": "41ad54d704ac",
+    "lastmod": "2026-11-07"
+  },
+  "/ja/tokyo/nihonbashi-japanese-dance-salon/": {
+    "hash": "2c84cb3cbeba",
+    "lastmod": "2026-11-07"
+  },
   "/ja/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "fef78c4950bf",
-    "lastmod": "2026-10-26"
+    "hash": "a7b90ccdad51",
+    "lastmod": "2026-11-07"
+  },
+  "/ja/tokyo/nihonbashi-shamisen-salon/": {
+    "hash": "cfd520e91ac0",
+    "lastmod": "2026-11-07"
   },
   "/ja/tokyo/shibuya-ramen-class/": {
-    "hash": "8f326d36584a",
-    "lastmod": "2026-10-16"
+    "hash": "2596b1769be8",
+    "lastmod": "2026-11-07"
   },
   "/ja/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "d5a76e20e4d9",
     "lastmod": "2026-10-23"
+  },
+  "/ja/tokyo/yotsuya-tea-ceremony/": {
+    "hash": "1e0e1907dc99",
+    "lastmod": "2026-11-07"
   },
   "/ja/trade/": {
     "hash": "201367b89425",
@@ -614,6 +738,10 @@
   "/ja/tradition/": {
     "hash": "eefbfe8ac3e3",
     "lastmod": "2026-10-22"
+  },
+  "/ja/wellness/": {
+    "hash": "c29e73f8e936",
+    "lastmod": "2026-11-07"
   },
   "/ofukuro-dinner/": {
     "hash": "85943877e2e7",
@@ -644,8 +772,8 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/experiences/": {
-    "hash": "8653f1413726",
-    "lastmod": "2026-10-26"
+    "hash": "dd15596c472b",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/faq/": {
     "hash": "b0daf3c1cab6",
@@ -688,8 +816,8 @@
     "lastmod": "2026-10-26"
   },
   "/zh-tw/kyoto/": {
-    "hash": "0f8618aaf519",
-    "lastmod": "2026-10-21"
+    "hash": "394ad9cf8658",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/kyoto/evening-with-geiko/": {
     "hash": "accc1e1b07f8",
@@ -720,12 +848,20 @@
     "lastmod": "2026-10-21"
   },
   "/zh-tw/osaka/dotonbori-ramen-class/": {
-    "hash": "f9b474de8bbd",
-    "lastmod": "2026-10-16"
+    "hash": "806f483593a6",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/osaka/osaka-kendo-experience-tour/": {
     "hash": "9b5b87f35583",
     "lastmod": "2026-10-23"
+  },
+  "/zh-tw/performing-arts/": {
+    "hash": "d3c28a825bf7",
+    "lastmod": "2026-11-07"
+  },
+  "/zh-tw/rakugo/": {
+    "hash": "4e1cd0dc9270",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/ramen/": {
     "hash": "bcb45959e0cd",
@@ -735,13 +871,17 @@
     "hash": "e327d5ec9989",
     "lastmod": "2026-10-22"
   },
+  "/zh-tw/tea-ceremony/": {
+    "hash": "2ae401c49ee9",
+    "lastmod": "2026-11-07"
+  },
   "/zh-tw/tokyo/": {
-    "hash": "2874d27263eb",
-    "lastmod": "2026-10-26"
+    "hash": "2744d3acd282",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/tokyo/kanji-name-calligraphy/": {
-    "hash": "22e2b856d544",
-    "lastmod": "2026-10-23"
+    "hash": "d0035db17f06",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/tokyo/mt-fuji-golf-day/": {
     "hash": "ec629977945e",
@@ -752,16 +892,20 @@
     "lastmod": "2026-10-26"
   },
   "/zh-tw/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "6a32b27a62d8",
-    "lastmod": "2026-10-26"
+    "hash": "646c7b6d6adf",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/tokyo/shibuya-ramen-class/": {
-    "hash": "4aca7a1e6ca3",
-    "lastmod": "2026-10-16"
+    "hash": "8a61abb739a2",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "d3aa094a7cba",
     "lastmod": "2026-10-23"
+  },
+  "/zh-tw/tokyo/yotsuya-tea-ceremony/": {
+    "hash": "fe78175d88a4",
+    "lastmod": "2026-11-07"
   },
   "/zh-tw/trade/": {
     "hash": "240733d0c108",
@@ -770,5 +914,9 @@
   "/zh-tw/tradition/": {
     "hash": "5af54ed78281",
     "lastmod": "2026-10-22"
+  },
+  "/zh-tw/wellness/": {
+    "hash": "19801bfdb683",
+    "lastmod": "2026-11-07"
   }
 }
