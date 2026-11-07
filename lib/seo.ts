@@ -7,7 +7,7 @@
 import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
-import { ownAggregateFor, REVIEWS_PUBLISHED } from "@/lib/reviews";
+import { ownAggregateFor, REVIEWS_PUBLISHED } from "@/lib/published-reviews";
 
 export const SITE_NAME = "KAMEHAME JAPAN";
 

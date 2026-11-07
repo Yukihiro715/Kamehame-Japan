@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Bus, CheckCircle2, Flag, UserRound, Languages, ArrowRight, Circle, Plus } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { GolfGuestQuote } from "@/components/site/golf-guest-review";
 import { busCopy, type BusCopy } from "@/lib/golfpaq-copy";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
@@ -85,6 +86,7 @@ export default async function GolfToursPage({ params }: Props) {
               </Link>
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>
+            <GolfGuestQuote lang={lang} landing />
           </div>
         </section>
 
