@@ -11,7 +11,7 @@ import { ReviewSummaryPanel } from "@/components/site/reviews";
 import { CancellationTable } from "@/components/site/cancellation-table";
 import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
 import { GolfGuideSample } from "@/components/site/golf-guide-sample";
-import { GolfGuestQuote, GolfGuestReview } from "@/components/site/golf-guest-review";
+import { GolfGuestReview } from "@/components/site/golf-guest-review";
 import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { GolfInclusions } from "@/components/site/golf-inclusions";
@@ -128,7 +128,6 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
             </ul>
             {/* The photo note is dropped from the booking service page (owner, 2026-10-25) */}
             {!isArrangement() && <p className="gg-note">{vc.photoNote}</p>}
-            {hasGolfGuest && <GolfGuestQuote lang={lang} />}
           </section>
 
           {/* 2. The one place to choose the party size and the area */}
