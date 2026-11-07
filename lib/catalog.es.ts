@@ -325,7 +325,7 @@ export const experiencesEs: Experience[] = [
       "El kendo es la espada del samurái convertida en disciplina, y esto es lo auténtico: un dojo en activo en Nihonbashi donde los visitantes aprenden kendo con un instructor. Empiezas por cómo nació el kendo y por qué cada encuentro empieza y termina con una reverencia; después aprendes el juego de pies, el agarre y el golpe, y lo unes todo en la práctica de ataque hasta que espíritu, espada y cuerpo caen a la vez.",
       "La última parte es un combate. Te enfrentas a los demás participantes y después al instructor, con la armadura completa. Nadie necesita haber sostenido una espada: la sesión está pensada para principiantes y se adapta a la edad y la forma física de cada persona. El dojo presta todo — uniforme, armadura y shinai — y fotografía la sesión para ti.",
     ],
-    duration: "Unas 2 horas", price: "¥20,000", group: "Clase reducida · 1–8 personas", ages: "Desde 6 años (tarifa reducida de 6 a 15 años y a partir de 65)", area: "Tokio (Nihonbashi)",
+    duration: "Unas 2 horas", price: "¥25,000", group: "Clase reducida · 1–8 personas", ages: "Desde 6 años (tarifa reducida de 6 a 15 años y a partir de 65)", area: "Tokio (Nihonbashi)",
     img: "/images/kendo-match.jpg", alt: "Un participante con uniforme de kendo frente al instructor con armadura, shinai en alto, en un dojo de suelo de madera",
     gallery: [
       { img: "/images/kendo-grip.jpg", alt: "El instructor corrige el agarre del shinai de un participante, espadas cruzadas" },
@@ -384,7 +384,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Está todo incluido?", a: "Sí. Uniforme, armadura y shinai se prestan sin coste adicional. Ven con ropa de calle; hay vestuarios y taquillas." },
       { q: "¿En qué idioma es la sesión?", a: "En inglés. El instructor enseña en inglés y japonés." },
       { q: "¿Puedo ir solo?", a: "Sí, desde una persona. Muchos participantes vienen solos." },
-      { q: "¿Pueden participar niños?", a: "Desde los 6 años, siempre que puedan seguir las indicaciones del instructor con seguridad; los niños de 6 a 15 años pagan ¥15,000 y los mayores de 65 ¥18,000 (adultos ¥20,000) — dinos la edad de todos en tu solicitud y el presupuesto la aplica. Los menores de 6 años no pueden unirse a una sesión compartida; puede organizarse una sesión privada." },
+      { q: "¿Pueden participar niños?", a: "Desde los 6 años, siempre que puedan seguir las indicaciones del instructor con seguridad; los niños de 6 a 15 años pagan ¥15,000 y los mayores de 65 ¥18,000 (adultos ¥25,000) — dinos la edad de todos en tu solicitud y el presupuesto la aplica. Los menores de 6 años no pueden unirse a una sesión compartida; puede organizarse una sesión privada." },
       { q: "¿Es un espectáculo de samuráis?", a: "No. No es una experiencia de disfraces ni de juego de rol. Entrenas en un dojo real, en el kendo que se practica hoy en Japón, y aprendes de dónde vienen sus tradiciones." },
       { q: "¿De cuántas personas es la clase?", a: "Hasta ocho personas comparten una sesión. Los grupos más grandes y las sesiones privadas se presupuestan individualmente." },
       { q: "No soy deportista. ¿Podré seguir el ritmo?", a: "Sí. La sesión se adapta a la edad y la forma física de cada persona, y no hace falta ejecutar cada movimiento a la perfección. Participan personas mayores con regularidad; donde la etiqueta exige arrodillarse, hay una silla." },
