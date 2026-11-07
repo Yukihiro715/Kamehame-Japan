@@ -1,5 +1,5 @@
 import { Star, ShieldCheck } from "lucide-react";
-import { aggregateFor, distributionFor, ownReviewsFor, reviewDate, reviewsFor, type Review } from "@/lib/reviews";
+import { aggregateFor, distributionFor, ownReviewsFor, reviewDate, reviewsFor, type Review } from "@/lib/published-reviews";
 import { t, type Lang } from "@/lib/i18n";
 
 /** Five stars with the last one clipped to the fractional part. */
@@ -86,18 +86,18 @@ export function ReviewSection({ experience, lang }: { experience: string; lang: 
 
 /** The review header on an experience page: the average as a big figure,
  *  the count, and a bar per star, in the manner of the large marketplaces. */
-export function ReviewSummaryPanel({ experience, lang }: { experience: string; lang: Lang }) {
-  const agg = aggregateFor(experience);
+export function ReviewSummaryPanel({ experience, lang, scope }: { experience: string; lang: Lang; scope?: "partner" }) {
+  const agg = aggregateFor(experience, scope);
   if (!agg) return null;
   const T = t(lang);
-  const dist = distributionFor(experience);
+  const dist = distributionFor(experience, scope);
   return (
     <div className="review-panel">
       <div className="review-panel-score">
         <b>{agg.average.toFixed(1)}</b>
         <Stars rating={agg.average} size={16} />
         <span>{T.reviewCount(agg.count)}</span>
-        <small><ShieldCheck size={13} /> {ownReviewsFor(experience).length ? T.detail.reviewsVerifiedNote : reviewsFor(experience).some((r) => r.source === "partner") ? T.detail.reviewsPartnerNote : T.detail.reviewsVenueNote}</small>
+        <small><ShieldCheck size={13} /> {scope === "partner" ? T.detail.reviewsPartnerNote : ownReviewsFor(experience).length ? T.detail.reviewsVerifiedNote : reviewsFor(experience).some((r) => r.source === "partner") ? T.detail.reviewsPartnerNote : T.detail.reviewsVenueNote}</small>
       </div>
       <ol className="review-bars" aria-label={T.reviewsH}>
         {dist.map((d) => (

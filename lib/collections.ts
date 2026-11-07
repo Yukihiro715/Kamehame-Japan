@@ -9,7 +9,7 @@ import type { Lang } from "@/lib/i18n";
 import { listPrice } from "@/lib/pricing";
 import { THEMES, themeBySlug, themeCategories } from "@/lib/themes";
 import { OFUKURO_CAMPAIGN, OFUKURO_FOUNDING, ofukuroFoundingRows, yenOf } from "@/lib/ofukuro-dinner";
-import { aggregateFor } from "@/lib/reviews";
+import { aggregateFor } from "@/lib/published-reviews";
 
 export interface ListingItem {
   kind: "experience" | "tour";
