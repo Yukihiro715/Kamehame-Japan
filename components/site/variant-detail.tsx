@@ -11,7 +11,7 @@ import { ReviewSummaryPanel } from "@/components/site/reviews";
 import { CancellationTable } from "@/components/site/cancellation-table";
 import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
 import { GolfGuideSample } from "@/components/site/golf-guide-sample";
-import { GolfGuestQuote, GolfGuestReview, golfPartnerReviewsHeading } from "@/components/site/golf-guest-review";
+import { GolfGuestQuote, GolfGuestReview } from "@/components/site/golf-guest-review";
 import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { GolfInclusions } from "@/components/site/golf-inclusions";
@@ -74,7 +74,6 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
   const hasGolfGuest = exp.slug === "mt-fuji-golf-day" && reviews.some((r) => r.id === "tyler-takane-2026-11" && r.verified);
-  const partnerReviews = reviews.filter((r) => r.source === "partner");
   const pricings = Object.fromEntries(variants.map((v) => [v.id, pricingForVariant(exp, v, lang)]));
   const avail = exp.availability;
   const size = exp.partySize ?? { min: 2, max: 4 };
@@ -159,12 +158,12 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
             <GolfTransfer copy={vc.transfer} />
             {jump}
 
-            {/* 4. Reviews (as supplied; not rewritten for the new packages) */}
-            {hasReviews && (!hasGolfGuest || partnerReviews.length > 0) && (
-              <section className="xp-section" id={hasGolfGuest ? "partner-reviews" : "reviews"}>
-                <h2>{hasGolfGuest ? golfPartnerReviewsHeading(lang) : T.reviewsH}</h2>
-                <ReviewSummaryPanel experience={exp.slug} lang={lang} scope={hasGolfGuest ? "partner" : undefined} />
-                <ReviewList reviews={hasGolfGuest ? partnerReviews : reviews} lang={lang} />
+            {/* Golf uses its verified booking review section above; show only one review source. */}
+            {hasReviews && exp.slug !== "mt-fuji-golf-day" && (
+              <section className="xp-section" id="reviews">
+                <h2>{T.reviewsH}</h2>
+                <ReviewSummaryPanel experience={exp.slug} lang={lang} />
+                <ReviewList reviews={reviews} lang={lang} />
               </section>
             )}
 
