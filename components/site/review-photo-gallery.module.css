@@ -1,0 +1,26 @@
+.photos { display:flex; flex-wrap:wrap; gap:8px; }
+.photo { display:block; flex:none; width:84px; height:112px; padding:0; border:0; overflow:hidden; border-radius:6px; background:#ede8dc; cursor:zoom-in; }
+.photo img { display:block; width:100%; height:100%; object-fit:cover; }
+.photo:focus-visible, .viewer button:focus-visible { outline:3px solid var(--kame); outline-offset:3px; }
+.viewer { width:min(1000px, calc(100vw - 32px)); height:min(900px, 92dvh); max-width:none; max-height:none; margin:auto; padding:0; border:0; border-radius:12px; background:#151816; color:#fff; overflow:hidden; }
+.viewer::backdrop { background:rgba(0,0,0,.86); }
+.panel { display:grid; grid-template-rows:auto minmax(0, 1fr) auto; height:100%; }
+.header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; font-size:14px; }
+.viewer button { display:inline-flex; align-items:center; justify-content:center; flex:none; min-width:44px; min-height:44px; border:1px solid #ffffff40; border-radius:8px; padding:0; color:#fff; background:#ffffff12; cursor:pointer; }
+.track { display:flex; width:100%; min-height:0; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; overscroll-behavior-x:contain; scrollbar-width:none; }
+.track::-webkit-scrollbar { display:none; }
+.slide { flex:0 0 100%; min-width:0; height:100%; margin:0; scroll-snap-align:center; scroll-snap-stop:always; }
+.slide img { display:block; width:100%; height:100%; object-fit:contain; user-select:none; }
+.footer { padding:12px; text-align:center; }
+.controls { display:flex; align-items:center; justify-content:center; gap:20px; }
+.thumbs { display:flex; gap:8px; }
+.thumbs button { width:44px; height:56px; border:2px solid transparent; opacity:.55; overflow:hidden; }
+.thumbs button[aria-pressed="true"] { border-color:var(--kame); opacity:1; }
+.thumbs img { width:100%; height:100%; object-fit:cover; }
+.footer p { margin:8px 0 0; font-size:12px; line-height:1.5; color:#d8ddd9; }
+@media (max-width:600px) {
+  .photo { width:66px; height:88px; }
+  .viewer { width:100%; height:100dvh; border-radius:0; }
+  .header { padding-top:max(8px, env(safe-area-inset-top)); }
+  .footer { padding-bottom:max(12px, env(safe-area-inset-bottom)); }
+}
