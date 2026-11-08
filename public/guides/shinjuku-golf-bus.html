@@ -11,6 +11,7 @@
     :root{color-scheme:light;--paper:#f6f3eb;--ink:#223b32;--muted:#58665e;--line:#d8ded5;--red:#a33827}
     *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-underline-offset:4px}header,main,footer{max-width:1000px;margin:auto;padding:28px}header{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.brand{font-size:16px;letter-spacing:.14em;font-weight:750;text-decoration:none}.tag{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}.intro{padding:40px 0 28px}h1{font:normal clamp(38px,7vw,64px)/1.08 Georgia,serif;letter-spacing:-.025em;margin:14px 0 20px;max-width:650px}h2{font:normal 29px/1.2 Georgia,serif;margin:0 0 20px}h3{font-size:18px;margin:0 0 8px}p{margin:0 0 16px}.lede{max-width:630px;color:var(--muted);font-size:19px}.alert{background:var(--ink);color:white;border-radius:14px;padding:26px 30px;margin:0 0 30px;display:grid;grid-template-columns:150px 1fr;gap:24px}.minutes{font:54px/1 Georgia,serif}.minutes span{display:block;font:13px/1.5 system-ui;letter-spacing:.1em;margin-top:8px;text-transform:uppercase}.alert p{margin:0}.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}.card{padding:30px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:24px}.address{font-size:19px}.jp{font-size:14px;color:var(--muted)}.button{display:inline-block;text-decoration:none;background:var(--ink);color:white;border-radius:8px;padding:12px 20px;font-weight:650;margin:10px 0}.steps{padding-left:24px}.steps li{padding:0 0 16px 6px}.note{border-left:3px solid var(--red);padding-left:16px;color:var(--muted)}.checklist{padding-left:22px}.checklist li{padding:0 0 12px 5px}.contact{font-size:23px;font-weight:650;white-space:nowrap}.small{font-size:14px;color:var(--muted)}footer{border-top:1px solid var(--line);font-size:13px;color:var(--muted);padding-bottom:40px}details{margin-top:20px}summary{cursor:pointer;font-weight:650}details p{margin-top:14px}a:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:5px}
     .meeting-photos{display:flex;flex-wrap:wrap;gap:18px;margin:24px 0 16px}.meeting-photos figure{flex:1 1 150px;max-width:200px;margin:0}.meeting-photos img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--line)}.meeting-photos figcaption{font-size:13px;line-height:1.5;margin-top:8px;color:var(--muted)}
+    .photo-link{display:block;position:relative;border-radius:8px;cursor:zoom-in}.photo-link span{display:block;font-size:12px;font-weight:650;margin-top:6px}.photo-viewer{border:0;padding:0;margin:auto;width:100vw;max-width:100vw;height:100vh;height:100dvh;max-height:100dvh;background:#14251f;color:white}.photo-viewer::backdrop{background:#14251f}.photo-viewer[open]{display:flex;flex-direction:column}.viewer-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px max(20px,env(safe-area-inset-right)) 12px max(20px,env(safe-area-inset-left));padding-top:max(16px,env(safe-area-inset-top))}.viewer-bar p{margin:0;font-size:15px}.photo-viewer button{font:inherit;color:white;background:transparent;border:1px solid #8d9e95;border-radius:8px;min-width:48px;min-height:48px;padding:8px 16px;cursor:pointer}.photo-viewer button:focus-visible{outline:3px solid white;outline-offset:4px}.viewer-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:12px}.viewer-stage img{width:100%;max-width:960px;max-height:100%;object-fit:contain;user-select:none}.viewer-footer{padding:12px 20px max(20px,env(safe-area-inset-bottom));text-align:center}.viewer-footer p{font-size:15px;margin-bottom:12px}.viewer-controls{display:flex;align-items:center;justify-content:center;gap:24px}.viewer-hint{color:#cad4ce;font-size:13px!important;margin:12px 0 0!important}
     @media(max-width:650px){header,main,footer{padding:22px}.tag.header-tag{display:none}.intro{padding-top:28px}.grid{display:block}.card{padding:24px}.alert{grid-template-columns:1fr;gap:16px;padding:24px}.minutes{font-size:46px}.minutes span{display:inline;margin-left:10px}.contact{font-size:21px}}
     @media print{body{background:white;font-size:12px}.intro{padding:10px 0}h1{font-size:30px}.alert{background:white;color:black;border:2px solid black}.card{break-inside:avoid;padding:18px}.button{background:white;color:black;border:1px solid black}header,main,footer{padding:12px}.grid{grid-template-columns:1fr 1fr}details{display:none}}
   </style>
@@ -35,8 +36,8 @@
           <p class="address">4-3-15 Shinjuku, Shinjuku-ku<br>Tokyo 160-0022, Japan</p>
           <p class="jp" lang="ja">東京都新宿区新宿4-3-15<br>BOXGOLF前（明治通り沿い）</p>
           <div class="meeting-photos">
-            <figure><img src="/images/guides/shinjuku-boxgolf-entrance.jpg" width="200" height="113" alt="Street-level entrance and pavement outside the BOXGOLF meeting point"><figcaption>Look for this street-level entrance.</figcaption></figure>
-            <figure><img src="/images/guides/shinjuku-meeting-street.jpg" width="200" height="113" alt="Pavement beside the BOXGOLF departure point, with a tour vehicle at the kerb"><figcaption>The meeting point viewed along the pavement.</figcaption></figure>
+            <figure><a class="photo-link" href="/images/guides/shinjuku-boxgolf-entrance.jpg" aria-label="Enlarge meeting point entrance photo"><img src="/images/guides/shinjuku-boxgolf-entrance.jpg" width="200" height="113" alt="Street-level entrance and pavement outside the BOXGOLF meeting point"><span>Tap to enlarge ↗</span></a><figcaption>Look for this street-level entrance.</figcaption></figure>
+            <figure><a class="photo-link" href="/images/guides/shinjuku-meeting-street.jpg" aria-label="Enlarge meeting point street view photo"><img src="/images/guides/shinjuku-meeting-street.jpg" width="200" height="113" alt="Pavement beside the BOXGOLF departure point, with a tour vehicle at the kerb"><span>Tap to enlarge ↗</span></a><figcaption>The meeting point viewed along the pavement.</figcaption></figure>
           </div>
           <p class="small">Reference photos: BOXGOLF / GOLFPAQ. Signs and vehicles may differ on your travel day. Use the address and map below to find the meeting point.</p>
           <a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=BOXGOLF%204-3-15%20Shinjuku%20Tokyo" target="_blank" rel="noopener noreferrer">Open meeting point in Google Maps ↗</a>
@@ -80,5 +81,67 @@
     <details class="card" lang="ja"><summary>日本語で確認する</summary><p>集合場所：東京都新宿区新宿4-3-15 BOXGOLF前。JR新宿駅東南口から徒歩約3分、地下鉄新宿三丁目駅E7出口すぐ。目印は新宿四丁目交番です。</p><p><strong>出発10分前までに必ず集合してください。</strong>遅れた場合、車両は待たずに出発します。6:50出発なら6:40必着です。実際の日程・出発時刻・コース・レンタル内容は予約確認メールをご確認ください。</p><p>当日の集合場所のお問い合わせ：090-1653-3562。連絡しても出発時刻は延長されません。</p></details>
   </main>
   <footer>KAMEHAME JAPAN · Shinjuku shared golf transfer guide<br>This guide provides meeting instructions. Your booking confirmation contains your individual itinerary.<br>Updated 8 November 2026.</footer>
+  <dialog class="photo-viewer" aria-labelledby="viewer-title">
+    <div class="viewer-bar"><p id="viewer-title">Shinjuku meeting point</p><button type="button" id="viewer-close" autofocus aria-label="Close photo viewer">Close ×</button></div>
+    <div class="viewer-stage"><img id="viewer-image" alt="" draggable="false"></div>
+    <div class="viewer-footer"><p id="viewer-caption" aria-live="polite"></p><div class="viewer-controls"><button type="button" id="viewer-prev" aria-label="Previous photo">←</button><span id="viewer-count" aria-live="polite"></span><button type="button" id="viewer-next" aria-label="Next photo">→</button></div><p class="viewer-hint">Swipe or use the arrows to switch photos. Pinch to zoom on your phone.</p></div>
+  </dialog>
+  <script>
+    (() => {
+      const links = Array.from(document.querySelectorAll('.photo-link'));
+      const viewer = document.querySelector('.photo-viewer');
+      if (!viewer || typeof viewer.showModal !== 'function') return;
+      const image = document.getElementById('viewer-image');
+      const caption = document.getElementById('viewer-caption');
+      const count = document.getElementById('viewer-count');
+      const stage = document.querySelector('.viewer-stage');
+      let current = 0, previousOverflow = '', opener = null, touch = null;
+      function show(index) {
+        current = (index + links.length) % links.length;
+        const source = links[current].querySelector('img');
+        image.src = links[current].href;
+        image.alt = source.alt;
+        caption.textContent = links[current].parentElement.querySelector('figcaption').textContent;
+        count.textContent = (current + 1) + ' / ' + links.length;
+      }
+      links.forEach((link, index) => link.addEventListener('click', (event) => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        opener = link;
+        show(index);
+        previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        viewer.showModal();
+      }));
+      document.getElementById('viewer-close').addEventListener('click', () => viewer.close());
+      document.getElementById('viewer-prev').addEventListener('click', () => show(current - 1));
+      document.getElementById('viewer-next').addEventListener('click', () => show(current + 1));
+      viewer.addEventListener('close', () => {
+        document.body.style.overflow = previousOverflow;
+        touch = null;
+        if (opener) opener.focus({ preventScroll: true });
+      });
+      viewer.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+          event.preventDefault();
+          show(current + (event.key === 'ArrowRight' ? 1 : -1));
+        }
+      });
+      stage.addEventListener('touchstart', (event) => {
+        // Leave multi-touch and a zoomed viewport to the browser's native zoom/pan.
+        touch = event.touches.length === 1 && (!window.visualViewport || window.visualViewport.scale <= 1)
+          ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+      }, { passive: true });
+      stage.addEventListener('touchmove', (event) => { if (event.touches.length !== 1) touch = null; }, { passive: true });
+      stage.addEventListener('touchcancel', () => { touch = null; }, { passive: true });
+      stage.addEventListener('touchend', (event) => {
+        if (!touch || event.touches.length || !event.changedTouches.length) return;
+        const dx = event.changedTouches[0].clientX - touch.x;
+        const dy = event.changedTouches[0].clientY - touch.y;
+        touch = null;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
