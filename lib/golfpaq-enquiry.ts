@@ -79,9 +79,12 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
       [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, shoeRenters, money.shoes, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, hotel || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
   }
   const from = "KAMEHAME JAPAN <hello@kamehame-japan.com>";
+  // Match the contact form's internal sender so booking-ledger webhooks see
+  // shared-bus requests too. Customer/partner correspondence stays on hello.
+  const staffFrom = "KAMEHAME JAPAN Site <enquiries@kamehame-japan.com>";
   const [customerMail, staffMail, partnerMail] = await Promise.all([
     sendGolfpaqMail(env, { from, to: email, replyTo: "hello@kamehame-japan.com", ...customerConfirmation(facts) }),
-    env.CONTACT_TO ? sendGolfpaqMail(env, { from, to: env.CONTACT_TO, replyTo: email, ...staffNotification(facts) }) : Promise.resolve("unconfigured" as const),
+    env.CONTACT_TO ? sendGolfpaqMail(env, { from: staffFrom, to: env.CONTACT_TO, replyTo: email, ...staffNotification(facts) }) : Promise.resolve("unconfigured" as const),
     env.GOLFPAQ_PARTNER_TO ? sendGolfpaqMail(env, { from, to: env.GOLFPAQ_PARTNER_TO, replyTo: "hello@kamehame-japan.com", ...partnerHandover(facts) }) : Promise.resolve("unconfigured" as const),
   ]);
   if (db) {

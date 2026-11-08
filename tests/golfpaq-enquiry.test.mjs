@@ -77,6 +77,10 @@ test("a valid enquiry: 409/400 guards, server pricing, ledger row, three mails w
     const staff = mock.sent.find((m) => m.to?.[0] === "team@example.com");
     const partner = mock.sent.find((m) => m.to?.[0] === "partner@example.com");
     assert.ok(customer && staff && partner);
+    assert.equal(staff.from, "KAMEHAME JAPAN Site <enquiries@kamehame-japan.com>", "internal sender matches the booking-ledger webhook");
+    assert.equal(staff.reply_to, "guest@example.com");
+    assert.equal(customer.from, "KAMEHAME JAPAN <hello@kamehame-japan.com>");
+    assert.equal(partner.from, "KAMEHAME JAPAN <hello@kamehame-japan.com>");
     assert.match(customer.text, /Your booking is not yet confirmed, and no payment has been taken/);
     assert.match(customer.text, new RegExp(`¥${(t.sourceYen + 15000).toLocaleString("en-US")} /person × 2`));
     assert.match(customer.text, /Rental clubs: ¥5,500 \/person × 1/); assert.match(customer.text, /Rental shoes: ¥2,200 \/person × 1 = ¥2,200/); assert.match(customer.text, /Golfers: 2 \(rental clubs for 1, rental shoes for 1\)/);
