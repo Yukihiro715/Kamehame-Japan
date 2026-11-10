@@ -1,4 +1,3 @@
-.page :global(.go-recommendation) { display:inline-block; margin:16px 0 4px; padding:10px 14px; border-radius:10px; background:#f7f0df; color:var(--ink); font-size:14px; font-weight:600; line-height:1.65; }
 .page :global(.vh-side) { align-self:start; }
 .page :global(.go-brief) { gap:18px; }
 .page :global(.go-brief > [data-fuji-transfer-estimate]), .page :global(.go-brief > [data-shared-bus-budget]) { margin:0; }
@@ -35,6 +34,11 @@
 .page :global(.gb-ways-inline .gb-small) { line-height:1.75; }
 .page :global(.more-in) { padding-top:48px; }
 @media(max-width:700px) {
+  .page :global(.vh-benefits) { display:grid; grid-template-columns:max-content max-content; gap:8px 6px; }
+  .page :global(.vh-benefits li) { padding:7px 9px; font-size:12px; gap:5px; }
+  .page :global(.vh-benefits li:has(a)) { grid-column:1 / -1; justify-self:start; }
+  .page :global(.vh-benefits li a) { gap:5px; }
+
   .page :global(.golf-form .form-step) { padding:16px; }
   .page :global(.golf-form .form-row.two:not(.keep)) { grid-template-columns:1fr; gap:16px; }
   .page :global(.golf-form input), .page :global(.golf-form select), .page :global(.golf-form textarea) { font-size:16px; }
