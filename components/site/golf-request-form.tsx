@@ -21,6 +21,9 @@ import { GOLF_FIXED_FEE_MAX, GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs,
 import { CLUB_RENTAL_COPY, GOLF_CLUB_RENTAL_JPY } from "@/lib/golf-club-rental";
 import { ClubSetPicker, clubSetLabel } from "@/components/site/golf-club-rental";
 import { useClubRental } from "@/components/site/club-rental-context";
+import { GolfTravelChoice, FujiTransferEstimate } from "@/components/site/golf-travel-choice";
+import { GOLF_TRAVEL_UI } from "@/lib/golf-travel";
+import travelStyles from "@/components/site/golf-travel-choice.module.css";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 /** "designated": the chosen-set rental (lib/golf-club-rental.ts), offered only while the option is on. */
@@ -87,6 +90,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   // "Other area": the place is required and travels in the course field; the specific-course checkbox is implied.
   const otherArea = arrangement && v.id === "other";
   const namedCourse = otherArea || (arrangement ? wantCourse : specific);
+  const PlanningSection = arrangement && !otherArea ? "details" : "div";
   // Five golfers or more in the booking service: no published fee, quoted for the group.
   const large = arrangement && n > GOLF_FIXED_FEE_MAX;
   const total = specific || large ? null : tierTotal(v.tiers, n);
@@ -209,7 +213,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
   }
 
   return (
-    <form className="enquiry-form golf-form" method="post" action="/api/contact" onSubmit={submit} onFocusCapture={markStarted} data-clarity-mask="True">
+    <form className="enquiry-form golf-form" method="post" action="/api/contact" onSubmit={submit} onInvalidCapture={event => {
+      // Keep required named-course fields reachable if their optional section was closed.
+      let element: HTMLElement | null = event.target as HTMLElement;
+      while (element) { if (element instanceof HTMLDetailsElement) element.open = true; element = element.parentElement; }
+    }} onFocusCapture={markStarted} data-clarity-mask="True">
       {/* The choice, repeated compactly so it can be changed here too (same state as the panel) */}
       <div className="go-summary" aria-live="polite">
         <span className="go-summary-h">{G.summaryH}</span>
@@ -221,6 +229,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             : <span className="go-summary-price"><strong><Fx brief>{p.perPersonRef}</Fx></strong><small><Fx>{p.totalShort}</Fx></small></span>}
         {clubDiscount > 0 && totalWithClubs !== null && <span className="go-summary-discount"><Fx>{ownClubsLine}</Fx> → <b><Fx brief>{yen(totalWithClubs)}</Fx></b> <small>{G.ownClubsTotal}</small></span>}
       </div>
+
+      {arrangement && <>
+        <GolfTravelChoice lang={lang} compact />
+        <input type="hidden" name="transfer" value={b.golfTransfer} />
+      </>}
 
       <fieldset className="form-step">
         <legend>{G.steps.dates}</legend>
@@ -240,80 +253,79 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         </div>
       </fieldset>
 
-      <fieldset className="form-step">
-        <legend>{G.steps.course}</legend>
-        {otherArea ? (
-          <p className="form-hint go-other-hint">{copy.otherArea?.hint}</p>
-        ) : (
-          <label className="form-check go-check">
-            <input type="checkbox" name="specific-course" checked={namedCourse} onChange={(e) => arrangement ? setWantCourse(e.target.checked) : b.set({ coursePref: e.target.checked ? "preferred" : "recommended" })} />
-            <span><b>{G.specificCourse}</b><small>{G.specificCourseNote}</small></span>
-          </label>
-        )}
-        {namedCourse && (
-          <div className="form-row two">
-            <label>
-              <span>{otherArea ? copy.otherArea?.label ?? G.courseName : G.courseName}</span>
-              <input name="course" type="text" required maxLength={160} value={b.courseName} onChange={(e) => b.set({ courseName: e.target.value })} />
-            </label>
-            <label>
-              <span>{G.courseUrl}</span>
-              <input name="course-url" type="text" maxLength={200} value={b.courseUrl} onChange={(e) => b.set({ courseUrl: e.target.value })} />
-            </label>
-            <small className="form-hint full">{G.specificCourseQuote}</small>
-          </div>
-        )}
-      </fieldset>
-
-      <fieldset className="form-step">
-        <legend>{G.steps.hotel}</legend>
-        {arrangement ? (
-          // Meet at the course: where the guest stays only helps us suggest courses and, if wanted, the transfer partner.
-          <>
-            <label className="form-row">
-              <span>{G.pickup}</span>
-              <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
-            </label>
-            <div className="form-row two keep golf-budget-row">
-              <label><span>{P.budget}</span><input name="golf_budget" type="number" min="1" max="100000000" step="any" inputMode="decimal" aria-describedby="golf-budget-hint" /></label>
-              <label><span>{P.currency}</span><select name="golf_currency" defaultValue="JPY">{["JPY", "USD", "GBP", "EUR", "AUD", "CAD", "SGD", "HKD", "TWD"].map(c => <option key={c}>{c}</option>)}</select></label>
-            </div>
-            <small id="golf-budget-hint" className="form-hint">{P.budgetHint}</small>
-            <label><span>{P.transport}</span><select name="golf_budget_transport" defaultValue="unsure"><option value="unsure">{P.unsure}</option><option value="included">{P.included}</option><option value="separate">{P.separate}</option></select></label>
-            {processCopy.transfer && processCopy.transfers && (
-              <label><span>{processCopy.transfer}</span>
-                <select name="transfer" defaultValue="none">
-                  {["none", "introduce", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.transfers![i]}</option>)}
-                </select><small>{processCopy.transferNote}</small>
+      <PlanningSection className={arrangement && !otherArea ? travelStyles.optional : undefined}>
+        {arrangement && !otherArea && <summary>{GOLF_TRAVEL_UI[lang].planning}</summary>}
+        <div>
+          <fieldset className="form-step">
+            <legend>{G.steps.course}</legend>
+            {otherArea ? (
+              <p className="form-hint go-other-hint">{copy.otherArea?.hint}</p>
+            ) : (
+              <label className="form-check go-check">
+                <input type="checkbox" name="specific-course" checked={namedCourse} onChange={(e) => arrangement ? setWantCourse(e.target.checked) : b.set({ coursePref: e.target.checked ? "preferred" : "recommended" })} />
+                <span><b>{G.specificCourse}</b><small>{G.specificCourseNote}</small></span>
               </label>
             )}
-          </>
-        ) : (
-          <>
-            <label><span>{processCopy.region}</span>
-              <select name="pickup_region" required defaultValue="">
-                {["", "tokyo", "saitama", "chiba", "other"].map((value, i) => <option key={value} value={value} disabled={!value}>{processCopy.regions[i]}</option>)}
-              </select>
-            </label>
-            <div className="form-row two">
-              <label>
-                <span>{G.pickup}</span>
-                <input name="pickup" type="text" required={!hotelUndecided} disabled={hotelUndecided} maxLength={200} placeholder={G.pickupHint} />
-              </label>
-              {hotelUndecided ? (
+            {namedCourse && (
+              <div className="form-row two">
                 <label>
-                  <span>{G.hotelArea}</span>
-                  <input name="hotel-area" type="text" maxLength={120} placeholder={G.hotelAreaHint} />
+                  <span>{otherArea ? copy.otherArea?.label ?? G.courseName : G.courseName}</span>
+                  <input name="course" type="text" required maxLength={160} value={b.courseName} onChange={(e) => b.set({ courseName: e.target.value })} />
                 </label>
-              ) : <span />}
-            </div>
-            <label className="form-check go-check one">
-              <input type="checkbox" name="hotel-undecided" checked={hotelUndecided} onChange={(e) => setHotelUndecided(e.target.checked)} />
-              <span><b>{G.hotelUndecided}</b></span>
-            </label>
-          </>
-        )}
-      </fieldset>
+                <label>
+                  <span>{G.courseUrl}</span>
+                  <input name="course-url" type="text" maxLength={200} value={b.courseUrl} onChange={(e) => b.set({ courseUrl: e.target.value })} />
+                </label>
+                <small className="form-hint full">{G.specificCourseQuote}</small>
+              </div>
+            )}
+          </fieldset>
+
+          <fieldset className="form-step">
+            <legend>{G.steps.hotel}</legend>
+            {arrangement ? (
+              // Meet at the course: where the guest stays only helps us suggest courses and, if wanted, the transfer partner.
+              <>
+                <label className="form-row">
+                  <span>{G.pickup}</span>
+                  <input name="pickup" type="text" maxLength={200} placeholder={G.pickupHint} />
+                </label>
+                <div className="form-row two keep golf-budget-row">
+                  <label><span>{P.budget}</span><input name="golf_budget" type="number" min="1" max="100000000" step="any" inputMode="decimal" aria-describedby="golf-budget-hint" /></label>
+                  <label><span>{P.currency}</span><select name="golf_currency" defaultValue="JPY">{["JPY", "USD", "GBP", "EUR", "AUD", "CAD", "SGD", "HKD", "TWD"].map(c => <option key={c}>{c}</option>)}</select></label>
+                </div>
+                <small id="golf-budget-hint" className="form-hint">{P.budgetHint}</small>
+                <label><span>{P.transport}</span><select name="golf_budget_transport" defaultValue="unsure"><option value="unsure">{P.unsure}</option><option value="included">{P.included}</option><option value="separate">{P.separate}</option></select></label>
+              </>
+            ) : (
+              <>
+                <label><span>{processCopy.region}</span>
+                  <select name="pickup_region" required defaultValue="">
+                    {["", "tokyo", "saitama", "chiba", "other"].map((value, i) => <option key={value} value={value} disabled={!value}>{processCopy.regions[i]}</option>)}
+                  </select>
+                </label>
+                <div className="form-row two">
+                  <label>
+                    <span>{G.pickup}</span>
+                    <input name="pickup" type="text" required={!hotelUndecided} disabled={hotelUndecided} maxLength={200} placeholder={G.pickupHint} />
+                  </label>
+                  {hotelUndecided ? (
+                    <label>
+                      <span>{G.hotelArea}</span>
+                      <input name="hotel-area" type="text" maxLength={120} placeholder={G.hotelAreaHint} />
+                    </label>
+                  ) : <span />}
+                </div>
+                <label className="form-check go-check one">
+                  <input type="checkbox" name="hotel-undecided" checked={hotelUndecided} onChange={(e) => setHotelUndecided(e.target.checked)} />
+                  <span><b>{G.hotelUndecided}</b></span>
+                </label>
+              </>
+            )}
+          </fieldset>
+
+        </div>
+      </PlanningSection>
 
       <fieldset className="form-step">
         <legend>{G.steps.group}</legend>
@@ -389,34 +401,39 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             <EmailInput lang={lang} required />
           </label>
         </div>
-        <div className="form-row two">
-          <label>
-            <span>{G.whatsapp}</span>
-            <WhatsAppInput lang={lang} />
-          </label>
-          <span />
-        </div>
-        <label className="form-row">
-          <span>{G.requests}</span>
-          <textarea name="message" rows={4} maxLength={arrangement ? 3000 : 4000} placeholder={G.requestsHint} />
-        </label>
-        <label><span>{processCopy.caddie}</span>
-          <select name="caddie" defaultValue="none">
-            {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.caddies[i]}</option>)}
-          </select><small>{processCopy.caddieNote}</small>
-        </label>
-        {addOns.length > 0 && (
-          <fieldset className="go-extras">
-            <legend>{G.extras}</legend>
-            <p className="form-hint">{G.extrasNote}</p>
-            {addOns.map((a) => (
-              <label key={a.id} className="form-check">
-                <input type="checkbox" disabled={blocked(a)} checked={!blocked(a) && b.addOns.includes(a.id)} onChange={() => b.toggleAddOn(a.id)} />
-                <span><b>{a.name}</b><small><Fx>{blocked(a) ? G.notForFour : addOnPrice(a)}</Fx></small><small>{a.description}</small></span>
+        <details className={travelStyles.optional}>
+          <summary>{GOLF_TRAVEL_UI[lang].requests}</summary>
+          <div>
+            <div className="form-row two">
+              <label>
+                <span>{G.whatsapp}</span>
+                <WhatsAppInput lang={lang} />
               </label>
-            ))}
-          </fieldset>
-        )}
+              <span />
+            </div>
+            <label className="form-row">
+              <span>{G.requests}</span>
+              <textarea name="message" rows={3} maxLength={arrangement ? 3000 : 4000} placeholder={G.requestsHint} />
+            </label>
+            <label><span>{processCopy.caddie}</span>
+              <select name="caddie" defaultValue="none">
+                {["none", "required", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.caddies[i]}</option>)}
+              </select><small>{processCopy.caddieNote}</small>
+            </label>
+            {addOns.length > 0 && (
+              <fieldset className="go-extras">
+                <legend>{G.extras}</legend>
+                <p className="form-hint">{G.extrasNote}</p>
+                {addOns.map((a) => (
+                  <label key={a.id} className="form-check">
+                    <input type="checkbox" disabled={blocked(a)} checked={!blocked(a) && b.addOns.includes(a.id)} onChange={() => b.toggleAddOn(a.id)} />
+                    <span><b>{a.name}</b><small><Fx>{blocked(a) ? G.notForFour : addOnPrice(a)}</Fx></small><small>{a.description}</small></span>
+                  </label>
+                ))}
+              </fieldset>
+            )}
+          </div>
+        </details>
       </fieldset>
 
       {/* Everything that matters, once more, right above the button */}
@@ -432,6 +449,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           {designatedCount > 0 && <div><dt>{C.optionShort}</dt><dd>{designatedLine}</dd></div>}
           {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd><Fx>{addOnLine(a)}</Fx></dd></div>)}
         </dl>
+        {arrangement && v.id === "fuji" && b.golfTransfer !== "none" && <FujiTransferEstimate lang={lang} golfers={n} compact />}
         <small>{G.confirmNote}</small>
         <FxNote lang={lang} />
       </div>

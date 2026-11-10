@@ -77,7 +77,8 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   for (const price of ["¥15,000", "¥20,000", "¥25,000", "¥30,000"]) assert.ok(html.includes(price), `fee table shows ${price}`);
   assert.ok(text.includes("¥15,000 for the first golfer, ¥5,000 for each additional golfer") && !text.includes("× 3 additional"), "fee table: the rule once, the figures alone");
   assert.ok(!/xp-sub-h">How booking works/.test(html), "no duplicate booking-steps list in the booking service");
-  assert.doesNotMatch(text, /¥45,000|¥60,000|flat fee|per golfer and the same/, "no trace of the per-golfer fee");
+  assert.doesNotMatch(html.match(/<div class="go-fee">[\s\S]*?<\/div>/)?.[0] ?? "", /¥45,000|¥60,000/, "booking fee excludes the obsolete per-golfer prices; transfer estimates are separate");
+  assert.doesNotMatch(text, /flat fee|per golfer and the same/, "no obsolete per-golfer fee claim");
   assert.doesNotMatch(html, /¥250,000|¥270,000|¥290,000|¥310,000|¥330,000|¥350,000/, "no package prices");
   assert.ok(text.includes("1 golfer") && !text.includes("1 golfers"), "a single golfer, in the singular");
   // larger groups (2026-10-23): a "5 or more" choice, a quoted row in the fee table, the FAQ
@@ -97,7 +98,7 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   // the form: tee time, optional base, no pick-up prefecture or assistant choice
   assert.ok(html.includes("Preferred tee time") && !html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
   // the transfer choice: not ours to sell, the partner introduced on request
-  assert.ok(html.includes('name="transfer"') && html.includes("please introduce the transfer partner") && html.includes("we can introduce our partner, whom you book and pay directly"), "transfer choice with the partner note");
+  assert.ok(html.includes('name="transfer"') && html.includes("Private car through our partner") && html.includes("Book and pay the transfer company directly"), "transfer choice with the partner note");
   assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");
   assert.ok(html.includes("Send Tee-Time Request") && html.includes("Check Tee Times"), "CTAs");
   assert.equal(html.split("<form ").length - 1, 1, "exactly one form");

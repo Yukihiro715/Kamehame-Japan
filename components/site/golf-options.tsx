@@ -9,6 +9,7 @@ import { useClubRental } from "@/components/site/club-rental-context";
 import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
+import { GolfTravelChoice, FujiTransferEstimate, SharedBusBudget } from "@/components/site/golf-travel-choice";
 import { countOf, fromPrice, golfFeeBreakdown, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
 import type { Lang } from "@/lib/i18n";
 import type { ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
@@ -105,6 +106,8 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary }
         <ul className="go-brief-lines">
           {summary.lines.map((x) => <li key={x}><Check size={14} aria-hidden="true" />{x}</li>)}
         </ul>
+        {b.variant === "fuji" && b.golfTransfer !== "none" && <FujiTransferEstimate lang={lang} golfers={n} compact />}
+        {b.variant === "fuji" && b.golfTransfer !== "none" && n <= 2 && <SharedBusBudget lang={lang} golfers={n} date={b.date} transfer={b.golfTransfer} compact />}
         <a className="bk-cta" href="#request-form" onClick={jump}>{ctaLabel} <ArrowRight size={16} /></a>
         <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>
       </section>
@@ -198,6 +201,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary }
       )}
 
       <p className="go-includes">{copy.includes}</p>
+      {isArrangement() && <GolfTravelChoice lang={lang} compact />}
       {custom ? <p className="go-note">{large ? copy.largePartyNote ?? copy.customNote : copy.customNote}</p> : (
         <div className="go-assure"><ShieldCheck size={16} aria-hidden="true" /><div><b>{copy.assure.heading}</b><p>{copy.assure.body}</p></div></div>
       )}
