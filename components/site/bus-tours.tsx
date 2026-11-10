@@ -6,6 +6,8 @@ import { GOLFPAQ_RENTAL_JPY, GOLFPAQ_SHOE_RENTAL_JPY, enquiryTotal, yen, type Pu
 import type { BusCopy } from "@/lib/golfpaq-copy";
 import type { Lang } from "@/lib/i18n";
 import { track } from "@/lib/analytics";
+import Link from "next/link";
+import { GOLF_TRAVEL_COPY, golfReturnHref, readGolfTravelQuery, type GolfTransferChoice } from "@/lib/golf-travel";
 
 const seatsText = (tpl: string, n: number) => { const [one, many] = tpl.split("|"); return (n === 1 || !many ? one : many).replace("{n}", String(n)); };
 const FALLBACK_IMG = "/images/golf-gallery-10-golf-course.webp";
@@ -35,6 +37,17 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const [chosen, setChosen] = useState<PublicTour | null>(null);
   const [open, setOpen] = useState<PublicTour | null>(null);
   const [flash, setFlash] = useState(0);
+  const [fromFuji, setFromFuji] = useState(false);
+  const [requestedDate, setRequestedDate] = useState("");
+  const [returnTransfer, setReturnTransfer] = useState<GolfTransferChoice>("unsure");
+  const travelCopy = GOLF_TRAVEL_COPY[lang];
+  useEffect(() => {
+    const query = readGolfTravelQuery(new URLSearchParams(window.location.search), MAX_PEOPLE);
+    if (query.golfers) setPeople(query.golfers);
+    if (query.date) { setDay(query.date); setRequestedDate(query.date); }
+    setFromFuji(query.fromFuji);
+    if (query.transfer) setReturnTransfer(query.transfer);
+  }, []);
   const formRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const pickRef = useRef<HTMLDivElement>(null);
@@ -57,6 +70,9 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   // The golfers filter never offers more than the largest open tour can take.
   const maxSeats = useMemo(() => Math.min(MAX_PEOPLE, Math.max(1, ...tours.filter((t) => !t.soldOut).map((t) => t.seats))), [tours]);
   const filtered = useMemo(() => tours.filter((t) => (!day || t.date === day) && (!area || t.departure.area === area) && (t.soldOut || t.seats >= people)), [tours, day, area, people]);
+  const noSeatsOnDay = !!day && !filtered.some((t) => !t.soldOut && t.seats >= people);
+  const nearbyDates = useMemo(() => [...new Set(tours.filter((t) => !t.soldOut && t.seats >= people && (!area || t.departure.area === area) && t.date !== day).map((t) => t.date))]
+    .sort((a, b) => Math.abs(Date.parse(a) - Date.parse(day)) - Math.abs(Date.parse(b) - Date.parse(day)) || a.localeCompare(b)).slice(0, 3), [tours, day, people, area]);
   /** Cards bundled per date, each date a horizontally scrolling row. */
   const groups = useMemo(() => { const m = new Map<string, PublicTour[]>(); for (const t of filtered) { (m.get(t.date) ?? m.set(t.date, []).get(t.date)!).push(t); } return [...m.entries()].sort(([a], [b]) => (a < b ? -1 : 1)).map(([d, list]) => [d, [...list].sort((a, b) => Number(a.soldOut) - Number(b.soldOut))] as [string, PublicTour[]]); }, [filtered]);
   useEffect(() => { if (chosen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [chosen]);
@@ -73,10 +89,11 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
       <div className="gb-wrap">
         <h2 id="gb-tours-h">{C.toursH}</h2>
         <p className="gb-lede">{C.toursLede}</p>
+        {fromFuji && <p className="gb-note"><Link href={golfReturnHref(lang, people, day || requestedDate, returnTransfer)}>{travelCopy.returnCta} →</Link></p>}
         <div className="gb-pick" ref={pickRef}>
         {tours.length > 0 && <Calendar tours={tours} months={months} day={day} people={people} area={area} onPick={pick} lang={lang} C={C} />}
         <div className="gb-filters">
-          <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: maxSeats }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
+          <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: Math.max(maxSeats, people) }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
           <label><span>{C.filterDeparture}</span><select value={area} onChange={(e) => setArea(e.target.value)}><option value="">{C.allDepartures}</option>{areas.map((a) => <option key={a} value={a}>{areaOf(a, C)}</option>)}</select></label>
           {updatedText && <span className="gb-updated">{C.updated}: {updatedText}</span>}
         </div>
@@ -90,6 +107,11 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
         )}
         <div ref={listRef} className={`gb-results${flash ? " flash" : ""}`} aria-live="polite">
           {day && <p className="gb-showing">{C.calShowing} <b>{dateLabel(day, lang)}</b> · <button type="button" className="gb-link" onClick={() => pick("")}>{C.calAny}</button></p>}
+          {fromFuji && noSeatsOnDay && tours.length > 0 && <div className="gb-how">
+            <p>{travelCopy.noSeats}</p>
+            {nearbyDates.length > 0 && <><b>{travelCopy.nearDates}</b><div className="gb-filters">{nearbyDates.map(d => <button type="button" className="gb-btn gb-btn-outline gb-btn-small" key={d} onClick={() => pick(d)}>{dateLabel(d, lang)}</button>)}</div></>}
+            <Link className="gb-link" href={golfReturnHref(lang, people, day || requestedDate, returnTransfer)}>{travelCopy.returnCta} →</Link>
+          </div>}
           {tours.length === 0 ? <p className="gb-empty">{C.unavailable}</p> : filtered.length === 0 ? <p className="gb-empty">{C.noMatch}</p> : (
             <div className="gb-days">
               {groups.map(([d, list]) => (
@@ -131,7 +153,10 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
  *  when every tour that day is sold out. A tap selects the day; the button
  *  under the grid says how many tours that is and jumps to the list. */
 function Calendar({ tours, months, day, people, area, onPick, lang, C }: { tours: PublicTour[]; months: string[]; day: string; people: number; area: string; onPick: (d: string, scroll?: boolean) => void; lang: Lang; C: BusCopy }) {
-  const [month, setMonth] = useState(() => (day ? day.slice(0, 7) : months[0]));
+  const [month, setMonth] = useState(() => (months.includes(day.slice(0, 7)) ? day.slice(0, 7) : months[0]));
+  useEffect(() => {
+    if (day && months.includes(day.slice(0, 7))) setMonth(day.slice(0, 7));
+  }, [day, months]);
   // Per day: tours that can take the chosen party (open, enough seats, matching departure) and the seats they have between them;
   // the cell shows the seats, so a pair can see at a glance that a "1" is not for them.
   const byDay = useMemo(() => {

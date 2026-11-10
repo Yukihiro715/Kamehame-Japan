@@ -21,6 +21,7 @@ import { GOLF_FIXED_FEE_MAX, GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs,
 import { CLUB_RENTAL_COPY, GOLF_CLUB_RENTAL_JPY } from "@/lib/golf-club-rental";
 import { ClubSetPicker, clubSetLabel } from "@/components/site/golf-club-rental";
 import { useClubRental } from "@/components/site/club-rental-context";
+import { GolfTravelChoice } from "@/components/site/golf-travel-choice";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 /** "designated": the chosen-set rental (lib/golf-club-rental.ts), offered only while the option is on. */
@@ -222,6 +223,11 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         {clubDiscount > 0 && totalWithClubs !== null && <span className="go-summary-discount"><Fx>{ownClubsLine}</Fx> → <b><Fx brief>{yen(totalWithClubs)}</Fx></b> <small>{G.ownClubsTotal}</small></span>}
       </div>
 
+      {arrangement && <>
+        <GolfTravelChoice lang={lang} compact />
+        <input type="hidden" name="transfer" value={b.golfTransfer} />
+      </>}
+
       <fieldset className="form-step">
         <legend>{G.steps.dates}</legend>
         <div className="form-row two">
@@ -280,13 +286,6 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
             </div>
             <small id="golf-budget-hint" className="form-hint">{P.budgetHint}</small>
             <label><span>{P.transport}</span><select name="golf_budget_transport" defaultValue="unsure"><option value="unsure">{P.unsure}</option><option value="included">{P.included}</option><option value="separate">{P.separate}</option></select></label>
-            {processCopy.transfer && processCopy.transfers && (
-              <label><span>{processCopy.transfer}</span>
-                <select name="transfer" defaultValue="none">
-                  {["none", "introduce", "unsure"].map((value, i) => <option key={value} value={value}>{processCopy.transfers![i]}</option>)}
-                </select><small>{processCopy.transferNote}</small>
-              </label>
-            )}
           </>
         ) : (
           <>
@@ -398,7 +397,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
         </div>
         <label className="form-row">
           <span>{G.requests}</span>
-          <textarea name="message" rows={4} maxLength={arrangement ? 3000 : 4000} placeholder={G.requestsHint} />
+          <textarea name="message" rows={3} maxLength={arrangement ? 3000 : 4000} placeholder={G.requestsHint} />
         </label>
         <label><span>{processCopy.caddie}</span>
           <select name="caddie" defaultValue="none">
