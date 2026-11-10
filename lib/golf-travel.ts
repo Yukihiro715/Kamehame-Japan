@@ -4,12 +4,12 @@ import type { Lang } from "./i18n";
 export const FUJI_TRANSFER_JPY = { min: 100_000, max: 120_000 };
 export const SHARED_BUS_BUDGET_JPY = { min: 30_000, max: 40_000 };
 export type GolfTransferChoice = "introduce" | "none" | "unsure";
-export const GOLF_TRAVEL_UI: Record<Lang, { details: string; bus: string; busArea: string; planning: string; requests: string }> = {
-  en: { details: "Price details & conditions", bus: "Shared bus · for 1–2 golfers", busArea: "Chiba / Ibaraki / Tochigi · Not the Fuji area", planning: "Hotel, budget & preferred course (optional)", requests: "WhatsApp & special requests (optional)" },
-  ja: { details: "料金の詳細・条件を見る", bus: "1〜2名向け・乗合バス", busArea: "千葉・茨城・栃木方面（富士エリア以外）", planning: "ホテル・予算・希望コース（任意）", requests: "WhatsApp・その他のご希望（任意）" },
-  es: { details: "Detalles y condiciones", bus: "Autobús compartido · 1–2 jugadores", busArea: "Chiba / Ibaraki / Tochigi · Fuera del Fuji", planning: "Hotel, presupuesto y campo preferido (opcional)", requests: "WhatsApp y otras peticiones (opcional)" },
-  fr: { details: "Détail des prix et conditions", bus: "Bus partagé · 1–2 joueurs", busArea: "Chiba / Ibaraki / Tochigi · Hors région du Fuji", planning: "Hôtel, budget et parcours souhaité (facultatif)", requests: "WhatsApp et demandes particulières (facultatif)" },
-  "zh-tw": { details: "查看費用詳情與條件", bus: "1〜2人適合・共乘巴士", busArea: "千葉・茨城・栃木（非富士地區）", planning: "住宿・預算・指定球場（選填）", requests: "WhatsApp・其他需求（選填）" },
+export const GOLF_TRAVEL_UI: Record<Lang, { bus: string; recommendation: string; example: string }> = {
+  en: { bus: "Shared bus · for 1–2 golfers", recommendation: "Recommended for 3+ golfers or anyone arranging their own transport", example: "Example for {n} golfers: approx. {price} each" },
+  ja: { bus: "1〜2名向け・乗合バス", recommendation: "3名以上、または自分で移動したい方におすすめ", example: "{n}名の場合：お一人 約{price}" },
+  es: { bus: "Autobús compartido · 1–2 jugadores", recommendation: "Recomendado para 3 o más jugadores o quienes organizan su propio transporte", example: "Ejemplo para {n} jugadores: aprox. {price} por persona" },
+  fr: { bus: "Bus partagé · 1–2 joueurs", recommendation: "Recommandé dès 3 joueurs ou si vous organisez votre propre transport", example: "Exemple pour {n} joueurs : env. {price} par personne" },
+  "zh-tw": { bus: "1〜2人適合・共乘巴士", recommendation: "推薦3人以上，或希望自行前往球場的旅客", example: "{n}人同行時：每人約{price}" },
 };
 export function travelRange(min: number, max: number) {
   return `¥${Math.ceil(min).toLocaleString("en-US")}–¥${Math.ceil(max).toLocaleString("en-US")}`;

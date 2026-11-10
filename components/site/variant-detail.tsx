@@ -1,3 +1,5 @@
+import { GOLF_TRAVEL_UI } from "@/lib/golf-travel";
+import golfPageStyles from "./golf-page.module.css";
 import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 import Link from "next/link";
 import { Check, Clock3, Wine } from "lucide-react";
@@ -105,7 +107,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   };
 
   return (
-    <main className="subpage detail-page xp xp2 xp-variant" lang={lang}>
+    <main className={`subpage detail-page xp xp2 xp-variant ${golfPageStyles.page}`} lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
       <Breadcrumbs trail={[
         { label: T.home, href: langHome(lang) },
@@ -117,6 +119,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
         {/* 1. Title block: a short H1 and one line, then straight to the photos */}
         <header className="xp-head vh-head">
           <h1>{exp.title}</h1>
+          {isArrangement() && <p className="go-recommendation">{GOLF_TRAVEL_UI[lang].recommendation}</p>}
         </header>
 
         <div className="xp-cols vh-cols">

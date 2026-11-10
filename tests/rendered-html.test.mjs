@@ -97,6 +97,11 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.ok(text.includes("No payment to enquire"), "reassurance under the options");
   // the form: tee time, optional base, no pick-up prefecture or assistant choice
   assert.ok(html.includes("Preferred tee time") && !html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
+  const golfForm = html.match(/<form[^>]*class="enquiry-form golf-form"[\s\S]*?<\/form>/)?.[0];
+  assert.ok(golfForm, "the golf enquiry form is rendered");
+  assert.doesNotMatch(golfForm, /<details\b/, "all form fields and price conditions stay visible without accordions");
+  assert.ok(text.includes("Example for 3 golfers: approx. ¥33,000–¥40,000 each"), "the introductory transfer example is for three golfers");
+  assert.ok(text.includes("Recommended for 3+ golfers or anyone arranging their own transport"), "the custom-booking recommendation includes independent travellers");
   // the transfer choice: not ours to sell, the partner introduced on request
   assert.ok(html.includes('name="transfer"') && html.includes("Private car through our partner") && html.includes("Book and pay the transfer company directly"), "transfer choice with the partner note");
   assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");

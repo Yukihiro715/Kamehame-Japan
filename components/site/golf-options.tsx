@@ -106,7 +106,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary }
         <ul className="go-brief-lines">
           {summary.lines.map((x) => <li key={x}><Check size={14} aria-hidden="true" />{x}</li>)}
         </ul>
-        {b.variant === "fuji" && b.golfTransfer !== "none" && <FujiTransferEstimate lang={lang} golfers={n} compact />}
+        {b.variant === "fuji" && b.golfTransfer !== "none" && <FujiTransferEstimate lang={lang} golfers={3} compact example />}
         {b.variant === "fuji" && b.golfTransfer !== "none" && n <= 2 && <SharedBusBudget lang={lang} golfers={n} date={b.date} transfer={b.golfTransfer} compact />}
         <a className="bk-cta" href="#request-form" onClick={jump}>{ctaLabel} <ArrowRight size={16} /></a>
         <p className="go-cta-note"><ShieldCheck size={14} /> {copy.ctaNote}</p>

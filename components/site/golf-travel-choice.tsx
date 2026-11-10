@@ -16,17 +16,18 @@ const fill = (text: string, n: number, price: string) => {
   return n === 1 ? result.replace("1 golfers", "1 golfer").replace("1 jugadores", "1 jugador").replace("1 joueurs", "1 joueur") : result;
 };
 
-export function FujiTransferEstimate({ lang, golfers, compact = false }: { lang: Lang; golfers: number; compact?: boolean }) {
+export function FujiTransferEstimate({ lang, golfers, compact = false, example = false }: { lang: Lang; golfers: number; compact?: boolean; example?: boolean }) {
   const C = GOLF_TRAVEL_COPY[lang];
   const range = travelRange(FUJI_TRANSFER_JPY.min, FUJI_TRANSFER_JPY.max);
+  const perPerson = (amount: number) => example ? Math.round(amount / golfers / 1000) * 1000 : amount / golfers;
   return <div className={compact ? styles.summary : styles.estimate} data-fuji-transfer-estimate>
     {!compact && <h3 className={styles.title}>{C.privateTitle}</h3>}
     <p className={styles.text}>{C.route}</p>
     <p className={compact ? styles.text : styles.price}><strong><Fx>{range}</Fx></strong></p>
-    <p className={styles.text}>{C.vehicle}{!compact && ` · ${C.includes}`}</p>
-    {golfers <= 4 && <p className={styles.split}><Fx>{fill(C.perGolfer, golfers, travelRange(FUJI_TRANSFER_JPY.min / golfers, FUJI_TRANSFER_JPY.max / golfers))}</Fx></p>}
+    <p className={styles.text}>{C.vehicle} · {C.includes}</p>
+    {golfers <= 4 && <p className={styles.split}><Fx>{fill(example ? GOLF_TRAVEL_UI[lang].example : C.perGolfer, golfers, travelRange(perPerson(FUJI_TRANSFER_JPY.min), perPerson(FUJI_TRANSFER_JPY.max)))}</Fx></p>}
     <p className={styles.note}>{C.excludes}</p>
-    {compact ? <details className={styles.details}><summary>{GOLF_TRAVEL_UI[lang].details}</summary><p className={styles.note}>{C.includes} {C.quote}</p></details> : <p className={styles.note}>{C.quote}</p>}
+    <p className={styles.note}>{C.quote}</p>
   </div>;
 }
 
@@ -38,10 +39,8 @@ export function SharedBusBudget({ lang, golfers = 2, date = "", transfer = "unsu
     <p className={styles.price}><Fx>{fill(C.busPrice, golfers, travelRange(SHARED_BUS_BUDGET_JPY.min, SHARED_BUS_BUDGET_JPY.max))}</Fx></p>
     <p className={styles.text}><strong>{C.busIncludes}</strong></p>
     <p className={compact ? styles.text : styles.split}><Fx>{fill(C.busTotal, golfers, travelRange(SHARED_BUS_BUDGET_JPY.min * golfers, SHARED_BUS_BUDGET_JPY.max * golfers))}</Fx></p>
-    {compact ? <>
-      <p className={styles.note}>{GOLF_TRAVEL_UI[lang].busArea}</p>
-      <details className={styles.details}><summary>{GOLF_TRAVEL_UI[lang].details}</summary><p className={styles.note}><Fx>{C.busExtras}</Fx></p><p className={styles.note}>{C.busArea}</p></details>
-    </> : <><p className={styles.note}><Fx>{C.busExtras}</Fx></p><p className={styles.note}>{C.busArea}</p></>}
+    <p className={styles.note}>{C.busArea}</p>
+    <p className={styles.note}><Fx>{C.busExtras}</Fx></p>
     {link && <Link className={styles.cta} href={golfBusHref(lang, golfers, date, transfer)} onClick={() => track("golf_bus_alternative_clicked", { golfers, date: date || undefined, area: "fuji", transfer, language: lang })}>{C.busCta}<ArrowRight size={16} aria-hidden="true" /></Link>}
   </div>;
 }
@@ -75,7 +74,8 @@ export function GolfTravelComparison({ lang }: { lang: Lang }) {
   const C = GOLF_TRAVEL_COPY[lang];
   return <div className={styles.comparison}>
     <h2>{C.compareTitle}</h2>
-    <FujiTransferEstimate lang={lang} golfers={2} />
+    <p className={styles.text}>{GOLF_TRAVEL_UI[lang].recommendation}</p>
+    <FujiTransferEstimate lang={lang} golfers={3} example />
     <SharedBusBudget lang={lang} golfers={2} />
   </div>;
 }
