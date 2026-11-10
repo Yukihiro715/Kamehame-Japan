@@ -10,17 +10,17 @@ const { golfBusHref, golfReturnHref, readGolfTravelQuery, travelRange, GOLF_TRAV
 test('bus detour and return preserve party, preferred date and private-transfer intent in every language', () => {
   for (const lang of Object.keys(GOLF_TRAVEL_COPY)) {
     for (const golfers of [1, 2]) {
-      for (const transfer of ['introduce', 'none', 'unsure']) {
+      for (const transfer of ['', 'introduce', 'none', 'unsure']) {
         const bus = new URL(golfBusHref(lang, golfers, '2026-12-08', transfer), 'https://example.test');
         assert.equal(bus.pathname, `/${lang}/golf-bus/`);
         assert.equal(bus.hash, '#tours');
         const state = readGolfTravelQuery(bus.searchParams);
-        assert.deepEqual(state, { golfers, date: '2026-12-08', transfer, fromFuji: true });
-        const back = new URL(golfReturnHref(lang, state.golfers, state.date, state.transfer), bus);
+        assert.deepEqual(state, { golfers, date: '2026-12-08', transfer: transfer || undefined, fromFuji: true });
+        const back = new URL(golfReturnHref(lang, state.golfers, state.date, state.transfer || ''), bus);
         assert.equal(back.searchParams.get('area'), 'fuji');
         assert.equal(back.searchParams.get('golfers'), String(golfers));
         assert.equal(back.searchParams.get('date'), '2026-12-08');
-        assert.equal(back.searchParams.get('transfer'), transfer);
+        assert.equal(back.searchParams.get('transfer'), transfer || null);
       }
     }
   }

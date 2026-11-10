@@ -1,9 +1,10 @@
 .choice { margin:0; min-width:0; }
 .legend { font-size:15px; font-weight:600; margin-bottom:8px; }
 .fieldset { border:0; padding:0; margin:0 0 14px; min-width:0; }
-.radios { display:grid; gap:6px; }
-.select { width:100%; min-height:44px; border:1px solid var(--border); border-radius:8px; background:var(--white); color:var(--ink); font:inherit; padding:8px; }
-.option { display:flex!important; align-items:center; gap:9px; min-height:44px; padding:8px 10px; border:1px solid var(--line,#ddd); border-radius:8px; font-size:14px!important; cursor:pointer; }
+.prompt { margin:0 0 10px; color:var(--muted); font-size:13px; line-height:1.5; }
+.radios { display:grid; gap:8px; }
+.option { display:flex!important; align-items:center; gap:9px; min-height:44px; padding:12px; border:1px solid var(--line,#ddd); border-radius:8px; font-size:14px!important; cursor:pointer; }
+.option:focus-within { outline:2px solid var(--kame); outline-offset:2px; }
 .option input { width:16px!important; height:16px!important; margin:0; flex:none; accent-color:var(--kame); }
 .option:has(input:checked) { background:var(--cream,#faf5e9); border-color:var(--kame); }
 .estimate, .bus { border-radius:12px; padding:18px; margin:12px 0; min-width:0; color:var(--ink); }
