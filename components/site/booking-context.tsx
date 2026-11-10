@@ -174,7 +174,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     guests: String(Math.min(Math.max(experience.minGuests, experience.defaultGuests ?? 2), maxGuests)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
     variant: initialVariant, coursePref: "recommended", courseName: "", courseUrl: "",
-    clubRentals: 0, golfTransfer: "",
+    clubRentals: 0, golfTransfer: "introduce",
   });
   // Until the guest picks a time, switching variant moves to that variant's usual departure.
   const [timeTouched, setTimeTouched] = useState(false);
