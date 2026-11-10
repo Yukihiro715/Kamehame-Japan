@@ -28,19 +28,21 @@ export function readGolfTravelQuery(query: URLSearchParams, maxPeople = 8) {
     fromFuji: query.get("from") === "fuji",
   };
 }
-export function golfBusHref(lang: Lang, golfers: number, date: string, transfer: GolfTransferChoice) {
-  const q = new URLSearchParams({ from: "fuji", golfers: String(golfers), transfer });
+export function golfBusHref(lang: Lang, golfers: number, date: string, transfer: GolfTransferChoice | "") {
+  const q = new URLSearchParams({ from: "fuji", golfers: String(golfers) });
+  if (transfer) q.set("transfer", transfer);
   if (validTravelDate(date)) q.set("date", date);
   return `/${lang}/golf-bus/?${q}#tours`;
 }
-export function golfReturnHref(lang: Lang, golfers: number, date: string, transfer: GolfTransferChoice) {
-  const q = new URLSearchParams({ area: "fuji", golfers: String(golfers), transfer });
+export function golfReturnHref(lang: Lang, golfers: number, date: string, transfer: GolfTransferChoice | "") {
+  const q = new URLSearchParams({ area: "fuji", golfers: String(golfers) });
+  if (transfer) q.set("transfer", transfer);
   if (validTravelDate(date)) q.set("date", date);
   return `/${lang}/tokyo/mt-fuji-golf-day/?${q}#request-form`;
 }
 
 interface TravelCopy {
-  heading: string; choices: Record<GolfTransferChoice, string>;
+  heading: string; prompt: string; choices: Record<GolfTransferChoice, string>;
   privateTitle: string; route: string; vehicle: string; includes: string;
   excludes: string; quote: string; perGolfer: string; transferOnly: string;
   busTag: string; busTitle: string; busPrice: string; busIncludes: string;
@@ -50,7 +52,7 @@ interface TravelCopy {
 }
 export const GOLF_TRAVEL_COPY: Record<Lang, TravelCopy> = {
   en: {
-    heading: "How would you like to get there?",
+    heading: "How would you like to get there?", prompt: "Choose one option",
     choices: { introduce: "Private car through our partner", none: "I'll make my own way", unsure: "I'd like advice" },
     privateTitle: "Hotel pickup, all the way to the course", route: "Tokyo ↔ Mt. Fuji area · Round trip",
     vehicle: "Estimated transfer price per vehicle", includes: "Fuel and highway tolls included.",
@@ -66,7 +68,7 @@ export const GOLF_TRAVEL_COPY: Record<Lang, TravelCopy> = {
     compareTitle: "Planning Mt. Fuji golf from Tokyo?", approx: "Approx.",
   },
   ja: {
-    heading: "ゴルフ場までの移動方法", choices: { introduce: "専用車の送迎を希望", none: "自分で移動する", unsure: "相談して決めたい" },
+    heading: "ゴルフ場までの移動方法", prompt: "1つ選択してください", choices: { introduce: "専用車の送迎を希望", none: "自分で移動する", unsure: "相談して決めたい" },
     privateTitle: "ホテルからゴルフ場まで、専用車で快適に", route: "東京 ↔ 富士エリア・往復",
     vehicle: "専用車1台の送迎費目安", includes: "ガソリン代・高速代込み。", excludes: "送迎のみの料金です。プレー代・手配料・レンタル代は別途。",
     quote: "出発地・コース・日程により正式見積もりをご案内します。東京以外からの出発は別途見積もり。送迎会社と直接契約・お支払いとなります。",
@@ -80,7 +82,7 @@ export const GOLF_TRAVEL_COPY: Record<Lang, TravelCopy> = {
     compareTitle: "東京から富士エリアでゴルフをするなら", approx: "約",
   },
   es: {
-    heading: "¿Cómo quieres llegar al campo?", choices: { introduce: "Coche privado con nuestro colaborador", none: "Iré por mi cuenta", unsure: "Quiero asesoramiento" },
+    heading: "¿Cómo quieres llegar al campo?", prompt: "Elige una opción", choices: { introduce: "Coche privado con nuestro colaborador", none: "Iré por mi cuenta", unsure: "Quiero asesoramiento" },
     privateTitle: "De tu hotel al campo en coche privado", route: "Tokio ↔ zona del monte Fuji · Ida y vuelta",
     vehicle: "Precio estimado del traslado por vehículo", includes: "Combustible y peajes incluidos.", excludes: "Solo traslado. Golf, gestión de reserva y alquileres aparte.",
     quote: "El presupuesto depende de la recogida, el campo y la fecha. Salidas fuera de Tokio: presupuesto aparte. Reserva y pago directamente a la empresa de transporte.",
@@ -94,7 +96,7 @@ export const GOLF_TRAVEL_COPY: Record<Lang, TravelCopy> = {
     compareTitle: "¿Golf cerca del monte Fuji desde Tokio?", approx: "Aprox.",
   },
   fr: {
-    heading: "Comment souhaitez-vous rejoindre le parcours ?", choices: { introduce: "Voiture privée avec notre partenaire", none: "Je m'y rendrai par mes propres moyens", unsure: "Je souhaite être conseillé" },
+    heading: "Comment souhaitez-vous rejoindre le parcours ?", prompt: "Sélectionnez une option", choices: { introduce: "Voiture privée avec notre partenaire", none: "Je m'y rendrai par mes propres moyens", unsure: "Je souhaite être conseillé" },
     privateTitle: "De votre hôtel au parcours en voiture privée", route: "Tokyo ↔ région du mont Fuji · Aller-retour",
     vehicle: "Estimation du transfert par véhicule", includes: "Carburant et péages inclus.", excludes: "Transfert uniquement. Golf, frais de réservation et locations en supplément.",
     quote: "Devis selon le lieu de prise en charge, le parcours et la date. Départs hors de Tokyo sur devis séparé. Réservation et paiement directement auprès du transporteur.",
@@ -108,7 +110,7 @@ export const GOLF_TRAVEL_COPY: Record<Lang, TravelCopy> = {
     compareTitle: "Un golf au mont Fuji au départ de Tokyo ?", approx: "Env.",
   },
   "zh-tw": {
-    heading: "前往球場的交通方式", choices: { introduce: "希望安排合作車公司的專車接送", none: "自行前往", unsure: "希望先諮詢" },
+    heading: "前往球場的交通方式", prompt: "請選擇一項", choices: { introduce: "希望安排合作車公司的專車接送", none: "自行前往", unsure: "希望先諮詢" },
     privateTitle: "專車從飯店直達球場", route: "東京 ↔ 富士地區・來回",
     vehicle: "每輛專車的接送費用估算", includes: "包含油費及高速公路通行費。", excludes: "僅為接送費用。打球費、預約手續費及租借費另計。",
     quote: "正式報價依接送地點、球場及日期而定。東京以外出發另行報價。請直接與接送公司簽約及付款。",

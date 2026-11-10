@@ -99,6 +99,9 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.ok(html.includes("Preferred tee time") && !html.includes('name="assistant"') && html.includes('name="pickup"') && html.includes('name="caddie"'), "booking-service form fields");
   const golfForm = html.match(/<form[^>]*class="enquiry-form golf-form"[\s\S]*?<\/form>/)?.[0];
   assert.ok(golfForm, "the golf enquiry form is rendered");
+  const transportChoices = [...golfForm.matchAll(/<input[^>]*type="radio"[^>]*name="golf-travel-[^>]*>/g)].map(match => match[0]);
+  assert.equal(transportChoices.length, 3, "all three transport choices are visible without a dropdown");
+  assert.ok(transportChoices.every(input => input.includes('required=""') && !input.includes('checked=""')), "transport requires an explicit choice and starts unselected");
   assert.doesNotMatch(golfForm, /<details\b/, "all form fields and price conditions stay visible without accordions");
   assert.equal((html.match(/data-fuji-transfer-estimate/g) || []).length, 1, "transfer pricing appears once, in the form's travel choice, without hero or confirmation duplicates");
   assert.equal((html.match(/data-shared-bus-budget/g) || []).length, 1, "the bus comparison appears once below the hero");

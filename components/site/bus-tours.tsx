@@ -39,7 +39,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const [flash, setFlash] = useState(0);
   const [fromFuji, setFromFuji] = useState(false);
   const [requestedDate, setRequestedDate] = useState("");
-  const [returnTransfer, setReturnTransfer] = useState<GolfTransferChoice>("unsure");
+  const [returnTransfer, setReturnTransfer] = useState<GolfTransferChoice | "">("");
   const travelCopy = GOLF_TRAVEL_COPY[lang];
   useEffect(() => {
     const query = readGolfTravelQuery(new URLSearchParams(window.location.search), MAX_PEOPLE);

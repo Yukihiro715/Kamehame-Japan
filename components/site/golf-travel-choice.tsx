@@ -31,7 +31,7 @@ export function FujiTransferEstimate({ lang, golfers, compact = false, example =
   </div>;
 }
 
-export function SharedBusBudget({ lang, golfers = 2, date = "", transfer = "unsure", link = true, compact = false }: { lang: Lang; golfers?: number; date?: string; transfer?: GolfTransferChoice; link?: boolean; compact?: boolean }) {
+export function SharedBusBudget({ lang, golfers = 2, date = "", transfer = "", link = true, compact = false }: { lang: Lang; golfers?: number; date?: string; transfer?: GolfTransferChoice | ""; link?: boolean; compact?: boolean }) {
   const C = GOLF_TRAVEL_COPY[lang];
   return <div className={`${styles.bus}${compact ? ` ${styles.compact}` : ""}`} data-shared-bus-budget>
     <span className={styles.tag}>{compact ? GOLF_TRAVEL_UI[lang].bus : C.busTag}</span>
@@ -55,10 +55,11 @@ export function GolfTravelChoice({ lang, compact = false }: { lang: Lang; compac
   return <div className={styles.choice}>
     <fieldset className={styles.fieldset}>
       <legend className={styles.legend}>{C.heading}</legend>
-      {compact ? <select className={styles.select} aria-label={C.heading} value={b.golfTransfer} onChange={e => b.set({ golfTransfer: e.target.value as GolfTransferChoice })}>{(["introduce", "none", "unsure"] as const).map(value => <option key={value} value={value}>{C.choices[value]}</option>)}</select> : <div className={styles.radios}>{(["introduce", "none", "unsure"] as const).map(value => <label className={styles.option} key={value}>
-        <input type="radio" name={`golf-travel-${id}`} value={value} checked={b.golfTransfer === value} onChange={() => b.set({ golfTransfer: value })} />
+      <p className={styles.prompt}>{C.prompt}</p>
+      <div className={styles.radios}>{(["introduce", "none", "unsure"] as const).map(value => <label className={styles.option} key={value}>
+        <input type="radio" required name={`golf-travel-${id}`} value={value} checked={b.golfTransfer === value} onChange={() => b.set({ golfTransfer: value })} />
         <span>{C.choices[value]}</span>
-      </label>)}</div>}
+      </label>)}</div>
     </fieldset>
     {fuji && b.golfTransfer !== "none" && <div aria-live="polite">
       <FujiTransferEstimate lang={lang} golfers={b.guestsNumber} compact={compact} />
