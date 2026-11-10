@@ -106,7 +106,7 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.doesNotMatch(golfForm, /<details\b/, "all form fields and price conditions stay visible without accordions");
   assert.equal((html.match(/data-fuji-transfer-estimate/g) || []).length, 1, "transfer pricing appears once, in the form's travel choice, without hero or confirmation duplicates");
   assert.equal((html.match(/data-shared-bus-budget/g) || []).length, 1, "the bus comparison appears once below the hero");
-  assert.ok(text.includes("Recommended for 3+ golfers or anyone arranging their own transport"), "the custom-booking recommendation includes independent travellers");
+  assert.ok(!html.includes('class="go-recommendation"'), "the hero omits the large recommendation badge");
   // the transfer choice: not ours to sell, the partner introduced on request
   assert.ok(html.includes('name="transfer"') && html.includes("Private car through our partner") && html.includes("Book and pay the transfer company directly"), "transfer choice with the partner note");
   assert.ok(!html.includes('name="pickup_region"') && !html.includes('name="hotel-undecided"'), "no pick-up prefecture or hotel-undecided fields");
