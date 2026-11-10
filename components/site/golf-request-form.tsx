@@ -21,7 +21,7 @@ import { GOLF_FIXED_FEE_MAX, GOLF_OWN_CLUBS_DISCOUNT_JPY, golfTotalWithOwnClubs,
 import { CLUB_RENTAL_COPY, GOLF_CLUB_RENTAL_JPY } from "@/lib/golf-club-rental";
 import { ClubSetPicker, clubSetLabel } from "@/components/site/golf-club-rental";
 import { useClubRental } from "@/components/site/club-rental-context";
-import { GolfTravelChoice, FujiTransferEstimate } from "@/components/site/golf-travel-choice";
+import { GolfTravelChoice } from "@/components/site/golf-travel-choice";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 /** "designated": the chosen-set rental (lib/golf-club-rental.ts), offered only while the option is on. */
@@ -431,7 +431,6 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
           {designatedCount > 0 && <div><dt>{C.optionShort}</dt><dd>{designatedLine}</dd></div>}
           {chosenAddOns.map((a) => <div key={a.id}><dt>{G.extras}</dt><dd><Fx>{addOnLine(a)}</Fx></dd></div>)}
         </dl>
-        {arrangement && v.id === "fuji" && b.golfTransfer !== "none" && <FujiTransferEstimate lang={lang} golfers={n} compact />}
         <small>{G.confirmNote}</small>
         <FxNote lang={lang} />
       </div>

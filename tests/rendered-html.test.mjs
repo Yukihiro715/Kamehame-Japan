@@ -100,7 +100,8 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   const golfForm = html.match(/<form[^>]*class="enquiry-form golf-form"[\s\S]*?<\/form>/)?.[0];
   assert.ok(golfForm, "the golf enquiry form is rendered");
   assert.doesNotMatch(golfForm, /<details\b/, "all form fields and price conditions stay visible without accordions");
-  assert.ok(text.includes("Example for 3 golfers: approx. ¥33,000–¥40,000 each"), "the introductory transfer example is for three golfers");
+  assert.equal((html.match(/data-fuji-transfer-estimate/g) || []).length, 1, "transfer pricing appears once, in the form's travel choice, without hero or confirmation duplicates");
+  assert.equal((html.match(/data-shared-bus-budget/g) || []).length, 1, "the bus comparison appears once below the hero");
   assert.ok(text.includes("Recommended for 3+ golfers or anyone arranging their own transport"), "the custom-booking recommendation includes independent travellers");
   // the transfer choice: not ours to sell, the partner introduced on request
   assert.ok(html.includes('name="transfer"') && html.includes("Private car through our partner") && html.includes("Book and pay the transfer company directly"), "transfer choice with the partner note");
