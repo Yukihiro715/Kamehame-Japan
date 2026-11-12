@@ -34,6 +34,10 @@ test("clinic preview: unlisted, noindex, private, guideline wording, pay at the 
     assert.match(html, /class="perk-badge">5%/, `${lang}: coupon badge on the photo`);
     assert.match(html, /class="xp-perk"/, `${lang}: coupon line under the title`);
     assert.match(html, /class="xp-perk-banner"/, `${lang}: coupon banner above the request form`);
+    assert.match(html, /class="xp-pricing xp-fees"/, `${lang}: fee table`);
+    assert.ok(text.includes("¥35,200") && text.includes("¥33,440"), `${lang}: clinic fee and 5%-off fee side by side`);
+    assert.doesNotMatch(text, /HIFU/, `${lang}: no treatment the clinic does not offer`);
+    assert.ok(/the day before|前日の18:00/.test(text), `${lang}: requests close the day before`);
     assert.doesNotMatch(text, FORBIDDEN_CLAIMS, `${lang}: no testimonial, result or superlative wording`);
     assert.ok(text.includes(expect), `${lang}: payment at the clinic`);
     assert.ok(/self-pay|自由診療/.test(text), `${lang}: self-pay practice stated`);

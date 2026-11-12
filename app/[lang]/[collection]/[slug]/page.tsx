@@ -311,6 +311,32 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               </section>
             )}
 
+            {/* ④″ Consultation-only products: the partner's published fee list, with the coupon column */}
+            {consultOnly && exp.feeTable && (
+              <section className="xp-section" id="pricing">
+                <h2>{exp.feeTable.heading}</h2>
+                <p className="xp-lede xp-fee-lead">{exp.feeTable.lead}</p>
+                <table className="xp-pricing xp-fees">
+                  <thead><tr><th>{D.feeTreatmentCol}</th><th>{D.feeClinicCol}</th>{exp.perk?.percent && <th className="coupon">{D.feeCouponCol(exp.perk.percent)}</th>}</tr></thead>
+                  <tbody>
+                    {exp.feeTable.items.map((it, i) => {
+                      const off = (n: number) => Math.round(n * (1 - (exp.perk?.percent ?? 0) / 100));
+                      const span = (n: number, f: (n: number) => number) => it.upTo ? `${yen(f(n))}–${yen(f(it.upTo))}` : yen(f(n));
+                      return (
+                        <tr key={i}>
+                          <td><b>{it.name}</b>{it.detail && <small>{it.detail}</small>}</td>
+                          <td><Fx>{span(it.yen, (n) => n)}</Fx></td>
+                          {exp.perk?.percent && <td className="coupon"><Fx>{span(it.yen, off)}</Fx></td>}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <p className="xp-pricing-note">{exp.feeTable.note}</p>
+                <FxNote lang={lang} />
+              </section>
+            )}
+
             {/* ④′ Flat pricing table (products without plans) */}
             {plans.length === 0 && !exp.pricePending && !consultOnly && (
               <section className="xp-section" id="pricing">

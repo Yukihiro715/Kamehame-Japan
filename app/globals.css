@@ -2498,3 +2498,10 @@ body[data-kh-modal] .sticky-request { display:none; }
 .xp-perk-banner strong { display:block; font-size:15px; line-height:1.35; }
 .xp-perk-banner small { display:block; margin-top:4px; font-size:13px; line-height:1.55; color:#4a463e; }
 @media (max-width:640px) { .xp-perk { font-size:13px; } .xp-perk-banner { gap:12px; padding:14px; } .xp-perk-banner > b { font-size:18px; padding:8px 11px; } }
+.xp-fees th:first-child, .xp-fees td:first-child { width:46%; white-space:normal; }
+.xp-fees td b { display:block; font-weight:600; }
+.xp-fees td small { display:block; font-size:12px; color:var(--muted); line-height:1.4; margin-top:2px; }
+.xp-fees th.coupon, .xp-fees td.coupon { color:var(--kame); font-weight:700; }
+.xp-fees th.coupon { background:#fff6ee; }
+.xp-fee-lead { margin-bottom:14px; }
+@media (max-width:640px) { .xp-fees { font-size:13px; } .xp-fees th, .xp-fees td { padding:9px 8px; } .xp-fees th:first-child, .xp-fees td:first-child { width:44%; } }

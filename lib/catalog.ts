@@ -222,7 +222,10 @@ export interface Experience {
   replyNote?: string;
   /** A benefit for booking through us (e.g. a coupon the confirmation carries),
    *  stated plainly in the booking card, the venue list and the FAQ. */
-  perk?: { badge: string; short: string; body: string };
+  perk?: { badge: string; short: string; body: string; percent?: number };
+  /** A fee list for a consultation-only product: the partner's published fees
+   *  (tax included) with, when `perk.percent` is set, the fee after the coupon. */
+  feeTable?: { heading: string; lead: string; items: { name: string; detail?: string; yen: number; upTo?: number }[]; note: string };
   notesHint?: string;
   /** Replaces the site-wide booking steps (written for the geiko evening). */
   flow?: { title: string; body: string }[];
@@ -578,10 +581,10 @@ export const experiences: Experience[] = [
     // clinic's sign-off arrives.
     slug: "kyoto-ryokan-beauty-clinic", city: "kyoto", category: "wellness", bookingType: "request", status: "preview", consultationOnly: true,
     title: "A Beauty Clinic Day at Jakuchu-an Clinic, Kyoto",
-    tagline: "Jakuchu-an Clinic is a doctor-led aesthetic clinic in southern Kyoto that receives four parties a day in a quiet ryokan-style house with a pine courtyard. Single-visit treatments chosen with the doctor at your consultation: vitamin and NMN drips, skin-quality injections, HIFU and pico-laser toning. Self-pay treatment; the fee is confirmed after the consultation and paid at the clinic.",
+    tagline: "Jakuchu-an Clinic is a doctor-led aesthetic clinic in southern Kyoto that receives four parties a day in a quiet ryokan-style house with a pine courtyard. Single-visit treatments chosen with the doctor at your consultation: NMN and glutathione drips, Filorga skin-quality injections, pico-laser toning, botulinum and hyaluronic-acid injections. Self-pay treatment; the fee is confirmed after the consultation and paid at the clinic.",
     overview: [
       "Named after the Edo painter Itō Jakuchū, whose works hang in its rooms, the clinic occupies a traditional-style house in Fushimi, south of central Kyoto, with a courtyard planted with pines and a corridor that leads you from the entrance to a private treatment room. Four parties a day, so you are never kept waiting with others. A doctor sees you first: skin, concerns, medical history, and what can sensibly be done in one visit before you travel on.",
-      "Treatments are medical, under Japanese free (self-pay) practice, and chosen with the doctor on the day. Typical single-visit choices are a vitamin or NMN drip, skin-quality (mesotherapy) injections, HIFU tightening, pico-laser toning and botulinum injections. Regenerative treatments are offered by the clinic under plans notified to the Ministry of Health, Labour and Welfare; they usually need more than one visit and are discussed at consultation, not booked from this page. Staff explain in English and Chinese, and consent forms are provided in your language.",
+      "Treatments are medical, under Japanese free (self-pay) practice, and chosen with the doctor on the day. Typical single-visit choices are an NMN or glutathione drip, Filorga skin-quality injections (NCTF 135HA), pico-laser toning, botulinum injections and hyaluronic-acid fillers. Regenerative treatments are offered by the clinic under plans notified to the Ministry of Health, Labour and Welfare; they usually need more than one visit and are discussed at consultation, not booked from this page. Staff explain in English and Chinese, and consent forms are provided in your language.",
     ],
     duration: "About 1.5 to 2.5 hours", price: "¥33,000", priceUnit: "person", group: "Private rooms · 1–2 guests per booking", ages: "Ages 18+", area: "Kyoto (Fushimi)",
     img: "/images/clinic-entrance.webp", alt: "The entrance of Jakuchu-an Clinic: a wooden sign beside a pine and the stepping-stone path to the house",
@@ -595,9 +598,9 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos by Jakuchu-an Clinic.",
     partySize: { min: 1, max: 2, default: 1 },
-    availability: { daily: false, startTimes: ["10:00", "11:30", "14:00", "16:00"], defaultTime: "11:30", cutoffDays: 3, cutoffTime: "18:00", closedWeekdays: [0, 3] },
+    availability: { daily: false, startTimes: ["10:00", "11:30", "14:00", "16:00"], defaultTime: "11:30", cutoffDays: 1, cutoffTime: "18:00", closedWeekdays: [0, 3] },
     timeLabel: "Preferred consultation time",
-    availabilityNote: "Consultations from 10:00 to 16:00; the clinic is closed on Sundays and Wednesdays and takes four parties a day, so each date is checked with the clinic. Requests close three days before the date.",
+    availabilityNote: "Consultations from 10:00 to 16:00; the clinic is closed on Sundays and Wednesdays and takes four parties a day, so each date is checked with the clinic. Requests close at 18:00 Japan time the day before.",
     scheduleNote: "A sample visit. The doctor decides the order and what is suitable for you; some treatments need a second visit, which the clinic will say at consultation.",
     taxIncluded: true,
     interpreter: false,
@@ -609,11 +612,29 @@ export const experiences: Experience[] = [
       heading: "Request a consultation",
       lead: "Tell us your date, how many of you there are and what you have in mind. The clinic confirms the appointment; nothing is paid until you have seen the doctor.",
     },
+    feeTable: {
+      heading: "Main single-visit treatments and fees",
+      lead: "The clinic's published fees, tax included, for the treatments that finish in one visit, and what they come to with the KAMEHAME JAPAN coupon. The doctor decides with you which, if any, suit you; you pay the clinic after the consultation.",
+      items: [
+        { name: "Filorga skin-quality injection", detail: "NCTF 135HA, one session", yen: 35200 },
+        { name: "NMN drip, 100 mg", detail: "about 60 minutes", yen: 44000 },
+        { name: "NMN drip, 300 mg", yen: 88000 },
+        { name: "Pico-laser toning", detail: "full face, one session", yen: 46200 },
+        { name: "Pico double", detail: "toning + fractional, one session", yen: 68200 },
+        { name: "Pico spot", detail: "one spot up to 10 mm", yen: 15400, upTo: 22000 },
+        { name: "Botulinum injection", detail: "forehead, glabella, crow's feet, chin, philtrum or mouth corners, per area", yen: 33000 },
+        { name: "Botulinum injection, jaw (masseter)", yen: 88000 },
+        { name: "Micro-botulinum lift", detail: "full face", yen: 110000, upTo: 132000 },
+        { name: "Hyaluronic-acid filler", detail: "lips, 1 syringe", yen: 55000 },
+        { name: "Hyaluronic-acid filler", detail: "nose or chin, 1 syringe", yen: 88000 },
+      ],
+      note: "Fees as published by the clinic in November 2026; the clinic may revise them. Two or more botulinum areas in one visit are discounted by the clinic separately. Regenerative treatments (PRP, VFD, stem-cell therapy) need more than one visit and are discussed at consultation only. All treatments are medical procedures with risks and possible side effects, explained by the doctor before you decide.",
+    },
     notesLabel: "What you would like to discuss, allergies, medication, pregnancy or health conditions (optional)",
     notesHint: "e.g. a drip and skin toning before our flight; one of us takes blood thinners",
     replyNote: "We confirm the appointment with the clinic, usually within one business day",
     perk: {
-      badge: "5% OFF",
+      badge: "5% OFF", percent: 5,
       short: "5% off the treatment fee when you book through KAMEHAME JAPAN",
       body: "Your confirmation comes with a coupon worth 5% of the treatment fee. Show it at the clinic when you pay; it applies to the treatment decided at your consultation.",
     },
@@ -623,7 +644,7 @@ export const experiences: Experience[] = [
     highlights: [
       { icon: "spark", title: "A doctor first, then the treatment", body: "Every visit starts with a consultation: your skin, your history, your plans, and what is reasonable in a single visit." },
       { icon: "group", title: "Four parties a day", body: "The house takes four bookings a day, each in a private room, so the visit is unhurried." },
-      { icon: "brush", title: "Treatments that finish in one visit", body: "Drips, skin-quality injections, HIFU and pico-laser toning can be done in one appointment; the doctor says which suit you and what downtime to expect." },
+      { icon: "brush", title: "Treatments that finish in one visit", body: "Drips, Filorga skin-quality injections, pico-laser toning and botulinum or hyaluronic-acid injections can be done in one appointment; the doctor says which suit you and what downtime to expect." },
     ],
     included: [
       "The doctor's consultation and skin check",
@@ -639,7 +660,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Arrival and consultation", body: "Through the courtyard to the consultation room. The doctor reviews your skin and history and explains the options, their fees and their risks." },
-      { time: "0:30", title: "Your treatment", body: "Carried out by the doctor or under the doctor's direction in a private room: a drip takes about 30 to 60 minutes; injections, HIFU or laser toning about 30 to 60 minutes each." },
+      { time: "0:30", title: "Your treatment", body: "Carried out by the doctor or under the doctor's direction in a private room: a drip takes about 30 to 60 minutes; injections or laser toning about 20 to 45 minutes each." },
       { time: "1:30", title: "Aftercare and payment", body: "Aftercare explained in your language; payment at the clinic by card or cash." },
       { time: "2:00", title: "End of the visit" },
     ],
@@ -654,12 +675,12 @@ export const experiences: Experience[] = [
       { title: "Consultation, then treatment, then pay", body: "The doctor confirms what suits you and the exact fee before anything is done. You pay the clinic on the day, showing the coupon. Nothing is charged through KAMEHAME JAPAN." },
     ],
     faq: [
-      { q: "What does it cost?", a: "The consultation is included in the appointment. Treatments are self-pay (not covered by insurance) and priced by the clinic; as a guide, a vitamin or NMN drip from about ¥15,000, skin-quality injections from about ¥33,000, HIFU from about ¥55,000 and pico-laser toning from about ¥22,000, tax included. The doctor confirms the exact fee at consultation and you pay at the clinic." },
+      { q: "What does it cost?", a: "The consultation is included in the appointment. Treatments are self-pay (not covered by insurance) and priced by the clinic; the main single-visit fees are listed above (Filorga injection ¥35,200, NMN drip from ¥44,000, pico-laser toning ¥46,200, botulinum from ¥33,000 per area, hyaluronic acid from ¥55,000, tax included), and the coupon takes 5% off them. The doctor confirms the exact fee at consultation and you pay at the clinic." },
       { q: "How does the 5% coupon work?", a: "Guests who book through KAMEHAME JAPAN receive a coupon with their confirmation worth 5% of the treatment fee. Show it at the clinic when you pay. It applies to the treatment decided at your consultation; the consultation itself is included in the appointment." },
       { q: "Are the treatments medical?", a: "Yes. Everything on the clinic's menu is a medical procedure performed by or under a doctor, under Japanese free (self-pay) practice. Each carries risks and possible side effects, such as redness, swelling, bruising, pain or, rarely, an allergic reaction; the doctor explains them for the treatment you choose, and some drips and injectables use products not approved for that use in Japan or your home country." },
       { q: "Can I have a stem-cell or regenerative treatment?", a: "The clinic offers regenerative treatments under plans notified to the Ministry of Health, Labour and Welfare. They are discussed at consultation, usually need more than one visit and are not booked from this page." },
       { q: "Is English spoken?", a: "Yes. The clinic's staff explain in English and Chinese, and consent forms and aftercare instructions are provided in your language. An interpreter guide is not needed." },
-      { q: "Is there downtime?", a: "It depends on the treatment. Drips have none; injections and laser toning can leave redness or small marks for a day or two; HIFU may leave mild tenderness. Tell the clinic about flights, sun exposure and events planned for the days after, and the doctor will advise." },
+      { q: "Is there downtime?", a: "It depends on the treatment. Drips have none; injections and laser toning can leave redness, small marks or slight swelling for a day or two. Tell the clinic about flights, sun exposure and events planned for the days after, and the doctor will advise." },
       { q: "Who cannot be treated?", a: "Guests under 18, and anyone who is pregnant or breastfeeding or has certain conditions or medication, may not be eligible for some or all treatments; please mention these when you request so the clinic can say in advance." },
       { q: "What if I decide against treatment after the consultation?", a: "That is fine. You pay only for what is done; there is no charge for deciding not to proceed." },
       { q: "What is the cancellation policy?", a: "The appointment is free to cancel or change until the day before, Japan time. Please tell us as early as you can: the clinic takes four parties a day." },
