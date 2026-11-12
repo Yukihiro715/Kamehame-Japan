@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 const { default: worker } = await import("../dist/server/index.js");
 const render = (path) => worker.fetch(new Request(`http://localhost${path}`, { headers: { accept: "text/html" } }), { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } }, { waitUntil() {}, passThroughOnException() {} });
 const PRIVATE = /ダヴィンチ|[Dd]a ?[Vv]inci|麻生|中島|藤森|[Ff]ujinomori|大亀谷|西寺町|075-606|jakuchu-an-biyo/;
-const FORBIDDEN_CLAIMS = /before and after|ビフォーアフター|guaranteed|保証|No\.\s?1|最高|cured|完治|testimonial|patients say|患者様の声/i;
+const FORBIDDEN_CLAIMS = /before and after|ビフォーアフター|guaranteed|保証|No\.\s?1|最高|cured|完治|testimonial|patients say|患者様の声|campaign|キャンペーン|limited time|期間限定|今だけ|今なら/i;
 
 test("clinic preview: unlisted, noindex, private, guideline wording, pay at the clinic", async () => {
   for (const [lang, expect] of [["en", "pay the clinic on the day"], ["ja", "クリニックでお支払い"]]) {
@@ -30,6 +30,7 @@ test("clinic preview: unlisted, noindex, private, guideline wording, pay at the 
     assert.ok(!/[¥￥]/.test(block(/class="bk-est[^"]*"[\s\S]*?<\/div>/)), `${lang}: no estimate amount in the booking card`);
     assert.ok(!/[¥￥]/.test(block(/class="sticky-request[^"]*"[\s\S]*?<\/div>\s*<a/)), `${lang}: no amount in the sticky bar`);
     assert.ok(!html.includes('"@type":"Product"'), `${lang}: no priced structured data`);
+    assert.ok(/5%/.test(block(/class="bk-est[^"]*"[\s\S]*?<\/div>/)), `${lang}: the 5% coupon is stated in the booking card`);
     assert.doesNotMatch(text, FORBIDDEN_CLAIMS, `${lang}: no testimonial, result or superlative wording`);
     assert.ok(text.includes(expect), `${lang}: payment at the clinic`);
     assert.ok(/self-pay|自由診療/.test(text), `${lang}: self-pay practice stated`);

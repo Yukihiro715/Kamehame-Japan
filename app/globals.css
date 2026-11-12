@@ -2487,3 +2487,4 @@ body[data-kh-modal] .sticky-request { display:none; }
 .bk-est.bk-consult { background:#eef3ee; }
 .bk-est.bk-consult span { display:flex; align-items:center; gap:6px; font-size:13px; letter-spacing:0; color:var(--ink); font-weight:600; }
 .bk-est.bk-consult small { color:#4a463e; }
+.bk-est.bk-consult .bk-perk { margin-top:6px; padding-top:8px; border-top:1px solid rgba(0,0,0,.08); }

@@ -54,6 +54,8 @@ export interface BookingExperience {
   /** Request-form notes field copy, when the product needs something specific. */
   notesLabel?: string;
   replyNote?: string;
+  /** One-line benefit of booking through us, shown in the card (e.g. a coupon). */
+  perk?: string;
   notesHint?: string;
   /** Product-specific button text and the trust line under it. */
   ctaLabel?: string;

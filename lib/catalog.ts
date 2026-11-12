@@ -220,6 +220,9 @@ export interface Experience {
   notesLabel?: string;
   /** Product-specific response expectation, when the generic 24-hour promise does not apply. */
   replyNote?: string;
+  /** A benefit for booking through us (e.g. a coupon the confirmation carries),
+   *  stated plainly in the booking card, the venue list and the FAQ. */
+  perk?: { short: string; body: string };
   notesHint?: string;
   /** Replaces the site-wide booking steps (written for the geiko evening). */
   flow?: { title: string; body: string }[];
@@ -602,13 +605,17 @@ export const experiences: Experience[] = [
     skipSiteFaq: true,
     cta: {
       label: "Request a consultation",
-      note: "No payment now. You pay the clinic on the day, after the consultation.",
+      note: "No payment now. You pay the clinic on the day, after the consultation, with a 5% coupon from your confirmation.",
       heading: "Request a consultation",
       lead: "Tell us your date, how many of you there are and what you have in mind. The clinic confirms the appointment; nothing is paid until you have seen the doctor.",
     },
     notesLabel: "What you would like to discuss, allergies, medication, pregnancy or health conditions (optional)",
     notesHint: "e.g. a drip and skin toning before our flight; one of us takes blood thinners",
     replyNote: "We confirm the appointment with the clinic, usually within one business day",
+    perk: {
+      short: "5% off the treatment fee when you book through KAMEHAME JAPAN",
+      body: "Your confirmation comes with a coupon worth 5% of the treatment fee. Show it at the clinic when you pay; it applies to the treatment decided at your consultation.",
+    },
     cancellation: "The appointment itself is free to cancel or change up to the day before, Japan time. Treatments are decided and paid at the clinic, so there is nothing to refund if you decide against a treatment after the consultation. A missed appointment without notice may mean the clinic declines a new booking.",
     cancellationTiers: [{ until: 1, rate: 0 }, { until: 0, rate: 0 }],
     includedShort: "Doctor's consultation · Private treatment room · English and Chinese explanations and consent forms",
@@ -637,16 +644,17 @@ export const experiences: Experience[] = [
     ],
     venue: {
       known: ["Jakuchu-an Clinic: a ryokan-style house with a pine courtyard in Fushimi, southern Kyoto — the exact address comes with your confirmation", "Four parties a day, each in a private room", "Closed on Sundays and Wednesdays", "All treatments are medical procedures carried out under free (self-pay) practice in Japan"],
-      afterBooking: ["The clinic's address and directions", "The appointment time and a phone number for the day", "A short medical questionnaire to fill in before you come"],
+      afterBooking: ["The clinic's address and directions", "The appointment time and a phone number for the day", "A 5% coupon for the treatment fee, to show at the clinic", "A short medical questionnaire to fill in before you come"],
       img: "/images/clinic-courtyard.webp", alt: "The courtyard of Jakuchu-an Clinic",
     },
     flow: [
       { title: "Send a consultation request", body: "Pick a date and time, say how many of you there are, and what you have in mind. It costs nothing." },
-      { title: "The clinic confirms the appointment", body: "We check the date with the clinic and send you the confirmation, the address and a short questionnaire, usually within one business day." },
-      { title: "Consultation, then treatment, then pay", body: "The doctor confirms what suits you and the exact fee before anything is done. You pay the clinic on the day. Nothing is charged through KAMEHAME JAPAN." },
+      { title: "The clinic confirms the appointment", body: "We check the date with the clinic and send you the confirmation, the address, your 5% coupon and a short questionnaire, usually within one business day." },
+      { title: "Consultation, then treatment, then pay", body: "The doctor confirms what suits you and the exact fee before anything is done. You pay the clinic on the day, showing the coupon. Nothing is charged through KAMEHAME JAPAN." },
     ],
     faq: [
       { q: "What does it cost?", a: "The consultation is included in the appointment. Treatments are self-pay (not covered by insurance) and priced by the clinic; as a guide, a vitamin or NMN drip from about ¥15,000, skin-quality injections from about ¥33,000, HIFU from about ¥55,000 and pico-laser toning from about ¥22,000, tax included. The doctor confirms the exact fee at consultation and you pay at the clinic." },
+      { q: "How does the 5% coupon work?", a: "Guests who book through KAMEHAME JAPAN receive a coupon with their confirmation worth 5% of the treatment fee. Show it at the clinic when you pay. It applies to the treatment decided at your consultation; the consultation itself is included in the appointment." },
       { q: "Are the treatments medical?", a: "Yes. Everything on the clinic's menu is a medical procedure performed by or under a doctor, under Japanese free (self-pay) practice. Each carries risks and possible side effects, such as redness, swelling, bruising, pain or, rarely, an allergic reaction; the doctor explains them for the treatment you choose, and some drips and injectables use products not approved for that use in Japan or your home country." },
       { q: "Can I have a stem-cell or regenerative treatment?", a: "The clinic offers regenerative treatments under plans notified to the Ministry of Health, Labour and Welfare. They are discussed at consultation, usually need more than one visit and are not booked from this page." },
       { q: "Is English spoken?", a: "Yes. The clinic's staff explain in English and Chinese, and consent forms and aftercare instructions are provided in your language. An interpreter guide is not needed." },

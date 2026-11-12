@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ArrowRight, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-react";
+import { ArrowRight, BadgePercent, CalendarDays, Check, Clock3, ShieldCheck } from "lucide-react";
 import { DatePicker } from "@/components/site/date-picker";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
@@ -126,6 +126,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         <div className="bk-est bk-consult">
           <span><ShieldCheck size={14} /> {D.consultOnlyPrice}</span>
           <small>{D.consultOnlyNote}</small>
+          {x.perk && <span className="bk-perk"><BadgePercent size={14} /> {x.perk}</span>}
         </div>
       ) : <div className="bk-est" aria-live="polite">
         {b.estimate ? (
