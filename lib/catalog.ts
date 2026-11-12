@@ -555,6 +555,99 @@ export const experiences: Experience[] = [
   },
 
   {
+    // Kyoto aesthetic clinic in a ryokan-style building (introduced 2026-11,
+    // via the inbound beauty-medicine group). Every item on its menu is a
+    // medical treatment under free (self-pay) practice, so this page is written
+    // to the medical advertising guideline: treatment names, indicative fees,
+    // risks and the self-pay notes only; no testimonials, no results, no
+    // before/after, no superlatives. Guests pay the clinic on the day; we only
+    // relay the request and the consultation. The clinic's name, address, phone,
+    // operating company and the doctor's name stay off the page (the doctor
+    // profile below is a placeholder until the clinic supplies its own).
+    // "preview" until photos and the clinic's sign-off arrive.
+    slug: "kyoto-ryokan-beauty-clinic", city: "kyoto", category: "wellness", bookingType: "request", status: "preview",
+    title: "A Beauty Clinic Day in a Ryokan-Style House, Kyoto",
+    tagline: "A doctor-led aesthetic clinic in southern Kyoto that receives four parties a day in a quiet ryokan-style house with a pine courtyard. Single-visit treatments chosen with the doctor at your consultation: vitamin and NMN drips, skin-quality injections, HIFU and pico-laser toning. Self-pay treatment; the fee is confirmed after the consultation and paid at the clinic.",
+    overview: [
+      "The clinic occupies a traditional-style house in Fushimi, south of central Kyoto, with a courtyard planted with pines and a corridor that leads you from the entrance to a private treatment room. Four parties a day, so you are never kept waiting with others. A doctor sees you first: skin, concerns, medical history, and what can sensibly be done in one visit before you travel on.",
+      "Treatments are medical, under Japanese free (self-pay) practice, and chosen with the doctor on the day. Typical single-visit choices are a vitamin or NMN drip, skin-quality (mesotherapy) injections, HIFU tightening, pico-laser toning and botulinum injections. Regenerative treatments are offered by the clinic under plans notified to the Ministry of Health, Labour and Welfare; they usually need more than one visit and are discussed at consultation, not booked from this page. Staff explain in English and Chinese, and consent forms are provided in your language.",
+    ],
+    duration: "About 1.5 to 2.5 hours", price: "¥33,000", priceUnit: "person", group: "Private rooms · 1–2 guests per booking", ages: "Ages 18+", area: "Kyoto (Fushimi)",
+    img: "/images/city-kyoto.jpg", alt: "Kyoto streets; the clinic's own photos follow",
+    gallery: [],
+    galleryNote: "The clinic's photos of the house, the courtyard and the treatment rooms are to come. The picture shown is a general view of Kyoto.",
+    partySize: { min: 1, max: 2, default: 1 },
+    availability: { daily: false, startTimes: ["10:00", "11:30", "14:00", "16:00"], defaultTime: "11:30", cutoffDays: 3, cutoffTime: "18:00", closedWeekdays: [0, 3] },
+    timeLabel: "Preferred consultation time",
+    availabilityNote: "Consultations from 10:00 to 16:00; the clinic is closed on Sundays and Wednesdays and takes four parties a day, so each date is checked with the clinic. Requests close three days before the date.",
+    scheduleNote: "A sample visit. The doctor decides the order and what is suitable for you; some treatments need a second visit, which the clinic will say at consultation.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "English and Chinese spoken · consent forms in your language",
+    skipSiteFaq: true,
+    cta: {
+      label: "Request a consultation",
+      note: "No payment now. You pay the clinic on the day, after the consultation.",
+      heading: "Request a consultation",
+      lead: "Tell us your date, how many of you there are and what you have in mind. The clinic confirms the appointment; nothing is paid until you have seen the doctor.",
+    },
+    notesLabel: "What you would like to discuss, allergies, medication, pregnancy or health conditions (optional)",
+    notesHint: "e.g. a drip and skin toning before our flight; one of us takes blood thinners",
+    replyNote: "We confirm the appointment with the clinic, usually within one business day",
+    cancellation: "The appointment itself is free to cancel or change up to the day before, Japan time. Treatments are decided and paid at the clinic, so there is nothing to refund if you decide against a treatment after the consultation. A missed appointment without notice may mean the clinic declines a new booking.",
+    cancellationTiers: [{ until: 1, rate: 0 }, { until: 0, rate: 0 }],
+    includedShort: "Doctor's consultation · Private treatment room · English and Chinese explanations and consent forms",
+    highlights: [
+      { icon: "spark", title: "A doctor first, then the treatment", body: "Every visit starts with a consultation: your skin, your history, your plans, and what is reasonable in a single visit." },
+      { icon: "group", title: "Four parties a day", body: "The house takes four bookings a day, each in a private room, so the visit is unhurried." },
+      { icon: "brush", title: "Treatments that finish in one visit", body: "Drips, skin-quality injections, HIFU and pico-laser toning can be done in one appointment; the doctor says which suit you and what downtime to expect." },
+    ],
+    included: [
+      "The doctor's consultation and skin check",
+      "A private treatment room for your appointment",
+      "Explanations in English or Chinese, and consent forms in your language",
+      "Aftercare instructions to take with you",
+    ],
+    notIncluded: [
+      "The treatments themselves: chosen with the doctor and paid at the clinic (self-pay practice; indicative fees below)",
+      "Transport to the clinic (the address comes with your confirmation; about 20 minutes by train from Kyoto Station)",
+      "Prescribed skincare or medication to take home",
+      "A second visit, where a treatment needs one",
+    ],
+    schedule: [
+      { time: "0:00", title: "Arrival and consultation", body: "Through the courtyard to the consultation room. The doctor reviews your skin and history and explains the options, their fees and their risks." },
+      { time: "0:30", title: "Your treatment", body: "Carried out by the doctor or under the doctor's direction in a private room: a drip takes about 30 to 60 minutes; injections, HIFU or laser toning about 30 to 60 minutes each." },
+      { time: "1:30", title: "Aftercare and payment", body: "Aftercare explained in your language; payment at the clinic by card or cash." },
+      { time: "2:00", title: "End of the visit" },
+    ],
+    venue: {
+      known: ["A ryokan-style house with a pine courtyard in Fushimi, southern Kyoto — the exact address comes with your confirmation", "Four parties a day, each in a private room", "Closed on Sundays and Wednesdays", "All treatments are medical procedures carried out under free (self-pay) practice in Japan"],
+      afterBooking: ["The clinic's name, address and directions", "The appointment time and a phone number for the day", "A short medical questionnaire to fill in before you come"],
+      img: "/images/city-kyoto.jpg", alt: "Kyoto; the clinic's own photos follow",
+    },
+    flow: [
+      { title: "Send a consultation request", body: "Pick a date and time, say how many of you there are, and what you have in mind. It costs nothing." },
+      { title: "The clinic confirms the appointment", body: "We check the date with the clinic and send you the confirmation, the address and a short questionnaire, usually within one business day." },
+      { title: "Consultation, then treatment, then pay", body: "The doctor confirms what suits you and the exact fee before anything is done. You pay the clinic on the day. Nothing is charged through KAMEHAME JAPAN." },
+    ],
+    faq: [
+      { q: "What does it cost?", a: "The consultation is included in the appointment. Treatments are self-pay (not covered by insurance) and priced by the clinic; as a guide, a vitamin or NMN drip from about ¥15,000, skin-quality injections from about ¥33,000, HIFU from about ¥55,000 and pico-laser toning from about ¥22,000, tax included. The doctor confirms the exact fee at consultation and you pay at the clinic." },
+      { q: "Are the treatments medical?", a: "Yes. Everything on the clinic's menu is a medical procedure performed by or under a doctor, under Japanese free (self-pay) practice. Each carries risks and possible side effects, such as redness, swelling, bruising, pain or, rarely, an allergic reaction; the doctor explains them for the treatment you choose, and some drips and injectables use products not approved for that use in Japan or your home country." },
+      { q: "Can I have a stem-cell or regenerative treatment?", a: "The clinic offers regenerative treatments under plans notified to the Ministry of Health, Labour and Welfare. They are discussed at consultation, usually need more than one visit and are not booked from this page." },
+      { q: "Is English spoken?", a: "Yes. The clinic's staff explain in English and Chinese, and consent forms and aftercare instructions are provided in your language. An interpreter guide is not needed." },
+      { q: "Is there downtime?", a: "It depends on the treatment. Drips have none; injections and laser toning can leave redness or small marks for a day or two; HIFU may leave mild tenderness. Tell the clinic about flights, sun exposure and events planned for the days after, and the doctor will advise." },
+      { q: "Who cannot be treated?", a: "Guests under 18, and anyone who is pregnant or breastfeeding or has certain conditions or medication, may not be eligible for some or all treatments; please mention these when you request so the clinic can say in advance." },
+      { q: "What if I decide against treatment after the consultation?", a: "That is fine. You pay only for what is done; there is no charge for deciding not to proceed." },
+      { q: "What is the cancellation policy?", a: "The appointment is free to cancel or change until the day before, Japan time. Please tell us as early as you can: the clinic takes four parties a day." },
+    ],
+    whatYoullDo: ["A consultation with the clinic's doctor", "A single-visit treatment chosen with the doctor, in a private room", "Aftercare explained in your language"],
+    master: { title: "Your doctor", bio: "Placeholder until the clinic supplies its own profile: the clinic's medical director is a board-certified plastic surgeon with experience in aesthetic and regenerative dermatology, who sees every guest personally at consultation. Full name and credentials follow from the clinic.", quote: "" },
+    itinerary: ["0:00 — Arrival and consultation", "0:30 — Your treatment", "1:30 — Aftercare and payment", "2:00 — End of the visit"],
+    goodToKnow: ["Consultations from 10:00 to 16:00; closed Sundays and Wednesdays; four parties a day.", "Ages 18+. Tell us about pregnancy, medication, allergies and health conditions when you request.", "Treatments are medical and self-pay; fees are confirmed by the doctor and paid at the clinic. Nothing is charged through KAMEHAME JAPAN.", "Plan the visit with your onward travel in mind: some treatments have a day or two of redness."],
+    story: { heading: "A quiet house, a doctor, one visit", body: "Kyoto's beauty clinics are usually on upper floors of city buildings. This one is a house with a courtyard, four parties a day, and a doctor who takes the time to say what is worth doing in a single visit." },
+  },
+
+  {
     // Tokyo calligraphy teacher; the partner's own brand is deliberately not
     // shown (guests would find it and book around us). Built from the condition
     // sheet, 2026-09; live since 2026-09-24 at ¥19,800 per person. Dates come from the
