@@ -114,7 +114,7 @@ test("golf page (booking service): a group fee from one golfer (¥15,000 + ¥5,0
   assert.equal(html.split("<form ").length - 1, 1, "exactly one form");
   // terms and structured data follow the fee
   assert.ok(!text.includes("Up to 7 days before the date") && text.includes("¥5,000 covers research and a suitable proposal") && text.includes("we retain ¥5,000 and refund the remainder"), "fee cancellation terms");
-  assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"15000"') && html.includes('"highPrice":"30000"'), "structured data carries the fee range");
+  assert.ok(html.includes('"@type":"AggregateOffer"') && html.includes('"lowPrice":"15000"') && html.includes('"highPrice":"30000"') && /"offerCount":\d+/.test(html), "structured data carries the fee range and the offer count");
   // the Japanese page and the listing card follow
   const ja = (await (await render("/ja/tokyo/mt-fuji-golf-day/")).text()).replace(/<[^>]+>/g, "");
   assert.ok(ja.includes("日本のゴルフ場予約手配サービス") && ja.includes("手配料") && ja.includes("ゴルフ場に集合"), "Japanese booking-service copy");

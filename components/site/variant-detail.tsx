@@ -329,7 +329,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
       )}
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, exp.price, exp.slug, maxPrice)),
+        __html: JSON.stringify(productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, exp.price, exp.slug, maxPrice, totals.length)),
       }} />
       <SiteFooter lang={lang} />
     </main>

@@ -82,7 +82,8 @@ export function withAlternates(meta: Metadata, languages: Record<string, string>
  *  only emitted from reviews written through our own booking flow: reviews
  *  the host venue or a partner collected are shown on the page with their
  *  provenance but are not ours to declare to search engines. */
-export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string, highPrice?: number) {
+/** `highPrice` with `offerCount` (the number of priced options behind the range) makes an AggregateOffer; Search Console flags the range without the count. */
+export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string, highPrice?: number, offerCount?: number) {
   const agg = slug && REVIEWS_PUBLISHED ? ownAggregateFor(slug) : null;
   const low = price.replace(/[^\d]/g, "");
   return {
@@ -94,7 +95,7 @@ export function productJsonLd(title: string, description: string, img: string, u
     url: `${SITE_ORIGIN}${url}`,
     // A range (the golf packages by area and party size) or a single lowest price.
     offers: highPrice
-      ? { "@type": "AggregateOffer", priceCurrency: "JPY", lowPrice: low, highPrice: String(highPrice), availability: "https://schema.org/PreOrder" }
+      ? { "@type": "AggregateOffer", priceCurrency: "JPY", lowPrice: low, highPrice: String(highPrice), offerCount: Math.max(1, offerCount ?? 1), availability: "https://schema.org/PreOrder" }
       : { "@type": "Offer", priceCurrency: "JPY", price: low, availability: "https://schema.org/PreOrder" },
     ...(agg && { aggregateRating: { "@type": "AggregateRating", ratingValue: agg.average, reviewCount: agg.count, bestRating: 5, worstRating: 1 } }),
   };
