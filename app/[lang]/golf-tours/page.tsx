@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { Bus, CheckCircle2, Flag, UserRound, Languages, ArrowRight, Circle, Plus } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { GolfGuestQuote } from "@/components/site/golf-guest-review";
+import { GolfTravelComparison } from "@/components/site/golf-travel-choice";
 import { busCopy, type BusCopy } from "@/lib/golfpaq-copy";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
@@ -85,6 +87,7 @@ export default async function GolfToursPage({ params }: Props) {
               </Link>
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>
+            <GolfGuestQuote lang={lang} landing />
           </div>
         </section>
 
@@ -101,17 +104,9 @@ export default async function GolfToursPage({ params }: Props) {
           </div>
         </section>
 
-        <section className="gl-estimate" aria-labelledby="gl-est-h">
+        <section className="gl-estimate">
           <div className="gb-wrap">
-            <h2 id="gl-est-h">{C.estimateH}</h2>
-            <p className="gb-lede">{C.estimateLede}</p>
-            <div className="gl-table-wrap">
-              <table className="gl-table gl-table-est">
-                <thead><tr><th scope="col"></th><th scope="col">{C.estimateCols[0]}</th><th scope="col">{C.estimateCols[1]}</th></tr></thead>
-                <tbody>{C.estimateRows.map((r, i) => <tr key={r.label} className={i >= C.estimateRows.length - 2 ? "total" : ""}><th scope="row">{r.label}</th><td>{r.feeOnly}</td><td>{r.withTransfer}</td></tr>)}</tbody>
-              </table>
-            </div>
-            <p className="gb-small">{C.estimateNote}</p>
+            <GolfTravelComparison lang={lang} />
           </div>
         </section>
 

@@ -1,0 +1,32 @@
+.choice { margin:0; min-width:0; }
+.legend { font-size:15px; font-weight:600; margin-bottom:8px; }
+.fieldset { border:0; padding:0; margin:0 0 14px; min-width:0; }
+.prompt { margin:0 0 10px; color:var(--muted); font-size:13px; line-height:1.5; }
+.radios { display:grid; gap:8px; }
+.option { display:flex!important; align-items:center; gap:9px; min-height:44px; padding:12px; border:1px solid var(--line,#ddd); border-radius:8px; font-size:14px!important; cursor:pointer; }
+.option:focus-within { outline:2px solid var(--kame); outline-offset:2px; }
+.option input { width:16px!important; height:16px!important; margin:0; flex:none; accent-color:var(--kame); }
+.option:has(input:checked) { background:var(--cream,#faf5e9); border-color:var(--kame); }
+.estimate, .bus { border-radius:12px; padding:18px; margin:12px 0; min-width:0; color:var(--ink); }
+.estimate { background:var(--cream,#faf5e9); }
+.bus { border:1px solid var(--kame); background:var(--paper,#fff); }
+.title { font-size:17px!important; font-weight:600!important; line-height:1.4!important; margin:0 0 8px!important; }
+.price { font-size:clamp(21px,3vw,27px)!important; font-weight:650; line-height:1.3; margin:8px 0!important; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.text { font-size:14px!important; line-height:1.55!important; margin:6px 0!important; }
+.note { font-size:13px!important; line-height:1.6!important; margin:8px 0!important; color:var(--muted,#59625d); }
+.split { margin:12px 0 4px!important; padding-top:12px; border-top:1px solid var(--line,#ddd); font-size:14px!important; font-weight:600; }
+.tag { display:block; font-size:12px; font-weight:600; color:var(--ink); margin-bottom:8px; }
+.cta { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:44px; padding:10px 14px; margin-top:14px; border-radius:8px; background:var(--kame); color:var(--ink)!important; font-size:14px; text-decoration:none; }
+.cta:hover { filter:brightness(.95); }
+.cta svg { flex:none; }
+.summary { font-size:13px; line-height:1.65; padding:16px; border:1px solid #e6e1d6; border-radius:12px; background:#f7f4ec; margin:16px 0; }
+.summary .split { padding-top:10px; margin:10px 0!important; }
+.summary .text { margin:6px 0!important; }
+.summary .note { margin:10px 0 0!important; }
+.compact { padding:16px; }
+.compact .price { font-size:20px!important; }
+.compact .tag { margin-bottom:4px; }
+.compact .cta { margin-top:16px; }
+.comparison { max-width:800px; margin:auto; }
+/* Expanded travel guidance must scroll with the page, never hide its CTA below a sticky viewport. */
+:global(.xp-side):has([data-fuji-transfer-estimate]) { position:static; }

@@ -1,3 +1,4 @@
+import golfPageStyles from "./golf-page.module.css";
 import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 import Link from "next/link";
 import { Check, Clock3, Wine } from "lucide-react";
@@ -11,6 +12,7 @@ import { ReviewSummaryPanel } from "@/components/site/reviews";
 import { CancellationTable } from "@/components/site/cancellation-table";
 import { GolfGallery, type GolfPhoto } from "@/components/site/golf-gallery";
 import { GolfGuideSample } from "@/components/site/golf-guide-sample";
+import { GolfGuestReview } from "@/components/site/golf-guest-review";
 import { GolfOptions } from "@/components/site/golf-options";
 import { GolfRequestForm } from "@/components/site/golf-request-form";
 import { GolfInclusions } from "@/components/site/golf-inclusions";
@@ -24,7 +26,7 @@ import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, t
 import { Fx, FxNote } from "@/components/site/money";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/reviews";
+import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/published-reviews";
 import { langHome, t, type Lang } from "@/lib/i18n";
 import { productJsonLd } from "@/lib/seo";
 
@@ -72,6 +74,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   const photos: GolfPhoto[] = [{ img: exp.img, alt: exp.alt }, ...exp.gallery.filter((g) => g.img !== exp.img)];
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
+  const hasGolfGuest = exp.slug === "mt-fuji-golf-day" && reviews.some((r) => r.id === "tyler-takane-2026-11" && r.verified);
   const pricings = Object.fromEntries(variants.map((v) => [v.id, pricingForVariant(exp, v, lang)]));
   const avail = exp.availability;
   const size = exp.partySize ?? { min: 2, max: 4 };
@@ -103,7 +106,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   };
 
   return (
-    <main className="subpage detail-page xp xp2 xp-variant" lang={lang}>
+    <main className={`subpage detail-page xp xp2 xp-variant ${golfPageStyles.page}`} lang={lang}>
       <SiteHeader variant="solid" lang={lang} />
       <Breadcrumbs trail={[
         { label: T.home, href: langHome(lang) },
@@ -142,6 +145,8 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
               {vc.intro.guideNote && <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>}
             </section>
 
+            {hasGolfGuest && <GolfGuestReview lang={lang} ctaLabel={ctaLabel} />}
+
             {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}
             <GolfInclusions copy={clubRental ? { ...vc.inclusions, items: vc.inclusions.items.map((it) => (it.id === "clubs" ? { ...it, note: R.inclusionNote } : it)) } : vc.inclusions} />
             {jump}
@@ -153,8 +158,8 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
             <GolfTransfer copy={vc.transfer} />
             {jump}
 
-            {/* 4. Reviews (as supplied; not rewritten for the new packages) */}
-            {hasReviews && (
+            {/* Golf uses its verified booking review section above; show only one review source. */}
+            {hasReviews && exp.slug !== "mt-fuji-golf-day" && (
               <section className="xp-section" id="reviews">
                 <h2>{T.reviewsH}</h2>
                 <ReviewSummaryPanel experience={exp.slug} lang={lang} />

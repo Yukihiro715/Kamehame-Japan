@@ -1,0 +1,53 @@
+.page :global(.vh-side) { align-self:start; }
+.page :global(.go-brief) { gap:18px; }
+.page :global(.go-brief > [data-fuji-transfer-estimate]), .page :global(.go-brief > [data-shared-bus-budget]) { margin:0; }
+.page :global(.go-cta-note) { margin:12px 0 0; line-height:1.7; }
+.page :global(.go-brief .go-cta-note) { margin:0; }
+.page :global(.xp-main > .xp-section) { padding-top:44px; }
+.page :global(.xp-main > .xp-section:first-child) { padding-top:0; }
+.page :global(#about > .xp-note) { margin:20px 0 0; padding:20px; border:1px solid #e6e1d6; border-radius:14px; background:#f7f4ec; }
+.page :global(#about .xp-note p) { margin:0; }
+.page :global(#about .xp-note h3) { margin:0 0 10px; line-height:1.55; }
+.page :global(#about .xp-note p + h3) { margin-top:22px; }
+.page :global(.gi-notes), .page :global(.gcr-notes), .page :global(.gt-note), .page :global(.vh-known), .page :global(.vp-notes) { margin-top:20px; padding:14px 16px; font-size:13px; line-height:1.75; }
+.page :global(.gi-notes p + p), .page :global(.gcr-notes p + ul) { margin-top:10px; }
+.page :global(.golf-form) { gap:24px; margin-top:24px; }
+.page :global(.golf-form .form-step) { padding:18px; margin:0; border:1px solid #e6e1d6; border-radius:14px; background:#faf8f3; gap:16px; }
+.page :global(.golf-form .form-step > legend) { float:left; width:100%; padding:0; margin:0 0 14px; font-family:var(--font-sans); font-size:16px; font-weight:600; letter-spacing:0; text-transform:none; line-height:1.5; }
+.page :global(.golf-form .form-step > legend + *) { clear:both; }
+.page :global(.golf-form label:not(.form-check):not(.go-seg-opt)) { display:grid; gap:8px; align-content:start; }
+.page :global(.golf-form .form-hint), .page :global(.golf-form label > small) { margin:6px 0 0; font-size:12px; line-height:1.7; color:var(--muted); }
+.page :global(.golf-form .go-rental-note) { margin:4px 0 12px; }
+.page :global(.golf-form .go-rental-row) { padding:14px; border:1px solid #e6e1d6; border-radius:10px; background:var(--white); gap:10px; }
+.page :global(.golf-form .go-rental-row + .go-rental-row) { margin-top:6px; }
+.page :global(.golf-form .form-after) { margin:0; padding:16px; border:1px solid #e6e1d6; border-radius:12px; background:#f7f4ec; font-size:13px; line-height:1.8; }
+.page :global(.golf-form .form-after .form-privacy) { display:block; margin-top:12px; line-height:1.7; }
+.page :global(.go-confirm > small) { display:block; margin-top:14px; line-height:1.7; }
+.page :global(.go-confirm) { padding:18px; }
+.page :global(.go-confirm dd small), .page :global(.go-summary-price small) { margin-top:8px; line-height:1.6; }
+.page :global(.go-confirm dl) { gap:12px; }
+.page :global(.xp-cancel-list li + li) { margin-top:12px; }
+.page :global(.vh-cols) { padding-bottom:0; }
+.page :global(.gb-ways-inline) { margin-top:40px; padding:32px clamp(24px,5vw,64px); border-block:1px solid #e6e1d6; background:#f7f4ec; }
+.page :global(.gb-ways-inline .gb-cta-row) { max-width:1232px; margin:0 auto; gap:18px; }
+.page :global(.gb-ways-inline .gb-cta-card) { padding:20px; gap:14px; }
+.page :global(.gb-ways-inline .gb-small) { line-height:1.75; }
+.page :global(.more-in) { padding-top:48px; }
+@media(max-width:700px) {
+  .page :global(.vh-benefits) { display:grid; grid-template-columns:max-content max-content; gap:8px 6px; }
+  .page :global(.vh-benefits li) { padding:7px 9px; font-size:12px; gap:5px; }
+  .page :global(.vh-benefits li:has(a)) { grid-column:1 / -1; justify-self:start; }
+  .page :global(.vh-benefits li a) { gap:5px; }
+
+  .page :global(.golf-form .form-step) { padding:16px; }
+  .page :global(.golf-form .form-row.two:not(.keep)) { grid-template-columns:1fr; gap:16px; }
+  .page :global(.golf-form input), .page :global(.golf-form select), .page :global(.golf-form textarea) { font-size:16px; }
+  .page :global(.golf-form .wa-field) { grid-template-columns:minmax(0,1fr); }
+  .page :global(.golf-form .form-row.two > span:empty) { display:none; }
+  .page :global(.golf-form .go-rental-row) { padding:12px; grid-template-columns:minmax(0,1fr); }
+  .page :global(.golf-form .go-rental-row > span:empty) { display:none; }
+  .page :global(.go-confirm dl > div) { grid-template-columns:85px minmax(0,1fr); gap:10px; }
+  .page :global(.gb-ways-inline) { padding:28px 20px; }
+  .page :global(.gb-ways-inline .gb-cta-row) { grid-template-columns:minmax(0,1fr); }
+  .page :global(.more-in) { padding-top:40px; }
+}

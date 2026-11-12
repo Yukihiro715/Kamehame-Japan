@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { quote, type PricingView, type Quote } from "@/lib/pricing";
 import { track } from "@/lib/analytics";
+import { readGolfTravelQuery, type GolfTransferChoice } from "@/lib/golf-travel";
 
 /** One alternative on a two-plan page, as the booking state needs it. */
 export interface BookingVariant {
@@ -87,6 +88,7 @@ export interface BookingState {
   courseUrl: string;
   /** Golf booking service: golfers who take the chosen-set club rental (lib/golf-club-rental.ts). */
   clubRentals: number;
+  golfTransfer: GolfTransferChoice | "";
 }
 
 interface Booking extends BookingState {
@@ -172,7 +174,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     guests: String(Math.min(Math.max(experience.minGuests, experience.defaultGuests ?? 2), maxGuests)), addOns: [],
     interpreter: lang === "es" || lang === "fr" ? lang : "en",
     variant: initialVariant, coursePref: "recommended", courseName: "", courseUrl: "",
-    clubRentals: 0,
+    clubRentals: 0, golfTransfer: "introduce",
   });
   // Until the guest picks a time, switching variant moves to that variant's usual departure.
   const [timeTouched, setTimeTouched] = useState(false);
@@ -207,6 +209,11 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     const area = q.get("area");
     const golfers = Number(q.get("golfers"));
     const patch: Partial<BookingState> = {};
+    if (experience.slug === "mt-fuji-golf-day") {
+      const travel = readGolfTravelQuery(q, maxGuests);
+      if (travel.date && isBookable(travel.date, experience)) patch.date = travel.date;
+      if (travel.transfer) patch.golfTransfer = travel.transfer;
+    }
     if (area && experience.variants.some((v) => v.id === area) && area !== initialVariant) {
       patch.variant = area;
       patch.time = pickDefault(variantTime(area));
@@ -236,6 +243,9 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
         }
         if (patch.coursePref !== undefined && patch.coursePref !== state.coursePref) {
           track(`${prefix}_course_preference_selected`, { preference: patch.coursePref, experience: experience.slug });
+        }
+        if (patch.golfTransfer !== undefined && patch.golfTransfer !== state.golfTransfer) {
+          track("golf_transfer_selected", { transfer: patch.golfTransfer, area: state.variant, golfers: guestsNumber });
         }
         if (patch.time !== undefined) setTimeTouched(true);
         setState((s) => {

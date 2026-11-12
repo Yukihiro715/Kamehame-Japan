@@ -36,6 +36,8 @@ Released to production on 2026-11-02 (owner's approval). Production shows the pa
 3. Mail, via Resend: customer acknowledgement (totals only, "not yet confirmed, no payment taken"), staff notification to `CONTACT_TO` (with the breakdown), partner hand-over to `GOLFPAQ_PARTNER_TO` (with the breakdown). Slack gets the party (rentals and shoe sizes), hotel, notes and the mail results, naming the partner (internal only).
 4. Status starts at `received`, becomes `handed_over` when the partner mail is sent; operations move it on from `/ops/bus-tours/`.
 
+Internal staff notifications use `KAMEHAME JAPAN Site <enquiries@kamehame-japan.com>`, matching the regular contact form and the booking-ledger webhook. Their Reply-To is the guest's email. Customer acknowledgements and partner handovers continue to use `hello@kamehame-japan.com`. The ledger also accepts legacy `hello@` messages with the `[乗合ゴルフ]` subject prefix; match the GP reference as well as Gmail IDs to avoid duplicate cases across sender changes. An unset `GOLFPAQ_PARTNER_TO` blocks partner handover only, not staff notification or ledger intake.
+
 Initial operation: KAMEHAME phones the partner to hold the seats; the partner (or operations on the partner's approved route) sends the purchase instructions; the customer pays the seller directly; operations mark `purchased` then `confirmed`.
 
 ## Operations portal

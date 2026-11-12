@@ -524,7 +524,7 @@ export const experiences: Experience[] = [
       { time: "3:30", title: "End of the session" },
     ],
     venue: {
-      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Normally closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "As Tokyo regulations require, an attendant is on duty and a monitoring camera watches over the bath for safety; where it points, who can see it and how the images are handled are confirmed with you before you book"],
+      known: ["A private home spa in Nerima, Tokyo — the exact address comes with your confirmation", "Your group alone: no other guests share the space, one group a day", "Normally closed on Tuesdays", "Meet at the building entrance 5 to 10 minutes before your start time", "Following guidance from the public health centre, safety cameras are installed in some parts of the facility. There are no cameras in the bathroom, changing area or toilet. Live footage is checked only when needed for safety; no footage is recorded or stored."],
       afterBooking: ["The spa's name, address and directions", "Arrival instructions and a phone number for the day"],
       img: "/images/nerima-herbal-bath.webp", alt: "The private bath",
     },
@@ -532,7 +532,7 @@ export const experiences: Experience[] = [
     notesHint: "e.g. one of us is pregnant; a child of eight joins; we would like an interpreter",
     flow: [
       { title: "Choose a date and send your request", body: "Pick a date, 11:00 or 16:30, and how many of you there are, with children's ages and any allergies." },
-      { title: "We reply within 24 hours", body: "The spa takes one group a day, so we check your date first, then confirm the price for your group, the conditions and the camera arrangements." },
+      { title: "We reply within 24 hours", body: "The spa takes one group a day, so we check your date first, then confirm the price for your group and the booking conditions." },
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
@@ -542,7 +542,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, with a guardian, by prior arrangement. Tell us their ages and how many; the spa confirms participation and the price. Mixed bathing in the private bath is for children up to six." },
       { q: "Can we take the bath blends home?", a: "Yes: two of the three packs you make go home with you, packed on the day. Postal delivery is not offered." },
       { q: "Can we bring food?", a: "Yes. Herbal tea and hot-spring drinking water are provided; you may bring your own meal for the rest time." },
-      { q: "Is the bath monitored?", a: "Yes. As Tokyo regulations require, an attendant is on duty and a monitoring camera watches over the bath for safety. Before you book we confirm with you where it points, who can see it and how the images are handled, and you decide." },
+      { q: "Are there cameras in the private areas?", a: "No. There are no cameras in the bathroom, changing area or toilet, and guests are not filmed while bathing or changing. Following guidance from the public health centre, safety cameras are installed in some other parts of the facility. Live footage is checked only when needed for safety; no footage is recorded or stored." },
       { q: "Who should check with us first?", a: "Anyone pregnant, with a chronic condition, a heart condition or high blood pressure, or who is unwell: the spa asks for a doctor's clearance. This is a relaxation experience, not a medical treatment." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. A confirmed date cannot be changed. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the date confirmation, the price for your group and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
