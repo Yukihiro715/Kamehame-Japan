@@ -5,7 +5,7 @@ import {
   cancellationFor, catalogFor, cityBySlug,
   isLive, TOURS_PUBLISHED, type Experience, type Tour,
 } from "@/lib/catalog";
-import type { Lang } from "@/lib/i18n";
+import { t, type Lang } from "@/lib/i18n";
 import { listPrice } from "@/lib/pricing";
 import { THEMES, themeBySlug, themeCategories } from "@/lib/themes";
 import { OFUKURO_CAMPAIGN, OFUKURO_FOUNDING, ofukuroFoundingRows, yenOf } from "@/lib/ofukuro-dinner";
@@ -319,9 +319,9 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       kind: "experience", slug: e.slug, live: isLive(e), unit: lp.unit, href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
       tags: [catBySlug(e.category)?.tag ?? "", isPrivate ? S.privateTag : S.smallGroupTag].filter(Boolean),
       title: e.title, line: e.tagline,
-      meta: `${cityTitle(e.city)} · ${e.duration}`, price: lp.price, priceNote: lp.note,
+      meta: `${cityTitle(e.city)} · ${e.duration}`, price: e.consultationOnly ? "" : lp.price, priceNote: e.consultationOnly ? t(lang).detail.consultOnlyShort : lp.note,
       photos: photosOf(e.img, e.gallery ?? []), city: e.city, cityLabel: cityTitle(e.city), category: e.category, categoryLabel: catBySlug(e.category)?.title ?? e.category,
-      durationLabel: e.duration, minutes: parseMinutes(e.duration), priceYen: parseYen(lp.price), isPrivate, bookingType: e.bookingType === "instant" ? "instant" : "request",
+      durationLabel: e.duration, minutes: parseMinutes(e.duration), priceYen: e.consultationOnly ? null : parseYen(lp.price), isPrivate, bookingType: e.bookingType === "instant" ? "instant" : "request",
       rating: agg ? { average: agg.average, count: agg.count } : null,
     };
   };

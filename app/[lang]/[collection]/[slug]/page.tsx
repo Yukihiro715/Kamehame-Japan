@@ -160,8 +160,9 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   const perGroup = pricing.unit === "group";
   const first = pricing.rows[0];
   // Group-priced products headline the per-person figure, with the group total beside it.
-  const headlinePrice = perGroup ? yen(first.perPerson) : exp.price;
-  const headlineCondition = perGroup ? D.totalForParty(yen(first.total), first.party) : T.perPersonUnit;
+  const consultOnly = !!exp.consultationOnly;
+  const headlinePrice = consultOnly ? D.consultOnlyH : perGroup ? yen(first.perPerson) : exp.price;
+  const headlineCondition = consultOnly ? D.consultOnlyPrice : perGroup ? D.totalForParty(yen(first.total), first.party) : T.perPersonUnit;
   const plans = pricing.plans ?? [];
   const eg = pricing.extraGuest;
   const supplementPlans = pricing.planMode === "supplement";
@@ -188,7 +189,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   ];
   const booking = {
     slug: exp.slug, title: exp.title,
-    provisionalCheckout: provisional, weekdaysOnly: provisional && !!EXPERIENCE_PRODUCTS[exp.slug].adultOnly,
+    provisionalCheckout: provisional, consultationOnly: consultOnly || undefined, weekdaysOnly: provisional && !!EXPERIENCE_PRODUCTS[exp.slug].adultOnly,
     weekendsOnly: avail?.weekendsOnly, openFrom: avail?.openFrom, closedWeekdays: avail?.closedWeekdays,
     cancellationText: cancellation, cancellationTiers: exp.cancellationTiers,
     leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00", cutoffHours: avail?.cutoffHours,
@@ -309,7 +310,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             )}
 
             {/* ④′ Flat pricing table (products without plans) */}
-            {plans.length === 0 && !exp.pricePending && (
+            {plans.length === 0 && !exp.pricePending && !consultOnly && (
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
                 <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />
@@ -565,7 +566,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
         </section>
       )}
 
-      {!exp.pricePending && <script type="application/ld+json" dangerouslySetInnerHTML={{
+      {!exp.pricePending && !consultOnly && <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
       }} />}
       <SiteFooter lang={lang} />

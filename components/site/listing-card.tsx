@@ -62,7 +62,7 @@ export function ListingCard({ item, lang = "en", view = "grid", eager = false }:
         <p className="lc-facts">
           <span>{item.cityLabel}</span>
           {item.durationLabel && <span><Clock3 size={12} /> {item.durationLabel}</span>}
-          <span className="lc-price">{T.from} <b><Fx>{item.price}</Fx></b> {item.kind === "experience" ? (item.unit === "group" ? T.perGroupShort : T.perPerson) : ""}</span>
+          {item.price && <span className="lc-price">{T.from} <b><Fx>{item.price}</Fx></b> {item.kind === "experience" ? (item.unit === "group" ? T.perGroupShort : T.perPerson) : ""}</span>}
         </p>
         {item.priceNote && <small className="lc-note"><Fx>{item.priceNote}</Fx></small>}
         {item.rating && <p className="lc-rating"><Star size={12} fill="currentColor" /> {item.rating.average.toFixed(1)} <span>{L.reviews(item.rating.count)}</span></p>}

@@ -183,6 +183,11 @@ export interface Experience {
   price: string;
   /** Review-only product whose selling price has not been agreed. */
   pricePending?: boolean;
+  /** Medical consultation booked without a price: the fee is decided at the
+   *  consultation and paid at the clinic, so no amount is shown anywhere in
+   *  the booking display (card, sticky bar, form, listing, structured data).
+   *  `price` stays as an internal indicative figure only. */
+  consultationOnly?: boolean;
   group: string;
   ages: string;
   area: string;
@@ -354,7 +359,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "consultationOnly" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
 
 export interface Tour {
   slug: string;
@@ -561,21 +566,31 @@ export const experiences: Experience[] = [
     // to the medical advertising guideline: treatment names, indicative fees,
     // risks and the self-pay notes only; no testimonials, no results, no
     // before/after, no superlatives. Guests pay the clinic on the day; we only
-    // relay the request and the consultation. The clinic's name, address, phone,
-    // operating company and the doctor's name stay off the page (the doctor
-    // profile below is a placeholder until the clinic supplies its own).
-    // "preview" until photos and the clinic's sign-off arrive.
-    slug: "kyoto-ryokan-beauty-clinic", city: "kyoto", category: "wellness", bookingType: "request", status: "preview",
-    title: "A Beauty Clinic Day in a Ryokan-Style House, Kyoto",
-    tagline: "A doctor-led aesthetic clinic in southern Kyoto that receives four parties a day in a quiet ryokan-style house with a pine courtyard. Single-visit treatments chosen with the doctor at your consultation: vitamin and NMN drips, skin-quality injections, HIFU and pico-laser toning. Self-pay treatment; the fee is confirmed after the consultation and paid at the clinic.",
+    // relay the request and the consultation. The clinic's name may appear
+    // (agreed 2026-11); its address, phone, operating company and the doctor's
+    // name stay off the page (the doctor profile below is a placeholder until
+    // the clinic supplies its own). Photos are the clinic's own, from its site.
+    // No amount is shown in the booking display (`consultationOnly`); the FAQ
+    // keeps the indicative fees the guideline asks for. "preview" until the
+    // clinic's sign-off arrives.
+    slug: "kyoto-ryokan-beauty-clinic", city: "kyoto", category: "wellness", bookingType: "request", status: "preview", consultationOnly: true,
+    title: "A Beauty Clinic Day at Jakuchu-an Clinic, Kyoto",
+    tagline: "Jakuchu-an Clinic is a doctor-led aesthetic clinic in southern Kyoto that receives four parties a day in a quiet ryokan-style house with a pine courtyard. Single-visit treatments chosen with the doctor at your consultation: vitamin and NMN drips, skin-quality injections, HIFU and pico-laser toning. Self-pay treatment; the fee is confirmed after the consultation and paid at the clinic.",
     overview: [
-      "The clinic occupies a traditional-style house in Fushimi, south of central Kyoto, with a courtyard planted with pines and a corridor that leads you from the entrance to a private treatment room. Four parties a day, so you are never kept waiting with others. A doctor sees you first: skin, concerns, medical history, and what can sensibly be done in one visit before you travel on.",
+      "Named after the Edo painter Itō Jakuchū, whose works hang in its rooms, the clinic occupies a traditional-style house in Fushimi, south of central Kyoto, with a courtyard planted with pines and a corridor that leads you from the entrance to a private treatment room. Four parties a day, so you are never kept waiting with others. A doctor sees you first: skin, concerns, medical history, and what can sensibly be done in one visit before you travel on.",
       "Treatments are medical, under Japanese free (self-pay) practice, and chosen with the doctor on the day. Typical single-visit choices are a vitamin or NMN drip, skin-quality (mesotherapy) injections, HIFU tightening, pico-laser toning and botulinum injections. Regenerative treatments are offered by the clinic under plans notified to the Ministry of Health, Labour and Welfare; they usually need more than one visit and are discussed at consultation, not booked from this page. Staff explain in English and Chinese, and consent forms are provided in your language.",
     ],
     duration: "About 1.5 to 2.5 hours", price: "¥33,000", priceUnit: "person", group: "Private rooms · 1–2 guests per booking", ages: "Ages 18+", area: "Kyoto (Fushimi)",
-    img: "/images/city-kyoto.jpg", alt: "Kyoto streets; the clinic's own photos follow",
-    gallery: [],
-    galleryNote: "The clinic's photos of the house, the courtyard and the treatment rooms are to come. The picture shown is a general view of Kyoto.",
+    img: "/images/clinic-entrance.webp", alt: "The entrance of Jakuchu-an Clinic: a wooden sign beside a pine and the stepping-stone path to the house",
+    gallery: [
+      { img: "/images/clinic-courtyard.webp", alt: "The clinic's courtyard: stepping stones through white gravel between pines and camellias" },
+      { img: "/images/clinic-stones.webp", alt: "Stepping stones and a stone lantern in the clinic's courtyard" },
+      { img: "/images/clinic-screens.webp", alt: "Reproductions of Itō Jakuchū's bird-and-flower paintings in the clinic's corridor" },
+      { img: "/images/clinic-lounge.webp", alt: "The waiting lounge: a sofa by paper screens, with a view of the courtyard" },
+      { img: "/images/clinic-corridor.webp", alt: "The corridor from the entrance to the treatment rooms" },
+      { img: "/images/clinic-gate.webp", alt: "The clinic's gate and tiled roof from the street" },
+    ],
+    galleryNote: "Photos by Jakuchu-an Clinic.",
     partySize: { min: 1, max: 2, default: 1 },
     availability: { daily: false, startTimes: ["10:00", "11:30", "14:00", "16:00"], defaultTime: "11:30", cutoffDays: 3, cutoffTime: "18:00", closedWeekdays: [0, 3] },
     timeLabel: "Preferred consultation time",
@@ -621,9 +636,9 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the visit" },
     ],
     venue: {
-      known: ["A ryokan-style house with a pine courtyard in Fushimi, southern Kyoto — the exact address comes with your confirmation", "Four parties a day, each in a private room", "Closed on Sundays and Wednesdays", "All treatments are medical procedures carried out under free (self-pay) practice in Japan"],
-      afterBooking: ["The clinic's name, address and directions", "The appointment time and a phone number for the day", "A short medical questionnaire to fill in before you come"],
-      img: "/images/city-kyoto.jpg", alt: "Kyoto; the clinic's own photos follow",
+      known: ["Jakuchu-an Clinic: a ryokan-style house with a pine courtyard in Fushimi, southern Kyoto — the exact address comes with your confirmation", "Four parties a day, each in a private room", "Closed on Sundays and Wednesdays", "All treatments are medical procedures carried out under free (self-pay) practice in Japan"],
+      afterBooking: ["The clinic's address and directions", "The appointment time and a phone number for the day", "A short medical questionnaire to fill in before you come"],
+      img: "/images/clinic-courtyard.webp", alt: "The courtyard of Jakuchu-an Clinic",
     },
     flow: [
       { title: "Send a consultation request", body: "Pick a date and time, say how many of you there are, and what you have in mind. It costs nothing." },
@@ -4167,7 +4182,7 @@ const golfPage = (e: Experience, lang: Lang) => isArrangement() ? applyGolfArran
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "consultationOnly", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);

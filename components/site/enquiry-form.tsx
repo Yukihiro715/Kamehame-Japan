@@ -245,7 +245,8 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
               </fieldset>
             )}
           </div>
-          {!card && <div className="form-estimate" aria-live="polite">
+          {!card && x?.consultationOnly && <div className="form-estimate"><span>{D.consultOnlyPrice}</span><small>{D.consultOnlyNote}</small></div>}
+          {!card && !x?.consultationOnly && <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
               <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} />{provisional ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}</>
             ) : (

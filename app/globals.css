@@ -2482,3 +2482,8 @@ body[data-kh-modal] .sticky-request { display:none; }
   .review-layout { gap: 24px; }
   .closing-section { padding: 64px 22px; }
 }
+
+/* Consultation-only booking (a clinic): the card carries no amount, only the rule. */
+.bk-est.bk-consult { background:#eef3ee; }
+.bk-est.bk-consult span { display:flex; align-items:center; gap:6px; font-size:13px; letter-spacing:0; color:var(--ink); font-weight:600; }
+.bk-est.bk-consult small { color:#4a463e; }

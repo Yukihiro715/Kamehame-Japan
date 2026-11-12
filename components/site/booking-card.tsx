@@ -63,7 +63,13 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   return (
     <div className={`bk-card${open ? " open" : ""}`} id="booking">
       <div className="bk-price">
-        {x.provisionalCheckout && (b.quoteRequested || b.largeParty) ? <b className="bk-quote-heading">{quoteCopy[lang].heading}</b> : groupRow ? (
+        {x.consultationOnly ? (
+          <>
+            {/* A consultation booked without a price: the fee is decided at the clinic, so no figure here. */}
+            <b className="bk-quote-heading">{D.consultOnlyH}</b>
+            <small>{D.consultOnlyPrice}</small>
+          </>
+        ) : x.provisionalCheckout && (b.quoteRequested || b.largeParty) ? <b className="bk-quote-heading">{quoteCopy[lang].heading}</b> : groupRow ? (
           <>
             {/* Group-priced: the per-person figure leads, the group total it comes from sits right under it. */}
             {D.fromPrice && <small>{D.fromPrice}</small>}
@@ -116,7 +122,12 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
         </div>
       </div>
 
-      <div className="bk-est" aria-live="polite">
+      {x.consultationOnly ? (
+        <div className="bk-est bk-consult">
+          <span><ShieldCheck size={14} /> {D.consultOnlyPrice}</span>
+          <small>{D.consultOnlyNote}</small>
+        </div>
+      ) : <div className="bk-est" aria-live="polite">
         {b.estimate ? (
           <>
             <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
@@ -131,7 +142,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
           </>
         )}
         <FxNote lang={lang} />
-      </div>
+      </div>}
 
       {!open && <QuoteRequestSwitch lang={lang} onStart={() => { if (window.matchMedia(SIDE_BY_SIDE).matches) expand(); else jump(); }} />}
       {open ? (

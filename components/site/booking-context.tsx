@@ -19,6 +19,8 @@ export interface BookingExperience {
   title: string;
   /** Enabled only after server-side payment and ledger readiness checks. */
   provisionalCheckout?: boolean;
+  /** Fee decided at the consultation and paid on site: no estimate is computed or sent. */
+  consultationOnly?: boolean;
   weekdaysOnly?: boolean;
   /** Saturdays and Sundays only. */
   weekendsOnly?: boolean;
@@ -268,7 +270,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
       },
       toggleAddOn: (id) => setState((s) => ({ ...s, addOns: s.addOns.includes(id) ? s.addOns.filter((x) => x !== id) : [...s.addOns, id] })),
       experience, pricing: activePricing, minDate,
-      estimate: activePricing && !largeParty && !customQuote && !state.quoteRequested ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
+      estimate: activePricing && !largeParty && !customQuote && !state.quoteRequested && !experience.consultationOnly ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
       guestsNumber, largeParty, variantView, customQuote,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- pickDefault/variantTime derive from `experience`
