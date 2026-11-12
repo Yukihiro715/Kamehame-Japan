@@ -31,6 +31,9 @@ test("clinic preview: unlisted, noindex, private, guideline wording, pay at the 
     assert.ok(!/[¥￥]/.test(block(/class="sticky-request[^"]*"[\s\S]*?<\/div>\s*<a/)), `${lang}: no amount in the sticky bar`);
     assert.ok(!html.includes('"@type":"Product"'), `${lang}: no priced structured data`);
     assert.ok(/5%/.test(block(/class="bk-est[^"]*"[\s\S]*?<\/div>/)), `${lang}: the 5% coupon is stated in the booking card`);
+    assert.match(html, /class="perk-badge">5%/, `${lang}: coupon badge on the photo`);
+    assert.match(html, /class="xp-perk"/, `${lang}: coupon line under the title`);
+    assert.match(html, /class="xp-perk-banner"/, `${lang}: coupon banner above the request form`);
     assert.doesNotMatch(text, FORBIDDEN_CLAIMS, `${lang}: no testimonial, result or superlative wording`);
     assert.ok(text.includes(expect), `${lang}: payment at the clinic`);
     assert.ok(/self-pay|自由診療/.test(text), `${lang}: self-pay practice stated`);

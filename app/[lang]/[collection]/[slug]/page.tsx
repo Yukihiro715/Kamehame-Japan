@@ -219,6 +219,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
         <header className="xp-head">
           {!live && <p className="soon-flag">{T.comingSoon}</p>}
           <h1>{exp.title}</h1>
+          {exp.perk && <p className="xp-perk"><b>{exp.perk.badge}</b><span>{exp.perk.short}</span></p>}
           {hasReviews && <p className="xp-head-rating"><RatingSummary experience={exp.slug} lang={lang} href="#reviews" size={15} /></p>}
         </header>
 
@@ -227,6 +228,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
           <div className="xp-hero-photo">
             <HeroCarousel photos={photos} lang={lang}>
               {!live && <span className="soon-badge">{T.comingSoon}</span>}
+              {live && exp.perk && <span className="perk-badge">{exp.perk.badge}</span>}
             </HeroCarousel>
           </div>
           <Gallery photos={photos} lang={lang} note={exp.galleryNote} />
@@ -524,6 +526,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
+              {exp.perk && <div className="xp-perk-banner"><b>{exp.perk.badge}</b><div><strong>{exp.perk.short}</strong><small>{exp.perk.body}</small></div></div>}
               <BookingRequestHeading lang={lang} defaultTitle={provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta} />
               {!provisional && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
               {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}

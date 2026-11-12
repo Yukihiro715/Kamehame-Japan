@@ -222,7 +222,7 @@ export interface Experience {
   replyNote?: string;
   /** A benefit for booking through us (e.g. a coupon the confirmation carries),
    *  stated plainly in the booking card, the venue list and the FAQ. */
-  perk?: { short: string; body: string };
+  perk?: { badge: string; short: string; body: string };
   notesHint?: string;
   /** Replaces the site-wide booking steps (written for the geiko evening). */
   flow?: { title: string; body: string }[];
@@ -613,6 +613,7 @@ export const experiences: Experience[] = [
     notesHint: "e.g. a drip and skin toning before our flight; one of us takes blood thinners",
     replyNote: "We confirm the appointment with the clinic, usually within one business day",
     perk: {
+      badge: "5% OFF",
       short: "5% off the treatment fee when you book through KAMEHAME JAPAN",
       body: "Your confirmation comes with a coupon worth 5% of the treatment fee. Show it at the clinic when you pay; it applies to the treatment decided at your consultation.",
     },
