@@ -29,7 +29,7 @@ const T0 = Date.parse("2026-10-05T03:00:00Z"); // bookings in the past relative 
 /** A client for the API: keeps cookies, sends the portal header and a same-origin Origin. */
 function client(db, env = {}, jar = new Map()) {
   const fullEnv = { DB: db.d1, KH_ENV: "staging", ...env };
-  return {
+  return { db,
     jar,
     async call(method, path, body, opts = {}) {
       const headers = new Headers(opts.headers ?? {});
@@ -47,6 +47,14 @@ function client(db, env = {}, jar = new Map()) {
   };
 }
 async function signIn(c, email, kind) {
+  if (kind === "hotel") {
+    const { passwordHash } = await vite.ssrLoadModule("/lib/portal/password-auth.ts");
+    const password = "fixture-password-123", salt = "test-only-salt";
+    await c.db.run(`INSERT OR REPLACE INTO partner_passwords SELECT id,?,?,? FROM users WHERE email=?`, [salt, await passwordHash(password, salt), new Date().toISOString(), email]);
+    const r = await c.call("POST", "auth/password-login", { email, password, kind });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    return;
+  }
   const r1 = await c.call("POST", "auth/request-code", { email, kind });
   assert.equal(r1.status, 200);
   assert.ok(r1.body.devCode, "staging without mail shows the code");
@@ -256,7 +264,7 @@ test("commission settings require finance/admin and partner reads use their own 
   assert.equal((await admin.call('POST', 'ops/commission-rates', { legalEntityId: null, rateBp: 600 })).status, 200);
   assert.equal((await admin.call('POST', 'ops/commission-rates', { legalEntityId: 'le1', rateBp: 800 })).status, 200);
   const list = await admin.call('GET', 'ops/policies');
-  assert.equal(list.body.rateSettings.length, 2);
+  assert.equal(list.body.rateSettings.length, 3);
   // Owner's seeded demo membership can read only its own common rate, never le1's override.
   const hotel = client(db); await signIn(hotel, 'yukihiro_ito@prosent.co.jp', 'hotel');
   assert.equal((await hotel.call('POST', 'ops/commission-rates', { legalEntityId: null, rateBp: 999 })).status, 401);
@@ -322,4 +330,77 @@ test('demo attempts are bounded, sessions honor revocation and account disableme
   await db.run(`UPDATE memberships SET revoked_at = NULL WHERE id = 'm-public-demo-manager'`);
   await db.run(`UPDATE users SET status = 'disabled' WHERE id = 'u-partner-public-demo'`);
   assert.equal((await other.call('GET', 'hotel/me')).status, 401);
+});
+
+test('partner password setup mail, login, reset revocation, token replay and OTP retirement', async (t) => {
+  const db = openTestDb(); await seed(db);
+  await auth.inviteMember(db, { KH_ENV: 'staging' }, { email: 'password@example.com', role: 'hotel_viewer', scopeType: 'hotel', scopeId: 'hA', by: 'test', loginOrigin: ORIGIN, scopeLabel: 'A' });
+  const mails = [];
+  t.mock.method(globalThis, 'fetch', async (_url, init) => { mails.push(JSON.parse(init.body)); return new Response('{}', { status: 200 }); });
+  const c = client(db, { RESEND_API_KEY: 'test', NOTIFY_ALLOWLIST: '@example.com' });
+  const request = async email => c.call('POST', 'auth/password-request', { email, kind: 'hotel' });
+  assert.deepEqual((await request('nobody@example.com')).body, { ok: true });
+  assert.equal(mails.length, 0);
+  assert.deepEqual((await request('password@example.com')).body, { ok: true });
+  const token = mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
+  assert.ok(!JSON.stringify(await db.all('SELECT * FROM partner_password_tokens')).includes(token));
+  const password = 'new-test-password-123';
+  const set = (token, password) => c.call('POST', 'auth/password-set', { kind: 'hotel', token, password });
+  assert.equal((await set(token, 'short')).status, 400);
+  assert.equal((await set(token, password)).status, 200);
+  assert.equal((await set(token, 'other-test-password')).status, 400);
+  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password: 'wrong' })).status, 401);
+  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password })).status, 200);
+  assert.equal((await c.call('GET', 'hotel/me')).status, 200);
+  assert.equal((await c.call('GET', 'ops/me')).status, 401);
+  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'ops', email: 'password@example.com', password })).status, 403);
+  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password }, { noOrigin: true })).status, 403);
+  assert.equal((await c.call('POST', 'auth/request-code', { kind: 'hotel', email: 'password@example.com' })).body.devCode, undefined);
+  await request('password@example.com');
+  const token2 = mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
+  const results = await Promise.all([set(token2, 'reset-password-one'), set(token2, 'reset-password-two')]);
+  assert.deepEqual(results.map(r => r.status).sort(), [200,400]);
+  assert.equal((await c.call('GET', 'hotel/me')).status, 401);
+  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password })).status, 401);
+  await request('password@example.com');
+  const token3 = mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
+  await db.run(`UPDATE partner_password_tokens SET expires_at='2000-01-01' WHERE consumed_by IS NULL`);
+  assert.equal((await set(token3, password)).status, 400);
+});
+
+test('demo samples filter correctly, agree with 5% totals, and never enter the ledger', async () => {
+  const db = openTestDb(), login = await demoFixture(db), c = client(db);
+  await c.call('POST', 'auth/demo-login', login);
+  const rows = (await c.call('GET','hotel/reservations')).body;
+  assert.equal(rows.total,6);
+  assert.equal(rows.rows[0].hotelRef,'R-DEMO06');
+  const completed = (await c.call('GET','hotel/reservations?status=completed')).body;
+  assert.equal(completed.total,2);
+  for (const r of completed.rows) { assert.equal(r.rateBp,500); assert.equal(r.commissionNet,r.baseNet*.05); }
+  const dash = (await c.call('GET','hotel/dashboard')).body;
+  assert.equal(dash.confirmed.commissionNet,completed.rows.reduce((n,r) => n+r.commissionNet,0));
+  assert.equal((await c.call('GET','hotel/reservations?ref=missing')).body.total,0);
+  const cases = (await c.call('GET','hotel/cases')).body;
+  assert.equal(cases.total,3);
+  assert.equal((await c.call('GET',`hotel/cases/${cases.rows[0].id}`)).status,200);
+  assert.equal((await c.call('GET','hotel/cases/unknown')).status,404);
+  assert.equal((await c.call('GET','hotel/settlement')).body.balance.unpaidNet,5000);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM reservations')).n,0);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM commission_entries')).n,0);
+  assert.equal((await db.first("SELECT rate_bp FROM partner_commission_rates WHERE id='common-rate-five-percent'")).rate_bp,500);
+});
+
+test('normal partner password attempts are limited; disabled and revoked accounts cannot enter', async () => {
+  const db = openTestDb(); await seed(db);
+  await auth.inviteMember(db, {}, { email: 'limit@example.com', role: 'hotel_viewer', scopeType: 'hotel', scopeId: 'hA', by: 'test', loginOrigin: ORIGIN, scopeLabel: 'A' });
+  const c = client(db); await signIn(c, 'limit@example.com', 'hotel');
+  for (let i=0;i<9;i++) assert.equal((await c.call('POST','auth/password-login',{kind:'hotel',email:'limit@example.com',password:'wrong'})).status,401);
+  assert.equal((await c.call('POST','auth/password-login',{kind:'hotel',email:'limit@example.com',password:'fixture-password-123'})).status,429);
+  await db.run('DELETE FROM partner_auth_limits');
+  await db.run("UPDATE users SET status='disabled' WHERE email='limit@example.com'");
+  assert.equal((await c.call('GET','hotel/me')).status,401);
+  assert.equal((await c.call('POST','auth/password-login',{kind:'hotel',email:'limit@example.com',password:'fixture-password-123'})).status,401);
+  await db.run("UPDATE users SET status='active' WHERE email='limit@example.com'");
+  await db.run("UPDATE memberships SET revoked_at='2026-01-01' WHERE user_id=(SELECT id FROM users WHERE email='limit@example.com')");
+  assert.equal((await c.call('POST','auth/password-login',{kind:'hotel',email:'limit@example.com',password:'fixture-password-123'})).status,401);
 });

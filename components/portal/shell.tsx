@@ -57,7 +57,11 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
       setMe(null);
       if (status !== 401) setError(errorText(e));
     }), [kind, applyLang]);
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize the incoming reset link after hydration
+    if (kind === "hotel" && new URLSearchParams(window.location.hash.slice(1)).has("password-token")) setMe(null);
+    else void load();
+  }, [load, kind]);
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
     requestAnimationFrame(() => document.getElementById("partner-menu-toggle")?.focus());
@@ -132,7 +136,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
           </div>
         </header>
         <main className="pt-main" id="partner-main" tabIndex={-1} inert={kind === "hotel" && menuOpen}>
-          {me.demo && <Notice tone="info">{lang === "en" ? "Demo · Read only. Bookings, link creation and changes are disabled." : "デモ画面（閲覧専用）です。予約・リンク発行・設定変更はできません。"}</Notice>}
+          {me.demo && <Notice tone="info">{lang === "en" ? "Demo · All figures and bookings are fictional samples. Read only." : "デモ画面：実績・予約情報は架空のサンプルです。閲覧専用で、実際の予約・精算には反映されません。"}</Notice>}
           {pageTitle && (kind === "hotel" ? <div className="pt-page-heading"><div><p className="pt-eyebrow">{hotel?.name ?? "PARTNER PORTAL"}</p><h1 className="pt-h1">{pageTitle}</h1></div><span className="pt-site-id">{hotel?.public_id}</span></div> : <h1 className="pt-h1">{pageTitle}</h1>)}
           {kind === "hotel" && !hotel ? <Notice tone="warn">{T.shell.noSite}</Notice> : <Fragment key={hotel?.id ?? kind}>{children}</Fragment>}
         </main>
@@ -151,14 +155,34 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
   const [email, setEmail] = useState(""), [code, setCode] = useState(""), [step, setStep] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false), [msg, setMsg] = useState<string | null>(null), [err, setErr] = useState<string | null>(null), [devCode, setDevCode] = useState<string | null>(null);
   const [password, setPassword] = useState("");
+  const [resetMode, setResetMode] = useState(false), [resetToken, setResetToken] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  useEffect(() => {
+    if (kind !== "hotel") return;
+    const token = new URLSearchParams(window.location.hash.slice(1)).get("password-token");
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the fragment is available only in the browser
+    if (token) { setResetToken(token); window.history.replaceState(null, "", window.location.pathname + window.location.search); }
+  }, [kind]);
   const demoLogin = kind === "hotel" && email.trim().toLowerCase() === DEMO_EMAIL;
   const request = async () => {
     if (busy) return;
     setBusy(true); setErr(null); setMsg(null);
     try {
-      if (demoLogin) {
+      if (demoLogin && !resetMode && !resetToken) {
         await api("POST", "auth/demo-login", { email, password, kind });
         setPassword(""); onDone(); return;
+      }
+      if (kind === "hotel") {
+        if (resetToken) {
+          if (password !== confirmPassword) { setErr(lang === "en" ? "Passwords do not match." : "確認用パスワードが一致しません。"); return; }
+          await api("POST", "auth/password-set", { kind, token: resetToken, password });
+          setResetToken(""); setPassword(""); setConfirmPassword("");
+          setMsg(lang === "en" ? "Password saved. Sign in with your email and password." : "パスワードを設定しました。メールアドレスとパスワードでログインしてください。");
+        } else if (resetMode) {
+          await api("POST", "auth/password-request", { kind, email });
+          setMsg(lang === "en" ? "If this address is registered, a setup link will arrive by email. It expires in 30 minutes." : "登録済みのメールアドレスに設定用リンクを送信します。メールをご確認ください（有効期限30分）。");
+        } else { await api("POST", "auth/password-login", { kind, email, password }); setPassword(""); onDone(); }
+        return;
       }
       const r = await api<{ sent: boolean; devCode?: string; mail?: string }>("POST", "auth/request-code", { email, kind, lang });
       setStep("code");
@@ -178,14 +202,17 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
           <p className="pt-brand" style={{ margin: 0 }}>KAMEHAME JAPAN <span>{kind === "hotel" ? DICT[lang].brand.loginPartner : DICT[lang].brand.loginOps}</span></p>
           {kind === "hotel" && <LangSwitch lang={lang} onChange={onLang} />}
         </div>
-        <h1>{L.h}</h1>
+        <h1>{resetToken ? (lang === "en" ? "Set password" : "パスワードを設定") : resetMode ? (lang === "en" ? "First-time setup / Reset" : "初回設定・パスワード再設定") : L.h}</h1>
+        {step === "email" && msg && <Notice tone="info">{msg}</Notice>}
         {step === "email" ? (
           <form onSubmit={(e) => { e.preventDefault(); void request(); }}>
-            <label className="pt-field"><span className="pt-field-l">{L.email}</span><input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus /></label>
-            {demoLogin && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Password" : "パスワード"}</span><input type="password" autoComplete="current-password" required maxLength={128} value={password} onChange={e => setPassword(e.target.value)} /></label>}
-            <p className="pt-login-note">{demoLogin ? (lang === "en" ? "Sign in to the read-only partner demo." : "パートナー向けの閲覧専用デモにログインします。") : L.note}</p>
-            <Button type="submit" disabled={busy || !email || (demoLogin && !password)}>{demoLogin ? L.signIn : L.send}</Button>
-            {kind === "hotel" && <Button kind="link" onClick={() => { setEmail(demoLogin ? "" : DEMO_EMAIL); setPassword(""); setErr(null); }}>{demoLogin ? (lang === "en" ? "Regular partner sign-in" : "通常のパートナーログインへ") : (lang === "en" ? "Demo sign-in" : "デモ用IDでログイン")}</Button>}
+            {!resetToken && <label className="pt-field"><span className="pt-field-l">{L.email}</span><input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus /></label>}
+            {kind === "hotel" && !resetMode && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Password" : "パスワード"}</span><input type="password" autoComplete={resetToken ? "new-password" : "current-password"} minLength={resetToken ? 12 : undefined} required maxLength={128} value={password} onChange={e => setPassword(e.target.value)} /></label>}
+            {resetToken && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Confirm password" : "パスワード（確認）"}</span><input type="password" autoComplete="new-password" minLength={12} maxLength={128} required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} /></label>}
+            <p className="pt-login-note">{demoLogin ? (lang === "en" ? "Sign in to the read-only partner demo." : "パートナー向けの閲覧専用デモにログインします。") : kind === "hotel" ? (lang === "en" ? (resetToken ? "Use 12–128 characters." : "Use your personal email address and password.") : (resetToken ? "12〜128文字で設定してください。" : "ご自身のメールアドレスとパスワードでログインしてください。")) : L.note}</p>
+            <Button type="submit" disabled={busy}>{kind === "hotel" ? (resetToken ? (lang === "en" ? "Save password" : "パスワードを設定") : resetMode ? (lang === "en" ? "Send setup link" : "設定用リンクを送る") : L.signIn) : L.send}</Button>
+            {kind === "hotel" && !resetToken && !resetMode && <Button kind="link" onClick={() => { setEmail(demoLogin ? "" : DEMO_EMAIL); setPassword(""); setErr(null); }}>{demoLogin ? (lang === "en" ? "Regular partner sign-in" : "通常のパートナーログインへ") : (lang === "en" ? "Demo sign-in" : "デモ用IDでログイン")}</Button>}
+            {kind === "hotel" && <Button kind="link" onClick={() => { setResetMode(!resetMode && !resetToken); setResetToken(""); setEmail(""); setPassword(""); setErr(null); setMsg(null); }}>{resetMode || resetToken ? (lang === "en" ? "Back to sign-in" : "ログインに戻る") : (lang === "en" ? "First-time setup / Forgot password" : "初回設定・パスワードを忘れた方")}</Button>}
           </form>
         ) : (
           <form onSubmit={(e) => { e.preventDefault(); void verify(); }}>

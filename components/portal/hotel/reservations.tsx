@@ -61,7 +61,7 @@ export function HotelReservations() {
             <dl className="pt-kv"><dt>{R.head[1]}</dt><dd>{jst(r.createdAt, false)}</dd><dt>{R.head[6]}</dt><dd>{label(S.payment, r.paymentStatus)}</dd><dt>{R.head[7]}</dt><dd>{yen(r.baseNet)}</dd><dt>{R.head[8]}</dt><dd>{pct(r.rateBp)}</dd><dt>{R.head[10]}</dt><dd>{yen(r.commissionGrossRef)}</dd></dl>
             {r.holdCodes.length > 0 && <p className="pt-small pt-muted">{r.holdCodes.map((h) => label(S.hold, h)).join(", ")}</p>}{r.entryStatus === "estimated" && <p className="pt-small pt-muted">{S.estimatedNote}</p>}
           </details>)}{data.rows.length === 0 && <p className="pt-empty">{C.empty}</p>}</div>
-          <div className="pt-pagination"><span>{data.total ? `${page * 25 + 1}–${page * 25 + data.rows.length} / ${data.total}` : "0"}</span><Button kind="secondary" disabled={page === 0} onClick={() => setPage((v) => v - 1)}>{lang === "en" ? "Previous" : "前へ"}</Button><Button kind="secondary" disabled={(page + 1) * 25 >= data.total} onClick={() => setPage((v) => v + 1)}>{lang === "en" ? "Next" : "次へ"}</Button></div>
+          {data.total > 25 && <div className="pt-pagination"><span>{data.total ? `${page * 25 + 1}–${page * 25 + data.rows.length} / ${data.total}` : "0"}</span><Button kind="secondary" disabled={page === 0} onClick={() => setPage((v) => v - 1)}>{lang === "en" ? "Previous" : "前へ"}</Button><Button kind="secondary" disabled={(page + 1) * 25 >= data.total} onClick={() => setPage((v) => v + 1)}>{lang === "en" ? "Next" : "次へ"}</Button></div>}
         </>
       )}
     </Card>

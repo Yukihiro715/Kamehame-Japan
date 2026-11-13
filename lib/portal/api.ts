@@ -1,3 +1,5 @@
+import { demoDashboard, demoReservations, demoBalance, demoCases, demoCase } from "./demo-data";
+import { passwordLogin, requestPassword, setPassword } from "./password-auth";
 /** The portal API: one entry point, routed by path, every handler scoped on
  *  the server. Mounted at /api/portal/<path> (app/api/portal/[...path]/route.ts).
  *
@@ -72,6 +74,18 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   const kind = (b: Record<string, unknown>) => (b.kind === "ops" ? "ops" : "hotel");
   if (ctx.method !== "POST") throw notFound();
   const body = await readJson(ctx.request);
+  const ip = ctx.request.headers.get("cf-connecting-ip") ?? "unknown";
+  if (["password-login", "password-request", "password-set"].includes(path[0])) {
+    if (body.kind !== "hotel") throw forbidden();
+    if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { email: body.email, ip, origin: await publicOrigin(ctx) }));
+    if (path[0] === "password-set") {
+      const ok = await setPassword(ctx.db, { token: body.token, password: body.password, ip });
+      return json({ ok, ...(ok ? {} : { error: "password_reset_invalid" }) }, ok ? 200 : 400);
+    }
+    const r = await passwordLogin(ctx.db, { email: body.email, password: body.password, ip });
+    if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "password_locked" : "password_invalid" }, r.error === "locked" ? 429 : 401);
+    return json({ ok: true }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure) });
+  }
   if (path[0] === "demo-login") {
     const r = await verifyDemoLogin(ctx.db, { email: body.email, password: body.password, kind: body.kind, ip: ctx.request.headers.get("cf-connecting-ip") ?? "unknown" });
     if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "demo_locked" : "demo_invalid" }, r.error === "locked" ? 429 : 401);
@@ -150,7 +164,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   }
   if (head === "dashboard" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
-    return json({ ok: true, hotel: hotelId, ...(await hotelDashboard(ctx.db, hotelId, period(ctx))) });
+    return json({ ok: true, hotel: hotelId, ...(p.demo ? demoDashboard(period(ctx)) : await hotelDashboard(ctx.db, hotelId, period(ctx))) });
   }
   if (head === "experiences" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
@@ -163,7 +177,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   if (head === "reservations" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
     const f = { from: isoDate(q(ctx, "from")) ?? undefined, to: isoDate(q(ctx, "to")) ?? undefined, experienceFrom: isoDate(q(ctx, "experienceFrom")) ?? undefined, experienceTo: isoDate(q(ctx, "experienceTo")) ?? undefined, experience: q(ctx, "experience"), status: q(ctx, "status"), ref: q(ctx, "ref"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined };
-    return json({ ok: true, hotel: hotelId, ...(await hotelReservations(ctx.db, hotelId, f)) });
+    return json({ ok: true, hotel: hotelId, ...(p.demo ? demoReservations(f) : await hotelReservations(ctx.db, hotelId, f)) });
   }
   if (head === "materials") {
     const body = ctx.method === "POST" ? await readJson(ctx.request) : {};
@@ -188,6 +202,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   if (head === "settlement" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
     await requireFeature(ctx.db, hotelId, "settlement");
+    if (p.demo) return json({ ok: true, hotel: hotelId, balance: demoBalance, profile: { id: "demo-profile", name: "デモ用の精算設定（サンプル）", min_payout_jpy: 3000, bank_details_masked: "サンプル銀行 本店 普通 ****1234", dispute_days: 14, fee_borne_by: "company", bank_fee_jpy: 0 }, billing: false, statements: [] });
     const dash = await hotelDashboard(ctx.db, hotelId, presetPeriod("this_quarter")!);
     const profile = await ctx.db.first<{ id: string; name: string; min_payout_jpy: number; bank_details_masked: string | null; dispute_days: number; fee_borne_by: string; bank_fee_jpy: number }>(
       `SELECT p.id, p.name, p.min_payout_jpy, p.bank_details_masked, p.dispute_days, p.fee_borne_by, p.bank_fee_jpy FROM settlement_profile_hotels ph JOIN settlement_profiles p ON p.id = ph.profile_id WHERE ph.hotel_id = ? AND (ph.valid_to IS NULL OR ph.valid_to > ?) ORDER BY ph.valid_from DESC LIMIT 1`, [hotelId, jstDate()]);
@@ -214,7 +229,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
       const hotelId = hotelScope(ctx, p);
       await requireCaseRole(ctx, p, hotelId);
       const own = !hasSiteRole(p, hotelId, "partner_manager");
-      return json({ ok: true, hotel: hotelId, manager: !own, ...(await cases.listCases(ctx.db, { siteIds: [hotelId], userId: own ? p.userId : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) });
+      return json({ ok: true, hotel: hotelId, manager: !own, ...(p.demo ? demoCases(ctx.url.searchParams) : await cases.listCases(ctx.db, { siteIds: [hotelId], userId: own ? p.userId : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) });
     }
     if (ctx.method === "POST") {
       const b = await readJson(ctx.request);
@@ -227,6 +242,12 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   }
   if (head === "cases" && sub) {
     const [, id, action] = path;
+    if (p.demo && ctx.method === "GET" && !action) {
+      hotelScope(ctx, p);
+      const sample = demoCase(id);
+      if (!sample) throw notFound();
+      return json({ ok: true, ...sample });
+    }
     const c = await cases.caseForPartner(ctx.db, p, id);
     await requireFeature(ctx.db, c.site_id, "cases");
     const origin = await publicOrigin(ctx);

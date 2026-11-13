@@ -402,3 +402,14 @@
   .pt-booking-value b { font-size: 21px; }
   .pt-booking-summary[open] > summary { border-bottom: 1px solid var(--pt-line); padding-bottom: 15px; margin-bottom: 15px; }
 }
+
+/* Safari date controls have an intrinsic minimum width; let the grid contain them. */
+.pt-partner .pt-field input,
+.pt-partner .pt-field select,
+.pt-partner .pt-field textarea { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; }
+.pt-partner .pt-field input[type="date"] { display: block; min-inline-size: 0; inline-size: 100%; -webkit-appearance: none; appearance: none; }
+.pt-partner input[type="date"]::-webkit-date-and-time-value { text-align: left; min-height: 1.5em; }
+@media (max-width: 640px) {
+  .pt-partner .pt-form { grid-template-columns: minmax(0, 1fr); }
+  .pt-partner .pt-main, .pt-partner .pt-card { min-width: 0; }
+}
