@@ -249,3 +249,20 @@ test("operations: reasons are required, corrections keep history, manual lines a
   const terms = (await admin.call("GET", "ops/policies")).body;
   assert.ok(terms.policies.some((p) => p.experience_slug === "dotonbori-ramen-class" && p.rate_bp === 700));
 });
+
+test("commission settings require finance/admin and partner reads use their own entity", async () => {
+  const db = openTestDb(); await seed(db);
+  const admin = client(db); await signIn(admin, 'admin@example.com', 'ops');
+  assert.equal((await admin.call('POST', 'ops/commission-rates', { legalEntityId: null, rateBp: 600 })).status, 200);
+  assert.equal((await admin.call('POST', 'ops/commission-rates', { legalEntityId: 'le1', rateBp: 800 })).status, 200);
+  const list = await admin.call('GET', 'ops/policies');
+  assert.equal(list.body.rateSettings.length, 2);
+  // Owner's seeded demo membership can read only its own common rate, never le1's override.
+  const hotel = client(db); await signIn(hotel, 'yukihiro_ito@prosent.co.jp', 'hotel');
+  assert.equal((await hotel.call('POST', 'ops/commission-rates', { legalEntityId: null, rateBp: 999 })).status, 401);
+  const terms = await hotel.call('GET', 'hotel/experiences?hotel=site-prosent-demo');
+  assert.equal(terms.status, 200);
+  assert.equal(terms.body.experiences.find(e => e.slug === 'kanji-name-calligraphy').rateBp, 600);
+  await db.run(`UPDATE memberships SET role = 'ops_booking' WHERE id = 'm-admin'`);
+  assert.equal((await admin.call('POST', 'ops/commission-rates', { legalEntityId: null, rateBp: 999 })).status, 403);
+});

@@ -417,7 +417,7 @@ export async function shareQuote(db: SqlDb, env: StripeEnv, quoteId: string, inp
   } else {
     const res = await db.first<{ payment_status: string }>(`SELECT payment_status FROM reservations WHERE id = ?`, [reservationId]);
     if (res && res.payment_status !== "unpaid") throw bad("already_paid");
-    const policy = await policyFor(db, c.experience_slug, now);
+    const policy = await policyFor(db, c.experience_slug, now, c.site_id);
     const statements: SqlStatement[] = [{ sql: `DELETE FROM reservation_lines WHERE reservation_id = ?`, params: [reservationId] }];
     lines.forEach((l, i) => statements.push({
       sql: `INSERT INTO reservation_lines (id, reservation_id, position, kind, description, commissionable, tax_rate_bp, quantity, gross_jpy, discount_jpy, refunded_gross_jpy, net_jpy, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 'manual')`,
@@ -664,7 +664,7 @@ export async function caseDetail(db: SqlDb, id: string, viewer: "ops" | "partner
     c.reservation_id ? db.first<ReservationSummary>(`SELECT id, hotel_ref, status, payment_status, amount_status, experience_date FROM reservations WHERE id = ?`, [c.reservation_id]) : Promise.resolve(null),
     c.reservation_id ? db.first<EntrySummary>(`SELECT base_net_jpy, rate_bp, commission_net_jpy, status, hold_reason FROM commission_entries WHERE reservation_id = ?`, [c.reservation_id]) : Promise.resolve(null),
     db.all<{ userId: string; email: string; name: string | null; role: string }>(`SELECT u.id AS userId, u.email, u.name, m.role FROM memberships m JOIN users u ON u.id = m.user_id WHERE m.scope_type = 'hotel' AND m.scope_id = ? AND m.revoked_at IS NULL AND m.role IN ('partner_agent','partner_manager') AND u.status != 'disabled' ORDER BY u.email`, [c.site_id]),
-    c.experience_slug ? policyFor(db, c.experience_slug, now) : Promise.resolve(null),
+    c.experience_slug ? policyFor(db, c.experience_slug, now, c.site_id) : Promise.resolve(null),
   ]);
   // Partners see what was shared with them; drafts, and drafts dropped before a share, stay with operations.
   const visible = viewer === "ops" ? quotes : quotes.filter((q) => q.status !== "draft" && !(q.status === "void" && !q.shared_at));

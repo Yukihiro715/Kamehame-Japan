@@ -148,7 +148,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     const options = new Map(cases.experienceOptions().map((o) => [o.slug, o]));
     const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id = ?`, [hotelId]))?.features_json);
     const relay = features.cases && hasSiteRole(p, hotelId, ...CASE_ROLES);
-    const experiences = (await experienceTerms(ctx.db)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
+    const experiences = (await experienceTerms(ctx.db, Date.now(), hotelId)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
     return json({ ok: true, experiences, relay, busGolf: options.get(cases.BUS_GOLF_SLUG) ?? null });
   }
   if (head === "reservations" && ctx.method === "GET") {
@@ -499,6 +499,10 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     const link = await ctx.db.first<{ id: string; token: string }>(`SELECT id, token FROM referral_links WHERE id = ?`, [q(ctx, "link") ?? ""]);
     if (!link) throw notFound();
     return qrResponse(publicLinkUrl(await publicOrigin(ctx), link.token), q(ctx, "format"), `kamehame-${link.id}`);
+  }
+  if (head === "commission-rates" && post) {
+    const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request);
+    return json({ ok: true, ...(await ops.createCommissionRate(ctx.db, { legalEntityId: b.legalEntityId, rateBp: b.rateBp, validFrom: b.validFrom, by: p.email })) });
   }
   if (head === "policies") {
     if (get) { await requireOps(ctx); return json({ ok: true, ...(await ops.policyList(ctx.db)) }); }

@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { api, errorText, jst, pct, yen } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, Table } from "../ui";
 
+import { CommissionRates, type RateSetting, type RatePartner } from "./commission-rates";
+
 interface Policy { id: string; experience_slug: string; title: string; rate_bp: number; tax_rate_bp: number; unit_price_excl_tax_jpy: number | null; reference_avg_jpy: number | null; reference_note: string | null; referral_enabled: number; valid_from: string; version: number; created_by: string | null }
-interface Data { experiences: { slug: string; title: string; price: string; priceUnit: string }[]; policies: Policy[] }
+interface Data { experiences: { slug: string; title: string; price: string; priceUnit: string }[]; policies: Policy[]; rateSettings: RateSetting[]; partners: RatePartner[] }
 
 export function OpsPolicies() {
   const [d, setD] = useState<Data | null>(null), [err, setErr] = useState<string | null>(null), [msg, setMsg] = useState<string | null>(null);
@@ -29,8 +31,9 @@ export function OpsPolicies() {
     <>
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
+      <CommissionRates rates={d.rateSettings} partners={d.partners} reload={load} />
       <Card title="体験ごとの紹介条件（現在有効なもの）">
-        <p className="pt-note-box">料率は体験ごとに設定します。未設定の体験は「紹介対象外・設定待ち」で、5% などを仮に当てることはありません。改定は新しい版として登録し、適用開始日以降の新規予約から効きます。</p>
+        <p className="pt-note-box">ここでは体験の紹介可否・税率・基準料率を設定します。共通料率やパートナー別料率を設定した場合、紹介料率はそちらが優先されます。未設定の体験は「紹介対象外・設定待ち」で、5% などを仮に当てることはありません。改定は新しい版として登録し、適用開始日以降の新規予約から効きます。</p>
         <Table head={["体験", "サイト価格", "紹介", "料率", "税率", "税抜単価", "参考予約単価", "注記", "適用開始", "版"]} rows={d.experiences.map((x) => { const p = current.get(x.slug); return [x.title, `${x.price}（${x.priceUnit === "group" ? "1組" : "1名"}）`, p && p.referral_enabled ? <Badge key="b" tone="ok">対象</Badge> : <Badge key="b" tone="warn">対象外・設定待ち</Badge>, p ? pct(p.rate_bp) : "—", p ? pct(p.tax_rate_bp) : "—", p?.unit_price_excl_tax_jpy ? yen(p.unit_price_excl_tax_jpy) : "—", p?.reference_avg_jpy ? yen(p.reference_avg_jpy) : "—", p?.reference_note ?? "—", p ? jst(p.valid_from, false) : "—", p?.version ?? "—"]; })} />
       </Card>
       <Card title="料率を登録・改定する">

@@ -6,6 +6,7 @@ import { listPrice } from "@/lib/pricing";
 import { type SqlDb } from "@/lib/referral/db";
 import { commissionNet, netFromGross, taxOnTotal } from "@/lib/referral/money";
 import { ENTRY_STATUS_JA, HOLD_JA, PAYMENT_STATUS_JA, RESERVATION_STATUS_JA, periodBounds } from "./util";
+import { effectiveRate } from "@/lib/referral/rates";
 import { paidTotalForHotel } from "./settlement";
 
 export interface Period { from: string; to: string }
@@ -51,12 +52,13 @@ export interface ExperienceTerms {
 }
 
 /** The live experiences with their referral terms. A missing policy row shows as "not referable / pending". */
-export async function experienceTerms(db: SqlDb, now = Date.now()): Promise<ExperienceTerms[]> {
+export async function experienceTerms(db: SqlDb, now = Date.now(), hotelId: string | null = null): Promise<ExperienceTerms[]> {
   const policies = await db.all<{ experience_slug: string; rate_bp: number; tax_rate_bp: number; reference_avg_jpy: number | null; reference_note: string | null; referral_enabled: number; valid_from: string; unit_price_excl_tax_jpy: number | null }>(
     `SELECT p.experience_slug, p.rate_bp, p.tax_rate_bp, p.reference_avg_jpy, p.reference_note, p.referral_enabled, p.valid_from, p.unit_price_excl_tax_jpy FROM experience_referral_policies p
-      WHERE p.valid_from <= ? AND p.valid_from = (SELECT MAX(q.valid_from) FROM experience_referral_policies q WHERE q.experience_slug = p.experience_slug AND q.valid_from <= ?)`,
+      WHERE p.valid_from <= ? AND p.id = (SELECT q.id FROM experience_referral_policies q WHERE q.experience_slug = p.experience_slug AND q.valid_from <= ? ORDER BY q.valid_from DESC, q.version DESC LIMIT 1)`,
     [new Date(now).toISOString(), new Date(now).toISOString()]);
-  const bySlug = new Map(policies.map((p) => [p.experience_slug, p]));
+  const rate = await effectiveRate(db, hotelId, now);
+  const bySlug = new Map(policies.map((p) => [p.experience_slug, { ...p, rate_bp: rate?.rate_bp ?? p.rate_bp }]));
   const enBySlug = new Map(catalogFor("en").experiences.map((x) => [x.slug, x]));
   return catalogFor("ja").experiences.filter((x) => x.status === "live").map((x: Experience) => {
     const p = bySlug.get(x.slug);
