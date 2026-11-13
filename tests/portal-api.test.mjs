@@ -281,13 +281,14 @@ async function demoFixture(db) {
   const salt = '0123456789abcdef0123456789abcdef';
   const hash = pbkdf2Sync(password, Buffer.from(salt, 'hex'), 100000, 32, 'sha256').toString('hex');
   await db.run(`UPDATE demo_credentials SET salt_hex = ?, password_hash = ?, iterations = 100000`, [salt, hash]);
-  return { email: 'demo@kamemane-japan.com', password, kind: 'hotel' };
+  return { email: 'demo@kamehame-japan.com', password, kind: 'hotel' };
 }
 
 test('demo password session: isolated reads, writes denied, sign-out and existing OTP preserved', async () => {
   const db = openTestDb(); await seed(db);
   const login = await demoFixture(db), demo = client(db);
   assert.equal((await demo.call('POST', 'auth/demo-login', { ...login, password: 'wrong' })).status, 401);
+  assert.equal((await demo.call('POST', 'auth/demo-login', { ...login, email: 'demo@kamemane-japan.com' })).status, 401);
   assert.equal((await demo.call('POST', 'auth/demo-login', login, { noOrigin: true })).status, 403);
   const signed = await demo.call('POST', 'auth/demo-login', login);
   assert.equal(signed.status, 200);
