@@ -2,7 +2,7 @@
 // (T02, T03), materials and QR, dashboard numbers (T22), operations actions,
 // CSV export and the request rules (CSRF, forged cookies) (T24).
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
+import test, { after, before, mock } from "node:test";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 import { openTestDb } from "./helpers/sqlite-db.mjs";
@@ -14,6 +14,10 @@ const { handlePortalApi } = await vite.ssrLoadModule("/lib/portal/api.ts");
 const auth = await vite.ssrLoadModule("/lib/portal/auth.ts");
 const links = await vite.ssrLoadModule("/lib/referral/links.ts");
 const R = await vite.ssrLoadModule("/lib/referral/reservations.ts");
+
+// Keep API timestamps and expiring fixtures independent of the day CI runs.
+before(() => mock.timers.enable({ apis: ["Date"], now: new Date("2026-10-28T03:00:00Z") }));
+after(() => mock.timers.reset());
 
 const ORIGIN = "https://staging.example";
 const UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Safari/604.1";

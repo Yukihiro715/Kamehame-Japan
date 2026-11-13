@@ -24,7 +24,7 @@ export function HotelCaseNew() {
     api<Options>("GET", `hotel/case-options?hotel=${hotel.id}`).then((o) => {
       setOpt(o);
       const pre = new URLSearchParams(window.location.search).get("experience");
-      setF((v) => ({ ...v, experience: pre && o.experiences.some((x) => x.slug === pre) ? pre : o.experiences[0]?.slug ?? "", assigneeUserId: o.me }));
+      setF((v) => ({ ...v, experience: pre && o.experiences.some((x) => x.slug === pre) ? pre : "", assigneeUserId: o.me }));
     }).catch((e) => { if ((e as { status?: number }).status === 403) setDenied(true); else setErr(errorText(e)); });
   }, [hotel]);
   if (denied) return <Notice tone="warn">{K.noAccess}</Notice>;
@@ -33,6 +33,7 @@ export function HotelCaseNew() {
   const chosen = f.kind === "experience" ? opt.experiences.find((x) => x.slug === f.experience) : null;
   const fields = chosen?.extraFields ?? [];
   const submit = async () => {
+    if (busy) return;
     setBusy(true); setErr(null);
     try {
       const r = await api<{ id: string }>("POST", "hotel/cases", { hotel: hotel.id, ...f, guests: f.guests ? Number(f.guests) : null, altDates: f.altDates, extra });
@@ -40,11 +41,11 @@ export function HotelCaseNew() {
     } catch (e) { setErr(errorText(e)); setBusy(false); }
   };
   return (
-    <form onSubmit={(e) => { e.preventDefault(); void submit(); }}>
-      <Card title={K.wishes}>
+    <form className="pt-request-form" onSubmit={(e) => { e.preventDefault(); void submit(); }}>
+      <p className="pt-page-description">{en ? "Tell us what your guest would like. We will check availability and prepare a quote. This request does not confirm a booking." : "お客様のご希望をお知らせください。運営が空き確認と見積もりを行います。この登録だけで予約は確定しません。"}</p><Card title={`01 / ${K.wishes}`}>
         <div className="pt-form">
-          <Field label={K.kind}><select value={f.kind} onChange={set("kind")}><option value="experience">{K.kindExperience}</option><option value="free">{K.kindFree}</option></select></Field>
-          {f.kind === "experience" && <Field label={K.experience} hint={chosen ? [chosen.area, chosen.duration, chosen.group, chosen.price].filter(Boolean).join(" · ") : undefined}><select value={f.experience} onChange={set("experience")}>{opt.experiences.map((x) => <option key={x.slug} value={x.slug}>{en ? x.titleEn : x.title}</option>)}</select></Field>}
+          <Field label={K.kind}><select value={f.kind} onChange={(e) => { set("kind")(e); setExtra({}); }}><option value="experience">{K.kindExperience}</option><option value="free">{K.kindFree}</option></select></Field>
+          {f.kind === "experience" && <Field label={K.experience} hint={chosen ? [chosen.area, chosen.duration, chosen.group, chosen.price].filter(Boolean).join(" · ") : undefined}><select required value={f.experience} onChange={(e) => { set("experience")(e); setExtra({}); }}><option value="">{en ? "Select an experience" : "体験を選択してください"}</option>{opt.experiences.map((x) => <option key={x.slug} value={x.slug}>{en ? x.titleEn : x.title}</option>)}</select></Field>}
           <Field label={K.date}><input type="date" value={f.preferredDate} onChange={set("preferredDate")} /></Field>
           <Field label={K.altDates}><input value={f.altDates} onChange={set("altDates")} placeholder="2026-12-11, 2026-12-12" /></Field>
           <Field label={K.timePref}><input value={f.timePref} onChange={set("timePref")} placeholder={K.timePh} /></Field>
@@ -60,18 +61,18 @@ export function HotelCaseNew() {
           ))}
         </div>
       </Card>
-      <Card title={K.customerH}>
+      <Card title={`02 / ${K.customerH}`}>
         <p className="pt-note-box">{K.customerNote}</p>
         <div className="pt-form">
           <Field label={K.customerName}><input value={f.customerName} onChange={set("customerName")} required /></Field>
           <Field label={K.email}><input type="email" value={f.customerEmail} onChange={set("customerEmail")} /></Field>
-          <Field label={K.phone}><input value={f.customerPhone} onChange={set("customerPhone")} /></Field>
+          <Field label={K.phone}><input type="tel" autoComplete="off" value={f.customerPhone} onChange={set("customerPhone")} /></Field>
           <Field label={K.country}><input value={f.customerCountry} onChange={set("customerCountry")} /></Field>
           <Field label={K.assignee}><select value={f.assigneeUserId} onChange={set("assigneeUserId")}>{opt.members.map((m) => <option key={m.userId} value={m.userId}>{m.name ?? m.email}</option>)}</select></Field>
           <Field label={K.partnerRef}><input value={f.partnerRef} onChange={set("partnerRef")} /></Field>
         </div>
         {err && <Notice tone="bad">{err}</Notice>}
-        <div className="pt-row"><Button type="submit" disabled={busy || !f.customerName.trim()}>{busy ? K.submitting : K.submit}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/cases/">{K.backToList}</Link></div>
+        <div className="pt-row"><Button type="submit" disabled={busy || !f.customerName.trim() || (f.kind === "experience" && !f.experience)}>{busy ? K.submitting : K.submit}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/cases/">{K.backToList}</Link></div>
       </Card>
     </form>
   );
