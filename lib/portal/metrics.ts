@@ -51,7 +51,7 @@ export interface ExperienceTerms {
   commissionExampleNet: number | null; policyFrom: string | null; siteStatus: string;
 }
 
-/** The live experiences with their referral terms. A missing policy row shows as "not referable / pending". */
+/** Live experiences inherit the common/partner rate unless explicitly disabled by an experience policy. */
 export async function experienceTerms(db: SqlDb, now = Date.now(), hotelId: string | null = null): Promise<ExperienceTerms[]> {
   const policies = await db.all<{ experience_slug: string; rate_bp: number; tax_rate_bp: number; reference_avg_jpy: number | null; reference_note: string | null; referral_enabled: number; valid_from: string; unit_price_excl_tax_jpy: number | null }>(
     `SELECT p.experience_slug, p.rate_bp, p.tax_rate_bp, p.reference_avg_jpy, p.reference_note, p.referral_enabled, p.valid_from, p.unit_price_excl_tax_jpy FROM experience_referral_policies p
@@ -61,7 +61,7 @@ export async function experienceTerms(db: SqlDb, now = Date.now(), hotelId: stri
   const bySlug = new Map(policies.map((p) => [p.experience_slug, { ...p, rate_bp: rate?.rate_bp ?? p.rate_bp }]));
   const enBySlug = new Map(catalogFor("en").experiences.map((x) => [x.slug, x]));
   return catalogFor("ja").experiences.filter((x) => x.status === "live").map((x: Experience) => {
-    const p = bySlug.get(x.slug);
+    const p = bySlug.get(x.slug) ?? (rate?.rate_bp != null ? { rate_bp: rate.rate_bp, tax_rate_bp: 1000, referral_enabled: 1, unit_price_excl_tax_jpy: null, reference_avg_jpy: null, reference_note: null, valid_from: rate.valid_from } : undefined);
     const xe = enBySlug.get(x.slug) ?? x;
     const lp = listPrice(x, "ja");
     const referable = !!p && !!p.referral_enabled;

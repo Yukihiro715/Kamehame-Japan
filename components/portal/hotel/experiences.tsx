@@ -16,7 +16,7 @@ export function HotelExperiences() {
   const X = t().experiences, S = t().status, en = lang === "en", access = partnerAccess(hotel, me.memberships);
   const [rows, setRows] = useState<Term[] | null>(null), [err, setErr] = useState<string | null>(null), [relay, setRelay] = useState(false);
   const [search, setSearch] = useState(""), [city, setCity] = useState(""), [mode, setMode] = useState(""), [referable, setReferable] = useState(false);
-  const [links, setLinks] = useState<Record<string, { qr: string; url: string }>>({});
+  const [links, setLinks] = useState<Record<string, { qr: string; qrId: string; url: string }>>({});
   const [pending, setPending] = useState<Record<string, boolean>>({}), [errors, setErrors] = useState<Record<string, string>>({}), [retry, setRetry] = useState(0);
   useEffect(() => {
     if (!hotel) return;
@@ -28,8 +28,8 @@ export function HotelExperiences() {
     if (!hotel || pending[slug]) return;
     setPending((p) => ({ ...p, [slug]: true })); setErrors((p) => ({ ...p, [slug]: "" }));
     try {
-      const r = await api<{ qr: { id: string; url: string }; url: { id: string; url: string } }>("POST", "hotel/materials", { hotel: hotel.id, experience: slug });
-      setLinks((l) => ({ ...l, [slug]: { qr: r.qr.url, url: r.url.url } }));
+      const r = await api<{ qr: { id: string; url: string }; url: { id: string; url: string } }>(me.demo ? "GET" : "POST", me.demo ? `hotel/demo-material?hotel=${hotel.id}&experience=${encodeURIComponent(slug)}` : "hotel/materials", me.demo ? undefined : { hotel: hotel.id, experience: slug });
+      setLinks((l) => ({ ...l, [slug]: { qr: r.qr.url, qrId: r.qr.id, url: r.url.url } }));
     } catch (e) { setErrors((p) => ({ ...p, [slug]: errorText(e) })); }
     finally { setPending((p) => ({ ...p, [slug]: false })); }
   };
@@ -57,9 +57,9 @@ export function HotelExperiences() {
         <div className="pt-experience-price"><small>{X.basePrice}</small><strong>{x.basePrice}</strong><span>{x.priceUnit === "group" ? X.perGroup : X.perPerson}</span></div>
         <div className="pt-referral-terms"><div><span>{X.rate}</span><b>{x.referable ? pct(x.rateBp) : "—"}</b></div><div><span>{X.example}</span><b>{x.commissionExampleNet !== null ? yen(x.commissionExampleNet) : "—"}</b></div></div>
         <details className="pt-price-details"><summary>{en ? "Price and referral details" : "料金・紹介料の補足"}</summary>{x.priceNote && !en && <p>{x.priceNote}</p>}<p>{X.refAvg}: {x.referenceAvgJpy ? yen(x.referenceAvgJpy) : "—"}{x.referenceNote && !en ? `（${x.referenceNote}）` : ""}</p><p>{X.note}</p></details>
-        <div className="pt-experience-actions"><Badge tone="neutral">{label(S.bookingModeTag, x.bookingMode)}</Badge>{relay && <Link className="pt-btn pt-btn-primary" href={`/hotel/cases/new/?experience=${encodeURIComponent(x.slug)}`}>{label(S.bookingMode, x.bookingMode)}</Link>}{access.refer && !links[x.slug] && <Button kind="secondary" disabled={me.demo || pending[x.slug]} onClick={() => void getLink(x.slug)}>{pending[x.slug] ? t().common.loading : X.getLink}</Button>}</div>
+        <div className="pt-experience-actions"><Badge tone="neutral">{label(S.bookingModeTag, x.bookingMode)}</Badge>{relay && <Link className="pt-btn pt-btn-primary" href={`/hotel/cases/new/?experience=${encodeURIComponent(x.slug)}`}>{label(S.bookingMode, x.bookingMode)}</Link>}{access.refer && !links[x.slug] && <Button kind="secondary" disabled={pending[x.slug]} onClick={() => void getLink(x.slug)}>{pending[x.slug] ? t().common.loading : X.getLink}</Button>}</div>
         {errors[x.slug] && <Notice tone="bad">{errors[x.slug]}</Notice>}
-        {access.refer && links[x.slug] && <div className="pt-generated-link"><a href={links[x.slug].url} target="_blank" rel="noreferrer">{links[x.slug].url}</a><CopyLink url={links[x.slug].url}/><Link className="pt-inline-link" href="/hotel/materials/">{X.getQr}</Link></div>}
+        {access.refer && links[x.slug] && <div className="pt-generated-link"><a href={links[x.slug].url} target="_blank" rel="noreferrer">{links[x.slug].url}</a><CopyLink url={links[x.slug].url}/><img className="pt-qr" src={`/api/portal/hotel/qr?link=${links[x.slug].qrId}`} alt={en ? "Referral QR code" : "紹介用QRコード"}/><a className="pt-btn pt-btn-secondary" href={`/api/portal/hotel/qr?link=${links[x.slug].qrId}&format=png`} download>{en ? "Download QR" : "QR画像を保存"}</a></div>}
       </div>
     </article>)}</div>}
   </>;

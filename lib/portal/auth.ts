@@ -1,5 +1,5 @@
 /** Partner password sign-in and operations one-time-code access. Memberships are checked on every request. */
-import { randomId, type SqlDb } from "@/lib/referral/db";
+import { jstDate, randomId, type SqlDb } from "@/lib/referral/db";
 import { readCookie } from "@/lib/referral/links";
 import { inviteMail, loginCodeMail, mailLangOf, sendPortalMail, type MailLang, type PortalMailEnv } from "./mail";
 
@@ -153,7 +153,7 @@ export const opsRole = (p: Principal, ...roles: Role[]) => p.memberships.some((m
 
 /** Whether this hotel user may see a settlement profile: billing rights on every hotel it covers (要件 3.6). */
 export async function canSeeProfile(db: SqlDb, p: Principal, profileId: string): Promise<boolean> {
-  const hotels = await db.all<{ hotel_id: string }>(`SELECT hotel_id FROM settlement_profile_hotels WHERE profile_id = ? AND (valid_to IS NULL OR valid_to > ?)`, [profileId, new Date().toISOString().slice(0, 10)]);
+  const hotels = await db.all<{ hotel_id: string }>(`SELECT hotel_id FROM settlement_profile_hotels WHERE profile_id = ? AND valid_from <= ? AND (valid_to IS NULL OR valid_to > ?)`, [profileId, jstDate(), jstDate()]);
   return hotels.length > 0 && hotels.every((h) => hasBillingFor(p, h.hotel_id));
 }
 

@@ -342,6 +342,24 @@ export async function recordPayout(db: SqlDb, payoutId: string, input: { status:
 /** Paid-out total for the partner's balance line. */
 export async function paidTotalForHotel(db: SqlDb, hotelId: string): Promise<number> {
   const r = await db.first<{ n: number | null }>(
-    `SELECT SUM(s.gross_jpy) AS n FROM statements s WHERE s.status = 'settled' AND s.profile_id IN (SELECT profile_id FROM settlement_profile_hotels WHERE hotel_id = ?)`, [hotelId]);
+    `SELECT SUM(s.transfer_jpy) AS n FROM statements s WHERE s.status = 'settled' AND s.profile_id IN (SELECT profile_id FROM settlement_profile_hotels WHERE hotel_id = ?)`, [hotelId]);
   return Number(r?.n ?? 0);
+}
+
+export interface QuarterPayment { period: string; status: "scheduled" | "paid" | "carried" | "disputed" | "accruing"; gross: number; transfer: number | null; carried: number; payDate: string | null; paidAt: string | null; statementId: string | null }
+/** Issued statements are the source of payment amounts. Unissued accruals are explicitly estimates. */
+export async function partnerQuarterPayments(db: SqlDb, hotelId: string, statements: StatementRow[]): Promise<QuarterPayment[]> {
+  const rows: QuarterPayment[] = statements.filter(s => !["void", "draft"].includes(s.status)).map(s => ({ period: s.period, status: s.status === "settled" ? "paid" : s.status === "disputed" ? "disputed" : s.transfer_jpy === 0 ? "carried" : "scheduled", gross: s.gross_jpy, transfer: s.transfer_jpy, carried: s.carried_out_jpy, payDate: s.pay_date_jst, paidAt: s.settled_at?.slice(0,10) ?? null, statementId: s.id }));
+  const unstated = await db.all<{day:string;net:number;tax:number}>(`SELECT e.performed_on_jst AS day, e.commission_net_jpy AS net, e.tax_rate_bp AS tax FROM commission_entries e LEFT JOIN statements s ON s.id=e.statement_id WHERE e.hotel_id=? AND e.status IN ('confirmed','adjusted') AND e.hold_reason IS NULL AND e.performed_on_jst IS NOT NULL AND (e.statement_id IS NULL OR s.status='draft')`, [hotelId]);
+  const adjustments = await db.all<{created_at:string;net:number;tax:number}>(`SELECT a.created_at,a.delta_net_jpy AS net,e.tax_rate_bp AS tax FROM commission_adjustments a JOIN commission_entries e ON e.id=a.entry_id JOIN statements original ON original.id=e.statement_id LEFT JOIN statements target ON target.id=a.statement_id WHERE e.hotel_id=? AND original.status NOT IN ('draft','void') AND (a.statement_id IS NULL OR target.status='draft')`,[hotelId]);
+  for (const a of adjustments) unstated.push({day:jstDate(a.created_at),net:a.net,tax:a.tax});
+  const profileIds = [...new Set(statements.map(s=>s.profile_id))];
+  if (profileIds.length) {
+    const payments = await db.all<{statement_ids_json:string;paid_at:string|null}>(`SELECT statement_ids_json,paid_at FROM payouts WHERE status='paid' AND profile_id IN (${profileIds.map(()=>"?").join(",")})`,profileIds);
+    for (const payment of payments) for (const id of JSON.parse(payment.statement_ids_json) as string[]) {const row=rows.find(r=>r.statementId===id);if(row&&payment.paid_at)row.paidAt=payment.paid_at;}
+  }
+  const totals = new Map<string,Map<number,number>>();
+  for (const e of unstated) { const period = quarterOf(e.day), taxes = totals.get(period) ?? new Map<number,number>(); taxes.set(e.tax,(taxes.get(e.tax) ?? 0)+e.net); totals.set(period,taxes); }
+  for (const [period,taxes] of totals) rows.push({ period,status:"accruing",gross:[...taxes].reduce((n,[tax,net]) => n+net+taxOnTotal(net,tax),0),transfer:null,carried:0,payDate:payDateFor(period),paidAt:null,statementId:null });
+  return rows.sort((a,b) => b.period.localeCompare(a.period));
 }

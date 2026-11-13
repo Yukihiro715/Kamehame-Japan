@@ -32,6 +32,7 @@ export function HotelReservations() {
   const data = loaded?.key === key ? loaded.value : null;
   return (
     <Card title={R.title}>
+      <p className="pt-note-box">{lang === "en" ? "Results and commissions for guest bookings through referral links and completed booking requests. To arrange a booking on behalf of a guest, use Bookings on behalf of guests." : "紹介リンクからのお客様の予約や、代理予約で成立した予約の実績・紹介料を確認する画面です。お客様に代わって予約を依頼する場合は「代理予約・相談」をご利用ください。"}</p>
       <div className="pt-form">
         <label className="pt-field"><span className="pt-field-l">{R.from}</span><input type="date" value={f.from} onChange={(e) => setF({ ...f, from: e.target.value })} /></label>
         <label className="pt-field"><span className="pt-field-l">{R.to}</span><input type="date" value={f.to} onChange={(e) => setF({ ...f, to: e.target.value })} /></label>
