@@ -177,7 +177,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   }
   if (head === "reservations" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
-    const f = { from: isoDate(q(ctx, "from")) ?? undefined, to: isoDate(q(ctx, "to")) ?? undefined, experienceFrom: isoDate(q(ctx, "experienceFrom")) ?? undefined, experienceTo: isoDate(q(ctx, "experienceTo")) ?? undefined, experience: q(ctx, "experience"), status: q(ctx, "status"), ref: q(ctx, "ref"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined };
+    const f = { from: isoDate(q(ctx, "from")) ?? undefined, to: isoDate(q(ctx, "to")) ?? undefined, experienceFrom: isoDate(q(ctx, "experienceFrom")) ?? undefined, experienceTo: isoDate(q(ctx, "experienceTo")) ?? undefined, experience: q(ctx, "experience"), status: q(ctx, "status"), ref: q(ctx, "ref"), q: q(ctx, "q"), sort: q(ctx, "sort"), direction: q(ctx, "direction"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined };
     return json({ ok: true, hotel: hotelId, ...(p.demo ? demoReservations(f) : await hotelReservations(ctx.db, hotelId, f)) });
   }
   if (head === "demo-material" && ctx.method === "GET") {

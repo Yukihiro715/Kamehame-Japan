@@ -485,3 +485,65 @@ test("dashboard: pending excludes confirmed/cancelled and estimates use selected
   const other=await metrics.hotelDashboard(db,'hB',{from:'2026-10-01',to:'2026-10-31'});
   assert.equal(other.funnel.provisional,0);assert.equal(other.funnel.estimatedCommissionNet,0);
 });
+
+
+test("reservation sheet: global sorting, full-result totals, search, one-sided dates and scope", async () => {
+  const db=openTestDb(); await seed(db);
+  const admin=client(db); await signIn(admin,'admin@example.com','ops');
+  await admin.call('POST','ops/hotels/hA/members',{email:'sheet@example.com',role:'hotel_viewer'});
+  const viewer=client(db); await signIn(viewer,'sheet@example.com','hotel');
+  const pair=(await viewer.call('POST','hotel/materials',{})).body;
+  const arrival=await links.handleReferralArrival(db,{token:pair.url.url.split('/r/')[1],userAgent:UA,now:T0});
+  const ctx=await links.activeReferral(db,arrival.setCookie.split(';')[0],T0);
+  const bookings=[];
+  for(let i=1;i<=31;i++) {
+    const r=await R.createReservation(db,{requestId:uuid(),flow:'experience',experienceSlug:'kanji-name-calligraphy',experienceDate:i===31?null:`2026-11-${String(i).padStart(2,'0')}`,guests:1,lang:'en',lines:[{kind:'base',description:'Test',commissionable:true,quantity:1,grossJpy:2200*i}]},ctx,T0+i*1000);
+    bookings.push(r);
+  }
+  await db.run(`UPDATE commission_entries SET status='confirmed' WHERE reservation_id=?`,[bookings[0].id]);
+  await db.run(`UPDATE commission_entries SET status='pending' WHERE reservation_id=?`,[bookings[1].id]);
+  await db.run(`UPDATE commission_entries SET status='voided',commission_net_jpy=0 WHERE reservation_id=?`,[bookings[30].id]);
+  await db.run(`UPDATE reservations SET status='cancelled' WHERE id=?`,[bookings[30].id]);
+  await db.run(`UPDATE reservations SET amount_status='pending' WHERE id=?`,[bookings[29].id]);
+  await db.run(`UPDATE commission_entries SET rate_bp=NULL,commission_net_jpy=0 WHERE reservation_id=?`,[bookings[29].id]);
+  const first=(await viewer.call('GET','hotel/reservations?sort=commission&direction=desc&limit=25')).body;
+  const second=(await viewer.call('GET','hotel/reservations?sort=commission&direction=desc&limit=25&offset=25')).body;
+  assert.equal(first.total,31);assert.equal(first.rows.length,25);assert.equal(second.rows.length,6);
+  assert.equal(first.rows[0].commissionNet,2900);
+  assert.equal(new Set([...first.rows,...second.rows].map(r=>r.hotelRef)).size,31);
+  assert.deepEqual(first.summary,{estimatedNet:43200,pendingNet:200,confirmedNet:100,unknownCount:1});
+  assert.deepEqual(first.summary,second.summary,"summary covers all matching pages");
+  const amount=(await viewer.call('GET','hotel/reservations?sort=amount&direction=desc&limit=100')).body;
+  assert.equal(amount.rows[0].bookingGross,68200);assert.equal(amount.rows.at(-1).bookingGross,null);
+  const dates=(await viewer.call('GET','hotel/reservations?sort=date&direction=asc&limit=100')).body;
+  assert.equal(dates.rows[0].experienceDate,'2026-11-01');assert.equal(dates.rows.at(-1).experienceDate,null);
+  const search=(await viewer.call('GET',`hotel/reservations?q=${first.rows[0].hotelRef.toLowerCase()}`)).body;
+  assert.equal(search.total,1);assert.equal(search.summary.estimatedNet,2900);
+  assert.equal((await viewer.call('GET',`hotel/reservations?q=${encodeURIComponent('書道')}`)).body.total,31);
+  assert.equal((await viewer.call('GET','hotel/reservations?q=%25')).body.total,0,"search wildcards are literal");
+  assert.equal((await viewer.call('GET','hotel/reservations?from=2026-10-06')).body.total,0);
+  assert.equal((await viewer.call('GET','hotel/reservations?to=2026-10-04')).body.total,0);
+  assert.equal((await viewer.call('GET','hotel/reservations?experienceFrom=2026-11-29')).body.total,2);
+  assert.equal((await viewer.call('GET','hotel/reservations?experienceTo=2026-11-02')).body.total,2);
+  const cancelled=(await viewer.call('GET','hotel/reservations?status=cancelled')).body;
+  assert.equal(cancelled.total,1);assert.equal(cancelled.summary.estimatedNet+cancelled.summary.confirmedNet+cancelled.summary.pendingNet,0);
+  const malicious=(await viewer.call('GET',`hotel/reservations?sort=${encodeURIComponent('r.created_at; DROP TABLE reservations')}&direction=anything`)).body;
+  assert.equal(malicious.total,31);assert.equal(malicious.rows[0].hotelRef,amount.rows[0].hotelRef);
+  assert.equal((await viewer.call('GET','hotel/reservations?hotel=hB&sort=amount')).status,403);
+  const {hotelReservations}=await vite.ssrLoadModule('/lib/portal/metrics.ts');
+  const other=await hotelReservations(db,'hB',{});assert.equal(other.total,0);assert.equal(other.summary.estimatedNet,0);
+  assert.ok(first.rows.every(r=>!('customerName' in r)&&!('customerEmail' in r)));
+  await db.run(`UPDATE reservation_lines SET discount_jpy=110,refunded_gross_jpy=220 WHERE reservation_id=?`,[bookings[0].id]);
+  const ref=(await db.first(`SELECT hotel_ref FROM reservations WHERE id=?`,[bookings[0].id])).hotel_ref;
+  assert.equal((await viewer.call('GET',`hotel/reservations?ref=${ref}`)).body.rows[0].bookingGross,1870);
+});
+
+test("demo reservation sheet mirrors ordering, search and full-result summaries", async () => {
+  const {demoReservations}=await vite.ssrLoadModule('/lib/portal/demo-data.ts');
+  const first=demoReservations({sort:'commission',direction:'desc',limit:2});
+  const next=demoReservations({sort:'commission',direction:'desc',limit:2,offset:2});
+  assert.equal(first.total,6);assert.equal(first.rows[0].commissionNet,4000);assert.deepEqual(first.summary,next.summary);
+  assert.deepEqual(first.summary,{estimatedNet:8000,pendingNet:0,confirmedNet:5000,unknownCount:0});
+  const pending=demoReservations({status:'provisional'});assert.equal(pending.total,1);assert.equal(pending.summary.estimatedNet,2500);
+  assert.equal(demoReservations({q:'demo03'}).total,1);assert.equal(demoReservations({q:'Calligraphy'}).total,6);
+});
