@@ -26,7 +26,7 @@ export function HotelStatementDetail({ id }: { id: string }) {
     <>
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
-      <Card title={<span>{periodLabel(s.period)} <Badge tone={st[1]}>{st[0]}</Badge></span>} className="no-print" actions={<span className="pt-row"><a className="pt-btn pt-btn-secondary pt-btn-small" href={`/api/portal/hotel/statements/${id}/csv`}>{M.csv}</a><Button kind="secondary" small onClick={() => window.print()}>{M.print}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/settlement/">{C.back}</Link></span>}>
+      <Card title={<span>{periodLabel(s.period)} <Badge tone={st[1]}>{st[0]}</Badge></span>} className="no-print" actions={<span className="pt-row"><a className="pt-btn pt-btn-secondary pt-btn-small" href={`/api/portal/hotel/statements/${id}/csv`}>{M.csv}</a><Button kind="secondary" small onClick={() => window.print()}>{M.print}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/partner/settlement/">{C.back}</Link></span>}>
         <p className="pt-small pt-muted">{M.issued} {jst(s.issued_at, false)}{s.dispute_deadline_jst ? ` · ${M.deadline} ${s.dispute_deadline_jst}` : ""}{s.acknowledged_at ? ` · ${M.acknowledged} ${jst(s.acknowledged_at, false)}` : ""}{s.settled_at ? ` · ${M.settled} ${jst(s.settled_at, false)}` : ""}</p>
         {s.status === "issued" && d.billing && <div className="pt-row"><Button onClick={() => run(() => api("POST", `hotel/statements/${id}/acknowledge`), M.ackDone)}>{M.ack}</Button></div>}
         {canAct && (

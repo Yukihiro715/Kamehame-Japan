@@ -1,3 +1,8 @@
+import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguage } from "./official-brochures";
+import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
+import { saveBank, readBank } from "./bank";
+import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
+import { passwordLogin, requestPassword, setPassword } from "./password-auth";
 /** The portal API: one entry point, routed by path, every handler scoped on
  *  the server. Mounted at /api/portal/<path> (app/api/portal/[...path]/route.ts).
  *
@@ -16,8 +21,8 @@ import * as settle from "./settlement";
 import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMail } from "./mail";
 import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
 import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
-import { createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
-import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
+import { targetFor, createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
+import { experienceTerms, experiencePopularity, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
 import { busEnquiryDetail, busEnquiryList, busEnquiryResendPartner, busEnquirySetNote, busEnquirySetStatus } from "@/lib/golfpaq-ops";
 import type { GolfpaqEnquiryEnv } from "@/lib/golfpaq-enquiry";
@@ -27,7 +32,7 @@ import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, resolvePublicOrigin, str } from "./util";
 import type { PortalMailEnv } from "./mail";
 
-export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown };
+export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown; PORTAL_BANK_KEY?: string };
 
 export async function handlePortalApi(request: Request, env: PortalEnv, path: string[]): Promise<Response> {
   try {
@@ -52,6 +57,9 @@ export async function handlePortalApi(request: Request, env: PortalEnv, path: st
   }
 }
 
+import { verifyDemoLogin } from "./demo-auth";
+import { DEMO_SESSION_SECONDS } from "./demo-config";
+
 interface Ctx { db: SqlDb; env: PortalEnv; request: Request; url: URL; path: string[]; method: string; secure: boolean; origin: string }
 
 const q = (ctx: Ctx, name: string) => ctx.url.searchParams.get(name) ?? undefined;
@@ -69,6 +77,23 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   const kind = (b: Record<string, unknown>) => (b.kind === "ops" ? "ops" : "hotel");
   if (ctx.method !== "POST") throw notFound();
   const body = await readJson(ctx.request);
+  const ip = ctx.request.headers.get("cf-connecting-ip") ?? "unknown";
+  if (["password-login", "password-request", "password-set"].includes(path[0])) {
+    if (body.kind !== "hotel") throw forbidden();
+    if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { email: body.email, ip, origin: await publicOrigin(ctx) }));
+    if (path[0] === "password-set") {
+      const ok = await setPassword(ctx.db, { token: body.token, password: body.password, ip });
+      return json({ ok, ...(ok ? {} : { error: "password_reset_invalid" }) }, ok ? 200 : 400);
+    }
+    const r = await passwordLogin(ctx.db, { email: body.email, password: body.password, ip });
+    if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "password_locked" : "password_invalid" }, r.error === "locked" ? 429 : 401);
+    return json({ ok: true }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure) });
+  }
+  if (path[0] === "demo-login") {
+    const r = await verifyDemoLogin(ctx.db, { email: body.email, password: body.password, kind: body.kind, ip: ctx.request.headers.get("cf-connecting-ip") ?? "unknown" });
+    if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "demo_locked" : "demo_invalid" }, r.error === "locked" ? 429 : 401);
+    return json({ ok: true, expiresAt: r.expiresAt }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure, DEMO_SESSION_SECONDS) });
+  }
   if (path[0] === "request-code") {
     const r = await requestLoginCode(ctx.db, ctx.env, { email: body.email, kind: kind(body), lang: body.lang });
     return json({ ok: true, sent: r.sent, mail: r.mail, ...(r.devCode ? { devCode: r.devCode } : {}) });
@@ -126,11 +151,12 @@ async function statementVisible(ctx: Ctx, p: Principal, statementId: string): Pr
 
 async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   const p = await requireHotelUser(ctx);
+  if (p.demo && ctx.method !== "GET") throw new ApiError(403, "demo_read_only", "デモは閲覧専用です。予約・リンク発行・設定変更はできません。");
   const [head, sub] = path;
   if (head === "me" && ctx.method === "GET") {
     const ids = hotelIdsOf(p);
     const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT id, name, public_id, status, brochure_url, site_kind, features_json FROM hotels WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`, ids) : [];
-    return json({ ok: true, user: { email: p.email, name: p.name, lang: p.lang }, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
+    return json({ ok: true, user: { email: p.email, name: p.name, lang: p.lang }, demo: p.demo === true, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
   }
   if (head === "lang" && ctx.method === "POST") {
     // The language the user reads the portal and its mails in (migration 0011).
@@ -139,22 +165,70 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     await ctx.db.run(`UPDATE users SET lang = ? WHERE id = ?`, [lang, p.userId]);
     return json({ ok: true, lang });
   }
+  if (head === "brochures") {
+    const body = ctx.method === "POST" ? await readJson(ctx.request, 300000) : undefined;
+    const hotelId = hotelScope(ctx, p, body);
+    const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id=?`,[hotelId]))?.features_json);
+    if (!features.refer && !features.cases) throw forbidden();
+    const canManage = hasSiteRole(p,hotelId,"partner_manager"), canPrice = hasSiteRole(p,hotelId,...CASE_ROLES);
+    if (ctx.method === "GET" && !sub) {
+      const config = await readBrochureConfig(ctx.db,hotelId);
+      if(p.demo) {
+        config.brand = { companyName:"KAMEHAME デモ旅行社",logoDataUrl:null,accentColor:"#b74908",contactEmail:"sample@example.invalid",contactPhone:"",contactUrl:"" };
+        config.prices = Object.fromEntries([
+          ['shibuya-ramen-class',29800],['kanji-name-calligraphy',35000],['nerima-herbal-bath-private-spa',29800],
+        ].map(([slug,amount])=>[slug,{priceJpy:Number(amount),priceUnit:'person' as const,priceMode:'fixed' as const,priceNote:'サンプルの案内価格です。ご希望日時をお問い合わせください。',priceNoteEn:'Sample quoted price. Please enquire about your preferred date.'}]));
+      }
+      return json({ ok:true,...config,experiences:brochureExperiences(),canManage,canPrice,demo:p.demo===true });
+    }
+    if (ctx.method === "POST" && sub === "brand") {
+      if(!canManage) throw forbidden();
+      return json({ok:true,brand:await saveBrochureBrand(ctx.db,hotelId,body!,p.userId)});
+    }
+    if (ctx.method === "POST" && sub === "price") {
+      if(!canPrice) throw forbidden();
+      return json({ok:true,price:await saveBrochurePrice(ctx.db,hotelId,body!,p.userId)});
+    }
+    throw notFound();
+  }
   if (head === "dashboard" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
-    return json({ ok: true, hotel: hotelId, ...(await hotelDashboard(ctx.db, hotelId, period(ctx))) });
+    return json({ ok: true, hotel: hotelId, ...(p.demo ? demoDashboard(period(ctx)) : await hotelDashboard(ctx.db, hotelId, period(ctx))) });
   }
   if (head === "experiences" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
     const options = new Map(cases.experienceOptions().map((o) => [o.slug, o]));
     const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id = ?`, [hotelId]))?.features_json);
     const relay = features.cases && hasSiteRole(p, hotelId, ...CASE_ROLES);
-    const experiences = (await experienceTerms(ctx.db)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
+    const popularity = p.demo ? demoPopularity() : await experiencePopularity(ctx.db);
+    const experiences = (await experienceTerms(ctx.db, Date.now(), hotelId)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, popularityRank: popularity.get(e.slug) ?? null, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
     return json({ ok: true, experiences, relay, busGolf: options.get(cases.BUS_GOLF_SLUG) ?? null });
   }
   if (head === "reservations" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
-    const f = { from: isoDate(q(ctx, "from")) ?? undefined, to: isoDate(q(ctx, "to")) ?? undefined, experienceFrom: isoDate(q(ctx, "experienceFrom")) ?? undefined, experienceTo: isoDate(q(ctx, "experienceTo")) ?? undefined, experience: q(ctx, "experience"), status: q(ctx, "status"), ref: q(ctx, "ref"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined };
-    return json({ ok: true, hotel: hotelId, ...(await hotelReservations(ctx.db, hotelId, f)) });
+    const f = { from: isoDate(q(ctx, "from")) ?? undefined, to: isoDate(q(ctx, "to")) ?? undefined, experienceFrom: isoDate(q(ctx, "experienceFrom")) ?? undefined, experienceTo: isoDate(q(ctx, "experienceTo")) ?? undefined, experience: q(ctx, "experience"), status: q(ctx, "status"), ref: q(ctx, "ref"), q: q(ctx, "q"), sort: q(ctx, "sort"), direction: q(ctx, "direction"), limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined };
+    return json({ ok: true, hotel: hotelId, ...(p.demo ? demoReservations(f) : await hotelReservations(ctx.db, hotelId, f)) });
+  }
+  if (head === "demo-material" && ctx.method === "GET") {
+    if (!p.demo) throw notFound();
+    hotelScope(ctx, p);
+    const slug = q(ctx, "experience") || null;
+    targetFor(slug);
+    const url = `https://example.invalid/demo/${slug ?? "all"}`;
+    return json({ok:true, qr:{id:`demo-qr:${slug ?? "all"}`,url},url:{id:`demo-url:${slug ?? "all"}`,url}});
+  }
+  if (head === "official-brochures") {
+    const body=ctx.method==='POST'?await readJson(ctx.request):{};
+    const hotelId=hotelScope(ctx,p,body);
+    await requireFeature(ctx.db,hotelId,'refer');
+    if(ctx.method==='GET'&&!sub)return json({ok:true,...officialBrochureCatalog()});
+    if((ctx.method==='POST'&&sub==='prepare')||(ctx.method==='GET'&&sub==='demo'&&p.demo)) {
+      const lang=officialBrochureLanguage(ctx.method==='POST'?body.lang:q(ctx,'lang'));
+      const slug=str(ctx.method==='POST'?body.experience:q(ctx,'experience'),80)||null;
+      const input=await officialBrochureInput(ctx.db,hotelId,lang,slug,await publicOrigin(ctx),p.email,p.demo===true);
+      return json({ok:true,input});
+    }
+    throw notFound();
   }
   if (head === "materials") {
     const body = ctx.method === "POST" ? await readJson(ctx.request) : {};
@@ -172,18 +246,35 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     return json({ ok: true, hotel: hotelId, hotelName: h?.name, brochureUrl: h?.brochure_url ?? null, links });
   }
   if (head === "qr" && ctx.method === "GET") {
+    if (p.demo && q(ctx,"link")?.startsWith("demo-qr:")) {
+      hotelScope(ctx,p);
+      const slug = q(ctx,"link")!.slice(8);
+      targetFor(slug === "all" ? null : slug);
+      return qrResponse(`https://example.invalid/demo/${slug}`,q(ctx,"format"),"demo-sample");
+    }
     const link = await ctx.db.first<{ id: string; token: string; hotel_id: string | null }>(`SELECT id, token, hotel_id FROM referral_links WHERE id = ?`, [q(ctx, "link") ?? ""]);
     if (!link || !link.hotel_id || !canSeeHotel(p, link.hotel_id)) throw notFound();
     return qrResponse(publicLinkUrl(await publicOrigin(ctx), link.token), q(ctx, "format"), `kamehame-${link.id}`);
   }
+  if (head === "bank" && ctx.method === "POST") {
+    const body = await readJson(ctx.request), profileId = str(body.profileId,100);
+    if (!await canSeeProfile(ctx.db,p,profileId)) throw forbidden();
+    const sites = await ctx.db.all<{hotel_id:string}>(`SELECT hotel_id FROM settlement_profile_hotels WHERE profile_id=? AND valid_from<=? AND (valid_to IS NULL OR valid_to>?)`,[profileId,jstDate(),jstDate()]);
+    for (const site of sites) await requireFeature(ctx.db,site.hotel_id,"settlement");
+    const active = await ctx.db.first(`SELECT id FROM settlement_profiles WHERE id=? AND valid_from<=? AND (valid_to IS NULL OR valid_to>?)`,[profileId,jstDate(),jstDate()]);
+    if (!active) throw forbidden();
+    return json({ok:true,...await saveBank(ctx.db,profileId,body,p.email,ctx.env.PORTAL_BANK_KEY)});
+  }
   if (head === "settlement" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
     await requireFeature(ctx.db, hotelId, "settlement");
+    if (p.demo) return json({ ok: true, hotel: hotelId, quarters: demoQuarters(), balance: demoBalance, profile: { id: "demo-profile", name: "デモ用の精算設定（サンプル）", min_payout_jpy: 3000, bank_details_masked: "サンプル銀行 本店 普通 ****1234", dispute_days: 14, fee_borne_by: "company", bank_fee_jpy: 0 }, billing: false, statements: [] });
     const dash = await hotelDashboard(ctx.db, hotelId, presetPeriod("this_quarter")!);
-    const profile = await ctx.db.first<{ id: string; name: string; min_payout_jpy: number; bank_details_masked: string | null; dispute_days: number; fee_borne_by: string; bank_fee_jpy: number }>(
-      `SELECT p.id, p.name, p.min_payout_jpy, p.bank_details_masked, p.dispute_days, p.fee_borne_by, p.bank_fee_jpy FROM settlement_profile_hotels ph JOIN settlement_profiles p ON p.id = ph.profile_id WHERE ph.hotel_id = ? AND (ph.valid_to IS NULL OR ph.valid_to > ?) ORDER BY ph.valid_from DESC LIMIT 1`, [hotelId, jstDate()]);
-    const statements = profile ? await settle.statementsOfProfiles(ctx.db, [profile.id]) : [];
-    return json({ ok: true, hotel: hotelId, balance: dash.balance, profile, billing: profile ? await canSeeProfile(ctx.db, p, profile.id) : false, statements });
+    const profile = await ctx.db.first<{ id: string; name: string; min_payout_jpy: number; bank_details_masked: string | null; payee_name: string | null; dispute_days: number; fee_borne_by: string; bank_fee_jpy: number }>(
+      `SELECT p.id, p.name, p.min_payout_jpy, p.bank_details_masked, p.payee_name, p.dispute_days, p.fee_borne_by, p.bank_fee_jpy FROM settlement_profile_hotels ph JOIN settlement_profiles p ON p.id = ph.profile_id WHERE ph.hotel_id = ? AND ph.valid_from <= ? AND (ph.valid_to IS NULL OR ph.valid_to > ?) AND (p.valid_to IS NULL OR p.valid_to > ?) ORDER BY ph.valid_from DESC LIMIT 1`, [hotelId, jstDate(), jstDate(), jstDate()]);
+    const history = await ctx.db.all<{profile_id:string}>(`SELECT DISTINCT profile_id FROM settlement_profile_hotels WHERE hotel_id=? AND valid_from<=?`,[hotelId,jstDate()]);
+    const statements = await settle.statementsOfProfiles(ctx.db, history.map(r=>r.profile_id));
+    return json({ ok: true, hotel: hotelId, quarters: await settle.partnerQuarterPayments(ctx.db, hotelId, statements), balance: dash.balance, profile, billing: profile ? await canSeeProfile(ctx.db, p, profile.id) : false, statements });
   }
   if (head === "statements" && sub) {
     const [, id, action] = path;
@@ -205,7 +296,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
       const hotelId = hotelScope(ctx, p);
       await requireCaseRole(ctx, p, hotelId);
       const own = !hasSiteRole(p, hotelId, "partner_manager");
-      return json({ ok: true, hotel: hotelId, manager: !own, ...(await cases.listCases(ctx.db, { siteIds: [hotelId], userId: own ? p.userId : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) });
+      return json({ ok: true, hotel: hotelId, manager: !own, ...(p.demo ? demoCases(ctx.url.searchParams) : await cases.listCases(ctx.db, { siteIds: [hotelId], userId: own ? p.userId : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) });
     }
     if (ctx.method === "POST") {
       const b = await readJson(ctx.request);
@@ -218,6 +309,12 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   }
   if (head === "cases" && sub) {
     const [, id, action] = path;
+    if (p.demo && ctx.method === "GET" && !action) {
+      hotelScope(ctx, p);
+      const sample = demoCase(id);
+      if (!sample) throw notFound();
+      return json({ ok: true, ...sample });
+    }
     const c = await cases.caseForPartner(ctx.db, p, id);
     await requireFeature(ctx.db, c.site_id, "cases");
     const origin = await publicOrigin(ctx);
@@ -322,7 +419,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const s = await settle.issueStatement(ctx.db, id, p.email);
       const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
       const origin = await publicOrigin(ctx);
-      const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/hotel/settlement/${s.id}/`, lang }) })));
+      const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/partner/settlement/${s.id}/`, lang }) })));
       return json({ ok: true, statement: s, notified: emails.length, mails });
     }
     if (action === "void" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); await settle.voidStatement(ctx.db, id, { reason: b.reason, by: p.email }); return json({ ok: true }); }
@@ -335,7 +432,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     const s = await settle.getStatement(ctx.db, d.statement_id);
     const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
     const origin = await publicOrigin(ctx);
-    const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/hotel/settlement/${s.id}/`, lang }) })));
+    const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/partner/settlement/${s.id}/`, lang }) })));
     return json({ ok: true, mails });
   }
   if (head === "payouts") {
@@ -355,7 +452,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
         const periods = (await ctx.db.all<{ period: string }>(`SELECT period FROM statements WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY period`, ids)).map((r) => r.period);
         const { emails, entityName } = await billingRecipients(ctx, po.profile_id);
         const origin = await publicOrigin(ctx);
-        mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/hotel/settlement/`, lang }) })));
+        mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/partner/settlement/`, lang }) })));
       }
     }
     return json({ ok: true, mails });
@@ -454,6 +551,10 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     if (id) { await ops.updateLegalEntity(ctx.db, id, { name: b.name, address: b.address, partnerType: b.partnerType, entityKind: b.entityKind, contactEmail: b.contactEmail, registrationStatus: b.registrationStatus, registrationNumber: b.registrationNumber, by: p.email }); return json({ ok: true }); }
     return json({ ok: true, ...(await ops.createLegalEntity(ctx.db, { name: b.name, address: b.address, registrationNumber: b.registrationNumber, partnerType: b.partnerType, entityKind: b.entityKind, contactEmail: b.contactEmail, withSite: b.withSite === true, features: b.features, by: p.email })) });
   }
+  if (head === "bank" && get && id) {
+    await requireOps(ctx,...FINANCE);
+    return json({ok:true,bank:await readBank(ctx.db,id,ctx.env.PORTAL_BANK_KEY)});
+  }
   if (head === "profiles" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createProfile(ctx.db, { legalEntityId: b.legalEntityId, name: b.name, hotelIds: b.hotelIds, validFrom: b.validFrom, by: p.email })) }); }
   if (head === "hotels") {
     if (!id && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createHotel(ctx.db, { legalEntityId: b.legalEntityId, name: b.name, publicId: b.publicId, siteKind: b.siteKind, features: b.features, withProfile: b.withProfile !== false, by: p.email })) }); }
@@ -499,6 +600,10 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     const link = await ctx.db.first<{ id: string; token: string }>(`SELECT id, token FROM referral_links WHERE id = ?`, [q(ctx, "link") ?? ""]);
     if (!link) throw notFound();
     return qrResponse(publicLinkUrl(await publicOrigin(ctx), link.token), q(ctx, "format"), `kamehame-${link.id}`);
+  }
+  if (head === "commission-rates" && post) {
+    const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request);
+    return json({ ok: true, ...(await ops.createCommissionRate(ctx.db, { legalEntityId: b.legalEntityId, rateBp: b.rateBp, validFrom: b.validFrom, by: p.email })) });
   }
   if (head === "policies") {
     if (get) { await requireOps(ctx); return json({ ok: true, ...(await ops.policyList(ctx.db)) }); }

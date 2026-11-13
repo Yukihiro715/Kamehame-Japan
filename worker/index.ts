@@ -120,6 +120,7 @@ async function referralArrival(request: Request, env: Env, url: URL): Promise<Re
       const r = await handleReferralArrival(d1Db(env.DB), { token, userAgent: request.headers.get("user-agent"), test: url.searchParams.get("kh_test") === "1", secure: url.protocol === "https:", cookie: request.headers.get("cookie") });
       location = r.redirect;
       if (r.setCookie) headers.append("set-cookie", r.setCookie);
+      if (r.visitorCookie) headers.append("set-cookie", r.visitorCookie);
     } catch (err) {
       console.error("referral: arrival not recorded", err instanceof Error ? err.message : err);
     }
@@ -190,6 +191,16 @@ const worker = {
 
     const gate = await stagingGate(request, env, url);
     if (gate) return withSecurityHeaders(gate);
+
+    // Keep existing bookmarks and mailed links working; query strings survive.
+    // No fragment is supplied, so browsers retain password-token fragments.
+    if (/^\/hotel(?:\/|$)/.test(url.pathname)) {
+      url.pathname = url.pathname.replace(/^\/hotel/, "/partner");
+      if (!url.pathname.endsWith("/")) url.pathname += "/";
+      return withSecurityHeaders(new Response(null, { status: 308, headers: {
+        location: url.toString(), "cache-control": "no-store", "x-robots-tag": "noindex, nofollow",
+      } }));
+    }
 
     if (REFERRAL_PATH.test(url.pathname)) return withSecurityHeaders(await referralArrival(request, env, url));
 

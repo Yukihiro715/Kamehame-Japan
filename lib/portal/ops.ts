@@ -165,7 +165,9 @@ export async function policyList(db: SqlDb) {
     `SELECT * FROM experience_referral_policies ORDER BY experience_slug, valid_from DESC, version DESC`);
   const titles = new Map(catalogFor("ja").experiences.map((x) => [x.slug, { title: x.title, status: x.status ?? "live", price: x.price }]));
   const experiences = catalogFor("ja").experiences.filter((x) => x.status === "live").map((x) => ({ slug: x.slug, title: x.title, price: x.price, priceUnit: x.priceUnit ?? "person" }));
-  return { experiences, policies: rows.map((r) => ({ ...r, title: titles.get(r.experience_slug)?.title ?? r.experience_slug })) };
+  const rateSettings = await db.all(`SELECT * FROM partner_commission_rates ORDER BY valid_from DESC`);
+  const partners = await db.all(`SELECT id, name FROM partner_legal_entities ORDER BY name`);
+  return { experiences, rateSettings, partners, policies: rows.map((r) => ({ ...r, title: titles.get(r.experience_slug)?.title ?? r.experience_slug })) };
 }
 
 export async function createPolicy(db: SqlDb, input: { experienceSlug: unknown; rateBp: unknown; taxRateBp?: unknown; unitPriceExclTax?: unknown; referenceAvg?: unknown; referenceNote?: unknown; enabled?: unknown; validFrom?: unknown; by: string }) {
@@ -256,7 +258,7 @@ export async function correctReferral(db: SqlDb, id: string, input: { hotelId: u
   if (!r) throw notFound();
   const hotelId = input.hotelId === null || input.hotelId === "" ? null : str(input.hotelId, 64);
   if (hotelId && !(await db.first(`SELECT id FROM hotels WHERE id = ?`, [hotelId]))) throw bad("unknown_hotel");
-  const existing = await db.first<{ hotel_id: string | null; status: string }>(`SELECT hotel_id, status FROM reservation_referrals WHERE reservation_id = ?`, [id]);
+  const existing = await db.first<{ hotel_id: string | null; status: string; policy_id: string | null; policy_version: number | null; rate_bp: number | null; rate_setting_id: string | null }>(`SELECT hotel_id, status, policy_id, policy_version, rate_bp, rate_setting_id FROM reservation_referrals WHERE reservation_id = ?`, [id]);
   const entry = await db.first<{ id: string; status: string }>(`SELECT id, status FROM commission_entries WHERE reservation_id = ?`, [id]);
   if (entry && ["confirmed", "adjusted"].includes(entry.status) && entry) {
     // Settled or confirmed amounts are reversed and re-created rather than moved silently (要件 7).
@@ -264,15 +266,16 @@ export async function correctReferral(db: SqlDb, id: string, input: { hotelId: u
     if (paidOut?.statement_id) throw bad("already_settled", "精算済みの紹介料は差分台帳で処理します（段階4）");
   }
   const at = new Date(now).toISOString();
-  const policy = await policyFor(db, r.experience_slug, Date.parse(r.created_at));
+  const resolved = await policyFor(db, r.experience_slug, Date.parse(r.created_at), hotelId);
+  const policy = existing?.hotel_id === hotelId && existing.rate_bp !== null && existing.policy_id ? { ...resolved, id: existing.policy_id, version: existing.policy_version, rate_bp: existing.rate_bp, rate_setting_id: existing.rate_setting_id } : resolved;
   const status = hotelId === null ? "removed" : policy ? "corrected" : "rate_missing";
   const statements: SqlStatement[] = [];
   if (existing) {
-    statements.push({ sql: `UPDATE reservation_referrals SET previous_hotel_id = hotel_id, hotel_id = ?, basis = 'manual', status = ?, policy_id = COALESCE(policy_id, ?), policy_version = COALESCE(policy_version, ?), rate_bp = COALESCE(rate_bp, ?), correction_reason = ?, corrected_by = ?, corrected_at = ? WHERE reservation_id = ?`,
-      params: [hotelId, status, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, reason, input.by, at, id] });
+    statements.push({ sql: `UPDATE reservation_referrals SET previous_hotel_id = hotel_id, hotel_id = ?, basis = 'manual', status = ?, policy_id = ?, policy_version = ?, rate_bp = ?, rate_setting_id = ?, correction_reason = ?, corrected_by = ?, corrected_at = ? WHERE reservation_id = ?`,
+      params: [hotelId, status, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, policy?.rate_setting_id ?? null, reason, input.by, at, id] });
   } else if (hotelId) {
-    statements.push({ sql: `INSERT INTO reservation_referrals (reservation_id, hotel_id, link_id, session_id, medium, basis, fixed_at, policy_id, policy_version, rate_bp, status, correction_reason, corrected_by, corrected_at) VALUES (?, ?, NULL, NULL, NULL, 'manual', ?, ?, ?, ?, ?, ?, ?, ?)`,
-      params: [id, hotelId, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, status, reason, input.by, at] });
+    statements.push({ sql: `INSERT INTO reservation_referrals (reservation_id, hotel_id, link_id, session_id, medium, basis, fixed_at, policy_id, policy_version, rate_bp, status, correction_reason, corrected_by, corrected_at, rate_setting_id) VALUES (?, ?, NULL, NULL, NULL, 'manual', ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      params: [id, hotelId, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, status, reason, input.by, at, policy?.rate_setting_id ?? null] });
   } else return reservationDetail(db, id);
   if (entry) statements.push({ sql: `UPDATE commission_entries SET hotel_id = ?, settlement_profile_id = NULL, updated_at = ? WHERE id = ?`, params: [hotelId, at, entry.id] });
   else statements.push({ sql: `INSERT INTO commission_entries (id, reservation_id, hotel_id, settlement_profile_id, rate_bp, base_net_jpy, commission_net_jpy, tax_rate_bp, status, hold_reason, created_at, updated_at) VALUES (?, ?, ?, NULL, ?, 0, 0, ?, 'estimated', NULL, ?, ?)`, params: [randomId(), id, hotelId, policy?.rate_bp ?? null, policy?.tax_rate_bp ?? 1000, at, at] });
@@ -430,4 +433,23 @@ export async function settingsSet(db: SqlDb, input: { values: unknown; by: strin
   }
   statements.push(audit(input.by, "settings.update", "settings", "portal", null, values, at));
   await db.batch(statements);
+}
+
+/** Append-only rates; a partner setting covers every site belonging to that entity. */
+export async function createCommissionRate(db: SqlDb, input: { legalEntityId: unknown; rateBp: unknown; validFrom?: unknown; by: string }) {
+  const legalEntityId = input.legalEntityId === null || input.legalEntityId === "" ? null : str(input.legalEntityId, 64);
+  if (input.legalEntityId === undefined || (input.legalEntityId !== null && input.legalEntityId !== "" && !legalEntityId)) throw bad("unknown_partner");
+  if (legalEntityId && !await db.first(`SELECT id FROM partner_legal_entities WHERE id = ?`, [legalEntityId])) throw bad("unknown_partner");
+  const rate = input.rateBp === null ? null : input.rateBp;
+  if (rate !== null && (typeof rate !== "number" || !Number.isInteger(rate) || rate < 0 || rate > 10000)) throw bad("bad_rate");
+  const at = now_();
+  const validFrom = input.validFrom === undefined ? at : typeof input.validFrom === "string" && Number.isFinite(Date.parse(input.validFrom)) ? new Date(input.validFrom).toISOString() : null;
+  if (!validFrom || validFrom < at) throw bad("bad_date", "適用開始は現在以降を指定してください");
+  if (await db.first(`SELECT id FROM partner_commission_rates WHERE legal_entity_id IS ? AND valid_from = ?`, [legalEntityId, validFrom])) throw bad("duplicate_rate_date", "同じ適用日時の設定が既にあります");
+  const id = randomId();
+  await db.batch([
+    { sql: `INSERT INTO partner_commission_rates (id, legal_entity_id, rate_bp, valid_from, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?)`, params: [id, legalEntityId, rate, validFrom, at, input.by] },
+    audit(input.by, "commission_rate.create", "commission_rate", id, null, { legalEntityId, rateBp: rate, validFrom }),
+  ]);
+  return { id };
 }

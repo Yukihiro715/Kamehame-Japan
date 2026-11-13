@@ -18,7 +18,7 @@ async function opsRecipient(db: SqlDb, env: NotifyEnv): Promise<string | null> {
   const v = (row?.value ?? env.CONTACT_TO ?? "").trim();
   return v && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? v : null;
 }
-const partnerUrl = (origin: string, id: string) => `${origin}/hotel/cases/${id}/`;
+const partnerUrl = (origin: string, id: string) => `${origin}/partner/cases/${id}/`;
 const opsUrl = (origin: string, id: string) => `${origin}/ops/cases/${id}/`;
 
 export type CaseEvent =

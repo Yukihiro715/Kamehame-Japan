@@ -73,6 +73,12 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
 
+      - name: Ensure bank encryption key
+        run: bash scripts/ensure-portal-bank-key.sh kamehame-japan
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d2242e318c59a385d35204a04aafa922
+
       - name: Deploy
         # GOLFPAQ_LIVE switches the golf landing and shared-bus pages on in production
         # (docs/GOLFPAQ_BUS_TOURS.md); the variable is set here so a deploy never drops it.

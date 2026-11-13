@@ -4,6 +4,19 @@ export { REVIEWS_PUBLISHED, reviewDate, sampleReviewsFor, featuredReviews } from
 export type { Review, Aggregate } from "@/lib/reviews";
 
 const DIRECT_REVIEWS: Review[] = [
+  // Direct submission on 13 Nov, matched to the confirmed 12 Nov kendo booking.
+  // Original English text preserved; first name only, no uploaded media.
+  {
+    id: "hui-nihonbashi-kendo-2026-11", experience: "nihonbashi-kendo-experience", rating: 5,
+    author: "Hui", country: "", source: "direct", verified: true, date: "2026-11-12",
+    body: "The teachers were really nice and patient. Course material (hard copy guide and all the armors) was sufficiently provided.",
+    i18n: {
+      ja: { body: "先生方はとても親切で、根気よく教えてくれました。教材（紙のガイドと防具一式）も十分に用意されていました。" },
+      es: { body: "Los profesores fueron muy amables y pacientes. El material del curso (la guía impresa y todo el equipo de protección) se proporcionó en cantidad suficiente." },
+      fr: { body: "Les enseignants étaient vraiment gentils et patients. Le matériel du cours (le guide imprimé et toutes les pièces d’armure) était fourni en quantité suffisante." },
+      "zh-tw": { body: "老師們非常親切，也很有耐心。課程教材（紙本指南及全套護具）都準備得很充足。" },
+    },
+  },
   // Direct submission matched to the review invitation and confirmed booking
   // for Takane Country Club, 4 Nov 2026. Site/SNS photo consent received 7 Nov.
   // Keep the guest's original English wording and first name only.

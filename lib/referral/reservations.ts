@@ -1,3 +1,4 @@
+import { catalogFor } from "@/lib/catalog";
 /** Reservations, their lines, the fixed attribution and the commission entry.
  *
  *  A reservation is written here in the same batch as its referral, so the
@@ -5,6 +6,7 @@
  *  commission entry is kept current from the lines (estimated → pending →
  *  confirmed); once confirmed, every change is a dated adjustment. */
 import { jstDate, randomId, type SqlDb, type SqlStatement } from "./db";
+import { effectiveRate } from "./rates";
 import { type ReferralContext } from "./links";
 
 /** The attribution a partner case fixes directly (docs/PARTNER_PLATFORM_STAGE1.md 4.5):
@@ -22,16 +24,22 @@ export interface NewReservation {
   /** True when the site cannot state the chargeable amount yet (quotes, enquiries). */
   amountPending?: boolean;
 }
-export interface PolicyRow { id: string; rate_bp: number; tax_rate_bp: number; version: number; referral_enabled: number }
+export interface PolicyRow { id: string | null; rate_bp: number; tax_rate_bp: number; version: number; referral_enabled: number; rate_setting_id?: string | null }
 export type ReferralStatus = "attributed" | "rate_missing" | "payee_missing";
 
 /** The commission terms in force for an experience at `now` (latest valid_from). */
-export async function policyFor(db: SqlDb, slug: string, now = Date.now()): Promise<PolicyRow | null> {
+export async function policyFor(db: SqlDb, slug: string, now = Date.now(), hotelId: string | null = null, profileId: string | null = null): Promise<PolicyRow | null> {
   const row = await db.first<PolicyRow>(
     `SELECT id, rate_bp, tax_rate_bp, version, referral_enabled FROM experience_referral_policies
       WHERE experience_slug = ? AND valid_from <= ? ORDER BY valid_from DESC, version DESC LIMIT 1`,
     [slug, new Date(now).toISOString()]);
-  return row && row.referral_enabled ? row : null;
+  if (row && !row.referral_enabled) return null;
+  const rate = await effectiveRate(db, hotelId, now, profileId);
+  if (!row) {
+    if (rate?.rate_bp == null || !catalogFor("ja").experiences.some(x => x.slug === slug && x.status === "live")) return null;
+    return { id: null, version: 0, referral_enabled: 1, tax_rate_bp: 1000, rate_bp: rate.rate_bp, rate_setting_id: rate.id };
+  }
+  return { ...row, rate_bp: rate?.rate_bp ?? row.rate_bp, rate_setting_id: rate?.id ?? null };
 }
 
 export interface CreateResult { id: string; created: boolean; referral?: ReferralStatus }
@@ -49,7 +57,7 @@ export async function createReservation(db: SqlDb, r: NewReservation, ref: Attri
   const existing = await db.first<{ id: string }>(`SELECT id FROM reservations WHERE request_id = ?`, [r.requestId]);
   if (existing) return { id: existing.id, created: false };
   const id = randomId(), at = new Date(now).toISOString();
-  const policy = ref ? await policyFor(db, r.experienceSlug, now) : null;
+  const policy = ref ? await policyFor(db, r.experienceSlug, now, ref.hotelId, ref.chainProfileId) : null;
   const statements: SqlStatement[] = [{
     sql: `INSERT INTO reservations (id, request_id, external_ref, flow, experience_slug, experience_date, guests, lang, status, payment_status, amount_status, created_at, updated_at, hotel_ref)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'provisional', 'unpaid', ?, ?, ?, ?)`,
@@ -68,11 +76,11 @@ export async function createReservation(db: SqlDb, r: NewReservation, ref: Attri
   if (ref) {
     referral = !policy ? "rate_missing" : ref.hotelId === null && !ref.chainProfileId ? "payee_missing" : "attributed";
     statements.push({
-      sql: `INSERT INTO reservation_referrals (reservation_id, hotel_id, link_id, session_id, medium, basis, case_id, fixed_at, policy_id, policy_version, rate_bp, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      sql: `INSERT INTO reservation_referrals (reservation_id, hotel_id, link_id, session_id, medium, basis, case_id, fixed_at, policy_id, policy_version, rate_bp, status, rate_setting_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       params: isCase(ref)
-        ? [id, ref.hotelId, null, null, null, "case", ref.caseId, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral]
-        : [id, ref.hotelId, ref.linkId, ref.sessionId, ref.medium, "cookie", null, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral],
+        ? [id, ref.hotelId, null, null, null, "case", ref.caseId, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral, policy?.rate_setting_id ?? null]
+        : [id, ref.hotelId, ref.linkId, ref.sessionId, ref.medium, "cookie", null, at, policy?.id ?? null, policy?.version ?? null, policy?.rate_bp ?? null, referral, policy?.rate_setting_id ?? null],
     });
     const commissionable = r.lines.filter((l) => l.commissionable).map((l) => ({ netJpy: netFromGross(l.grossJpy - (l.discountJpy ?? 0), l.taxRateBp ?? policy?.tax_rate_bp ?? 1000), rateBp: policy?.rate_bp ?? 0 }));
     statements.push({

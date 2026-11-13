@@ -13,6 +13,7 @@ interface Data { entities: Entity[]; hotels: Hotel[]; profiles: Profile[] }
 const STATUS: Record<string, [string, "ok" | "warn" | "bad"]> = { active: ["提携中", "ok"], suspended: ["一時停止", "warn"], terminated: ["提携終了", "bad"] };
 
 export function OpsPartners() {
+  const [bank, setBank] = useState<{name:string;value:string}|null>(null);
   const [d, setD] = useState<Data | null>(null), [err, setErr] = useState<string | null>(null), [msg, setMsg] = useState<string | null>(null);
   const [le, setLe] = useState({ name: "", address: "", registrationNumber: "", partnerType: "hotel", entityKind: "company", contactEmail: "", withSite: false, features: { refer: true, cases: false, settlement: true, members: false } as Features });
   const [h, setH] = useState({ legalEntityId: "", name: "", publicId: "", siteKind: "hotel", features: { refer: true, cases: false, settlement: true, members: false } as Features });
@@ -69,7 +70,8 @@ export function OpsPartners() {
           </div>
           <div className="pt-row"><Button disabled={!p.legalEntityId || !p.name || p.hotelIds.length < 2} onClick={() => run(() => api("POST", "ops/profiles", p), "精算設定を作成しました。")}>一括設定を作る</Button></div>
         </div>
-        <Table head={["設定名", "契約先", "対象拠点", "適用", "最低振込額"]} rows={d.profiles.map((pr) => [pr.name, entityName(pr.legal_entity_id), pr.hotelIds.map((id) => d.hotels.find((x) => x.id === id)?.name ?? id).join("、") || "—", `${pr.valid_from}〜${pr.valid_to ?? ""}`, `¥${pr.min_payout_jpy.toLocaleString()}`])} empty="なし" compact />
+        {bank && <Notice tone="info"><b>{bank.name}</b><p>{bank.value}</p><Button kind="link" onClick={()=>setBank(null)}>閉じる</Button></Notice>}
+        <Table head={["設定名", "契約先", "対象拠点", "適用", "最低振込額", "振込先（経理・管理者）"]} rows={d.profiles.map((pr) => [pr.name, entityName(pr.legal_entity_id), pr.hotelIds.map((id) => d.hotels.find((x) => x.id === id)?.name ?? id).join("、") || "—", `${pr.valid_from}〜${pr.valid_to ?? ""}`, `¥${pr.min_payout_jpy.toLocaleString()}`, <Button key="bank" kind="link" onClick={async()=>{setBank(null);try {const r=await api<{bank:{bank:string;branch:string;type:string;number:string;holder:string}|null}>("GET",`ops/bank/${pr.id}`);setBank({name:pr.name,value:r.bank?`${r.bank.bank} ${r.bank.branch} ${r.bank.type === "ordinary" ? "普通" : "当座"} ${r.bank.number} ${r.bank.holder}`:"未登録"});}catch(e){setErr(errorText(e));}}}>口座を確認</Button>])} empty="なし" compact />
       </Card>
     </>
   );

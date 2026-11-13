@@ -60,19 +60,19 @@ export const loginCodeMail = (code: string, kind: "hotel" | "ops", lang: MailLan
   ].join("\n"),
 });
 
-export const inviteMail = (p: { name: string | null; loginUrl: string; scopeLabel: string; roleLabel: string; lang?: MailLang }) => p.lang === "en" ? ({
+export const inviteMail = (p: { name: string | null; loginUrl: string; scopeLabel: string; roleLabel: string; passwordLogin?: boolean; lang?: MailLang }) => p.lang === "en" ? ({
   subject: "[KAMEHAME JAPAN] Your invitation to the partner portal",
   text: [
     `${p.name ? `Dear ${p.name},` : "Hello,"}`,
     "",
     `You have been registered on the KAMEHAME JAPAN partner portal (${p.scopeLabel}) as ${p.roleLabel}.`,
     "",
-    "How to sign in:",
+    p.passwordLogin ? "Open the login page and choose First-time setup / Forgot password to receive your personal password setup link." : "How to sign in:",
     `1. Open ${p.loginUrl}`,
     "2. Enter this e-mail address",
-    "3. Enter the six-digit code you receive",
+    p.passwordLogin ? "3. Choose First-time setup / Forgot password and set a password from the emailed link." : "3. Enter the six-digit code you receive",
     "",
-    "There is no password: you sign in with an e-mailed code each time. You can switch the portal to English or Japanese at the top of the page.",
+    p.passwordLogin ? "After setup, sign in with your email and password." : "There is no password: you sign in with an e-mailed code each time.",
     "Questions? Write to hello@kamehame-japan.com.",
     "",
     SIGN_EN,
@@ -87,9 +87,9 @@ export const inviteMail = (p: { name: string | null; loginUrl: string; scopeLabe
     "サインインの手順:",
     `1. ${p.loginUrl} を開く`,
     "2. このメールアドレスを入力する",
-    "3. 届いた6桁のコードを入力する",
+    p.passwordLogin ? "3.「初回設定・パスワードを忘れた方」からメールを受け取り、リンク先でパスワードを設定する" : "3. 届いた6桁のコードを入力する",
     "",
-    "パスワードはありません。毎回メールのコードでサインインします。",
+    p.passwordLogin ? "設定後は、ご自身のメールアドレスとパスワードでログインできます。" : "パスワードはありません。毎回メールのコードでサインインします。",
     "ご不明な点は hello@kamehame-japan.com までご連絡ください。",
     "",
     "KAMEHAME JAPAN（株式会社プロセント）",

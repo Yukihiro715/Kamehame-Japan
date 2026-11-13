@@ -10,12 +10,12 @@ export const PORTAL_LANG_NAME: Record<PortalLang, string> = { ja: "日本語", e
 
 const ja = {
   brand: { partner: "パートナー向け管理画面", ops: "運営", loginPartner: "パートナー向け管理画面", loginOps: "運営画面" },
-  nav: { dashboard: "実績", reservations: "紹介予約", cases: "取り次ぎ", experiences: "体験一覧", materials: "QR・リンク", settlement: "精算", guide: "使い方" },
+  nav: { dashboard: "サマリー", reservations: "予約実績・紹介料", cases: "代理予約・相談", experiences: "体験を探す", materials: "QR・紹介リンク", brochures: "代理店向け・自社価格PDF", settlement: "紹介料・精算", guide: "使い方" },
   shell: { signOut: "サインアウト", chooseSite: "拠点を選ぶ", noSite: "閲覧できる拠点がありません。KAMEHAME JAPAN にお問い合わせください。", footer: "KAMEHAME JAPAN パートナー向け管理画面 · 株式会社プロセント · お問い合わせ hello@kamehame-japan.com", language: "言語" },
   login: { h: "サインイン", email: "メールアドレス", note: "パスワードはありません。登録されたメールアドレスに6桁のコードをお送りします。", send: "コードを送る", code: "6桁のコード", signIn: "サインイン", changeEmail: "アドレスを変える", devNote: "検証環境: メールは送らず、コードをここに表示しています。", sentNote: "登録済みのアドレスなら、6桁のコードをメールでお送りしました。届かない場合は迷惑メールもご確認ください。", codeLabel: "コード" },
-  common: { loading: "読み込み中…", empty: "該当するデータはありません。", search: "検索", clear: "条件を消す", save: "保存", cancel: "やめる", open: "開く", detail: "詳細", back: "一覧へ", copy: "URL をコピー", copied: "コピーしました", send: "送信", sending: "送信中…", run: "実行", reasonRequired: "理由（必須）", reasonOptional: "理由（任意）", all: "すべて", undecided: "未定", none: "—", yes: "○", items: (n: number) => `${n} 件`, updated: "更新", created: "登録", taxIncl: "税込", taxExcl: "税抜" },
+  common: { close: "閉じる", about: (term: string) => `${term}の説明`, retry: "再読み込み", loading: "読み込み中…", empty: "該当するデータはありません。", search: "検索", clear: "条件を消す", save: "保存", cancel: "やめる", open: "開く", detail: "詳細", back: "一覧へ", copy: "URL をコピー", copied: "コピーしました", copyFailed: "コピーできませんでした。表示されているURLを選択してコピーしてください。", send: "送信", sending: "送信中…", run: "実行", reasonRequired: "理由（必須）", reasonOptional: "理由（任意）", all: "すべて", undecided: "未定", none: "—", yes: "○", items: (n: number) => `${n} 件`, updated: "更新", created: "登録", taxIncl: "税込", taxExcl: "税抜" },
   period: { this_month: "今月", last_month: "先月", this_quarter: "当四半期", last_quarter: "前四半期", from: "開始日", to: "終了日", show: "表示" },
-  errors: { unauthenticated: "サインインしてください。", forbidden: "この操作の権限がありません。", not_found: "見つかりません。", ledger_unavailable: "台帳データベースに接続できません。", invalid: "コードが違います。", expired: "コードの有効期限が切れました。もう一度コードを送ってください。", locked: "試行回数の上限です。もう一度コードを送ってください。", reason_required: "理由を入力してください。", unknown_experience: "体験が見つかりません。", feature_off: "この拠点ではこの機能が使えません。", case_locked: "決済後の変更は運営へご連絡ください。", case_closed: "終了した案件です。", customer_name_required: "お客様の代表者名を入力してください。", bad_email: "メールアドレスが正しくありません。", bad_guests: "人数が正しくありません。", body_required: "本文か添付が必要です。", too_large: "ファイルが大きすぎます。", bad_type: "PDF・画像・テキストのみ添付できます。", media_unavailable: "添付の保存先が未設定です。", generic: "エラーが発生しました。" },
+  errors: { password_invalid: "IDまたはパスワードが違います。初めての方は初回設定を行ってください。", password_locked: "試行回数の上限です。15分ほど待ってからお試しください。", password_reset_invalid: "リンクの有効期限・パスワードの文字数（12〜128文字）をご確認ください。", demo_invalid: "IDまたはパスワードが違います。", demo_locked: "試行回数の上限です。15分ほど待ってからお試しください。", demo_read_only: "デモは閲覧専用です。", unauthenticated: "サインインしてください。", forbidden: "この操作の権限がありません。", not_found: "見つかりません。", ledger_unavailable: "台帳データベースに接続できません。", invalid: "コードが違います。", expired: "コードの有効期限が切れました。もう一度コードを送ってください。", locked: "試行回数の上限です。もう一度コードを送ってください。", reason_required: "理由を入力してください。", unknown_experience: "体験が見つかりません。", feature_off: "この拠点ではこの機能が使えません。", case_locked: "決済後の変更は運営へご連絡ください。", case_closed: "終了した案件です。", customer_name_required: "お客様の代表者名を入力してください。", bad_email: "メールアドレスが正しくありません。", bad_guests: "人数が正しくありません。", body_required: "本文か添付が必要です。", too_large: "ファイルが大きすぎます。", bad_type: "PDF・画像・テキストのみ添付できます。", media_unavailable: "添付の保存先が未設定です。", generic: "エラーが発生しました。" },
   status: {
     reservation: { provisional: "仮予約", arranging: "手配中", confirmed: "予約確定", completed: "実施済み", cancelled: "キャンセル", no_show: "未実施" },
     payment: { unpaid: "未決済", partial: "一部決済", paid: "決済済み", partially_refunded: "一部返金", refunded: "全額返金", disputed: "支払紛争" },
@@ -36,12 +36,12 @@ const ja = {
   },
   dashboard: {
     title: (site: string) => `${site} の実績`, period: (from: string, to: string, at: string) => `期間 ${from} 〜 ${to}（日本時間）· 更新 ${at}`, funnel: "集客・予約状況", confirmedH: "確定実績・精算（体験実施後）",
-    accesses: "QR・リンク経由アクセス数", accessesNote: "紹介URLへの到達で数えます", visits: "訪問数", visitsNote: "同一セッション30分以内は1訪問", provisional: "仮予約件数", provisionalNote: "予約作成日で集計", confirmed: "予約確定件数", paid: "決済済み件数", fullyRefunded: (n: number) => `全額返金 ${n} 件`, cancelled: "キャンセル件数",
-    estimated: "未実施予約の見込紹介料（税抜）", estimatedNote: "見込・精算対象外", performed: "実施確認済み件数", performedNote: "実施日で集計", baseNet: "実施済み予約の税抜対象売上", commissionNet: "確定税抜紹介料", taxRef: (v: string) => `税込参考 ${v}`, unpaid: "確定未払残高（税抜）", unpaidNote: (v: string) => `現在残高 · 税込参考 ${v}`, paidOut: "支払済み額", paidOutNote: "精算書の支払後に計上",
+    accesses: "リンクが開かれた回数", accessesNote: "QR・紹介リンクの合計。繰り返し開いた分も含みます", visits: "訪問人数（目安）", visitsNote: "同じブラウザは初回から7日間で1人。QR・リンク共通で集計し、7日後は再カウントします。別端末・Cookie削除時は別人数です。", visitsPartial: " ※新集計開始後のアクセスのみ対象です。", provisional: "仮予約中", provisionalNote: "予約作成日で集計", confirmed: "予約確定件数", paid: "決済済み件数", fullyRefunded: (n: number) => `全額返金 ${n} 件`, cancelled: "キャンセル件数",
+    estimated: "紹介料見込み（税抜）", estimatedNote: "見込・精算対象外", performed: "実施確認済み件数", performedNote: "実施日で集計", baseNet: "実施済み予約の税抜対象売上", commissionNet: "確定税抜紹介料", taxRef: (v: string) => `税込参考 ${v}`, unpaid: "確定未払残高（税抜）", unpaidNote: (v: string) => `現在残高 · 税込参考 ${v}`, paidOut: "支払い済み合計（振込額）", paidOutNote: "全四半期・振込手数料控除後",
     note: "「決済済み」は確定実績ではありません。紹介料は体験の実施確認後に確定し、四半期ごとに精算します。正式な税額と支払額は精算書に表示します。",
   },
   reservations: {
-    title: "紹介予約一覧", from: "予約日（から）", to: "予約日（まで）", xFrom: "体験日（から）", xTo: "体験日（まで）", status: "予約状況", ref: "照合番号",
+    title: "予約実績・紹介料一覧", from: "予約日（から）", to: "予約日（まで）", xFrom: "体験日（から）", xTo: "体験日（まで）", status: "予約状況", ref: "照合番号",
     note: "税込参考額は目安で、正式な税額は精算書に表示します。お客様の個人情報は表示しません。",
     head: ["照合番号", "予約日", "体験", "体験日", "人数", "予約状況", "決済状況", "対象額（税抜）", "料率", "紹介料（税抜）", "税込参考", "精算状態"],
   },
@@ -53,7 +53,7 @@ const ja = {
   materials: {
     allTitle: "全体験一覧へのQRコードとリンク", note: "QRは印刷物に、リンクはメールやWebに。QRとリンクは別の識別子で、どちらから来たかを区別します（QR用URLをそのまま共有された場合もQR経由に数えます）。印刷後に掲載する体験を変えても、同じQRのまま使えます。QRにお客様や口座の情報は入りません。",
     issue: "QRコードとリンクを発行する", qrAlt: "全体験一覧のQRコード", qrPrint: "QRコード（印刷用）", qrContent: "QRの中身", linkCopy: "紹介リンク（コピー用）", copyLink: "リンクをコピー",
-    perTitle: "体験別のQRコードとリンク", perNote: "「体験一覧」の各体験で「紹介リンクを取得」を押すと、ここに並びます。", perHead: ["対象", "種類", "URL", "QR", "発行日"], perEmpty: "体験別のリンクはまだありません。", link: "リンク",
+    perTitle: "体験別のQRコードとリンク", perNote: "体験を選んで、この画面からQRとリンクを発行できます。体験一覧からも発行できます。", perHead: ["対象", "種類", "URL", "QR", "発行日"], perEmpty: "体験別のリンクはまだありません。", link: "リンク",
     brochure: "パンフレット", brochureOpen: "最新のパンフレット（PDF）を開く", brochureSoon: "準備中です。用意でき次第ここに表示されます。", issuedTitle: "KAMEHAME JAPAN が発行した媒体別リンク", issuedHead: ["ラベル", "媒体", "対象", "種類", "URL", "QR"], allExperiences: "全体験一覧",
   },
   settlement: {
@@ -73,7 +73,7 @@ const ja = {
   },
   cases: {
     title: "取り次ぎ案件", newCase: "新しい案件を登録", openOnly: "進行中のみ", showAll: "終了分も表示",
-    intro: "お客様のご希望を登録すると、KAMEHAME JAPAN が空き確認と見積もりを行い、お客様向けの見積もり・決済ページを用意します。案件から生まれた予約の紹介元は、Cookie に関係なく貴社の拠点に固定されます。", managerNote: "拠点管理者のため、拠点の全案件が表示されます。", agentNote: "ご自身が登録または担当する案件が表示されます。",
+    intro: "お客様のご希望を登録すると、KAMEHAME JAPAN が空き確認と見積もりを行い、お客様向けの見積もり・決済ページを用意します。お客様が別の端末で決済しても、貴社からの紹介として記録されます。", managerNote: "拠点管理者のため、拠点の全案件が表示されます。", agentNote: "ご自身が登録または担当する案件が表示されます。",
     noAccess: "この拠点では予約取り次ぎが使えないか、取り次ぎの役割が割り当てられていません。KAMEHAME JAPAN にお問い合わせください。",
     head: ["案件", "状態", "体験", "希望日", "人数", "お客様", "見積もり", "担当", "更新", ""], emptyOpen: "進行中の案件はありません。", emptyAll: "案件はまだありません。", version: (v: number) => `第${v}版`,
     newTitle: "案件を登録", wishes: "ご希望の内容", kind: "種類", kindExperience: "掲載中の体験・ツアー", kindFree: "自由相談（内容を備考に）", experience: "体験", date: "希望日", altDates: "代替日（カンマ区切り、最大5つ）", timePref: "時間帯の希望", timePh: "午後、10時ごろ など", guests: "人数", lang: "お客様の希望言語", requirements: "希望条件・備考", requirementsPh: "食事制限、記念日、移動の都合、予算感など", extraH: "この商品の追加項目",
@@ -90,8 +90,8 @@ const ja = {
     title: "使い方", lead: "KAMEHAME JAPAN のパートナー向け管理画面は、提携パートナー（ホテル・旅行代理店・ガイド）がお客様に日本の体験を紹介し、その紹介料を受け取るための画面です。言語は右上で切り替えられ、メールも同じ言語で届きます。",
     sections: [
       ["実績", "QR・リンク経由のアクセス、予約、決済、実施確認済みの紹介料を期間で確認します。「決済済み」は確定実績ではなく、紹介料は体験の実施確認後に確定します。"],
-      ["紹介予約", "貴社の紹介で生まれた予約の一覧です。照合番号（R-XXXXXX）で運営とやり取りできます。お客様の個人情報は表示しません。"],
-      ["取り次ぎ", "お客様のご希望を案件として登録すると、KAMEHAME JAPAN が空き確認と見積もりを行い、お客様向けの見積もり・決済ページ（URL）を用意します。案件から生まれた予約の紹介元は貴社の拠点に固定され、お客様が別の端末で決済しても変わりません。運営とのやり取り・資料共有は案件ページの連絡欄で行います。"],
+      ["予約実績・紹介料", "貴社の紹介で生まれた予約の一覧です。照合番号（R-XXXXXX）で運営とやり取りできます。お客様の個人情報は表示しません。"],
+      ["代理予約・相談", "お客様のご希望を案件として登録すると、KAMEHAME JAPAN が空き確認と見積もりを行い、お客様向けの見積もり・決済ページ（URL）を用意します。案件から生まれた予約の紹介元は貴社の拠点に固定され、お客様が別の端末で決済しても変わりません。運営とのやり取り・資料共有は案件ページの連絡欄で行います。"],
       ["体験一覧", "紹介できる体験と条件（基本料金、紹介料率、目安）です。各体験の紹介リンクを取得したり、取り次ぎ案件を登録したりできます。"],
       ["QR・リンク", "印刷物用の QR コードとメール・Web 用のリンクです。どちらから来たかを区別して集計します。"],
       ["精算", "暦四半期ごとに、実施確認済みの紹介料をまとめた「お支払い通知書」を KAMEHAME JAPAN が発行し、翌月末にお振込みします（貴社からの請求書は不要です）。内容に相違があれば期限までに異議を申し立ててください。最低お支払額（税込 3,000 円）未満は次回へ繰り越します。"],
@@ -104,12 +104,12 @@ type Dict = typeof ja;
 
 const en: Dict = {
   brand: { partner: "Partner portal", ops: "Operations", loginPartner: "Partner portal", loginOps: "Operations" },
-  nav: { dashboard: "Results", reservations: "Referred bookings", cases: "Booking requests", experiences: "Experiences", materials: "QR & links", settlement: "Settlement", guide: "Guide" },
+  nav: { dashboard: "Results", reservations: "Bookings & commissions", cases: "Bookings on behalf of guests", experiences: "Experiences", materials: "QR & links", brochures: "Agency sales PDFs", settlement: "Settlement", guide: "Guide" },
   shell: { signOut: "Sign out", chooseSite: "Choose a site", noSite: "There is no site you can view. Please contact KAMEHAME JAPAN.", footer: "KAMEHAME JAPAN partner portal · Prosent Inc. · hello@kamehame-japan.com", language: "Language" },
   login: { h: "Sign in", email: "E-mail address", note: "There is no password. We e-mail a six-digit code to your registered address.", send: "Send code", code: "Six-digit code", signIn: "Sign in", changeEmail: "Change address", devNote: "Staging: no mail is sent; the code is shown here.", sentNote: "If the address is registered, a six-digit code is on its way. Check your spam folder if it does not arrive.", codeLabel: "Code" },
-  common: { loading: "Loading…", empty: "Nothing to show.", search: "Search", clear: "Clear", save: "Save", cancel: "Cancel", open: "Open", detail: "Details", back: "Back to list", copy: "Copy URL", copied: "Copied", send: "Send", sending: "Sending…", run: "Confirm", reasonRequired: "Reason (required)", reasonOptional: "Reason (optional)", all: "All", undecided: "TBD", none: "—", yes: "Yes", items: (n: number) => `${n} item${n === 1 ? "" : "s"}`, updated: "Updated", created: "Created", taxIncl: "tax incl.", taxExcl: "tax excl." },
+  common: { close: "Close", about: (term: string) => `About ${term}`, retry: "Try again", loading: "Loading…", empty: "Nothing to show.", search: "Search", clear: "Clear", save: "Save", cancel: "Cancel", open: "Open", detail: "Details", back: "Back to list", copy: "Copy URL", copied: "Copied", copyFailed: "Could not copy. Select and copy the displayed URL instead.", send: "Send", sending: "Sending…", run: "Confirm", reasonRequired: "Reason (required)", reasonOptional: "Reason (optional)", all: "All", undecided: "TBD", none: "—", yes: "Yes", items: (n: number) => `${n} item${n === 1 ? "" : "s"}`, updated: "Updated", created: "Created", taxIncl: "tax incl.", taxExcl: "tax excl." },
   period: { this_month: "This month", last_month: "Last month", this_quarter: "This quarter", last_quarter: "Last quarter", from: "From", to: "To", show: "Show" },
-  errors: { unauthenticated: "Please sign in.", forbidden: "You do not have permission for this.", not_found: "Not found.", ledger_unavailable: "The ledger database is unavailable.", invalid: "The code is wrong.", expired: "The code has expired. Request a new one.", locked: "Too many attempts. Request a new code.", reason_required: "Please give a reason.", unknown_experience: "Experience not found.", feature_off: "This site does not have this feature.", case_locked: "After payment, please contact KAMEHAME JAPAN for changes.", case_closed: "This case is closed.", customer_name_required: "Please enter the customer's name.", bad_email: "The e-mail address is not valid.", bad_guests: "The number of guests is not valid.", body_required: "A message or an attachment is needed.", too_large: "The file is too large.", bad_type: "Only PDF, images and text files can be attached.", media_unavailable: "Attachments are not configured.", generic: "Something went wrong." },
+  errors: { password_invalid: "Incorrect ID or password. First-time users must set up a password.", password_locked: "Too many attempts. Try again in 15 minutes.", password_reset_invalid: "Invalid or expired link, or password outside 12–128 characters. Request a new link if needed.", demo_invalid: "Incorrect ID or password.", demo_locked: "Too many attempts. Please try again in 15 minutes.", demo_read_only: "The demo is read only.", unauthenticated: "Please sign in.", forbidden: "You do not have permission for this.", not_found: "Not found.", ledger_unavailable: "The ledger database is unavailable.", invalid: "The code is wrong.", expired: "The code has expired. Request a new one.", locked: "Too many attempts. Request a new code.", reason_required: "Please give a reason.", unknown_experience: "Experience not found.", feature_off: "This site does not have this feature.", case_locked: "After payment, please contact KAMEHAME JAPAN for changes.", case_closed: "This case is closed.", customer_name_required: "Please enter the customer's name.", bad_email: "The e-mail address is not valid.", bad_guests: "The number of guests is not valid.", body_required: "A message or an attachment is needed.", too_large: "The file is too large.", bad_type: "Only PDF, images and text files can be attached.", media_unavailable: "Attachments are not configured.", generic: "Something went wrong." },
   status: {
     reservation: { provisional: "Provisional", arranging: "Arranging", confirmed: "Confirmed", completed: "Completed", cancelled: "Cancelled", no_show: "No-show" },
     payment: { unpaid: "Unpaid", partial: "Partly paid", paid: "Paid", partially_refunded: "Partly refunded", refunded: "Refunded", disputed: "Disputed" },
@@ -130,12 +130,12 @@ const en: Dict = {
   },
   dashboard: {
     title: (site: string) => `Results for ${site}`, period: (from: string, to: string, at: string) => `${from} to ${to} (Japan time) · updated ${at}`, funnel: "Traffic and bookings", confirmedH: "Confirmed results and settlement (after the experience)",
-    accesses: "Visits via QR / links", accessesNote: "Counted on arrival at a referral URL", visits: "Sessions", visitsNote: "One session per 30 minutes", provisional: "Provisional bookings", provisionalNote: "By booking date", confirmed: "Confirmed bookings", paid: "Paid bookings", fullyRefunded: (n: number) => `${n} fully refunded`, cancelled: "Cancellations",
-    estimated: "Estimated commission, not yet performed (tax excl.)", estimatedNote: "Estimate, not yet payable", performed: "Experiences performed", performedNote: "By date performed", baseNet: "Commissionable sales, performed (tax excl.)", commissionNet: "Confirmed commission (tax excl.)", taxRef: (v: string) => `${v} with tax, for reference`, unpaid: "Confirmed, unpaid balance (tax excl.)", unpaidNote: (v: string) => `Current balance · ${v} with tax, for reference`, paidOut: "Paid out", paidOutNote: "Counted once a statement is paid",
+    accesses: "Link opens", accessesNote: "QR and referral links, including repeat opens", visits: "Estimated visitors", visitsNote: "One browser counts once per 7-day window across your QR codes and links, then counts again. Different devices or cleared cookies count separately.", visitsPartial: " Only accesses recorded after the new counting method began are included.", provisional: "Awaiting confirmation", provisionalNote: "By booking date", confirmed: "Confirmed bookings", paid: "Paid bookings", fullyRefunded: (n: number) => `${n} fully refunded`, cancelled: "Cancellations",
+    estimated: "Estimated commission (excl. tax)", estimatedNote: "Estimate, not yet payable", performed: "Experiences performed", performedNote: "By date performed", baseNet: "Commissionable sales, performed (tax excl.)", commissionNet: "Confirmed commission (tax excl.)", taxRef: (v: string) => `${v} with tax, for reference`, unpaid: "Confirmed, unpaid balance (tax excl.)", unpaidNote: (v: string) => `Current balance · ${v} with tax, for reference`, paidOut: "Total transferred", paidOutNote: "All quarters, after bank fees",
     note: "\"Paid\" is not a confirmed result. Commission is confirmed after the experience has taken place and is settled every quarter. The formal tax and payment amounts are on the payment notice.",
   },
   reservations: {
-    title: "Referred bookings", from: "Booked from", to: "Booked to", xFrom: "Experience from", xTo: "Experience to", status: "Booking status", ref: "Reference",
+    title: "Bookings & commissions", from: "Booked from", to: "Booked to", xFrom: "Experience from", xTo: "Experience to", status: "Booking status", ref: "Reference",
     note: "Amounts with tax are for reference; the formal tax is on the payment notice. No customer personal data is shown.",
     head: ["Reference", "Booked", "Experience", "Date", "Guests", "Booking", "Payment", "Base (tax excl.)", "Rate", "Commission (tax excl.)", "With tax (ref.)", "Settlement"],
   },
@@ -147,7 +147,7 @@ const en: Dict = {
   materials: {
     allTitle: "QR code and link to all experiences", note: "Use the QR on printed material and the link in e-mails or on the web. They carry different identifiers, so we can tell which one a guest used (a shared QR URL still counts as the QR). You can change the experiences on offer after printing; the QR stays valid. The QR holds no customer or bank details.",
     issue: "Issue the QR code and link", qrAlt: "QR code to all experiences", qrPrint: "QR code (for print)", qrContent: "QR contents", linkCopy: "Referral link (to copy)", copyLink: "Copy link",
-    perTitle: "QR codes and links per experience", perNote: "Press \"Get a referral link\" on an experience in the Experiences list and it appears here.", perHead: ["Experience", "Type", "URL", "QR", "Issued"], perEmpty: "No per-experience links yet.", link: "Link",
+    perTitle: "QR codes and links per experience", perNote: "Select an experience and create its QR code and link here, or from the Experiences page.", perHead: ["Experience", "Type", "URL", "QR", "Issued"], perEmpty: "No per-experience links yet.", link: "Link",
     brochure: "Brochure", brochureOpen: "Open the latest brochure (PDF)", brochureSoon: "In preparation. It will appear here when ready.", issuedTitle: "Links issued by KAMEHAME JAPAN per medium", issuedHead: ["Label", "Medium", "Experience", "Type", "URL", "QR"], allExperiences: "All experiences",
   },
   settlement: {
@@ -184,8 +184,8 @@ const en: Dict = {
     title: "Guide", lead: "The KAMEHAME JAPAN partner portal is where partners (hotels, travel agencies and guides) refer their guests to experiences in Japan and receive commission. Switch the language at the top right; e-mails follow the same language.",
     sections: [
       ["Results", "Traffic via QR codes and links, bookings, payments and confirmed commission for a period. \"Paid\" is not a confirmed result: commission is confirmed after the experience has taken place."],
-      ["Referred bookings", "Bookings that came from your referrals. Use the reference (R-XXXXXX) when talking to operations. No customer personal data is shown."],
-      ["Booking requests", "Register what a customer would like; KAMEHAME JAPAN checks availability, prepares a quote and a customer page (URL) for review and payment. Bookings from a request are attributed to your site even if the customer pays on another device. Messages and documents are exchanged on the request page."],
+      ["Bookings & commissions", "Bookings that came from your referrals. Use the reference (R-XXXXXX) when talking to operations. No customer personal data is shown."],
+      ["Bookings on behalf of guests", "Register what a customer would like; KAMEHAME JAPAN checks availability, prepares a quote and a customer page (URL) for review and payment. Bookings from a request are attributed to your site even if the customer pays on another device. Messages and documents are exchanged on the request page."],
       ["Experiences", "The experiences you can refer and their terms (base price, referral rate, example). Get a referral link or register a booking request from each one."],
       ["QR & links", "A QR code for print and a link for e-mail and the web; we count which one a guest used."],
       ["Settlement", "Every calendar quarter KAMEHAME JAPAN issues a payment notice for the commission on experiences that took place and transfers it at the end of the following month (no invoice from you is needed). Dispute anything that differs by the deadline. Amounts below the minimum payout (¥3,000 incl. tax) are carried to the next period."],

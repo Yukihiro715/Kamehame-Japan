@@ -6,7 +6,7 @@
 // cases are invisible.
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
-import test, { after } from "node:test";
+import test, { after, before, mock } from "node:test";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 import { openTestDb } from "./helpers/sqlite-db.mjs";
@@ -20,6 +20,10 @@ const { receiveWebhook } = await vite.ssrLoadModule("/lib/payment-webhooks.ts");
 
 const T = Date.parse("2026-11-06T03:00:00Z");
 const iso = (t) => new Date(t).toISOString();
+// Keep API timestamps and expiring fixtures independent of the day CI runs.
+before(() => mock.timers.enable({ apis: ["Date"], now: new Date("2026-11-06T03:00:00Z") }));
+after(() => mock.timers.reset());
+
 const ORIGIN = "https://staging.example";
 const SECRET = "whsec_test_secret";
 
@@ -63,7 +67,7 @@ function client(db, jar = new Map(), mails = [], stripe = []) {
     }
     return realFetch(url, init);
   };
-  return {
+  return { db,
     env, mails, stripe, restore: () => { globalThis.fetch = realFetch; },
     async call(method, path, body, raw) {
       const headers = new Headers();
@@ -77,6 +81,14 @@ function client(db, jar = new Map(), mails = [], stripe = []) {
   };
 }
 async function signIn(c, email, kind) {
+  if (kind === "hotel") {
+    const { passwordHash } = await vite.ssrLoadModule("/lib/portal/password-auth.ts");
+    const password = "fixture-password-123", salt = "test-only-salt";
+    await c.db.run(`INSERT OR REPLACE INTO partner_passwords SELECT id,?,?,? FROM users WHERE email=?`, [salt, await passwordHash(password, salt), new Date().toISOString(), email]);
+    const r = await c.call("POST", "auth/password-login", { email, password, kind });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    return;
+  }
   const r1 = await c.call("POST", "auth/request-code", { email, kind });
   const code = r1.body.devCode ?? c.mails.filter((m) => m.to?.[0] === email).at(-1)?.text.match(/サインインコード: (\d{6})/)?.[1];
   const r2 = await c.call("POST", "auth/verify", { email, code, kind }); assert.equal(r2.status, 200, JSON.stringify(r2.body));

@@ -21,7 +21,7 @@ const now = new Date("2026-11-06T03:00:00Z").toISOString();
 
 function client(db, jar = new Map()) {
   const env = { DB: db.d1, KH_ENV: "staging" };
-  return {
+  return { db,
     async call(method, path, body) {
       const headers = new Headers();
       if (method !== "GET") { headers.set("content-type", "application/json"); headers.set("origin", ORIGIN); headers.set("x-kh-portal", "1"); }
@@ -33,6 +33,14 @@ function client(db, jar = new Map()) {
   };
 }
 async function signIn(c, email, kind) {
+  if (kind === "hotel") {
+    const { passwordHash } = await vite.ssrLoadModule("/lib/portal/password-auth.ts");
+    const password = "fixture-password-123", salt = "test-only-salt";
+    await c.db.run(`INSERT OR REPLACE INTO partner_passwords SELECT id,?,?,? FROM users WHERE email=?`, [salt, await passwordHash(password, salt), new Date().toISOString(), email]);
+    const r = await c.call("POST", "auth/password-login", { email, password, kind });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    return;
+  }
   const r1 = await c.call("POST", "auth/request-code", { email, kind });
   const r2 = await c.call("POST", "auth/verify", { email, code: r1.body.devCode, kind });
   assert.equal(r2.status, 200, JSON.stringify(r2.body));
@@ -53,8 +61,8 @@ test("after the migration an existing hotel reads as hotel / company / link refe
   const db = openTestDb(); await seed(db);
   const ops = client(db); await signIn(ops, "admin@example.com", "ops");
   const list = (await ops.call("GET", "ops/partners")).body;
-  // Migration 0011 seeds the owner's demo site beside the test's hotel; look at the hotel alone.
-  assert.deepEqual(list.entities.filter((e) => e.id !== "le-prosent").map((e) => [e.partner_type, e.entity_kind]), [["hotel", "company"]]);
+  // Migrations seed demo sites beside the test's hotel; look at the legacy hotel alone.
+  assert.deepEqual(list.entities.filter((e) => e.id === "le1").map((e) => [e.partner_type, e.entity_kind]), [["hotel", "company"]]);
   const hA = list.hotels.find((h) => h.id === "hA");
   assert.deepEqual(hA.features, { refer: true, cases: false, settlement: true, members: false });
   assert.equal(hA.site_kind, "hotel");

@@ -7,6 +7,7 @@
  *  the session up again, so the browser cannot claim a hotel it was not sent
  *  by. Nothing about the visitor (IP, user agent, fingerprint) is stored. */
 import { nowIso, randomId, type SqlDb } from "./db";
+import { visitorWindow, VISITOR_COOKIE } from "./visitors";
 
 export const REFERRAL_COOKIE = "kh_ref";
 export const REFERRAL_TTL_DAYS = 30;
@@ -60,7 +61,7 @@ export function referFeatureOn(json: string | null | undefined): boolean {
 }
 
 export interface ArrivalInput { token: string; userAgent?: string | null; test?: boolean; now?: number; secure?: boolean; /** The request's Cookie header, to recognise a repeat scan. */ cookie?: string | null }
-export interface ArrivalResult { redirect: string; setCookie?: string; recorded: boolean; uaClass: UaClass; linkId?: string }
+export interface ArrivalResult { redirect: string; setCookie?: string; visitorCookie?: string; recorded: boolean; uaClass: UaClass; linkId?: string }
 
 interface LinkRow { id: string; hotel_id: string | null; chain_profile_id: string | null; target_path: string; medium: string; status: string; hotel_status: string | null; hotel_features: string | null }
 
@@ -91,9 +92,11 @@ export async function handleReferralArrival(db: SqlDb, input: ArrivalInput): Pro
     if (existing && now - Date.parse(existing.last_seen_at) <= VISIT_WINDOW_MS && Date.parse(existing.expires_at) > now) { sessionId = existing.id; reused = true; }
     else sessionId = randomId();
   }
+  const visitor = excluded ? null : await visitorWindow(db, readCookie(input.cookie, VISITOR_COOKIE),
+    link.hotel_id ? `partner:${link.hotel_id}` : `chain:${link.chain_profile_id ?? link.id}`, now, input.secure ?? true);
   const statements = [
-    { sql: `INSERT INTO referral_events (id, link_id, hotel_id, session_id, at, ua_class, excluded, lang) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      params: [randomId(), link.id, link.hotel_id, sessionId, at, uaClass, excluded ? 1 : 0, lang] },
+    { sql: `INSERT INTO referral_events (id, link_id, hotel_id, session_id, at, ua_class, excluded, lang, visitor_window_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      params: [randomId(), link.id, link.hotel_id, sessionId, at, uaClass, excluded ? 1 : 0, lang, visitor?.id ?? null] },
   ];
   if (sessionId && reused) {
     statements.push({ sql: `UPDATE referral_sessions SET last_seen_at = ? WHERE id = ?`, params: [at, sessionId] });
@@ -102,7 +105,7 @@ export async function handleReferralArrival(db: SqlDb, input: ArrivalInput): Pro
       params: [sessionId, link.hotel_id, link.id, at, at, new Date(now + REFERRAL_TTL_MS).toISOString()] });
   }
   await db.batch(statements);
-  return { redirect: target, recorded: true, uaClass, linkId: link.id, ...(sessionId ? { setCookie: referralCookie(sessionId, input.secure ?? true) } : {}) };
+  return { redirect: target, recorded: true, uaClass, linkId: link.id, ...(visitor ? { visitorCookie: visitor.cookie } : {}), ...(sessionId ? { setCookie: referralCookie(sessionId, input.secure ?? true) } : {}) };
 }
 
 export interface ReferralContext { sessionId: string; hotelId: string | null; linkId: string; chainProfileId: string | null; medium: string }

@@ -261,3 +261,39 @@ test("a chain-wide link with no payee is held as payee_missing; a paused link or
   assert.equal(ended.setCookie, undefined); assert.equal(ended.redirect, "/en/tokyo/kanji-name-calligraphy/");
   assert.equal((await db.first(`SELECT excluded FROM referral_events WHERE link_id = ?`, [A.link])).excluded, 1);
 });
+
+
+test("visitors: one browser per partner for seven fixed days, independent of attribution", async () => {
+  const db = openTestDb(), a = await seedHotel(db, "visitA"), b = await seedHotel(db, "visitB");
+  const metrics = await vite.ssrLoadModule("/lib/portal/metrics.ts");
+  const period = { from: "2026-11-01", to: "2026-11-30" };
+  const secondToken = "tok_second_0123456789abcdef";
+  await db.run(`INSERT INTO referral_links (id, token, hotel_id, medium, kind, target_path, status, created_at, updated_at)
+    VALUES ('second-link', ?, ?, 'web', 'url', '/en/tokyo/kanji-name-calligraphy/', 'active', ?, ?)`, [secondToken, a.hotel, iso(T0), iso(T0)]);
+  const cookie = r => [r.setCookie, r.visitorCookie].filter(Boolean).map(c => c.split(';')[0]).join('; ');
+  const first = await links.handleReferralArrival(db, { token: a.token, userAgent: UA, now: T0 });
+  const otherLink = await links.handleReferralArrival(db, { token: secondToken, userAgent: UA, now: T0 + DAY, cookie: cookie(first) });
+  const otherPartner = await links.handleReferralArrival(db, { token: b.token, userAgent: UA, now: T0 + 2 * DAY, cookie: cookie(otherLink) });
+  const back = await links.handleReferralArrival(db, { token: a.token, userAgent: UA, now: T0 + 7 * DAY - 1, cookie: cookie(otherPartner) });
+  assert.equal((await metrics.hotelDashboard(db, a.hotel, period)).funnel.visits, 1, "different links and an intervening partner do not double count");
+  assert.equal((await metrics.hotelDashboard(db, b.hotel, period)).funnel.visits, 1, "each partner counts independently");
+  const afterWeek = await links.handleReferralArrival(db, { token: a.token, userAgent: UA, now: T0 + 7 * DAY, cookie: cookie(back) });
+  assert.equal((await metrics.hotelDashboard(db, a.hotel, period)).funnel.visits, 2, "a return does not extend the initial seven-day window");
+  const ref = await links.activeReferral(db, cookie(afterWeek), T0 + 20 * DAY);
+  assert.equal(ref.hotelId, a.hotel, "referral attribution survives beyond the seven-day visitor window");
+  assert.equal(await links.activeReferral(db, cookie(afterWeek), T0 + 38 * DAY), null, "the original 30-day referral expiry still applies");
+  await links.handleReferralArrival(db, { token: a.token, userAgent: UA, now: T0 + 7 * DAY + 1 });
+  assert.equal((await metrics.hotelDashboard(db, a.hotel, period)).funnel.visits, 3, "a browser without its cookie counts separately");
+  for (const input of [{ userAgent: "Googlebot" }, { userAgent: "facebookexternalhit" }, { userAgent: UA, test: true }]) {
+    const r = await links.handleReferralArrival(db, { token: a.token, now: T0 + 8 * DAY, cookie: cookie(afterWeek), ...input });
+    assert.equal(r.visitorCookie, undefined);
+  }
+  const dash = await metrics.hotelDashboard(db, a.hotel, period);
+  assert.equal(dash.funnel.visits, 3); assert.equal(dash.funnel.accesses, 5); assert.equal(dash.visitorCountPartial, false);
+  assert.equal((await metrics.hotelDashboard(db, a.hotel, { from: "2026-11-02", to: "2026-11-02" })).funnel.visits, 1, "counts windows with events in the selected period, even when the window began earlier");
+  // Historical sessions cannot be reinterpreted as seven-day visitors.
+  await db.run(`UPDATE referral_events SET visitor_window_id = NULL WHERE hotel_id = ? AND at = ?`, [a.hotel, iso(T0)]);
+  const historical = await metrics.hotelDashboard(db, a.hotel, { from: "2026-11-01", to: "2026-11-01" });
+  assert.equal(historical.funnel.visits, null); assert.equal(historical.visitorCountPartial, true);
+  assert.equal((await metrics.hotelDashboard(db, a.hotel, period)).visitorCountPartial, true);
+});

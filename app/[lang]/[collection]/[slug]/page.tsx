@@ -32,7 +32,7 @@ import {
   type Experience, type Tour,
 } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { REVIEWS_PUBLISHED, reviewsFor, sampleReviewsFor } from "@/lib/reviews";
+import { REVIEWS_PUBLISHED, reviewsFor, sampleReviewsFor } from "@/lib/published-reviews";
 import { RatingSummary, ReviewSummaryPanel } from "@/components/site/reviews";
 import { isLang, langHome, LANGS, t, type Lang } from "@/lib/i18n";
 import { productJsonLd, socialMeta, withAlternates } from "@/lib/seo";

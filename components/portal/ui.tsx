@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { t } from "./i18n";
+import { InfoHelp } from "./help";
 
 export function Card({ title, children, actions, className = "" }: { title?: ReactNode; children: ReactNode; actions?: ReactNode; className?: string }) {
   return (
@@ -12,14 +14,11 @@ export function Card({ title, children, actions, className = "" }: { title?: Rea
   );
 }
 
-export function Stat({ label, value, note, tone }: { label: string; value: ReactNode; note?: ReactNode; tone?: "muted" | "accent" | "warn" }) {
-  return (
-    <div className={`pt-stat${tone ? ` pt-stat-${tone}` : ""}`}>
-      <span className="pt-stat-l">{label}</span>
-      <b className="pt-stat-v">{value}</b>
-      {note && <small className="pt-stat-n">{note}</small>}
-    </div>
-  );
+export function Stat({ label, value, note, tone, href, help }: { label: string; value: ReactNode; note?: ReactNode; help?: ReactNode; tone?: "muted" | "accent" | "warn"; href?: string }) {
+  const content = <><span className="pt-stat-l">{label}{href && <ArrowUpRight size={16} aria-hidden="true"/>}</span><b className="pt-stat-v">{value}</b>{note && <small className="pt-stat-n">{note}</small>}</>;
+  const className = `pt-stat${tone ? ` pt-stat-${tone}` : ""}`;
+  if (help) return <div className={className}><span className="pt-stat-l"><span>{label}</span><InfoHelp label={label}>{help}</InfoHelp></span>{href ? <a className="pt-stat-value-link" href={href}><b className="pt-stat-v">{value}</b><ArrowUpRight size={16} aria-hidden="true"/></a> : <b className="pt-stat-v">{value}</b>}{note && <small className="pt-stat-n">{note}</small>}</div>;
+  return href ? <a className={`${className} pt-stat-link`} href={href}>{content}</a> : <div className={className}>{content}</div>;
 }
 
 export function Badge({ children, tone = "neutral" }: { children: ReactNode; tone?: "neutral" | "ok" | "warn" | "bad" | "info" }) {
@@ -48,7 +47,7 @@ export function Button({ children, onClick, kind = "primary", type = "button", d
 }
 
 export function Notice({ children, tone = "info" }: { children: ReactNode; tone?: "info" | "ok" | "warn" | "bad" }) {
-  return <p className={`pt-notice pt-notice-${tone}`}>{children}</p>;
+  return <p role={tone === "bad" ? "alert" : "status"} className={`pt-notice pt-notice-${tone}`}>{children}</p>;
 }
 
 export function Loading({ text }: { text?: string }) { return <p className="pt-loading">{text ?? t().common.loading}</p>; }
@@ -60,12 +59,12 @@ export function PeriodPicker({ value, onChange }: { value: { period?: string; fr
   const [from, setFrom] = useState(value.from ?? ""), [to, setTo] = useState(value.to ?? "");
   return (
     <div className="pt-period">
-      {PERIODS.map(([k]) => <button key={k} type="button" className={`pt-chip${value.period === k && !value.from ? " on" : ""}`} onClick={() => onChange({ period: k })}>{(t().period as Record<string, string>)[k]}</button>)}
+      {PERIODS.map(([k]) => <button key={k} type="button" aria-pressed={value.period === k && !value.from} className={`pt-chip${value.period === k && !value.from ? " on" : ""}`} onClick={() => onChange({ period: k })}>{(t().period as Record<string, string>)[k]}</button>)}
       <span className="pt-period-custom">
-        <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} aria-label={t().period.from} />
+        <input type="date" max={to || undefined} value={from} onChange={(e) => setFrom(e.target.value)} aria-label={t().period.from} />
         <span>〜</span>
-        <input type="date" value={to} onChange={(e) => setTo(e.target.value)} aria-label={t().period.to} />
-        <Button kind="secondary" small onClick={() => { if (from && to && from <= to) onChange({ from, to }); }}>{t().period.show}</Button>
+        <input type="date" min={from || undefined} value={to} onChange={(e) => setTo(e.target.value)} aria-label={t().period.to} />
+        <Button kind="secondary" small disabled={!from || !to || from > to} onClick={() => { if (from && to && from <= to) onChange({ from, to }); }}>{t().period.show}</Button>
       </span>
     </div>
   );
@@ -86,4 +85,10 @@ export function ReasonAction({ label, onConfirm, kind = "secondary", placeholder
       {err && <small className="pt-err">{err}</small>}
     </div>
   );
+}
+
+/** Clipboard failure is visible, so the user can copy the displayed URL manually. */
+export function CopyLink({ url }: { url: string }) {
+  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
+  return <span className="pt-copy"><Button kind="secondary" small onClick={async () => { try { await navigator.clipboard.writeText(url); setStatus("copied"); } catch { setStatus("failed"); } }}>{t().common.copy}</Button><span role="status" className="pt-small">{status === "copied" ? t().common.copied : status === "failed" ? t().common.copyFailed : ""}</span></span>;
 }

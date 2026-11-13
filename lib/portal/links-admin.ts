@@ -17,12 +17,13 @@ export function targetFor(experienceSlug: string | null): string {
   return `/en/${x.city}/${x.slug}/`;
 }
 
-export interface CreateLinkInput { hotelId: string | null; chainProfileId?: string | null; experienceSlug?: string | null; medium: Medium; kind: "qr" | "url"; label?: string | null; by: string }
+export interface CreateLinkInput { hotelId: string | null; chainProfileId?: string | null; experienceSlug?: string | null; medium: Medium; kind: "qr" | "url"; label?: string | null; targetLanguage?: "ja" | "en"; by: string }
 
 export async function createLink(db: SqlDb, input: CreateLinkInput, now = Date.now()): Promise<LinkRow> {
   if (!MEDIUMS.includes(input.medium)) throw bad("bad_medium");
   if (!input.hotelId && !input.chainProfileId) throw bad("hotel_or_profile_required");
-  const target = targetFor(input.experienceSlug ?? null);
+  if (input.targetLanguage !== undefined && !["ja","en"].includes(input.targetLanguage)) throw bad("bad_language");
+  const target = targetFor(input.experienceSlug ?? null).replace(/^\/en(?=\/)/, `/${input.targetLanguage ?? "en"}`);
   if (!ALLOWED_TARGET.test(target)) throw bad("bad_target");
   const at = new Date(now).toISOString();
   const row: LinkRow = { id: randomId(), token: newLinkToken(), hotel_id: input.hotelId, chain_profile_id: input.chainProfileId ?? null, experience_slug: input.experienceSlug ?? null, medium: input.medium, kind: input.kind, target_path: target, label: input.label ?? null, status: "active", created_at: at };

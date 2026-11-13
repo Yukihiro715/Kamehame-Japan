@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst } from "../client";
 import { label, t } from "../i18n";
-import { Button, Card, Field, Loading, Notice, ReasonAction } from "../ui";
+import { Button, Card, CopyLink, Field, Loading, Notice, ReasonAction } from "../ui";
 import { CaseFacts, CaseLedger, CaseMessages, QuoteCard, StatusBadge, caseTitle, type CaseDetail } from "../case-common";
 
 export function HotelCaseDetail({ id }: { id: string }) {
@@ -22,9 +22,9 @@ export function HotelCaseDetail({ id }: { id: string }) {
     <>
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
-      <Card title={<span>{c.public_ref} · {caseTitle(c)} <StatusBadge status={c.displayStatus} /></span>} actions={<Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/cases/">{C.back}</Link>}>
+      <Card title={<span>{c.public_ref} · {caseTitle(c)} <StatusBadge status={c.displayStatus} /></span>} actions={<Link className="pt-btn pt-btn-link pt-btn-small" href="/partner/cases/">{C.back}</Link>}>
         <p className="pt-note-box">{label(K.next, c.displayStatus, "")}</p>
-        {current?.shareUrl && open && <p className="pt-small">{K.customerUrl}: <a href={current.shareUrl} target="_blank" rel="noreferrer">{current.shareUrl}</a></p>}
+        {current?.shareUrl && <div className="pt-generated-link"><span className="pt-small">{K.customerUrl}</span><a href={current.shareUrl} target="_blank" rel="noreferrer">{current.shareUrl}</a><CopyLink url={current.shareUrl}/></div>}
         {!edit ? <CaseFacts c={c} /> : (
           <div className="pt-form">
             <Field label={K.customerName}><input value={f.customerName} onChange={(e) => setF({ ...f, customerName: e.target.value })} /></Field>
