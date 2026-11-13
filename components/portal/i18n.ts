@@ -36,7 +36,7 @@ const ja = {
   },
   dashboard: {
     title: (site: string) => `${site} の実績`, period: (from: string, to: string, at: string) => `期間 ${from} 〜 ${to}（日本時間）· 更新 ${at}`, funnel: "集客・予約状況", confirmedH: "確定実績・精算（体験実施後）",
-    accesses: "リンクが開かれた回数", accessesNote: "QR・紹介リンクの合計。繰り返し開いた分も含みます", visits: "重複をまとめた訪問回数", visitsNote: "同じブラウザ・同じリンクへの30分以内の再訪を1回に集計。人数ではありません", provisional: "仮予約件数", provisionalNote: "予約作成日で集計", confirmed: "予約確定件数", paid: "決済済み件数", fullyRefunded: (n: number) => `全額返金 ${n} 件`, cancelled: "キャンセル件数",
+    accesses: "リンクが開かれた回数", accessesNote: "QR・紹介リンクの合計。繰り返し開いた分も含みます", visits: "訪問人数（目安）", visitsNote: "同じブラウザは初回から7日間で1人。QR・リンク共通で集計し、7日後は再カウントします。別端末・Cookie削除時は別人数です。", visitsPartial: " ※新集計開始後のアクセスのみ対象です。", provisional: "仮予約件数", provisionalNote: "予約作成日で集計", confirmed: "予約確定件数", paid: "決済済み件数", fullyRefunded: (n: number) => `全額返金 ${n} 件`, cancelled: "キャンセル件数",
     estimated: "未実施予約の見込紹介料（税抜）", estimatedNote: "見込・精算対象外", performed: "実施確認済み件数", performedNote: "実施日で集計", baseNet: "実施済み予約の税抜対象売上", commissionNet: "確定税抜紹介料", taxRef: (v: string) => `税込参考 ${v}`, unpaid: "確定未払残高（税抜）", unpaidNote: (v: string) => `現在残高 · 税込参考 ${v}`, paidOut: "支払い済み合計（振込額）", paidOutNote: "全四半期・振込手数料控除後",
     note: "「決済済み」は確定実績ではありません。紹介料は体験の実施確認後に確定し、四半期ごとに精算します。正式な税額と支払額は精算書に表示します。",
   },
@@ -130,7 +130,7 @@ const en: Dict = {
   },
   dashboard: {
     title: (site: string) => `Results for ${site}`, period: (from: string, to: string, at: string) => `${from} to ${to} (Japan time) · updated ${at}`, funnel: "Traffic and bookings", confirmedH: "Confirmed results and settlement (after the experience)",
-    accesses: "Link opens", accessesNote: "QR and referral links, including repeat opens", visits: "Visits excluding repeat opens", visitsNote: "Same browser and link within 30 minutes count once. Not unique people.", provisional: "Provisional bookings", provisionalNote: "By booking date", confirmed: "Confirmed bookings", paid: "Paid bookings", fullyRefunded: (n: number) => `${n} fully refunded`, cancelled: "Cancellations",
+    accesses: "Link opens", accessesNote: "QR and referral links, including repeat opens", visits: "Estimated visitors", visitsNote: "One browser counts once per 7-day window across your QR codes and links, then counts again. Different devices or cleared cookies count separately.", visitsPartial: " Only accesses recorded after the new counting method began are included.", provisional: "Provisional bookings", provisionalNote: "By booking date", confirmed: "Confirmed bookings", paid: "Paid bookings", fullyRefunded: (n: number) => `${n} fully refunded`, cancelled: "Cancellations",
     estimated: "Estimated commission, not yet performed (tax excl.)", estimatedNote: "Estimate, not yet payable", performed: "Experiences performed", performedNote: "By date performed", baseNet: "Commissionable sales, performed (tax excl.)", commissionNet: "Confirmed commission (tax excl.)", taxRef: (v: string) => `${v} with tax, for reference`, unpaid: "Confirmed, unpaid balance (tax excl.)", unpaidNote: (v: string) => `Current balance · ${v} with tax, for reference`, paidOut: "Total transferred", paidOutNote: "All quarters, after bank fees",
     note: "\"Paid\" is not a confirmed result. Commission is confirmed after the experience has taken place and is settled every quarter. The formal tax and payment amounts are on the payment notice.",
   },

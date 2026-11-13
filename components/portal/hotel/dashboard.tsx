@@ -10,8 +10,8 @@ import { partnerAccess } from "../partner-access";
 import { Button, Card, Loading, Notice, PeriodPicker, Stat, periodQuery } from "../ui";
 
 interface Dash {
-  period: { from: string; to: string }; updatedAt: string;
-  funnel: { accesses: number; visits: number; provisional: number; confirmed: number; paid: number; fullyRefunded: number; cancelled: number; estimatedCommissionNet: number };
+  period: { from: string; to: string }; updatedAt: string; visitorCountPartial: boolean;
+  funnel: { accesses: number; visits: number | null; provisional: number; confirmed: number; paid: number; fullyRefunded: number; cancelled: number; estimatedCommissionNet: number };
   confirmed: { count: number; baseNet: number; commissionNet: number; commissionTaxRef: number };
   balance: { unpaidNet: number; unpaidTaxRef: number; paid: number };
 }
@@ -48,7 +48,7 @@ export function HotelDashboard() {
       <div className="pt-dashboard-columns">
         <Card title={D.funnel} actions={<Link className="pt-inline-link" href={bookingLink}>{en ? "View bookings" : "予約実績・紹介料を見る"}<ArrowRight size={15}/></Link>}>
           <dl className="pt-metric-list">
-            {[[D.accesses, data.funnel.accesses, D.accessesNote], [D.visits, data.funnel.visits, D.visitsNote], [D.provisional, data.funnel.provisional, D.provisionalNote], [D.paid, data.funnel.paid, D.fullyRefunded(data.funnel.fullyRefunded)], [D.cancelled, data.funnel.cancelled, ""]].map(([name, value, note]) => <div key={String(name)}><dt>{name}<small>{note}</small></dt><dd>{Number(value).toLocaleString()}</dd></div>)}
+            {[[D.accesses, data.funnel.accesses, D.accessesNote], [D.visits, data.funnel.visits, D.visitsNote + (data.visitorCountPartial ? D.visitsPartial : "")], [D.provisional, data.funnel.provisional, D.provisionalNote], [D.paid, data.funnel.paid, D.fullyRefunded(data.funnel.fullyRefunded)], [D.cancelled, data.funnel.cancelled, ""]].map(([name, value, note]) => <div key={String(name)}><dt>{name}<small>{note}</small></dt><dd>{value === null ? "—" : Number(value).toLocaleString()}</dd></div>)}
           </dl>
         </Card>
         <Card title={en ? "Commission overview" : "紹介料の内訳"}>
