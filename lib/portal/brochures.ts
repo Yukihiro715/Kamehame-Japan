@@ -1,3 +1,4 @@
+import { partnerExperienceOrder } from "./experience-sort";
 import { catalogFor } from "@/lib/catalog";
 import { listPrice } from "@/lib/pricing";
 import { randomId, type SqlDb } from "@/lib/referral/db";
@@ -25,9 +26,9 @@ export function validateBrand(input: Record<string, unknown>): BrochureBrand {
   return brand;
 }
 export function brochureExperiences() {
-  const forLang = (lang: "ja" | "en"): BrochureExperience[] => catalogFor(lang).experiences.filter(x => x.status === "live").map(x => {
+  const forLang = (lang: "ja" | "en"): BrochureExperience[] => partnerExperienceOrder(catalogFor(lang).experiences).filter(x => x.status === "live").map(x => {
     const price = listPrice(x, lang);
-    return { slug: x.slug, img: x.img, title: x.title, tagline: x.tagline, area: x.area, duration: x.duration, group: x.group, highlights: x.whatYoullDo.slice(0,3), basePrice: price.price, priceUnit: price.unit };
+    return { slug: x.slug, img: x.img, detailImg: x.gallery?.find(image => image.img !== x.img)?.img, title: x.title, tagline: x.tagline, area: x.area, duration: x.duration, group: x.group, highlights: x.whatYoullDo.slice(0,3), basePrice: price.price, priceUnit: price.unit };
   });
   return { ja: forLang('ja'), en: forLang('en') };
 }
@@ -36,13 +37,15 @@ export function validatePrice(input: Record<string, unknown>): { slug: string; v
   if (!catalogFor('ja').experiences.some(x => x.slug === slug && x.status === 'live')) throw notFound();
   if (input.priceJpy !== null && (typeof input.priceJpy !== 'number' || !Number.isSafeInteger(input.priceJpy) || input.priceJpy < 1 || input.priceJpy > 100000000)) throw bad('brochure_price', '案内価格は1〜100,000,000円の整数で入力してください / Enter a whole-yen price from 1 to 100,000,000.');
   if (input.priceUnit !== 'person' && input.priceUnit !== 'group') throw bad('brochure_unit');
-  return { slug, value: { priceJpy: input.priceJpy as number | null, priceUnit: input.priceUnit, priceNote: text(input.priceNote, 180) } };
+  const priceMode = input.priceMode ?? (input.priceJpy === null ? 'inquiry' : 'fixed');
+  if (!['fixed','inquiry','unset'].includes(String(priceMode)) || (priceMode === 'fixed' ? input.priceJpy === null : input.priceJpy !== null)) throw bad('brochure_price', '金額を入力するか「お問い合わせ」を選択してください / Enter a price or choose Enquire.');
+  return { slug, value: { priceJpy: input.priceJpy as number | null, priceUnit: input.priceUnit, priceMode: priceMode as BrochurePrice['priceMode'], priceNote: text(input.priceNote, 180), priceNoteEn: text(input.priceNoteEn ?? input.priceNote, 180) } };
 }
 export async function readBrochureConfig(db: SqlDb, hotelId: string) {
   const hotel = await db.first<{ name: string }>('SELECT name FROM hotels WHERE id=?', [hotelId]);
   if (!hotel) throw notFound();
   const brand = await db.first<BrochureBrand>(`SELECT company_name AS companyName,logo_data_url AS logoDataUrl,accent_color AS accentColor,contact_email AS contactEmail,contact_phone AS contactPhone,contact_url AS contactUrl FROM partner_brochure_brands WHERE hotel_id=?`, [hotelId]);
-  const rows = await db.all<BrochurePrice & { slug: string }>(`SELECT experience_slug AS slug,price_jpy AS priceJpy,price_unit AS priceUnit,price_note AS priceNote FROM partner_brochure_prices WHERE hotel_id=?`, [hotelId]);
+  const rows = await db.all<BrochurePrice & { slug: string }>(`SELECT p.experience_slug AS slug,p.price_jpy AS priceJpy,p.price_unit AS priceUnit,p.price_note AS priceNote,COALESCE(o.price_note_en,p.price_note) AS priceNoteEn,COALESCE(o.price_mode,CASE WHEN p.price_jpy IS NULL THEN 'inquiry' ELSE 'fixed' END) AS priceMode FROM partner_brochure_prices p LEFT JOIN partner_brochure_options o ON o.hotel_id=p.hotel_id AND o.experience_slug=p.experience_slug WHERE p.hotel_id=?`, [hotelId]);
   return { brand: brand ?? { companyName: hotel.name, logoDataUrl: null, accentColor: '#b74908', contactEmail: '', contactPhone: '', contactUrl: '' }, prices: Object.fromEntries(rows.map(({ slug, ...price }) => [slug, price])) };
 }
 export async function saveBrochureBrand(db: SqlDb, hotelId: string, input: Record<string, unknown>, by: string) {
@@ -54,9 +57,11 @@ export async function saveBrochureBrand(db: SqlDb, hotelId: string, input: Recor
   return v;
 }
 export async function saveBrochurePrice(db: SqlDb, hotelId: string, input: Record<string, unknown>, by: string) {
-  const { slug, value: v } = validatePrice(input), at = new Date().toISOString();
+  const previous = input.priceNoteEn === undefined ? await db.first<{note:string}>(`SELECT price_note_en AS note FROM partner_brochure_options WHERE hotel_id=? AND experience_slug=?`,[hotelId,String(input.slug)]) : null;
+  const { slug, value: v } = validatePrice({...input,priceNoteEn:input.priceNoteEn ?? previous?.note ?? input.priceNote}), at = new Date().toISOString();
   await db.batch([
     { sql: `INSERT INTO partner_brochure_prices VALUES (?,?,?,?,?,?,?) ON CONFLICT(hotel_id,experience_slug) DO UPDATE SET price_jpy=excluded.price_jpy,price_unit=excluded.price_unit,price_note=excluded.price_note,updated_at=excluded.updated_at,updated_by=excluded.updated_by`, params: [hotelId,slug,v.priceJpy,v.priceUnit,v.priceNote,at,by] },
+    { sql: `INSERT INTO partner_brochure_options(hotel_id,experience_slug,price_mode,price_note_en) VALUES (?,?,?,?) ON CONFLICT(hotel_id,experience_slug) DO UPDATE SET price_mode=excluded.price_mode,price_note_en=excluded.price_note_en`,params:[hotelId,slug,v.priceMode,v.priceNoteEn] },
     { sql: `INSERT INTO audit_logs(id,at,actor,action,target_type,target_id,after_json) VALUES (?,?,?,'partner.brochure.price','hotel',?,?)`, params: [randomId(),at,by,hotelId,JSON.stringify({slug,...v})] },
   ]);
   return v;

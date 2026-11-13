@@ -589,6 +589,29 @@ test('partner brochure settings: role and site isolation, safe values, no bookin
   assert.equal(config.canManage,true);assert.equal(config.brand.companyName,'Agency A');
   assert.equal(config.prices[price.slug].priceJpy,35000);
   assert.ok(config.experiences.en.some(e=>e.slug===price.slug));
+  assert.equal(config.prices[price.slug].priceMode,'fixed');
+  assert.equal(config.prices[price.slug].priceNoteEn,price.priceNote,'legacy client note retained');
+  const bilingual={...price,priceMode:'fixed',priceNoteEn:'For two or more guests.'};
+  assert.equal((await c.call('POST','hotel/brochures/price',bilingual)).status,200);
+  assert.equal((await c.call('POST','hotel/brochures/price',{...price,priceNote:'日本語のみ更新'})).status,200);
+  let current=(await c.call('GET','hotel/brochures?hotel=hA')).body.prices[price.slug];
+  assert.equal(current.priceNote,'日本語のみ更新');assert.equal(current.priceNoteEn,bilingual.priceNoteEn,'legacy writes preserve existing English note');
+  for(const invalid of [{priceMode:'fixed',priceJpy:null},{priceMode:'inquiry',priceJpy:100},{priceMode:'bad'},{priceNoteEn:'x'.repeat(181)}]) {
+    assert.equal((await c.call('POST','hotel/brochures/price',{...bilingual,...invalid})).status,400);
+  }
+  const {brochurePriceReady,emptyBrochurePrice}=await vite.ssrLoadModule('/lib/portal/brochure-types.ts');
+  assert.equal(brochurePriceReady(emptyBrochurePrice('person')),false);
+  for(const mode of ['unset','inquiry']) {
+    assert.equal((await c.call('POST','hotel/brochures/price',{...bilingual,priceMode:mode,priceJpy:null})).status,200);
+    current=(await c.call('GET','hotel/brochures?hotel=hA')).body.prices[price.slug];
+    assert.equal(current.priceMode,mode);assert.equal(brochurePriceReady(current),mode==='inquiry');
+  }
+  // Migration remains compatible with the seven-column insert used by the previous worker.
+  await db.run('DELETE FROM partner_brochure_options WHERE hotel_id=? AND experience_slug=?',['hA',price.slug]);
+  await db.run('INSERT OR REPLACE INTO partner_brochure_prices VALUES (?,?,?,?,?,?,?)',['hA',price.slug,36000,'group','旧設定','2026-01-01','u-brand']);
+  current=(await c.call('GET','hotel/brochures?hotel=hA')).body.prices[price.slug];
+  assert.equal(current.priceMode,'fixed');assert.equal(current.priceNoteEn,'旧設定');
+
   const logo='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aWhkAAAAASUVORK5CYII=';
   assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,logoDataUrl:logo})).status,200);
   assert.equal((await c.call('GET','hotel/brochures?hotel=hA')).body.brand.logoDataUrl,logo);

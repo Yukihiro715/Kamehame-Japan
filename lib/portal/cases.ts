@@ -1,3 +1,4 @@
+import { partnerExperienceOrder } from "./experience-sort";
 /** The booking relay (docs/PARTNER_PLATFORM_STAGE1.md 4.5): a partner's case,
  *  the quotes operations make for it, the customer's shared page and the
  *  reservation that carries the case's attribution.
@@ -73,7 +74,7 @@ export function experienceOptions(lang: Lang = "ja"): ExperienceOption[] {
     slug: x.slug, title: x.title, titleEn: experienceTitle(x.slug, "en"), city: x.city, area: x.area, duration: x.duration, group: x.group, price: x.pricePending ? null : x.price, bookingMode: bookingModeOf(x), extraFields: extraFieldsFor(x.slug),
   }));
   live.push({ slug: BUS_GOLF_SLUG, title: BUS_GOLF_TITLE[lang], titleEn: BUS_GOLF_TITLE.en, city: "tokyo", area: "Tokyo → Mt. Fuji area", duration: null, group: null, price: null, bookingMode: "request", extraFields: GOLF_EXTRA_FIELDS });
-  return live;
+  return partnerExperienceOrder(live);
 }
 export function experienceTitle(slug: string | null, lang: Lang = "ja"): string {
   if (!slug) return "自由相談";

@@ -1,3 +1,4 @@
+import { partnerExperienceOrder } from "./experience-sort";
 /** What the hotel portal shows: the funnel for a period, the confirmed
  *  results, the experiences with their terms, and the referred bookings.
  *  Everything is scoped by hotel id on the server (要件 5.1, 5.2, 5.3). */
@@ -71,7 +72,7 @@ export async function experienceTerms(db: SqlDb, now = Date.now(), hotelId: stri
   const rate = await effectiveRate(db, hotelId, now);
   const bySlug = new Map(policies.map((p) => [p.experience_slug, { ...p, rate_bp: rate?.rate_bp ?? p.rate_bp }]));
   const enBySlug = new Map(catalogFor("en").experiences.map((x) => [x.slug, x]));
-  return catalogFor("ja").experiences.filter((x) => x.status === "live").map((x: Experience) => {
+  return partnerExperienceOrder(catalogFor("ja").experiences).filter((x) => x.status === "live").map((x: Experience) => {
     const p = bySlug.get(x.slug) ?? (rate?.rate_bp != null ? { rate_bp: rate.rate_bp, tax_rate_bp: 1000, referral_enabled: 1, unit_price_excl_tax_jpy: null, reference_avg_jpy: null, reference_note: null, valid_from: rate.valid_from } : undefined);
     const xe = enBySlug.get(x.slug) ?? x;
     const lp = listPrice(x, "ja");

@@ -20,3 +20,8 @@ export function sortExperiences<T extends { referable: boolean; commissionExampl
     return sort === "commission" ? y - x : x - y;
   });
 }
+
+/** Partner catalogue default: lead with the hands-on ramen experience; preserve all other ordering. */
+export function partnerExperienceOrder<T extends { slug: string }>(rows: T[]): T[] {
+  return [...rows].sort((a,b) => Number(b.slug === "shibuya-ramen-class") - Number(a.slug === "shibuya-ramen-class"));
+}

@@ -494,15 +494,43 @@
 
 @media (max-width: 640px) { .pt-list-search input, .pt-list-toolbar > select, .pt-list-meta select, .pt-list-date-filters input[type=date] { font-size: 16px; } }
 
-/* Branded sales sheets: the canvas is the exact A4 download preview. */
-.pt-brochure-layout { display: grid; grid-template-columns: minmax(280px, 390px) minmax(0, 1fr); gap: 24px; align-items: start; }
-.pt-brochure-controls { display: grid; gap: 20px; min-width: 0; }
-.pt-brochure-layout .pt-card { min-width: 0; }
-.pt-brochure-preview { padding: 12px; background: #edeef0; border-radius: 8px; min-width: 0; }
-.pt-brochure-preview canvas { display: block; width: 100%; height: auto; background: #fff; box-shadow: 0 3px 18px #0001; }
-.pt-brochure-preview[aria-busy=true] { opacity: .55; }
+/* Saved brochure library: full table height, only horizontal overflow. */
+.pt-brand-settings { margin: 20px 0; border: 1px solid var(--pt-border, #e5e2de); border-radius: 12px; background: white; }
+.pt-brand-settings > summary { cursor: pointer; padding: 18px 20px; font-weight: 700; }
+.pt-brand-settings > summary small { display: block; margin-top: 6px; font-weight: 400; color: #726b64; overflow-wrap: anywhere; }
+.pt-brand-settings > .pt-card { border: 0; margin: 0; }
+.pt-brand-settings input[type=color] { width: 120px; height: 44px; padding: 4px; }
+.pt-brand-settings input[type=file] { max-width: 100%; }
 .pt-brochure-logo { width: 120px; height: 64px; object-fit: contain; border: 1px solid #eee; border-radius: 6px; }
-.pt-brochure-controls input[type=color] { width: 100%; height: 44px; padding: 4px; }
-.pt-brochure-controls input[type=file] { font-size: 12px; }
-@media(max-width: 900px) { .pt-brochure-layout { grid-template-columns: minmax(0, 1fr); } }
-@media(max-width: 760px) { .pt-brochure-controls :is(input,select) { font-size: 16px; } }
+.pt-brochure-toolbar { display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
+.pt-brochure-toolbar > .pt-field { flex: 1 1 180px; min-width: 0; }
+.pt-brochure-table-wrap { width: 100%; overflow-x: auto; overflow-y: hidden; height: auto; max-height: none; border: 1px solid #e5e2de; border-radius: 10px; isolation: isolate; }
+.pt-brochure-table { width: 100%; min-width: 1140px; margin: 0; border-collapse: separate; border-spacing: 0; }
+.pt-brochure-table :is(th,td) { padding: 16px; vertical-align: top; border-right: 1px solid #eeeae5; }
+.pt-brochure-table th:first-child { position: sticky; left: 0; z-index: 1; width: 240px; min-width: 240px; max-width: 240px; background: #fff; box-shadow: 2px 0 0 #eeeae5; white-space: normal; }
+.pt-brochure-table thead th { position: static; background: #f8f7f5; }
+.pt-brochure-table thead th:first-child { position: sticky; background: #f8f7f5; }
+.pt-brochure-title { display: block; font-weight: 700; line-height: 1.5; }
+.pt-brochure-table th small { display: block; font-size: 11px; font-weight: 400; color: #726b64; margin-top: 8px; }
+.pt-brochure-price-input { display: grid; gap: 8px; width: 170px; }
+.pt-brochure-table select { min-width: 92px; }
+.pt-brochure-row-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 120px; }
+.pt-brochure-row-actions { display: flex; flex-wrap: wrap; gap: 8px; width: 210px; }
+.pt-brochure-invalid { color: #a12a22; white-space: normal; }
+.pt-brochure-notes-row td { background: #fff9f2; }
+.pt-brochure-notes { position: sticky; left: 16px; width: min(640px, calc(100vw - 100px)); white-space: normal; }
+.pt-brochure-dialog { width: min(900px, calc(100vw - 24px)); max-width: 900px; }
+.pt-brochure-preview { margin: 16px 0; padding: 10px; background: #edeef0; border-radius: 8px; }
+.pt-brochure-preview img { display: block; width: 100%; height: auto; box-shadow: 0 3px 18px #0001; }
+@media(max-width: 760px) {
+  .pt-brochure-table th:first-child { width: 160px; min-width: 160px; max-width: 160px; }
+  .pt-brochure-table :is(th,td) { padding: 12px; }
+  .pt-brochure-toolbar > .pt-field { flex-basis: 100%; }
+  .pt-brochure-table :is(input,select), .pt-brand-settings :is(input,select) { font-size: 16px; }
+}
+
+.pt-brochure-table :is(input,select) { font: inherit; padding: 10px; border: 1px solid #ded8d0; border-radius: 7px; min-height: 44px; background: #fff; width: 100%; box-sizing: border-box; }
+.pt-brochure-table th small { white-space: normal; }
+.pt-brand-settings .pt-card { display: grid; gap: 16px; }
+.pt-partner .pt-brochure-table .pt-btn { text-decoration: none; }
+@media(max-width: 760px) { .pt-brochure-table :is(input,select) { font-size: 16px; } }
