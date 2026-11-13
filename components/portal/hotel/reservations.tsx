@@ -12,21 +12,24 @@ const tone = (s: string | null) => (s === "confirmed" || s === "adjusted" ? "ok"
 const EMPTY = { from: "", to: "", experienceFrom: "", experienceTo: "", status: "", ref: "" };
 
 export function HotelReservations() {
-  const { hotel } = usePortal();
+  const { hotel, lang } = usePortal();
   const R = t().reservations, S = t().status, C = t().common;
-  const [f, setF] = useState(EMPTY);
-  const [loaded, setLoaded] = useState<{ key: string; value: { rows: Row[]; total: number } } | null>(null), [err, setErr] = useState<string | null>(null);
+  const [f, setF] = useState(() => {
+    const query = new URLSearchParams(typeof window === "undefined" ? "" : window.location.search);
+    return Object.fromEntries(Object.keys(EMPTY).map((k) => [k, query.get(k) ?? ""])) as typeof EMPTY;
+  });
+  const [page, setPage] = useState(0), [retry, setRetry] = useState(0);
+  const [loaded, setLoaded] = useState<{ key: string; value: { rows: Row[]; total: number } } | null>(null), [err, setErr] = useState<{ key: string; text: string } | null>(null);
   const [applied, setApplied] = useState(f);
-  const key = `${hotel?.id ?? ""}|${JSON.stringify(applied)}`;
+  const key = `${hotel?.id ?? ""}|${JSON.stringify(applied)}|${page}|${retry}`;
   useEffect(() => {
     if (!hotel) return;
     let live = true;
     const qs = Object.entries(applied).filter(([, v]) => v).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
-    api<{ rows: Row[]; total: number }>("GET", `hotel/reservations?hotel=${hotel.id}&limit=200${qs ? `&${qs}` : ""}`).then((value) => { if (live) setLoaded({ key, value }); }).catch((e) => { if (live) setErr(errorText(e)); });
+    api<{ rows: Row[]; total: number }>("GET", `hotel/reservations?hotel=${hotel.id}&limit=25&offset=${page * 25}${qs ? `&${qs}` : ""}`).then((value) => { if (live) { setLoaded({ key, value }); setErr(null); } }).catch((e) => { if (live) setErr({ key, text: errorText(e) }); });
     return () => { live = false; };
-  }, [hotel, applied, key]);
+  }, [hotel, applied, key, page]);
   const data = loaded?.key === key ? loaded.value : null;
-  if (err) return <Notice tone="bad">{err}</Notice>;
   return (
     <Card title={R.title}>
       <div className="pt-form">
@@ -38,12 +41,12 @@ export function HotelReservations() {
           <select value={f.status} onChange={(e) => setF({ ...f, status: e.target.value })}><option value="">{C.all}</option>{Object.entries(S.reservation).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
         </label>
         <label className="pt-field"><span className="pt-field-l">{R.ref}</span><input value={f.ref} onChange={(e) => setF({ ...f, ref: e.target.value })} placeholder="R-XXXXXX" /></label>
-        <div className="pt-row"><Button onClick={() => setApplied({ ...f })}>{C.search}</Button><Button kind="link" onClick={() => { setF(EMPTY); setApplied(EMPTY); }}>{C.clear}</Button></div>
+        <div className="pt-row"><Button onClick={() => { setApplied({ ...f }); setPage(0); }}>{C.search}</Button><Button kind="link" onClick={() => { setF(EMPTY); setApplied(EMPTY); setPage(0); }}>{C.clear}</Button></div>
       </div>
-      {!data ? <Loading /> : (
+      {err?.key === key ? <><Notice tone="bad">{err.text}</Notice><Button kind="secondary" onClick={() => setRetry((v) => v + 1)}>{lang === "en" ? "Try again" : "再読み込み"}</Button></> : !data ? <Loading /> : (
         <>
           <p className="pt-small pt-muted">{C.items(data.total)} · {R.note}</p>
-          <Table
+          <div className="pt-reservation-table"><Table
             head={R.head}
             rows={data.rows.map((r) => [
               <code key="r">{r.hotelRef}</code>, jst(r.createdAt, false), r.experience, r.experienceDate ?? "—", r.guests ?? "—",
@@ -52,7 +55,13 @@ export function HotelReservations() {
               yen(r.baseNet), pct(r.rateBp), yen(r.commissionNet), yen(r.commissionGrossRef),
               <span key="e"><Badge tone={tone(r.entryStatus)}>{label(S.entry, r.entryStatus)}</Badge>{r.holdCodes.length > 0 && <small className="pt-muted"> {r.holdCodes.map((h) => label(S.hold, h)).join(", ")}</small>}{r.entryStatus === "estimated" && <small className="pt-muted"> {S.estimatedNote}</small>}</span>,
             ])}
-          />
+          /></div>
+          <div className="pt-reservation-mobile">{data.rows.map((r) => <details className="pt-booking-summary" key={r.hotelRef}>
+            <summary><span className="pt-case-reference">{r.hotelRef}</span><strong>{r.experience}</strong><span>{r.experienceDate ?? C.undecided} · {r.guests ?? "—"}{lang === "en" ? " guests" : "名"}</span><span><Badge tone={r.status === "completed" || r.status === "confirmed" ? "ok" : "neutral"}>{label(S.reservation, r.status)}</Badge> <Badge tone={tone(r.entryStatus)}>{label(S.entry, r.entryStatus)}</Badge></span><span className="pt-booking-value">{R.head[9]} <b>{yen(r.commissionNet)}</b></span><small className="pt-inline-link">{lang === "en" ? "Payment & commission details" : "決済・紹介料の詳細"}</small></summary>
+            <dl className="pt-kv"><dt>{R.head[1]}</dt><dd>{jst(r.createdAt, false)}</dd><dt>{R.head[6]}</dt><dd>{label(S.payment, r.paymentStatus)}</dd><dt>{R.head[7]}</dt><dd>{yen(r.baseNet)}</dd><dt>{R.head[8]}</dt><dd>{pct(r.rateBp)}</dd><dt>{R.head[10]}</dt><dd>{yen(r.commissionGrossRef)}</dd></dl>
+            {r.holdCodes.length > 0 && <p className="pt-small pt-muted">{r.holdCodes.map((h) => label(S.hold, h)).join(", ")}</p>}{r.entryStatus === "estimated" && <p className="pt-small pt-muted">{S.estimatedNote}</p>}
+          </details>)}{data.rows.length === 0 && <p className="pt-empty">{C.empty}</p>}</div>
+          <div className="pt-pagination"><span>{data.total ? `${page * 25 + 1}–${page * 25 + data.rows.length} / ${data.total}` : "0"}</span><Button kind="secondary" disabled={page === 0} onClick={() => setPage((v) => v - 1)}>{lang === "en" ? "Previous" : "前へ"}</Button><Button kind="secondary" disabled={(page + 1) * 25 >= data.total} onClick={() => setPage((v) => v + 1)}>{lang === "en" ? "Next" : "次へ"}</Button></div>
         </>
       )}
     </Card>

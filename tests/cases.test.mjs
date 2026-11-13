@@ -6,7 +6,7 @@
 // cases are invisible.
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
-import test, { after } from "node:test";
+import test, { after, before, mock } from "node:test";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 import { openTestDb } from "./helpers/sqlite-db.mjs";
@@ -20,6 +20,10 @@ const { receiveWebhook } = await vite.ssrLoadModule("/lib/payment-webhooks.ts");
 
 const T = Date.parse("2026-11-06T03:00:00Z");
 const iso = (t) => new Date(t).toISOString();
+// Keep API timestamps and expiring fixtures independent of the day CI runs.
+before(() => mock.timers.enable({ apis: ["Date"], now: new Date("2026-11-06T03:00:00Z") }));
+after(() => mock.timers.reset());
+
 const ORIGIN = "https://staging.example";
 const SECRET = "whsec_test_secret";
 

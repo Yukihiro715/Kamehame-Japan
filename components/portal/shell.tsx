@@ -1,12 +1,15 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import Link from "next/link";
+import { Fragment, createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { ArrowUpRight, BookOpen, CalendarDays, ClipboardList, LayoutDashboard, MapPin, Menu, QrCode, Wallet, X } from "lucide-react";
+import { partnerAccess, type PartnerSite } from "./partner-access";
 import { api, errorText } from "./client";
 import { asPortalLang, detectPortalLang, DICT, PORTAL_LANG_NAME, PORTAL_LANGS, setPortalLang, type PortalLang } from "./i18n";
 import { Button, Loading, Notice } from "./ui";
 
 export type Kind = "hotel" | "ops";
-export interface HotelInfo { id: string; name: string; public_id: string; status: string; brochure_url: string | null }
+export interface HotelInfo extends PartnerSite { id: string; name: string; public_id: string; status: string; brochure_url: string | null }
 export interface Me { user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
 
 interface PortalState { kind: Kind; me: Me; hotel: HotelInfo | null; setHotel: (id: string) => void; refresh: () => void; lang: PortalLang; setLang: (l: PortalLang) => void }
@@ -14,11 +17,12 @@ const Ctx = createContext<PortalState | null>(null);
 export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Error("usePortal outside PortalShell"); return c; };
 
 /** Partner navigation is labelled from the dictionary; operations stay Japanese. */
-const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/hotel/", "dashboard"], ["/hotel/reservations/", "reservations"], ["/hotel/cases/", "cases"], ["/hotel/experiences/", "experiences"], ["/hotel/materials/", "materials"], ["/hotel/settlement/", "settlement"], ["/hotel/guide/", "guide"]];
+const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/hotel/", "dashboard"], ["/hotel/experiences/", "experiences"], ["/hotel/cases/", "cases"], ["/hotel/reservations/", "reservations"], ["/hotel/materials/", "materials"], ["/hotel/settlement/", "settlement"], ["/hotel/guide/", "guide"]];
 const NAV: Record<Kind, [string, string][]> = {
   hotel: [],
   ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/cases/", "取り次ぎ"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "提携パートナー"], ["/ops/settlement/", "精算"], ["/ops/payouts/", "支払"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
 };
+const NAV_ICONS = { dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, settlement: Wallet, guide: BookOpen };
 const HOTEL_KEY = "kh-portal-hotel";
 const LANG_KEY = "kh-portal-lang";
 
@@ -27,6 +31,7 @@ const LANG_KEY = "kh-portal-lang";
  *  API; the HTML the server sends holds nothing about any hotel. */
 /** `titleKey` names a dictionary entry ("nav.dashboard"); server pages cannot hand a function to this client component. */
 export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; children: ReactNode; title?: string; titleKey?: string }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [me, setMe] = useState<Me | null | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [hotelId, setHotelId] = useState<string | null>(null);
@@ -52,13 +57,20 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
       if (status !== 401) setError(errorText(e));
     }), [kind, applyLang]);
   useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (e: KeyboardEvent) => { if (e.key === "Escape") { setMenuOpen(false); document.getElementById("partner-menu-toggle")?.focus(); } };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [menuOpen]);
+  const rootClass = kind === "hotel" ? "pt-root pt-partner" : "pt-root";
   const path = typeof window !== "undefined" ? window.location.pathname : "";
   const isLogin = path.endsWith("/login/") || path.endsWith("/login");
 
-  if (me === undefined) return <div className="pt-root"><Loading /></div>;
+  if (me === undefined) return <div className={rootClass}><Loading /></div>;
   if (me === null) {
-    if (error) return <div className="pt-root"><div className="pt-login"><Notice tone="bad">{error}</Notice></div></div>;
-    return <div className="pt-root" lang={lang}><Login kind={kind} onDone={load} lang={lang} onLang={applyLang} /></div>;
+    if (error) return <div className={rootClass}><div className="pt-login"><div className="pt-login-box"><Notice tone="bad">{error}</Notice><Button onClick={() => void load()}>{lang === "en" ? "Try again" : "再読み込み"}</Button></div></div></div>;
+    return <div className={rootClass} lang={lang}><Login kind={kind} onDone={load} lang={lang} onLang={applyLang} /></div>;
   }
   if (isLogin && typeof window !== "undefined") { window.location.replace(`/${kind}/`); return null; }
   const hotel = kind === "hotel" ? (me.hotels ?? []).find((h) => h.id === hotelId) ?? null : null;
@@ -66,16 +78,31 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
   // A partner's choice is saved on their profile so mails follow it too.
   const setLang = (l: PortalLang) => { applyLang(l); if (kind === "hotel") void api("POST", "hotel/lang", { lang: l }).catch(() => {}); };
   const T = DICT[lang];
-  const nav: [string, string][] = kind === "hotel" ? HOTEL_NAV.map(([href, key]) => [href, T.nav[key]]) : NAV.ops;
+  const access = partnerAccess(hotel, me.memberships);
+  const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "settlement" ? access.settlement : true);
+  const nav: [string, string][] = kind === "hotel" ? hotelNav.map(([href, key]) => [href, T.nav[key]]) : NAV.ops;
+  const active = (href: string) => path.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind}/` && path.startsWith(href));
   const pageTitle = titleKey ? titleKey.split(".").reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), T) as string | undefined : title;
   return (
     <Ctx.Provider value={{ kind, me, hotel, setHotel, refresh: load, lang, setLang }}>
-      <div className="pt-root" lang={lang}>
+      <div className={`${rootClass}${menuOpen ? " pt-menu-open" : ""}`} lang={lang}>
+        {kind === "hotel" && <>
+          <a className="pt-skip" href="#partner-main">{lang === "en" ? "Skip to content" : "本文へ移動"}</a>
+          <aside className="pt-sidebar" id="partner-navigation">
+            <Link className="pt-partner-brand" href="/hotel/"><span className="pt-brand-symbol">K<span>+</span></span><span>KAMEHAME<small>JAPAN / PARTNER</small></span></Link>
+            <p className="pt-nav-label">{lang === "en" ? "YOUR WORKSPACE" : "パートナーワークスペース"}</p>
+            <nav aria-label={lang === "en" ? "Main menu" : "メインメニュー"}>
+              {hotelNav.map(([href, key]) => { const Icon = NAV_ICONS[key]; return <a key={href} href={href} className={active(href) ? "on" : ""} aria-current={active(href) ? "page" : undefined}><Icon size={18} aria-hidden="true"/><span>{T.nav[key]}</span></a>; })}
+            </nav>
+            <div className="pt-sidebar-bottom"><span>KAMEHAME JAPAN</span><p>{lang === "en" ? "Bring Japan closer to your guests." : "日本の体験を、お客様へ。"}</p><a href="mailto:hello@kamehame-japan.com">{lang === "en" ? "Contact our team" : "運営に問い合わせる"}<ArrowUpRight size={15} aria-hidden="true"/></a></div>
+          </aside>
+        </>}
         <header className="pt-top">
+          {kind === "hotel" && <button id="partner-menu-toggle" type="button" className="pt-menu-toggle" aria-expanded={menuOpen} aria-controls="partner-navigation" aria-label={lang === "en" ? (menuOpen ? "Close menu" : "Open menu") : (menuOpen ? "メニューを閉じる" : "メニューを開く")} onClick={() => setMenuOpen((v) => !v)}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button>}
           <a className="pt-brand" href={`/${kind}/`}>KAMEHAME JAPAN <span>{kind === "hotel" ? T.brand.partner : T.brand.ops}</span></a>
-          <nav className="pt-nav" aria-label={lang === "en" ? "Menu" : "メニュー"}>
-            {nav.map(([href, label]) => <a key={href} href={href} className={path === href || (href !== `/${kind}/` && path.startsWith(href)) ? "on" : ""}>{label}</a>)}
-          </nav>
+          {kind === "ops" && <nav className="pt-nav" aria-label={lang === "en" ? "Menu" : "メニュー"}>
+            {nav.map(([href, label]) => <a key={href} href={href} className={active(href) ? "on" : ""}>{label}</a>)}
+          </nav>}
           <div className="pt-user">
             {kind === "hotel" && (me.hotels?.length ?? 0) > 1 && (
               <select value={hotelId ?? ""} onChange={(e) => setHotel(e.target.value)} aria-label={T.shell.chooseSite}>{me.hotels!.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select>
@@ -85,9 +112,9 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
             <Button kind="link" small onClick={async () => { await api("POST", "auth/signout", { kind }); window.location.href = `/${kind}/login/`; }}>{T.shell.signOut}</Button>
           </div>
         </header>
-        <main className="pt-main">
-          {pageTitle && <h1 className="pt-h1">{pageTitle}</h1>}
-          {kind === "hotel" && !hotel ? <Notice tone="warn">{T.shell.noSite}</Notice> : children}
+        <main className="pt-main" id="partner-main" tabIndex={-1}>
+          {pageTitle && (kind === "hotel" ? <div className="pt-page-heading"><div><p className="pt-eyebrow">{hotel?.name ?? "PARTNER PORTAL"}</p><h1 className="pt-h1">{pageTitle}</h1></div><span className="pt-site-id">{hotel?.public_id}</span></div> : <h1 className="pt-h1">{pageTitle}</h1>)}
+          {kind === "hotel" && !hotel ? <Notice tone="warn">{T.shell.noSite}</Notice> : <Fragment key={hotel?.id ?? kind}>{children}</Fragment>}
         </main>
         <footer className="pt-foot">{T.shell.footer}</footer>
       </div>
@@ -135,7 +162,7 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
           <form onSubmit={(e) => { e.preventDefault(); void verify(); }}>
             {msg && <Notice tone="info">{msg}</Notice>}
             {devCode && <p className="pt-devcode">{L.codeLabel}: <b>{devCode}</b></p>}
-            <label className="pt-field"><span className="pt-field-l">{L.code}</span><input inputMode="numeric" pattern="[0-9]*" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} autoFocus /></label>
+            <label className="pt-field"><span className="pt-field-l">{L.code}</span><input autoComplete="one-time-code" aria-label={L.code} inputMode="numeric" pattern="[0-9]*" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} autoFocus /></label>
             <div className="pt-row">
               <Button type="submit" disabled={busy || code.length !== 6}>{L.signIn}</Button>
               <Button kind="link" onClick={() => { setStep("email"); setCode(""); setErr(null); }}>{L.changeEmail}</Button>
