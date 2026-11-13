@@ -555,3 +555,8 @@
   .pt-official-brochure-options { grid-template-columns: minmax(0, 1fr); }
   .pt-official-brochure-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
 }
+
+.pt-trifold-print { margin: 14px 0; }
+.pt-trifold-print summary { color: var(--pt-accent, #b74908); cursor: pointer; font-weight: 600; }
+.pt-trifold-page { margin: 24px 0 0; min-width: 0; }
+.pt-trifold-page figcaption { display: flex; flex-direction: column; gap: 6px; }

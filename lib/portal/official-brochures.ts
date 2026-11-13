@@ -16,8 +16,9 @@ export function officialBrochureCatalog(): OfficialBrochureCatalog {
 }
 export function officialBrochureItems(lang:OfficialBrochureLanguage, slug:string|null): OfficialBrochureExperience[] {
   const live=partnerExperienceOrder(catalogFor(lang).experiences).filter(e=>e.status==='live');
-  const featured=['shibuya-ramen-class','kanji-name-calligraphy','nihonbashi-kendo-experience'];
-  const selected=slug?live.filter(e=>e.slug===slug):featured.map(s=>live.find(e=>e.slug===s)).filter(e=>!!e);
+  // The evergreen overview describes themes, not a fixed list of live products.
+  if(!slug)return [];
+  const selected=live.filter(e=>e.slug===slug);
   if(!selected.length)throw bad('unknown_experience');
   return selected.map(e=>{
     const p=listPrice(e,lang),numeric=/^(?:約|approx\.\s*)?¥[\d,]+$/.test(p.price);
