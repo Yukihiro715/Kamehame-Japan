@@ -285,7 +285,22 @@
 .pt-segments { display: flex; padding: 4px; background: #eae9e6; border-radius: 8px; gap: 3px; }
 .pt-segments button { font: inherit; font-size: 12px; padding: 8px 13px; border: 0; border-radius: 6px; cursor: pointer; color: #6f6256; background: transparent; }
 .pt-segments button.on { color: #66310d; background: #fff; box-shadow: 0 1px 4px #2e210c12; font-weight: 600; }
-.pt-case-search { display: flex; gap: 8px; flex: 1; }
+/* Keep the search action beside its field; clear filters gets its own row. */
+.pt-case-toolbar { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 16px; }
+.pt-case-toolbar .pt-segments { min-width: 0; }
+.pt-case-toolbar .pt-segments button { min-height: 44px; }
+.pt-case-search { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 8px; min-width: 0; margin: 0; }
+.pt-case-search .pt-search { min-width: 0; }
+.pt-case-search .pt-search svg { flex-shrink: 0; }
+.pt-case-search > .pt-btn { white-space: nowrap; }
+.pt-case-search > .pt-btn-link { grid-column: 1 / -1; justify-self: start; }
+@media (max-width: 760px) {
+  .pt-case-toolbar { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .pt-case-toolbar .pt-segments { width: 100%; box-sizing: border-box; }
+  .pt-case-toolbar .pt-segments button { flex: 1; min-width: 0; padding-inline: 8px; }
+  .pt-case-search input { font-size: 16px; }
+  .pt-case-results { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
 .pt-case-list { display: grid; gap: 14px; }
 .pt-case-row { border: 1px solid var(--pt-line); background: #fff; border-radius: 11px; overflow: hidden; padding: 20px 23px; }
 .pt-case-top { display: flex; align-items: center; gap: 12px; justify-content: space-between; flex-wrap: wrap; }
@@ -371,8 +386,6 @@
   .pt-catalog-tools .pt-check { width: 100%; padding: 0; }
   .pt-experience-body { padding: 19px; }
   .pt-experience-image { aspect-ratio: 16/8; }
-  .pt-case-search { flex-wrap: wrap; }
-  .pt-case-search .pt-search { min-width: 180px; }
   .pt-case-row { padding: 17px; }
   .pt-case-body { grid-template-columns: 1fr auto; gap: 16px; }
   .pt-case-body > .pt-btn { grid-column: 1/-1; justify-self: stretch; }
