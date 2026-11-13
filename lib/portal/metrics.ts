@@ -8,6 +8,16 @@ import { commissionNet, netFromGross, taxOnTotal } from "@/lib/referral/money";
 import { ENTRY_STATUS_JA, HOLD_JA, PAYMENT_STATUS_JA, RESERVATION_STATUS_JA, periodBounds } from "./util";
 import { effectiveRate } from "@/lib/referral/rates";
 import { paidTotalForHotel } from "./settlement";
+import { popularityRanks } from "./experience-sort";
+
+export async function experiencePopularity(db: SqlDb, now = Date.now()) {
+  const counts = await db.all<{ slug: string; count: number }>(
+    `SELECT experience_slug AS slug, COUNT(*) AS count FROM reservations
+     WHERE status IN ('confirmed','completed') AND payment_status NOT IN ('refunded','disputed')
+       AND created_at >= ? AND created_at <= ? GROUP BY experience_slug`,
+    [new Date(now - 90 * 86400000).toISOString(), new Date(now).toISOString()]);
+  return popularityRanks(counts);
+}
 
 export interface Period { from: string; to: string }
 

@@ -258,9 +258,14 @@
 .pt-experience-price small { width: 100%; font-size: 11px; color: var(--muted); }
 .pt-experience-price strong { font-size: 24px; font-weight: 650; letter-spacing: -.04em; }
 .pt-experience-price > span { font-size: 11px; color: var(--muted); }
-.pt-referral-terms { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; padding: 12px; background: #fff6ed; border-radius: 7px; }
-.pt-referral-terms span { display: block; font-size: 10px; color: #815f45; }
-.pt-referral-terms b { display: block; color: #8b3b10; font-size: 16px; margin-top: 5px; }
+.pt-referral-terms { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; padding: 12px; background: #fff6ed; border-radius: 7px; }
+.pt-referral-terms > div { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.pt-referral-terms > div > span { display: flex; align-items: center; min-height: 32px; font-size: 10px; color: #815f45; }
+.pt-referral-terms b { display: block; color: #8b3b10; font-size: 16px; line-height: 1.5; margin-top: auto; overflow-wrap: anywhere; }
+.pt-catalog-sort { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.pt-catalog-sort label { display: flex; align-items: center; gap: 8px; }
+.pt-catalog-sort select { min-width: 0; max-width: 100%; padding: 8px; border: 1px solid #dcd6cf; border-radius: 8px; background: #fff; color: #302b27; font: inherit; }
+@media (max-width: 760px) { .pt-catalog-sort select { font-size: 16px; } }
 .pt-price-details { font-size: 11px; color: var(--muted); }
 .pt-price-details summary { cursor: pointer; padding: 3px 0; }
 .pt-price-details p { margin: 8px 0; }
@@ -448,11 +453,11 @@
 .pt-list-meta label { display: inline-flex; align-items: center; gap: 7px; }
 .pt-list-meta select { height: 34px; }
 .pt-table-instruction { margin: 0; font-size: 11px; }
-.pt-reservation-grid { min-width: 0; max-width: 100%; max-height: 65dvh; overflow: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; border: 1px solid #e8e3dd; border-radius: 8px; }
+.pt-reservation-grid { min-width: 0; max-width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: none; -webkit-overflow-scrolling: touch; border: 1px solid #e8e3dd; border-radius: 8px; }
 .pt-partner .pt-reservation-sheet { min-width: 1120px; border-collapse: separate; border-spacing: 0; width: 100%; }
 .pt-partner .pt-reservation-sheet :is(th,td) { vertical-align: middle; box-sizing: border-box; padding: 10px 12px; height: 62px; border-right: 1px solid #f0ede9; font-size: 12px; }
-.pt-partner .pt-reservation-sheet thead th { position: sticky; top: 0; height: 44px; z-index: 2; background: #f8f7f4; padding-top: 5px; padding-bottom: 5px; }
-.pt-partner .pt-reservation-sheet thead th:first-child { left: 0; z-index: 3; box-shadow: 3px 0 5px #00000008; }
+.pt-partner .pt-reservation-sheet thead th { position: static; height: 44px; background: #f8f7f4; padding-top: 5px; padding-bottom: 5px; }
+.pt-partner .pt-reservation-sheet thead th:first-child { position: sticky; top: auto; left: 0; z-index: 3; box-shadow: 3px 0 5px #00000008; }
 .pt-partner .pt-reservation-sheet tbody th { position: sticky; left: 0; top: auto; z-index: 1; background: #fff; font-weight: 400; color: inherit; box-shadow: 3px 0 5px #00000008; }
 .pt-partner .pt-reservation-sheet tbody tr { cursor: pointer; }
 .pt-partner .pt-reservation-sheet tbody tr:hover :is(th,td), .pt-partner .pt-reservation-sheet tbody tr:focus-within :is(th,td) { background: #fff6ee; }
