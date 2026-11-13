@@ -18,19 +18,17 @@ base-only total. The normal checkout requires eligibility, standard-plan and
 provisional-booking consent. Existing localized provisional/refund copy replaces
 the old booking FAQ and flow when checkout is enabled.
 
-## Release gate
+## Live configuration
 
-The four live Stripe price IDs in `lib/private-tea-checkout-prices.ts` are blank.
-Both the page and checkout API fail closed until all four IDs exist. Live price
-creation was rejected by automatic approval review pending explicit approval of
-the amounts and per-guest/solo units. Do not merge this preparatory branch as a
-completed release or bypass that review. No live price or customer payment was
-created by the implementation tests.
+The four one-time, active JPY inclusive-tax prices in
+`lib/private-tea-checkout-prices.ts` were registered in the KAMEHAME JAPAN live
+Stripe account after approval to release. Both the page and checkout API fail
+closed if any price ID is missing. The displayed catalog totals must match the
+server-selected price and quantity before creating a checkout session.
 
-After approval, create or verify the four active, one-time JPY inclusive-tax
-prices in the KAMEHAME JAPAN Stripe account, populate their exact IDs, rerun the
-checkout tests/build, and merge for the repository's existing Cloudflare deploy
-workflow. Confirm the deployed page and readiness before reporting release.
+Publish through this repository's existing Cloudflare deploy workflow. Confirm
+the deployed page and readiness before reporting release. Customer payment is
+still provisional and does not confirm host availability.
 
 Existing Apps Script accepts the stored order price/quantity and needs no code
 change for this product. Its existing signed-webhook processing, paid-pending
