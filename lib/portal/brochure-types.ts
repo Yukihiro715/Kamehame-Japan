@@ -1,6 +1,12 @@
 export interface BrochureBrand {
   companyName: string; logoDataUrl: string | null; accentColor: string;
   contactEmail: string; contactPhone: string; contactUrl: string;
+  contactOptions?: BrochureContactOptions;
+}
+export interface BrochureContactOptions {
+  showEmail: boolean; showPhone: boolean; showUrl: boolean;
+  qrEnabled: boolean; qrType: "website" | "line" | "whatsapp" | "other";
+  qrUrl: string; whatsappPhone: string; captionJa: string; captionEn: string;
 }
 export interface BrochurePrice { priceJpy: number | null; priceUnit: "person" | "group"; priceMode: "fixed" | "inquiry" | "unset"; priceNote: string; priceNoteEn: string }
 export interface BrochureExperience {

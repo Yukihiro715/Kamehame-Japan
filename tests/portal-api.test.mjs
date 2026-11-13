@@ -700,3 +700,37 @@ test('official brochures use public prices and stable hotel/language referral QR
   assert.equal((await db.first('SELECT COUNT(*) AS n FROM reservations')).n,0);
   assert.equal((await db.first('SELECT COUNT(*) AS n FROM commission_entries')).n,0);
 });
+
+test('agency QR preferences persist per partner, validate destinations and preserve old-client writes', async()=>{
+  const db=openTestDb();await seed(db);
+  await db.run(`INSERT INTO users(id,email,name,status,created_at) VALUES ('qr-user','qr@example.com','Guide','active','2026-01-01')`);
+  await db.run(`INSERT INTO memberships(id,user_id,role,scope_type,scope_id,created_at) VALUES ('qr-member','qr-user','partner_manager','hotel','hA','2026-01-01')`);
+  const c=client(db);await signIn(c,'qr@example.com','hotel');
+  const brand={hotel:'hA',companyName:'Guide',logoDataUrl:null,accentColor:'#204040',contactEmail:'guide@example.com',contactPhone:'',contactUrl:''};
+  const options={showEmail:true,showPhone:false,showUrl:false,qrEnabled:true,qrType:'whatsapp',qrUrl:'',whatsappPhone:'+81 90 1234 5678',captionJa:'予約はこちら',captionEn:'Contact your guide'};
+  const save=await c.call('POST','hotel/brochures/brand',{...brand,contactOptions:options});
+  assert.equal(save.status,200,JSON.stringify(save.body));
+  assert.deepEqual((await c.call('GET','hotel/brochures?hotel=hA')).body.brand.contactOptions,options);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,companyName:'Updated guide'})).status,200);
+  assert.deepEqual((await c.call('GET','hotel/brochures?hotel=hA')).body.brand.contactOptions,options,'old cached clients preserve QR settings');
+  const contacts=await vite.ssrLoadModule('/lib/portal/brochure-contact.ts');
+  assert.equal(contacts.brochureQrUrl({...brand,contactOptions:options}),'https://wa.me/819012345678');
+  assert.equal(contacts.brochureQrCaption({...brand,contactOptions:{...options,captionEn:''}},'en'),'Enquire on WhatsApp');
+  assert.equal(contacts.brochureQrCaption({...brand,contactOptions:options},'ja'),'予約はこちら');
+  for(const change of [{whatsappPhone:'09012345678'},{whatsappPhone:'+0819012345678'},{qrType:'bad'},{qrEnabled:'true'},{showEmail:1},{captionEn:'x'.repeat(61)},{qrType:'line',qrUrl:'https://line.me.evil.example/foo'},{qrType:'other',qrUrl:'javascript:alert(1)'},{qrType:'website',qrUrl:'https://user:pass@example.com'}]){
+    assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactOptions:{...options,...change}})).status,400,JSON.stringify(change));
+  }
+  for(const [qrType,qrUrl] of [['website','https://example.com'],['line','https://lin.ee/abc'],['line','https://line.me/R/ti/p/@guide'],['other','https://example.com/contact']]){
+    assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactOptions:{...options,qrType,qrUrl}})).status,200);
+  }
+  const off={...options,qrEnabled:false,showEmail:false};
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactOptions:off})).status,200);
+  const current=(await c.call('GET','hotel/brochures?hotel=hA')).body.brand;
+  assert.equal(contacts.brochureQrUrl(current),'');assert.equal(contacts.brochureBrandReady(current),false);
+  assert.deepEqual(contacts.visibleBrochureContacts(current),[]);
+  assert.equal(contacts.brochureBrandReady({...brand,contactOptions:{...options,showEmail:false}}),true,'QR-only guide needs no website');
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,hotel:'hB',contactOptions:options})).status,403);
+  assert.equal(await db.first('SELECT * FROM partner_brochure_contacts WHERE hotel_id=?',['hB']),null);
+  await db.run(`UPDATE memberships SET role='partner_agent' WHERE id='qr-member'`);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactOptions:options})).status,403);
+});
