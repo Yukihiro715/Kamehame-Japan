@@ -151,7 +151,7 @@ export function buildEntries(read) {
   // Articles render only in the locales they have been written for, and only
   // while one of the experiences they are tagged with is on the site
   // (lib/articles.ts articlesFor).
-  const articles = src("lib/articles.ts");
+  const articles = src("lib/articles.ts") + "\n" + src("lib/golf-articles.ts");
   const listed = new Set(experiences.map((e) => e.slug));
   const articlePaths = Object.fromEntries(LANGS.map((l) => [l, []]));
   for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {

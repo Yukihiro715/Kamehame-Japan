@@ -11,6 +11,7 @@ import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
 import { isLang, LANGS } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
+import { articlesForExperience } from "@/lib/articles";
 
 /** The golf landing page for advertising: the two ways to play (shared bus
  *  tour vs. custom booking) explained side by side, each leading to its own
@@ -119,6 +120,11 @@ export default async function GolfToursPage({ params }: Props) {
             </div>
           </div>
         </section>
+        {articlesForExperience("mt-fuji-golf-day", lang, 3).length > 0 && <section className="golf-journal-links gb-wrap" aria-labelledby="golf-reading-heading">
+          <h2 id="golf-reading-heading">{lang === "en" ? "Before you book: golf planning guides" : "Golf planning guides"}</h2>
+          <ul>{articlesForExperience("mt-fuji-golf-day", lang, 3).map((article) => <li key={article.slug}><Link href={`/${lang}/journal/${article.slug}/`}>{article.copy[lang]!.title} <ArrowRight size={16} /></Link></li>)}</ul>
+          <Link href={`/${lang}/journal/`}>{lang === "en" ? "Browse all articles" : "Journal"} <ArrowRight size={16} /></Link>
+        </section>}
       </main>
       <SiteFooter lang={lang} />
     </>

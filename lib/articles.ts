@@ -9,6 +9,7 @@
 
 import { catalogFor } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
+import { GOLF_ARTICLES } from "@/lib/golf-articles";
 
 export interface Article {
   slug: string;
@@ -24,6 +25,10 @@ export interface Article {
   /** Hero image, site-root-relative. */
   img: string;
   alt: string;
+  /** Editorial context is explicit; no invented individual author or guest testimonial. */
+  editorial?: { author: string; note: string; imageCaption: string };
+  relatedArticles?: string[];
+  cta?: { label: string; href: string; text: string };
   /** Per-locale copy. An article renders only in the locales present here. */
   copy: Partial<Record<Lang, ArticleCopy>>;
 }
@@ -33,10 +38,15 @@ export interface ArticleCopy {
   /** One sentence: used on cards, in metadata and as the share description. */
   standfirst: string;
   /** Body paragraphs. A string starting with "## " becomes a subheading. */
-  body: string[];
+  body: ArticleBlock[];
 }
 
+export type ArticleBlock = string
+  | { type: "table"; caption: string; headings: string[]; rows: string[][] }
+  | { type: "link"; text: string; label: string; href: string };
+
 const ARTICLES: Article[] = [
+  ...GOLF_ARTICLES,
   {
     slug: "booking-a-maiko-evening",
     date: "2026-08-20",
