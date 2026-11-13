@@ -1,4 +1,5 @@
 import type { Article } from "@/lib/articles";
+import { golfArticleTranslations } from "@/lib/golf-article-locales";
 
 // Public editorial copy approved for publication by the site owner.
 // Case examples are anonymised; no source correspondence or internal records.
@@ -147,7 +148,7 @@ export const GOLF_ARTICLES: Article[] = ([
     minutes: 6,
     experiences: ["mt-fuji-golf-day"],
     img: "/images/golf-gallery-02-golf-swing.webp",
-    alt: "A golfer preparing a shot on a Japanese course",
+    alt: "A golfer finishing a tee shot on a tree-lined course",
     copy: {
       en: {
         title: "Golf in Japan for one or two players: what ‘solo welcome’ means",
@@ -191,8 +192,8 @@ export const GOLF_ARTICLES: Article[] = ([
     date: "2026-11-13",
     minutes: 6,
     experiences: ["mt-fuji-golf-day"],
-    img: "/images/golf-gallery-03-clubhouse-lobby.webp",
-    alt: "The entrance and reception area of a golf clubhouse",
+    img: "/images/golf-bus/bus-card.webp",
+    alt: "A shared golf shuttle bus",
     copy: {
       en: {
         title: "Getting to golf courses from Tokyo: bus, private car or train?",
@@ -236,8 +237,8 @@ export const GOLF_ARTICLES: Article[] = ([
     date: "2026-11-13",
     minutes: 6,
     experiences: ["mt-fuji-golf-day"],
-    img: "/images/golf-gallery-08-lounge.webp",
-    alt: "A golf clubhouse lounge overlooking the grounds",
+    img: "/images/golf-clubs/xxio-mp800-r-sr.webp",
+    alt: "An example rental golf club set in a golf bag",
     copy: {
       en: {
         title: "Renting golf clubs and shoes in Japan: the details to settle early",
@@ -283,8 +284,8 @@ export const GOLF_ARTICLES: Article[] = ([
     date: "2026-11-13",
     minutes: 6,
     experiences: ["mt-fuji-golf-day"],
-    img: "/images/golf-gallery-09-tonkatsu-lunch.webp",
-    alt: "A Japanese clubhouse lunch with a breaded pork cutlet and side dishes",
+    img: "/images/golf-gallery-06-golf-cart.webp",
+    alt: "Golfers riding a cart on a golf course",
     copy: {
       en: {
         title: "Your first round in Japan: what happens between arrival and the ride home",
@@ -334,8 +335,8 @@ export const GOLF_ARTICLES: Article[] = ([
     date: "2026-11-13",
     minutes: 7,
     experiences: ["mt-fuji-golf-day"],
-    img: "/images/golf-gallery-04-japanese-lunch.webp",
-    alt: "A Japanese meal served at a golf clubhouse",
+    img: "/images/golf-email/chiba-isumi.jpg",
+    alt: "A golf fairway with bunkers and trees",
     copy: {
       en: {
         title: "Booking golf in Japan: what is confirmed, what is paid, and what happens next",
@@ -381,9 +382,10 @@ export const GOLF_ARTICLES: Article[] = ([
   },
 ] satisfies Article[]).map((article) => ({
   ...article,
+  copy: { ...article.copy, ...golfArticleTranslations(article.slug) },
   editorial: {
     author: "KAMEHAME JAPAN",
     note: "Prepared from KAMEHAME JAPAN booking correspondence and operating guidance, with AI assistance. Guest cases are anonymised; enquiries and proposals are not presented as completed trips. Published 13 November 2026. Prices and arrangements remain subject to the specific booking.",
-    imageCaption: "Illustrative image from our existing golf gallery; not a photograph of the guest case described. The course, facilities and conditions for your booking may differ.",
+    imageCaption: "Illustrative image from our golf and equipment pages; not a photograph of the guest case described. The course, equipment, vehicle and conditions for your booking may differ.",
   },
 }));

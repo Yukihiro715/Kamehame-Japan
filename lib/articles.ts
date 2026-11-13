@@ -34,6 +34,10 @@ export interface Article {
 }
 
 export interface ArticleCopy {
+  /** Optional localized image and booking copy. */
+  alt?: string;
+  cta?: Article["cta"];
+  editorial?: Article["editorial"];
   title: string;
   /** One sentence: used on cards, in metadata and as the share description. */
   standfirst: string;
@@ -339,6 +343,7 @@ export const articlesFor = (lang: Lang): Article[] => {
   const listed = new Set(catalogFor(lang).experiences.map((e) => e.slug));
   return ARTICLES
     .filter((a) => a.copy[lang] && a.experiences.some((slug) => listed.has(slug)))
+    .map((a) => ({ ...a, alt: a.copy[lang]!.alt ?? a.alt, cta: a.copy[lang]!.cta ?? a.cta, editorial: a.copy[lang]!.editorial ?? a.editorial }))
     .sort((a, b) => b.date.localeCompare(a.date));
 };
 

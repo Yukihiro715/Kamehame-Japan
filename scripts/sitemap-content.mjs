@@ -152,6 +152,11 @@ export function buildEntries(read) {
   // while one of the experiences they are tagged with is on the site
   // (lib/articles.ts articlesFor).
   const articles = src("lib/articles.ts") + "\n" + src("lib/golf-articles.ts");
+  const golfTranslations = Object.fromEntries(LANGS.filter((lang) => lang !== "en").map((lang) => {
+    const text = src(`lib/golf-articles.${lang}.json`);
+    return [lang, text ? JSON.parse(text) : {}];
+  }));
+  const golfSlugs = new Set([...src("lib/golf-articles.ts").matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]));
   const listed = new Set(experiences.map((e) => e.slug));
   const articlePaths = Object.fromEntries(LANGS.map((l) => [l, []]));
   for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {
@@ -160,10 +165,13 @@ export function buildEntries(read) {
     const tags = [...(block.match(/experiences:\s*\[([^\]]*)\]/)?.[1] ?? "").matchAll(/"([a-z0-9-]+)"/g)].map((t) => t[1]);
     if (!tags.some((t) => listed.has(t))) continue;
     const head = block.slice(0, block.indexOf("copy:"));
-    const langs = LANGS.filter((l) => langBlock(block, l, "      "));
+    const copyFor = (lang) => golfSlugs.has(slug) && golfTranslations[lang]?.[slug]
+      ? JSON.stringify(golfTranslations[lang][slug])
+      : langBlock(block, lang, "      ");
+    const langs = LANGS.filter((l) => copyFor(l));
     for (const lang of langs) {
       articlePaths[lang].push(`/${lang}/journal/${slug}/`);
-      add(`/${lang}/journal/${slug}/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/journal/${slug}/`, langs), key: join(head, langBlock(block, lang, "      ")) });
+      add(`/${lang}/journal/${slug}/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/journal/${slug}/`, langs), key: join(head, copyFor(lang), golfSlugs.has(slug) ? src("lib/journal-copy.ts") : "") });
     }
   }
 
