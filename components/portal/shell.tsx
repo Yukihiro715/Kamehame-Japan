@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Fragment, createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
-import { ArrowUpRight, BookOpen, CalendarDays, ClipboardList, LayoutDashboard, MapPin, Menu, QrCode, Wallet, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, CalendarDays, ClipboardList, LayoutDashboard, MapPin, Menu, FileText, QrCode, Wallet, X } from "lucide-react";
 import { partnerAccess, type PartnerSite } from "./partner-access";
 import { api, errorText } from "./client";
 import { asPortalLang, detectPortalLang, DICT, PORTAL_LANG_NAME, PORTAL_LANGS, setPortalLang, type PortalLang } from "./i18n";
@@ -18,12 +18,12 @@ const Ctx = createContext<PortalState | null>(null);
 export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Error("usePortal outside PortalShell"); return c; };
 
 /** Partner navigation is labelled from the dictionary; operations stay Japanese. */
-const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/reservations/", "reservations"], ["/partner/materials/", "materials"], ["/partner/settlement/", "settlement"], ["/partner/guide/", "guide"]];
+const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/reservations/", "reservations"], ["/partner/materials/", "materials"], ["/partner/brochures/", "brochures"], ["/partner/settlement/", "settlement"], ["/partner/guide/", "guide"]];
 const NAV: Record<Kind, [string, string][]> = {
   hotel: [],
   ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/cases/", "取り次ぎ"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "提携パートナー"], ["/ops/settlement/", "精算"], ["/ops/payouts/", "支払"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
 };
-const NAV_ICONS = { dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, settlement: Wallet, guide: BookOpen };
+const NAV_ICONS = { dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, brochures: FileText, settlement: Wallet, guide: BookOpen };
 const HOTEL_KEY = "kh-portal-hotel";
 const LANG_KEY = "kh-portal-lang";
 
@@ -100,7 +100,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
   const setLang = (l: PortalLang) => { applyLang(l); if (kind === "hotel" && !me.demo) void api("POST", "hotel/lang", { lang: l }).catch(() => {}); };
   const T = DICT[lang];
   const access = partnerAccess(hotel, me.memberships);
-  const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "settlement" ? access.settlement : true);
+  const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "brochures" ? (access.refer || hotel?.features?.cases === true) : key === "settlement" ? access.settlement : true);
   const nav: [string, string][] = kind === "hotel" ? hotelNav.map(([href, key]) => [href, T.nav[key]]) : NAV.ops;
   const active = (href: string) => path.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind === "hotel" ? "partner" : "ops"}/` && path.startsWith(href));
   const pageTitle = titleKey ? titleKey.split(".").reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), T) as string | undefined : title;
