@@ -1,3 +1,4 @@
+import { JOURNAL_COPY } from "@/lib/journal-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -121,9 +122,9 @@ export default async function GolfToursPage({ params }: Props) {
           </div>
         </section>
         {articlesForExperience("mt-fuji-golf-day", lang, 3).length > 0 && <section className="golf-journal-links gb-wrap" aria-labelledby="golf-reading-heading">
-          <h2 id="golf-reading-heading">{lang === "en" ? "Before you book: golf planning guides" : "Golf planning guides"}</h2>
+          <h2 id="golf-reading-heading">{JOURNAL_COPY[lang].planningGuides}</h2>
           <ul>{articlesForExperience("mt-fuji-golf-day", lang, 3).map((article) => <li key={article.slug}><Link href={`/${lang}/journal/${article.slug}/`}>{article.copy[lang]!.title} <ArrowRight size={16} /></Link></li>)}</ul>
-          <Link href={`/${lang}/journal/`}>{lang === "en" ? "Browse all articles" : "Journal"} <ArrowRight size={16} /></Link>
+          <Link href={`/${lang}/journal/`}>{JOURNAL_COPY[lang].all} <ArrowRight size={16} /></Link>
         </section>}
       </main>
       <SiteFooter lang={lang} />

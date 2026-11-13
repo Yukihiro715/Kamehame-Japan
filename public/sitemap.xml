@@ -2588,7 +2588,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/booking-a-maiko-evening/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-a-maiko-evening/"/>
@@ -2596,7 +2596,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/journal/booking-a-maiko-evening/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-a-maiko-evening/"/>
@@ -2604,7 +2604,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/when-to-visit-seasons/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/when-to-visit-seasons/"/>
@@ -2612,7 +2612,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/journal/when-to-visit-seasons/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/when-to-visit-seasons/"/>
@@ -2620,7 +2620,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/tatami-rooms-what-to-know/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/tatami-rooms-what-to-know/"/>
@@ -2628,7 +2628,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/journal/tatami-rooms-what-to-know/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/tatami-rooms-what-to-know/"/>
@@ -2640,6 +2640,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/play-golf-in-japan-as-a-visitor/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/play-golf-in-japan-as-a-visitor/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/play-golf-in-japan-as-a-visitor/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/play-golf-in-japan-as-a-visitor/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/play-golf-in-japan-as-a-visitor/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/play-golf-in-japan-as-a-visitor/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/play-golf-in-japan-as-a-visitor/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/play-golf-in-japan-as-a-visitor/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/play-golf-in-japan-as-a-visitor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/play-golf-in-japan-as-a-visitor/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/golf-day-trip-tokyo-cost/</loc>
@@ -2647,6 +2695,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-day-trip-tokyo-cost/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/golf-day-trip-tokyo-cost/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-day-trip-tokyo-cost/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/golf-day-trip-tokyo-cost/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-day-trip-tokyo-cost/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/golf-day-trip-tokyo-cost/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-day-trip-tokyo-cost/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/golf-day-trip-tokyo-cost/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-day-trip-tokyo-cost/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-day-trip-tokyo-cost/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/golf-near-mount-fuji-from-tokyo/</loc>
@@ -2654,6 +2750,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-near-mount-fuji-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/golf-near-mount-fuji-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-near-mount-fuji-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/golf-near-mount-fuji-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-near-mount-fuji-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/golf-near-mount-fuji-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-near-mount-fuji-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/golf-near-mount-fuji-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-near-mount-fuji-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-near-mount-fuji-from-tokyo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/golf-japan-solo-two-players/</loc>
@@ -2661,6 +2805,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-japan-solo-two-players/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/golf-japan-solo-two-players/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-japan-solo-two-players/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/golf-japan-solo-two-players/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-japan-solo-two-players/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/golf-japan-solo-two-players/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-japan-solo-two-players/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/golf-japan-solo-two-players/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-japan-solo-two-players/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-japan-solo-two-players/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/golf-transport-from-tokyo/</loc>
@@ -2668,6 +2860,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-transport-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/golf-transport-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-transport-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/golf-transport-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-transport-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/golf-transport-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-transport-from-tokyo/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/golf-transport-from-tokyo/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/golf-transport-from-tokyo/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/golf-transport-from-tokyo/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/renting-golf-clubs-shoes-japan/</loc>
@@ -2675,6 +2915,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/renting-golf-clubs-shoes-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/renting-golf-clubs-shoes-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/renting-golf-clubs-shoes-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/renting-golf-clubs-shoes-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/renting-golf-clubs-shoes-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/renting-golf-clubs-shoes-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/renting-golf-clubs-shoes-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/renting-golf-clubs-shoes-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/renting-golf-clubs-shoes-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/renting-golf-clubs-shoes-japan/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/first-golf-round-in-japan/</loc>
@@ -2682,6 +2970,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/first-golf-round-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/first-golf-round-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/first-golf-round-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/first-golf-round-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/first-golf-round-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/first-golf-round-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/first-golf-round-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/first-golf-round-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/first-golf-round-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/first-golf-round-in-japan/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/journal/booking-golf-in-japan/</loc>
@@ -2689,6 +3025,54 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/booking-golf-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/journal/booking-golf-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/booking-golf-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/journal/booking-golf-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/booking-golf-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/journal/booking-golf-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/booking-golf-in-japan/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/journal/booking-golf-in-japan/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/journal/booking-golf-in-japan/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/journal/booking-golf-in-japan/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/about/</loc>
@@ -2813,7 +3197,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/es/journal/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
@@ -2824,7 +3208,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/ja/journal/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
@@ -2835,7 +3219,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/fr/journal/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>
@@ -2846,7 +3230,7 @@
   </url>
   <url>
     <loc>https://kamehame-japan.com/zh-tw/journal/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/journal/"/>

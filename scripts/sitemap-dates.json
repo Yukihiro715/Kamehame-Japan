@@ -52,48 +52,48 @@
     "lastmod": "2026-09-17"
   },
   "/en/journal/booking-a-maiko-evening/": {
-    "hash": "e40a2bc066d3",
-    "lastmod": "2026-10-10"
+    "hash": "044ea7732d06",
+    "lastmod": "2026-11-13"
   },
   "/en/journal/booking-golf-in-japan/": {
-    "hash": "ce74787be95a",
+    "hash": "2f648117348c",
     "lastmod": "2026-11-13"
   },
   "/en/journal/first-golf-round-in-japan/": {
-    "hash": "7dfd7d48010e",
+    "hash": "bafd048dcdc8",
     "lastmod": "2026-11-13"
   },
   "/en/journal/golf-day-trip-tokyo-cost/": {
-    "hash": "f0d2d1e68d2c",
+    "hash": "170eb6282f01",
     "lastmod": "2026-11-13"
   },
   "/en/journal/golf-japan-solo-two-players/": {
-    "hash": "b0da46574501",
+    "hash": "4b35377e8c85",
     "lastmod": "2026-11-13"
   },
   "/en/journal/golf-near-mount-fuji-from-tokyo/": {
-    "hash": "bf02a3465494",
+    "hash": "258edc6e7279",
     "lastmod": "2026-11-13"
   },
   "/en/journal/golf-transport-from-tokyo/": {
-    "hash": "6e76639f24f9",
+    "hash": "adb6778cdaa4",
     "lastmod": "2026-11-13"
   },
   "/en/journal/play-golf-in-japan-as-a-visitor/": {
-    "hash": "76d47ab943d7",
+    "hash": "57bbebfda3a4",
     "lastmod": "2026-11-13"
   },
   "/en/journal/renting-golf-clubs-shoes-japan/": {
-    "hash": "6cded0d6e4ba",
+    "hash": "1df22dfb34f8",
     "lastmod": "2026-11-13"
   },
   "/en/journal/tatami-rooms-what-to-know/": {
-    "hash": "288565aa00f8",
-    "lastmod": "2026-09-17"
+    "hash": "3f9e4c3c889d",
+    "lastmod": "2026-11-13"
   },
   "/en/journal/when-to-visit-seasons/": {
-    "hash": "eae5c4a1b162",
-    "lastmod": "2026-09-17"
+    "hash": "132223147eb8",
+    "lastmod": "2026-11-13"
   },
   "/en/kanazawa/": {
     "hash": "b63097e8fa9a",
@@ -303,6 +303,38 @@
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
   },
+  "/es/journal/booking-golf-in-japan/": {
+    "hash": "a74e365096f5",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/first-golf-round-in-japan/": {
+    "hash": "d64f8da54d05",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/golf-day-trip-tokyo-cost/": {
+    "hash": "ce5f1c96afde",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/golf-japan-solo-two-players/": {
+    "hash": "c25547656b1b",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/golf-near-mount-fuji-from-tokyo/": {
+    "hash": "cf07b92d8bf4",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/golf-transport-from-tokyo/": {
+    "hash": "91c7fc10e80e",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/play-golf-in-japan-as-a-visitor/": {
+    "hash": "1932b20b5400",
+    "lastmod": "2026-11-13"
+  },
+  "/es/journal/renting-golf-clubs-shoes-japan/": {
+    "hash": "e867c8a71cce",
+    "lastmod": "2026-11-13"
+  },
   "/es/kanazawa/": {
     "hash": "e2575e1bf1d7",
     "lastmod": "2026-10-21"
@@ -474,6 +506,38 @@
   "/fr/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
+  },
+  "/fr/journal/booking-golf-in-japan/": {
+    "hash": "de289c894ec7",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/first-golf-round-in-japan/": {
+    "hash": "ec8940ca755a",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/golf-day-trip-tokyo-cost/": {
+    "hash": "888429bf7382",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/golf-japan-solo-two-players/": {
+    "hash": "3d8969199446",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/golf-near-mount-fuji-from-tokyo/": {
+    "hash": "cc1fba16150a",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/golf-transport-from-tokyo/": {
+    "hash": "2b884897ea8c",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/play-golf-in-japan-as-a-visitor/": {
+    "hash": "cb3861bfd1e6",
+    "lastmod": "2026-11-13"
+  },
+  "/fr/journal/renting-golf-clubs-shoes-japan/": {
+    "hash": "1356cd8b0ead",
+    "lastmod": "2026-11-13"
   },
   "/fr/kanazawa/": {
     "hash": "97ad63c91ede",
@@ -648,16 +712,48 @@
     "lastmod": "2026-09-17"
   },
   "/ja/journal/booking-a-maiko-evening/": {
-    "hash": "f71ac85a29ce",
-    "lastmod": "2026-10-10"
+    "hash": "1d8d0185562c",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/booking-golf-in-japan/": {
+    "hash": "f9fe332d2dec",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/first-golf-round-in-japan/": {
+    "hash": "d90951a92837",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/golf-day-trip-tokyo-cost/": {
+    "hash": "9a003218c6b4",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/golf-japan-solo-two-players/": {
+    "hash": "65599205de8f",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/golf-near-mount-fuji-from-tokyo/": {
+    "hash": "5bfd32c3e59d",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/golf-transport-from-tokyo/": {
+    "hash": "3aac8adfbb60",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/play-golf-in-japan-as-a-visitor/": {
+    "hash": "ed46bb28cf47",
+    "lastmod": "2026-11-13"
+  },
+  "/ja/journal/renting-golf-clubs-shoes-japan/": {
+    "hash": "aebe180f8651",
+    "lastmod": "2026-11-13"
   },
   "/ja/journal/tatami-rooms-what-to-know/": {
-    "hash": "fb8c6c71eaf9",
-    "lastmod": "2026-09-17"
+    "hash": "6188ef6abecb",
+    "lastmod": "2026-11-13"
   },
   "/ja/journal/when-to-visit-seasons/": {
-    "hash": "ddaa13aedfd5",
-    "lastmod": "2026-09-17"
+    "hash": "1b9d5d7a1ff8",
+    "lastmod": "2026-11-13"
   },
   "/ja/kanazawa/": {
     "hash": "c16dacf824f2",
@@ -858,6 +954,38 @@
   "/zh-tw/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
+  },
+  "/zh-tw/journal/booking-golf-in-japan/": {
+    "hash": "93c868218c9b",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/first-golf-round-in-japan/": {
+    "hash": "eaf0aad7c868",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/golf-day-trip-tokyo-cost/": {
+    "hash": "b2153a820110",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/golf-japan-solo-two-players/": {
+    "hash": "a65fec3b0988",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/golf-near-mount-fuji-from-tokyo/": {
+    "hash": "c0be60361d76",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/golf-transport-from-tokyo/": {
+    "hash": "868b8970201b",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/play-golf-in-japan-as-a-visitor/": {
+    "hash": "a05b8b91ce1c",
+    "lastmod": "2026-11-13"
+  },
+  "/zh-tw/journal/renting-golf-clubs-shoes-japan/": {
+    "hash": "7df6ecbb577e",
+    "lastmod": "2026-11-13"
   },
   "/zh-tw/kanazawa/": {
     "hash": "50f02c1d1330",

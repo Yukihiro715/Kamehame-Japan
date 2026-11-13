@@ -551,6 +551,8 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
 .journal-card { display:block; background:var(--white); border:2px solid var(--ink); box-shadow:6px 6px 0 rgba(23,26,33,.85); text-decoration:none; color:inherit; transition:transform .15s ease, box-shadow .15s ease; }
 .journal-card:hover { transform:translate(-2px,-2px); box-shadow:8px 8px 0 rgba(23,26,33,.85); }
 .journal-card img { width:100%; height:190px; object-fit:cover; display:block; border-bottom:2px solid var(--ink); }
+/* Keep the photographed rental set visible in both card and article crops. */
+.journal-card img[src*="/golf-clubs/"], .detail-gallery.single .gallery-main[src*="/golf-clubs/"] { object-fit:contain; background:#e9eae4; }
 .journal-card > div { padding:20px 22px 24px; }
 .journal-card h2, .journal-card h3 { margin:6px 0 10px; font-family:var(--font-display); font-weight:400; font-size:20px; letter-spacing:.02em; text-transform:uppercase; line-height:1.2; }
 .journal-card p { margin:0; font-size:13px; line-height:1.75; color:#4a463e; }
