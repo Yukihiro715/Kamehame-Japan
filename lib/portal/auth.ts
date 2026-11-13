@@ -1,11 +1,4 @@
-/** Sign-in and access for the hotel and operations portals.
- *
- *  Passwordless: the user types their e-mail, receives a six-digit code
- *  (ten minutes, five attempts) and gets a session cookie. Who may sign in,
- *  and to what, is decided from `memberships` on the server for every
- *  request; the cookie only identifies the session. Invitations create the
- *  user and the membership up front and mail the sign-in steps, so there is
- *  no invitation token to leak (要件 12). */
+/** Partner password sign-in and operations one-time-code access. Memberships are checked on every request. */
 import { randomId, type SqlDb } from "@/lib/referral/db";
 import { readCookie } from "@/lib/referral/links";
 import { inviteMail, loginCodeMail, mailLangOf, sendPortalMail, type MailLang, type PortalMailEnv } from "./mail";
@@ -75,7 +68,7 @@ async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now:
 /** Step one: mail a code. The answer never says whether the address is known. */
 export async function requestLoginCode(db: SqlDb, env: PortalMailEnv, input: { email: unknown; kind: PortalKind; lang?: unknown }, now = Date.now()): Promise<RequestCodeResult> {
   const email = normalizeEmail(input.email);
-  if (!validEmail(email) || email === DEMO_EMAIL) return { ok: true, sent: false };
+  if (input.kind !== "ops" || !validEmail(email) || email === DEMO_EMAIL) return { ok: true, sent: false };
   if (input.kind === "ops") await bootstrapAdmin(db, env, email, now);
   const user = await eligibleUser(db, email, input.kind);
   if (!user) return { ok: true, sent: false };
@@ -98,7 +91,7 @@ export interface VerifyResult { ok: boolean; error?: "invalid" | "expired" | "lo
 export async function verifyLoginCode(db: SqlDb, input: { email: unknown; code: unknown; kind: PortalKind }, now = Date.now()): Promise<VerifyResult> {
   const email = normalizeEmail(input.email);
   const code = typeof input.code === "string" ? input.code.replace(/\D/g, "") : "";
-  if (email === DEMO_EMAIL || !validEmail(email) || code.length !== 6) return { ok: false, error: "invalid" };
+  if (input.kind !== "ops" || email === DEMO_EMAIL || !validEmail(email) || code.length !== 6) return { ok: false, error: "invalid" };
   const row = await db.first<{ id: string; code_hash: string; expires_at: string; attempts: number }>(
     `SELECT id, code_hash, expires_at, attempts FROM login_codes WHERE email = ? AND kind = ? AND consumed_at IS NULL ORDER BY created_at DESC LIMIT 1`, [email, input.kind]);
   if (!row) return { ok: false, error: "invalid" };
@@ -194,7 +187,7 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
     ]);
   }
   const loginUrl = `${input.loginOrigin}/${input.scopeType === "ops" ? "ops" : "hotel"}/login/`;
-  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
+  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, passwordLogin: input.scopeType === "hotel", roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
   return { userId: user.id, membershipId, mail };
 }
 

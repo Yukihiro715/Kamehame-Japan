@@ -29,6 +29,7 @@ export const jst = (iso: string | null | undefined, withTime = true) => {
   return d.toLocaleString(portalLang() === "en" ? "en-GB" : "ja-JP", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", ...(withTime ? { hour: "2-digit", minute: "2-digit" } : {}) });
 };
 export const ERROR_JA: Record<string, string> = {
+  password_invalid: "IDまたはパスワードが違います。初めての方は初回設定を行ってください。", password_locked: "試行回数の上限です。15分ほど待ってからお試しください。", password_reset_invalid: "設定リンクが無効・期限切れか、パスワードが12〜128文字ではありません。必要に応じてリンクを再発行してください。",
   demo_invalid: "IDまたはパスワードが違います。", demo_locked: "試行回数の上限です。15分ほど待ってからお試しください。", demo_read_only: "デモは閲覧専用です。予約・リンク発行・設定変更はできません。",
   unauthenticated: "サインインしてください。", forbidden: "この操作の権限がありません。", not_found: "見つかりません。", ledger_unavailable: "台帳データベースに接続できません。",
   invalid: "コードが違います。", expired: "コードの有効期限が切れました。もう一度コードを送ってください。", locked: "試行回数の上限です。もう一度コードを送ってください。",

@@ -47,7 +47,7 @@ function client(db, jar = new Map(), mails = []) {
   const env = { DB: db.d1, KH_ENV: "staging", RESEND_API_KEY: "re_test", NOTIFY_ALLOWLIST: "@hotel.example,@example.com" };
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (url, init) => { if (String(url).startsWith("https://api.resend.com/")) { mails.push(JSON.parse(init.body)); return new Response(JSON.stringify({ id: "m" }), { status: 200, headers: { "content-type": "application/json" } }); } return realFetch(url, init); };
-  return {
+  return { db,
     mails, restore: () => { globalThis.fetch = realFetch; },
     async call(method, path, body) {
       const headers = new Headers();
@@ -61,6 +61,14 @@ function client(db, jar = new Map(), mails = []) {
   };
 }
 async function signIn(c, email, kind) {
+  if (kind === "hotel") {
+    const { passwordHash } = await vite.ssrLoadModule("/lib/portal/password-auth.ts");
+    const password = "fixture-password-123", salt = "test-only-salt";
+    await c.db.run(`INSERT OR REPLACE INTO partner_passwords SELECT id,?,?,? FROM users WHERE email=?`, [salt, await passwordHash(password, salt), new Date().toISOString(), email]);
+    const r = await c.call("POST", "auth/password-login", { email, password, kind });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    return;
+  }
   const r1 = await c.call("POST", "auth/request-code", { email, kind });
   // The code travels by (mocked) mail; staging shows it only when no mail could be sent.
   const code = r1.body.devCode ?? c.mails.filter((m) => m.to?.[0] === email).at(-1)?.text.match(/サインインコード: (\d{6})/)?.[1];
