@@ -1,3 +1,4 @@
+import { quarterOf, previousPeriod, payDateFor } from "./settlement";
 /** Fictional, read-only samples. Never inserted into reservations or financial ledgers. */
 import { jstDate } from "@/lib/referral/db";
 import { DEMO_SITE_ID, DEMO_USER_ID } from "./demo-config";
@@ -36,4 +37,13 @@ export function demoCase(id: string) {
   const row = demoCases(new URLSearchParams()).rows.find(r => r.id === id);
   if (!row) return null;
   return { case: { id, public_ref: row.publicRef, partner_ref: row.partnerRef, site_id: DEMO_SITE_ID, siteName: "デモ用", sitePublicId: "HP-DEMO-PUBLIC", entityName: "KAMEHAME デモ用", kind: "experience", experience_slug: "kanji-name-calligraphy", experienceTitle: row.experienceTitle, experienceTitleEn: row.experienceTitleEn, customer_name: row.customerName, customer_email: "sample@example.invalid", customer_phone: null, customer_country: "Japan", preferred_date: row.preferredDate, guests: row.guests, requirements: "英語での案内を希望（架空のサンプル）", lang: "ja", status: row.status, displayStatus: row.status, statusJa: row.status, displayStatusJa: row.status, created_at: row.updatedAt, updated_at: row.updatedAt, createdBy: "デモ担当者", created_by_user_id: DEMO_USER_ID, assignee: "デモ担当者", altDates: [], extra: {}, extraFields: [] }, quotes: row.quoteVersion ? [{ id: `${id}-quote`, version: 1, status: "shared", title: "書道体験（サンプル見積もり）", lines: [{ kind: "base", description: "体験料金", quantity: 1, unitJpy: 44000, grossJpy: 44000, taxRateBp: 1000, commissionable: true }], totalJpy: 44000, onsiteJpy: 0, paymentMode: "stripe", shareUrl: null, createdAt: row.updatedAt, commission: { baseNetJpy: 40000, rateBp: 500, estimateNetJpy: 2000, policyMissing: false } }] : [], messages: [], reservation: null, entry: null, members: [] };
+}
+
+export function demoQuarters() {
+  const current = quarterOf(jstDate()), previous = previousPeriod(current), older = previousPeriod(previous);
+  return [
+    {period:current,status:"accruing",gross:5500,transfer:null,carried:0,payDate:payDateFor(current),paidAt:null,statementId:null},
+    {period:previous,status:"paid",gross:8800,transfer:8800,carried:0,payDate:payDateFor(previous),paidAt:payDateFor(previous),statementId:null},
+    {period:older,status:"paid",gross:4400,transfer:4400,carried:0,payDate:payDateFor(older),paidAt:payDateFor(older),statementId:null},
+  ];
 }

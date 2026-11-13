@@ -63,3 +63,19 @@ test('invalid and retroactive settings are rejected; settings are audited; demo 
   assert.equal((await db.first(`SELECT COUNT(*) n FROM audit_logs WHERE action = 'commission_rate.create' AND actor != 'migration:0015'`)).n, 1);
   assert.equal((await db.first(`SELECT name FROM hotels WHERE public_id = 'HP-DEMO'`)).name, 'デモ用（社内確認）');
 });
+
+test('published experiences without individual policies inherit the common rate in display and ledger', async () => {
+  const db = await seed();
+  const {catalogFor} = await vite.ssrLoadModule('/lib/catalog.ts');
+  const x = catalogFor('ja').experiences.find(x=>x.status==='live'&&x.slug!==slug);
+  const p = await R.policyFor(db,x.slug,T,'site-prosent-demo');
+  assert.equal(p.rate_bp,500);assert.equal(p.id,null);
+  const term = (await M.experienceTerms(db,T,'site-prosent-demo')).find(t=>t.slug===x.slug);
+  assert.equal(term.referable,true);assert.equal(term.rateBp,500);
+  const created = await R.createReservation(db,{requestId:'common-default',flow:'experience',experienceSlug:x.slug,lines:[{kind:'base',description:'Test',commissionable:true,grossJpy:22000}]},{hotelId:'site-prosent-demo',chainProfileId:null,linkId:null,sessionId:null,medium:null},T);
+  const snap=await db.first('SELECT rate_bp,policy_id,rate_setting_id FROM reservation_referrals WHERE reservation_id=?',[created.id]);
+  assert.equal(snap.rate_bp,500);assert.equal(snap.policy_id,null);assert.equal(snap.rate_setting_id,'common-rate-five-percent');
+  assert.equal((await db.first('SELECT commission_net_jpy FROM commission_entries WHERE reservation_id=?',[created.id])).commission_net_jpy,1000);
+  await db.run(`INSERT INTO experience_referral_policies (id,experience_slug,rate_bp,tax_rate_bp,referral_enabled,valid_from,created_at) VALUES ('disabled',?,500,1000,0,'2026-01-01','')`,[x.slug]);
+  assert.equal(await R.policyFor(db,x.slug,T,'site-prosent-demo'),null);
+});

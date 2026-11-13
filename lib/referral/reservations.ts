@@ -1,3 +1,4 @@
+import { catalogFor } from "@/lib/catalog";
 /** Reservations, their lines, the fixed attribution and the commission entry.
  *
  *  A reservation is written here in the same batch as its referral, so the
@@ -23,7 +24,7 @@ export interface NewReservation {
   /** True when the site cannot state the chargeable amount yet (quotes, enquiries). */
   amountPending?: boolean;
 }
-export interface PolicyRow { id: string; rate_bp: number; tax_rate_bp: number; version: number; referral_enabled: number; rate_setting_id?: string | null }
+export interface PolicyRow { id: string | null; rate_bp: number; tax_rate_bp: number; version: number; referral_enabled: number; rate_setting_id?: string | null }
 export type ReferralStatus = "attributed" | "rate_missing" | "payee_missing";
 
 /** The commission terms in force for an experience at `now` (latest valid_from). */
@@ -32,8 +33,12 @@ export async function policyFor(db: SqlDb, slug: string, now = Date.now(), hotel
     `SELECT id, rate_bp, tax_rate_bp, version, referral_enabled FROM experience_referral_policies
       WHERE experience_slug = ? AND valid_from <= ? ORDER BY valid_from DESC, version DESC LIMIT 1`,
     [slug, new Date(now).toISOString()]);
-  if (!row?.referral_enabled) return null;
+  if (row && !row.referral_enabled) return null;
   const rate = await effectiveRate(db, hotelId, now, profileId);
+  if (!row) {
+    if (rate?.rate_bp == null || !catalogFor("ja").experiences.some(x => x.slug === slug && x.status === "live")) return null;
+    return { id: null, version: 0, referral_enabled: 1, tax_rate_bp: 1000, rate_bp: rate.rate_bp, rate_setting_id: rate.id };
+  }
   return { ...row, rate_bp: rate?.rate_bp ?? row.rate_bp, rate_setting_id: rate?.id ?? null };
 }
 

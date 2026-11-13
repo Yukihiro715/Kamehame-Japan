@@ -404,3 +404,54 @@ test('normal partner password attempts are limited; disabled and revoked account
   await db.run("UPDATE memberships SET revoked_at='2026-01-01' WHERE user_id=(SELECT id FROM users WHERE email='limit@example.com')");
   assert.equal((await c.call('POST','auth/password-login',{kind:'hotel',email:'limit@example.com',password:'fixture-password-123'})).status,401);
 });
+
+test('bank updates require billing scope, encrypt account numbers and remain isolated from demo and booking operators', async()=>{
+  const db=openTestDb();await seed(db);
+  await auth.inviteMember(db,{}, {email:'billing@example.com',role:'hotel_billing',scopeType:'hotel',scopeId:'hA',by:'test',loginOrigin:ORIGIN,scopeLabel:'A'});
+  const env={PORTAL_BANK_KEY:'ab'.repeat(32)}, c=client(db,env);await signIn(c,'billing@example.com','hotel');
+  const input={profileId:'spA',bank:'Test Bank',branch:'Test Branch',type:'ordinary',number:'1234567',holder:'テスト'};
+  assert.equal((await c.call('POST','hotel/bank',input,{noOrigin:true})).status,403);
+  assert.equal((await c.call('POST','hotel/bank',{...input,profileId:'spB'})).status,403);
+  assert.equal((await c.call('POST','hotel/bank',{...input,number:'123'})).status,400);
+  assert.equal((await c.call('POST','hotel/bank',input)).status,200);
+  const row=await db.first("SELECT * FROM settlement_profiles WHERE id='spA'");
+  assert.ok(!row.bank_details_enc.includes('1234567'));assert.match(row.bank_details_masked,/\*\*\*4567/);
+  const B=await vite.ssrLoadModule('/lib/portal/bank.ts');
+  await assert.rejects(B.saveBank(db,'spA',input,'test'),/準備中/);
+  await db.run("UPDATE settlement_profiles SET bank_details_enc=? WHERE id='spB'",[row.bank_details_enc]);
+  await assert.rejects(B.readBank(db,'spB',env.PORTAL_BANK_KEY),'ciphertext is bound to its payment profile');
+  const view=await c.call('GET','hotel/settlement');assert.ok(!JSON.stringify(view.body).includes('1234567'));assert.equal(view.body.profile.payee_name,'テスト');
+  const admin=client(db,env);await signIn(admin,'admin@example.com','ops');
+  assert.equal((await admin.call('GET','ops/bank/spA')).body.bank.number,'1234567');
+  await db.run("UPDATE memberships SET role='ops_booking' WHERE id='m-admin'");
+  assert.equal((await admin.call('GET','ops/bank/spA')).status,403);
+  await db.run("INSERT INTO settlement_profile_hotels VALUES ('spA','hB','2026-01-01',NULL)");
+  assert.equal((await c.call('POST','hotel/bank',input)).status,403,'billing rights on all grouped sites required');
+  const login=await demoFixture(db), demo=client(db,env);await demo.call('POST','auth/demo-login',login);
+  assert.equal((await demo.call('POST','hotel/bank',input)).status,403);
+});
+
+test('demo QR previews do not create live referral links and quarterly samples reconcile', async()=>{
+  const db=openTestDb(),login=await demoFixture(db),c=client(db);await c.call('POST','auth/demo-login',login);
+  const material=(await c.call('GET','hotel/demo-material?experience=kanji-name-calligraphy')).body;
+  assert.match(material.url.url,/^https:\/\/example.invalid\//);
+  assert.equal((await c.call('GET',`hotel/qr?link=${encodeURIComponent(material.qr.id)}`)).status,200);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM referral_links')).n,0);
+  const settle=(await c.call('GET','hotel/settlement')).body;
+  assert.equal(settle.quarters.filter(r=>r.status==='paid').reduce((n,r)=>n+r.transfer,0),settle.balance.paid);
+  assert.equal(settle.quarters.find(r=>r.status==='accruing').transfer,null);
+});
+
+test('quarterly payments exclude void/draft statements, retain actual transfers and separate unstated accruals', async()=>{
+  const db=openTestDb();await seed(db);
+  const S=await vite.ssrLoadModule('/lib/portal/settlement.ts');
+  for (const [id,period,status,gross,transfer,carry] of [['paid','2026-Q1','settled',5500,5280,0],['void','2026-Q1','void',9900,9680,0],['scheduled','2026-Q2','issued',6600,6380,0],['carry','2026-Q3','issued',1100,0,1100],['draft','2026-Q4','draft',7700,7480,0]]) {
+    await db.run(`INSERT INTO statements (id,profile_id,period,version,status,gross_jpy,transfer_jpy,carried_out_jpy,created_at,updated_at) VALUES (?,'spA',?,?, ?,?,?,?,'','')`,[id,period,id==='void'?2:1,status,gross,transfer,carry]);
+  }
+  const rows=await S.partnerQuarterPayments(db,'hA',await S.statementsOfProfiles(db,['spA']));
+  assert.equal(rows.length,3);assert.equal(rows.find(r=>r.status==='paid').transfer,5280);assert.equal(await S.paidTotalForHotel(db,'hA'),5280);assert.equal(rows.find(r=>r.status==='carried').carried,1100);assert.equal(rows.find(r=>r.status==='scheduled').transfer,6380);
+  const r=await R.createReservation(db,{requestId:'quarter',flow:'experience',experienceSlug:'kanji-name-calligraphy',lines:[{kind:'base',description:'test',commissionable:true,grossJpy:22000}]},{hotelId:'hA',chainProfileId:null,linkId:null,sessionId:null,medium:null});
+  await db.run(`UPDATE commission_entries SET status='confirmed',hold_reason=NULL,performed_on_jst='2026-10-12',commission_net_jpy=1000 WHERE reservation_id=?`,[r.id]);
+  const pending=(await S.partnerQuarterPayments(db,'hA',[]))[0];assert.equal(pending.period,'2026-Q4');assert.equal(pending.gross,1100);assert.equal(pending.transfer,null);
+  assert.equal((await S.partnerQuarterPayments(db,'hB',[])).length,0);
+});
