@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, yen } from "../client";
+import { helpText, TermLabel, type HelpTerm } from "../help";
 import { usePortal } from "../shell";
 import { Badge, Button, Card, Field, Loading, Notice, Stat, Table } from "../ui";
 import { periodLabel } from "../statement-sheet";
@@ -26,11 +27,11 @@ export function HotelSettlement() {
   return <>
     {err && <Notice tone="bad">{err}</Notice>}{msg && <Notice tone="ok">{msg}</Notice>}
     <Card title={en?"Commission payments":"紹介料のお支払い"}>
-      <div className="pt-grid"><Stat label={en?"Total transferred":"支払い済み合計（振込額）"} value={yen(paid)} note={en?"All quarters · after transfer fees":"全四半期の合計・振込手数料控除後"}/><Stat label={en?"Scheduled transfers":"支払い予定合計（確定分）"} value={yen(scheduled)} note={en?"Issued statements only":"発行済み精算書の振込予定額"}/></div>
+      <div className="pt-grid"><Stat label={en?"Total transferred":"支払い済み合計（振込額）"} value={yen(paid)} help={<p>{helpText("paidTotal",en)}</p>} note={en?"All quarters · after transfer fees":"全四半期の合計・振込手数料控除後"}/><Stat label={en?"Scheduled transfers":"支払い予定合計（確定分）"} value={yen(scheduled)} help={<p>{helpText("scheduled",en)}</p>} note={en?"Issued statements only":"発行済み精算書の振込予定額"}/></div>
       <p className="pt-note-box">{en ? "Payments are grouped by calendar quarter and scheduled for the following month-end. Accruing rows show completed experiences not yet on an issued statement; the transfer amount is not final. Below the minimum, the balance carries forward." : "1〜3月・4〜6月・7〜9月・10〜12月ごとに精算し、翌月末に振り込みます。「集計中」は実施確認済みで精算書の発行前の紹介料です。振込額は未確定で、最低振込額に満たない場合は次期へ繰り越します。"} {en?"Minimum transfer: ":"最低振込額："}{yen(data.profile?.min_payout_jpy??3000)}</p>
     </Card>
     <Card title={en?"Quarterly payment history & schedule":"四半期別のお支払い予定・履歴"}>
-      <Table head={en?["Quarter","Status","Commission incl. tax","Transfer","Carry forward","Scheduled date","Paid date","Statement"]:["対象四半期","状態","紹介料（税込）","振込額","次期繰越","支払い予定日","支払い日","明細"]} rows={data.quarters.map(r=>[periodLabel(r.period),<Badge key="s" tone={r.status==="paid"?"ok":r.status==="disputed"?"bad":"warn"}>{statuses[r.status]}</Badge>,yen(r.gross),r.transfer===null?(en?"Not final":"未確定"):yen(r.transfer),yen(r.carried),r.payDate??"—",r.paidAt??"—",r.statementId?<a key="link" href={`/partner/settlement/${r.statementId}/`}>{en?"View":"精算書"}</a>:me.demo?(en?"Sample":"サンプル"):"—"])} empty={en?"No commission payments yet.":"紹介料のお支払い実績はまだありません。"} compact/>
+      <Table head={(en?["Quarter","Status","Commission incl. tax","Transfer","Carry forward","Scheduled date","Paid date","Statement"]:["対象四半期","状態","紹介料（税込）","振込額","次期繰越","支払い予定日","支払い日","明細"]).map((name,i)=>{const term:HelpTerm|undefined=(["quarter","settlementStatus",undefined,"transfer","carry"] as (HelpTerm|undefined)[])[i];return term?<TermLabel key={i} label={name} term={term} en={en}/>:name;})} rows={data.quarters.map(r=>[periodLabel(r.period),<Badge key="s" tone={r.status==="paid"?"ok":r.status==="disputed"?"bad":"warn"}>{statuses[r.status]}</Badge>,yen(r.gross),r.transfer===null?(en?"Not final":"未確定"):yen(r.transfer),yen(r.carried),r.payDate??"—",r.paidAt??"—",r.statementId?<a key="link" href={`/partner/settlement/${r.statementId}/`}>{en?"View":"精算書"}</a>:me.demo?(en?"Sample":"サンプル"):"—"])} empty={en?"No commission payments yet.":"紹介料のお支払い実績はまだありません。"} compact/>
       <p className="pt-small pt-muted">{en?"Accruals cover this site; issued statements may combine sites sharing the same payment destination. Transfer amounts include carry-over and deduct bank fees. A past estimated date is subject to settlement processing.":"集計中の行はこの拠点の実績です。精算書は同じ支払い先の複数拠点をまとめる場合があります。振込額は前期繰越・振込手数料を反映した金額です。予定日を過ぎた集計中の金額は精算処理後に確定します。"}</p>
     </Card>
     <Card title={en?"Payment destination":"精算・支払い先"}>

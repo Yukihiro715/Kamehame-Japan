@@ -413,3 +413,27 @@
   .pt-partner .pt-form { grid-template-columns: minmax(0, 1fr); }
   .pt-partner .pt-main, .pt-partner .pt-card { min-width: 0; }
 }
+
+/* Term explanations are native dialogs so taps work on mobile as well as keyboard. */
+.pt-term-label { display: inline-flex; align-items: center; gap: 5px; }
+.pt-info-button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 32px; height: 32px; padding: 4px; border: 0; border-radius: 50%; color: #94603e; background: transparent; cursor: pointer; vertical-align: middle; }
+.pt-info-button:hover { background: #fff0e3; }
+.pt-info-button:focus-visible { outline: 2px solid #b74908; outline-offset: 2px; }
+.pt-help-dialog { width: min(480px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 0; border: 1px solid #e6dfd7; border-radius: 16px; background: #fff; color: #302b27; box-shadow: 0 16px 70px #0003; }
+.pt-help-dialog::backdrop { background: #211a1766; }
+.pt-help-content { padding: 24px; display: grid; gap: 20px; font: 15px/1.8 sans-serif; }
+.pt-help-content header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.pt-help-content h2 { margin: 0; font-size: 18px; line-height: 1.5; }
+.pt-help-content p { margin: 0 0 12px; }
+.pt-help-content p:last-child { margin-bottom: 0; }
+.pt-help-content > .pt-btn { justify-self: end; min-width: 100px; }
+.pt-stat-value-link { display: flex; align-items: center; justify-content: space-between; gap: 4px; color: inherit; text-decoration: none; }
+.pt-stat-value-link:hover { color: #b74908; }
+.pt-stat-value-link svg { flex-shrink: 0; }
+.pt-kpis-five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.pt-help-terms { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-bottom: 16px; font-size: 12px; color: #716256; }
+@media (max-width: 1250px) { .pt-kpis-five { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pt-kpis-five > :last-child { grid-column: 1 / -1; } }
+@media (max-width: 400px) { .pt-kpis-five .pt-stat-v { font-size: 22px; overflow-wrap: anywhere; } }
+
+.pt-kpis-five .pt-stat-v { font-size: clamp(20px, 2vw, 30px); overflow-wrap: anywhere; }
+.pt-help-dialog .pt-btn-primary { background: #b74908; border-color: #b74908; color: #fff; }

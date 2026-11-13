@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { api, errorText, jst, pct, yen } from "../client";
 import { label, t } from "../i18n";
+import { TermLabel, type HelpTerm } from "../help";
 import { usePortal } from "../shell";
 import { Badge, Button, Card, Loading, Notice, Table } from "../ui";
 
 interface Row { hotelRef: string; createdAt: string; experience: string; experienceDate: string | null; guests: number | null; status: string; paymentStatus: string; baseNet: number | null; rateBp: number | null; commissionNet: number | null; commissionGrossRef: number | null; entryStatus: string | null; holdCodes: string[]; performedOn: string | null }
 
 const tone = (s: string | null) => (s === "confirmed" || s === "adjusted" ? "ok" : s === "pending" ? "warn" : s === "voided" ? "bad" : "neutral");
+const HEADER_HELP: Record<number, HelpTerm> = { 5: "bookingStatus", 6: "payment", 7: "base", 8: "rate", 9: "commission", 10: "tax", 11: "entry" };
 const EMPTY = { from: "", to: "", experienceFrom: "", experienceTo: "", status: "", ref: "" };
 
 export function HotelReservations() {
@@ -32,6 +34,7 @@ export function HotelReservations() {
   const data = loaded?.key === key ? loaded.value : null;
   return (
     <Card title={R.title}>
+      <div className="pt-help-terms">{[7,8,9,11].map(i => <TermLabel key={i} label={R.head[i]} term={HEADER_HELP[i]} en={lang === "en"}/>)}</div>
       <p className="pt-note-box">{lang === "en" ? "Results and commissions for guest bookings through referral links and completed booking requests. To arrange a booking on behalf of a guest, use Bookings on behalf of guests." : "紹介リンクからのお客様の予約や、代理予約で成立した予約の実績・紹介料を確認する画面です。お客様に代わって予約を依頼する場合は「代理予約・相談」をご利用ください。"}</p>
       <div className="pt-form">
         <label className="pt-field"><span className="pt-field-l">{R.from}</span><input type="date" value={f.from} onChange={(e) => setF({ ...f, from: e.target.value })} /></label>
@@ -48,7 +51,7 @@ export function HotelReservations() {
         <>
           <p className="pt-small pt-muted">{C.items(data.total)} · {R.note}</p>
           <div className="pt-reservation-table"><Table
-            head={R.head}
+            head={R.head.map((name, i) => HEADER_HELP[i] ? <TermLabel key={i} label={name} term={HEADER_HELP[i]} en={lang === "en"}/> : name)}
             rows={data.rows.map((r) => [
               <code key="r">{r.hotelRef}</code>, jst(r.createdAt, false), r.experience, r.experienceDate ?? "—", r.guests ?? "—",
               <Badge key="s" tone={r.status === "completed" || r.status === "confirmed" ? "ok" : r.status === "cancelled" || r.status === "no_show" ? "bad" : "neutral"}>{label(S.reservation, r.status)}</Badge>,
