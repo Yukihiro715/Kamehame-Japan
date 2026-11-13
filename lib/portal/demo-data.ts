@@ -7,16 +7,28 @@ import type { HotelReservationRow, HotelDashboard, Period, ReservationFilters } 
 import { RESERVATION_STATUS_JA, PAYMENT_STATUS_JA, ENTRY_STATUS_JA } from "./util";
 const month = () => jstDate().slice(0, 7);
 const date = (day: number) => `${month()}-${String(day).padStart(2, "0")}`;
+const experiences = [
+  { slug: "kanji-name-calligraphy", title: "漢字の名前・書道体験", search: "Calligraphy" },
+  { slug: "shibuya-ramen-class", title: "渋谷のラーメン作り体験", search: "Ramen" },
+  { slug: "nerima-herbal-bath-private-spa", title: "練馬で薬草入浴剤作りと貸切温泉スパ", search: "Herbal bath private spa" },
+];
 export function demoRows(): HotelReservationRow[] {
-  return ["completed", "completed", "confirmed", "confirmed", "provisional", "cancelled"].map((status, i) => {
-    const baseNet = [60000, 40000, 80000, 30000, 50000, 20000][i], commissionNet = status === "cancelled" ? 0 : baseNet * .05;
-    const entryStatus = i < 2 ? "confirmed" : status === "cancelled" ? "cancelled" : "estimated", paymentStatus = i < 4 ? "paid" : "unpaid";
-    return { hotelRef: `R-DEMO0${i + 1}`, createdAt: `${date(i + 1)}T03:00:00Z`, experience: "漢字の名前・書道体験（サンプル）", experienceSlug: "kanji-name-calligraphy", experienceDate: date(8 + i * 3), guests: i % 3 + 2, status, statusJa: RESERVATION_STATUS_JA[status] ?? status, paymentStatus, paymentJa: PAYMENT_STATUS_JA[paymentStatus] ?? paymentStatus, bookingGross: baseNet * 1.1, baseNet, rateBp: 500, commissionNet, commissionGrossRef: commissionNet * 1.1, entryStatus, entryJa: ENTRY_STATUS_JA[entryStatus] ?? entryStatus, hold: null, holdCodes: [], performedOn: i < 2 ? date(8 + i * 3) : null };
+  const today = jstDate(), elapsedDays = Number(today.slice(8, 10));
+  return Array.from({ length: 60 }, (_, i) => {
+    const status = i < 30 ? "completed" : i < 48 ? "confirmed" : i < 56 ? "provisional" : i < 58 ? "arranging" : "cancelled";
+    const baseNet = [60000, 40000, 80000, 30000, 50000, 20000][i % 6], commissionNet = status === "cancelled" ? 0 : baseNet * .05;
+    const entryStatus = status === "completed" ? "confirmed" : status === "cancelled" ? "voided" : "estimated", paymentStatus = i < 48 ? "paid" : "unpaid";
+    const bookedDay = 1 + Math.floor(i * elapsedDays / 60), experience = experiences[i % experiences.length];
+    // Completed samples never occur in the future, including on the first of a month.
+    const experienceDate = status === "completed" ? date(Math.min(elapsedDays, bookedDay + 2)) : new Date(`${today}T12:00:00+09:00`);
+    if (experienceDate instanceof Date) experienceDate.setUTCDate(experienceDate.getUTCDate() + 1 + i % 21);
+    const experienceOn = typeof experienceDate === "string" ? experienceDate : experienceDate.toISOString().slice(0, 10);
+    return { hotelRef: `R-DEMO${String(i + 1).padStart(2, "0")}`, createdAt: `${date(bookedDay)}T00:${String(i % 60).padStart(2, "0")}:00Z`, experience: `${experience.title}（サンプル）`, experienceSlug: experience.slug, experienceDate: experienceOn, guests: i % 3 + 2, status, statusJa: RESERVATION_STATUS_JA[status] ?? status, paymentStatus, paymentJa: PAYMENT_STATUS_JA[paymentStatus] ?? paymentStatus, bookingGross: Math.round(baseNet * 1.1), baseNet, rateBp: 500, commissionNet, commissionGrossRef: Math.round(commissionNet * 1.1), entryStatus, entryJa: ENTRY_STATUS_JA[entryStatus] ?? entryStatus, hold: null, holdCodes: [], performedOn: status === "completed" ? experienceOn : null };
   });
 }
 export function demoReservations(f: ReservationFilters = {}) {
   const query = f.q?.trim().slice(0,100).toLowerCase();
-  const rows = demoRows().filter(r => (!f.from || r.createdAt.slice(0,10) >= f.from) && (!f.to || r.createdAt.slice(0,10) <= f.to) && (!f.experienceFrom || r.experienceDate! >= f.experienceFrom) && (!f.experienceTo || r.experienceDate! <= f.experienceTo) && (!f.status || r.status === f.status) && (!f.ref || r.hotelRef === f.ref.toUpperCase()) && (!f.experience || r.experienceSlug === f.experience) && (!query || `${r.hotelRef} ${r.experience} ${r.experienceSlug} Calligraphy`.toLowerCase().includes(query)));
+  const rows = demoRows().filter(r => (!f.from || r.createdAt.slice(0,10) >= f.from) && (!f.to || r.createdAt.slice(0,10) <= f.to) && (!f.experienceFrom || r.experienceDate! >= f.experienceFrom) && (!f.experienceTo || r.experienceDate! <= f.experienceTo) && (!f.status || r.status === f.status) && (!f.ref || r.hotelRef === f.ref.toUpperCase()) && (!f.experience || r.experienceSlug === f.experience) && (!query || `${r.hotelRef} ${r.experience} ${r.experienceSlug} ${experiences.find(e => e.slug === r.experienceSlug)?.search ?? ""}`.toLowerCase().includes(query)));
   const sort = reservationSort(f.sort), direction = f.direction === "asc" ? 1 : -1;
   const value = (r: HotelReservationRow): string | number | null => sort === "created" ? r.createdAt : sort === "date" ? r.experienceDate : sort === "amount" ? r.bookingGross : sort === "rate" ? r.rateBp : sort === "commission" ? r.commissionNet : sort === "status" ? ["provisional","arranging","confirmed","completed","cancelled","no_show"].indexOf(r.status) : r.entryStatus ? ["estimated","pending","confirmed","adjusted","voided"].indexOf(r.entryStatus) : null;
   rows.sort((a,b) => { const x=value(a), y=value(b); return x===null && y!==null ? 1 : y===null && x!==null ? -1 : x!==null && y!==null && x!==y ? (x<y?-1:1)*direction : a.hotelRef.localeCompare(b.hotelRef); });
@@ -25,9 +37,10 @@ export function demoReservations(f: ReservationFilters = {}) {
   const offset = Math.max(0, f.offset ?? 0), limit = Math.min(500, Math.max(1, f.limit ?? 25));
   return { rows: rows.slice(offset, offset + limit), total: rows.length, summary };
 }
-export const demoBalance = { unpaidNet: 5000, unpaidTaxRef: 500, paid: 13200 };
+const unpaidNet = demoRows().filter(r => r.entryStatus === "confirmed").reduce((sum, r) => sum + r.commissionNet!, 0);
+export const demoBalance = { unpaidNet, unpaidTaxRef: unpaidNet / 10, paid: 154000 };
 export function demoDashboard(period: Period): HotelDashboard {
-  const rows = demoReservations(period).rows, done = demoRows().filter(r => r.performedOn && r.performedOn >= period.from && r.performedOn <= period.to);
+  const rows = demoReservations({ ...period, limit: 500 }).rows, done = demoRows().filter(r => r.performedOn && r.performedOn >= period.from && r.performedOn <= period.to);
   const net = done.reduce((n,r) => n + r.commissionNet!,0);
   return { period, visitorCountPartial: false, updatedAt: new Date().toISOString(), funnel: { accesses: rows.length * 40, visits: rows.length * 27, provisional: rows.filter(r => ["provisional","arranging"].includes(r.status)).length, confirmed: rows.filter(r => ["completed","confirmed"].includes(r.status)).length, paid: rows.filter(r => r.paymentStatus === "paid").length, fullyRefunded: 0, cancelled: rows.filter(r => r.status === "cancelled").length, estimatedCommissionNet: rows.filter(r => r.entryStatus === "estimated" && !r.performedOn && ["provisional","arranging","confirmed"].includes(r.status)).reduce((n,r) => n + r.commissionNet!,0) }, confirmed: { count: done.length, baseNet: done.reduce((n,r) => n+r.baseNet!,0), commissionNet: net, commissionTaxRef: net*.1 }, balance: demoBalance };
 }
@@ -49,8 +62,8 @@ export function demoCase(id: string) {
 export function demoQuarters() {
   const current = quarterOf(jstDate()), previous = previousPeriod(current), older = previousPeriod(previous);
   return [
-    {period:current,status:"accruing",gross:5500,transfer:null,carried:0,payDate:payDateFor(current),paidAt:null,statementId:null},
-    {period:previous,status:"paid",gross:8800,transfer:8800,carried:0,payDate:payDateFor(previous),paidAt:payDateFor(previous),statementId:null},
-    {period:older,status:"paid",gross:4400,transfer:4400,carried:0,payDate:payDateFor(older),paidAt:payDateFor(older),statementId:null},
+    {period:current,status:"accruing",gross:demoBalance.unpaidNet + demoBalance.unpaidTaxRef,transfer:null,carried:0,payDate:payDateFor(current),paidAt:null,statementId:null},
+    {period:previous,status:"paid",gross:88000,transfer:88000,carried:0,payDate:payDateFor(previous),paidAt:payDateFor(previous),statementId:null},
+    {period:older,status:"paid",gross:66000,transfer:66000,carried:0,payDate:payDateFor(older),paidAt:payDateFor(older),statementId:null},
   ];
 }

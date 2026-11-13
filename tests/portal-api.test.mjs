@@ -373,22 +373,24 @@ test('demo samples filter correctly, agree with 5% totals, and never enter the l
   const db = openTestDb(), login = await demoFixture(db), c = client(db);
   await c.call('POST', 'auth/demo-login', login);
   const rows = (await c.call('GET','hotel/reservations')).body;
-  assert.equal(rows.total,6);
-  assert.equal(rows.rows[0].hotelRef,'R-DEMO06');
-  const completed = (await c.call('GET','hotel/reservations?status=completed')).body;
-  assert.equal(completed.total,2);
+  assert.equal(rows.total,60);
+  assert.equal(rows.rows.length,25);
+  assert.equal(rows.rows[0].hotelRef,'R-DEMO60');
+  const completed = (await c.call('GET','hotel/reservations?status=completed&limit=500')).body;
+  assert.equal(completed.total,30);
   for (const r of completed.rows) { assert.equal(r.rateBp,500); assert.equal(r.commissionNet,r.baseNet*.05); }
   const dash = (await c.call('GET','hotel/dashboard')).body;
   assert.equal(dash.confirmed.commissionNet,completed.rows.reduce((n,r) => n+r.commissionNet,0));
-  assert.equal(dash.funnel.provisional,1);
-  assert.equal(dash.funnel.confirmed,4);
-  assert.equal(dash.funnel.estimatedCommissionNet,8000);
+  assert.equal(dash.funnel.provisional,10);
+  assert.equal(dash.funnel.confirmed,48);
+  assert.equal(dash.funnel.visits,1620);
+  assert.equal(dash.funnel.estimatedCommissionNet,66500);
   assert.equal((await c.call('GET','hotel/reservations?ref=missing')).body.total,0);
   const cases = (await c.call('GET','hotel/cases')).body;
   assert.equal(cases.total,3);
   assert.equal((await c.call('GET',`hotel/cases/${cases.rows[0].id}`)).status,200);
   assert.equal((await c.call('GET','hotel/cases/unknown')).status,404);
-  assert.equal((await c.call('GET','hotel/settlement')).body.balance.unpaidNet,5000);
+  assert.equal((await c.call('GET','hotel/settlement')).body.balance.unpaidNet,70000);
   assert.equal((await db.first('SELECT COUNT(*) AS n FROM reservations')).n,0);
   assert.equal((await db.first('SELECT COUNT(*) AS n FROM commission_entries')).n,0);
   assert.equal((await db.first("SELECT rate_bp FROM partner_commission_rates WHERE id='common-rate-five-percent'")).rate_bp,500);
@@ -444,6 +446,7 @@ test('demo QR previews do not create live referral links and quarterly samples r
   const settle=(await c.call('GET','hotel/settlement')).body;
   assert.equal(settle.quarters.filter(r=>r.status==='paid').reduce((n,r)=>n+r.transfer,0),settle.balance.paid);
   assert.equal(settle.quarters.find(r=>r.status==='accruing').transfer,null);
+  assert.equal(settle.quarters.find(r=>r.status==='accruing').gross,settle.balance.unpaidNet + settle.balance.unpaidTaxRef);
 });
 
 test('quarterly payments exclude void/draft statements, retain actual transfers and separate unstated accruals', async()=>{
@@ -542,8 +545,33 @@ test("demo reservation sheet mirrors ordering, search and full-result summaries"
   const {demoReservations}=await vite.ssrLoadModule('/lib/portal/demo-data.ts');
   const first=demoReservations({sort:'commission',direction:'desc',limit:2});
   const next=demoReservations({sort:'commission',direction:'desc',limit:2,offset:2});
-  assert.equal(first.total,6);assert.equal(first.rows[0].commissionNet,4000);assert.deepEqual(first.summary,next.summary);
-  assert.deepEqual(first.summary,{estimatedNet:8000,pendingNet:0,confirmedNet:5000,unknownCount:0});
-  const pending=demoReservations({status:'provisional'});assert.equal(pending.total,1);assert.equal(pending.summary.estimatedNet,2500);
-  assert.equal(demoReservations({q:'demo03'}).total,1);assert.equal(demoReservations({q:'Calligraphy'}).total,6);
+  assert.equal(first.total,60);assert.equal(first.rows[0].commissionNet,4000);assert.deepEqual(first.summary,next.summary);
+  assert.deepEqual(first.summary,{estimatedNet:66500,pendingNet:0,confirmedNet:70000,unknownCount:0});
+  const pending=demoReservations({status:'provisional'});assert.equal(pending.total,8);assert.equal(pending.summary.estimatedNet,19000);
+  assert.equal(demoReservations({q:'demo03'}).total,1);assert.equal(demoReservations({q:'Calligraphy'}).total,20);
+});
+
+// Exercise calendar boundaries as well as the regular end-of-month fixture.
+test('expanded demo rows paginate without gaps and keep completed dates in the past', async () => {
+  const {demoRows,demoReservations,demoDashboard,demoBalance}=await vite.ssrLoadModule('/lib/portal/demo-data.ts');
+  try {
+    for (const today of ['2026-11-01','2027-02-28','2028-02-29','2026-12-31']) {
+      mock.timers.setTime(new Date(`${today}T03:00:00Z`).getTime());
+      const rows=demoRows();
+      assert.equal(new Set(rows.map(r=>r.hotelRef)).size,60);
+      assert.equal(new Set(rows.map(r=>r.experienceSlug)).size,3);
+      for (const row of rows) {
+        assert.ok(row.createdAt.slice(0,10)<=today);
+        assert.ok(row.createdAt.slice(0,10)<=row.experienceDate);
+        assert.equal(new Date(row.experienceDate).toISOString().slice(0,10),row.experienceDate);
+        if(row.performedOn) assert.ok(row.performedOn<=today);
+      }
+      const pages=[0,25,50].flatMap(offset=>demoReservations({offset}).rows);
+      assert.equal(new Set(pages.map(r=>r.hotelRef)).size,60);
+      const dash=demoDashboard({from:today.slice(0,7)+'-01',to:today});
+      assert.equal(dash.funnel.confirmed,48);
+      assert.equal(dash.funnel.provisional,10);
+      assert.equal(dash.confirmed.commissionNet,demoBalance.unpaidNet);
+    }
+  } finally { mock.timers.setTime(new Date('2026-10-28T03:00:00Z').getTime()); }
 });
