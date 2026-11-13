@@ -646,3 +646,57 @@ test('partner brochure settings: role and site isolation, safe values, no bookin
   const audit=await db.all("SELECT after_json FROM audit_logs WHERE action='partner.brochure.brand'");
   assert.equal(audit.length,3);assert.ok(audit.every(a=>!a.after_json.includes('logoDataUrl')));
 });
+
+test('official brochures use public prices and stable hotel/language referral QRs, isolated from agency branding and demo', async () => {
+  const db=openTestDb();await seed(db);
+  const admin=client(db);await signIn(admin,'admin@example.com','ops');
+  await admin.call('POST','ops/hotels/hA/members',{email:'print@example.com',role:'hotel_viewer'});
+  const c=client(db);await signIn(c,'print@example.com','hotel');
+  const slug='shibuya-ramen-class';
+  // Unrelated agency settings must never enter an official download.
+  await db.run('INSERT INTO partner_brochure_brands VALUES (?,?,?,?,?,?,?,?,?)',['hA','PRIVATE AGENCY',null,'#000000','private@example.com','','','2026-01-01','u-admin']);
+  await db.run('INSERT INTO partner_brochure_prices VALUES (?,?,?,?,?,?,?)',['hA',slug,999999,'group','PRIVATE PRICE NOTE','2026-01-01','u-admin']);
+  const catalog=await c.call('GET','hotel/official-brochures?hotel=hA');
+  assert.equal(catalog.status,200);assert.equal(catalog.body.experiences.en[0].slug,slug);
+  const prep=(lang,experience=null,extras={})=>c.call('POST','hotel/official-brochures/prepare',{hotel:'hA',lang,experience,...extras});
+  const en=await prep('en',slug,{priceJpy:999999,companyName:'FORGED BRAND',referralUrl:'https://evil.example'});
+  assert.equal(en.status,200,JSON.stringify(en.body));
+  assert.equal(en.body.input.items[0].price,'From ¥26,500');
+  assert.equal(en.body.input.demo,false);
+  assert.ok(!JSON.stringify(en.body).includes('PRIVATE'));
+  assert.ok(!JSON.stringify(en.body).includes('999999'));
+  assert.equal((await prep('en',slug)).body.input.referralUrl,en.body.input.referralUrl,'reprint reuses the same QR');
+  const ja=(await prep('ja',slug)).body.input,general=(await prep('en')).body.input;
+  assert.notEqual(ja.referralUrl,en.body.input.referralUrl);assert.equal(general.items.length,3);
+  assert.equal(general.items[0].slug,slug);assert.equal(general.experience,null);
+  for(const input of [en.body.input,ja,general]) {
+    const token=new URL(input.referralUrl).pathname.split('/').pop();
+    const row=await db.first('SELECT * FROM referral_links WHERE token=?',[token]);
+    assert.equal(row.hotel_id,'hA');assert.equal(row.kind,'qr');assert.equal(row.medium,'brochure');
+    assert.ok(row.target_path.startsWith(`/${input.lang}/`));
+    const arrival=await links.handleReferralArrival(db,{token,userAgent:UA});
+    assert.equal(arrival.redirect,row.target_path);assert.ok(arrival.setCookie);
+    const context=await links.activeReferral(db,arrival.setCookie);
+    assert.equal(context.hotelId,'hA');assert.equal(context.linkId,row.id);
+    if(input.experience)assert.ok(arrival.redirect.includes(input.experience));else assert.equal(arrival.redirect,'/en/');
+  }
+  const before=(await db.first('SELECT COUNT(*) AS n FROM referral_links')).n;
+  assert.equal((await prep('es',slug)).status,400);
+  assert.equal((await prep('en','not-live')).status,400);
+  assert.equal((await prep('en',slug,{hotel:'hB'})).status,403);
+  assert.equal((await c.call('GET','hotel/official-brochures?hotel=hB')).status,403);
+  assert.equal((await c.call('GET','hotel/official-brochures/demo?hotel=hA&lang=en')).status,404);
+  assert.equal((await c.call('POST','hotel/official-brochures/prepare',{hotel:'hA',lang:'en'},{noOrigin:true})).status,403);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM referral_links')).n,before);
+  await db.run(`UPDATE hotels SET features_json='{"refer":false}' WHERE id='hA'`);
+  assert.equal((await prep('en')).status,403);
+  assert.equal((await c.call('GET','hotel/official-brochures?hotel=hA')).status,403);
+  const d=client(db),login=await demoFixture(db);await d.call('POST','auth/demo-login',login);
+  const demo=await d.call('GET',`hotel/official-brochures/demo?lang=ja&experience=${slug}`);
+  assert.equal(demo.status,200);assert.equal(demo.body.input.demo,true);
+  assert.equal(new URL(demo.body.input.referralUrl).hostname,'example.invalid');
+  assert.equal((await d.call('POST','hotel/official-brochures/prepare',{lang:'en'})).status,403);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM referral_links')).n,before);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM reservations')).n,0);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM commission_entries')).n,0);
+});

@@ -1,6 +1,6 @@
 "use client";
 
-import NextLink from "next/link";
+import { OfficialBrochures } from "./official-brochures";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst } from "../client";
 import { label, t } from "../i18n";
@@ -24,7 +24,7 @@ export function HotelMaterials() {
     } else { await api("POST", "hotel/materials", { hotel: hotel.id, experience: slug }); load(); } } catch (e) { setErr(errorText(e)); } finally { setBusy(false); } };
   if (err && !data) return <><Notice tone="bad">{err}</Notice><Button kind="secondary" onClick={load}>{t().common.retry}</Button></>;
   if (!data) return <Loading />;
-  const general = data.links.filter((l) => !l.experience);
+  const general = data.links.filter((l) => !l.experience && l.medium === "other");
   const qr = general.find((l) => l.kind === "qr"), url = general.find((l) => l.kind === "url");
   const qrCell = (l: Link) => l.kind === "qr" ? <span key="q" className="pt-row"><a href={`/api/portal/hotel/qr?link=${l.id}&format=svg&download=1`} download>SVG</a><a href={`/api/portal/hotel/qr?link=${l.id}&format=png`} download>PNG</a></span> : "—";
   return (
@@ -58,10 +58,7 @@ export function HotelMaterials() {
         <div className="pt-row"><label className="pt-field"><span>{lang === "en" ? "Experience" : "体験を選択"}</span><select value={experience} onChange={e => setExperience(e.target.value)}><option value="">{lang === "en" ? "Select an experience" : "体験を選んでください"}</option>{options.map(x => <option key={x.slug} value={x.slug}>{lang === "en" ? x.titleEn : x.title}</option>)}</select></label><Button disabled={busy || !experience} onClick={() => void ensureAll(experience)}>{lang === "en" ? "Create QR & link" : "この体験のQR・リンクを発行"}</Button></div>
         <Table head={M.perHead} rows={data.links.filter((l) => l.experience).map((l) => [options.find(x => x.slug === l.experience)?.[lang === "en" ? "titleEn" : "title"] ?? l.experience, l.kind === "qr" ? "QR" : M.link, <a key="u" href={l.url} target="_blank" rel="noreferrer">{l.url}</a>, qrCell(l), jst(l.createdAt, false)])} empty={M.perEmpty} />
       </Card>
-      <Card title={M.brochure}>
-        <NextLink className="pt-btn pt-btn-secondary" href="/partner/brochures/">{lang === "en" ? "Create branded sales PDF" : "自社ブランド・自社価格の紹介PDFを作成"}</NextLink>
-        {data.brochureUrl ? <p><a href={data.brochureUrl} target="_blank" rel="noreferrer">{M.brochureOpen}</a></p> : <p className="pt-muted">{M.brochureSoon}</p>}
-      </Card>
+      {hotel && <OfficialBrochures key={hotel.id} hotelId={hotel.id} en={lang === "en"} demo={me.demo === true} onIssued={load}/>}
       {data.links.filter((l) => l.medium !== "other").length > 0 && (
         <Card title={M.issuedTitle}>
           <Table head={M.issuedHead} rows={data.links.filter((l) => l.medium !== "other").map((l) => [l.label ?? "—", label(S.medium, l.medium), l.experience ?? M.allExperiences, l.kind === "qr" ? "QR" : M.link, <a key="u" href={l.url} target="_blank" rel="noreferrer">{l.url}</a>, qrCell(l)])} />
