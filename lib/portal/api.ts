@@ -52,6 +52,9 @@ export async function handlePortalApi(request: Request, env: PortalEnv, path: st
   }
 }
 
+import { verifyDemoLogin } from "./demo-auth";
+import { DEMO_SESSION_SECONDS } from "./demo-config";
+
 interface Ctx { db: SqlDb; env: PortalEnv; request: Request; url: URL; path: string[]; method: string; secure: boolean; origin: string }
 
 const q = (ctx: Ctx, name: string) => ctx.url.searchParams.get(name) ?? undefined;
@@ -69,6 +72,11 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   const kind = (b: Record<string, unknown>) => (b.kind === "ops" ? "ops" : "hotel");
   if (ctx.method !== "POST") throw notFound();
   const body = await readJson(ctx.request);
+  if (path[0] === "demo-login") {
+    const r = await verifyDemoLogin(ctx.db, { email: body.email, password: body.password, kind: body.kind, ip: ctx.request.headers.get("cf-connecting-ip") ?? "unknown" });
+    if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "demo_locked" : "demo_invalid" }, r.error === "locked" ? 429 : 401);
+    return json({ ok: true, expiresAt: r.expiresAt }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure, DEMO_SESSION_SECONDS) });
+  }
   if (path[0] === "request-code") {
     const r = await requestLoginCode(ctx.db, ctx.env, { email: body.email, kind: kind(body), lang: body.lang });
     return json({ ok: true, sent: r.sent, mail: r.mail, ...(r.devCode ? { devCode: r.devCode } : {}) });
@@ -126,11 +134,12 @@ async function statementVisible(ctx: Ctx, p: Principal, statementId: string): Pr
 
 async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   const p = await requireHotelUser(ctx);
+  if (p.demo && ctx.method !== "GET") throw new ApiError(403, "demo_read_only", "デモは閲覧専用です。予約・リンク発行・設定変更はできません。");
   const [head, sub] = path;
   if (head === "me" && ctx.method === "GET") {
     const ids = hotelIdsOf(p);
     const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT id, name, public_id, status, brochure_url, site_kind, features_json FROM hotels WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`, ids) : [];
-    return json({ ok: true, user: { email: p.email, name: p.name, lang: p.lang }, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
+    return json({ ok: true, user: { email: p.email, name: p.name, lang: p.lang }, demo: p.demo === true, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
   }
   if (head === "lang" && ctx.method === "POST") {
     // The language the user reads the portal and its mails in (migration 0011).

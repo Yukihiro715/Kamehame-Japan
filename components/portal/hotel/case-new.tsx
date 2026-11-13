@@ -13,7 +13,7 @@ interface Options { experiences: Option[]; members: { userId: string; email: str
 
 /** Register a case (要件 5-1): the experience or a free consultation, the wishes, the customer's name and contact, the partner's own reference. */
 export function HotelCaseNew() {
-  const { hotel } = usePortal();
+  const { hotel, me } = usePortal();
   const K = t().cases, S = t().status, en = portalLang() === "en";
   const [opt, setOpt] = useState<Options | null>(null), [err, setErr] = useState<string | null>(null), [busy, setBusy] = useState(false), [denied, setDenied] = useState(false);
   const [f, setF] = useState({ kind: "experience", experience: "", preferredDate: "", altDates: "", timePref: "", guests: "2", lang: "en", requirements: "", customerName: "", customerEmail: "", customerPhone: "", customerCountry: "", partnerRef: "", assigneeUserId: "" });
@@ -72,7 +72,7 @@ export function HotelCaseNew() {
           <Field label={K.partnerRef}><input value={f.partnerRef} onChange={set("partnerRef")} /></Field>
         </div>
         {err && <Notice tone="bad">{err}</Notice>}
-        <div className="pt-row"><Button type="submit" disabled={busy || !f.customerName.trim() || (f.kind === "experience" && !f.experience)}>{busy ? K.submitting : K.submit}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/cases/">{K.backToList}</Link></div>
+        <div className="pt-row"><Button type="submit" disabled={me.demo || busy || !f.customerName.trim() || (f.kind === "experience" && !f.experience)}>{busy ? K.submitting : K.submit}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/cases/">{K.backToList}</Link></div>
       </Card>
     </form>
   );

@@ -10,7 +10,7 @@ interface Link { id: string; experience: string | null; medium: string; kind: st
 interface Data { hotelName: string; brochureUrl: string | null; links: Link[] }
 
 export function HotelMaterials() {
-  const { hotel } = usePortal();
+  const { hotel, me } = usePortal();
   const M = t().materials, S = t().status;
   const [data, setData] = useState<Data | null>(null), [err, setErr] = useState<string | null>(null), [busy, setBusy] = useState(false);
   const load = useCallback(() => { if (hotel) api<Data>("GET", `hotel/materials?hotel=${hotel.id}`).then((d) => { setData(d); setErr(null); }).catch((e) => setErr(errorText(e))); }, [hotel]);
@@ -26,7 +26,7 @@ export function HotelMaterials() {
       {err && <Notice tone="bad">{err}</Notice>}
       <Card title={M.allTitle}>
         <p className="pt-note-box">{M.note}</p>
-        {!qr ? <Button onClick={() => void ensureAll()} disabled={busy}>{M.issue}</Button> : (
+        {!qr ? <Button onClick={() => void ensureAll()} disabled={me.demo || busy}>{M.issue}</Button> : (
           <div className="pt-grid-2">
             <div className="pt-row" style={{ alignItems: "flex-start" }}>
               <img className="pt-qr" src={`/api/portal/hotel/qr?link=${qr.id}`} alt={M.qrAlt} />

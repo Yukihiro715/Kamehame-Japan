@@ -10,6 +10,8 @@ import { randomId, type SqlDb } from "@/lib/referral/db";
 import { readCookie } from "@/lib/referral/links";
 import { inviteMail, loginCodeMail, mailLangOf, sendPortalMail, type MailLang, type PortalMailEnv } from "./mail";
 
+import { DEMO_EMAIL, DEMO_USER_ID, DEMO_SITE_ID } from "./demo-config";
+
 export type PortalKind = "hotel" | "ops";
 export type Role = "ops_admin" | "ops_booking" | "ops_finance" | "hotel_viewer" | "hotel_billing" | "partner_agent" | "partner_manager";
 export const OPS_ROLES: Role[] = ["ops_admin", "ops_booking", "ops_finance"];
@@ -26,7 +28,7 @@ const CODE_MAX_ATTEMPTS = 5;
 const CODES_PER_HOUR = 5;
 
 export interface Membership { id: string; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null }
-export interface Principal { userId: string; email: string; name: string | null; lang: MailLang; kind: PortalKind; sessionId: string; memberships: Membership[] }
+export interface Principal { userId: string; email: string; name: string | null; lang: MailLang; kind: PortalKind; sessionId: string; demo?: boolean; memberships: Membership[] }
 
 export const normalizeEmail = (s: unknown) => (typeof s === "string" ? s.trim().toLowerCase() : "");
 export const validEmail = (s: string) => s.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
@@ -73,7 +75,7 @@ async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now:
 /** Step one: mail a code. The answer never says whether the address is known. */
 export async function requestLoginCode(db: SqlDb, env: PortalMailEnv, input: { email: unknown; kind: PortalKind; lang?: unknown }, now = Date.now()): Promise<RequestCodeResult> {
   const email = normalizeEmail(input.email);
-  if (!validEmail(email)) return { ok: true, sent: false };
+  if (!validEmail(email) || email === DEMO_EMAIL) return { ok: true, sent: false };
   if (input.kind === "ops") await bootstrapAdmin(db, env, email, now);
   const user = await eligibleUser(db, email, input.kind);
   if (!user) return { ok: true, sent: false };
@@ -96,7 +98,7 @@ export interface VerifyResult { ok: boolean; error?: "invalid" | "expired" | "lo
 export async function verifyLoginCode(db: SqlDb, input: { email: unknown; code: unknown; kind: PortalKind }, now = Date.now()): Promise<VerifyResult> {
   const email = normalizeEmail(input.email);
   const code = typeof input.code === "string" ? input.code.replace(/\D/g, "") : "";
-  if (!validEmail(email) || code.length !== 6) return { ok: false, error: "invalid" };
+  if (email === DEMO_EMAIL || !validEmail(email) || code.length !== 6) return { ok: false, error: "invalid" };
   const row = await db.first<{ id: string; code_hash: string; expires_at: string; attempts: number }>(
     `SELECT id, code_hash, expires_at, attempts FROM login_codes WHERE email = ? AND kind = ? AND consumed_at IS NULL ORDER BY created_at DESC LIMIT 1`, [email, input.kind]);
   if (!row) return { ok: false, error: "invalid" };
@@ -132,11 +134,14 @@ export async function principalFromRequest(db: SqlDb, request: Request, kind: Po
   const s = await db.first<{ id: string; user_id: string; expires_at: string; last_seen_at: string; email: string; name: string | null; status: string; lang: string }>(
     `SELECT s.id, s.user_id, s.expires_at, s.last_seen_at, u.email, u.name, u.status, u.lang FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ? AND s.kind = ? AND s.revoked_at IS NULL`, [id, kind]);
   if (!s || Date.parse(s.expires_at) <= now || s.status === "disabled") return null;
+  if ((s.user_id === DEMO_USER_ID || s.email === DEMO_EMAIL) && (s.user_id !== DEMO_USER_ID || s.email !== DEMO_EMAIL || kind !== "hotel")) return null;
   const rows = await db.all<{ id: string; role: Role; scope_type: "ops" | "hotel"; scope_id: string | null }>(
     `SELECT id, role, scope_type, scope_id FROM memberships WHERE user_id = ? AND revoked_at IS NULL AND scope_type = ?`, [s.user_id, kind === "ops" ? "ops" : "hotel"]);
-  if (!rows.length) return null;
+  const demo = s.user_id === DEMO_USER_ID;
+  const allowed = demo ? rows.filter(r => r.scope_type === "hotel" && r.scope_id === DEMO_SITE_ID && r.role === "partner_manager") : rows;
+  if (!allowed.length) return null;
   if (now - Date.parse(s.last_seen_at) > 5 * 60000) await db.run(`UPDATE sessions SET last_seen_at = ? WHERE id = ?`, [new Date(now).toISOString(), s.id]);
-  return { userId: s.user_id, email: s.email, name: s.name, lang: mailLangOf(s.lang), kind, sessionId: s.id, memberships: rows.map((r) => ({ id: r.id, role: r.role, scopeType: r.scope_type, scopeId: r.scope_id })) };
+  return { userId: s.user_id, email: s.email, name: s.name, lang: mailLangOf(s.lang), kind, sessionId: s.id, demo, memberships: allowed.map((r) => ({ id: r.id, role: r.role, scopeType: r.scope_type, scopeId: r.scope_id })) };
 }
 
 export async function signOut(db: SqlDb, request: Request, kind: PortalKind) {
@@ -166,7 +171,7 @@ export interface InviteInput { email: unknown; name?: unknown; role: Role; scope
 /** Create (or reuse) the user, add the membership and mail the sign-in steps. */
 export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteInput, now = Date.now()): Promise<{ userId: string; membershipId: string; mail: string }> {
   const email = normalizeEmail(input.email);
-  if (!validEmail(email)) throw new Error("invalid_email");
+  if (!validEmail(email) || email === DEMO_EMAIL) throw new Error("invalid_email");
   if ((input.scopeType === "ops") !== OPS_ROLES.includes(input.role)) throw new Error("role_scope_mismatch");
   if (input.scopeType === "hotel" && !input.scopeId) throw new Error("hotel_required");
   const name = typeof input.name === "string" ? input.name.trim().slice(0, 120) || null : null;

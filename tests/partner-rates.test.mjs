@@ -61,5 +61,5 @@ test('invalid and retroactive settings are rejected; settings are audited; demo 
   await assert.rejects(O.createCommissionRate(db, { legalEntityId: null, rateBp: 500, validFrom: '2020-01-01', by: 'test' }));
   await O.createCommissionRate(db, { legalEntityId: 'le-prosent', rateBp: 0, by: 'test' });
   assert.equal((await db.first(`SELECT COUNT(*) n FROM audit_logs WHERE action = 'commission_rate.create'`)).n, 1);
-  assert.equal((await db.first(`SELECT name FROM hotels WHERE public_id = 'HP-DEMO'`)).name, 'デモ用');
+  assert.equal((await db.first(`SELECT name FROM hotels WHERE public_id = 'HP-DEMO'`)).name, 'デモ用（社内確認）');
 });
