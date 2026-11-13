@@ -1,3 +1,4 @@
+import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
 import { saveBank, readBank } from "./bank";
 import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
 import { passwordLogin, requestPassword, setPassword } from "./password-auth";
@@ -162,6 +163,27 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     const lang = b.lang === "en" ? "en" : "ja";
     await ctx.db.run(`UPDATE users SET lang = ? WHERE id = ?`, [lang, p.userId]);
     return json({ ok: true, lang });
+  }
+  if (head === "brochures") {
+    const body = ctx.method === "POST" ? await readJson(ctx.request, 300000) : undefined;
+    const hotelId = hotelScope(ctx, p, body);
+    const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id=?`,[hotelId]))?.features_json);
+    if (!features.refer && !features.cases) throw forbidden();
+    const canManage = hasSiteRole(p,hotelId,"partner_manager"), canPrice = hasSiteRole(p,hotelId,...CASE_ROLES);
+    if (ctx.method === "GET" && !sub) {
+      const config = await readBrochureConfig(ctx.db,hotelId);
+      if(p.demo) config.brand = { companyName:"KAMEHAME デモ旅行社",logoDataUrl:null,accentColor:"#176b69",contactEmail:"sample@example.invalid",contactPhone:"",contactUrl:"" };
+      return json({ ok:true,...config,experiences:brochureExperiences(),canManage,canPrice,demo:p.demo===true });
+    }
+    if (ctx.method === "POST" && sub === "brand") {
+      if(!canManage) throw forbidden();
+      return json({ok:true,brand:await saveBrochureBrand(ctx.db,hotelId,body!,p.userId)});
+    }
+    if (ctx.method === "POST" && sub === "price") {
+      if(!canPrice) throw forbidden();
+      return json({ok:true,price:await saveBrochurePrice(ctx.db,hotelId,body!,p.userId)});
+    }
+    throw notFound();
   }
   if (head === "dashboard" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);

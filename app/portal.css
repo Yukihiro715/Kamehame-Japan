@@ -493,3 +493,16 @@
 }
 
 @media (max-width: 640px) { .pt-list-search input, .pt-list-toolbar > select, .pt-list-meta select, .pt-list-date-filters input[type=date] { font-size: 16px; } }
+
+/* Branded sales sheets: the canvas is the exact A4 download preview. */
+.pt-brochure-layout { display: grid; grid-template-columns: minmax(280px, 390px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.pt-brochure-controls { display: grid; gap: 20px; min-width: 0; }
+.pt-brochure-layout .pt-card { min-width: 0; }
+.pt-brochure-preview { padding: 12px; background: #edeef0; border-radius: 8px; min-width: 0; }
+.pt-brochure-preview canvas { display: block; width: 100%; height: auto; background: #fff; box-shadow: 0 3px 18px #0001; }
+.pt-brochure-preview[aria-busy=true] { opacity: .55; }
+.pt-brochure-logo { width: 120px; height: 64px; object-fit: contain; border: 1px solid #eee; border-radius: 6px; }
+.pt-brochure-controls input[type=color] { width: 100%; height: 44px; padding: 4px; }
+.pt-brochure-controls input[type=file] { font-size: 12px; }
+@media(max-width: 900px) { .pt-brochure-layout { grid-template-columns: minmax(0, 1fr); } }
+@media(max-width: 760px) { .pt-brochure-controls :is(input,select) { font-size: 16px; } }

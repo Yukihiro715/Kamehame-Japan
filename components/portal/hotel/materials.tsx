@@ -1,5 +1,6 @@
 "use client";
 
+import NextLink from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst } from "../client";
 import { label, t } from "../i18n";
@@ -58,6 +59,7 @@ export function HotelMaterials() {
         <Table head={M.perHead} rows={data.links.filter((l) => l.experience).map((l) => [options.find(x => x.slug === l.experience)?.[lang === "en" ? "titleEn" : "title"] ?? l.experience, l.kind === "qr" ? "QR" : M.link, <a key="u" href={l.url} target="_blank" rel="noreferrer">{l.url}</a>, qrCell(l), jst(l.createdAt, false)])} empty={M.perEmpty} />
       </Card>
       <Card title={M.brochure}>
+        <NextLink className="pt-btn pt-btn-secondary" href="/partner/brochures/">{lang === "en" ? "Create branded sales PDF" : "自社ブランド・自社価格の紹介PDFを作成"}</NextLink>
         {data.brochureUrl ? <p><a href={data.brochureUrl} target="_blank" rel="noreferrer">{M.brochureOpen}</a></p> : <p className="pt-muted">{M.brochureSoon}</p>}
       </Card>
       {data.links.filter((l) => l.medium !== "other").length > 0 && (

@@ -575,3 +575,51 @@ test('expanded demo rows paginate without gaps and keep completed dates in the p
     }
   } finally { mock.timers.setTime(new Date('2026-10-28T03:00:00Z').getTime()); }
 });
+
+test('partner brochure settings: role and site isolation, safe values, no booking or commission changes', async () => {
+  const db=openTestDb();await seed(db);
+  await db.run(`INSERT INTO users(id,email,name,status,created_at) VALUES ('u-brand','brand@example.com','Brand manager','active','2026-01-01')`);
+  await db.run(`INSERT INTO memberships(id,user_id,role,scope_type,scope_id,created_at) VALUES ('m-brand','u-brand','partner_manager','hotel','hA','2026-01-01')`);
+  const c=client(db);await signIn(c,'brand@example.com','hotel');
+  const brand={hotel:'hA',companyName:'Agency A',logoDataUrl:null,accentColor:'#176b69',contactEmail:'hello@example.com',contactPhone:'03-0000-0000',contactUrl:'https://example.com/enquiry'};
+  const price={hotel:'hA',slug:'kanji-name-calligraphy',priceJpy:35000,priceUnit:'person',priceNote:'2名から・税込'};
+  assert.equal((await c.call('POST','hotel/brochures/brand',brand)).status,200);
+  assert.equal((await c.call('POST','hotel/brochures/price',price)).status,200);
+  const config=(await c.call('GET','hotel/brochures?hotel=hA')).body;
+  assert.equal(config.canManage,true);assert.equal(config.brand.companyName,'Agency A');
+  assert.equal(config.prices[price.slug].priceJpy,35000);
+  assert.ok(config.experiences.en.some(e=>e.slug===price.slug));
+  const logo='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aWhkAAAAASUVORK5CYII=';
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,logoDataUrl:logo})).status,200);
+  assert.equal((await c.call('GET','hotel/brochures?hotel=hA')).body.brand.logoDataUrl,logo);
+  assert.equal((await c.call('POST','hotel/brochures/brand',brand)).status,200);
+  assert.equal((await c.call('GET','hotel/brochures?hotel=hA')).body.brand.logoDataUrl,null);
+  assert.equal((await c.call('GET','hotel/brochures?hotel=hB')).status,403);
+  assert.equal((await c.call('POST','hotel/brochures/price',{...price,hotel:'hB'})).status,403);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactUrl:'javascript:alert(1)'})).status,400);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactUrl:'https://user:secret@example.com'})).status,400);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,logoDataUrl:'data:image/svg+xml;base64,PHN2Zz4='})).status,400);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,logoDataUrl:'data:image/png;base64,YmFk'})).status,400);
+  assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,companyName:'x'.repeat(81)})).status,400);
+  assert.equal((await c.call('POST','hotel/brochures/brand',brand,{noOrigin:true})).status,403);
+  for(const priceJpy of [-1,0,1.5,100000001,'35000'])assert.equal((await c.call('POST','hotel/brochures/price',{...price,priceJpy})).status,400);
+  assert.equal((await c.call('POST','hotel/brochures/price',{...price,slug:'not-live'})).status,404);
+  assert.equal((await c.call('POST','hotel/brochures/price',{...price,priceJpy:null})).status,200);
+  await db.run(`UPDATE memberships SET role='partner_agent' WHERE id='m-brand'`);
+  assert.equal((await c.call('POST','hotel/brochures/brand',brand)).status,403);
+  assert.equal((await c.call('POST','hotel/brochures/price',price)).status,200);
+  await db.run(`UPDATE memberships SET role='hotel_viewer' WHERE id='m-brand'`);
+  assert.equal((await c.call('POST','hotel/brochures/price',price)).status,403);
+  assert.equal((await c.call('GET','hotel/brochures?hotel=hA')).body.canPrice,false);
+  await db.run(`UPDATE hotels SET features_json='{"refer":false,"cases":false}' WHERE id='hA'`);
+  assert.equal((await c.call('GET','hotel/brochures?hotel=hA')).status,403);
+  const d=client(db),login=await demoFixture(db);await d.call('POST','auth/demo-login',login);
+  assert.equal((await d.call('GET','hotel/brochures')).body.demo,true);
+  assert.equal((await d.call('POST','hotel/brochures/price',price)).status,403);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM reservations')).n,0);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM commission_entries')).n,0);
+  assert.equal((await db.first("SELECT rate_bp FROM partner_commission_rates WHERE id='common-rate-five-percent'")).rate_bp,500);
+  assert.equal((await db.first('SELECT COUNT(*) AS n FROM partner_brochure_prices')).n,1);
+  const audit=await db.all("SELECT after_json FROM audit_logs WHERE action='partner.brochure.brand'");
+  assert.equal(audit.length,3);assert.ok(audit.every(a=>!a.after_json.includes('logoDataUrl')));
+});
