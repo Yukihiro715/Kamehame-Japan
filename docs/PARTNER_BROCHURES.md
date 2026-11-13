@@ -1,18 +1,19 @@
 # Partner-branded experience PDFs
 
-`/partner/brochures/` is available to a site's members when referral or agency-booking features are enabled. Experience cards and the materials page link to it; the experience slug is preselected from the card.
+`/partner/brochures/` is available to a site's members when referral or agency-booking features are enabled. Experience cards and the materials page link to it; the experience slug filters the table when opened from a card. The default partner ordering leads with Shibuya ramen across the experience list, brochure table and booking selectors; explicit popularity/commission sorting still takes precedence.
 
 - Company name, normalized PNG logo, theme color and contact details are per partner site. Only `partner_manager` can save them.
-- Managers and `partner_agent` can save a tax-inclusive JPY sales-material price, per-person/per-group unit and price note for each live experience. Empty prices display an enquiry prompt. Viewers may download saved material.
+- Managers and `partner_agent` can save a tax-inclusive JPY sales-material price, per-person/per-group unit and price note for each live experience. Each row has explicit unset/fixed/inquiry modes. Unset and unsaved rows cannot be downloaded; choosing inquiry intentionally prints an enquiry prompt. Japanese and English notes are saved separately. Viewers may download saved material.
 - Prices only affect these PDFs. They never update reservations, payments, underlying catalogue prices, commission rates or settlement snapshots.
 - A saved brand and price are required before exporting edited content. At least one contact method is required. The PDF contact QR/link points to the agency's own HTTPS enquiry URL, never to KAMEHAME's checkout at a different price.
-- Japanese/English catalogue copy and photos are combined with the chosen brand and price in a one-page A4 layout. User-entered brand/price notes are not translated automatically.
+- The independent Japanese/English PDF language selector controls catalogue copy, pricing notes and labels. Catalogue photos (a hero and a second image where available) are combined with the chosen brand and price in a one-page A4 layout. User-entered brand/price notes are not translated automatically.
 - The exact canvas preview is embedded at 200 dpi into a downloadable PDF. Text is rasterized, not selectable. Customer/ledger data and internal prices are never passed to the renderer. Printed brochures are static snapshots and must be re-exported after changes.
-- The demo supports local edits and sample PDF downloads. Writes remain blocked; the PDF is marked as a demo.
+- The searchable table supports configured/unconfigured filters, saved row prices, draft modal previews, direct PDF downloads and a per-row agency booking action for authorized agents. Brand settings are collapsible. The table grows vertically with the page; only horizontal scrolling is internal, with a sticky experience column.
+- The demo starts with three sample prices and supports local edits and sample PDF downloads. Writes remain blocked; the PDF is marked as a demo.
 
 ## Storage and authorization
 
-Migration `0018_partner_brochures.sql` adds `partner_brochure_brands` and `partner_brochure_prices`. Both are scoped by `hotel_id`. API routes are under `/api/portal/hotel/brochures`; they use the existing session, membership checks, feature flags, Origin and portal-header protection. Mutations are audited without logo bytes. Logos are uploaded as bounded PNG data URLs after client normalization; SVG/remote logo URLs are not accepted. Brand logos are private configuration, not publicly hosted files.
+Migration `0018_partner_brochures.sql` adds `partner_brochure_brands` and `partner_brochure_prices`. Both are scoped by `hotel_id`. Migration `0019_partner_brochure_options.sql` adds explicit price mode and English note in a separate child table to preserve compatibility with old seven-column price inserts during deployment. Legacy rows infer mode from price and keep their old note in both languages until edited. API routes are under `/api/portal/hotel/brochures`; they use the existing session, membership checks, feature flags, Origin and portal-header protection. Mutations are audited without logo bytes. Logos are uploaded as bounded PNG data URLs after client normalization; SVG/remote logo URLs are not accepted. Brand logos are private configuration, not publicly hosted files.
 
 ## Validation
 

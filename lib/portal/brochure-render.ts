@@ -6,7 +6,7 @@ export interface BrochureInput { brand: BrochureBrand; experience: BrochureExper
 const FONT = 'Arial, "Hiragino Sans", "Noto Sans CJK JP", "Noto Sans JP", sans-serif';
 
 /** Shared by the on-screen preview and the downloaded A4 PDF. All amounts are sales-material prices. */
-export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInput, hero: CanvasImageSource, logo?: CanvasImageSource) {
+export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInput, hero: CanvasImageSource, logo?: CanvasImageSource, detail?: CanvasImageSource) {
   const { brand: b, experience: e, price: p, lang, demo } = input, en = lang === 'en';
   ctx.save(); ctx.scale(2,2); ctx.textBaseline = 'top';
   const W = BROCHURE_WIDTH / 2, H = BROCHURE_HEIGHT / 2, ink = '#242a2d', accent = b.accentColor;
@@ -36,10 +36,13 @@ export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInp
   const companyWidth=logo?607:731;let companySize=25;
   font(companySize,700);while(lines(b.companyName,companyWidth).length>2&&companySize>14){companySize--;font(companySize,700);}
   text(b.companyName || (en?'Your company':'会社名'),logo?172:48,50,companyWidth,companySize,2,31,ink,700);
-  drawImage(hero,48,132,731,290,true);
+  text(en?'EXPERIENCE GUIDE':'体験のご案内',logo?172:48,111,607,10,1,13,accent,700);
+  if(detail) {drawImage(hero,48,142,483,280,true);drawImage(detail,539,142,240,280,true);}
+  else drawImage(hero,48,142,731,280,true);
   text(e.area,48,442,731,12,1,18,accent,700);
   text(e.title,48,468,731,28,3,32,ink,700);
-  text(e.tagline,48,570,731,14,3,20,'#535a5d');
+  font(28,700);const titleHeight=Math.min(3,lines(e.title,731).length)*32;
+  text(e.tagline,48,468+titleHeight+14,731,14,3,20,'#535a5d');
   rect(48,642,731,70,'#f4f5f5');
   text(en?'DURATION':'所要時間',66,654,330,10,1,14,'#626b70',700);
   text(e.duration,66,674,330,14,2,17,ink,600);
@@ -51,7 +54,7 @@ export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInp
   text(en?'YOUR PRICE · JPY':'ご案内価格（税込）',68,901,320,11,1,16,'#626b70',700);
   text(p.priceJpy===null?(en?'Please enquire':'お問い合わせ'):new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',maximumFractionDigits:0}).format(p.priceJpy),68,927,340,p.priceJpy===null?27:34,1,39,ink,700);
   text(en?(p.priceUnit==='person'?'Tax included · per person':'Tax included · per group'):(p.priceUnit==='person'?'1名あたり':'1組あたり'),68,974,320,11,1,14,'#626b70');
-  text(p.priceNote || (en?'Availability and final booking terms will be confirmed when you enquire.':'空き状況・ご予約条件はお問い合わせ時にご案内します。'),430,910,327,10,6,12,'#535a5d');
+  text((en?p.priceNoteEn:p.priceNote) || (en?'Availability and final booking terms will be confirmed when you enquire.':'空き状況・ご予約条件はお問い合わせ時にご案内します。'),430,901,327,11,7,13,'#535a5d');
   text(en?'BOOKINGS & ENQUIRIES':'ご予約・お問い合わせ',48,1020,600,13,1,18,accent,700);
   const contactWidth=b.contactUrl?590:731;let contactY=1047;
   for(const value of [b.contactEmail,b.contactPhone,b.contactUrl].filter(Boolean)) {const count=value===b.contactEmail?2:1;text(value,48,contactY,contactWidth,12,count,17);font(12);contactY+=Math.min(count,lines(value,contactWidth).length)*17+4;}

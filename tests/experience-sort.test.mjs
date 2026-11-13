@@ -7,7 +7,7 @@ import { openTestDb } from './helpers/sqlite-db.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const vite = await createServer({ appType: 'custom', configFile: false, root, resolve: { alias: { '@': root } }, server: { middlewareMode: true }, logLevel: 'silent' });
 after(() => vite.close());
-const { sortExperiences } = await vite.ssrLoadModule('/lib/portal/experience-sort.ts');
+const { sortExperiences, partnerExperienceOrder } = await vite.ssrLoadModule('/lib/portal/experience-sort.ts');
 const { experiencePopularity } = await vite.ssrLoadModule('/lib/portal/metrics.ts');
 
 test('experience sorts use numeric commission, keep unknowns last and preserve tied order', () => {
@@ -41,4 +41,21 @@ test('popularity includes only eligible recent bookings, returns ranks, and demo
   assert.equal(demo.size, 3);
   assert.ok([...demo.values()].every(rank => rank === 1));
   assert.equal((await db.first('SELECT COUNT(*) AS n FROM reservations')).n, fixtures.length);
+});
+
+test('partner default promotes ramen across catalogues without overriding explicit sorts', async () => {
+  const {brochureExperiences}=await vite.ssrLoadModule('/lib/portal/brochures.ts');
+  const {experienceOptions}=await vite.ssrLoadModule('/lib/portal/cases.ts');
+  const {experienceTerms}=await vite.ssrLoadModule('/lib/portal/metrics.ts');
+  const ramen='shibuya-ramen-class';
+  for(const lang of ['ja','en']) {
+    assert.equal(brochureExperiences()[lang][0].slug,ramen);
+    assert.equal(experienceOptions(lang)[0].slug,ramen);
+  }
+  assert.equal((await experienceTerms(openTestDb()))[0].slug,ramen);
+  const rows=[{slug:'spa',referable:true,commissionExampleNet:2000,popularityRank:1},{slug:ramen,referable:true,commissionExampleNet:1000,popularityRank:2}];
+  const ordered=partnerExperienceOrder(rows);
+  assert.equal(ordered[0].slug,ramen);assert.equal(rows[0].slug,'spa');
+  assert.equal(sortExperiences(ordered,'commission')[0].slug,'spa');
+  assert.equal(sortExperiences(ordered,'popular')[0].slug,'spa');
 });

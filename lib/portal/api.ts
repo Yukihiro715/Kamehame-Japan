@@ -172,7 +172,12 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     const canManage = hasSiteRole(p,hotelId,"partner_manager"), canPrice = hasSiteRole(p,hotelId,...CASE_ROLES);
     if (ctx.method === "GET" && !sub) {
       const config = await readBrochureConfig(ctx.db,hotelId);
-      if(p.demo) config.brand = { companyName:"KAMEHAME デモ旅行社",logoDataUrl:null,accentColor:"#176b69",contactEmail:"sample@example.invalid",contactPhone:"",contactUrl:"" };
+      if(p.demo) {
+        config.brand = { companyName:"KAMEHAME デモ旅行社",logoDataUrl:null,accentColor:"#b74908",contactEmail:"sample@example.invalid",contactPhone:"",contactUrl:"" };
+        config.prices = Object.fromEntries([
+          ['shibuya-ramen-class',29800],['kanji-name-calligraphy',35000],['nerima-herbal-bath-private-spa',29800],
+        ].map(([slug,amount])=>[slug,{priceJpy:Number(amount),priceUnit:'person' as const,priceMode:'fixed' as const,priceNote:'サンプルの案内価格です。ご希望日時をお問い合わせください。',priceNoteEn:'Sample quoted price. Please enquire about your preferred date.'}]));
+      }
       return json({ ok:true,...config,experiences:brochureExperiences(),canManage,canPrice,demo:p.demo===true });
     }
     if (ctx.method === "POST" && sub === "brand") {
