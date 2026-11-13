@@ -6,11 +6,12 @@ import { ArrowUpRight, BookOpen, CalendarDays, ClipboardList, LayoutDashboard, M
 import { partnerAccess, type PartnerSite } from "./partner-access";
 import { api, errorText } from "./client";
 import { asPortalLang, detectPortalLang, DICT, PORTAL_LANG_NAME, PORTAL_LANGS, setPortalLang, type PortalLang } from "./i18n";
+import { DEMO_EMAIL } from "@/lib/portal/demo-config";
 import { Button, Loading, Notice } from "./ui";
 
 export type Kind = "hotel" | "ops";
 export interface HotelInfo extends PartnerSite { id: string; name: string; public_id: string; status: string; brochure_url: string | null }
-export interface Me { user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
+export interface Me { demo?: boolean; user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
 
 interface PortalState { kind: Kind; me: Me; hotel: HotelInfo | null; setHotel: (id: string) => void; refresh: () => void; lang: PortalLang; setLang: (l: PortalLang) => void }
 const Ctx = createContext<PortalState | null>(null);
@@ -44,7 +45,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
     .then((data) => {
       setMe(data); setError(null);
       if (kind === "hotel") {
-        if (data.user.lang === "en" || data.user.lang === "ja") applyLang(asPortalLang(data.user.lang));
+        if (!data.demo && (data.user.lang === "en" || data.user.lang === "ja")) applyLang(asPortalLang(data.user.lang));
         let stored: string | null = null;
         try { stored = localStorage.getItem(HOTEL_KEY); } catch { stored = null; }
         const hotels = data.hotels ?? [];
@@ -57,12 +58,28 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
       if (status !== 401) setError(errorText(e));
     }), [kind, applyLang]);
   useEffect(() => { void load(); }, [load]);
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    requestAnimationFrame(() => document.getElementById("partner-menu-toggle")?.focus());
+  }, []);
   useEffect(() => {
     if (!menuOpen) return;
-    const close = (e: KeyboardEvent) => { if (e.key === "Escape") { setMenuOpen(false); document.getElementById("partner-menu-toggle")?.focus(); } };
-    window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
-  }, [menuOpen]);
+    const drawer = document.getElementById("partner-navigation");
+    const focusables = () => Array.from(drawer?.querySelectorAll<HTMLElement>('a[href],button:not([disabled])') ?? []);
+    focusables()[0]?.focus();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { e.preventDefault(); closeMenu(); }
+      if (e.key === "Tab") {
+        const items = focusables(), first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", onKey); };
+  }, [menuOpen, closeMenu]);
   const rootClass = kind === "hotel" ? "pt-root pt-partner" : "pt-root";
   const path = typeof window !== "undefined" ? window.location.pathname : "";
   const isLogin = path.endsWith("/login/") || path.endsWith("/login");
@@ -76,7 +93,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
   const hotel = kind === "hotel" ? (me.hotels ?? []).find((h) => h.id === hotelId) ?? null : null;
   const setHotel = (id: string) => { setHotelId(id); try { localStorage.setItem(HOTEL_KEY, id); } catch { /* ignore */ } };
   // A partner's choice is saved on their profile so mails follow it too.
-  const setLang = (l: PortalLang) => { applyLang(l); if (kind === "hotel") void api("POST", "hotel/lang", { lang: l }).catch(() => {}); };
+  const setLang = (l: PortalLang) => { applyLang(l); if (kind === "hotel" && !me.demo) void api("POST", "hotel/lang", { lang: l }).catch(() => {}); };
   const T = DICT[lang];
   const access = partnerAccess(hotel, me.memberships);
   const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "settlement" ? access.settlement : true);
@@ -88,16 +105,18 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
       <div className={`${rootClass}${menuOpen ? " pt-menu-open" : ""}`} lang={lang}>
         {kind === "hotel" && <>
           <a className="pt-skip" href="#partner-main">{lang === "en" ? "Skip to content" : "本文へ移動"}</a>
-          <aside className="pt-sidebar" id="partner-navigation">
+          {menuOpen && <><button className="pt-menu-backdrop" type="button" tabIndex={-1} aria-label={lang === "en" ? "Close menu" : "メニューを閉じる"} onClick={closeMenu} />
+          <aside className="pt-sidebar" id="partner-navigation" role="dialog" aria-modal="true" aria-label={lang === "en" ? "Main menu" : "メインメニュー"}>
+            <button className="pt-drawer-close" type="button" onClick={closeMenu} aria-label={lang === "en" ? "Close menu" : "メニューを閉じる"}><X size={22} /></button>
             <Link className="pt-partner-brand" href="/hotel/"><span className="pt-brand-symbol">K<span>+</span></span><span>KAMEHAME<small>JAPAN / PARTNER</small></span></Link>
             <p className="pt-nav-label">{lang === "en" ? "YOUR WORKSPACE" : "パートナーワークスペース"}</p>
             <nav aria-label={lang === "en" ? "Main menu" : "メインメニュー"}>
-              {hotelNav.map(([href, key]) => { const Icon = NAV_ICONS[key]; return <a key={href} href={href} className={active(href) ? "on" : ""} aria-current={active(href) ? "page" : undefined}><Icon size={18} aria-hidden="true"/><span>{T.nav[key]}</span></a>; })}
+              {hotelNav.map(([href, key]) => { const Icon = NAV_ICONS[key]; return <a key={href} href={href} onClick={closeMenu} className={active(href) ? "on" : ""} aria-current={active(href) ? "page" : undefined}><Icon size={18} aria-hidden="true"/><span>{T.nav[key]}</span></a>; })}
             </nav>
             <div className="pt-sidebar-bottom"><span>KAMEHAME JAPAN</span><p>{lang === "en" ? "Bring Japan closer to your guests." : "日本の体験を、お客様へ。"}</p><a href="mailto:hello@kamehame-japan.com">{lang === "en" ? "Contact our team" : "運営に問い合わせる"}<ArrowUpRight size={15} aria-hidden="true"/></a></div>
-          </aside>
+          </aside></>}
         </>}
-        <header className="pt-top">
+        <header className="pt-top" inert={kind === "hotel" && menuOpen}>
           {kind === "hotel" && <button id="partner-menu-toggle" type="button" className="pt-menu-toggle" aria-expanded={menuOpen} aria-controls="partner-navigation" aria-label={lang === "en" ? (menuOpen ? "Close menu" : "Open menu") : (menuOpen ? "メニューを閉じる" : "メニューを開く")} onClick={() => setMenuOpen((v) => !v)}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button>}
           <a className="pt-brand" href={`/${kind}/`}>KAMEHAME JAPAN <span>{kind === "hotel" ? T.brand.partner : T.brand.ops}</span></a>
           {kind === "ops" && <nav className="pt-nav" aria-label={lang === "en" ? "Menu" : "メニュー"}>
@@ -112,11 +131,12 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
             <Button kind="link" small onClick={async () => { await api("POST", "auth/signout", { kind }); window.location.href = `/${kind}/login/`; }}>{T.shell.signOut}</Button>
           </div>
         </header>
-        <main className="pt-main" id="partner-main" tabIndex={-1}>
+        <main className="pt-main" id="partner-main" tabIndex={-1} inert={kind === "hotel" && menuOpen}>
+          {me.demo && <Notice tone="info">{lang === "en" ? "Demo · Read only. Bookings, link creation and changes are disabled." : "デモ画面（閲覧専用）です。予約・リンク発行・設定変更はできません。"}</Notice>}
           {pageTitle && (kind === "hotel" ? <div className="pt-page-heading"><div><p className="pt-eyebrow">{hotel?.name ?? "PARTNER PORTAL"}</p><h1 className="pt-h1">{pageTitle}</h1></div><span className="pt-site-id">{hotel?.public_id}</span></div> : <h1 className="pt-h1">{pageTitle}</h1>)}
           {kind === "hotel" && !hotel ? <Notice tone="warn">{T.shell.noSite}</Notice> : <Fragment key={hotel?.id ?? kind}>{children}</Fragment>}
         </main>
-        <footer className="pt-foot">{T.shell.footer}</footer>
+        <footer className="pt-foot" inert={kind === "hotel" && menuOpen}>{T.shell.footer}</footer>
       </div>
     </Ctx.Provider>
   );
@@ -130,9 +150,16 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
   const L = DICT[lang].login;
   const [email, setEmail] = useState(""), [code, setCode] = useState(""), [step, setStep] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false), [msg, setMsg] = useState<string | null>(null), [err, setErr] = useState<string | null>(null), [devCode, setDevCode] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const demoLogin = kind === "hotel" && email.trim().toLowerCase() === DEMO_EMAIL;
   const request = async () => {
+    if (busy) return;
     setBusy(true); setErr(null); setMsg(null);
     try {
+      if (demoLogin) {
+        await api("POST", "auth/demo-login", { email, password, kind });
+        setPassword(""); onDone(); return;
+      }
       const r = await api<{ sent: boolean; devCode?: string; mail?: string }>("POST", "auth/request-code", { email, kind, lang });
       setStep("code");
       setDevCode(r.devCode ?? null);
@@ -155,8 +182,10 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
         {step === "email" ? (
           <form onSubmit={(e) => { e.preventDefault(); void request(); }}>
             <label className="pt-field"><span className="pt-field-l">{L.email}</span><input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus /></label>
-            <p className="pt-login-note">{L.note}</p>
-            <Button type="submit" disabled={busy || !email}>{L.send}</Button>
+            {demoLogin && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Password" : "パスワード"}</span><input type="password" autoComplete="current-password" required maxLength={128} value={password} onChange={e => setPassword(e.target.value)} /></label>}
+            <p className="pt-login-note">{demoLogin ? (lang === "en" ? "Sign in to the read-only partner demo." : "パートナー向けの閲覧専用デモにログインします。") : L.note}</p>
+            <Button type="submit" disabled={busy || !email || (demoLogin && !password)}>{demoLogin ? L.signIn : L.send}</Button>
+            {kind === "hotel" && <Button kind="link" onClick={() => { setEmail(demoLogin ? "" : DEMO_EMAIL); setPassword(""); setErr(null); }}>{demoLogin ? (lang === "en" ? "Regular partner sign-in" : "通常のパートナーログインへ") : (lang === "en" ? "Demo sign-in" : "デモ用IDでログイン")}</Button>}
           </form>
         ) : (
           <form onSubmit={(e) => { e.preventDefault(); void verify(); }}>

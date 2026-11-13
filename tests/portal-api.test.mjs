@@ -266,3 +266,60 @@ test("commission settings require finance/admin and partner reads use their own 
   await db.run(`UPDATE memberships SET role = 'ops_booking' WHERE id = 'm-admin'`);
   assert.equal((await admin.call('POST', 'ops/commission-rates', { legalEntityId: null, rateBp: 999 })).status, 403);
 });
+
+async function demoFixture(db) {
+  const { pbkdf2Sync } = await import('node:crypto');
+  const password = 'test-only-demo-pass';
+  const salt = '0123456789abcdef0123456789abcdef';
+  const hash = pbkdf2Sync(password, Buffer.from(salt, 'hex'), 100000, 32, 'sha256').toString('hex');
+  await db.run(`UPDATE demo_credentials SET salt_hex = ?, password_hash = ?, iterations = 100000`, [salt, hash]);
+  return { email: 'demo@kamemane-japan.com', password, kind: 'hotel' };
+}
+
+test('demo password session: isolated reads, writes denied, sign-out and existing OTP preserved', async () => {
+  const db = openTestDb(); await seed(db);
+  const login = await demoFixture(db), demo = client(db);
+  assert.equal((await demo.call('POST', 'auth/demo-login', { ...login, password: 'wrong' })).status, 401);
+  assert.equal((await demo.call('POST', 'auth/demo-login', login, { noOrigin: true })).status, 403);
+  const signed = await demo.call('POST', 'auth/demo-login', login);
+  assert.equal(signed.status, 200);
+  const cookie = signed.headers.get('set-cookie');
+  assert.match(cookie, /HttpOnly/); assert.match(cookie, /Secure/); assert.match(cookie, /Max-Age=7200/);
+  const me = (await demo.call('GET', 'hotel/me')).body;
+  assert.equal(me.demo, true); assert.deepEqual(me.hotels.map(h => h.id), ['site-partner-public-demo']);
+  for (const path of ['dashboard', 'experiences', 'reservations', 'materials', 'settlement', 'cases', 'case-options']) {
+    assert.equal((await demo.call('GET', `hotel/${path}`)).status, 200, path);
+  }
+  assert.equal((await demo.call('GET', 'hotel/dashboard?hotel=site-prosent-demo')).status, 403);
+  assert.equal((await demo.call('GET', 'ops/policies')).status, 401);
+  for (const path of ['materials', 'cases', 'lang', 'cases/fake/messages', 'statements/fake/acknowledge']) {
+    const r = await demo.call('POST', `hotel/${path}`, {});
+    assert.equal(r.status, 403, path); assert.equal(r.body.error, 'demo_read_only');
+  }
+  // Even accidental extra memberships cannot expand the shared credential's scope.
+  await db.run(`INSERT INTO memberships (id, user_id, role, scope_type, scope_id, created_at) VALUES ('extra-demo', 'u-partner-public-demo', 'partner_manager', 'hotel', 'hA', '')`);
+  assert.equal((await demo.call('GET', 'hotel/dashboard?hotel=hA')).status, 403);
+  assert.equal((await demo.call('POST', 'auth/demo-login', { ...login, kind: 'ops' })).status, 401);
+  const code = await demo.call('POST', 'auth/request-code', { email: login.email, kind: 'hotel' });
+  assert.equal(code.body.sent, false); assert.equal(code.body.devCode, undefined);
+  assert.equal((await demo.call('POST', 'auth/verify', { email: login.email, kind: 'hotel', code: '123456' })).status, 401);
+  const principalRequest = new Request(ORIGIN, { headers: { cookie: cookie.split(';')[0] } });
+  assert.equal(await auth.principalFromRequest(db, principalRequest, 'hotel', Date.parse(signed.body.expiresAt) + 1), null);
+  await demo.call('POST', 'auth/signout', { kind: 'hotel' });
+  assert.equal((await demo.call('GET', 'hotel/me')).status, 401);
+  const admin = client(db); await signIn(admin, 'admin@example.com', 'ops');
+  assert.equal((await admin.call('GET', 'ops/policies')).status, 200);
+});
+
+test('demo attempts are bounded, sessions honor revocation and account disablement', async () => {
+  const db = openTestDb(); const login = await demoFixture(db), demo = client(db);
+  for (let i = 0; i < 10; i++) assert.equal((await demo.call('POST', 'auth/demo-login', { ...login, password: 'wrong' })).status, 401);
+  assert.equal((await demo.call('POST', 'auth/demo-login', login)).status, 429);
+  const other = client(db);
+  assert.equal((await other.call('POST', 'auth/demo-login', login, { headers: { 'cf-connecting-ip': '192.0.2.1' } })).status, 200);
+  await db.run(`UPDATE memberships SET revoked_at = '2026-01-01' WHERE id = 'm-public-demo-manager'`);
+  assert.equal((await other.call('GET', 'hotel/me')).status, 401);
+  await db.run(`UPDATE memberships SET revoked_at = NULL WHERE id = 'm-public-demo-manager'`);
+  await db.run(`UPDATE users SET status = 'disabled' WHERE id = 'u-partner-public-demo'`);
+  assert.equal((await other.call('GET', 'hotel/me')).status, 401);
+});
