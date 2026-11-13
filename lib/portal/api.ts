@@ -1,5 +1,5 @@
 import { saveBank, readBank } from "./bank";
-import { demoDashboard, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
+import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
 import { passwordLogin, requestPassword, setPassword } from "./password-auth";
 /** The portal API: one entry point, routed by path, every handler scoped on
  *  the server. Mounted at /api/portal/<path> (app/api/portal/[...path]/route.ts).
@@ -20,7 +20,7 @@ import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMai
 import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
 import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { targetFor, createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
-import { experienceTerms, hotelDashboard, hotelReservations } from "./metrics";
+import { experienceTerms, experiencePopularity, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
 import { busEnquiryDetail, busEnquiryList, busEnquiryResendPartner, busEnquirySetNote, busEnquirySetStatus } from "@/lib/golfpaq-ops";
 import type { GolfpaqEnquiryEnv } from "@/lib/golfpaq-enquiry";
@@ -172,7 +172,8 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     const options = new Map(cases.experienceOptions().map((o) => [o.slug, o]));
     const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id = ?`, [hotelId]))?.features_json);
     const relay = features.cases && hasSiteRole(p, hotelId, ...CASE_ROLES);
-    const experiences = (await experienceTerms(ctx.db, Date.now(), hotelId)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
+    const popularity = p.demo ? demoPopularity() : await experiencePopularity(ctx.db);
+    const experiences = (await experienceTerms(ctx.db, Date.now(), hotelId)).map((e) => { const o = options.get(e.slug); const mode = o?.bookingMode ?? "request"; return { ...e, popularityRank: popularity.get(e.slug) ?? null, bookingMode: mode, bookingModeJa: cases.BOOKING_MODE_JA[mode] }; });
     return json({ ok: true, experiences, relay, busGolf: options.get(cases.BUS_GOLF_SLUG) ?? null });
   }
   if (head === "reservations" && ctx.method === "GET") {

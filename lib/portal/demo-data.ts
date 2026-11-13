@@ -3,6 +3,7 @@ import { quarterOf, previousPeriod, payDateFor } from "./settlement";
 import { jstDate } from "@/lib/referral/db";
 import { DEMO_SITE_ID, DEMO_USER_ID } from "./demo-config";
 import { reservationSort } from "./metrics";
+import { popularityRanks } from "./experience-sort";
 import type { HotelReservationRow, HotelDashboard, Period, ReservationFilters } from "./metrics";
 import { RESERVATION_STATUS_JA, PAYMENT_STATUS_JA, ENTRY_STATUS_JA } from "./util";
 const month = () => jstDate().slice(0, 7);
@@ -36,6 +37,13 @@ export function demoReservations(f: ReservationFilters = {}) {
   for (const r of rows) { if(r.rateBp===null || r.commissionNet===null) { summary.unknownCount++; continue; } if(r.entryStatus==="estimated") summary.estimatedNet+=r.commissionNet??0; if(r.entryStatus==="pending") summary.pendingNet+=r.commissionNet??0; if(r.entryStatus==="confirmed"||r.entryStatus==="adjusted") summary.confirmedNet+=r.commissionNet??0; }
   const offset = Math.max(0, f.offset ?? 0), limit = Math.min(500, Math.max(1, f.limit ?? 25));
   return { rows: rows.slice(offset, offset + limit), total: rows.length, summary };
+}
+export function demoPopularity() {
+  const counts = new Map<string, number>();
+  for (const row of demoRows()) {
+    if (["confirmed", "completed"].includes(row.status)) counts.set(row.experienceSlug, (counts.get(row.experienceSlug) ?? 0) + 1);
+  }
+  return popularityRanks([...counts].map(([slug, count]) => ({ slug, count })));
 }
 const unpaidNet = demoRows().filter(r => r.entryStatus === "confirmed").reduce((sum, r) => sum + r.commissionNet!, 0);
 export const demoBalance = { unpaidNet, unpaidTaxRef: unpaidNet / 10, paid: 154000 };

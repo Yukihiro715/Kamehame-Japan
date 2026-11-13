@@ -5,17 +5,20 @@ import { useEffect, useState } from "react";
 import { MapPin, Clock3, Search } from "lucide-react";
 import { api, errorText, pct, yen } from "../client";
 import { label, t } from "../i18n";
-import { TermLabel } from "../help";
+import { InfoHelp, TermLabel } from "../help";
 import { usePortal } from "../shell";
 import { partnerAccess } from "../partner-access";
 import { Badge, Button, CopyLink, Loading, Notice } from "../ui";
 
-interface Term { bookingMode: "instant" | "request" | "quote"; slug: string; title: string; titleEn: string; tagline: string; city: string; area: string; areaEn: string; duration: string; durationEn: string; group: string; groupEn: string; img: string; basePrice: string; priceUnit: "person" | "group"; priceNote?: string; referable: boolean; rateBp: number | null; referenceAvgJpy: number | null; referenceNote: string | null; commissionExampleNet: number | null; policyFrom: string | null }
+import { sortExperiences, type ExperienceSort } from "@/lib/portal/experience-sort";
+
+interface Term { popularityRank: number | null; bookingMode: "instant" | "request" | "quote"; slug: string; title: string; titleEn: string; tagline: string; city: string; area: string; areaEn: string; duration: string; durationEn: string; group: string; groupEn: string; img: string; basePrice: string; priceUnit: "person" | "group"; priceNote?: string; referable: boolean; rateBp: number | null; referenceAvgJpy: number | null; referenceNote: string | null; commissionExampleNet: number | null; policyFrom: string | null }
 
 export function HotelExperiences() {
   const { hotel, me, lang } = usePortal();
   const X = t().experiences, S = t().status, en = lang === "en", access = partnerAccess(hotel, me.memberships);
   const [rows, setRows] = useState<Term[] | null>(null), [err, setErr] = useState<string | null>(null), [relay, setRelay] = useState(false);
+  const [sort, setSort] = useState<ExperienceSort>("default");
   const [search, setSearch] = useState(""), [city, setCity] = useState(""), [mode, setMode] = useState(""), [referable, setReferable] = useState(false);
   const [links, setLinks] = useState<Record<string, { qr: string; qrId: string; url: string }>>({});
   const [pending, setPending] = useState<Record<string, boolean>>({}), [errors, setErrors] = useState<Record<string, string>>({}), [retry, setRetry] = useState(0);
@@ -38,7 +41,7 @@ export function HotelExperiences() {
   if (!rows) return <Loading />;
   const areas = [...new Set(rows.map((x) => x.city))].sort();
   const query = search.trim().toLocaleLowerCase();
-  const filtered = rows.filter((x) => (!query || [x.title, x.titleEn, x.area, x.areaEn, x.city].join(" ").toLocaleLowerCase().includes(query)) && (!city || x.city === city) && (!mode || x.bookingMode === mode) && (!referable || x.referable));
+  const filtered = sortExperiences(rows.filter((x) => (!query || [x.title, x.titleEn, x.area, x.areaEn, x.city].join(" ").toLocaleLowerCase().includes(query)) && (!city || x.city === city) && (!mode || x.bookingMode === mode) && (!referable || x.referable)), sort);
   const clear = () => { setSearch(""); setCity(""); setMode(""); setReferable(false); };
   return <>
     <p className="pt-page-description">{en ? "Find the right experience for your guests. Check the price and referral terms, then share or send a booking request." : "お客様に合う体験を探して、紹介・予約へ。料金と紹介条件をまとめて確認できます。"}</p>
@@ -48,7 +51,8 @@ export function HotelExperiences() {
       <select value={mode} onChange={(e) => setMode(e.target.value)} aria-label={en ? "Booking type" : "予約方法"}><option value="">{en ? "All booking types" : "すべての予約方法"}</option>{Object.entries(S.bookingModeTag).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
       <label className="pt-check"><input type="checkbox" checked={referable} onChange={(e) => setReferable(e.target.checked)}/>{en ? "Commission available" : "紹介料対象のみ"}</label>
     </div>
-    <div className="pt-result-count"><span role="status">{t().common.items(filtered.length)}</span>{(search || city || mode || referable) && <Button kind="link" small onClick={clear}>{t().common.clear}</Button>}</div>
+    <div className="pt-result-count"><span role="status">{t().common.items(filtered.length)}</span><div className="pt-catalog-sort"><label>{en ? "Sort" : "並べ替え"}<select value={sort} onChange={e => setSort(e.target.value as ExperienceSort)}><option value="default">{en ? "Listed order" : "掲載順"}</option><option value="commission">{en ? "Highest commission" : "紹介料が高い順"}</option><option value="popular">{en ? "Most popular" : "人気順"}</option></select></label><InfoHelp label={en ? "Sorting experiences" : "並べ替えの基準"}><p>{en ? "Highest commission uses the displayed estimate excluding tax. The basis may be per person or per group; check each price label. Experiences without an estimate appear last." : "紹介料が高い順は、カードに表示されている紹介料の目安（税抜）の金額で並べます。1名あたり・1組あたりの違いは各料金表示をご確認ください。金額未定・紹介対象外の体験は最後に表示します。"}</p><p>{me.demo ? (en ? "Popularity in the demo uses fictional confirmed and completed bookings." : "デモの人気順は、架空の予約確定・実施済みサンプルを基に並べています。") : (en ? "Popularity uses bookings registered across KAMEHAME JAPAN in the past 90 days that are currently confirmed or completed. Cancelled, fully refunded and disputed bookings are excluded. Ties and experiences without bookings retain their listed order." : "人気順は、直近90日間にKAMEHAME JAPAN全体で登録された、現在「予約確定」「実施済み」の予約件数を基準にします。キャンセル・全額返金・決済異議のある予約は除外します。同数・実績なしの場合は掲載順になります。")}</p></InfoHelp></div>{(search || city || mode || referable) && <Button kind="link" small onClick={clear}>{t().common.clear}</Button>}</div>
+    {sort === "popular" && filtered.length > 0 && filtered.every(x => x.popularityRank === null) && <p className="pt-small pt-muted">{en ? "No recent confirmed bookings for these experiences. Showing listed order." : "表示中の体験には直近90日の予約実績がないため、掲載順で表示しています。"}</p>}
     {filtered.length === 0 ? <div className="pt-card pt-empty-state"><Search size={28}/><h2>{en ? "No matching experiences" : "条件に合う体験がありません"}</h2><p>{en ? "Try another name, area or booking type." : "キーワードやエリア、予約方法を変えてお試しください。"}</p><Button kind="secondary" onClick={clear}>{t().common.clear}</Button></div> : <div className="pt-catalog-grid">{filtered.map((x) => <article className="pt-experience-card" key={x.slug}>
       <div className="pt-experience-image"><img src={x.img} alt="" loading="lazy"/><span><Badge tone={x.referable ? "ok" : "warn"}>{x.referable ? X.referable : X.notReferable}</Badge></span></div>
       <div className="pt-experience-body">
