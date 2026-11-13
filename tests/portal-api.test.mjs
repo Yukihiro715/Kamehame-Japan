@@ -204,7 +204,7 @@ test("T22: dashboard numbers come from the same facts as the reservation list; b
   const out = await admin.call("POST", `ops/reservations/${r2.id}/outcome`, { outcome: "cancelled", reason: "guest cancelled" });
   assert.equal(out.status, 200, JSON.stringify(out.body));
   const dash = (await a.call("GET", "hotel/dashboard?from=2026-10-01&to=2026-10-31")).body;
-  assert.deepEqual(dash.funnel, { accesses: 2, visits: 1, provisional: 2, confirmed: 1, paid: 1, fullyRefunded: 0, cancelled: 1, estimatedCommissionNet: 0 });
+  assert.deepEqual(dash.funnel, { accesses: 2, visits: 1, provisional: 0, confirmed: 1, paid: 1, fullyRefunded: 0, cancelled: 1, estimatedCommissionNet: 0 });
   assert.deepEqual(dash.confirmed, { count: 1, baseNet: 36000, commissionNet: 1800, commissionTaxRef: 180 });
   assert.deepEqual(dash.balance, { unpaidNet: 1800, unpaidTaxRef: 180, paid: 0 });
   const other = (await a.call("GET", "hotel/dashboard?from=2026-11-01&to=2026-11-30")).body;
@@ -380,6 +380,9 @@ test('demo samples filter correctly, agree with 5% totals, and never enter the l
   for (const r of completed.rows) { assert.equal(r.rateBp,500); assert.equal(r.commissionNet,r.baseNet*.05); }
   const dash = (await c.call('GET','hotel/dashboard')).body;
   assert.equal(dash.confirmed.commissionNet,completed.rows.reduce((n,r) => n+r.commissionNet,0));
+  assert.equal(dash.funnel.provisional,1);
+  assert.equal(dash.funnel.confirmed,4);
+  assert.equal(dash.funnel.estimatedCommissionNet,8000);
   assert.equal((await c.call('GET','hotel/reservations?ref=missing')).body.total,0);
   const cases = (await c.call('GET','hotel/cases')).body;
   assert.equal(cases.total,3);
@@ -455,4 +458,30 @@ test('quarterly payments exclude void/draft statements, retain actual transfers 
   await db.run(`UPDATE commission_entries SET status='confirmed',hold_reason=NULL,performed_on_jst='2026-10-12',commission_net_jpy=1000 WHERE reservation_id=?`,[r.id]);
   const pending=(await S.partnerQuarterPayments(db,'hA',[]))[0];assert.equal(pending.period,'2026-Q4');assert.equal(pending.gross,1100);assert.equal(pending.transfer,null);
   assert.equal((await S.partnerQuarterPayments(db,'hB',[])).length,0);
+});
+
+
+test("dashboard: pending excludes confirmed/cancelled and estimates use selected booking dates", async () => {
+  const db = openTestDb(); await seed(db);
+  const metrics = await vite.ssrLoadModule("/lib/portal/metrics.ts");
+  const admin = client(db); await signIn(admin, "admin@example.com", "ops");
+  const materials = await admin.call("POST", "ops/hotels/hA/links", { medium:"web",kind:"url" });
+  const arrival = await links.handleReferralArrival(db,{ token:materials.body.link.url.split('/r/')[1],userAgent:UA,now:T0 });
+  const ctx = await links.activeReferral(db,arrival.setCookie.split(';')[0],T0);
+  const states = ['provisional','arranging','confirmed','completed','cancelled','no_show','confirmed','provisional'];
+  const entries = [];
+  for (let i=0;i<states.length;i++) {
+    const r=await R.createReservation(db,{requestId:uuid(),flow:'experience',experienceSlug:'kanji-name-calligraphy',experienceDate:'2026-10-25',guests:1,lang:'en',lines:[{kind:'base',description:'Test',commissionable:true,quantity:1,grossJpy:22000}]},ctx,T0+i);
+    await db.run(`UPDATE reservations SET status = ?, created_at = ? WHERE id = ?`,[states[i],i===6?'2026-09-01T00:00:00Z':iso(T0),r.id]);
+    if(i===7) await db.run(`UPDATE reservation_referrals SET status = 'removed' WHERE reservation_id = ?`,[r.id]);
+    if(i===3) await db.run(`UPDATE commission_entries SET status = 'pending', performed_on_jst = '2026-10-25' WHERE reservation_id = ?`,[r.id]);
+    entries.push(await db.first(`SELECT commission_net_jpy FROM commission_entries WHERE reservation_id = ?`,[r.id]));
+  }
+  const d=await metrics.hotelDashboard(db,'hA',{from:'2026-10-01',to:'2026-10-31'});
+  assert.equal(d.funnel.provisional,2);
+  assert.equal(d.funnel.confirmed,2);
+  assert.equal(d.funnel.estimatedCommissionNet,entries.slice(0,3).reduce((n,e)=>n+e.commission_net_jpy,0));
+  assert.ok(d.funnel.estimatedCommissionNet>0);
+  const other=await metrics.hotelDashboard(db,'hB',{from:'2026-10-01',to:'2026-10-31'});
+  assert.equal(other.funnel.provisional,0);assert.equal(other.funnel.estimatedCommissionNet,0);
 });

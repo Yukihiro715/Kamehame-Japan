@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { MapPin, Clock3, Search } from "lucide-react";
 import { api, errorText, pct, yen } from "../client";
 import { label, t } from "../i18n";
+import { TermLabel } from "../help";
 import { usePortal } from "../shell";
 import { partnerAccess } from "../partner-access";
 import { Badge, Button, CopyLink, Loading, Notice } from "../ui";
@@ -55,7 +56,7 @@ export function HotelExperiences() {
         <h2>{en ? x.titleEn : x.title}</h2>
         <p className="pt-experience-meta"><Clock3 size={14} aria-hidden="true"/>{en ? x.durationEn : x.duration}<span>·</span>{en ? x.groupEn : x.group}</p>
         <div className="pt-experience-price"><small>{X.basePrice}</small><strong>{x.basePrice}</strong><span>{x.priceUnit === "group" ? X.perGroup : X.perPerson}</span></div>
-        <div className="pt-referral-terms"><div><span>{X.rate}</span><b>{x.referable ? pct(x.rateBp) : "—"}</b></div><div><span>{X.example}</span><b>{x.commissionExampleNet !== null ? yen(x.commissionExampleNet) : "—"}</b></div></div>
+        <div className="pt-referral-terms"><div><TermLabel label={X.rate} term="rate" en={en}/><b>{x.referable ? pct(x.rateBp) : "—"}</b></div><div><span>{X.example}</span><b>{x.commissionExampleNet !== null ? yen(x.commissionExampleNet) : "—"}</b></div></div>
         <details className="pt-price-details"><summary>{en ? "Price and referral details" : "料金・紹介料の補足"}</summary>{x.priceNote && !en && <p>{x.priceNote}</p>}<p>{X.refAvg}: {x.referenceAvgJpy ? yen(x.referenceAvgJpy) : "—"}{x.referenceNote && !en ? `（${x.referenceNote}）` : ""}</p><p>{X.note}</p></details>
         <div className="pt-experience-actions"><Badge tone="neutral">{label(S.bookingModeTag, x.bookingMode)}</Badge>{relay && <Link className="pt-btn pt-btn-primary" href={`/partner/cases/new/?experience=${encodeURIComponent(x.slug)}`}>{label(S.bookingMode, x.bookingMode)}</Link>}{access.refer && !links[x.slug] && <Button kind="secondary" disabled={pending[x.slug]} onClick={() => void getLink(x.slug)}>{pending[x.slug] ? t().common.loading : X.getLink}</Button>}</div>
         {errors[x.slug] && <Notice tone="bad">{errors[x.slug]}</Notice>}

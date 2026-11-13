@@ -6,6 +6,7 @@ import { ArrowRight, ClipboardPlus, MapPin, QrCode } from "lucide-react";
 import { api, errorText, jst, yen } from "../client";
 import { t } from "../i18n";
 import { usePortal } from "../shell";
+import { helpText, TermLabel } from "../help";
 import { partnerAccess } from "../partner-access";
 import { Button, Card, Loading, Notice, PeriodPicker, Stat, periodQuery } from "../ui";
 
@@ -39,22 +40,24 @@ export function HotelDashboard() {
     </div>
     <div className="pt-period-bar"><span className="pt-small pt-muted">{en ? "Reporting period · JST" : "集計期間 · 日本時間"}</span><PeriodPicker value={period} onChange={setPeriod}/></div>
     {err?.key === key ? <><Notice tone="bad">{err.text}</Notice><Button kind="secondary" onClick={() => setRetry((v) => v + 1)}>{en ? "Try again" : "再読み込み"}</Button></> : !data ? <Loading/> : <>
-      <div className="pt-kpis">
-        <Stat label={en ? "Confirmed commission (excl. tax)" : "確定紹介料（税抜）"} value={yen(data.confirmed.commissionNet)} note={`${D.performedNote} · ${D.taxRef(yen(data.confirmed.commissionNet + data.confirmed.commissionTaxRef))}`} tone="accent" href={access.settlement ? "/partner/settlement/" : undefined}/>
-        <Stat label={D.confirmed} value={data.funnel.confirmed} note={D.provisionalNote} href={bookingLink}/>
-        <Stat label={en ? "Completed experiences" : "実施確認済み"} value={data.confirmed.count} note={D.performedNote} href="/partner/reservations/"/>
-        <Stat label={en ? "Current unpaid commission (excl. tax)" : "現在の未払紹介料（税抜）"} value={yen(data.balance.unpaidNet)} note={en ? "All periods · See statements for payment amounts" : "全期間の残高 · 振込額は精算書で確認"} href={access.settlement ? "/partner/settlement/" : undefined}/>
+      <div className="pt-kpis pt-kpis-five">
+        <Stat label={D.visits} value={data.funnel.visits ?? "—"} note={en ? "Same browser · counted once in 7 days" : "同じブラウザは7日間で1人"} help={<><p>{helpText("visits", en)}</p>{data.visitorCountPartial && <p>{D.visitsPartial}</p>}</>}/>
+        <Stat label={D.provisional} value={data.funnel.provisional} note={en ? "Awaiting confirmation · by booking date" : "予約確定待ち・予約日で集計"} href={bookingLink} help={<p>{helpText("pending", en)}</p>}/>
+        <Stat label={D.confirmed} value={data.funnel.confirmed} note={en ? "Includes completed · by booking date" : "実施済みを含む・予約日で集計"} href={bookingLink} help={<p>{helpText("confirmed", en)}</p>}/>
+        <Stat label={D.estimated} value={yen(data.funnel.estimatedCommissionNet)} note={en ? "Not yet performed · subject to change" : "未実施分・キャンセル等で変動"} href={bookingLink} help={<p>{helpText("estimate", en)}</p>}/>
+        <Stat label={en ? "Confirmed commission (excl. tax)" : "確定紹介料（税抜）"} value={yen(data.confirmed.commissionNet)} note={en ? "Performed experiences · by performance date" : "実施済み分・実施日で集計"} tone="accent" href={`/partner/reservations/?experienceFrom=${data.period.from}&experienceTo=${data.period.to}`} help={<p>{helpText("earned", en)}</p>}/>
       </div>
+      {data.visitorCountPartial && <p className="pt-small pt-muted">{D.visits}: {D.visitsPartial}</p>}
       <div className="pt-dashboard-columns">
         <Card title={D.funnel} actions={<Link className="pt-inline-link" href={bookingLink}>{en ? "View bookings" : "予約実績・紹介料を見る"}<ArrowRight size={15}/></Link>}>
           <dl className="pt-metric-list">
-            {[[D.accesses, data.funnel.accesses, D.accessesNote], [D.visits, data.funnel.visits, D.visitsNote + (data.visitorCountPartial ? D.visitsPartial : "")], [D.provisional, data.funnel.provisional, D.provisionalNote], [D.paid, data.funnel.paid, D.fullyRefunded(data.funnel.fullyRefunded)], [D.cancelled, data.funnel.cancelled, ""]].map(([name, value, note]) => <div key={String(name)}><dt>{name}<small>{note}</small></dt><dd>{value === null ? "—" : Number(value).toLocaleString()}</dd></div>)}
+            {[[D.accesses, data.funnel.accesses, D.accessesNote], [D.paid, data.funnel.paid, D.fullyRefunded(data.funnel.fullyRefunded)], [D.cancelled, data.funnel.cancelled, ""]].map(([name, value, note]) => <div key={String(name)}><dt>{name === D.accesses || name === D.paid ? <TermLabel label={String(name)} term={name === D.accesses ? "opens" : "payment"} en={en}/> : name}<small>{note}</small></dt><dd>{value === null ? "—" : Number(value).toLocaleString()}</dd></div>)}
           </dl>
         </Card>
-        <Card title={en ? "Commission overview" : "紹介料の内訳"}>
-          <div className="pt-commission-estimate"><span>{D.estimated}</span><strong>{yen(data.funnel.estimatedCommissionNet)}</strong><small>{D.estimatedNote} · {en ? "All periods" : "全期間"}</small></div>
-          <dl className="pt-metric-list"><div><dt>{D.baseNet}</dt><dd>{yen(data.confirmed.baseNet)}</dd></div><div><dt>{D.paidOut}<small>{D.paidOutNote}</small></dt><dd>{yen(data.balance.paid)}</dd></div></dl>
+        <Card title={en ? "How to read your results" : "実績の見方"}>
+          <p className="pt-small pt-muted">{en ? "Bookings and estimated commission use booking dates. Confirmed commission uses the date the experience was performed." : "仮予約中・予約確定・紹介料見込みは予約日、確定紹介料は体験の実施日を基に、選択した期間で集計します。"}</p>
           <p className="pt-note-box">{D.note}</p>
+          {access.settlement && <Link className="pt-inline-link" href="/partner/settlement/">{en ? "View payment schedule & history" : "支払い予定・履歴を確認する"}<ArrowRight size={15}/></Link>}
         </Card>
       </div>
       <p className="pt-small pt-muted">{D.period(data.period.from, data.period.to, jst(data.updatedAt))}</p>

@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { t } from "./i18n";
+import { InfoHelp } from "./help";
 
 export function Card({ title, children, actions, className = "" }: { title?: ReactNode; children: ReactNode; actions?: ReactNode; className?: string }) {
   return (
@@ -13,9 +14,10 @@ export function Card({ title, children, actions, className = "" }: { title?: Rea
   );
 }
 
-export function Stat({ label, value, note, tone, href }: { label: string; value: ReactNode; note?: ReactNode; tone?: "muted" | "accent" | "warn"; href?: string }) {
+export function Stat({ label, value, note, tone, href, help }: { label: string; value: ReactNode; note?: ReactNode; help?: ReactNode; tone?: "muted" | "accent" | "warn"; href?: string }) {
   const content = <><span className="pt-stat-l">{label}{href && <ArrowUpRight size={16} aria-hidden="true"/>}</span><b className="pt-stat-v">{value}</b>{note && <small className="pt-stat-n">{note}</small>}</>;
   const className = `pt-stat${tone ? ` pt-stat-${tone}` : ""}`;
+  if (help) return <div className={className}><span className="pt-stat-l"><span>{label}</span><InfoHelp label={label}>{help}</InfoHelp></span>{href ? <a className="pt-stat-value-link" href={href}><b className="pt-stat-v">{value}</b><ArrowUpRight size={16} aria-hidden="true"/></a> : <b className="pt-stat-v">{value}</b>}{note && <small className="pt-stat-n">{note}</small>}</div>;
   return href ? <a className={`${className} pt-stat-link`} href={href}>{content}</a> : <div className={className}>{content}</div>;
 }
 
