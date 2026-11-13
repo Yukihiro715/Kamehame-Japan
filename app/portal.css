@@ -547,3 +547,11 @@
 .pt-brand-settings .pt-card { display: grid; gap: 16px; }
 .pt-partner .pt-brochure-table .pt-btn { text-decoration: none; }
 @media(max-width: 760px) { .pt-brochure-table :is(input,select) { font-size: 16px; } }
+
+.pt-official-brochure-options { display: grid; grid-template-columns: minmax(0, 2fr) minmax(150px, 1fr); gap: 16px; }
+.pt-official-brochure-options select { text-overflow: ellipsis; }
+.pt-official-brochure-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+@media(max-width: 600px) {
+  .pt-official-brochure-options { grid-template-columns: minmax(0, 1fr); }
+  .pt-official-brochure-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+}

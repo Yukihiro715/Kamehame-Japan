@@ -69,7 +69,7 @@ export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInp
 }
 
 /** A dependency-free, single-page A4 PDF containing the exact high-resolution preview. */
-export function brochurePdf(jpeg: Uint8Array, contactUrl = ''): Uint8Array {
+export function brochurePdf(jpeg: Uint8Array, contactUrl = '', linkRect: [number,number,number,number] = [34,32,562,110]): Uint8Array {
   const encode=(s:string)=>new TextEncoder().encode(s), chunks:Uint8Array[]=[], offsets=[0];let length=0;
   const add=(bytes:Uint8Array)=>{chunks.push(bytes);length+=bytes.length;};
   const object=(id:number,parts:(string|Uint8Array)[])=>{offsets[id]=length;add(encode(`${id} 0 obj\n`));for(const part of parts)add(typeof part==='string'?encode(part):part);add(encode('\nendobj\n'));};
@@ -80,7 +80,7 @@ export function brochurePdf(jpeg: Uint8Array, contactUrl = ''): Uint8Array {
   object(4,[`<< /Type /XObject /Subtype /Image /Width ${BROCHURE_WIDTH} /Height ${BROCHURE_HEIGHT} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>\nstream\n`,jpeg,'\nendstream']);
   const content='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
   object(5,[`<< /Length ${content.length} >>\nstream\n${content}\nendstream`]);
-  if(url)object(6,[`<< /Type /Annot /Subtype /Link /Rect [34 32 562 110] /Border [0 0 0] /A << /S /URI /URI (${url}) >> >>`]);
+  if(url)object(6,[`<< /Type /Annot /Subtype /Link /Rect [${linkRect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (${url}) >> >>`]);
   const start=length;add(encode(`xref\n0 ${offsets.length}\n0000000000 65535 f \n${offsets.slice(1).map(o=>`${String(o).padStart(10,'0')} 00000 n \n`).join('')}trailer\n<< /Size ${offsets.length} /Root 1 0 R >>\nstartxref\n${start}\n%%EOF\n`));
   const pdf=new Uint8Array(length);let cursor=0;for(const part of chunks){pdf.set(part,cursor);cursor+=part.length;}return pdf;
 }

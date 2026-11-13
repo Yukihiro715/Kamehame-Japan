@@ -1,3 +1,4 @@
+import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguage } from "./official-brochures";
 import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
 import { saveBank, readBank } from "./bank";
 import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
@@ -215,6 +216,19 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     targetFor(slug);
     const url = `https://example.invalid/demo/${slug ?? "all"}`;
     return json({ok:true, qr:{id:`demo-qr:${slug ?? "all"}`,url},url:{id:`demo-url:${slug ?? "all"}`,url}});
+  }
+  if (head === "official-brochures") {
+    const body=ctx.method==='POST'?await readJson(ctx.request):{};
+    const hotelId=hotelScope(ctx,p,body);
+    await requireFeature(ctx.db,hotelId,'refer');
+    if(ctx.method==='GET'&&!sub)return json({ok:true,...officialBrochureCatalog()});
+    if((ctx.method==='POST'&&sub==='prepare')||(ctx.method==='GET'&&sub==='demo'&&p.demo)) {
+      const lang=officialBrochureLanguage(ctx.method==='POST'?body.lang:q(ctx,'lang'));
+      const slug=str(ctx.method==='POST'?body.experience:q(ctx,'experience'),80)||null;
+      const input=await officialBrochureInput(ctx.db,hotelId,lang,slug,await publicOrigin(ctx),p.email,p.demo===true);
+      return json({ok:true,input});
+    }
+    throw notFound();
   }
   if (head === "materials") {
     const body = ctx.method === "POST" ? await readJson(ctx.request) : {};
