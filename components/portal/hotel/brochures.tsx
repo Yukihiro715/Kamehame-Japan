@@ -1,5 +1,7 @@
 "use client";
 
+import { brochureBrandReady as brandReady, brochureContactError, brochureContacts } from "@/lib/portal/brochure-contact";
+import { BrochureContactSettings } from "./brochure-contact-settings";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { api, errorText } from "../client";
@@ -11,11 +13,6 @@ import type { BrochureInput } from "@/lib/portal/brochure-render";
 import { logoPng, prepareBrochure, downloadBrochure } from "./brochure-media";
 import { BrochurePreview } from "./brochure-preview";
 
-function brandReady(brand: BrochureBrand) {
-  let urlValid=!brand.contactUrl;
-  try {const url=new URL(brand.contactUrl);urlValid=url.protocol==='https:'&&!url.username&&!url.password;}catch{/* Empty URL is allowed. */}
-  return !!brand.companyName.trim() && !!(brand.contactEmail||brand.contactPhone||brand.contactUrl) && urlValid && (!brand.contactEmail||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(brand.contactEmail));
-}
 export function HotelBrochures() {
   const {hotel,lang,me}=usePortal();
   return hotel?<BrochureLibrary key={hotel.id} hotelId={hotel.id} en={lang==='en'} canBook={partnerAccess(hotel,me.memberships).cases}/>:null;
@@ -27,7 +24,7 @@ function BrochureLibrary({hotelId,en,canBook}:{hotelId:string;en:boolean;canBook
   const [error,setError]=useState(''),[notice,setNotice]=useState(''),[pending,setPending]=useState(''),[retry,setRetry]=useState(0);
   const busy=!!pending;
   useEffect(()=>{let live=true;api<BrochureConfig>('GET',`hotel/brochures?hotel=${encodeURIComponent(hotelId)}`).then(d=>{
-    if(!live)return;setData(d);setBrand(d.brand);setPrices(d.prices);setBrandOpen(!brandReady(d.brand));setError('');
+    if(!live)return;const loadedBrand={...d.brand,contactOptions:brochureContacts(d.brand)};setData({...d,brand:loadedBrand});setBrand(loadedBrand);setPrices(d.prices);setBrandOpen(!brandReady(loadedBrand));setError('');
     const requested=new URLSearchParams(window.location.search).get('experience');if(d.experiences.ja.some(x=>x.slug===requested))setSearch(requested!);
   }).catch(e=>{if(live)setError(errorText(e));});return()=>{live=false;};},[hotelId,retry]);
   const brandDirty=!!data&&JSON.stringify(brand)!==JSON.stringify(data.brand);
@@ -74,13 +71,11 @@ function BrochureLibrary({hotelId,en,canBook}:{hotelId:string;en:boolean;canBook
           <Field label={en?'Logo (PNG / JPEG / WebP)':'ロゴ（PNG・JPEG・WebP）'} hint={en?'Optional. The image is resized automatically.':'任意。画像は自動で縮小します。'}><input type="file" accept="image/png,image/jpeg,image/webp" disabled={!canBrand||busy} onChange={async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;setPending('logo');setError('');try{editBrand('logoDataUrl',await logoPng(file));}catch(err){setError(err instanceof Error?err.message:String(err));}finally{setPending('');}}}/></Field>
           {brand.logoDataUrl&&<div className="pt-row"><img className="pt-brochure-logo" src={brand.logoDataUrl} alt={en?'Company logo':'会社ロゴ'}/>{canBrand&&<Button kind="link" disabled={busy} onClick={()=>editBrand('logoDataUrl',null)}>{en?'Remove logo':'ロゴを削除'}</Button>}</div>}
           <Field label={en?'Theme color':'テーマカラー'}><input type="color" value={brand.accentColor} disabled={!canBrand||busy} onChange={e=>editBrand('accentColor',e.target.value)}/></Field>
-          <Field label={en?'Contact email':'お問い合わせメール'}><input type="email" value={brand.contactEmail} maxLength={120} disabled={!canBrand||busy} onChange={e=>editBrand('contactEmail',e.target.value)}/></Field>
-          <Field label={en?'Contact phone':'お問い合わせ電話'}><input type="tel" value={brand.contactPhone} maxLength={40} disabled={!canBrand||busy} onChange={e=>editBrand('contactPhone',e.target.value)}/></Field>
-          <Field label={en?'Company enquiry URL':'自社の問い合わせURL'} hint={en?'HTTPS. Included as a QR code in the PDF.':'https:// のURL。PDFに問い合わせ用QRを掲載します。'}><input type="url" value={brand.contactUrl} maxLength={240} disabled={!canBrand||busy} onChange={e=>editBrand('contactUrl',e.target.value)}/></Field>
-          <Button disabled={!canBrand||busy||!brandDirty} onClick={()=>void saveBrand()}>{data.demo?(en?'Apply in demo':'デモに反映'):(en?'Save company settings':'会社設定を保存')}</Button>
+          <BrochureContactSettings brand={brand} en={en} disabled={!canBrand||busy} onChange={value=>{setBrand(value);setNotice('');}}/>
+          <Button disabled={!canBrand||busy||!brandDirty||!!brochureContactError(brand)||!brand.companyName.trim()} onClick={()=>void saveBrand()}>{data.demo?(en?'Apply in demo':'デモに反映'):(en?'Save company settings':'会社設定を保存')}</Button>
       </Card>
     </details>
-    {!brandReady(brand)&&<Notice>{en?'Set your company contact details to enable PDF downloads.':'PDF出力には、上の会社設定で問い合わせ先を1つ以上登録してください。'}</Notice>}
+    {!brandReady(brand)&&<Notice>{en?'Choose at least one visible contact detail or a valid QR code to enable PDF downloads.':'PDF出力には、掲載する連絡先を1つ以上選ぶか、有効なQRを設定してください。'}</Notice>}
     {brandDirty&&<Notice>{en?'Save the company changes to enable downloads.':'会社情報に未保存の変更があります。保存するとPDFをダウンロードできます。'}</Notice>}
     <Card title={en?'Saved experience brochures':'体験別の紹介資料'}>
       <div className="pt-brochure-toolbar">

@@ -36,3 +36,24 @@ test('single experience and agency PDFs retain portrait size and one page',()=>{
   const raw=inspect(brochurePdf(jpeg,'https://example.com/booking'));
   assert.match(raw,/\/Count 1/);assert.match(raw,/\/MediaBox \[0 0 595.28 841.89\]/);
 });
+
+test('agency PDF links keep independent contact targets and escape unsafe actions',async()=>{
+  const {brochurePdfWithLinks}=await vite.ssrLoadModule('/lib/portal/brochure-render.ts');
+  const raw=inspect(brochurePdfWithLinks(jpeg,[
+    {url:'mailto:guide@example.com',rect:[1,2,3,4]},
+    {url:'tel:+819012345678',rect:[5,6,7,8]},
+    {url:'https://wa.me/819012345678',rect:[9,10,11,12]},
+    {url:'javascript:alert(1)',rect:[0,0,1,1]},
+  ]));
+  assert.equal(raw.match(/\/Subtype \/Link/g).length,3);
+  assert.match(raw,/mailto:guide@example.com/);assert.match(raw,/tel:\+819012345678/);assert.match(raw,/https:\/\/wa.me\/819012345678/);
+  assert.ok(!raw.includes('javascript'));
+  assert.ok(!inspect(brochurePdfWithLinks(jpeg,[])).includes('/Annots'));
+});
+
+test('QR and PDF destinations retain percent-encoded paths without double encoding',async()=>{
+  const {brochurePdfWithLinks}=await vite.ssrLoadModule('/lib/portal/brochure-render.ts');
+  const raw=inspect(brochurePdfWithLinks(jpeg,[{url:'https://example.com/%E4%BA%88%E7%B4%84?source=guide',rect:[1,2,3,4]}]));
+  assert.ok(raw.includes('/%E4%BA%88%E7%B4%84?source=guide'));
+  assert.ok(!raw.includes('%25E4'));
+});

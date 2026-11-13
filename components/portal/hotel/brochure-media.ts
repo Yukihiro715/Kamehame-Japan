@@ -1,5 +1,5 @@
-import type { BrochureInput } from "@/lib/portal/brochure-render";
-import { BROCHURE_WIDTH, BROCHURE_HEIGHT, brochurePdf, renderBrochure } from "@/lib/portal/brochure-render";
+import type { BrochureInput, BrochureLink } from "@/lib/portal/brochure-render";
+import { BROCHURE_WIDTH, BROCHURE_HEIGHT, brochurePdfWithLinks, renderBrochure } from "@/lib/portal/brochure-render";
 
 export function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve,reject)=>{const image=new Image(),timer=setTimeout(()=>reject(new Error('画像の読み込みに失敗しました / Image loading timed out.')),15000);image.onload=()=>{clearTimeout(timer);resolve(image);};image.onerror=()=>{clearTimeout(timer);reject(new Error('画像を読み込めません / Could not load an image.'));};image.src=src;});
@@ -18,7 +18,15 @@ export async function logoPng(file: File) {
   } finally {URL.revokeObjectURL(url);}
 }
 
+const contactLinks = new WeakMap<HTMLCanvasElement,BrochureLink[]>();
+const editorialFonts = new Map<string,Promise<void>>();
+async function loadEditorialFont(lang: 'ja' | 'en') {
+  let pending=editorialFonts.get(lang);
+  if(!pending){pending=(async()=>{const face=new FontFace(`Kamehame Editorial ${lang}`,`url(/fonts/brochure-editorial-${lang}.woff)`);await face.load();document.fonts.add(face);})().catch(error=>{editorialFonts.delete(lang);throw error;});editorialFonts.set(lang,pending);}
+  await pending;
+}
 export async function prepareBrochure(input: BrochureInput): Promise<HTMLCanvasElement> {
+  await loadEditorialFont(input.lang);
   await document.fonts.ready;
   const heroUrl=new URL(input.experience.img,window.location.origin);
   if(heroUrl.origin!==window.location.origin)throw new Error('画像URLが無効です / Invalid image URL.');
@@ -27,10 +35,10 @@ export async function prepareBrochure(input: BrochureInput): Promise<HTMLCanvasE
   const [hero,logo,detail]=await Promise.all([loadImage(heroUrl.href),input.brand.logoDataUrl?loadImage(input.brand.logoDataUrl):Promise.resolve(undefined),detailUrl?loadImage(detailUrl.href):Promise.resolve(undefined)]);
   const canvas=document.createElement('canvas');canvas.width=BROCHURE_WIDTH;canvas.height=BROCHURE_HEIGHT;
   const ctx=canvas.getContext('2d');if(!ctx)throw new Error('PDFを作成できません / PDF rendering unavailable.');
-  renderBrochure(ctx,input,hero,logo,detail);return canvas;
+  contactLinks.set(canvas,renderBrochure(ctx,input,hero,logo,detail));return canvas;
 }
 export function downloadBrochure(canvas: HTMLCanvasElement, input: BrochureInput) {
   const jpeg=Uint8Array.from(atob(canvas.toDataURL('image/jpeg',.94).split(',')[1]),c=>c.charCodeAt(0));
-  const bytes=brochurePdf(jpeg,input.brand.contactUrl),url=URL.createObjectURL(new Blob([bytes as BlobPart],{type:'application/pdf'}));
+  const bytes=brochurePdfWithLinks(jpeg,contactLinks.get(canvas)??[]),url=URL.createObjectURL(new Blob([bytes as BlobPart],{type:'application/pdf'}));
   const link=document.createElement('a');link.href=url;link.download=`${input.demo?'DEMO-':''}experience-${input.experience.slug}-${input.lang}.pdf`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
 }

@@ -560,3 +560,11 @@
 .pt-trifold-print summary { color: var(--pt-accent, #b74908); cursor: pointer; font-weight: 600; }
 .pt-trifold-page { margin: 24px 0 0; min-width: 0; }
 .pt-trifold-page figcaption { display: flex; flex-direction: column; gap: 6px; }
+
+/* Agency PDFs: contact settings remain a single column on small screens. */
+.pt-brochure-contacts { border: 0; margin: 24px 0; padding: 0; min-width: 0; }
+.pt-brochure-contacts legend { font-weight: 700; }
+.pt-brochure-check { display: flex; align-items: center; gap: 10px; margin: 8px 0 24px; font-size: 14px; }
+.pt-brochure-check input[type="checkbox"] { width: 18px; height: 18px; min-height: 18px; flex: 0 0 18px; accent-color: var(--pt-accent, #b74908); }
+.pt-brochure-qr-fields { border-inline-start: 2px solid #e6ddd3; padding-inline-start: 16px; }
+.pt-brochure-destination { overflow-wrap: anywhere; }
