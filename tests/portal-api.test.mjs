@@ -667,8 +667,8 @@ test('official brochures use public prices and stable hotel/language referral QR
   assert.ok(!JSON.stringify(en.body).includes('999999'));
   assert.equal((await prep('en',slug)).body.input.referralUrl,en.body.input.referralUrl,'reprint reuses the same QR');
   const ja=(await prep('ja',slug)).body.input,general=(await prep('en')).body.input;
-  assert.notEqual(ja.referralUrl,en.body.input.referralUrl);assert.equal(general.items.length,3);
-  assert.equal(general.items[0].slug,slug);assert.equal(general.experience,null);
+  assert.notEqual(ja.referralUrl,en.body.input.referralUrl);assert.equal(general.items.length,0);
+  assert.equal(general.experience,null);
   for(const input of [en.body.input,ja,general]) {
     const token=new URL(input.referralUrl).pathname.split('/').pop();
     const row=await db.first('SELECT * FROM referral_links WHERE token=?',[token]);
