@@ -27,7 +27,7 @@ export async function requestPassword(db: SqlDb, env: PortalMailEnv, input: { em
   if (!user) return { ok: true };
   const token = randomId() + randomId(), at = new Date(now).toISOString();
   await db.run(`INSERT INTO partner_password_tokens VALUES (?,?,?,?,NULL)`, [await sha256Hex(token), user.id, new Date(now + 30 * 60000).toISOString(), at]);
-  const url = `${input.origin}/hotel/login/#password-token=${token}`;
+  const url = `${input.origin}/partner/login/#password-token=${token}`;
   const en = user.lang === "en";
   await sendPortalMail(env, { to: email, subject: en ? "[KAMEHAME JAPAN] Set your password" : "【KAMEHAME JAPAN】パスワードの初回設定・再設定", text: en ? `Set your password using the link below (valid for 30 minutes, one use).\n${url}\nIf you did not request this, ignore this email.` : `以下のリンクからパスワードを設定してください（30分間有効・1回限り）。\n${url}\n心当たりがない場合は、このメールを破棄してください。` });
   return { ok: true };

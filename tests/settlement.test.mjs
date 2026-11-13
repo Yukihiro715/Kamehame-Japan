@@ -150,7 +150,7 @@ test("lifecycle through the API: issue notifies billing, acknowledge / dispute w
     const issued = (await ops.call("POST", `ops/statements/${sid}/issue`)).body;
     assert.equal(issued.statement.status, "issued"); assert.equal(issued.notified, 1);
     const mail = ops.mails.findLast((m) => m.to?.[0] === "billing@hotel.example" && /通知書/.test(m.subject));
-    assert.match(mail.subject, /お支払い通知書/); assert.match(mail.text, /税込合計: 6,600円/); assert.match(mail.text, /お振込予定額: 6,600円/); assert.match(mail.text, /\/hotel\/settlement\//);
+    assert.match(mail.subject, /お支払い通知書/); assert.match(mail.text, /税込合計: 6,600円/); assert.match(mail.text, /お振込予定額: 6,600円/); assert.match(mail.text, /\/partner\/settlement\//);
     // The partner sees it with items; the CSV carries the same figures (T29).
     const mine = (await bill.call("GET", "hotel/settlement?hotel=hA")).body;
     assert.equal(mine.statements.length, 1); assert.equal(mine.billing, true);

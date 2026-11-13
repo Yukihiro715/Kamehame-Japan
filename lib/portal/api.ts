@@ -377,7 +377,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const s = await settle.issueStatement(ctx.db, id, p.email);
       const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
       const origin = await publicOrigin(ctx);
-      const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/hotel/settlement/${s.id}/`, lang }) })));
+      const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...statementIssuedMail({ entityName, period: s.period, grossJpy: s.gross_jpy, transferJpy: s.transfer_jpy, carriedOutJpy: s.carried_out_jpy, payDate: s.pay_date_jst, deadline: s.dispute_deadline_jst, url: `${origin}/partner/settlement/${s.id}/`, lang }) })));
       return json({ ok: true, statement: s, notified: emails.length, mails });
     }
     if (action === "void" && post) { const p = await requireOps(ctx, ...FINANCE); const b = await readJson(ctx.request); await settle.voidStatement(ctx.db, id, { reason: b.reason, by: p.email }); return json({ ok: true }); }
@@ -390,7 +390,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     const s = await settle.getStatement(ctx.db, d.statement_id);
     const { emails, entityName } = await billingRecipients(ctx, s.profile_id);
     const origin = await publicOrigin(ctx);
-    const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/hotel/settlement/${s.id}/`, lang }) })));
+    const mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...disputeResolvedMail({ entityName, period: s.period, outcome: b.outcome === "upheld" ? "upheld" : "rejected", resolution: str(b.resolution, 1000), url: `${origin}/partner/settlement/${s.id}/`, lang }) })));
     return json({ ok: true, mails });
   }
   if (head === "payouts") {
@@ -410,7 +410,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
         const periods = (await ctx.db.all<{ period: string }>(`SELECT period FROM statements WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY period`, ids)).map((r) => r.period);
         const { emails, entityName } = await billingRecipients(ctx, po.profile_id);
         const origin = await publicOrigin(ctx);
-        mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/hotel/settlement/`, lang }) })));
+        mails = await Promise.all(emails.map(({ to, lang }) => sendPortalMail(ctx.env, { to, ...payoutPaidMail({ entityName, periods, transferJpy: po.transfer_jpy, paidAt: po.paid_at ?? jstDate(), reference: po.reference, url: `${origin}/partner/settlement/`, lang }) })));
       }
     }
     return json({ ok: true, mails });

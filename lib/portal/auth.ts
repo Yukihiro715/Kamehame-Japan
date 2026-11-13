@@ -186,7 +186,7 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
       { sql: `INSERT INTO audit_logs (id, at, actor, action, target_type, target_id, after_json) VALUES (?, ?, ?, 'membership.invite', 'user', ?, ?)`, params: [randomId(), at, input.by, user.id, JSON.stringify({ email, role: input.role, scopeType: input.scopeType, scopeId: input.scopeId })] },
     ]);
   }
-  const loginUrl = `${input.loginOrigin}/${input.scopeType === "ops" ? "ops" : "hotel"}/login/`;
+  const loginUrl = `${input.loginOrigin}/${input.scopeType === "ops" ? "ops" : "partner"}/login/`;
   const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, passwordLogin: input.scopeType === "hotel", roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
   return { userId: user.id, membershipId, mail };
 }
