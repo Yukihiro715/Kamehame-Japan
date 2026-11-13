@@ -2,6 +2,7 @@ import { quarterOf, previousPeriod, payDateFor } from "./settlement";
 /** Fictional, read-only samples. Never inserted into reservations or financial ledgers. */
 import { jstDate } from "@/lib/referral/db";
 import { DEMO_SITE_ID, DEMO_USER_ID } from "./demo-config";
+import { reservationSort } from "./metrics";
 import type { HotelReservationRow, HotelDashboard, Period, ReservationFilters } from "./metrics";
 import { RESERVATION_STATUS_JA, PAYMENT_STATUS_JA, ENTRY_STATUS_JA } from "./util";
 const month = () => jstDate().slice(0, 7);
@@ -10,13 +11,19 @@ export function demoRows(): HotelReservationRow[] {
   return ["completed", "completed", "confirmed", "confirmed", "provisional", "cancelled"].map((status, i) => {
     const baseNet = [60000, 40000, 80000, 30000, 50000, 20000][i], commissionNet = status === "cancelled" ? 0 : baseNet * .05;
     const entryStatus = i < 2 ? "confirmed" : status === "cancelled" ? "cancelled" : "estimated", paymentStatus = i < 4 ? "paid" : "unpaid";
-    return { hotelRef: `R-DEMO0${i + 1}`, createdAt: `${date(i + 1)}T03:00:00Z`, experience: "漢字の名前・書道体験（サンプル）", experienceSlug: "kanji-name-calligraphy", experienceDate: date(8 + i * 3), guests: i % 3 + 2, status, statusJa: RESERVATION_STATUS_JA[status] ?? status, paymentStatus, paymentJa: PAYMENT_STATUS_JA[paymentStatus] ?? paymentStatus, baseNet, rateBp: 500, commissionNet, commissionGrossRef: commissionNet * 1.1, entryStatus, entryJa: ENTRY_STATUS_JA[entryStatus] ?? entryStatus, hold: null, holdCodes: [], performedOn: i < 2 ? date(8 + i * 3) : null };
+    return { hotelRef: `R-DEMO0${i + 1}`, createdAt: `${date(i + 1)}T03:00:00Z`, experience: "漢字の名前・書道体験（サンプル）", experienceSlug: "kanji-name-calligraphy", experienceDate: date(8 + i * 3), guests: i % 3 + 2, status, statusJa: RESERVATION_STATUS_JA[status] ?? status, paymentStatus, paymentJa: PAYMENT_STATUS_JA[paymentStatus] ?? paymentStatus, bookingGross: baseNet * 1.1, baseNet, rateBp: 500, commissionNet, commissionGrossRef: commissionNet * 1.1, entryStatus, entryJa: ENTRY_STATUS_JA[entryStatus] ?? entryStatus, hold: null, holdCodes: [], performedOn: i < 2 ? date(8 + i * 3) : null };
   });
 }
 export function demoReservations(f: ReservationFilters = {}) {
-  const rows = demoRows().filter(r => (!f.from || r.createdAt.slice(0,10) >= f.from) && (!f.to || r.createdAt.slice(0,10) <= f.to) && (!f.experienceFrom || r.experienceDate! >= f.experienceFrom) && (!f.experienceTo || r.experienceDate! <= f.experienceTo) && (!f.status || r.status === f.status) && (!f.ref || r.hotelRef === f.ref.toUpperCase()) && (!f.experience || r.experienceSlug === f.experience)).reverse();
+  const query = f.q?.trim().slice(0,100).toLowerCase();
+  const rows = demoRows().filter(r => (!f.from || r.createdAt.slice(0,10) >= f.from) && (!f.to || r.createdAt.slice(0,10) <= f.to) && (!f.experienceFrom || r.experienceDate! >= f.experienceFrom) && (!f.experienceTo || r.experienceDate! <= f.experienceTo) && (!f.status || r.status === f.status) && (!f.ref || r.hotelRef === f.ref.toUpperCase()) && (!f.experience || r.experienceSlug === f.experience) && (!query || `${r.hotelRef} ${r.experience} ${r.experienceSlug} Calligraphy`.toLowerCase().includes(query)));
+  const sort = reservationSort(f.sort), direction = f.direction === "asc" ? 1 : -1;
+  const value = (r: HotelReservationRow): string | number | null => sort === "created" ? r.createdAt : sort === "date" ? r.experienceDate : sort === "amount" ? r.bookingGross : sort === "rate" ? r.rateBp : sort === "commission" ? r.commissionNet : sort === "status" ? ["provisional","arranging","confirmed","completed","cancelled","no_show"].indexOf(r.status) : r.entryStatus ? ["estimated","pending","confirmed","adjusted","voided"].indexOf(r.entryStatus) : null;
+  rows.sort((a,b) => { const x=value(a), y=value(b); return x===null && y!==null ? 1 : y===null && x!==null ? -1 : x!==null && y!==null && x!==y ? (x<y?-1:1)*direction : a.hotelRef.localeCompare(b.hotelRef); });
+  const summary = { estimatedNet: 0, pendingNet: 0, confirmedNet: 0, unknownCount: 0 };
+  for (const r of rows) { if(r.rateBp===null || r.commissionNet===null) { summary.unknownCount++; continue; } if(r.entryStatus==="estimated") summary.estimatedNet+=r.commissionNet??0; if(r.entryStatus==="pending") summary.pendingNet+=r.commissionNet??0; if(r.entryStatus==="confirmed"||r.entryStatus==="adjusted") summary.confirmedNet+=r.commissionNet??0; }
   const offset = Math.max(0, f.offset ?? 0), limit = Math.min(500, Math.max(1, f.limit ?? 25));
-  return { rows: rows.slice(offset, offset + limit), total: rows.length };
+  return { rows: rows.slice(offset, offset + limit), total: rows.length, summary };
 }
 export const demoBalance = { unpaidNet: 5000, unpaidTaxRef: 500, paid: 13200 };
 export function demoDashboard(period: Period): HotelDashboard {
