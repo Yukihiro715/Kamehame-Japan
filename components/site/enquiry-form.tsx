@@ -16,7 +16,7 @@ import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
-import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy, checkoutTimeCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy, checkoutTimeCopy, checkoutStandardCopy } from "@/lib/provisional-booking";
 import { CancellationTable } from "@/components/site/cancellation-table";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -317,7 +317,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
             <CancellationTable exp={{ cancellationTiers: x.cancellationTiers }} text={x.cancellationText ?? ""} lang={lang} />
           </details>
           <p>{P.cancellation}</p>
-          <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{P.standard}</span></label>
+          <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{checkoutStandardCopy(lang, x.slug)}</span></label>
           {(EXPERIENCE_PRODUCTS[x.slug].adultOnly || EXPERIENCE_PRODUCTS[x.slug].eligibilityRequired || EXPERIENCE_PRODUCTS[x.slug].groupPricing) && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{checkoutAdultCopy(lang, x.slug)}</span></label>}
           <label className="form-check"><input name="checkout_consent" type="checkbox" required /><span>{P.consent} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{T.footerTerms}</a></span></label>
 

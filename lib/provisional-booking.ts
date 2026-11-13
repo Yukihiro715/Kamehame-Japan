@@ -1,7 +1,9 @@
 import type { Lang } from "@/lib/i18n";
+import { privateTeaCheckoutConfigured } from "@/lib/private-tea-checkout-prices";
 
 export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
-export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean }> = {
+export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean; privateTeaPricing?: boolean }> = {
+  "kyoto-higashiyama-private-tea-ceremony": { price: "", amount: 16500, min: 1, max: 5, minCharge: 1, eligibilityRequired: true, privateTeaPricing: true },
   "osaka-kendo-experience-tour": { price: "price_1UTES5DpZ5Y8WoJ2IqJbx1wp", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "kyoto-kendo-experience-tour": { price: "price_1UTESBDpZ5Y8WoJ2vKiTajho", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "nagoya-kendo-experience-tour": { price: "price_1UTESIDpZ5Y8WoJ2xMeQieOF", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
@@ -15,6 +17,8 @@ export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number
   "nihonbashi-bushido-experience": { price: "price_1UXwbPDpZ5Y8WoJ21QAHRH7V", amount: 10000, min: 2, max: 8, minCharge: 2, eligibilityRequired: true, timeOnConfirmation: true },
   "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 2, max: 4, minCharge: 2 },
 };
+
+export const checkoutProductConfigured = (slug: string) => !!EXPERIENCE_PRODUCTS[slug] && (!EXPERIENCE_PRODUCTS[slug].privateTeaPricing || privateTeaCheckoutConfigured());
 
 const copy = {
   en: {
@@ -110,4 +114,12 @@ const nihonbashiEligibility: Record<Lang, { kendo: string; bushido: string; time
   "zh-tw": { kendo: "所有參加者皆為16至64歲。如有6至15歲或65歲以上參加者，請先取得適用報價再付款。", bushido: "所有參加者皆年滿15歲。", time: "開始時間將於付款後與道場協調。請在備註填寫希望時段。若無法達成合適時間，將全額退款。" },
 };
 export const checkoutTimeCopy = (lang: Lang) => nihonbashiEligibility[lang].time;
-export const checkoutAdultCopy = (lang: Lang, slug: string) => slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
+const privateTeaCopy: Record<Lang, { eligibility: string; standard: string }> = {
+  en: { eligibility: "All participants are aged 4 or over. Children pay the same rate as adults.", standard: "This payment covers the private tea ceremony only. Kimono rental and special arrangements require a separate quote before payment." },
+  ja: { eligibility: "参加者全員が4歳以上です。お子様も大人と同料金です。", standard: "貸切茶道体験のみの料金です。着物レンタル・特別手配は、決済前に個別見積もりをご依頼ください。" },
+  es: { eligibility: "Todos los participantes tienen al menos 4 años. Los niños pagan la misma tarifa que los adultos.", standard: "El pago cubre solo la ceremonia privada del té. El alquiler de kimono y los servicios especiales requieren un presupuesto antes de pagar." },
+  fr: { eligibility: "Tous les participants ont au moins 4 ans. Le tarif enfant est identique au tarif adulte.", standard: "Ce paiement couvre uniquement la cérémonie privée du thé. La location de kimono et les prestations particulières nécessitent un devis avant le paiement." },
+  "zh-tw": { eligibility: "所有參加者皆年滿4歲。兒童與成人同價。", standard: "此費用僅包含私人茶道體驗。和服租借與特殊安排請先取得個別報價再付款。" },
+};
+export const checkoutStandardCopy = (lang: Lang, slug: string) => EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].standard : copy[lang].standard;
+export const checkoutAdultCopy = (lang: Lang, slug: string) => EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;

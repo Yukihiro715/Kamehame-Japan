@@ -10,7 +10,7 @@ import { BookingBox } from "@/components/site/booking-box";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider } from "@/components/site/booking-context";
 import { experienceCheckoutEnabled } from "@/lib/experience-checkout";
-import { EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutProductConfigured } from "@/lib/provisional-booking";
 import { BookingCard } from "@/components/site/booking-card";
 import { DateList } from "@/components/site/date-list";
 import { Gallery } from "@/components/site/gallery";
@@ -140,7 +140,7 @@ const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Langua
 async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
   const D = T.detail;
-  const provisional = !!EXPERIENCE_PRODUCTS[exp.slug] && await experienceCheckoutEnabled();
+  const provisional = checkoutProductConfigured(exp.slug) && await experienceCheckoutEnabled();
   const P = provisionalCopy(lang);
   const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
