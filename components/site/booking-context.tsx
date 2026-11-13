@@ -234,9 +234,12 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
     const largeParty = guestsNumber > experience.listedMax;
     const variantView = experience.variants?.find((v) => v.id === state.variant);
     const customQuote = !!experience.variants && (largeParty || state.coursePref === "preferred");
+    // Extras need a separate quote; never charge a base-only total for kimono.
+    const quoteRequested = !!state.quoteRequested || (!!experience.provisionalCheckout && state.addOns.length > 0);
     const prefix = experience.eventPrefix ?? "experience";
     return {
       ...state,
+      quoteRequested,
       set: (patch) => {
         // Choice events for GTM (area, party size, course preference), once per actual change.
         if (patch.variant !== undefined && patch.variant !== state.variant) {
@@ -272,7 +275,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
       },
       toggleAddOn: (id) => setState((s) => ({ ...s, addOns: s.addOns.includes(id) ? s.addOns.filter((x) => x !== id) : [...s.addOns, id] })),
       experience, pricing: activePricing, minDate,
-      estimate: activePricing && !largeParty && !customQuote && !state.quoteRequested && !experience.consultationOnly ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
+      estimate: activePricing && !largeParty && !customQuote && !quoteRequested && !experience.consultationOnly ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
       guestsNumber, largeParty, variantView, customQuote,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- pickDefault/variantTime derive from `experience`

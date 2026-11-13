@@ -2,7 +2,8 @@ import { catalogFor } from "@/lib/catalog";
 import { pricingFor, quote } from "@/lib/pricing";
 import { GEIKO_CHECKOUT_PRICES } from "@/lib/geiko-checkout-prices";
 import { isLang, type Lang } from "@/lib/i18n";
-import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy, checkoutProductConfigured } from "@/lib/provisional-booking";
+import { PRIVATE_TEA_CHECKOUT_PRICES } from "@/lib/private-tea-checkout-prices";
 
 export interface ExperienceCheckoutEnv {
   EXPERIENCE_CHECKOUT_ENABLED?: string;
@@ -157,7 +158,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const slug = typeof body.experience === "string" ? body.experience : "";
   const product = EXPERIENCE_PRODUCTS[slug];
   const x = product && catalogFor("en").experiences.find(x => x.slug === slug && x.status === "live");
-  if (!x || !product || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
+  if (!x || !product || !checkoutProductConfigured(slug) || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
   if ((product.adultOnly || product.eligibilityRequired) && body.adultOnly !== true) return null;
   if (product.groupPricing && body.adultOnly !== true) return null;
   if (body.addOns !== undefined && (!Array.isArray(body.addOns) || body.addOns.length)) return null;
@@ -174,9 +175,10 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const cutoff = (a?.cutoffTime ?? "17:00").split(":").map(Number);
   const today = new Date(now + 9 * 3600000);
   today.setUTCDate(today.getUTCDate() + (a?.cutoffDays ?? 3) + (today.getUTCHours()*60 + today.getUTCMinutes() >= cutoff[0]*60 + cutoff[1] ? 1 : 0));
-  if (date < today.toISOString().slice(0,10) || d.getTime() > now + 366*86400000) return null;
+  if ((!a?.cutoffHours && date < today.toISOString().slice(0,10)) || d.getTime() > now + 366*86400000) return null;
   const times = a?.dates ? a.dates.find(v => v.date === date)?.times ?? [] : a?.startTimes ?? ["10:00"];
   if (product.timeOnConfirmation ? time !== "" : !times.includes(time)) return null;
+  if (a?.cutoffHours && Date.parse(`${date}T${time}:00+09:00`) < now + a.cutoffHours * 3600000) return null;
   if (a?.closed?.some(w => w.from <= w.to ? date.slice(5) >= w.from && date.slice(5) <= w.to : date.slice(5) >= w.from || date.slice(5) <= w.to)) return null;
   if (product.adultOnly && [0,6].includes(d.getUTCDay())) return null;
   const quantity = product.groupPricing ? 1 : Math.max(product.minCharge, guests);
@@ -192,7 +194,15 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
     if (!selected || selected.amount !== q?.total) return null;
     price = selected.price; amount = selected.amount;
     title += ` — ${view.plans.find(p => p.id === plan)!.label} (${guests} guests)`;
-  } else if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
+  } else {
+    if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
+    if (product.privateTeaPricing) {
+      const q = quote(pricingFor(x, "en"), "", guests, date);
+      const selected = q && PRIVATE_TEA_CHECKOUT_PRICES[`${q.peak ? "peak" : "regular"}_${guests === 1 ? "solo" : "guest"}`];
+      if (!selected || selected.amount * quantity !== q?.total) return null;
+      price = selected.price; amount = q.total;
+    }
+  }
   return { requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
     city: x.city, chargeUnit: product.groupPricing ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
     date, time: product.timeOnConfirmation ? "To be confirmed" : time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
