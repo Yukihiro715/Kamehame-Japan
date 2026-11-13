@@ -43,7 +43,9 @@ export const citiesJa: City[] = [
 ];
 
 export const categoriesJa: Category[] = [
-  { slug: "wellness", title: "温泉・リラクゼーション", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "温泉・リラクゼーション" },
+  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
+    lead: "日本のゴルフには独自の作法があり、国内屈指の景色があります。コースとティータイムを手配し、東京のホテルから専用車で、英語サポート付きで過ごす富士山エリアのプライベートゴルフの一日。" },
+  { slug: "wellness", title: "温泉・リラクゼーション", tag: "Wellness", mark: "湯", img: "/images/clinic-courtyard.webp", lead: "温泉・リラクゼーション" },
   { slug: "sushi", title: "寿司", tag: "食", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "日本の寿司は、レシピではなく十年単位で測られる仕事です。東京と京都の現役の職人の付け台に立ち、握り、締め、その場で味わう少人数のクラスを、通訳ガイド同行でご用意しています。" },
   { slug: "sumo", title: "相撲", tag: "伝統", mark: "相", img: "/images/cat-sumo.jpg",
@@ -64,8 +66,6 @@ export const categoriesJa: Category[] = [
     lead: "ラーメンは日本の日常のごちそう。いちばん早く理解する方法は、自分で作ること。麺を一から打ち、スープを仕上げ、一杯にする。東京と大阪で、英語で進む少人数のクラスです。" },
   { slug: "kendo", title: "剣道", tag: "伝統", mark: "剣", img: "/images/kendo-match.jpg",
     lead: "剣道は、武士の剣が「道」になったもの。礼、足さばき、そして気・剣・体が一つになる一本。東京の現役の道場で英語で教える講師と稽古するか、日本剣道形と武士が残した言葉に向き合う静かな1時間を。" },
-  { slug: "golf", title: "ゴルフ", tag: "スポーツ", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
-    lead: "日本のゴルフには独自の作法があり、国内屈指の景色があります。コースとティータイムを手配し、東京のホテルから専用車で、英語サポート付きで過ごす富士山エリアのプライベートゴルフの一日。" },
   { slug: "samurai", title: "侍", tag: "伝統", mark: "侍", img: "/images/tate-swords-window.jpg",
     lead: "侍が東京に残したのは、宿場町の面影と剣の流派、そして今も礼儀作法に息づく行動規範です。侍の装いで歴史ある町を歩くか、舞台や映画の剣戟「殺陣」をプロの演者から学ぶか。" },
   { slug: "rakugo", title: "落語", tag: "伝統", mark: "噺", img: "/images/rakugo-performer.jpg",

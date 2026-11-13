@@ -39,7 +39,9 @@ export const citiesEs: City[] = [
 ];
 
 export const categoriesEs: Category[] = [
-  { slug: "wellness", title: "Bienestar", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "Bienestar" },
+  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
+    lead: "El golf en Japón tiene sus propias costumbres y algunas de las mejores vistas del país. Un día de golf privado en la región del monte Fuji, con tu campo y tu hora de salida organizados para ti, coche privado desde tu hotel de Tokio y apoyo en inglés." },
+  { slug: "wellness", title: "Bienestar", tag: "Wellness", mark: "湯", img: "/images/clinic-courtyard.webp", lead: "Bienestar" },
   { slug: "sushi", title: "Sushi", tag: "Gastronomía", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "En Japón, el sushi es un oficio que se mide en décadas, no en recetas. Estas clases magistrales en grupos reducidos te ponen detrás de la barra con chefs en activo de Tokio y Kioto — moldeando, sazonando y probando como ellos, con un guía intérprete a tu lado." },
   { slug: "sumo", title: "Sumo", tag: "Tradicional", mark: "相", img: "/images/cat-sumo.jpg",
@@ -60,8 +62,6 @@ export const categoriesEs: Category[] = [
     lead: "El ramen es la comida reconfortante de cada día en Japón, y la forma más rápida de entenderlo es hacerlo: fideos desde cero, el caldo, el cuenco. Clases prácticas reducidas en Tokio y Osaka, en inglés." },
   { slug: "kendo", title: "Kendo", tag: "Tradición", mark: "剣", img: "/images/kendo-match.jpg",
     lead: "El kendo es la espada del samurái convertida en disciplina: una reverencia, el juego de pies, un golpe que une espíritu, espada y cuerpo. Entrena en un dojo en activo de Tokio con un instructor que enseña en inglés, o pasa una hora más tranquila con el Nihon Kendo Kata y las palabras que dejaron los samuráis." },
-  { slug: "golf", title: "Golf", tag: "Deporte", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
-    lead: "El golf en Japón tiene sus propias costumbres y algunas de las mejores vistas del país. Un día de golf privado en la región del monte Fuji, con tu campo y tu hora de salida organizados para ti, coche privado desde tu hotel de Tokio y apoyo en inglés." },
   { slug: "samurai", title: "Samurái", tag: "Tradicional", mark: "侍", img: "/images/tate-swords-window.jpg",
     lead: "Los samuráis dejaron a Tokio sus antiguas ciudades-posta, sus escuelas de esgrima y un código de conducta que aún marca los modales. Camina por un barrio histórico vestido de samurái o aprende tate, el combate coreografiado del teatro y el cine japoneses, con un intérprete profesional." },
   { slug: "rakugo", title: "Rakugo", tag: "Tradicional", mark: "噺", img: "/images/rakugo-performer.jpg",

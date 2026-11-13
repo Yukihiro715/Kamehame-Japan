@@ -429,7 +429,9 @@ export const cities: City[] = [
 ];
 
 export const categories: Category[] = [
-  { slug: "wellness", title: "Wellness", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "Wellness" },
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
+    lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
+  { slug: "wellness", title: "Wellness", tag: "Wellness", mark: "湯", img: "/images/clinic-courtyard.webp", lead: "Wellness" },
   { slug: "sushi", title: "Sushi", tag: "Food", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "Sushi in Japan is a craft measured in decades, not recipes. These small-group masterclasses put you behind the counter with working chefs in Tokyo and Kyoto — shaping, seasoning and tasting as they do, with an interpreter guide beside you." },
   { slug: "sumo", title: "Sumo", tag: "Traditional", mark: "相", img: "/images/cat-sumo.jpg",
@@ -450,8 +452,6 @@ export const categories: Category[] = [
     lead: "Ramen is Japan's everyday comfort food, and the quickest way to understand it is to make it: noodles from scratch, the broth, the bowl. Small hands-on classes in Tokyo and Osaka, taught in English." },
   { slug: "kendo", title: "Kendo", tag: "Traditional", mark: "剣", img: "/images/kendo-match.jpg",
     lead: "Kendo is the samurai's sword turned into a discipline: a bow, the footwork, a strike that unites spirit, sword and body. Train in a working Tokyo dojo with an instructor who teaches in English, or spend a quieter hour with the Nihon Kendo Kata and the words the samurai left behind." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
-    lead: "Golf in Japan has its own customs and some of the country's finest views. A private golf day in the Mt. Fuji region, with your course and tee time arranged for you, a private car from your Tokyo hotel and English-speaking support." },
   { slug: "samurai", title: "Samurai", tag: "Traditional", mark: "侍", img: "/images/tate-swords-window.jpg",
     lead: "The samurai left Tokyo its old post towns, its sword schools and a code of conduct that still shapes manners here. Walk a historic district in samurai dress, or learn tate, the choreographed sword combat of Japanese stage and film, with a professional performer." },
   { slug: "rakugo", title: "Rakugo", tag: "Traditional", mark: "噺", img: "/images/rakugo-performer.jpg",

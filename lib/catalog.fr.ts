@@ -38,7 +38,9 @@ export const citiesFr: City[] = [
 ];
 
 export const categoriesFr: Category[] = [
-  { slug: "wellness", title: "Bien-être", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "Bien-être" },
+  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
+    lead: "Au Japon, le golf a ses propres usages et quelques-uns des plus beaux panoramas du pays. Une journée de golf privée dans la région du mont Fuji, avec votre golf et votre heure de départ organisés pour vous, une voiture privée depuis votre hôtel à Tokyo et un accompagnement en anglais." },
+  { slug: "wellness", title: "Bien-être", tag: "Wellness", mark: "湯", img: "/images/clinic-courtyard.webp", lead: "Bien-être" },
   { slug: "sushi", title: "Sushi", tag: "Gastronomie", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "Au Japon, le sushi est un métier qui se mesure en décennies, pas en recettes. Ces masterclasses en tout petit groupe vous placent derrière le comptoir avec des chefs en activité à Tokyo et Kyoto — façonner, assaisonner et goûter comme eux, avec un guide-interprète à vos côtés." },
   { slug: "sumo", title: "Sumo", tag: "Traditionnel", mark: "相", img: "/images/cat-sumo.jpg",
@@ -59,8 +61,6 @@ export const categoriesFr: Category[] = [
     lead: "Le ramen est le plat réconfortant du quotidien au Japon, et le plus court chemin pour le comprendre est de le faire : les nouilles de A à Z, le bouillon, le bol. De petits ateliers pratiques à Tokyo et Osaka, en anglais." },
   { slug: "kendo", title: "Kendo", tag: "Tradition", mark: "剣", img: "/images/kendo-match.jpg",
     lead: "Le kendo, c'est le sabre du samouraï devenu discipline : un salut, les déplacements, une frappe qui unit l'esprit, le sabre et le corps. Entraînez-vous dans un dojo en activité de Tokyo avec un instructeur qui enseigne en anglais, ou passez une heure plus calme avec le Nihon Kendo Kata et les mots laissés par les samouraïs." },
-  { slug: "golf", title: "Golf", tag: "Sport", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
-    lead: "Au Japon, le golf a ses propres usages et quelques-uns des plus beaux panoramas du pays. Une journée de golf privée dans la région du mont Fuji, avec votre golf et votre heure de départ organisés pour vous, une voiture privée depuis votre hôtel à Tokyo et un accompagnement en anglais." },
   { slug: "samurai", title: "Samouraï", tag: "Tradition", mark: "侍", img: "/images/tate-swords-window.jpg",
     lead: "Les samouraïs ont laissé à Tokyo ses anciennes villes-relais, ses écoles de sabre et un code de conduite qui façonne encore les manières. Parcourez un quartier historique en tenue de samouraï, ou apprenez le tate, le combat au sabre chorégraphié de la scène et du cinéma japonais, avec un interprète professionnel." },
   { slug: "rakugo", title: "Rakugo", tag: "Tradition", mark: "噺", img: "/images/rakugo-performer.jpg",

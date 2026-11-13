@@ -38,7 +38,9 @@ export const citiesZh: City[] = [
 ];
 
 export const categoriesZh: Category[] = [
-  { slug: "wellness", title: "溫泉與放鬆", tag: "Wellness", mark: "湯", img: "/images/nerima-herbal-bath.webp", lead: "溫泉與放鬆" },
+  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
+    lead: "日本的高爾夫有自己的規矩，也有全國數一數二的美景。在富士山地區度過私人的高爾夫一日：球場與開球時段為你安排，私人專車從東京飯店出發，並有英語協助。" },
+  { slug: "wellness", title: "溫泉與放鬆", tag: "Wellness", mark: "湯", img: "/images/clinic-courtyard.webp", lead: "溫泉與放鬆" },
   { slug: "sushi", title: "壽司", tag: "美食", mark: "寿", img: "/images/cat-sushi.jpg",
     lead: "在日本，壽司是以數十年計算的手藝，而非食譜。這些小班制大師課讓您站到東京與京都現役職人的吧檯後——像他們一樣捏製、調味、品嚐，口譯導遊全程在旁。" },
   { slug: "sumo", title: "相撲", tag: "傳統", mark: "相", img: "/images/cat-sumo.jpg",
@@ -59,8 +61,6 @@ export const categoriesZh: Category[] = [
     lead: "拉麵是日本日常的療癒美食，理解它最快的方法就是親手做：從零開始的麵條、湯頭、一碗完成。在東京與大阪、以英語進行的小班動手課。" },
   { slug: "kendo", title: "劍道", tag: "傳統", mark: "剣", img: "/images/kendo-match.jpg",
     lead: "劍道是武士的劍化為一門修行：一個禮、步法，以及氣、劍、體合一的一擊。在東京一間現役道場，跟著以英語授課的教練練習；或以更安靜的一小時，面對日本劍道形與武士留下的話。" },
-  { slug: "golf", title: "高爾夫", tag: "運動", mark: "球", img: "/images/golf-gallery-01-fuji-aerial.webp",
-    lead: "日本的高爾夫有自己的規矩，也有全國數一數二的美景。在富士山地區度過私人的高爾夫一日：球場與開球時段為你安排，私人專車從東京飯店出發，並有英語協助。" },
   { slug: "samurai", title: "武士", tag: "傳統", mark: "侍", img: "/images/tate-swords-window.jpg",
     lead: "武士留給東京的，是舊宿場町的風貌、劍術流派，以及至今仍影響禮儀的行為準則。穿上武士裝束走訪歷史街區，或向專業演員學習日本舞台與電影中的「殺陣」劍術。" },
   { slug: "rakugo", title: "落語", tag: "傳統", mark: "噺", img: "/images/rakugo-performer.jpg",

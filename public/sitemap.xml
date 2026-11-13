@@ -442,6 +442,61 @@
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/himeji/"/>
   </url>
   <url>
+    <loc>https://kamehame-japan.com/en/golf/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/es/golf/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/ja/golf/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/fr/golf/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
+  </url>
+  <url>
+    <loc>https://kamehame-japan.com/zh-tw/golf/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
+    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
+  </url>
+  <url>
     <loc>https://kamehame-japan.com/en/wellness/</loc>
     <lastmod>2026-11-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -770,61 +825,6 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/kendo/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/kendo/"/>
     <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/kendo/"/>
-  </url>
-  <url>
-    <loc>https://kamehame-japan.com/en/golf/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
-    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
-  </url>
-  <url>
-    <loc>https://kamehame-japan.com/es/golf/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
-    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
-  </url>
-  <url>
-    <loc>https://kamehame-japan.com/ja/golf/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
-    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
-  </url>
-  <url>
-    <loc>https://kamehame-japan.com/fr/golf/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
-    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
-  </url>
-  <url>
-    <loc>https://kamehame-japan.com/zh-tw/golf/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kamehame-japan.com/en/golf/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://kamehame-japan.com/es/golf/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://kamehame-japan.com/ja/golf/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kamehame-japan.com/fr/golf/"/>
-    <xhtml:link rel="alternate" hreflang="zh-tw" href="https://kamehame-japan.com/zh-tw/golf/"/>
   </url>
   <url>
     <loc>https://kamehame-japan.com/en/rakugo/</loc>

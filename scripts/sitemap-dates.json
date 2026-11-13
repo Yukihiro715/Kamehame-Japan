@@ -37,7 +37,7 @@
   },
   "/en/golf/": {
     "hash": "ec6ec4d057df",
-    "lastmod": "2026-10-15"
+    "lastmod": "2026-11-13"
   },
   "/en/himeji/": {
     "hash": "f0ecb8eabb41",
@@ -216,7 +216,7 @@
     "lastmod": "2026-11-13"
   },
   "/en/wellness/": {
-    "hash": "6267ad539376",
+    "hash": "112a106872cd",
     "lastmod": "2026-11-13"
   },
   "/es/": {
@@ -257,7 +257,7 @@
   },
   "/es/golf/": {
     "hash": "c19561b2f068",
-    "lastmod": "2026-10-15"
+    "lastmod": "2026-11-13"
   },
   "/es/himeji/": {
     "hash": "aa1d0fd3147c",
@@ -388,7 +388,7 @@
     "lastmod": "2026-11-13"
   },
   "/es/wellness/": {
-    "hash": "c56df6bda0d8",
+    "hash": "d06223df9505",
     "lastmod": "2026-11-13"
   },
   "/fr/": {
@@ -429,7 +429,7 @@
   },
   "/fr/golf/": {
     "hash": "1ef75295daed",
-    "lastmod": "2026-10-15"
+    "lastmod": "2026-11-13"
   },
   "/fr/himeji/": {
     "hash": "e2ebe5e71bb9",
@@ -560,7 +560,7 @@
     "lastmod": "2026-11-13"
   },
   "/fr/wellness/": {
-    "hash": "776f6664031a",
+    "hash": "25835b07c401",
     "lastmod": "2026-11-13"
   },
   "/ja/": {
@@ -601,7 +601,7 @@
   },
   "/ja/golf/": {
     "hash": "254ae4cf5edd",
-    "lastmod": "2026-10-15"
+    "lastmod": "2026-11-13"
   },
   "/ja/himeji/": {
     "hash": "9d55864464f6",
@@ -764,7 +764,7 @@
     "lastmod": "2026-11-13"
   },
   "/ja/wellness/": {
-    "hash": "dcb8bab20f13",
+    "hash": "d5abaab14f0e",
     "lastmod": "2026-11-13"
   },
   "/ofukuro-dinner/": {
@@ -813,7 +813,7 @@
   },
   "/zh-tw/golf/": {
     "hash": "a63d25886bf2",
-    "lastmod": "2026-10-15"
+    "lastmod": "2026-11-13"
   },
   "/zh-tw/himeji/": {
     "hash": "0b0dcdbaf423",
@@ -944,7 +944,7 @@
     "lastmod": "2026-11-13"
   },
   "/zh-tw/wellness/": {
-    "hash": "7c01b3a43a18",
+    "hash": "b28c87a12340",
     "lastmod": "2026-11-13"
   }
 }
