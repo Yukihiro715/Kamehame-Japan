@@ -30,7 +30,8 @@ test("/r/<token>: records the arrival, sets the session cookie and redirects to 
   const res = await w.fetch(new Request("https://kamehame-japan.com/r/exampletoken_0123456789", { headers: { "user-agent": UA } }), { ASSETS: assets, DB: db.d1 }, ctx);
   assert.equal(res.status, 302);
   assert.equal(res.headers.get("location"), "https://kamehame-japan.com/ja/tokyo/mt-fuji-golf-day/");
-  assert.match(res.headers.get("set-cookie") ?? "", /^kh_ref=[A-Za-z0-9_-]{22}; Max-Age=2592000; Path=\/; HttpOnly; SameSite=Lax; Secure$/);
+  assert.match(res.headers.getSetCookie().find(c => c.startsWith("kh_ref=")) ?? "", /^kh_ref=[A-Za-z0-9_-]{22}; Max-Age=2592000; Path=\/; HttpOnly; SameSite=Lax; Secure$/);
+  assert.match(res.headers.getSetCookie().find(c => c.startsWith("kh_visitor=")) ?? "", /^kh_visitor=[A-Za-z0-9_-]{22}; Max-Age=604800; Path=\/; HttpOnly; SameSite=Lax; Secure$/);
   assert.equal(res.headers.get("x-robots-tag"), "noindex, nofollow");
   assert.equal(res.headers.get("cache-control"), "no-store");
   const events = await db.all(`SELECT ua_class, excluded FROM referral_events`);

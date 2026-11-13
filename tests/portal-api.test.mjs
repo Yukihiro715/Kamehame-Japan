@@ -190,9 +190,9 @@ test("T22: dashboard numbers come from the same facts as the reservation list; b
   const a = client(db); await signIn(a, "front@hotel-a.example", "hotel");
   const pair = (await a.call("POST", "hotel/materials", {})).body;
   const token = pair.qr.url.split("/r/")[1];
-  // three arrivals: two scans within 30 minutes are one visit, a bot is excluded
+  // Three arrivals: the browser keeps both cookies; repeat scans count once, bots are excluded.
   const v1 = await links.handleReferralArrival(db, { token, userAgent: UA, now: T0 });
-  await links.handleReferralArrival(db, { token, userAgent: UA, now: T0 + 10 * 60000, cookie: v1.setCookie.split(";")[0] });
+  await links.handleReferralArrival(db, { token, userAgent: UA, now: T0 + 10 * 60000, cookie: [v1.setCookie, v1.visitorCookie].map(c => c.split(";")[0]).join("; ") });
   await links.handleReferralArrival(db, { token, userAgent: "Googlebot/2.1", now: T0 });
   const ctx = await links.activeReferral(db, v1.setCookie.split(";")[0], T0 + 20 * 60000);
   const r1 = await R.createReservation(db, { requestId: uuid(), flow: "experience", experienceSlug: "kanji-name-calligraphy", experienceDate: "2026-10-20", guests: 2, lang: "en", lines: [{ kind: "base", description: "Calligraphy × 2", commissionable: true, quantity: 2, grossJpy: 39600 }] }, ctx, T0 + 20 * 60000);
