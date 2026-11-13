@@ -18,7 +18,7 @@ const Ctx = createContext<PortalState | null>(null);
 export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Error("usePortal outside PortalShell"); return c; };
 
 /** Partner navigation is labelled from the dictionary; operations stay Japanese. */
-const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/hotel/", "dashboard"], ["/hotel/experiences/", "experiences"], ["/hotel/cases/", "cases"], ["/hotel/reservations/", "reservations"], ["/hotel/materials/", "materials"], ["/hotel/settlement/", "settlement"], ["/hotel/guide/", "guide"]];
+const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/reservations/", "reservations"], ["/partner/materials/", "materials"], ["/partner/settlement/", "settlement"], ["/partner/guide/", "guide"]];
 const NAV: Record<Kind, [string, string][]> = {
   hotel: [],
   ops: [["/ops/", "概要"], ["/ops/exceptions/", "例外"], ["/ops/reservations/", "予約"], ["/ops/cases/", "取り次ぎ"], ["/ops/bus-tours/", "乗合ゴルフ"], ["/ops/golf-courses/", "コース名"], ["/ops/popular/", "人気体験"], ["/ops/reviews/", "レビュー素材"], ["/ops/partners/", "提携パートナー"], ["/ops/settlement/", "精算"], ["/ops/payouts/", "支払"], ["/ops/policies/", "料率"], ["/ops/members/", "運営メンバー"], ["/ops/audit/", "操作履歴"], ["/ops/settings/", "設定"]],
@@ -93,7 +93,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
     if (error) return <div className={rootClass}><div className="pt-login"><div className="pt-login-box"><Notice tone="bad">{error}</Notice><Button onClick={() => void load()}>{lang === "en" ? "Try again" : "再読み込み"}</Button></div></div></div>;
     return <div className={rootClass} lang={lang}><Login kind={kind} onDone={load} lang={lang} onLang={applyLang} /></div>;
   }
-  if (isLogin && typeof window !== "undefined") { window.location.replace(`/${kind}/`); return null; }
+  if (isLogin && typeof window !== "undefined") { window.location.replace(`/${kind === "hotel" ? "partner" : "ops"}/`); return null; }
   const hotel = kind === "hotel" ? (me.hotels ?? []).find((h) => h.id === hotelId) ?? null : null;
   const setHotel = (id: string) => { setHotelId(id); try { localStorage.setItem(HOTEL_KEY, id); } catch { /* ignore */ } };
   // A partner's choice is saved on their profile so mails follow it too.
@@ -102,7 +102,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
   const access = partnerAccess(hotel, me.memberships);
   const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "settlement" ? access.settlement : true);
   const nav: [string, string][] = kind === "hotel" ? hotelNav.map(([href, key]) => [href, T.nav[key]]) : NAV.ops;
-  const active = (href: string) => path.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind}/` && path.startsWith(href));
+  const active = (href: string) => path.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind === "hotel" ? "partner" : "ops"}/` && path.startsWith(href));
   const pageTitle = titleKey ? titleKey.split(".").reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), T) as string | undefined : title;
   return (
     <Ctx.Provider value={{ kind, me, hotel, setHotel, refresh: load, lang, setLang }}>
@@ -112,7 +112,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
           {menuOpen && <><button className="pt-menu-backdrop" type="button" tabIndex={-1} aria-label={lang === "en" ? "Close menu" : "メニューを閉じる"} onClick={closeMenu} />
           <aside className="pt-sidebar" id="partner-navigation" role="dialog" aria-modal="true" aria-label={lang === "en" ? "Main menu" : "メインメニュー"}>
             <button className="pt-drawer-close" type="button" onClick={closeMenu} aria-label={lang === "en" ? "Close menu" : "メニューを閉じる"}><X size={22} /></button>
-            <Link className="pt-partner-brand" href="/hotel/"><span className="pt-brand-symbol">K<span>+</span></span><span>KAMEHAME<small>JAPAN / PARTNER</small></span></Link>
+            <Link className="pt-partner-brand" href="/partner/"><span className="pt-brand-symbol">K<span>+</span></span><span>KAMEHAME<small>JAPAN / PARTNER</small></span></Link>
             <p className="pt-nav-label">{lang === "en" ? "YOUR WORKSPACE" : "パートナーワークスペース"}</p>
             <nav aria-label={lang === "en" ? "Main menu" : "メインメニュー"}>
               {hotelNav.map(([href, key]) => { const Icon = NAV_ICONS[key]; return <a key={href} href={href} onClick={closeMenu} className={active(href) ? "on" : ""} aria-current={active(href) ? "page" : undefined}><Icon size={18} aria-hidden="true"/><span>{T.nav[key]}</span></a>; })}
@@ -122,7 +122,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
         </>}
         <header className="pt-top" inert={kind === "hotel" && menuOpen}>
           {kind === "hotel" && <button id="partner-menu-toggle" type="button" className="pt-menu-toggle" aria-expanded={menuOpen} aria-controls="partner-navigation" aria-label={lang === "en" ? (menuOpen ? "Close menu" : "Open menu") : (menuOpen ? "メニューを閉じる" : "メニューを開く")} onClick={() => setMenuOpen((v) => !v)}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button>}
-          <a className="pt-brand" href={`/${kind}/`}>KAMEHAME JAPAN <span>{kind === "hotel" ? T.brand.partner : T.brand.ops}</span></a>
+          <a className="pt-brand" href={`/${kind === "hotel" ? "partner" : "ops"}/`}>KAMEHAME JAPAN <span>{kind === "hotel" ? T.brand.partner : T.brand.ops}</span></a>
           {kind === "ops" && <nav className="pt-nav" aria-label={lang === "en" ? "Menu" : "メニュー"}>
             {nav.map(([href, label]) => <a key={href} href={href} className={active(href) ? "on" : ""}>{label}</a>)}
           </nav>}
@@ -132,7 +132,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
             )}
             {kind === "hotel" && <LangSwitch lang={lang} onChange={setLang} />}
             <span className="pt-user-mail">{me.user.name ?? me.user.email}</span>
-            <Button kind="link" small onClick={async () => { await api("POST", "auth/signout", { kind }); window.location.href = `/${kind}/login/`; }}>{T.shell.signOut}</Button>
+            <Button kind="link" small onClick={async () => { await api("POST", "auth/signout", { kind }); window.location.href = `/${kind === "hotel" ? "partner" : "ops"}/login/`; }}>{T.shell.signOut}</Button>
           </div>
         </header>
         <main className="pt-main" id="partner-main" tabIndex={-1} inert={kind === "hotel" && menuOpen}>

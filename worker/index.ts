@@ -191,6 +191,16 @@ const worker = {
     const gate = await stagingGate(request, env, url);
     if (gate) return withSecurityHeaders(gate);
 
+    // Keep existing bookmarks and mailed links working; query strings survive.
+    // No fragment is supplied, so browsers retain password-token fragments.
+    if (/^\/hotel(?:\/|$)/.test(url.pathname)) {
+      url.pathname = url.pathname.replace(/^\/hotel/, "/partner");
+      if (!url.pathname.endsWith("/")) url.pathname += "/";
+      return withSecurityHeaders(new Response(null, { status: 308, headers: {
+        location: url.toString(), "cache-control": "no-store", "x-robots-tag": "noindex, nofollow",
+      } }));
+    }
+
     if (REFERRAL_PATH.test(url.pathname)) return withSecurityHeaders(await referralArrival(request, env, url));
 
     if (url.pathname === "/.well-known/security.txt" || url.pathname === "/security.txt") {

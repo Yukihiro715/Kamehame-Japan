@@ -37,7 +37,7 @@ export function HotelCaseNew() {
     setBusy(true); setErr(null);
     try {
       const r = await api<{ id: string }>("POST", "hotel/cases", { hotel: hotel.id, ...f, guests: f.guests ? Number(f.guests) : null, altDates: f.altDates, extra });
-      window.location.href = `/hotel/cases/${r.id}/`;
+      window.location.href = `/partner/cases/${r.id}/`;
     } catch (e) { setErr(errorText(e)); setBusy(false); }
   };
   return (
@@ -72,7 +72,7 @@ export function HotelCaseNew() {
           <Field label={K.partnerRef}><input value={f.partnerRef} onChange={set("partnerRef")} /></Field>
         </div>
         {err && <Notice tone="bad">{err}</Notice>}
-        <div className="pt-row"><Button type="submit" disabled={me.demo || busy || !f.customerName.trim() || (f.kind === "experience" && !f.experience)}>{busy ? K.submitting : K.submit}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/hotel/cases/">{K.backToList}</Link></div>
+        <div className="pt-row"><Button type="submit" disabled={me.demo || busy || !f.customerName.trim() || (f.kind === "experience" && !f.experience)}>{busy ? K.submitting : K.submit}</Button><Link className="pt-btn pt-btn-link pt-btn-small" href="/partner/cases/">{K.backToList}</Link></div>
       </Card>
     </form>
   );
