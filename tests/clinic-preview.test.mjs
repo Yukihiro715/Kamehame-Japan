@@ -1,8 +1,8 @@
-// The Kyoto ryokan-style beauty clinic (lib/catalog.ts): a preview page written
-// to the medical advertising guideline. It is reachable by URL, never indexed or
-// listed, names the clinic but no company, person, street or phone, carries no
-// testimonial or result claim, shows no amount in the booking display, and
-// says the fee is paid at the clinic.
+// The Kyoto ryokan-style beauty clinic (lib/catalog.ts): a live page written
+// to the medical advertising guideline. It is listed and indexed, names the
+// clinic but no company, person, street or phone, carries no testimonial or
+// result claim, shows no amount in the booking display, and says the fee is
+// paid at the clinic.
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
@@ -12,14 +12,15 @@ const render = (path) => worker.fetch(new Request(`http://localhost${path}`, { h
 const PRIVATE = /ダヴィンチ|[Dd]a ?[Vv]inci|麻生|中島|藤森|[Ff]ujinomori|大亀谷|西寺町|075-606|jakuchu-an-biyo/;
 const FORBIDDEN_CLAIMS = /before and after|ビフォーアフター|guaranteed|保証|No\.\s?1|最高|cured|完治|testimonial|patients say|患者様の声|campaign|キャンペーン|limited time|期間限定|今だけ|今なら/i;
 
-test("clinic preview: unlisted, noindex, private, guideline wording, pay at the clinic", async () => {
+test("clinic page: listed, indexed, private, guideline wording, pay at the clinic", async () => {
   for (const [lang, expect] of [["en", "pay the clinic on the day"], ["ja", "クリニックでお支払い"]]) {
     const res = await render(`/${lang}/kyoto/kyoto-ryokan-beauty-clinic/`);
     assert.equal(res.status, 200, `${lang} page renders`);
     const html = await res.text();
     const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
-    assert.match(html, /noindex/, `${lang} noindex`);
-    assert.match(html, /xp-preview-banner/, `${lang} preview banner`);
+    assert.doesNotMatch(html, /noindex/, `${lang} indexable`);
+    assert.doesNotMatch(html, /xp-preview-banner/, `${lang} no preview banner`);
+    assert.doesNotMatch(text, /Placeholder until|仮文/, `${lang}: no placeholder doctor profile`);
     assert.doesNotMatch(text, PRIVATE, `${lang}: company, people, street and phone stay off the page`);
     assert.match(text, /Jakuchu-an|若冲庵/, `${lang}: the clinic is named`);
     assert.match(html, /\/images\/clinic-entrance\.webp/, `${lang}: the clinic's own photos`);
@@ -43,10 +44,10 @@ test("clinic preview: unlisted, noindex, private, guideline wording, pay at the 
     assert.ok(/self-pay|自由診療/.test(text), `${lang}: self-pay practice stated`);
     assert.ok(/side effects|副作用/.test(text), `${lang}: risks and side effects stated`);
   }
-  for (const path of ["/en/kyoto/", "/en/wellness-beauty/", "/en/experiences/", "/ja/kyoto/"]) {
+  for (const path of ["/en/kyoto/", "/en/wellness-beauty/", "/en/experiences/", "/ja/kyoto/", "/fr/kyoto/"]) {
     const html = await (await render(path)).text();
-    assert.ok(!html.includes("kyoto-ryokan-beauty-clinic"), `${path} does not list the preview`);
+    assert.ok(html.includes("kyoto-ryokan-beauty-clinic"), `${path} lists the clinic`);
   }
   const sitemap = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
-  assert.ok(!sitemap.includes("kyoto-ryokan-beauty-clinic"), "not in the sitemap");
+  assert.ok(sitemap.includes("/en/kyoto/kyoto-ryokan-beauty-clinic/") && sitemap.includes("/ja/kyoto/kyoto-ryokan-beauty-clinic/"), "in the sitemap");
 });

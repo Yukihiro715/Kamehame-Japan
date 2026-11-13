@@ -49,7 +49,7 @@ export const THEMES: Theme[] = [
     },
   },
   {
-    slug: "wellness-beauty", tags: ["Wellness", "Pop culture"], img: "/images/nerima-herbal-bath.webp", mark: "湯",
+    slug: "wellness-beauty", tags: ["Wellness", "Pop culture"], img: "/images/clinic-courtyard.webp", mark: "湯",
     copy: {
       en: { title: "Wellness & Beauty", sub: "Herbal bath / Nail art", h1: "Wellness & beauty experiences in Japan", lead: "Slow down the Japanese way: a private hot-spring bath with herbal blends you mix yourself, a quiet home spa that takes one party a day, and the beauty culture shaping Japan today, from character nail art to more to come.", heroAlt: "Herbal bath blends beside a private hot-spring bath" },
       es: { title: "Bienestar y belleza", sub: "Baño de hierbas / Nail art", h1: "Experiencias de bienestar y belleza en Japón", lead: "Baja el ritmo a la japonesa: un baño termal privado con mezclas de hierbas que preparas tú, un spa doméstico tranquilo que recibe a un grupo al día, y la cultura de belleza que define el Japón de hoy, del nail art de personajes a lo que está por venir.", heroAlt: "Mezclas de hierbas para el baño junto a un baño termal privado" },

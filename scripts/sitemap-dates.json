@@ -20,8 +20,8 @@
     "lastmod": "2026-09-17"
   },
   "/en/experiences/": {
-    "hash": "5395b9463d15",
-    "lastmod": "2026-11-07"
+    "hash": "23ba5791ed9c",
+    "lastmod": "2026-11-13"
   },
   "/en/faq/": {
     "hash": "6475e67568b3",
@@ -76,8 +76,8 @@
     "lastmod": "2026-10-26"
   },
   "/en/kyoto/": {
-    "hash": "52c15dc98ff0",
-    "lastmod": "2026-11-07"
+    "hash": "af1d24079f0b",
+    "lastmod": "2026-11-13"
   },
   "/en/kyoto/evening-with-geiko/": {
     "hash": "934ee427f168",
@@ -102,6 +102,10 @@
   "/en/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "e4bb7f878eb2",
     "lastmod": "2026-10-23"
+  },
+  "/en/kyoto/kyoto-ryokan-beauty-clinic/": {
+    "hash": "3f762f4d63e3",
+    "lastmod": "2026-11-13"
   },
   "/en/nagoya/": {
     "hash": "767c6f40738c",
@@ -152,8 +156,8 @@
     "lastmod": "2026-11-07"
   },
   "/en/tokyo/": {
-    "hash": "17b6e779fc06",
-    "lastmod": "2026-11-07"
+    "hash": "03a7ee1523d1",
+    "lastmod": "2026-11-13"
   },
   "/en/tokyo/kanji-name-calligraphy/": {
     "hash": "b12881df613d",
@@ -164,8 +168,8 @@
     "lastmod": "2026-10-17"
   },
   "/en/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "8814fadca0d8",
-    "lastmod": "2026-11-09"
+    "hash": "a3309cbe4b36",
+    "lastmod": "2026-11-13"
   },
   "/en/tokyo/nihonbashi-bushido-experience/": {
     "hash": "6415e80ad010",
@@ -208,12 +212,12 @@
     "lastmod": "2026-10-22"
   },
   "/en/wellness-beauty/": {
-    "hash": "77dd50ab6afe",
-    "lastmod": "2026-11-07"
+    "hash": "bfda347ce950",
+    "lastmod": "2026-11-13"
   },
   "/en/wellness/": {
-    "hash": "bf0e2167bff3",
-    "lastmod": "2026-11-07"
+    "hash": "6267ad539376",
+    "lastmod": "2026-11-13"
   },
   "/es/": {
     "hash": "e83249bd3ba7",
@@ -236,8 +240,8 @@
     "lastmod": "2026-09-17"
   },
   "/es/experiences/": {
-    "hash": "320b129e9387",
-    "lastmod": "2026-11-07"
+    "hash": "471ac7d32a95",
+    "lastmod": "2026-11-13"
   },
   "/es/faq/": {
     "hash": "b30dc3dba1ad",
@@ -280,8 +284,8 @@
     "lastmod": "2026-10-26"
   },
   "/es/kyoto/": {
-    "hash": "f5761a0ae498",
-    "lastmod": "2026-11-07"
+    "hash": "608f24c9822f",
+    "lastmod": "2026-11-13"
   },
   "/es/kyoto/evening-with-geiko/": {
     "hash": "130c2751f853",
@@ -340,8 +344,8 @@
     "lastmod": "2026-11-07"
   },
   "/es/tokyo/": {
-    "hash": "8fdf0a62854a",
-    "lastmod": "2026-11-07"
+    "hash": "48801e576643",
+    "lastmod": "2026-11-13"
   },
   "/es/tokyo/kanji-name-calligraphy/": {
     "hash": "ab4c09667763",
@@ -380,12 +384,12 @@
     "lastmod": "2026-10-22"
   },
   "/es/wellness-beauty/": {
-    "hash": "e2daea53c3cc",
-    "lastmod": "2026-11-07"
+    "hash": "2efab8174bde",
+    "lastmod": "2026-11-13"
   },
   "/es/wellness/": {
-    "hash": "20b1e5f5391d",
-    "lastmod": "2026-11-07"
+    "hash": "c56df6bda0d8",
+    "lastmod": "2026-11-13"
   },
   "/fr/": {
     "hash": "e83249bd3ba7",
@@ -408,8 +412,8 @@
     "lastmod": "2026-09-17"
   },
   "/fr/experiences/": {
-    "hash": "55c5cc22d16c",
-    "lastmod": "2026-11-07"
+    "hash": "c0bbeb4af1ec",
+    "lastmod": "2026-11-13"
   },
   "/fr/faq/": {
     "hash": "02b9560a1a76",
@@ -452,8 +456,8 @@
     "lastmod": "2026-10-26"
   },
   "/fr/kyoto/": {
-    "hash": "c1317ee9a3a8",
-    "lastmod": "2026-11-07"
+    "hash": "ccb0473c1850",
+    "lastmod": "2026-11-13"
   },
   "/fr/kyoto/evening-with-geiko/": {
     "hash": "fa094726d20e",
@@ -512,8 +516,8 @@
     "lastmod": "2026-11-07"
   },
   "/fr/tokyo/": {
-    "hash": "974958e6e133",
-    "lastmod": "2026-11-07"
+    "hash": "dd90642bdc60",
+    "lastmod": "2026-11-13"
   },
   "/fr/tokyo/kanji-name-calligraphy/": {
     "hash": "9cbdf45e13d5",
@@ -552,12 +556,12 @@
     "lastmod": "2026-10-22"
   },
   "/fr/wellness-beauty/": {
-    "hash": "e11709c15f61",
-    "lastmod": "2026-11-07"
+    "hash": "040736b2d8de",
+    "lastmod": "2026-11-13"
   },
   "/fr/wellness/": {
-    "hash": "15b5fa5799d9",
-    "lastmod": "2026-11-07"
+    "hash": "776f6664031a",
+    "lastmod": "2026-11-13"
   },
   "/ja/": {
     "hash": "e83249bd3ba7",
@@ -580,8 +584,8 @@
     "lastmod": "2026-09-17"
   },
   "/ja/experiences/": {
-    "hash": "035c6f125ee9",
-    "lastmod": "2026-11-07"
+    "hash": "756fc2f11c90",
+    "lastmod": "2026-11-13"
   },
   "/ja/faq/": {
     "hash": "4938be2962f9",
@@ -636,8 +640,8 @@
     "lastmod": "2026-10-26"
   },
   "/ja/kyoto/": {
-    "hash": "0b2f319c5853",
-    "lastmod": "2026-11-07"
+    "hash": "3e4eb74dac54",
+    "lastmod": "2026-11-13"
   },
   "/ja/kyoto/evening-with-geiko/": {
     "hash": "0214ec3c7e36",
@@ -646,6 +650,10 @@
   "/ja/kyoto/kyoto-kendo-experience-tour/": {
     "hash": "c48039baf4f8",
     "lastmod": "2026-10-23"
+  },
+  "/ja/kyoto/kyoto-ryokan-beauty-clinic/": {
+    "hash": "a984a5a94924",
+    "lastmod": "2026-11-13"
   },
   "/ja/nagoya/": {
     "hash": "c89050aabda0",
@@ -696,8 +704,8 @@
     "lastmod": "2026-11-07"
   },
   "/ja/tokyo/": {
-    "hash": "be4c80851dc8",
-    "lastmod": "2026-11-07"
+    "hash": "4472ac71caff",
+    "lastmod": "2026-11-13"
   },
   "/ja/tokyo/kanji-name-calligraphy/": {
     "hash": "8453a46beca0",
@@ -708,8 +716,8 @@
     "lastmod": "2026-10-17"
   },
   "/ja/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "676626842951",
-    "lastmod": "2026-11-09"
+    "hash": "fced65588d71",
+    "lastmod": "2026-11-13"
   },
   "/ja/tokyo/nihonbashi-bushido-experience/": {
     "hash": "e9d5cb650eee",
@@ -752,12 +760,12 @@
     "lastmod": "2026-10-22"
   },
   "/ja/wellness-beauty/": {
-    "hash": "ca315f03a05b",
-    "lastmod": "2026-11-07"
+    "hash": "41d8b88e24af",
+    "lastmod": "2026-11-13"
   },
   "/ja/wellness/": {
-    "hash": "c29e73f8e936",
-    "lastmod": "2026-11-07"
+    "hash": "dcb8bab20f13",
+    "lastmod": "2026-11-13"
   },
   "/ofukuro-dinner/": {
     "hash": "85943877e2e7",
@@ -788,8 +796,8 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/experiences/": {
-    "hash": "dd15596c472b",
-    "lastmod": "2026-11-07"
+    "hash": "db6b8692dc46",
+    "lastmod": "2026-11-13"
   },
   "/zh-tw/faq/": {
     "hash": "b0daf3c1cab6",
@@ -832,8 +840,8 @@
     "lastmod": "2026-10-26"
   },
   "/zh-tw/kyoto/": {
-    "hash": "394ad9cf8658",
-    "lastmod": "2026-11-07"
+    "hash": "a96791e3292d",
+    "lastmod": "2026-11-13"
   },
   "/zh-tw/kyoto/evening-with-geiko/": {
     "hash": "accc1e1b07f8",
@@ -892,8 +900,8 @@
     "lastmod": "2026-11-07"
   },
   "/zh-tw/tokyo/": {
-    "hash": "2744d3acd282",
-    "lastmod": "2026-11-07"
+    "hash": "88fdbe719ce2",
+    "lastmod": "2026-11-13"
   },
   "/zh-tw/tokyo/kanji-name-calligraphy/": {
     "hash": "d0035db17f06",
@@ -932,11 +940,11 @@
     "lastmod": "2026-10-22"
   },
   "/zh-tw/wellness-beauty/": {
-    "hash": "4f3a44fb275a",
-    "lastmod": "2026-11-07"
+    "hash": "40847adbcced",
+    "lastmod": "2026-11-13"
   },
   "/zh-tw/wellness/": {
-    "hash": "19801bfdb683",
-    "lastmod": "2026-11-07"
+    "hash": "7c01b3a43a18",
+    "lastmod": "2026-11-13"
   }
 }

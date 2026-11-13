@@ -316,11 +316,11 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     const isPrivate = /^priv/i.test(e.group) || /貸切|privado|privé|私人|包場/i.test(e.group);
     const agg = aggregateFor(e.slug);
     return {
-      kind: "experience", slug: e.slug, live: isLive(e), unit: lp.unit, href: p(`/${e.city}/${e.slug}/`), img: e.img, alt: e.alt,
+      kind: "experience", slug: e.slug, live: isLive(e), unit: lp.unit, href: p(`/${e.city}/${e.slug}/`), img: e.thumb ?? e.img, alt: e.alt,
       tags: [catBySlug(e.category)?.tag ?? "", isPrivate ? S.privateTag : S.smallGroupTag].filter(Boolean),
       title: e.title, line: e.tagline,
       meta: `${cityTitle(e.city)} · ${e.duration}`, price: e.consultationOnly ? "" : lp.price, priceNote: e.consultationOnly ? t(lang).detail.consultOnlyShort : lp.note,
-      photos: photosOf(e.img, e.gallery ?? []), city: e.city, cityLabel: cityTitle(e.city), category: e.category, categoryLabel: catBySlug(e.category)?.title ?? e.category,
+      photos: photosOf(e.thumb ?? e.img, [{ img: e.img }, ...(e.gallery ?? [])]), city: e.city, cityLabel: cityTitle(e.city), category: e.category, categoryLabel: catBySlug(e.category)?.title ?? e.category,
       durationLabel: e.duration, minutes: parseMinutes(e.duration), priceYen: e.consultationOnly ? null : parseYen(lp.price), isPrivate, bookingType: e.bookingType === "instant" ? "instant" : "request",
       rating: agg ? { average: agg.average, count: agg.count } : null,
     };
@@ -328,6 +328,10 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
   // The Ofukuro Dinner campaign (published 2026-10-23, English page): a card at
   // the top of the Tokyo, Osaka, food and all-experiences listings.
   const cc = OFUKURO_CAMPAIGN[lang];
+  // The campaign card sits at the top of a listing, except under the golf
+  // day, which leads every listing it appears in (the best-selling product).
+  const withCampaign = (items: ListingItem[]): ListingItem[] =>
+    items[0]?.slug === "mt-fuji-golf-day" ? [items[0], campaignItem, ...items.slice(1)] : [campaignItem, ...items];
   const campaignItem: ListingItem = {
     kind: "experience", slug: "ofukuro-dinner", live: true, unit: "group", href: OFUKURO_FOUNDING.path,
     img: "/images/ofukuro-hero-table.webp", alt: cc.alt, tags: [cc.tag, S.privateTag],
@@ -359,7 +363,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     return {
       slug, crumb: city.title, h1: S.cityH1(city.title),
       heroImg: city.img, heroAlt: S.cityStreet(city.title), lead: city.lead,
-      items: [...(city.slug === "tokyo" || city.slug === "osaka" ? [campaignItem] : []), ...exps.map(expItem), ...cityTours.map(tourItem)],
+      items: (city.slug === "tokyo" || city.slug === "osaka" ? withCampaign : (x: ListingItem[]) => x)([...exps.map(expItem), ...cityTours.map(tourItem)]),
       refine: catLinks,
       about: { heading: S.cityAboutH(city.title), body: S.cityAbout(city.title) },
       faq: [{ q: S.cityFaqQ(city.title), a: S.cityFaqA(city.title, exps[0]?.area ?? "") }, FAQ_GUIDE, FAQ_CANCEL],
@@ -409,7 +413,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     return {
       slug, crumb: copy.title, h1: copy.h1,
       heroImg: theme.img, heroAlt: copy.heroAlt, lead: copy.lead,
-      items: [...(theme.slug === "food" ? [campaignItem] : []), ...exps.map(expItem)],
+      items: (theme.slug === "food" ? withCampaign : (x: ListingItem[]) => x)(exps.map(expItem)),
       refine: [...catLinks, ...cityLinks],
       about: { heading: S.catAboutH(copy.title), body: S.catAbout },
       faq: [{ q: S.catFaqQ, a: S.catFaqA }, FAQ_GUIDE, FAQ_BOOK],
@@ -438,7 +442,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       slug, crumb: S.allCrumb, h1: S.allH1,
       heroImg: "/images/craft-hands.jpg", heroAlt: S.allHeroAlt,
       lead: S.allLead,
-      items: [campaignItem, ...experiences.map(expItem), ...tours.map(tourItem)],
+      items: withCampaign([...experiences.map(expItem), ...tours.map(tourItem)]),
       refine: [
         ...cities.map((c) => ({ label: c.title, href: p(`/${c.slug}/`) })),
         ...categories.map((c) => ({ label: c.title, href: p(`/${c.slug}/`) })),
