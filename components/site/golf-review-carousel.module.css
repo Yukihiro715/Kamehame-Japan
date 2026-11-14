@@ -19,4 +19,9 @@
 .bottom a { display:inline-flex; align-items:center; gap:7px; min-height:44px; font-size:13px; font-weight:700; color:#171a21; text-underline-offset:4px; }
 .bottom small { color:#635d52; font-size:10px; }
 .controls button:focus-visible,.bottom a:focus-visible { outline:3px solid var(--kame); outline-offset:3px; }
+@media(min-width:768px) {
+  .header p,.controls { display:none; }
+  .rail { overflow:visible; scroll-snap-type:none; padding-bottom:2px; }
+  .card { flex:1 1 0; scroll-snap-align:none; }
+}
 @media(max-width:600px) { .header { align-items:flex-end; gap:10px; } .controls { gap:5px; } .card { flex-basis:92%; padding:16px; } .top img { width:52px; height:52px; } .card blockquote { font-size:14px; } }
