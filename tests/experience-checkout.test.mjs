@@ -299,7 +299,8 @@ test('private tea prices match displayed totals across seasons, year boundary, a
   };
   for(const [date,totals] of Object.entries(expected))for(let guests=1;guests<=5;guests++)for(const lang of ['en','ja','es','fr','zh-tw']) {
     const o=m.parseExperienceOrder({...teaInput,date,guests,lang,amount:1,price:'price_tampered'},now);
-    const x=catalogFor(lang).experiences.find(e=>e.slug===teaInput.experience) ?? catalogFor('en').experiences.find(e=>e.slug===teaInput.experience);
+    const x=catalogFor(lang).experiences.find(e=>e.slug===teaInput.experience);
+    assert.ok(x, `private tea must exist in the ${lang} catalog without a test-only fallback`);
     assert.equal(o.amount,totals[guests-1]);
     assert.equal(o.amount,quote(pricingFor(x,lang),'',guests,date).total);
     assert.equal(o.quantity,guests);assert.equal(o.city,'kyoto');
@@ -332,7 +333,8 @@ test('private tea uses existing paid-pending ledger and notification queue witho
 });
 test('private tea consent and provisional payment form render in all supported languages',()=>{
   for(const lang of ['en','ja','es','fr','zh-tw']) {
-    const x=catalogFor(lang).experiences.find(e=>e.slug===teaInput.experience) ?? catalogFor('en').experiences.find(e=>e.slug===teaInput.experience);
+    const x=catalogFor(lang).experiences.find(e=>e.slug===teaInput.experience);
+    assert.ok(x, `private tea must exist in the ${lang} catalog without a test-only fallback`);
     const b={slug:x.slug,title:x.title,provisionalCheckout:true,leadDays:1,cutoffTime:'00:00',cutoffHours:24,minGuests:1,defaultGuests:3,listedMax:5,maxGuests:5,startTimes:x.availability.startTimes,interpreter:false,cancellationText:x.cancellation,cancellationTiers:x.cancellationTiers};
     const html=renderToStaticMarkup(React.createElement(CurrencyProvider,null,React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang),lang},React.createElement(EnquiryForm,{kind:'guest',lang,fallbackEmail:'hello@kamehame-japan.com',experience:x}))));
     assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_adult'));assert.ok(html.includes('checkout_consent'));
