@@ -1,7 +1,7 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { ReviewPhotoGallery } from "./review-photo-gallery";
 import { Stars } from "@/components/site/reviews";
-import { reviewDate, reviewsFor } from "@/lib/published-reviews";
+import { reviewDate, reviewsFor, ownReviewsFor } from "@/lib/published-reviews";
 import { reviewTranslationFor } from "@/lib/review-translations";
 import { t, type Lang } from "@/lib/i18n";
 import styles from "./golf-guest-review.module.css";
@@ -41,18 +41,19 @@ export function GolfGuestQuote({ lang, landing = false }: { lang: Lang; landing?
 }
 
 export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: string }) {
-  const review = guestReview();
-  if (!review) return null;
+  const list = ownReviewsFor("mt-fuji-golf-day");
+  if (!list.length) return null;
   const c = copy[lang];
-  const translation = reviewTranslationFor(review.id, lang);
-  const paragraphs = (translation?.body ?? review.body).split("\n\n");
   return (
     <section className={`xp-section ${styles.feature}`} id="reviews" aria-labelledby="golf-guest-title">
       <p className={styles.eyebrow}>{c.eyebrow}</p>
       <h2 id="golf-guest-title">{c.title}</h2>
-      <article className={styles.story}>
+      {list.map((review) => {
+  const translation = reviewTranslationFor(review.id, lang);
+  const paragraphs = (translation?.body ?? review.body).split("\n\n");
+  return (<article key={review.id} className={styles.story}>
         <header className={styles.storyHeader}>
-          <div><Stars rating={review.rating} size={17} /><span className={styles.ownCount}>{c.own}</span></div>
+          <div><Stars rating={review.rating} size={17} /></div>
           <div className={styles.meta}><b>{review.author}</b><span>·</span><time dateTime={review.date}>{reviewDate(review.date!, lang)}</time><span className={styles.verified}><ShieldCheck size={14} aria-hidden="true" />{t(lang).reviewVerified}</span></div>
         </header>
         {translation && <p className={styles.original}>{c.translated}</p>}
@@ -61,11 +62,12 @@ export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: stri
           <summary>{c.original}</summary>
           <blockquote lang="en">{review.body.split("\n\n").map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</blockquote>
         </details>}
-        <figure className={styles.figure}>
+        {!!review.photos?.length && <figure className={styles.figure}>
           <ReviewPhotoGallery photos={review.photos ?? []} alts={c.alts} label={c.photos} lang={lang} />
           <figcaption>{c.photos}<span className={styles.photoHint}>{c.photoHint}</span></figcaption>
-        </figure>
-      </article>
+        </figure>}
+      </article>);
+      })}
       <a className={styles.cta} href="#request-form">{ctaLabel}<ArrowRight size={16} aria-hidden="true" /></a>
     </section>
   );
