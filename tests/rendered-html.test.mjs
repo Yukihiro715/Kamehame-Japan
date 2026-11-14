@@ -346,7 +346,7 @@ test("kendo tours are published after approval; unapproved partners remain in pr
   const pages = [
     ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥26,500", "/en/tokyo/"],
     ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥16,500", "/en/tokyo/"],
-    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥17,000", "/en/tokyo/"],
+    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥17,500", "/en/tokyo/"],
     ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥27,500", "/en/tokyo/"],
     ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥27,500", "/en/osaka/"],
     ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥27,500", "/en/kyoto/"],
@@ -450,17 +450,17 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
 });
 
 test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setagaya and Asakusa noodle previews never name the partners", async () => {
-  // The Yotsuya tea page carries the owner's table (2026-11-14: ¥17,500 / ¥16,000 / ¥14,500 per person) and the host's photos.
+  // The Yotsuya tea page carries the owner's table (2026-11-14: ¥17,500 for 1–3 / ¥16,000 for 4–10 per person) and the host's photos.
   const tea = await (await render("/en/tokyo/yotsuya-tea-ceremony/")).text();
   const teaText = tea.replace(/<[^>]+>/g, " ");
-  for (const s of ["¥17,500", "¥32,000", "¥48,000", "¥64,000", "¥72,500", "¥145,000", "¥16,000", "¥14,500", "five to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
+  for (const s of ["¥17,500", "¥35,000", "¥52,500", "¥64,000", "¥80,000", "¥160,000", "¥16,000", "four to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
   for (const s of ["¥8,800", "¥7,700", "¥6,600", "quoted with your request"]) assert.ok(!teaText.includes(s), `host's public rate not shown: ${s}`);
   assert.ok(tea.includes("/images/tea-yotsuya-class.jpg") && tea.includes("/images/tea-yotsuya-tatami.jpg"), "host photos on the tea page");
   assert.ok(!tea.includes("craft-hands.jpg") && !tea.includes("Placeholder photos"), "no placeholder photos left on the tea page");
   for (const lang of ["ja", "es", "fr", "zh-tw"]) {
     const alt = await (await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`)).text();
     assert.ok(alt.includes("/images/tea-yotsuya-class.jpg") && !alt.includes("craft-hands.jpg"), `${lang} tea photos`);
-    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥145,000"), `${lang} tea table`);
+    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥160,000"), `${lang} tea table`);
   }
   const pages = [
     ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥37,500", "¥50,000", "¥250,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
@@ -715,7 +715,7 @@ test('additional advertising-inclusive prices render with the existing publicati
 test('remaining advertising-inclusive prices render across languages and retain preview status',async()=>{
  for(const lang of ['en','ja','es','fr','zh-tw'])for(const [slug,prices,preview] of [
   ['kanji-name-calligraphy',['¥21,500','¥43,000'],false],
-  ['yotsuya-tea-ceremony',['¥17,500','¥32,000','¥145,000'],false],
+  ['yotsuya-tea-ceremony',['¥17,500','¥35,000','¥160,000'],false],
   ['nerima-herbal-bath-private-spa',['¥24,500','¥42,000','¥60,000'],false],
   ['setagaya-omotesenke-tea-ceremony',['¥25,000','¥16,000'],true],
   ['asakusa-soba-making-class',['¥16,000','¥14,500'],true],
@@ -747,7 +747,8 @@ test("Yotsuya ten-guest total is current across all locales", async () => {
     const response = await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`);
     assert.equal(response.status, 200);
     const text = (await response.text()).replace(/<[^>]+>/g, " ");
-    assert.ok(text.includes("¥145,000"), `${lang} ten-guest total`);
-    assert.ok(!text.includes("¥140,000"), `${lang} has no stale total`);
+    assert.ok(text.includes("¥160,000"), `${lang} ten-guest total`);
+    for (const total of ["¥17,500", "¥35,000", "¥52,500", "¥64,000", "¥80,000", "¥96,000", "¥112,000", "¥128,000", "¥144,000", "¥160,000"]) assert.ok(text.includes(total), `${lang} total ${total}`);
+    for (const stale of ["¥140,000", "¥145,000", "¥14,500"]) assert.ok(!text.includes(stale), `${lang} has no stale price ${stale}`);
   }
 });
