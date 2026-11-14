@@ -183,6 +183,9 @@ export interface Experience {
   price: string;
   /** Review-only product whose selling price has not been agreed. */
   pricePending?: boolean;
+  /** Temporarily unavailable even when the review URL remains accessible. */
+  bookingPaused?: boolean;
+  bookingNotice?: string;
   /** Medical consultation booked without a price: the fee is decided at the
    *  consultation and paid at the clinic, so no amount is shown anywhere in
    *  the booking display (card, sticky bar, form, listing, structured data).
@@ -369,7 +372,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "consultationOnly" | "thumb" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "bookingPaused" | "consultationOnly" | "thumb" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
 
 export interface Tour {
   slug: string;
@@ -2895,12 +2898,12 @@ export const experiences: Experience[] = [
       "The costume plan adds a ninja outfit to change into, worn through the session and the photos. Nothing is needed beyond comfortable clothes and closed shoes, and children are welcome with an adult.",
     ],
     duration: "45–60 minutes", price: "¥17,500", priceUnit: "person", group: "1 to 12 per session · private sessions up to 16", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
-    img: "/images/ninja-arashiyama-hero.jpg", alt: "Three guests in black ninja costumes striking poses in a wood-panelled training room",
+    img: "/images/partner-arashiyama/kyoto-ninja-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/ninja-blowgun.jpg", alt: "A guest in a ninja costume aiming a blowpipe at the targets" },
-      { img: "/images/ninja-shuriken-throw.jpg", alt: "A guest laughing as she pulls a throwing star from the target" },
-      { img: "/images/ninja-pose.jpg", alt: "Three guests in ninja costume making hand seals in front of the targets" },
-      { img: "/images/ninja-shuriken-box.jpg", alt: "A wooden box of black throwing stars on a table" },
+      { img: "/images/partner-arashiyama/experience-1128091-29-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1128091-10-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1128091-11-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1128091-31-800.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's studio.",
     partySize: { min: 1, max: 16 },
@@ -2934,7 +2937,7 @@ export const experiences: Experience[] = [
     schedule: [
       { time: "-0:15", title: "Arrive and check in", body: "Change into your costume if you chose the costume plan." },
       { time: "0:00", title: "Blowpipe", body: "Aim and breath: the blowpipe at the targets." },
-      { time: "0:20", title: "Shuriken", body: "How to hold and throw a shuriken so it sticks.", img: "/images/ninja-shuriken-throw.jpg" },
+      { time: "0:20", title: "Shuriken", body: "How to hold and throw a shuriken so it sticks.", img: "/images/partner-arashiyama/experience-1128091-29-800.jpg" },
       { time: "0:40", title: "Hand seals", body: "The in-musubi, the ninja's hand seals, with the instructor." },
       { time: "0:50", title: "Photos", body: "Photos in the training room, in costume if you are wearing one." },
       { time: "1:00", title: "End of the session" },
@@ -2942,7 +2945,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A ninja training studio on an upper floor of a building in central Arashiyama, Kyoto, a short walk from the station and the bamboo grove — the exact address and entrance come with your confirmation", "Please be at the studio by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "Regular sessions may include other guests; a private session takes your group only (up to 16)", "Not accessible for wheelchairs or strollers", "Comfortable clothes and closed-toe shoes"],
       afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
-      img: "/images/ninja-target-room.jpg", alt: "The training room with its row of targets",
+      img: "/images/partner-arashiyama/experience-1128091-29-800.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. costume plan for all of us; children's ages",
@@ -2978,18 +2981,19 @@ export const experiences: Experience[] = [
     // the day before, start time arranged around the group's day) with the
     // partner's cancellation scale. Venue name stays off the page. Preview.
     slug: "arashiyama-stone-mill-matcha", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    bookingPaused: true, bookingNotice: "Bookings are currently paused. Reopening and available dates are being confirmed.",
     title: "Stone-Mill Matcha Grinding in Arashiyama, Kyoto",
-    tagline: "Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five to sixty minutes, in English or Japanese.",
+    tagline: "Bookings are currently paused. Reopening and available dates are being confirmed. Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five to sixty minutes, in English or Japanese.",
     overview: [
       "Matcha is tea leaf ground to a powder fine enough to drink, and the grinding is the slow part. On a covered terrace in Arashiyama you turn a traditional stone mill yourself, feel how little comes out of each turn, and understand why good matcha costs what it does.",
       "Then you whisk the powder you made into a bowl with a bamboo chasen and drink it, looking out over the street. The session takes 45 to 60 minutes and is taught in English or Japanese; the tencha, the mill and the utensils are provided.",
     ],
     duration: "45–60 minutes", price: "¥13,500", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
-    img: "/images/matcha-stone-mill.jpg", alt: "Hands turning a granite stone mill with bright green matcha powder gathering in the groove",
+    img: "/images/partner-arashiyama/experience-1197289-2-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/matcha-whisk.jpg", alt: "Whisking matcha in a bowl with a bamboo chasen" },
-      { img: "/images/matcha-powder.jpg", alt: "Freshly ground matcha powder falling from a stone mill" },
-      { img: "/images/matcha-sweets.jpg", alt: "A bowl of matcha and a plate of seasonal Japanese sweets by a window" },
+      { img: "/images/partner-arashiyama/experience-1197289-1-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1197289-3-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1197289-4-800.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's terrace.",
     partySize: { min: 1, max: 40 },
@@ -3021,7 +3025,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "-0:15", title: "Arrive and check in" },
-      { time: "0:00", title: "The mill", body: "How the stone mill works and how to turn it; then grind your tencha.", img: "/images/matcha-powder.jpg" },
+      { time: "0:00", title: "The mill", body: "How the stone mill works and how to turn it; then grind your tencha.", img: "/images/partner-arashiyama/experience-1197289-1-800.jpg" },
       { time: "0:25", title: "Whisk", body: "Sift the powder, add hot water and whisk with the chasen." },
       { time: "0:35", title: "Drink", body: "Your bowl of matcha on the terrace." },
       { time: "0:45", title: "End of the session" },
@@ -3029,7 +3033,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A café terrace on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "The terrace is covered but semi-outdoor: dress for the weather", "Please be at the terrace by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The venue's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
-      img: "/images/matcha-sweets.jpg", alt: "Matcha and sweets on the terrace",
+      img: "/images/partner-arashiyama/experience-1197289-1-800.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. children's ages; a preferred time of day",
@@ -3047,7 +3051,7 @@ export const experiences: Experience[] = [
       { q: "What if we are late?", a: "Please be there by your start time. The instructor can wait about 5 to 10 minutes; after that you may not be able to join, so call the number on your confirmation if you are delayed." },
       { q: "Is the terrace accessible?", a: "No: it is up a flight of stairs and cannot take wheelchairs or strollers." },
       { q: "What is the cancellation policy?", a: "Regular sessions of up to 19 guests: free until 30 days before the date; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free until 45 days before; from 44 to 29 days before, half; from 28 days before, the full price. One free date change up to 14 days before (29 days before for private sessions and groups of 20 or more), if another time has room. Days are counted in Japan time." },
-      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+      { q: "Can I book now?", a: "Bookings are currently paused. Reopening and available dates are being confirmed." },
     ],
     whatYoullDo: ["Grind tencha into matcha on a stone mill", "Whisk it with a bamboo chasen", "Drink your bowl on a covered terrace"],
     master: { title: "Your instructor", bio: "The terrace's staff teach the mill and the whisk in English and Japanese.", quote: "" },
@@ -3076,11 +3080,12 @@ export const experiences: Experience[] = [
       "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Engraving can be added on the custom plan for a fee.",
     ],
     duration: "About 60 minutes", price: "¥27,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
-    img: "/images/knife-arashiyama-hero.jpg", alt: "An instructor in an apron smiling behind a table of Japanese kitchen knives and wooden handles",
+    img: "/images/partner-arashiyama/kyoto-knife-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/knife-sharpening.jpg", alt: "Hands sharpening a blade on a wet whetstone" },
-      { img: "/images/knife-paper-test.jpg", alt: "The instructor testing an edge on a sheet of paper" },
-      { img: "/images/knife-tomato.jpg", alt: "A finished knife slicing cleanly through a tomato" },
+      { img: "/images/partner-arashiyama/experience-1212742-2-480.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212742-1-480.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212742-6-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212742-3-480.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's workshop.",
     partySize: { min: 1, max: 40 },
@@ -3114,7 +3119,7 @@ export const experiences: Experience[] = [
     schedule: [
       { time: "-0:15", title: "Arrive and check in" },
       { time: "0:00", title: "Choose your blade", body: "Several blade shapes to pick from; the instructor explains what each is for." },
-      { time: "0:10", title: "Sharpen", body: "The angle, the pressure and the rhythm on the whetstone, with the instructor beside you.", img: "/images/knife-sharpening.jpg" },
+      { time: "0:10", title: "Sharpen", body: "The angle, the pressure and the rhythm on the whetstone, with the instructor beside you.", img: "/images/partner-arashiyama/experience-1212742-2-480.jpg" },
       { time: "0:40", title: "Fit the handle", body: "Attach the prepared handle and finish the knife." },
       { time: "0:55", title: "Test the edge", body: "Paper, then a tomato." },
       { time: "1:00", title: "End of the workshop" },
@@ -3122,7 +3127,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A workshop on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Knives are sharp: follow the instructor's safety instructions; from age 6", "Please be at the workshop by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "You take the finished knife home the same day; it cannot go in cabin baggage", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The workshop's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on packing the knife in checked luggage"],
-      img: "/images/knife-craftsman.jpg", alt: "A craftsman inspecting a blade",
+      img: "/images/partner-arashiyama/experience-1212742-2-480.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. custom plan for two, beginner plan for one; left-handed",
@@ -3169,11 +3174,12 @@ export const experiences: Experience[] = [
       "Choose the standard size or a mini shuriken about half as large, small enough to carry. On some days other weapon shapes or a necklace finish are available; ask the staff on the day. The session is taught in English or Japanese.",
     ],
     duration: "About 60 minutes", price: "¥20,000", priceUnit: "person", group: "1 to 12 guests · private sessions on request", ages: "Ages 6+ (hot metal is handled by the instructor)", area: "Kyoto (Arashiyama)",
-    img: "/images/shuriken-arashiyama-hero.jpg", alt: "A guest in a leather apron holding up a freshly cast metal shuriken in front of the targets",
+    img: "/images/partner-arashiyama/kyoto-shuriken-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/shuriken-pour.jpg", alt: "Molten metal poured from a ladle into a sand mould" },
-      { img: "/images/shuriken-quench.jpg", alt: "Hands quenching a cast shuriken in a wooden tub of water" },
-      { img: "/images/shuriken-finished.jpg", alt: "A finished four-pointed shuriken on an anvil" },
+      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's studio.",
     partySize: { min: 1, max: 12 },
@@ -3206,14 +3212,14 @@ export const experiences: Experience[] = [
     schedule: [
       { time: "-0:15", title: "Arrive and check in" },
       { time: "0:00", title: "Design and mould", body: "Choose standard or mini, shape the design and prepare the sand mould." },
-      { time: "0:20", title: "The pour", body: "The instructor pours the molten metal into your mould.", img: "/images/shuriken-pour.jpg" },
-      { time: "0:30", title: "Quench and polish", body: "Cool the star in water, then file and polish it.", img: "/images/shuriken-quench.jpg" },
+      { time: "0:20", title: "The pour", body: "The instructor pours the molten metal into your mould.", img: "/images/partner-arashiyama/experience-1212731-11-480.jpg" },
+      { time: "0:30", title: "Quench and polish", body: "Cool the star in water, then file and polish it.", img: "/images/partner-arashiyama/experience-1212731-11-480.jpg" },
       { time: "1:00", title: "End of the session" },
     ],
     venue: {
       known: ["A ninja studio on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Hot metal is handled by the instructor; guests wear aprons and gloves and follow the safety instructions; from age 6", "Please be at the studio by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "You take the finished shuriken home the same day", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the shuriken home, confirmed with the studio"],
-      img: "/images/ninja-target-room.jpg", alt: "The studio's training room",
+      img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. two standard, one mini; children's ages",
@@ -4217,7 +4223,7 @@ const golfPage = (e: Experience, lang: Lang) => isArrangement() ? applyGolfArran
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "consultationOnly", "thumb", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "bookingPaused", "consultationOnly", "thumb", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);

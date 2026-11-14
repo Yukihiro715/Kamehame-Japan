@@ -147,7 +147,8 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const preview = isPreview(exp);
   // A page in preview shows the full booking flow so it can be checked end to end.
-  const live = (isLive(exp) || preview) && !exp.pricePending;
+  const bookingUnavailable = Boolean(exp.pricePending || exp.bookingPaused);
+  const live = (isLive(exp) || preview) && !bookingUnavailable;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
@@ -242,9 +243,9 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
           <aside className="xp-side">
             {live ? <BookingCard lang={lang} headline={headlinePrice} /> : (
               <div className="bk-card">
-                <p className="soon-flag">{exp.pricePending ? exp.price : T.comingSoon}</p>
-                <p className="xp-note">{T.comingSoonBody}</p>
-                {!exp.pricePending && <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>}
+                <p className="soon-flag">{exp.bookingPaused ? exp.bookingNotice : exp.pricePending ? exp.price : T.comingSoon}</p>
+                {!exp.bookingPaused && <p className="xp-note">{T.comingSoonBody}</p>}
+                {!bookingUnavailable && <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>}
               </div>
             )}
           </aside>
@@ -338,7 +339,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             )}
 
             {/* ④′ Flat pricing table (products without plans) */}
-            {plans.length === 0 && !exp.pricePending && !consultOnly && (
+            {plans.length === 0 && !bookingUnavailable && !consultOnly && (
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
                 <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />
@@ -546,16 +547,16 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             {/* ⑬ Flow, cancellation, request */}
             <section className="xp-section xp-request" id="request">
               <h2>{D.flowH}</h2>
-              <ol className="xp-flow">
+              {!exp.bookingPaused && <ol className="xp-flow">
                 {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
-              </ol>
+              </ol>}
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
               {exp.perk && <div className="xp-perk-banner"><b>{exp.perk.badge}</b><div><strong>{exp.perk.short}</strong><small>{exp.perk.body}</small></div></div>}
-              <BookingRequestHeading lang={lang} defaultTitle={provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta} />
-              {!provisional && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
-              {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
+              {exp.bookingPaused ? <p className="xp-note">{exp.bookingNotice}</p> : <BookingRequestHeading lang={lang} defaultTitle={provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta} />}
+              {!provisional && !exp.bookingPaused && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
+              {!bookingUnavailable && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
             </section>
 
             {reading.length > 0 && (
@@ -577,7 +578,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
           </div>
 
         </div>
-        {!exp.pricePending && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={provisional ? P.cta : live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
+        {!bookingUnavailable && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={provisional ? P.cta : live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
       </BookingProvider>
 
       {moreInCity.length > 0 && (
@@ -595,7 +596,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
         </section>
       )}
 
-      {!exp.pricePending && !consultOnly && <script type="application/ld+json" dangerouslySetInnerHTML={{
+      {!bookingUnavailable && !consultOnly && <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
       }} />}
       <SiteFooter lang={lang} />
