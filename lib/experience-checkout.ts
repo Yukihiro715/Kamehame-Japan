@@ -1,3 +1,4 @@
+import { sanitizeAttribution, type Attribution } from "@/lib/attribution";
 import { catalogFor } from "@/lib/catalog";
 import { pricingFor, quote } from "@/lib/pricing";
 import { GEIKO_CHECKOUT_PRICES } from "@/lib/geiko-checkout-prices";
@@ -21,6 +22,7 @@ export interface ReadyStateKv {
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 }
 export interface ExperienceOrder {
+  attribution?: Attribution;
   requestId: string; slug: string; title: string; name: string; email: string; message: string; lang: Lang;
   date: string; time: string; guests: number; quantity: number; price: string; amount: number;
   city?: string; chargeUnit?: "group" | "guest"; plan?: string; interpreter?: string;
@@ -203,7 +205,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
       price = selected.price; amount = q.total;
     }
   }
-  return { requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
+  return { attribution: sanitizeAttribution(body.attribution, now), requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
     city: x.city, chargeUnit: product.groupPricing ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
     date, time: product.timeOnConfirmation ? "To be confirmed" : time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
 }
@@ -216,6 +218,8 @@ export function checkoutParameters(order: ExperienceOrder, reference: string, cr
     success_url: `${ORIGIN}/${order.lang}/booked/?stay=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${ORIGIN}/${order.lang}/${order.city ?? "tokyo"}/${order.slug}/?checkout=cancelled#request-form`,
     expires_at: String(Math.floor(createdAt/1000) + 3600),
+    "metadata[request_id]": order.requestId,
+    "payment_intent_data[metadata][request_id]": order.requestId,
     "metadata[booking_flow]": "experience_provisional", "metadata[booking_reference]": reference,
     "metadata[experience_slug]": order.slug, "metadata[policy_version]": order.policyVersion,
     "metadata[plan]": order.plan ?? "", "metadata[guests]": String(order.guests),
@@ -231,7 +235,10 @@ export function checkoutParameters(order: ExperienceOrder, reference: string, cr
 
 export async function openExperienceCheckout(env: ExperienceCheckoutEnv, order: ExperienceOrder) {
   const c = provisionalCopy(order.lang);
-  const row = await experienceLedger(env, "experience_create", { order, receipt: { subject: c.paid, text: `${c.pending}\n\n${c.refund}` } });
+  // Marketing context is fixed in D1. Keep it out of the business order's
+  // strict idempotency comparison: consent/GA callbacks can change on retry.
+  const { attribution: _attribution, ...businessOrder } = order;
+  const row = await experienceLedger(env, "experience_create", { order: businessOrder, receipt: { subject: c.paid, text: `${c.pending}\n\n${c.refund}` } });
   const reference = row.id;
   if (!experienceReference(reference) || typeof row.createdAt !== "number") throw Error("invalid_ledger_response");
   if (row.status === "paid_pending") return { ok: false, error: "already_paid" };

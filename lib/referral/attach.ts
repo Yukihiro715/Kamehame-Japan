@@ -54,7 +54,7 @@ export async function attachEnquiry(env: ReferralEnv | null | undefined, request
     const ctx = await activeReferral(db, request.headers.get("cookie"));
     const { lines, amountPending } = enquiryLines(e);
     const r = await createReservation(db, {
-      requestId: e.requestId, flow: e.areaId ? "golf" : "contact", experienceSlug: e.experience,
+      marketingAttribution: e.attribution, requestId: e.requestId, flow: e.areaId ? "golf" : "contact", experienceSlug: e.experience,
       experienceDate: e.dates?.match(/\d{4}-\d{2}-\d{2}/)?.[0], guests: /^\d+$/.test(e.party ?? "") ? Number(e.party) : undefined, lang: e.lang,
       lines, amountPending,
     }, ctx);
@@ -72,7 +72,7 @@ export async function attachExperienceOrder(env: ReferralEnv | null | undefined,
   try {
     const ctx = await activeReferral(db, request.headers.get("cookie"));
     const r = await createReservation(db, {
-      requestId: order.requestId, externalRef: experienceExternalRef(order.requestId), flow: "experience", experienceSlug: order.slug,
+      marketingAttribution: order.attribution, requestId: order.requestId, externalRef: experienceExternalRef(order.requestId), flow: "experience", experienceSlug: order.slug,
       experienceDate: order.date, guests: order.guests, lang: order.lang,
       lines: [{ kind: "base", description: order.title, commissionable: true, quantity: order.quantity, grossJpy: order.amount }],
     }, ctx);

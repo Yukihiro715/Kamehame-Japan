@@ -1,6 +1,6 @@
 "use client";
 import "./provisional-consent.css";
-import { readAttribution } from "@/lib/attribution-client";
+import { collectAttribution } from "@/lib/attribution-client";
 import { QuoteRequestSwitch, quoteCopy } from "./quote-request-switch";
 
 import { useRef, useState, type FormEvent } from "react";
@@ -106,19 +106,19 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           } catch { /* storage blocked: the in-memory attempt still protects retries */ }
           attempt.current = { signature, id };
         }
-        const res = await fetch("/api/experience-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: attempt.current.id }) });
+        const res = await fetch("/api/experience-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: attempt.current.id, attribution: await collectAttribution() }) });
         const json = await res.json() as { ok?: boolean; url?: string };
         if (!res.ok || !json.ok || !json.url) { setStatus("failed"); return; }
         const target = new URL(json.url);
         if (target.protocol !== "https:" || !["checkout.stripe.com", "book.stripe.com"].includes(target.hostname)) { setStatus("failed"); return; }
-        track("begin_checkout", { experience: x.slug, value: b.estimate?.total, currency: "JPY", language: lang });
+        track("begin_checkout", { enquiry_id: attempt.current.id, experience: x.slug, value: b.estimate?.total, currency: "JPY", language: lang });
         window.location.assign(target.href);
         return;
       }
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug, attribution: readAttribution() }),
+        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug, attribution: await collectAttribution() }),
       });
       const json = (await res.json()) as { ok: boolean; request_id?: string };
       if (!json.ok) { setStatus("failed"); return; }

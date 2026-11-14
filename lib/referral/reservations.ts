@@ -1,3 +1,4 @@
+import { sanitizeAttribution, type Attribution as MarketingAttribution } from "@/lib/attribution";
 import { catalogFor } from "@/lib/catalog";
 /** Reservations, their lines, the fixed attribution and the commission entry.
  *
@@ -19,6 +20,7 @@ import { allocateProportionally, commissionNet, netFromGross } from "./money";
 export type LineKind = "base" | "addon" | "arrangement" | "onsite";
 export interface NewLine { kind: LineKind; description: string; commissionable: boolean; taxRateBp?: number; quantity?: number; grossJpy: number; discountJpy?: number }
 export interface NewReservation {
+  marketingAttribution?: MarketingAttribution;
   requestId: string; externalRef?: string; flow: "contact" | "experience" | "golf"; experienceSlug: string;
   experienceDate?: string; guests?: number; lang?: string; lines: NewLine[];
   /** True when the site cannot state the chargeable amount yet (quotes, enquiries). */
@@ -59,9 +61,9 @@ export async function createReservation(db: SqlDb, r: NewReservation, ref: Attri
   const id = randomId(), at = new Date(now).toISOString();
   const policy = ref ? await policyFor(db, r.experienceSlug, now, ref.hotelId, ref.chainProfileId) : null;
   const statements: SqlStatement[] = [{
-    sql: `INSERT INTO reservations (id, request_id, external_ref, flow, experience_slug, experience_date, guests, lang, status, payment_status, amount_status, created_at, updated_at, hotel_ref)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'provisional', 'unpaid', ?, ?, ?, ?)`,
-    params: [id, r.requestId, r.externalRef ?? null, r.flow, r.experienceSlug, r.experienceDate ?? null, r.guests ?? null, r.lang ?? null, r.amountPending || r.lines.length === 0 ? "pending" : "known", at, at, newHotelRef()],
+    sql: `INSERT INTO reservations (id, request_id, external_ref, flow, experience_slug, experience_date, guests, lang, status, payment_status, amount_status, created_at, updated_at, hotel_ref, marketing_attribution_json)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'provisional', 'unpaid', ?, ?, ?, ?, ?)`,
+    params: [id, r.requestId, r.externalRef ?? null, r.flow, r.experienceSlug, r.experienceDate ?? null, r.guests ?? null, r.lang ?? null, r.amountPending || r.lines.length === 0 ? "pending" : "known", at, at, newHotelRef(), JSON.stringify(sanitizeAttribution(r.marketingAttribution, now) ?? null)],
   }];
   r.lines.forEach((l, i) => {
     const tax = l.taxRateBp ?? policy?.tax_rate_bp ?? 1000;
