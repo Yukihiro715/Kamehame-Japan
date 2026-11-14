@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bus, CheckCircle2, MapPin, UserRound, Flag, Search, Send, Mail, CreditCard, BadgeCheck, Clock, Users, JapaneseYen, CalendarX2, ShieldCheck } from "lucide-react";
 import { BusGuestReview } from "@/components/site/bus-guest-review";
+import { RatingSummary } from "@/components/site/reviews";
 import { BusTours } from "@/components/site/bus-tours";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -58,6 +59,7 @@ export default async function GolfBusPage({ params }: Props) {
           <div className="gb-hero-text">
             <p className="gb-eyebrow">KAMEHAME JAPAN · GOLF · SHARED BUS TOURS</p>
             <h1>{C.heroTitle}</h1>
+            <div className="gb-hero-reviews"><RatingSummary experience="golf-bus" lang={lang} href="#reviews" size={17} /></div>
             <p className="gb-hero-lede">{C.heroLede}</p>
             <ul className="gb-features">
               {C.features.map((f, i) => { const Icon = featureIcons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
@@ -75,9 +77,9 @@ export default async function GolfBusPage({ params }: Props) {
           </div>
         </section>
 
-        <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} />
-
         <div className="gb-wrap"><BusGuestReview lang={lang} /></div>
+
+        <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} />
 
         <section className="gb-about" id="details" aria-labelledby="gb-about-h">
           <div className="gb-wrap">
