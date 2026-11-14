@@ -460,7 +460,7 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
   for (const lang of ["ja", "es", "fr", "zh-tw"]) {
     const alt = await (await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`)).text();
     assert.ok(alt.includes("/images/tea-yotsuya-class.jpg") && !alt.includes("craft-hands.jpg"), `${lang} tea photos`);
-    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥140,000"), `${lang} tea table`);
+    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥145,000"), `${lang} tea table`);
   }
   const pages = [
     ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥37,500", "¥50,000", "¥250,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
@@ -726,4 +726,28 @@ test('remaining advertising-inclusive prices render across languages and retain 
   for(const price of prices)assert.ok(text.includes(price),path+' '+price);
   assert.equal(/<meta name="robots" content="noindex/.test(html),preview,path);
  }
+});
+
+test("street walk per-person headline and solo supplement agree across all locales", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const response = await render(`/${lang}/tokyo/samurai-street-walk-kitasenju/`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    const text = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ");
+    // The first price is the booking headline, not a later FAQ or pricing table.
+    assert.equal(text.match(/¥[\d,]+/)?.[0], "¥56,500", `${lang} advertised rate`);
+    assert.ok(text.includes("¥75,000"), `${lang} solo rate`);
+    assert.ok(text.includes("¥113,000"), `${lang} two-guest quote`);
+    assert.match(html, /noindex/, `${lang} remains unlisted`);
+  }
+});
+
+test("Yotsuya ten-guest total is current across all locales", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const response = await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`);
+    assert.equal(response.status, 200);
+    const text = (await response.text()).replace(/<[^>]+>/g, " ");
+    assert.ok(text.includes("¥145,000"), `${lang} ten-guest total`);
+    assert.ok(!text.includes("¥140,000"), `${lang} has no stale total`);
+  }
 });
