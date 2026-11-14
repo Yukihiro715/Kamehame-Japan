@@ -46,7 +46,9 @@ test('remaining advertising prices keep locale quotes, tiers and checkout consis
    assert.equal(checkoutParameters(o,'KJ-E-11111111222243338444555555555555',Date.now()).get('line_items[0][price]'),EXPERIENCE_PRODUCTS[calligraphy.slug].price);
   }
   const tea=live.find(x=>x.slug==='yotsuya-tea-ceremony');
-  for(let n=1;n<=10;n++)assert.equal(quote(pricingFor(tea,lang),'',n).total,n===1?17500:n*(n<=4?16000:14500));
+  for(let n=1;n<=10;n++)assert.equal(quote(pricingFor(tea,lang),'',n).total,n*(n<=3?17500:16000));
+  assert.ok(!JSON.stringify(tea.faq).includes('¥14,500'));
+  assert.equal(tea.status,'live');
   const spa=live.find(x=>x.slug==='nerima-herbal-bath-private-spa');
   for(const [n,total] of [[1,24500],[2,42000],[3,60000]])assert.equal(quote(pricingFor(spa,lang),'',n).total,total);
   for(const [slug,price] of [['setagaya-omotesenke-tea-ceremony',25000],['asakusa-soba-making-class',16000],['asakusa-ramen-making-class',16000]]){
