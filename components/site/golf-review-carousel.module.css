@@ -1,0 +1,22 @@
+.section { margin:28px 0 8px; min-width:0; }
+.header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:14px; }
+.header h2 { margin:0; font-size:clamp(22px,3vw,30px); }
+.header p { margin:4px 0 0; color:#635d52; font-size:12px; }
+.controls { display:flex; align-items:center; gap:10px; flex:none; font-size:12px; }
+.controls button { display:grid; place-items:center; width:44px; height:44px; background:#fffdf8; border:1px solid #d9d2c5; border-radius:50%; cursor:pointer; color:#171a21; }
+.controls button:disabled { opacity:.35; cursor:default; }
+.rail { position:relative; display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:thin; padding:2px 2px 12px; }
+.card { flex:0 0 min(620px,88%); min-width:0; display:flex; flex-direction:column; gap:12px; padding:20px; border:1px solid #e3ded3; border-left:3px solid var(--kame); border-radius:12px; background:#faf8f3; scroll-snap-align:start; }
+.top { display:flex; align-items:center; gap:14px; }
+.top img { border-radius:8px; object-fit:cover; flex:none; width:64px; height:64px; }
+.service { margin:0 0 4px; font-size:12px; font-weight:700; color:#665b4a; }
+.stars { color:#a66a00; letter-spacing:2px; font-size:18px; }
+.card blockquote { margin:0; min-height:6.4em; line-height:1.6; font-size:15px; color:#171a21; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+.meta { display:flex; flex-wrap:wrap; gap:5px 12px; font-size:12px; color:#635d52; }
+.meta b { color:#171a21; }
+.meta span:last-child { display:inline-flex; align-items:center; gap:4px; color:#356044; }
+.bottom { display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; margin-top:auto; }
+.bottom a { display:inline-flex; align-items:center; gap:7px; min-height:44px; font-size:13px; font-weight:700; color:#171a21; text-underline-offset:4px; }
+.bottom small { color:#635d52; font-size:10px; }
+.controls button:focus-visible,.bottom a:focus-visible { outline:3px solid var(--kame); outline-offset:3px; }
+@media(max-width:600px) { .header { align-items:flex-end; gap:10px; } .controls { gap:5px; } .card { flex-basis:92%; padding:16px; } .top img { width:52px; height:52px; } .card blockquote { font-size:14px; } }
