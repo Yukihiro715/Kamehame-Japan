@@ -4236,9 +4236,10 @@ function withStructure(localized: Experience[]): Experience[] {
 }
 
 /** Keep existing review URLs available when these approved pages go live.
- *  Japanese copy is available; other locales retain their English fallback
- *  until their own translation is added. */
+ *  Locales without authored copy retain English content until their own
+ *  translation is added. Booking controls still use the selected locale. */
 const APPROVED_ENGLISH_FALLBACK = new Set([
+  "kyoto-higashiyama-private-tea-ceremony",
   "nerima-herbal-bath-private-spa", "yotsuya-tea-ceremony", "kyoto-ryokan-beauty-clinic",
   "nihonbashi-japanese-dance-salon", "nihonbashi-english-rakugo-salon", "nihonbashi-shamisen-salon",
 ]);
