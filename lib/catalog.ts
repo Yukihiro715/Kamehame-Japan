@@ -272,6 +272,8 @@ export interface Experience {
     peakWindows?: { from: string; to: string }[];
     /** Per-person products: a smaller party pays as this many guests (e.g. a solo guest pays for two). */
     minCharge?: number;
+    /** Per-person products: additional charge when exactly one guest attends. */
+    soloSupplement?: number;
   };
   /** Localised text for `pricing.plans`, keyed by plan id. */
   planText?: Record<string, { label: string; name: string; performers: string; blurb: string }>;
@@ -2156,7 +2158,7 @@ export const experiences: Experience[] = [
       "Kitasenju was the first post town on the road north out of Edo, and its back streets still keep the scale of that time. This experience puts you in samurai dress and walks you through them with a professional samurai performer, past the old gateway of Senju-juku, local shops and a temple, before returning to the venue for the hands-on part.",
       "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
     ],
-    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "group", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
+    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
     img: "/images/samurai-walk-pair.jpg", alt: "A guest in a black kimono and the samurai master in hakama walking down a Kitasenju shopping street",
     gallery: [
       { img: "/images/samurai-walk-master.jpg", alt: "The samurai master in a black kimono holding a sword in front of a calligraphy scroll" },
@@ -2164,7 +2166,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 5 },
-    pricing: { tiers: [{ party: 1, total: 75000 }, { party: 2, total: 113000 }, { party: 3, total: 169500 }, { party: 4, total: 226000 }, { party: 5, total: 282500 }] },
+    pricing: { soloSupplement: 18500 },
     availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
     availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
     scheduleNote: "Timings counted from the 4:00 pm start; the walk is about an hour.",
