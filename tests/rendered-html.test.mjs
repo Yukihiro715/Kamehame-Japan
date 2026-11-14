@@ -660,3 +660,18 @@ test("golf planning: all five languages expose optional budget and travel inputs
     }
   }
 });
+
+
+test("private tea routes are reachable in every supported locale", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const path = `/${lang}/kyoto/kyoto-higashiyama-private-tea-ceremony/`;
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes("Private Tea Ceremony in a Higashiyama Teahouse, Kyoto"), path);
+    // The Node worker harness has no Cloudflare payment bindings, so checkout
+    // readiness is false. Payment controls are covered in experience-checkout.
+    assert.ok(html.includes('name="date"'), path);
+    assert.ok(html.includes('name="time"'), path);
+  }
+});
