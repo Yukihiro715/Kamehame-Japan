@@ -450,10 +450,10 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
 });
 
 test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setagaya and Asakusa noodle previews never name the partners", async () => {
-  // The Yotsuya tea page carries the owner's table (2026-10-23: ¥17,000 / ¥15,500 / ¥14,000 per person) and the host's photos.
+  // The Yotsuya tea page carries the owner's table (2026-11-14: ¥17,500 / ¥16,000 / ¥14,500 per person) and the host's photos.
   const tea = await (await render("/en/tokyo/yotsuya-tea-ceremony/")).text();
   const teaText = tea.replace(/<[^>]+>/g, " ");
-  for (const s of ["¥17,000", "¥31,000", "¥46,500", "¥62,000", "¥70,000", "¥140,000", "¥15,500", "¥14,000", "five to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
+  for (const s of ["¥17,500", "¥32,000", "¥48,000", "¥64,000", "¥72,500", "¥145,000", "¥16,000", "¥14,500", "five to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
   for (const s of ["¥8,800", "¥7,700", "¥6,600", "quoted with your request"]) assert.ok(!teaText.includes(s), `host's public rate not shown: ${s}`);
   assert.ok(tea.includes("/images/tea-yotsuya-class.jpg") && tea.includes("/images/tea-yotsuya-tatami.jpg"), "host photos on the tea page");
   assert.ok(!tea.includes("craft-hands.jpg") && !tea.includes("Placeholder photos"), "no placeholder photos left on the tea page");
@@ -467,9 +467,9 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
     ["/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/", "Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥11,500", "¥92,000", "¥9,500", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥25,000", "¥33,000", "¥82,500", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥38,000", "¥95,000", "ryurei", "Larger parties are quoted on request"]],
-    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
-    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 days before", "6 days before or later"]],
-    ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "Up to 15 days before the date"]],
+    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥25,000", "¥16,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
+    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥16,000", "¥14,500", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 days before", "6 days before or later"]],
+    ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥16,000", "¥14,500", "Up to 15 days before the date"]],
   ];
   const partners = /Camellia|camelliakyoto|tea-kyoto\.com|Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介|Masuya-cho|Ikenoshita|605-0826|616-8003/i;
   const { readFileSync } = await import("node:fs");
@@ -600,7 +600,7 @@ test("private spa preview: the owner's price, the spa's terms, no public address
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, " ");
     assert.match(html, /noindex/);
-    assert.ok(text.includes("¥24,000") && !text.includes("¥18,000") && !text.includes("¥14,400"), `sale price only on ${lang}`);
+    assert.ok(text.includes("¥24,500") && !text.includes("¥18,000") && !text.includes("¥14,400"), `sale price only on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "Closed on Tuesdays" : "火曜定休"), `Tuesday closure on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "camera" : "カメラ"), `camera disclosure on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "Up to 7 days before the date" : "開催7日前まで"), `cancellation table on ${lang}`);
@@ -710,4 +710,20 @@ test('additional advertising-inclusive prices render with the existing publicati
     const html=await response.text();assert.ok(html.includes(price),path);assert.match(html, /noindex/);
     if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥75,000'));assert.ok(html.includes('¥113,000'));}
   }
+});
+
+test('remaining advertising-inclusive prices render across languages and retain preview status',async()=>{
+ for(const lang of ['en','ja','es','fr','zh-tw'])for(const [slug,prices,preview] of [
+  ['kanji-name-calligraphy',['¥21,500','¥43,000'],false],
+  ['yotsuya-tea-ceremony',['¥17,500','¥32,000','¥145,000'],false],
+  ['nerima-herbal-bath-private-spa',['¥24,500','¥42,000','¥60,000'],false],
+  ['setagaya-omotesenke-tea-ceremony',['¥25,000','¥16,000'],true],
+  ['asakusa-soba-making-class',['¥16,000','¥14,500'],true],
+  ['asakusa-ramen-making-class',['¥16,000','¥14,500'],true],
+ ]){
+  const path=`/${lang}/tokyo/${slug}/`,response=await render(path);assert.equal(response.status,200,path);
+  const html=await response.text(),text=html.replace(/<[^>]+>/g,' ');
+  for(const price of prices)assert.ok(text.includes(price),path+' '+price);
+  assert.equal(/<meta name="robots" content="noindex/.test(html),preview,path);
+ }
 });

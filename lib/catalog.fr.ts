@@ -302,7 +302,7 @@ export const experiencesFr: Experience[] = [
     tagline: "Créez une œuvre unique autour d'un kanji inspiré de votre prénom, lors d'un cours privé à Tokyo. Avant le jour J, nous vous interrogeons sur votre prénom et sa signification, et la professeure prépare trois kanji pour vous ; vous choisissez celui qui vous ressemble le plus et le transformez en œuvre au pinceau et à l'encre.",
     overview: ["Ce n'est pas un cours de calligraphie où l'on cherche à écrire parfaitement ou à suivre des règles strictes. Ce qui compte, c'est ce que votre kanji signifie pour vous, et la façon dont vous l'exprimez.", "Vous découvrez d'abord comment bouge le pinceau : les traits, les effets de pinceau sec, les nuances de l'encre. Puis vous choisissez un style — Cute, Bold ou Elegant — et développez votre caractère avec l'accompagnement personnalisé de la professeure. Aucune expérience du pinceau ni des kanji n'est nécessaire.", "Un sceau rouge vient compléter l'œuvre, que vous emportez : un kanji choisi pour vous et façonné de vos propres mains — une véritable œuvre de votre séjour à Tokyo, bien plus qu'un souvenir."],
     overviewFigure: { img: "/images/kanji-styles.jpg", alt: "Exemples de styles : six kanji tracés dans les styles Cute, Bold et Elegant", caption: "Les trois styles au choix : Cute, Bold et Elegant (exemples)." },
-    duration: "Environ 2 h", price: "¥19,800", group: "Privé · 2 à 4 personnes", ages: "Dès 10 ans", area: "Tokyo (Shinjuku)",
+    duration: "Environ 2 h", price: "¥21,500", group: "Privé · 2 à 4 personnes", ages: "Dès 10 ans", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Deux participants souriants avec les kanji qu'ils ont tracés lors d'un cours de calligraphie à Tokyo",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "La professeure montre un trait pendant qu'un participant s'exerce à côté" },
@@ -704,7 +704,7 @@ export const experiencesFr: Experience[] = [
       "La cérémonie du thé condense l'hospitalité japonaise dans un seul bol, et c'est l'occasion de s'y asseoir plutôt que de regarder depuis la porte. Votre hôtesse est la troisième génération de sa famille à enseigner le thé : diplômée instructrice de l'école Sōhen en 1993, plus de quarante ans de pratique et plusieurs centaines d'élèves par mois. Elle accueille des visiteurs étrangers dans ce salon depuis des années.",
       "Les quatre-vingt-dix minutes suivent la forme d'une vraie réunion. Vous vous retrouvez à la galerie de Yotsuya, apprenez la naissance de la cérémonie et l'étiquette de l'invité, entrez dans le salon de thé à la manière traditionnelle et regardez l'hôtesse préparer le thé — chaque geste a sa raison. Puis vous fouettez un bol vous-même, sous sa conduite, et vous asseyez pour une courte méditation avant les questions et les photos. En anglais, pour un groupe de dix au plus, avec des chaussettes pour seul bagage.",
     ],
-    duration: "Environ 1 h 30", price: "¥17,000", group: "Petit groupe · 1 à 10 personnes", ages: "Dès 5 ans", area: "Tokyo (Yotsuya, Shinjuku)",
+    duration: "Environ 1 h 30", price: "¥17,500", group: "Petit groupe · 1 à 10 personnes", ages: "Dès 5 ans", area: "Tokyo (Yotsuya, Shinjuku)",
     img: "/images/tea-yotsuya-drink.jpg", alt: "Une invitée boit son matcha dans le salon de thé",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "L'hôtesse agenouillée devant les invités assis sur le tatami du salon de thé" },
@@ -762,7 +762,7 @@ export const experiencesFr: Experience[] = [
       { q: "Les enfants peuvent-ils participer ?", a: "Oui, dès 5 ans. Pour les participants de 5 à 18 ans, indiquez leur âge afin que nous confirmions le tarif enfant ou jeune avant le paiement." },
       { q: "S'assoit-on par terre ?", a: "Oui, sur le tatami. Les chaussettes sont la seule chose à apporter ; si s'agenouiller est difficile, l'hôtesse propose une façon plus confortable de s'asseoir." },
       { q: "Quelle est la taille du groupe ?", a: "Jusqu'à dix personnes partagent une séance. Les groupes plus nombreux sont chiffrés individuellement." },
-      { q: "Comment le prix est-il calculé ?", a: "Par personne, avec un tarif dégressif : ¥17,000 pour une personne, ¥15,500 par personne de deux à quatre, et ¥14,000 par personne de cinq à dix. Taxes comprises." },
+      { q: "Comment le prix est-il calculé ?", a: "Par personne, avec un tarif dégressif : ¥17,500 pour une personne, ¥16,000 par personne de deux à quatre, et ¥14,500 par personne de cinq à dix. Taxes comprises." },
       { q: "Quelles sont les conditions d'annulation ?", a: "Gratuite jusqu'à 7 jours avant la date ; à partir de 6 jours avant, non-présentation comprise, le prix total. Les jours se comptent en heure du Japon." },
       { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; cela ne coûte rien. Nous répondons sous 24 heures avec l'heure de début, le prix et les conditions. Votre réservation est confirmée quand vous payez via le lien que nous envoyons, et les conditions d'annulation courent à partir de là." },
     ],

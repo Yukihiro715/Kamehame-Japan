@@ -29,10 +29,10 @@ const reference='KJ-E-11111111222243338444555555555555';
 const env={EXPERIENCE_CHECKOUT_ENABLED:'true',STRIPE_CHECKOUT_KEY:'rk_live_example',STRIPE_READ_KEY:'rk_live_read',STRIPE_WEBHOOK_SECRET:'whsec_example',GOLF_AUTOMATION_URL:'https://script.google.com/macros/s/example/exec',GOLF_AUTOMATION_TOKEN:'test-token'};
 
 test('server prices: minimum charge, allowed quantities, adult eligibility and tampered prices',()=>{
-  assert.equal(order.amount,39600);assert.equal(order.quantity,2);assert.equal(order.guests,2);
-  for(const guests of [2,3,4])assert.equal(m.parseExperienceOrder({...base,guests},now).amount,19800*guests);
+  assert.equal(order.amount,43000);assert.equal(order.quantity,2);assert.equal(order.guests,2);
+  for(const guests of [2,3,4])assert.equal(m.parseExperienceOrder({...base,guests},now).amount,21500*guests);
   assert.equal(m.parseExperienceOrder({...base,guests:5},now),null);
-  assert.equal(m.parseExperienceOrder({...base,amount:1,price:'price_fake'},now).amount,39600);
+  assert.equal(m.parseExperienceOrder({...base,amount:1,price:'price_fake'},now).amount,43000);
   assert.equal(m.parseExperienceOrder({...base,experience:'mt-fuji-golf-day'},now),null);
   for(const change of [{guests:1},{guests:1.5},{consent:false},{standard:false},{date:'2026-02-30'},{time:'03:00'},{date:'2026-10-22'},{email:'bad'},{name:'Header\r\nInjected'},{request_id:'invalid'}])assert.equal(m.parseExperienceOrder({...base,...change},now),null);
   assert.equal(m.parseExperienceOrder({...base,date:'2026-10-23'},Date.parse('2026-10-22T09:00:00Z')),null,'18:00 JST cutoff');
@@ -129,7 +129,7 @@ test('retry uses same Stripe idempotency key; no redirect until session is persi
   const old=globalThis.fetch,calls=[];let failPersist=true;const createdAt=Date.now();
   try{
     globalThis.fetch=async(url,init)=>{
-      if(String(url).startsWith('https://api.stripe.com')){calls.push(init);return Response.json({id:'cs_live_example',url:'https://checkout.stripe.com/c/pay/example',status:'open',livemode:true,amount_total:39600,currency:'jpy'});}
+      if(String(url).startsWith('https://api.stripe.com')){calls.push(init);return Response.json({id:'cs_live_example',url:'https://checkout.stripe.com/c/pay/example',status:'open',livemode:true,amount_total:43000,currency:'jpy'});}
       const b=JSON.parse(init.body);
       if(b.action==='experience_create')return Response.json({ok:true,id:reference,createdAt,status:'awaiting_payment'});
       return Response.json({ok:!failPersist});
@@ -209,7 +209,7 @@ test('enabled request form renders paid-provisional copy, charge minimum and con
     const x=catalogFor(lang).experiences.find(x=>x.slug==='kanji-name-calligraphy');
     const b={slug:x.slug,title:x.title,provisionalCheckout:true,leadDays:1,cutoffTime:'18:00',minGuests:2,defaultGuests:2,listedMax:4,maxGuests:4,startTimes:x.availability.startTimes,interpreter:false,cancellationText:x.cancellation,cancellationTiers:x.cancellationTiers};
     const html=renderToStaticMarkup(React.createElement(CurrencyProvider,null,React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang),lang},React.createElement(EnquiryForm,{kind:'guest',lang,fallbackEmail:'hello@kamehame-japan.com',experience:x}))));
-    assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_consent'));assert.ok(html.includes('39,600'));assert.ok(html.includes('required=""'));
+    assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_consent'));assert.ok(html.includes('43,000'));assert.ok(html.includes('required=""'));
     assert.ok(!html.includes('No payment now'));
   }
 });

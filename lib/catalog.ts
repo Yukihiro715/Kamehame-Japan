@@ -713,7 +713,7 @@ export const experiences: Experience[] = [
     // condition sheet (confirmed by the operator 2026-10-11) and its terms
     // page. Wholesale ¥14,400 per person incl. tax; the sale price follows
     // the owner's rule (wholesale + ¥4,500 ad cost, 20% margin, rounded up
-    // to ¥500) → ¥24,000. Children's price: the operator has none yet, so
+    // to ¥500 incl. tax): one guest ¥24,500 (2026-11-14). Children's price: the operator has none yet, so
     // children are quoted. Cancellation from the operator's current terms
     // was the spa's own; 2026-10-23 the owner set KAMEHAME's standard
     // instead (free until 7 days before, then the full price) and ruled out
@@ -729,13 +729,13 @@ export const experiences: Experience[] = [
       "A home spa in Nerima that takes one group a day. You start at the work table: a sachet of Japanese cypress and aromatic herbs, then three packs of your own herbal bath blend, mixed by hand with the staff showing you how. One pack is steeped in two litres of hot water and goes into the bath; the other two go home with you.",
       "Then the slow part. Wash, soak for about thirty minutes in the private hot-spring bath, change into a yukata, and take the rest of the time as you like: a nap, the herbal tea and spring water that come with the room, or a meal you brought along. The staff speak Japanese and work with translated materials and translation tools; a dedicated interpreter is not included.",
     ],
-    duration: "About 3.5 hours", price: "¥24,000", priceUnit: "group", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
+    duration: "About 3.5 hours", price: "¥24,500", priceUnit: "group", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
     img: "/images/nerima-herbal-bath.webp", alt: "The private bath and tea space of the home spa",
     thumb: "/images/nerima-herbal-bath-thumb.webp",
     gallery: [],
     galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
     partySize: { min: 1, max: 3, default: 2 },
-    pricing: { tiers: [{ party: 1, total: 24000 }, { party: 2, total: 42000 }, { party: 3, total: 60000 }] },
+    pricing: { tiers: [{ party: 1, total: 24500 }, { party: 2, total: 42000 }, { party: 3, total: 60000 }] },
     availability: { daily: false, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions start at 11:00 or 16:30; normally closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
@@ -791,7 +791,7 @@ export const experiences: Experience[] = [
     ],
     faq: [
       { q: "Is this a private experience?", a: "Yes. The spa takes one group a day, of one to three guests; larger groups can be asked about." },
-      { q: "How much is it?", a: "Group totals, tax included: ¥24,000 for one guest, ¥42,000 for two guests, or ¥60,000 for three guests. Includes the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
+      { q: "How much is it?", a: "Group totals, tax included: ¥24,500 for one guest, ¥42,000 for two guests, or ¥60,000 for three guests. Includes the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
       { q: "Is English spoken?", a: "The staff speak Japanese and use translated written materials and translation tools. An interpreter guide can be arranged for an extra charge; ask when you request." },
       { q: "Can children join?", a: "Yes, with a guardian, by prior arrangement. Tell us their ages and how many; the spa confirms participation and the price. Mixed bathing in the private bath is for children up to six." },
       { q: "Can we take the bath blends home?", a: "Yes: two of the three packs you make go home with you, packed on the day. Postal delivery is not offered." },
@@ -937,7 +937,7 @@ export const experiences: Experience[] = [
   {
     // Tokyo calligraphy teacher; the partner's own brand is deliberately not
     // shown (guests would find it and book around us). Built from the condition
-    // sheet, 2026-09; live since 2026-09-24 at ¥19,800 per person. Dates come from the
+    // sheet, 2026-09; live since 2026-09-24; repriced to ¥21,500 on 2026-11-14. Dates come from the
     // teacher's lesson calendar and are replaced every three months: ◎ slots have
     // the studio booked; ▲ slots need the studio booked when a request comes in.
     // The calendar has two tables (■ teacher/space, ★ summary); a slot is open
@@ -947,7 +947,7 @@ export const experiences: Experience[] = [
     tagline: "Create a one-of-a-kind kanji artwork inspired by your own name, in a private class in Tokyo. Before the day we ask about your name and its meaning, and the teacher prepares three kanji for you; you choose the one that feels most like you and turn it into art with brush and ink.",
     overview: ["This is not a calligraphy class about writing perfectly or following strict rules. What matters is what your kanji means to you, and expressing it in your own way.", "You start by exploring how the brush moves — lines, dry-brush texture, the moods of ink. Then you choose a style, Cute, Bold or Elegant, and develop your character with one-to-one guidance from the teacher. No experience with brushes or kanji is needed.", "A red seal completes the piece, and it goes home with you: a kanji chosen for you and shaped by your own hands — a piece of art from your time in Tokyo, not just a souvenir."],
     overviewFigure: { img: "/images/kanji-styles.jpg", alt: "Style examples: six kanji brushed in the Cute, Bold and Elegant styles", caption: "The three styles to choose from — Cute, Bold and Elegant (examples)." },
-    duration: "About 2 hours", price: "¥19,800", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
+    duration: "About 2 hours", price: "¥21,500", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },
@@ -1422,7 +1422,7 @@ export const experiences: Experience[] = [
       "The tea ceremony distils Japanese hospitality into a single bowl, and this is a chance to sit inside it rather than watch from the door. Your host is the third generation of her family to teach tea: licensed as an instructor of the Sōhen school in 1993, more than forty years in the practice, and teaching several hundred students a month. She has welcomed visitors from abroad to this tearoom for years.",
       "The ninety minutes follow the shape of a real gathering. You meet at the gallery in Yotsuya, learn how the ceremony came to be and the etiquette of a guest, enter the tearoom the traditional way, and watch the host prepare tea — every movement with a reason. Then you whisk a bowl yourself, under her guidance, and sit for a short meditation before questions and photographs. In English, for a group of up to ten, with socks the only thing to bring.",
     ],
-    duration: "About 1.5 hours", price: "¥17,000", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
+    duration: "About 1.5 hours", price: "¥17,500", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
     img: "/images/tea-yotsuya-drink.jpg", alt: "A guest drinking matcha in the tearoom",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "The host kneeling before guests seated on the tatami of the tearoom" },
@@ -1435,9 +1435,9 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the host's tearoom in Yotsuya.",
     partySize: { min: 1, max: 10, default: 2 },
-    // Whole-group totals at the owner's rates (2026-10-23): 1 guest ¥17,000,
-    // 2–4 guests ¥15,500 each, 5–10 guests ¥14,000 each.
-    pricing: { tiers: [{ party: 1, total: 17000 }, { party: 2, total: 31000 }, { party: 3, total: 46500 }, { party: 4, total: 62000 }, { party: 5, total: 70000 }, { party: 6, total: 84000 }, { party: 7, total: 98000 }, { party: 8, total: 112000 }, { party: 9, total: 126000 }, { party: 10, total: 140000 }] },
+    // Whole-group totals at the owner's tax-exclusive advertising rule (2026-11-14): 1 guest ¥17,500,
+    // 2–4 guests ¥16,000 each, 5–10 guests ¥14,500 each.
+    pricing: { tiers: [{ party: 1, total: 17500 }, { party: 2, total: 32000 }, { party: 3, total: 48000 }, { party: 4, total: 64000 }, { party: 5, total: 72500 }, { party: 6, total: 87000 }, { party: 7, total: 101500 }, { party: 8, total: 116000 }, { party: 9, total: 130500 }, { party: 10, total: 145000 }] },
     taxIncluded: true,
     interpreter: false,
     langTag: "Taught in English",
@@ -1488,7 +1488,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, from age 5. For guests aged 5–18, tell us their ages so we can quote the applicable child or youth rate before payment." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
-      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,000 for one guest, ¥15,500 per person for two to four guests, and ¥14,000 per person for five to ten guests. Tax is included." },
+      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,500 for one guest, ¥16,000 per person for two to four guests, and ¥14,500 per person for five to ten guests. Tax is included." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
@@ -3655,7 +3655,7 @@ export const experiences: Experience[] = [
       "Omotesenke is one of the three main schools descended from Sen no Rikyu, and this is its tea as it is practised today, in a tearoom in a quiet part of Setagaya, half an hour from Shinjuku. The teacher, who runs the school, takes one group at a time, so the ninety minutes are yours.",
       "The session begins with an explanation of the ceremony and the etiquette of a guest, then the entry into the tearoom and the ceremony itself: two kinds of sweets, matcha prepared for each of you, and the small gestures that make a guest at a tea gathering. Kaishi paper, a fan and a sweet pick are provided for the ceremony. Sessions are on Saturdays and Sundays, starting at 11:00 or 15:00, and the tearoom takes guests from mid-January 2027.",
     ],
-    duration: "About 1.5 hours", price: "¥24,500", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (children 6–17 at a reduced price)", area: "Tokyo (Kyodo, Setagaya-ku)",
+    duration: "About 1.5 hours", price: "¥25,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (children 6–17 at a reduced price)", area: "Tokyo (Kyodo, Setagaya-ku)",
     img: "/images/craft-hands.jpg", alt: "A tea ceremony host placing a tea bowl on the tatami before seated guests",
     gallery: [
       { img: "/images/cat-tea.jpg", alt: "Matcha being prepared at a tea gathering" },
@@ -3712,7 +3712,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need to know anything about tea?", a: "No. The session starts with an explanation, and the teacher guides each gesture as it comes." },
       { q: "When does it run?", a: "On Saturdays and Sundays, starting at 11:00 or 15:00, from mid-January 2027. Other times can be asked for. Requests close five days before the date, at 17:00 Japan time." },
-      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 17 pay ¥15,000 instead of ¥24,500; the table above shows adult prices and our reply adjusts for children." },
+      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 17 pay ¥16,000 instead of ¥25,000; the table above shows adult prices and our reply adjusts for children." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are required; bare feet are not allowed in the tearoom. Tell us if kneeling is difficult." },
       { q: "Is the session private?", a: "Yes. The teacher takes one group at a time, from two to six guests." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
@@ -3728,10 +3728,10 @@ export const experiences: Experience[] = [
     // SOBAGIRI RAKUJYO (株式会社RAKUJYO), Matsugaya, Taito-ku: 60-minute
     // soba-making class (30 min making, 30 min eating) on Kappabashi
     // kitchenware street near Asakusa. Built 2026-10-22 from the partner's
-    // condition sheet (Drive folder SOBAGIRI) and its public site. Wholesale
+    // condition sheet (Drive folder SOBAGIRI) and its public site. Provisional cost
     // ¥6,500 (Mon–Thu) / ¥7,500 (Fri–Sun and holidays) incl. tax; the sale
     // prices follow the owner's rule (wholesale + ¥4,500 ad cost, 20% margin,
-    // rounded up to ¥500) and are provisional: ¥14,000 / ¥15,000. The page
+    // rounded up to ¥500 incl. tax), using provisional costs: ¥14,500 / ¥16,000. The page
     // shows the higher rate and says weekdays are lower. Cancellation terms
     // follow the partner's travel-agency (B2B) scale, to be confirmed. The
     // studio's name may be published per the sheet but stays off the page
@@ -3744,7 +3744,7 @@ export const experiences: Experience[] = [
       "Kappabashi is the street where Tokyo's restaurants buy their knives, pots and plastic food, a ten-minute walk from Asakusa. The studio on it teaches the one thing the street's tools are for: making noodles by hand. In thirty minutes you mix, knead, roll and cut soba from pure buckwheat flour, the way it has been done since the Edo period, with tools chosen or made for beginners.",
       "Then you eat it. The soba you cut is cooked at once and served the way you choose: a cold Edo-style dipping sauce, a Kyoto-style one, hot wagyu sukiyaki broth, chicken and soft-boiled egg, shrimp and salt, braised pork, walnut sauce, or a vegan broth. The soba itself contains no wheat. Six guests make a session private; smaller groups share the room.",
     ],
-    duration: "1 hour", price: "¥15,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
+    duration: "1 hour", price: "¥16,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
     img: "/images/soba-asakusa-hero.jpg", alt: "Two guests in aprons cutting soba noodles with wide knives at the studio's wooden table",
     gallery: [
       { img: "/images/soba-asakusa-cutting.jpg", alt: "A wide soba knife cutting folded dough into thin noodles" },
@@ -3804,7 +3804,7 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-      { q: "How much is it?", a: "¥15,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,000 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
+      { q: "How much is it?", a: "¥16,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,500 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
       { q: "Is the soba gluten-free?", a: "The noodles are 100% buckwheat with no wheat flour. Most broths and sauces contain soy sauce; the vegan broth is made with gluten-free tamari. Tell us about allergies when you request; the studio cannot use ingredients brought by guests." },
       { q: "Which broths can we choose from?", a: "Cold: Edo-style dipping sauce, Kyoto-style dipping sauce, salt only, walnut sauce. Hot: wagyu sukiyaki, chicken and soft-boiled egg, shrimp and salt, braised pork. A vegan broth is ¥500 extra. Choose on the day or tell us in your request." },
       { q: "Which language is the class in?", a: "The instructor speaks Japanese; the steps are shown and English materials are provided. The class is designed so that children can follow it." },
@@ -3830,7 +3830,7 @@ export const experiences: Experience[] = [
       "The studio on Kappabashi street took the hand-cutting technique it teaches for soba and applied it to ramen: a flour developed for noodles, a method that works without a machine, and tools chosen or made so that first-timers can follow it. In thirty minutes you mix, knead, roll and cut your own ramen noodles.",
       "Then they go into a bowl. The noodles you cut are cooked at once and served in the studio's ramen broth, with toppings, at the table where you made them. Six guests make a session private; smaller groups share the room. A ten-minute walk from Asakusa.",
     ],
-    duration: "1 hour", price: "¥15,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
+    duration: "1 hour", price: "¥16,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
     img: "/images/ramen-asakusa-hero.jpg", alt: "A bowl of ramen beside hands cutting fresh noodles with a wide knife",
     gallery: [
       { img: "/images/ramen-asakusa-bowl.jpg", alt: "A bowl of ramen with chashu pork, egg and nori" },
@@ -3889,7 +3889,7 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-      { q: "How much is it?", a: "¥15,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,000 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
+      { q: "How much is it?", a: "¥16,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,500 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
       { q: "What goes in the bowl?", a: "The studio's ramen broth with toppings such as chashu pork, a seasoned egg and nori. Tell us about allergies or ingredients you avoid when you request; the studio cannot use ingredients brought by guests." },
       { q: "Which language is the class in?", a: "The instructor speaks Japanese; the steps are shown and English materials are provided. The class is designed so that children can follow it." },
       { q: "Can we have the room to ourselves?", a: "A booking for six makes the session private automatically, from Monday to Thursday. On Fridays, weekends and holidays private sessions are only possible for groups of eight or more, arranged individually." },

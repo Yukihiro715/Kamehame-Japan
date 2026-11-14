@@ -15,7 +15,7 @@ export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number
   "shibuya-ramen-class": { price: "price_1USyuLDpZ5Y8WoJ2Er2OtMAL", amount: 26500, min: 1, max: 16, minCharge: 1 },
   "nihonbashi-kendo-experience": { price: "price_1UbYxmDpZ5Y8WoJ2OBTFjIUZ", amount: 26500, min: 1, max: 8, minCharge: 1, eligibilityRequired: true, timeOnConfirmation: true },
   "nihonbashi-bushido-experience": { price: "price_1UbYy4DpZ5Y8WoJ2DrRDcGXv", amount: 16500, min: 2, max: 8, minCharge: 2, eligibilityRequired: true, timeOnConfirmation: true },
-  "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 2, max: 4, minCharge: 2 },
+  "kanji-name-calligraphy": { price: "price_1UbZREDpZ5Y8WoJ2yQP9RmS2", amount: 21500, min: 2, max: 4, minCharge: 2 },
 };
 
 export const checkoutProductConfigured = (slug: string) => !!EXPERIENCE_PRODUCTS[slug] && (!EXPERIENCE_PRODUCTS[slug].privateTeaPricing || privateTeaCheckoutConfigured());
