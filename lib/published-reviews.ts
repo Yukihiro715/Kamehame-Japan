@@ -4,10 +4,11 @@ export { REVIEWS_PUBLISHED, reviewDate, sampleReviewsFor, featuredReviews } from
 export type { Review, Aggregate } from "@/lib/reviews";
 
 const DIRECT_REVIEWS: Review[] = [
-  // Direct submission on 14 Nov, matched to the completed 10 Nov golf booking.
+  // Direct submission on 14 Nov, matched to the completed 10 Nov shared-bus
+  // tour from Shinjuku to Taiheiyo Club Mashiko PGA, Tochigi (not Mt. Fuji).
   // Original English text preserved; first name only.
   {
-    id: "neil-golf-2026-11", experience: "mt-fuji-golf-day", rating: 5,
+    id: "neil-golf-2026-11", experience: "golf-bus", rating: 5,
     author: "Neil", country: "", source: "direct", verified: true, date: "2026-11-10",
     body: "Wasn't sure what to expect from the day after booking a few days before the round. Toshi our driver and guide was extremely helpful and helped me navigate golf etiquette in Japan and the different style of play I'm accustomed to in America. It was a long day but Toshi kept us on schedule and allowed time for breaks during the bus ride. The course was in excellent condition even though it rained the night before. I would highly recommend this trip for anyone wanting to experience golf in Japan.",
   },

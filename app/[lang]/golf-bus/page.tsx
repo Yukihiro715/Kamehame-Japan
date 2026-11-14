@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bus, CheckCircle2, MapPin, UserRound, Flag, Search, Send, Mail, CreditCard, BadgeCheck, Clock, Users, JapaneseYen, CalendarX2, ShieldCheck } from "lucide-react";
+import { BusGuestReview } from "@/components/site/bus-guest-review";
 import { BusTours } from "@/components/site/bus-tours";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -75,6 +76,8 @@ export default async function GolfBusPage({ params }: Props) {
         </section>
 
         <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} />
+
+        <div className="gb-wrap"><BusGuestReview lang={lang} /></div>
 
         <section className="gb-about" id="details" aria-labelledby="gb-about-h">
           <div className="gb-wrap">

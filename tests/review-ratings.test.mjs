@@ -11,13 +11,13 @@ const { productJsonLd } = await vite.ssrLoadModule('/lib/seo.ts');
 const golf = 'mt-fuji-golf-day';
 
 test('golf headline and structured rating count only the verified bookings', () => {
-  assert.equal(reviewsFor(golf).length, 7);
-  assert.deepEqual(aggregateFor(golf), { average: 5, count: 2 });
+  assert.equal(reviewsFor(golf).length, 6);
+  assert.deepEqual(aggregateFor(golf), { average: 5, count: 1 });
   assert.deepEqual(ownAggregateFor(golf), aggregateFor(golf));
-  assert.deepEqual(ratingReviewsFor(golf).map(r => r.author), ['Neil', 'Tyler']);
-  assert.equal(distributionFor(golf).reduce((n, d) => n + d.count, 0), 2);
+  assert.deepEqual(ratingReviewsFor(golf).map(r => r.author), ['Tyler']);
+  assert.equal(distributionFor(golf).reduce((n, d) => n + d.count, 0), 1);
   const schema = productJsonLd('Golf', 'Booking service', '/golf.webp', '/en/golf/', '¥15,000', golf);
-  assert.equal(schema.aggregateRating.reviewCount, 2);
+  assert.equal(schema.aggregateRating.reviewCount, 1);
   assert.equal(schema.aggregateRating.ratingValue, 5);
 });
 
@@ -33,4 +33,12 @@ test('unrelated partner-only experiences and unknown experiences retain their be
   assert.deepEqual(aggregateFor('kanji-name-calligraphy'), { average: 4.8, count: 5 });
   assert.equal(ownAggregateFor('kanji-name-calligraphy'), null);
   assert.equal(aggregateFor('unknown-experience'), null);
+});
+
+
+test('shared-bus feedback stays separate from Mt. Fuji golf ratings', () => {
+  assert.deepEqual(ratingReviewsFor('golf-bus').map(r => r.author), ['Neil']);
+  assert.deepEqual(ownAggregateFor('golf-bus'), { average: 5, count: 1 });
+  assert.ok(!reviewsFor(golf).some(r => r.author === 'Neil'));
+  assert.equal(reviewsFor('golf-bus')[0].date, '2026-11-10');
 });
