@@ -303,7 +303,7 @@ export const experiencesEs: Experience[] = [
     tagline: "Crea una obra de arte única con un kanji inspirado en tu propio nombre, en una clase privada en Tokio. Antes del día te preguntamos por tu nombre y su significado, y la profesora prepara tres kanji para ti; eliges el que más te represente y lo conviertes en arte con pincel y tinta.",
     overview: ["No es una clase de caligrafía para escribir a la perfección ni para seguir reglas estrictas. Lo importante es lo que tu kanji significa para ti y expresarlo a tu manera.", "Primero descubres cómo se mueve el pincel: trazos, texturas de pincel seco, los matices de la tinta. Después eliges un estilo —Cute, Bold o Elegant— y desarrollas tu carácter con la guía personalizada de la profesora. No hace falta experiencia con el pincel ni con los kanji.", "Un sello rojo completa la obra, y te la llevas: un kanji elegido para ti y creado con tus propias manos, una pieza de arte de tu paso por Tokio y no un simple recuerdo."],
     overviewFigure: { img: "/images/kanji-styles.jpg", alt: "Ejemplos de estilo: seis kanji en los estilos Cute, Bold y Elegant", caption: "Los tres estilos para elegir: Cute, Bold y Elegant (ejemplos)." },
-    duration: "Unas 2 horas", price: "¥19,800", group: "Privado · 2–4 personas", ages: "Desde 10 años", area: "Tokio (Shinjuku)",
+    duration: "Unas 2 horas", price: "¥21,500", group: "Privado · 2–4 personas", ages: "Desde 10 años", area: "Tokio (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Dos participantes sonrientes con los kanji que pintaron en una clase de caligrafía en Tokio",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "La profesora muestra un trazo mientras un participante practica a su lado" },
@@ -705,7 +705,7 @@ export const experiencesEs: Experience[] = [
       "La ceremonia del té destila la hospitalidad japonesa en un solo cuenco, y esta es la ocasión de sentarte dentro en lugar de mirar desde la puerta. Tu anfitriona es la tercera generación de su familia que enseña té: titulada como instructora de la escuela Sōhen en 1993, con más de cuarenta años de práctica y varios cientos de alumnos al mes. Lleva años recibiendo a visitantes extranjeros en esta sala.",
       "Los noventa minutos siguen la forma de una reunión real. Os encontráis en la galería de Yotsuya, aprendéis cómo nació la ceremonia y la etiqueta del invitado, entráis en la sala de té a la manera tradicional y veis a la anfitriona preparar el té, con cada movimiento justificado. Después bates un cuenco tú mismo, con su guía, y os sentáis para una breve meditación antes de las preguntas y las fotos. En inglés, para un grupo de hasta diez, con los calcetines como único equipaje.",
     ],
-    duration: "Alrededor de 1,5 horas", price: "¥17,000", group: "Clase reducida · 1–10 personas", ages: "Desde 5 años", area: "Tokio (Yotsuya, Shinjuku)",
+    duration: "Alrededor de 1,5 horas", price: "¥17,500", group: "Clase reducida · 1–10 personas", ages: "Desde 5 años", area: "Tokio (Yotsuya, Shinjuku)",
     img: "/images/tea-yotsuya-drink.jpg", alt: "Una invitada bebiendo matcha en la sala de té",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "La anfitriona arrodillada ante los invitados sentados en el tatami de la sala de té" },
@@ -763,7 +763,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Pueden participar niños?", a: "Sí, desde 5 años. Para participantes de 5 a 18 años, indica sus edades para que confirmemos la tarifa infantil o juvenil antes del pago." },
       { q: "¿Nos sentamos en el suelo?", a: "Sí, en tatami. Los calcetines son lo único que hay que traer; si arrodillarse resulta difícil, la anfitriona sugiere una forma más cómoda de sentarse." },
       { q: "¿De cuántas personas es el grupo?", a: "Hasta diez personas comparten una sesión. Los grupos más grandes se presupuestan individualmente." },
-      { q: "¿Cómo se calcula el precio?", a: "Por persona, con una tarifa menor para grupos: ¥17,000 para una persona, ¥15,500 por persona de dos a cuatro, y ¥14,000 por persona de cinco a diez. Impuestos incluidos." },
+      { q: "¿Cómo se calcula el precio?", a: "Por persona, con una tarifa menor para grupos: ¥17,500 para una persona, ¥16,000 por persona de dos a cuatro, y ¥14,500 por persona de cinco a diez. Impuestos incluidos." },
       { q: "¿Cuál es la política de cancelación?", a: "Gratuita hasta 7 días antes de la fecha; desde 6 días antes, incluida la no presentación, el precio completo. Los días se cuentan en hora de Japón." },
       { q: "¿Cómo funciona la reserva?", a: "Elige una fecha y envía una solicitud; no cuesta nada. Respondemos en 24 horas con la hora de inicio, el precio y las condiciones. Tu reserva queda confirmada cuando pagas a través del enlace que te enviamos, y las condiciones de cancelación empiezan entonces." },
     ],
