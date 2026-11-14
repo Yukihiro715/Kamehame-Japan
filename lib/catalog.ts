@@ -1437,9 +1437,9 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the host's tearoom in Yotsuya.",
     partySize: { min: 1, max: 10, default: 2 },
-    // Whole-group totals at the owner's tax-exclusive advertising rule (2026-11-14): 1 guest ¥17,500,
-    // 2–4 guests ¥16,000 each, 5–10 guests ¥14,500 each.
-    pricing: { tiers: [{ party: 1, total: 17500 }, { party: 2, total: 32000 }, { party: 3, total: 48000 }, { party: 4, total: 64000 }, { party: 5, total: 72500 }, { party: 6, total: 87000 }, { party: 7, total: 101500 }, { party: 8, total: 116000 }, { party: 9, total: 130500 }, { party: 10, total: 145000 }] },
+    // Owner-approved prices from confirmed wholesale costs (2026-11-14):
+    // 1–3 guests ¥17,500 each; 4–10 guests ¥16,000 each.
+    pricing: { tiers: [{ party: 1, total: 17500 }, { party: 2, total: 35000 }, { party: 3, total: 52500 }, { party: 4, total: 64000 }, { party: 5, total: 80000 }, { party: 6, total: 96000 }, { party: 7, total: 112000 }, { party: 8, total: 128000 }, { party: 9, total: 144000 }, { party: 10, total: 160000 }] },
     taxIncluded: true,
     interpreter: false,
     langTag: "Taught in English",
@@ -1490,7 +1490,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, from age 5. For guests aged 5–18, tell us their ages so we can quote the applicable child or youth rate before payment." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
-      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,500 for one guest, ¥16,000 per person for two to four guests, and ¥14,500 per person for five to ten guests. Tax is included." },
+      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,500 per person for one to three guests, and ¥16,000 per person for four to ten guests. Tax is included." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
