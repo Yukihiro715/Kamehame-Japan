@@ -545,7 +545,7 @@ export const experiencesEs: Experience[] = [
       "El kendo es la espada del samurái convertida en disciplina, y esto es lo auténtico: un dojo en activo en Nihonbashi donde los visitantes aprenden kendo con un instructor. Empiezas por cómo nació el kendo y por qué cada encuentro empieza y termina con una reverencia; después aprendes el juego de pies, el agarre y el golpe, y lo unes todo en la práctica de ataque hasta que espíritu, espada y cuerpo caen a la vez.",
       "La última parte es un combate. Te enfrentas a los demás participantes y después al instructor, con la armadura completa. Nadie necesita haber sostenido una espada: la sesión está pensada para principiantes y se adapta a la edad y la forma física de cada persona. El dojo presta todo — uniforme, armadura y shinai — y fotografía la sesión para ti.",
     ],
-    duration: "Unas 2 horas", price: "¥25,000", group: "Clase reducida · 1–8 personas", ages: "Desde 6 años (tarifa reducida de 6 a 15 años y a partir de 65)", area: "Tokio (Nihonbashi)",
+    duration: "Unas 2 horas", price: "¥26,500", group: "Clase reducida · 1–8 personas", ages: "Desde 6 años (tarifa reducida de 6 a 15 años y a partir de 65)", area: "Tokio (Nihonbashi)",
     img: "/images/kendo-match.jpg", alt: "Un participante con uniforme de kendo frente al instructor con armadura, shinai en alto, en un dojo de suelo de madera",
     gallery: [
       { img: "/images/kendo-grip.jpg", alt: "El instructor corrige el agarre del shinai de un participante, espadas cruzadas" },
@@ -604,7 +604,7 @@ export const experiencesEs: Experience[] = [
       { q: "¿Está todo incluido?", a: "Sí. Uniforme, armadura y shinai se prestan sin coste adicional. Ven con ropa de calle; hay vestuarios y taquillas." },
       { q: "¿En qué idioma es la sesión?", a: "En inglés. El instructor enseña en inglés y japonés." },
       { q: "¿Puedo ir solo?", a: "Sí, desde una persona. Muchos participantes vienen solos." },
-      { q: "¿Pueden participar niños?", a: "Desde los 6 años, siempre que puedan seguir las indicaciones del instructor con seguridad; los niños de 6 a 15 años pagan ¥15,000 y los mayores de 65 ¥18,000 (adultos ¥25,000) — dinos la edad de todos en tu solicitud y el presupuesto la aplica. Los menores de 6 años no pueden unirse a una sesión compartida; puede organizarse una sesión privada." },
+      { q: "¿Pueden participar niños?", a: "Desde los 6 años, siempre que puedan seguir las indicaciones del instructor con seguridad; para niños de 6 a 15 años o personas de 65 años en adelante, dinos la edad de todos y solicita un presupuesto antes de pagar. La tarifa estándar de adulto es ¥26,500. Los menores de 6 años no pueden unirse a una sesión compartida; puede organizarse una sesión privada." },
       { q: "¿Es un espectáculo de samuráis?", a: "No. No es una experiencia de disfraces ni de juego de rol. Entrenas en un dojo real, en el kendo que se practica hoy en Japón, y aprendes de dónde vienen sus tradiciones." },
       { q: "¿De cuántas personas es la clase?", a: "Hasta ocho personas comparten una sesión. Los grupos más grandes y las sesiones privadas se presupuestan individualmente." },
       { q: "No soy deportista. ¿Podré seguir el ritmo?", a: "Sí. La sesión se adapta a la edad y la forma física de cada persona, y no hace falta ejecutar cada movimiento a la perfección. Participan personas mayores con regularidad; donde la etiqueta exige arrodillarse, hay una silla." },
@@ -627,7 +627,7 @@ export const experiencesEs: Experience[] = [
       "No es un espectáculo de samuráis, y el dojo deja claro que no está pensado para divertirse en el sentido habitual. El bushido no tiene una única respuesta correcta. Lo que cada uno saque de las formas y de las palabras que dejaron los samuráis será distinto, y la hora está construida para que descubras qué es para ti.",
       "Se mueve por tres cosas. Tradición: el Nihon Kendo Kata, ejecutado con una espada de madera, que explora principios heredados de las tradiciones japonesas de la espada en una secuencia fija de movimientos — por qué la reverencia, por qué la distancia, por qué esto es más que practicar con una espada. Palabras: los dichos que los samuráis transmitieron, leídos con el pensamiento que hay detrás. Reflexión: qué sientes y cómo lo interpretas. La sesión es en inglés, no hay ejercicio intenso y el dojo la fotografía para ti.",
     ],
-    duration: "Alrededor de 1 hora", price: "¥10,000", group: "Clase reducida · 2–8 personas", ages: "Desde 15 años", area: "Tokio (Nihonbashi)",
+    duration: "Alrededor de 1 hora", price: "¥16,500", group: "Clase reducida · 2–8 personas", ages: "Desde 15 años", area: "Tokio (Nihonbashi)",
     img: "/images/bushido-20261022-3.jpg", alt: "Dos practicantes muestran una forma con espada de pie, sin armadura",
     gallery: [
       { img: "/images/bushido-20261022-1.jpg", alt: "Dos practicantes se saludan en el suelo del dojo" },
@@ -781,7 +781,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la mañana entre semana, normalmente desde las 10:00, en un dojo de kendo en activo en Higashi-Nippori, Arakawa, a unos diez o doce minutos a pie de la estación JR de Uguisudani. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Osaka, Kioto, Nagoya, Okinawa, Kanazawa y Himeji — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Tokio (Arakawa, cerca de la estación de Uguisudani)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Tokio (Arakawa, cerca de la estación de Uguisudani)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },
@@ -863,7 +863,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la mañana entre semana, normalmente desde las 10:00, en un dojo o pabellón en activo de Osaka que el operador elige para tu fecha entre lugares a treinta o cincuenta minutos del centro. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Tokio, Kioto, Nagoya, Okinawa, Kanazawa y Himeji — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Osaka (dojo elegido para tu fecha)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Osaka (dojo elegido para tu fecha)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },
@@ -945,7 +945,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la mañana entre semana, normalmente desde las 10:00, en un dojo o pabellón en activo de Kioto que el operador elige para tu fecha entre lugares a treinta o cincuenta minutos del centro. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Tokio, Osaka, Nagoya, Okinawa, Kanazawa y Himeji — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Kioto (dojo elegido para tu fecha)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Kioto (dojo elegido para tu fecha)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },
@@ -1027,7 +1027,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la tarde entre semana, normalmente desde las 13:30, en un dojo o pabellón en activo de Nagoya que el operador elige para tu fecha entre lugares a treinta o cincuenta minutos del centro. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Tokio, Osaka, Kioto, Okinawa, Kanazawa y Himeji — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Nagoya (dojo elegido para tu fecha)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Nagoya (dojo elegido para tu fecha)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },
@@ -1109,7 +1109,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la tarde entre semana, normalmente desde las 13:00, en un dojo o pabellón en activo de Okinawa que el operador elige para tu fecha entre lugares a treinta o cincuenta minutos del centro. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Tokio, Osaka, Kioto, Nagoya, Kanazawa y Himeji — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Okinawa (dojo elegido para tu fecha)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Okinawa (dojo elegido para tu fecha)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },
@@ -1191,7 +1191,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la mañana entre semana, normalmente desde las 10:00, en un dojo o pabellón en activo de Kanazawa que el operador elige para tu fecha entre lugares a treinta o cincuenta minutos del centro. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Tokio, Osaka, Kioto, Nagoya, Okinawa y Himeji — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Kanazawa (dojo elegido para tu fecha)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Kanazawa (dojo elegido para tu fecha)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },
@@ -1273,7 +1273,7 @@ export const experiencesEs: Experience[] = [
       "Es el tour de kendo que reservan colegios, empresas y familias viajeras cuando todo el grupo quiere empuñar una espada. Lo dirige un operador que lleva visitantes a dojos japoneses desde 2016 bajo la supervisión de la Federación Japonesa de Kendo, con instructores de quinto a séptimo dan y más de treinta años de kendo, y escala desde una pareja hasta un autobús entero: cada participante se viste con armadura, saluda como se saluda en un dojo, aprende lo que guiaba a los samuráis, practica golpes y termina con un combate.",
       "Las sesiones son por la mañana entre semana, normalmente desde las 10:00, en un dojo o pabellón en activo de Himeji que el operador elige para tu fecha entre lugares a treinta o cincuenta minutos del centro. La sesión es en inglés y japonés; se prestan uniforme, armadura y shinai, y te llevas una toalla tenugui. El mismo tour se celebra en Tokio, Osaka, Kioto, Nagoya, Okinawa y Kanazawa — dinos dónde estarás.",
     ],
-    duration: "De 1,5 a 2 horas", price: "¥19,800", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Himeji (dojo elegido para tu fecha)",
+    duration: "De 1,5 a 2 horas", price: "¥27,500", group: "Grupos · 2–200 personas", ages: "Desde 9 años (tarifa reducida de 9 a 13)", area: "Himeji (dojo elegido para tu fecha)",
     img: "/images/kendotour-line.jpg", alt: "Una fila de participantes con uniforme de kendo sostiene los shinai al frente en un dojo, con los instructores al fondo",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Participantes con armadura alineados con shinai en un pabellón luminoso" },

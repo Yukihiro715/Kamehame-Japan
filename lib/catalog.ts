@@ -1241,7 +1241,7 @@ export const experiences: Experience[] = [
       "Kendo is the samurai's sword turned into a discipline, and this is the real thing: a working dojo in Nihonbashi where visitors learn kendo with an instructor. You start with how kendo came to be and why every exchange begins and ends with a bow, then learn the footwork, the grip and the swing, and put them together in striking practice until spirit, sword and body land as one.",
       "The last part is a match. You face the other guests, then the instructor, in full protective armour. Nobody needs to have held a sword before; the session is built for beginners and adjusted to each person's age and fitness. The dojo lends everything — uniform, armour and shinai — and photographs the session for you.",
     ],
-    duration: "About 2 hours", price: "¥25,000", priceUnit: "person", group: "Small class · 1–8 guests", ages: "Ages 6+ (reduced rates for ages 6–15 and 65+)", area: "Tokyo (Nihonbashi)",
+    duration: "About 2 hours", price: "¥26,500", priceUnit: "person", group: "Small class · 1–8 guests", ages: "Ages 6+ (reduced rates for ages 6–15 and 65+)", area: "Tokyo (Nihonbashi)",
     img: "/images/kendo-match.jpg", alt: "A guest in kendo uniform squaring up to the armoured instructor with shinai raised, in a wooden-floored dojo",
     gallery: [
       { img: "/images/kendo-grip.jpg", alt: "The instructor correcting a guest's grip on the shinai, swords crossed" },
@@ -1305,7 +1305,7 @@ export const experiences: Experience[] = [
       { q: "Is everything provided?", a: "Yes. Uniform, protective armour and shinai are lent at no extra cost. Come in everyday clothes; there are changing rooms and lockers." },
       { q: "Which language is the session in?", a: "English. The instructor teaches in English and Japanese." },
       { q: "Can I join alone?", a: "Yes, from one guest. Many guests come on their own." },
-      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; children aged 6 to 15 pay ¥15,000 and guests aged 65 and over ¥18,000 (adults ¥25,000) — tell us everyone's age in your request and the quote applies it. Younger children cannot join a shared session; a private session can be arranged instead." },
+      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; for children aged 6–15 or guests aged 65 and over, tell us everyone's age and request a quote before paying. The standard adult rate is ¥26,500. Younger children cannot join a shared session; a private session can be arranged instead." },
       { q: "Is this a samurai show?", a: "No. It is not a costume or role-play experience. You train in a real dojo, in the kendo that is practised in Japan today, and learn where its traditions come from." },
       { q: "How large is the class?", a: "Up to eight guests share a session. Larger groups, and a private session for your party only, are quoted individually." },
       { q: "I am not sporty. Can I keep up?", a: "Yes. The session is adjusted to each person's age and fitness, and there is no need to perform every movement perfectly. Older guests join regularly; where the etiquette involves kneeling, a chair is provided." },
@@ -1330,7 +1330,7 @@ export const experiences: Experience[] = [
       "This is not a samurai show, and the dojo is clear that it is not meant to be fun in the usual sense. Bushido has no single correct answer. What you take from the forms and the words the samurai left behind will be different for everyone, and the hour is built to let you find out what that is.",
       "It moves through three things. Tradition: the Nihon Kendo Kata, performed with a wooden sword, which explore principles inherited from Japan's swordsmanship traditions through a fixed sequence of movements — why the bow, why the distance, why this is more than practising with a sword. Words: the sayings the samurai handed down, read with the thoughts behind them. Reflection: what you feel, and how you read it. The session is in English, there is no strenuous exercise, and the dojo photographs it for you.",
     ],
-    duration: "About 1 hour", price: "¥10,000", priceUnit: "person", group: "Small class · 2–8 guests", ages: "Ages 15+", area: "Tokyo (Nihonbashi)",
+    duration: "About 1 hour", price: "¥16,500", priceUnit: "person", group: "Small class · 2–8 guests", ages: "Ages 15+", area: "Tokyo (Nihonbashi)",
     img: "/images/bushido-20261022-3.jpg", alt: "Two practitioners demonstrating a standing sword form without armour",
     gallery: [
       { img: "/images/bushido-20261022-1.jpg", alt: "Two practitioners bowing to each other on the dojo floor" },
@@ -1511,7 +1511,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working kendo dojo in Higashi-Nippori, Arakawa, about ten to twelve minutes on foot from JR Uguisudani station. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (Arakawa, near Uguisudani station)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (Arakawa, near Uguisudani station)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1603,7 +1603,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Osaka that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Osaka (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Osaka (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1695,7 +1695,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Kyoto that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kyoto (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kyoto (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1787,7 +1787,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday afternoons, usually from 13:30, in a working dojo or hall in Nagoya that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Nagoya (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Nagoya (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1879,7 +1879,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday afternoons, usually from 13:00, in a working dojo or hall in Okinawa that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Okinawa (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Okinawa (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1971,7 +1971,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Kanazawa that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kanazawa (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kanazawa (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -2063,7 +2063,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Himeji that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Kanazawa — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Himeji (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Himeji (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -2156,7 +2156,7 @@ export const experiences: Experience[] = [
       "Kitasenju was the first post town on the road north out of Edo, and its back streets still keep the scale of that time. This experience puts you in samurai dress and walks you through them with a professional samurai performer, past the old gateway of Senju-juku, local shops and a temple, before returning to the venue for the hands-on part.",
       "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
     ],
-    duration: "About 2.5 hours", price: "¥40,000", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
+    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "group", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
     img: "/images/samurai-walk-pair.jpg", alt: "A guest in a black kimono and the samurai master in hakama walking down a Kitasenju shopping street",
     gallery: [
       { img: "/images/samurai-walk-master.jpg", alt: "The samurai master in a black kimono holding a sword in front of a calligraphy scroll" },
@@ -2164,6 +2164,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 5 },
+    pricing: { tiers: [{ party: 1, total: 75000 }, { party: 2, total: 113000 }, { party: 3, total: 169500 }, { party: 4, total: 226000 }, { party: 5, total: 282500 }] },
     availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
     availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
     scheduleNote: "Timings counted from the 4:00 pm start; the walk is about an hour.",
@@ -2200,7 +2201,7 @@ export const experiences: Experience[] = [
       { time: "2:30", title: "Change and finish" },
     ],
     venue: {
-      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥55,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
+      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥75,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
       afterBooking: ["The venue's name and address", "Directions from Kitasenju station", "A phone number for the day"],
       img: "/images/samurai-walk-master.jpg", alt: "The samurai master with a sword before a calligraphy scroll",
     },
@@ -2215,7 +2216,7 @@ export const experiences: Experience[] = [
       { q: "What do we actually do?", a: "You dress in samurai attire, walk Kitasenju's old streets with a samurai performer for about an hour, then take a sword workshop with a bushido talk back at the venue. Photos in costume and Japanese tea close the session." },
       { q: "Is it taught in English?", a: "The experience is run for international guests with English guidance. Tell us your language when you request and we will confirm what is available for your date." },
       { q: "Can children join?", a: "From age 6, accompanied by an adult aged 18 or over. Children pay the same price as adults. Under 6 cannot take part." },
-      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥55,000; groups of two to five pay ¥40,000 per person." },
+      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥75,000; groups of two to five pay ¥56,500 per person." },
       { q: "When does it run?", a: "On selected dates from August to December 2026, from 4:00 pm to about 6:30 pm. Tell us your preferred date and we confirm the nearest one that runs." },
       { q: "What should I wear?", a: "Comfortable clothes you can change out of easily, and shoes you can walk in: the samurai attire goes on at the venue and the walk lasts about an hour." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
@@ -2224,7 +2225,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in samurai attire", "Walk Kitasenju's old post-town streets for an hour", "Train with a sword-fighting instructor and hear about bushido", "Photos in costume and Japanese tea"],
     master: { title: "Your instructor", bio: "A samurai performer and sword-fighting instructor trained in Yagyu Shinkage-ryu swordsmanship, who has guided international guests through Kitasenju for years.", quote: "" },
     itinerary: ["0:00 — Dress as a samurai", "0:20 — Street walk through Kitasenju", "1:20 — Back at the venue", "1:30 — Samurai workshop and bushido", "2:20 — Photos and tea", "2:30 — Change and finish"],
-    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥55,000; two to five pay ¥40,000 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
+    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥75,000; two to five pay ¥56,500 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
     story: { heading: "The first town on the road north", body: "Travellers leaving Edo for the north spent their first night at Senju-juku. The poet Basho set off from here on his Narrow Road. Walking it in samurai dress, with someone who can read the street for you, puts you inside that story rather than in front of it." },
   },
   {
@@ -2240,7 +2241,7 @@ export const experiences: Experience[] = [
       "Tate is the art behind every sword fight you have seen in a Japanese film: not real combat, but precision, rhythm, posture and trust between partners. In this private session a performer from a classical sword-performance school dresses you in samurai costume, gives a short introduction to bushido, and teaches the movements and timing of a fight scene step by step.",
       "You rehearse with a partner, then perform a short duel together. The master then performs kenbu, the sword dance, for you; you try a few characters with a brush and keep the sheet; and the session closes with matcha and traditional sweets. Groups are private, two to six guests, on Mondays, Tuesdays, Thursdays and Saturdays from September to November 2026.",
     ],
-    duration: "About 90 minutes", price: "¥33,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
+    duration: "About 90 minutes", price: "¥47,500", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
     img: "/images/tate-swords-window.jpg", alt: "Two guests in kimono crossing swords by the shoji window of a tatami room",
     gallery: [
       { img: "/images/tate-group.jpg", alt: "A group of guests in kimono and hakama posing with swords after the workshop" },
@@ -2384,7 +2385,7 @@ export const experiences: Experience[] = [
       "This is a small cooking seminar, not a show: a professional chef demonstrates, then you cook. You start with sushi rice — washing, cooking and seasoning it properly — and go on to a dish using shibazuke pickles and crunchy soy-sauce almonds, a roll with Japanese wagyu roast beef, and nigiri with a chef's demonstration alongside.",
       "Then you sit down to eat: premium chirashi sushi with seasonal fish prepared by the chef, and a soft-serve dessert made with moromi, the soy-sauce mash. The chef began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills before coming home to teach. The seminar is designed for international visitors and runs for eight guests on announced dates.",
     ],
-    duration: "2 hours", price: "¥18,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
+    duration: "2 hours", price: "¥29,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
     img: "/images/kichijoji-chef-counter.jpg", alt: "The chef in whites at the kitchen counter, preparing sushi rolls",
     gallery: [
       { img: "/images/kichijoji-rolls.jpg", alt: "A row of salmon-topped sushi rolls on a slate board" },
@@ -2473,7 +2474,7 @@ export const experiences: Experience[] = [
       "Rakugo is one of Japan's oldest living performing arts: a storyteller on a cushion, a fan and a hand towel for props, and every character played by the same voice. In Asakusa, the district where Tokyo's popular entertainment grew up, an association of performers presents it entirely in English, together with traditional variety entertainment, at a public venue a few steps from the Kaminarimon gate.",
       "After the performance, an English-speaking guide walks you through Asakusa for an hour: the well-known landmarks, and the streets linked to the theatres and entertainers of old Tokyo. The afternoon ends near the stations. It runs on the second and fourth Sundays from October to December 2026, for two to ten guests.",
     ],
-    duration: "About 4 hours", price: "¥12,000", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
+    duration: "About 4 hours", price: "¥21,500", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
     img: "/images/rakugo-performer.jpg", alt: "A rakugo performer in a grey kimono kneeling on a red cushion, telling a story in English",
     gallery: [
       { img: "/images/rakugo-audience.jpg", alt: "The audience seated in the small hall before the performance" },
@@ -2803,7 +2804,7 @@ export const experiences: Experience[] = [
       "The ninja were not acrobats; they were people who had to stay calm, decide fast and keep going. The practice behind that has three parts — hand seals, breathing and body work — organised around the five elements of earth, water, fire, wind and void. This afternoon session teaches it as a meditation method, with no religious content, led by a ninjutsu master with more than ten years of teaching, in Japan and abroad.",
       "You learn the nine seals of the kuji in order, from preparing to face yourself to finding a wider awareness; practise yin and yang breathing and the ninja's silent footwork; and sit — on a cushion or a chair — through a meditation on the elements. Sessions run from 1:30 pm to 4:30 pm for up to fifteen guests aged sixteen and over, in Japanese with English interpretation.",
     ],
-    duration: "3 hours", price: "¥30,000", priceUnit: "person", group: "Up to 15 guests", ages: "Ages 16+", area: "Tokyo (near Tokyo Tower, Minato)",
+    duration: "3 hours", price: "¥44,000", priceUnit: "person", group: "Up to 15 guests", ages: "Ages 16+", area: "Tokyo (near Tokyo Tower, Minato)",
     img: "/images/zen-meditation-hall.jpg", alt: "The entrance of a temple meditation hall with a black curtain bearing the characters for zazen",
     gallery: [
       { img: "/images/tokyo-tower-red.jpg", alt: "Tokyo Tower lit red above the night skyline" },
