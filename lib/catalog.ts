@@ -272,6 +272,8 @@ export interface Experience {
     peakWindows?: { from: string; to: string }[];
     /** Per-person products: a smaller party pays as this many guests (e.g. a solo guest pays for two). */
     minCharge?: number;
+    /** Per-person products: additional charge when exactly one guest attends. */
+    soloSupplement?: number;
   };
   /** Localised text for `pricing.plans`, keyed by plan id. */
   planText?: Record<string, { label: string; name: string; performers: string; blurb: string }>;
@@ -1435,9 +1437,9 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the host's tearoom in Yotsuya.",
     partySize: { min: 1, max: 10, default: 2 },
-    // Whole-group totals at the owner's tax-exclusive advertising rule (2026-11-14): 1 guest ¥17,500,
-    // 2–4 guests ¥16,000 each, 5–10 guests ¥14,500 each.
-    pricing: { tiers: [{ party: 1, total: 17500 }, { party: 2, total: 32000 }, { party: 3, total: 48000 }, { party: 4, total: 64000 }, { party: 5, total: 72500 }, { party: 6, total: 87000 }, { party: 7, total: 101500 }, { party: 8, total: 116000 }, { party: 9, total: 130500 }, { party: 10, total: 145000 }] },
+    // Owner-approved prices from confirmed wholesale costs (2026-11-14):
+    // 1–3 guests ¥17,500 each; 4–10 guests ¥16,000 each.
+    pricing: { tiers: [{ party: 1, total: 17500 }, { party: 2, total: 35000 }, { party: 3, total: 52500 }, { party: 4, total: 64000 }, { party: 5, total: 80000 }, { party: 6, total: 96000 }, { party: 7, total: 112000 }, { party: 8, total: 128000 }, { party: 9, total: 144000 }, { party: 10, total: 160000 }] },
     taxIncluded: true,
     interpreter: false,
     langTag: "Taught in English",
@@ -1488,7 +1490,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, from age 5. For guests aged 5–18, tell us their ages so we can quote the applicable child or youth rate before payment." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
-      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,500 for one guest, ¥16,000 per person for two to four guests, and ¥14,500 per person for five to ten guests. Tax is included." },
+      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,500 per person for one to three guests, and ¥16,000 per person for four to ten guests. Tax is included." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
@@ -2156,7 +2158,7 @@ export const experiences: Experience[] = [
       "Kitasenju was the first post town on the road north out of Edo, and its back streets still keep the scale of that time. This experience puts you in samurai dress and walks you through them with a professional samurai performer, past the old gateway of Senju-juku, local shops and a temple, before returning to the venue for the hands-on part.",
       "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
     ],
-    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "group", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
+    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
     img: "/images/samurai-walk-pair.jpg", alt: "A guest in a black kimono and the samurai master in hakama walking down a Kitasenju shopping street",
     gallery: [
       { img: "/images/samurai-walk-master.jpg", alt: "The samurai master in a black kimono holding a sword in front of a calligraphy scroll" },
@@ -2164,7 +2166,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 5 },
-    pricing: { tiers: [{ party: 1, total: 75000 }, { party: 2, total: 113000 }, { party: 3, total: 169500 }, { party: 4, total: 226000 }, { party: 5, total: 282500 }] },
+    pricing: { soloSupplement: 18500 },
     availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
     availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
     scheduleNote: "Timings counted from the 4:00 pm start; the walk is about an hour.",

@@ -6,7 +6,7 @@ const root=fileURLToPath(new URL('..',import.meta.url));
 const vite=await createServer({appType:'custom',configFile:false,root,resolve:{alias:{'@':root}},server:{middlewareMode:true}});
 after(()=>vite.close());
 const {catalogFor,previewsFor}=await vite.ssrLoadModule('/lib/catalog.ts');
-const {pricingFor,quote}=await vite.ssrLoadModule('/lib/pricing.ts');
+const {pricingFor,quote,listPrice}=await vite.ssrLoadModule('/lib/pricing.ts');
 const {EXPERIENCE_PRODUCTS}=await vite.ssrLoadModule('/lib/provisional-booking.ts');
 const {parseExperienceOrder,checkoutParameters}=await vite.ssrLoadModule('/lib/experience-checkout.ts');
 const langs=['en','ja','es','fr','zh-tw'];
@@ -46,7 +46,9 @@ test('remaining advertising prices keep locale quotes, tiers and checkout consis
    assert.equal(checkoutParameters(o,'KJ-E-11111111222243338444555555555555',Date.now()).get('line_items[0][price]'),EXPERIENCE_PRODUCTS[calligraphy.slug].price);
   }
   const tea=live.find(x=>x.slug==='yotsuya-tea-ceremony');
-  for(let n=1;n<=10;n++)assert.equal(quote(pricingFor(tea,lang),'',n).total,n===1?17500:n*(n<=4?16000:14500));
+  for(let n=1;n<=10;n++)assert.equal(quote(pricingFor(tea,lang),'',n).total,n*(n<=3?17500:16000));
+  assert.ok(!JSON.stringify(tea.faq).includes('¥14,500'));
+  assert.equal(tea.status,'live');
   const spa=live.find(x=>x.slug==='nerima-herbal-bath-private-spa');
   for(const [n,total] of [[1,24500],[2,42000],[3,60000]])assert.equal(quote(pricingFor(spa,lang),'',n).total,total);
   for(const [slug,price] of [['setagaya-omotesenke-tea-ceremony',25000],['asakusa-soba-making-class',16000],['asakusa-ramen-making-class',16000]]){
@@ -54,5 +56,21 @@ test('remaining advertising prices keep locale quotes, tiers and checkout consis
    assert.equal(quote(pricingFor(x,lang),'',2).total,2*price);assert.equal(EXPERIENCE_PRODUCTS[slug],undefined);
    const faq=JSON.stringify(x.faq);assert.ok(faq.includes(slug.startsWith('setagaya')?'¥16,000':'¥14,500'));
   }
+ }
+});
+
+
+test('street walk advertises the per-person rate without losing the solo supplement in any locale',()=>{
+ for(const lang of langs){
+  const x=previewsFor(lang).experiences.find(e=>e.slug==='samurai-street-walk-kitasenju');
+  assert.equal(x.priceUnit,'person');
+  assert.deepEqual(listPrice(x,lang),{price:'¥56,500',unit:'person'});
+  const view=pricingFor(x,lang);
+  assert.equal(view.unit,'person');
+  assert.equal(view.perPerson,56500);
+  assert.deepEqual(view.rows.map(row=>row.party),[1,2,3,4,5]);
+  for(const row of view.rows)assert.equal(row.total,row.party===1?75000:56500*row.party);
+  for(let guests=1;guests<=5;guests++)assert.equal(quote(view,'',guests).total,guests===1?75000:56500*guests);
+  assert.equal(quote(view,'',6),null);
  }
 });

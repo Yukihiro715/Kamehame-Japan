@@ -36,6 +36,8 @@ export interface PricingView {
   maxGuests?: number;
   /** A smaller party pays as this many guests. */
   minCharge?: number;
+  /** Extra charge for a one-guest booking; the advertised per-person rate stays unchanged. */
+  soloSupplement?: number;
 }
 
 const yenFormat = new Intl.NumberFormat("en-US");
@@ -156,14 +158,17 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
   // Per person: a short reference table across the party range.
   const unit = parseYen(exp.price);
   const minCharge = pr?.minCharge ?? 1;
-  const parties = [...new Set([size.min, 2, 4, size.max].filter((n) => n >= size.min && n <= size.max))].sort((a, b) => a - b);
+  const parties = pr?.soloSupplement
+    ? Array.from({ length: size.max - size.min + 1 }, (_, i) => size.min + i)
+    : [...new Set([size.min, 2, 4, size.max].filter((n) => n >= size.min && n <= size.max))].sort((a, b) => a - b);
   return {
     unit: "person",
     rows: parties.map((party) => {
-      const total = unit * Math.max(party, minCharge);
+      const total = unit * Math.max(party, minCharge) + (party === 1 ? pr?.soloSupplement ?? 0 : 0);
       return { party, total, perPerson: Math.round(total / party) };
     }),
     minCharge,
+    soloSupplement: pr?.soloSupplement,
     moreOnRequest: false,
     addOns: exp.addOns,
     perPerson: unit,
@@ -179,7 +184,7 @@ export interface Quote { total: number; peak: boolean; base: number; extraCount:
 export function quote(view: PricingView, planId: string, guests: number, iso?: string): Quote | null {
   if (!view.plans?.length && view.unit === "person" && view.perPerson) {
     if (view.maxGuests && guests > view.maxGuests) return null;
-    const total = view.perPerson * Math.max(guests, view.minCharge ?? 1);
+    const total = view.perPerson * Math.max(guests, view.minCharge ?? 1) + (guests === 1 ? view.soloSupplement ?? 0 : 0);
     return { total, peak: false, base: total, extraCount: 0, extraEach: 0 };
   }
   // Flat group table: the row for this party size (high-season table when the
