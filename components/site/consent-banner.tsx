@@ -8,16 +8,6 @@ import { t, type Lang } from "@/lib/i18n";
 
 type Choice = "granted" | "denied";
 
-/** Timezones that mean "probably in the EEA, the UK or Switzerland". Used
- *  only to decide whether to show the banner unprompted; the legal defaults
- *  are enforced by region inside Consent Mode, so a miss fails safe. */
-function inStrictRegion() {
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
-    return tz.startsWith("Europe/") || ["Atlantic/Canary", "Atlantic/Madeira", "Atlantic/Azores", "Atlantic/Reykjavik"].includes(tz);
-  } catch { return false; }
-}
-
 function update(choice: Choice) {
   const w = window as unknown as { dataLayer?: unknown[] };
   w.dataLayer = w.dataLayer || [];
@@ -50,7 +40,7 @@ export function ConsentBanner({ lang }: { lang: Lang }) {
   useEffect(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem(CONSENT_KEY); } catch { /* private mode */ }
-    if (stored !== "granted" && stored !== "denied" && inStrictRegion()) setOpen(true);
+    if (stored !== "granted" && stored !== "denied") setOpen(true);
     // The footer link re-opens this from anywhere on the page.
     const onOpen = () => setOpen(true);
     window.addEventListener("kh:consent", onOpen);

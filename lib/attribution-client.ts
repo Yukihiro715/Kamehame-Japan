@@ -19,3 +19,21 @@ export function readAttribution(): Attribution | undefined {
   try{localStorage.setItem(ATTRIBUTION_KEY,JSON.stringify(value));}catch{}
   return value;
 }
+
+/** Read GA identifiers through Google's supported getter, only after opt-in.
+ * Never delay a booking indefinitely when GTM is blocked. Do not read GA cookies.
+ * Re-check consent after the callbacks: revocation must win a pending read. */
+export async function collectAttribution(): Promise<Attribution | undefined> {
+  const value = readAttribution();
+  if (!value) return;
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  if (!gtag) return value;
+  const get = (field: string) => new Promise<unknown>((resolve) => {
+    const timer = setTimeout(() => resolve(undefined), 300);
+    try { gtag('get', 'G-5PQXBXVZWE', field, (v: unknown) => { clearTimeout(timer); resolve(v); }); }
+    catch { clearTimeout(timer); resolve(undefined); }
+  });
+  const [clientId, sessionId] = await Promise.all([get('client_id'), get('session_id')]);
+  if (!acceptedExplicitly()) return;
+  return sanitizeAttribution({...value, ga: {clientId, sessionId: sessionId == null ? undefined : String(sessionId)}});
+}

@@ -1,5 +1,7 @@
 "use client";
 
+import { collectAttribution } from "@/lib/attribution-client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bus, CalendarDays, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, Utensils, X } from "lucide-react";
 import { GOLFPAQ_RENTAL_JPY, GOLFPAQ_SHOE_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
@@ -274,11 +276,11 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
         id: tour.id, date: tour.date, people, rental: renters > 0, renters, name, email, phone, hotel, note, lang, consent, request_id: requestId, website,
         golfers: party.map((g) => ({ name: g.name.trim(), clubs: g.clubs, hand: g.hand, shoes: g.shoes, shoeSize: g.shoes ? g.shoeSize.trim() : "" })),
       };
-      const r = await fetch("/api/golfpaq/enquiry", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+      const r = await fetch("/api/golfpaq/enquiry", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({...payload, attribution: await collectAttribution()}) });
       const j = (await r.json().catch(() => ({}))) as { ok?: boolean; reference?: string; error?: string };
       if (!r.ok || !j.ok) { setError(C.errors[j.error ?? ""] ?? C.errors.default); setStatus("idle"); return; }
       setReference(j.reference ?? ""); setStatus("done");
-      track("bus_tour_enquiry", { tour_id: tour.id, date: tour.date, golfers: people, rentals: renters, shoes: shoeRenters, value: money.total, currency: "JPY" });
+      track("bus_tour_enquiry", { enquiry_id: requestId, booking_reference: j.reference, tour_id: tour.id, date: tour.date, golfers: people, rentals: renters, shoes: shoeRenters, value: money.total, currency: "JPY" });
     } catch { setError(C.errors.default); setStatus("idle"); }
   }
 
