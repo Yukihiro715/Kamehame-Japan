@@ -38,7 +38,7 @@ test('server prices: minimum charge, allowed quantities, adult eligibility and t
   assert.equal(m.parseExperienceOrder({...base,date:'2026-10-23'},Date.parse('2026-10-22T09:00:00Z')),null,'18:00 JST cutoff');
   const k={...base,experience:'tokyo-kendo-experience-tour',time:'10:00',guests:2};
   assert.equal(m.parseExperienceOrder(k,now),null);
-  assert.equal(m.parseExperienceOrder({...k,adultOnly:true},now).amount,39600);
+  assert.equal(m.parseExperienceOrder({...k,adultOnly:true},now).amount,55000);
   assert.equal(m.parseExperienceOrder({...k,adultOnly:true,date:'2026-11-07'},now),null,'weekend');
   assert.equal(m.parseExperienceOrder({...base,experience:'shibuya-ramen-class',time:'11:00',guests:16},now).amount,424000);
 });
@@ -269,13 +269,21 @@ test('earliest displayed date skips weekends, closures and empty announced slots
 
 
 test('Nihonbashi validates party limits, eligibility and date-only requests including weekends',()=>{
-  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,25000],['nihonbashi-bushido-experience',2,10000]]) {
+  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,26500],['nihonbashi-bushido-experience',2,16500]]) {
     const input={...base,experience:slug,date:'2026-11-07',time:'',guests:min,adultOnly:true};
     const o=m.parseExperienceOrder(input,now);
     assert.equal(o.amount,amount*min);assert.equal(o.time,'To be confirmed');
     for(const patch of [{adultOnly:false},{guests:min-1},{guests:9},{time:'10:00'}]) assert.equal(m.parseExperienceOrder({...input,...patch},now),null);
     for(const lang of ['en','ja','es','fr','zh-tw']) {
       const x=catalogFor(lang).experiences.find(e=>e.slug===slug);
+      assert.equal(x.price, '¥'+amount.toLocaleString('en-US'));
+      for(let guests=min;guests<=8;guests++) {
+        assert.equal(quote(pricingFor(x,lang), 'select', guests, input.date).total, amount*guests);
+        const priced=m.parseExperienceOrder({...input,lang,guests,amount:1,price:'price_fake'},now);
+        assert.equal(priced.amount,amount*guests);
+        assert.equal(m.checkoutParameters(priced,reference,now).get('line_items[0][price]'),EXPERIENCE_PRODUCTS[slug].price);
+      }
+      if(slug==='nihonbashi-kendo-experience') assert.doesNotMatch(JSON.stringify(x.faq), /¥15,000|¥18,000/);
       const b={slug,title:x.title,provisionalCheckout:true,minGuests:min,defaultGuests:min,listedMax:8,maxGuests:8,interpreter:false};
       const html=renderToStaticMarkup(React.createElement(CurrencyProvider,{lang},React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang)},React.createElement(EnquiryForm,{lang,card:true}))));
       assert.ok(html.includes('checkout_adult'));assert.ok(!html.includes('name="time"'));

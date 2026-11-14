@@ -544,7 +544,7 @@ export const experiencesFr: Experience[] = [
       "Le kendo, c'est le sabre du samouraï devenu discipline, et ici c'est le vrai : un dojo en activité à Nihonbashi, où les visiteurs découvrent le kendo avec un instructeur. Vous commencez par la naissance du kendo et la raison pour laquelle chaque échange s'ouvre et se ferme par un salut, puis vous apprenez les déplacements, la prise et la frappe, et vous assemblez le tout dans les exercices d'attaque, jusqu'à ce que l'esprit, le sabre et le corps tombent ensemble.",
       "La dernière partie est un combat. Vous affrontez les autres participants, puis l'instructeur, en armure complète. Personne n'a besoin d'avoir déjà tenu un sabre : la séance est conçue pour les débutants et s'adapte à l'âge et à la condition physique de chacun. Le dojo prête tout — tenue, armure et shinai — et photographie la séance pour vous.",
     ],
-    duration: "Environ 2 heures", price: "¥25,000", group: "Petit groupe · 1 à 8 personnes", ages: "Dès 6 ans (tarif réduit de 6 à 15 ans et à partir de 65 ans)", area: "Tokyo (Nihonbashi)",
+    duration: "Environ 2 heures", price: "¥26,500", group: "Petit groupe · 1 à 8 personnes", ages: "Dès 6 ans (tarif réduit de 6 à 15 ans et à partir de 65 ans)", area: "Tokyo (Nihonbashi)",
     img: "/images/kendo-match.jpg", alt: "Un participant en tenue de kendo face à l'instructeur en armure, shinai levé, dans un dojo au sol de bois",
     gallery: [
       { img: "/images/kendo-grip.jpg", alt: "L'instructeur corrige la prise du shinai d'un participant, sabres croisés" },
@@ -603,7 +603,7 @@ export const experiencesFr: Experience[] = [
       { q: "Tout est-il fourni ?", a: "Oui. Tenue, armure de protection et shinai sont prêtés sans supplément. Venez en tenue de ville ; il y a des vestiaires et des casiers." },
       { q: "Dans quelle langue se déroule la séance ?", a: "En anglais. L'instructeur enseigne en anglais et en japonais." },
       { q: "Puis-je venir seul ?", a: "Oui, dès une personne. Beaucoup de participants viennent seuls." },
-      { q: "Les enfants peuvent-ils participer ?", a: "Dès 6 ans, à condition de pouvoir suivre les consignes de l'instructeur en sécurité ; les enfants de 6 à 15 ans paient ¥15,000 et les personnes de 65 ans et plus ¥18,000 (adultes ¥25,000) — indiquez l'âge de chacun dans votre demande et le devis l'applique. Les enfants plus jeunes ne peuvent pas rejoindre une séance partagée ; une séance privée peut être organisée." },
+      { q: "Les enfants peuvent-ils participer ?", a: "Dès 6 ans, à condition de pouvoir suivre les consignes de l'instructeur en sécurité ; pour les enfants de 6 à 15 ans ou les personnes de 65 ans et plus, indiquez l'âge de chacun et demandez un devis avant de payer. Le tarif adulte standard est de ¥26,500. Les enfants plus jeunes ne peuvent pas rejoindre une séance partagée ; une séance privée peut être organisée." },
       { q: "Est-ce un spectacle de samouraïs ?", a: "Non. Ce n'est ni un déguisement ni un jeu de rôle. Vous vous entraînez dans un vrai dojo, au kendo tel qu'il se pratique au Japon aujourd'hui, et vous apprenez d'où viennent ses traditions." },
       { q: "Quelle est la taille du groupe ?", a: "Jusqu'à huit personnes partagent une séance. Les groupes plus nombreux et les séances privées pour votre groupe seul sont chiffrés individuellement." },
       { q: "Je ne suis pas sportif. Vais-je suivre ?", a: "Oui. La séance s'adapte à l'âge et à la condition physique de chacun, et il n'est pas nécessaire d'exécuter chaque mouvement parfaitement. Des personnes âgées participent régulièrement ; là où l'étiquette demande de s'agenouiller, une chaise est fournie." },
@@ -626,7 +626,7 @@ export const experiencesFr: Experience[] = [
       "Ce n'est pas un spectacle de samouraïs, et le dojo le dit clairement : ce n'est pas fait pour s'amuser au sens habituel. Le bushido n'a pas une seule bonne réponse. Ce que chacun retire des formes et des mots laissés par les samouraïs sera différent, et l'heure est construite pour vous laisser découvrir ce que c'est pour vous.",
       "Elle avance en trois temps. La tradition : le Nihon Kendo Kata, exécuté au sabre de bois, qui explore des principes hérités des traditions japonaises du sabre dans une suite fixe de mouvements — pourquoi le salut, pourquoi la distance, pourquoi c'est plus qu'un exercice au sabre. Les mots : les paroles transmises par les samouraïs, lues avec la pensée qu'il y a derrière. La réflexion : ce que vous ressentez, et comment vous le lisez. La séance est en anglais, sans effort physique intense, et le dojo la photographie pour vous.",
     ],
-    duration: "Environ 1 heure", price: "¥10,000", group: "Petit groupe · 2 à 8 personnes", ages: "Dès 15 ans", area: "Tokyo (Nihonbashi)",
+    duration: "Environ 1 heure", price: "¥16,500", group: "Petit groupe · 2 à 8 personnes", ages: "Dès 15 ans", area: "Tokyo (Nihonbashi)",
     img: "/images/bushido-20261022-3.jpg", alt: "Deux pratiquants montrent une forme au sabre debout, sans armure",
     gallery: [
       { img: "/images/bushido-20261022-1.jpg", alt: "Deux pratiquants se saluent au sol dans le dojo" },
@@ -780,7 +780,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine le matin, en général à partir de 10 h, dans un dojo de kendo en activité à Higashi-Nippori, Arakawa, à dix à douze minutes à pied de la gare JR d'Uguisudani. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Osaka, Kyoto, Nagoya, Okinawa, Kanazawa et Himeji — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Tokyo (Arakawa, près de la gare d'Uguisudani)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Tokyo (Arakawa, près de la gare d'Uguisudani)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },
@@ -862,7 +862,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine le matin, en général à partir de 10 h, dans un dojo ou une salle en activité d'Osaka que l'opérateur choisit pour votre date parmi des lieux situés à trente ou cinquante minutes du centre. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa et Himeji — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Osaka (dojo choisi pour votre date)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Osaka (dojo choisi pour votre date)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },
@@ -944,7 +944,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine le matin, en général à partir de 10 h, dans un dojo ou une salle en activité de Kyoto que l'opérateur choisit pour votre date parmi des lieux situés à trente ou cinquante minutes du centre. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Tokyo, Osaka, Nagoya, Okinawa, Kanazawa et Himeji — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Kyoto (dojo choisi pour votre date)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Kyoto (dojo choisi pour votre date)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },
@@ -1026,7 +1026,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine l'après-midi, en général à partir de 13 h 30, dans un dojo ou une salle en activité de Nagoya que l'opérateur choisit pour votre date parmi des lieux situés à trente ou cinquante minutes du centre. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Tokyo, Osaka, Kyoto, Okinawa, Kanazawa et Himeji — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Nagoya (dojo choisi pour votre date)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Nagoya (dojo choisi pour votre date)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },
@@ -1108,7 +1108,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine l'après-midi, en général à partir de 13 h, dans un dojo ou une salle en activité d'Okinawa que l'opérateur choisit pour votre date parmi des lieux situés à trente ou cinquante minutes du centre. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Tokyo, Osaka, Kyoto, Nagoya, Kanazawa et Himeji — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Okinawa (dojo choisi pour votre date)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Okinawa (dojo choisi pour votre date)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },
@@ -1190,7 +1190,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine le matin, en général à partir de 10 h, dans un dojo ou une salle en activité de Kanazawa que l'opérateur choisit pour votre date parmi des lieux situés à trente ou cinquante minutes du centre. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Tokyo, Osaka, Kyoto, Nagoya, Okinawa et Himeji — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Kanazawa (dojo choisi pour votre date)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Kanazawa (dojo choisi pour votre date)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },
@@ -1272,7 +1272,7 @@ export const experiencesFr: Experience[] = [
       "C'est l'initiation au kendo que réservent les écoles, les entreprises et les familles en voyage quand tout le groupe veut tenir un sabre. Elle est menée par un opérateur qui fait entrer des visiteurs dans les dojos japonais depuis 2016 sous la supervision de la Fédération japonaise de kendo, avec des instructeurs de cinquième à septième dan et plus de trente ans de kendo, et elle s'adapte d'un couple à un car entier : chaque participant est revêtu de l'armure, salue comme on salue dans un dojo, apprend ce qui guidait les samouraïs, s'exerce à la frappe et termine par un combat.",
       "Les séances ont lieu en semaine le matin, en général à partir de 10 h, dans un dojo ou une salle en activité de Himeji que l'opérateur choisit pour votre date parmi des lieux situés à trente ou cinquante minutes du centre. La séance se déroule en anglais et en japonais ; tenue, armure et shinai sont prêtés, et vous repartez avec une serviette tenugui. La même initiation existe à Tokyo, Osaka, Kyoto, Nagoya, Okinawa et Kanazawa — dites-nous où vous serez.",
     ],
-    duration: "Environ 1 h 30 à 2 h", price: "¥19,800", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Himeji (dojo choisi pour votre date)",
+    duration: "Environ 1 h 30 à 2 h", price: "¥27,500", group: "Groupes · 2 à 200 personnes", ages: "Dès 9 ans (tarif réduit de 9 à 13 ans)", area: "Himeji (dojo choisi pour votre date)",
     img: "/images/kendotour-line.jpg", alt: "Une rangée de participants en tenue de kendo tendent leurs shinai devant eux dans un dojo, les instructeurs au fond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Des participants en armure alignés avec leurs shinai dans une salle lumineuse" },

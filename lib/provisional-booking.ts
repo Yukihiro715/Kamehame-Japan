@@ -4,17 +4,17 @@ import { privateTeaCheckoutConfigured } from "@/lib/private-tea-checkout-prices"
 export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
 export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean; privateTeaPricing?: boolean }> = {
   "kyoto-higashiyama-private-tea-ceremony": { price: "", amount: 16500, min: 1, max: 5, minCharge: 1, eligibilityRequired: true, privateTeaPricing: true },
-  "osaka-kendo-experience-tour": { price: "price_1UTES5DpZ5Y8WoJ2IqJbx1wp", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
-  "kyoto-kendo-experience-tour": { price: "price_1UTESBDpZ5Y8WoJ2vKiTajho", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
-  "nagoya-kendo-experience-tour": { price: "price_1UTESIDpZ5Y8WoJ2xMeQieOF", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
-  "okinawa-kendo-experience-tour": { price: "price_1UTESODpZ5Y8WoJ2ECyti0tU", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
-  "kanazawa-kendo-experience-tour": { price: "price_1UTESUDpZ5Y8WoJ21CKaE1Du", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
-  "himeji-kendo-experience-tour": { price: "price_1UTESZDpZ5Y8WoJ2dSJGCE12", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "osaka-kendo-experience-tour": { price: "price_1UbZ5JDpZ5Y8WoJ2MzJXExjV", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "kyoto-kendo-experience-tour": { price: "price_1UbZ5QDpZ5Y8WoJ2sAFlZBh4", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "nagoya-kendo-experience-tour": { price: "price_1UbZ5lDpZ5Y8WoJ2DdsG1Oxk", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "okinawa-kendo-experience-tour": { price: "price_1UbZ5sDpZ5Y8WoJ2SBhwqCZp", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "kanazawa-kendo-experience-tour": { price: "price_1UbZ5zDpZ5Y8WoJ2YW6CZEMR", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "himeji-kendo-experience-tour": { price: "price_1UbZ67DpZ5Y8WoJ26bZ15AHl", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "dotonbori-ramen-class": { price: "price_1UTESxDpZ5Y8WoJ22NGPt3xy", amount: 26500, min: 1, max: 16, minCharge: 1 },
-  "tokyo-kendo-experience-tour": { price: "price_1USyu1DpZ5Y8WoJ2tnGKPAdj", amount: 19800, min: 2, max: 13, minCharge: 2, adultOnly: true },
+  "tokyo-kendo-experience-tour": { price: "price_1UbZ5DDpZ5Y8WoJ2WS6iraQf", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "shibuya-ramen-class": { price: "price_1USyuLDpZ5Y8WoJ2Er2OtMAL", amount: 26500, min: 1, max: 16, minCharge: 1 },
-  "nihonbashi-kendo-experience": { price: "price_1UYkjgDpZ5Y8WoJ27JdfWDGp", amount: 25000, min: 1, max: 8, minCharge: 1, eligibilityRequired: true, timeOnConfirmation: true },
-  "nihonbashi-bushido-experience": { price: "price_1UXwbPDpZ5Y8WoJ21QAHRH7V", amount: 10000, min: 2, max: 8, minCharge: 2, eligibilityRequired: true, timeOnConfirmation: true },
+  "nihonbashi-kendo-experience": { price: "price_1UbYxmDpZ5Y8WoJ2OBTFjIUZ", amount: 26500, min: 1, max: 8, minCharge: 1, eligibilityRequired: true, timeOnConfirmation: true },
+  "nihonbashi-bushido-experience": { price: "price_1UbYy4DpZ5Y8WoJ2DrRDcGXv", amount: 16500, min: 2, max: 8, minCharge: 2, eligibilityRequired: true, timeOnConfirmation: true },
   "kanji-name-calligraphy": { price: "price_1UJVn2DpZ5Y8WoJ2ZFthxVOo", amount: 19800, min: 2, max: 4, minCharge: 2 },
 };
 

@@ -344,16 +344,16 @@ test("theme pages: a home tile lists every published experience in its categorie
 
 test("kendo tours are published after approval; unapproved partners remain in preview", async () => {
   const pages = [
-    ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥25,000", "/en/tokyo/"],
-    ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000", "/en/tokyo/"],
+    ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥26,500", "/en/tokyo/"],
+    ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥16,500", "/en/tokyo/"],
     ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥17,000", "/en/tokyo/"],
-    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800", "/en/tokyo/"],
-    ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥19,800", "/en/osaka/"],
-    ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥19,800", "/en/kyoto/"],
-    ["/en/nagoya/nagoya-kendo-experience-tour/", "Kendo Experience Tour in Nagoya with Dan-ranked Instructors", "¥19,800", "/en/nagoya/"],
-    ["/en/okinawa/okinawa-kendo-experience-tour/", "Kendo Experience Tour in Okinawa with Dan-ranked Instructors", "¥19,800", "/en/okinawa/"],
-    ["/en/kanazawa/kanazawa-kendo-experience-tour/", "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors", "¥19,800", "/en/kanazawa/"],
-    ["/en/himeji/himeji-kendo-experience-tour/", "Kendo Experience Tour in Himeji with Dan-ranked Instructors", "¥19,800", "/en/himeji/"],
+    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥27,500", "/en/tokyo/"],
+    ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥27,500", "/en/osaka/"],
+    ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥27,500", "/en/kyoto/"],
+    ["/en/nagoya/nagoya-kendo-experience-tour/", "Kendo Experience Tour in Nagoya with Dan-ranked Instructors", "¥27,500", "/en/nagoya/"],
+    ["/en/okinawa/okinawa-kendo-experience-tour/", "Kendo Experience Tour in Okinawa with Dan-ranked Instructors", "¥27,500", "/en/okinawa/"],
+    ["/en/kanazawa/kanazawa-kendo-experience-tour/", "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors", "¥27,500", "/en/kanazawa/"],
+    ["/en/himeji/himeji-kendo-experience-tour/", "Kendo Experience Tour in Himeji with Dan-ranked Instructors", "¥27,500", "/en/himeji/"],
   ];
   for (const [path, title, price, city] of pages) {
     const res = await render(path);
@@ -396,11 +396,11 @@ test("kendo tours are published after approval; unapproved partners remain in pr
 
 test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages that never name the partners", async () => {
   const pages = [
-    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥40,000"],
-    ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥33,000"],
-    ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥18,500"],
-    ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥12,000"],
-    ["/en/tokyo/tokyo-ninja-zen-meditation/", "Ninja Zen Meditation in Tokyo: Breathing, Hand Seals and Stillness", "¥30,000"],
+    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥56,500"],
+    ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥47,500"],
+    ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥29,500"],
+    ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥21,500"],
+    ["/en/tokyo/tokyo-ninja-zen-meditation/", "Ninja Zen Meditation in Tokyo: Breathing, Hand Seals and Stillness", "¥44,000"],
     ["/en/kyoto/arashiyama-ninja-experience/", "Ninja Experience in Arashiyama, Kyoto: Blowpipe, Shuriken and Hand Seals", "¥17,500"],
     ["/en/kyoto/arashiyama-stone-mill-matcha/", "Stone-Mill Matcha Grinding in Arashiyama, Kyoto", "¥13,500"],
     ["/en/kyoto/arashiyama-japanese-knife-workshop/", "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto", "¥27,000"],
@@ -673,5 +673,41 @@ test("private tea routes are reachable in every supported locale", async () => {
     // readiness is false. Payment controls are covered in experience-checkout.
     assert.ok(html.includes('name="date"'), path);
     assert.ok(html.includes('name="time"'), path);
+  }
+});
+
+test('Nihonbashi advertising-inclusive prices render consistently in every locale', async () => {
+  for (const lang of ['en', 'ja', 'es', 'fr', 'zh-tw']) {
+    for (const [slug, price, total] of [
+      ['nihonbashi-kendo-experience', '¥26,500', '¥53,000'],
+      ['nihonbashi-bushido-experience', '¥16,500', '¥33,000'],
+    ]) {
+      const path=`/${lang}/tokyo/${slug}/`;
+      const response=await render(path);
+      assert.equal(response.status,200,path);
+      const html=await response.text();
+      const text=html.replace(/<[^>]+>/g,' ');
+      assert.ok(text.includes(price),path+' unit price');
+      assert.ok(text.includes(total),path+' two-person total');
+      assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    }
+  }
+});
+
+test('additional advertising-inclusive prices render with the existing publication boundaries', async () => {
+  for(const city of ['tokyo','osaka','kyoto','nagoya','okinawa','kanazawa','himeji']) {
+    const path=`/en/${city}/${city}-kendo-experience-tour/`;
+    const response=await render(path);assert.equal(response.status,200,path);
+    const html=await response.text();assert.ok(html.includes('¥27,500'));assert.ok(html.includes('¥55,000'));
+    assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+  }
+  for(const lang of ['en','ja'])for(const [slug,price] of [
+    ['samurai-street-walk-kitasenju','¥56,500'],['tokyo-tate-samurai-sword-experience','¥47,500'],
+    ['kichijoji-japanese-cuisine-class','¥29,500'],['asakusa-english-rakugo-walk','¥21,500'],['tokyo-ninja-zen-meditation','¥44,000'],
+  ]){
+    const path=`/${lang}/tokyo/${slug}/`;
+    const response=await render(path);assert.equal(response.status,200,path);
+    const html=await response.text();assert.ok(html.includes(price),path);assert.match(html, /noindex/);
+    if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥75,000'));assert.ok(html.includes('¥113,000'));}
   }
 });
