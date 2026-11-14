@@ -10,14 +10,14 @@ const { aggregateFor, ownAggregateFor, distributionFor, reviewsFor, ratingReview
 const { productJsonLd } = await vite.ssrLoadModule('/lib/seo.ts');
 const golf = 'mt-fuji-golf-day';
 
-test('golf headline and structured rating count only the verified booking', () => {
-  assert.equal(reviewsFor(golf).length, 6);
-  assert.deepEqual(aggregateFor(golf), { average: 5, count: 1 });
+test('golf headline and structured rating count only the verified bookings', () => {
+  assert.equal(reviewsFor(golf).length, 7);
+  assert.deepEqual(aggregateFor(golf), { average: 5, count: 2 });
   assert.deepEqual(ownAggregateFor(golf), aggregateFor(golf));
-  assert.deepEqual(ratingReviewsFor(golf).map(r => r.author), ['Tyler']);
-  assert.equal(distributionFor(golf).reduce((n, d) => n + d.count, 0), 1);
+  assert.deepEqual(ratingReviewsFor(golf).map(r => r.author), ['Neil', 'Tyler']);
+  assert.equal(distributionFor(golf).reduce((n, d) => n + d.count, 0), 2);
   const schema = productJsonLd('Golf', 'Booking service', '/golf.webp', '/en/golf/', '¥15,000', golf);
-  assert.equal(schema.aggregateRating.reviewCount, 1);
+  assert.equal(schema.aggregateRating.reviewCount, 2);
   assert.equal(schema.aggregateRating.ratingValue, 5);
 });
 
