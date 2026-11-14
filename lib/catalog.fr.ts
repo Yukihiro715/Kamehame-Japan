@@ -762,7 +762,7 @@ export const experiencesFr: Experience[] = [
       { q: "Les enfants peuvent-ils participer ?", a: "Oui, dès 5 ans. Pour les participants de 5 à 18 ans, indiquez leur âge afin que nous confirmions le tarif enfant ou jeune avant le paiement." },
       { q: "S'assoit-on par terre ?", a: "Oui, sur le tatami. Les chaussettes sont la seule chose à apporter ; si s'agenouiller est difficile, l'hôtesse propose une façon plus confortable de s'asseoir." },
       { q: "Quelle est la taille du groupe ?", a: "Jusqu'à dix personnes partagent une séance. Les groupes plus nombreux sont chiffrés individuellement." },
-      { q: "Comment le prix est-il calculé ?", a: "Par personne, avec un tarif dégressif : ¥17,500 pour une personne, ¥16,000 par personne de deux à quatre, et ¥14,500 par personne de cinq à dix. Taxes comprises." },
+      { q: "Comment le prix est-il calculé ?", a: "Par personne, avec un tarif dégressif : ¥17,500 par personne pour une à trois personnes, et ¥16,000 par personne de quatre à dix. Taxes comprises." },
       { q: "Quelles sont les conditions d'annulation ?", a: "Gratuite jusqu'à 7 jours avant la date ; à partir de 6 jours avant, non-présentation comprise, le prix total. Les jours se comptent en heure du Japon." },
       { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; cela ne coûte rien. Nous répondons sous 24 heures avec l'heure de début, le prix et les conditions. Votre réservation est confirmée quand vous payez via le lien que nous envoyons, et les conditions d'annulation courent à partir de là." },
     ],
