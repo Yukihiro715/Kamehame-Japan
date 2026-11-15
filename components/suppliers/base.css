@@ -1,0 +1,10 @@
+:where(.sp-page) a{color:inherit;text-decoration:none}
+:where(.sp-page) button,:where(.sp-page) input,:where(.sp-page) textarea{font:inherit}
+:where(.sp-page) button{color:inherit}
+.sp-page svg{vertical-align:middle}
+.sp-page .brand{display:inline-flex;align-items:center;gap:9px;flex:none}
+.sp-page .brand-mark{width:36px;height:36px}
+.sp-page .brand span{display:flex;flex-direction:column;line-height:1}
+.sp-page .brand b{font-family:Arial,sans-serif;font-size:20px;letter-spacing:.04em;font-weight:900}
+.sp-page .brand small{font-family:Arial,sans-serif;font-size:9px;letter-spacing:.45em;margin-top:6px}
+:where(.sp-page) p{margin-bottom:1em}:where(.sp-page) button,:where(.sp-page) input,:where(.sp-page) textarea{font:inherit}.sp-page fieldset{min-width:0}.sp-page .sp-button{font-size:14px;font-weight:bold}
