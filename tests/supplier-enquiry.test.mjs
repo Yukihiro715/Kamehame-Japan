@@ -9,6 +9,7 @@ after(() => vite.close());
 const { handleSupplierSubmission: handle, parseSupplierSubmission: parse, supplierNotification, supplierAcknowledgement } = await vite.ssrLoadModule("/lib/supplier-enquiry.ts");
 const { SUPPLIER_POLICY_VERSION } = await vite.ssrLoadModule("/lib/supplier-policy.ts");
 const good = { kind: "consult", company: "体験工房", name: "山田", email: "test@example.com", title: "茶道体験", phone: "03-1234-5678", message: "茶道体験の掲載について相談したいです。", websiteUrl: "https://example.com/experience", consent: true, requestId: "11111111-2222-4333-8444-555555555555" };
+const photo = { filename: "tea.png", content: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO5bFZkAAAAASUVORK5CYII=" };
 const env = { CONTACT_TO: "ops@example.com", RESEND_API_KEY: "test-key" };
 const req = (body, headers = {}) => new Request("https://kamehame-japan.com/api/supplier", { method: "POST", headers: { "content-type": "application/json", origin: "https://kamehame-japan.com", ...headers }, body: JSON.stringify(body) });
 
@@ -71,16 +72,35 @@ test("mail-provider errors and timeouts never show a successful receipt", async 
 });
 
 test("detailed registrations require all details, integer prices and the current policy; all prices stay in the team notification", async () => {
-  const apply = { ...good, kind: "apply", policyVersion: SUPPLIER_POLICY_VERSION, location: "東京都", category: "茶道", title: "茶道体験", description: "茶道の体験です", duration: "90分", capacity: "2〜8名", availability: "毎日", languages: "日本語", meetingPoint: "茶室", included: "お茶", cancellation: "3日前まで無料", priceUnit: "1名", retailPrice: "10000", wholesalePrice: "7500" };
+  const apply = { ...good, kind: "apply", policyVersion: SUPPLIER_POLICY_VERSION, location: "東京都", category: "茶道", title: "茶道体験", description: "茶道の体験です", duration: "90分", capacity: "2〜8名", availability: "毎日", languages: "日本語", meetingPoint: "茶室", meetingMapUrl: "https://maps.google.com/?q=Tokyo", snsUrl: "https://instagram.com/tea", photos: [photo], photoPromotionConsent: false, included: "お茶", cancellation: "3日前まで無料", priceUnit: "1名", retailPrice: "10000", wholesalePrice: "7500" };
   assert.ok(parse(apply));
+  assert.equal(parse({ ...apply, photos: [] }), null, "a shared drive link cannot replace a directly uploaded photo");
+  assert.equal(parse({ ...apply, photos: [{ ...photo, filename: "tea.pdf" }] }), null);
+  assert.equal(parse({ ...apply, photoPromotionConsent: "true" }), null);
+  assert.equal(parse({ ...apply, meetingMapUrl: "javascript:alert(1)" }), null);
+  assert.equal(parse({ ...apply, snsUrl: "https://user:pass@example.com" }), null);
   for (const [key, value] of [["title", ""], ["languages", ""], ["retailPrice", "0"], ["wholesalePrice", "1.1"], ["policyVersion", "outdated"]]) assert.equal(parse({ ...apply, [key]: value }), null);
   const note = supplierNotification(parse(apply));
   assert.match(note.text, /審査と掲載条件の合意が必要/);
   assert.match(note.text, /5〜10％/);
   assert.match(note.text, /希望卸価格（税込・円）: 7500/);
-  const res = await handle(req(apply), env, async () => Response.json({ id: "application-test" }));
+  assert.match(note.text, /SNS等での写真利用許可：許可なし/);
+  assert.match(note.text, /予約確定後に共有/);
+  const requests = [];
+  const res = await handle(req(apply), env, async (_, init) => { requests.push(JSON.parse(init.body)); return Response.json({ id: "application-test" }); });
+  assert.deepEqual(requests[0].attachments, [photo]);
   const receipt = await res.json();
   assert.equal(receipt.ok, true); assert.equal(JSON.stringify(receipt).includes("7500"), false);
+});
+
+test("cross-origin requests do not consume a shared network's quota", async () => {
+  const ip = "192.0.2.233", send = async () => Response.json({ data: [{ id: "team" }, { id: "ack" }] });
+  for (let i = 0; i < 12; i++) {
+    const hostile = req(good, { "cf-connecting-ip": ip, origin: "https://hostile.example", "content-type": "text/plain" });
+    Object.defineProperty(hostile, "body", { get() { throw new Error("origin rejection must not read body"); } });
+    assert.equal((await handle(hostile, env, send)).status, 403);
+  }
+  assert.equal((await handle(req(good, { "cf-connecting-ip": ip }), env, send)).status, 200);
 });
 
 test("the per-IP burst limit stops repeated submissions", async () => {

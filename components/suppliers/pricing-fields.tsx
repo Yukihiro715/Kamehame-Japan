@@ -20,8 +20,8 @@ function Toggle({ checked, onChange, children }: { checked: boolean; onChange: (
 function PricePair({ id, plan, retail, wholesale, onChange, unit, extra = false }: { id: string; plan: SupplierPlan; retail: string; wholesale: string; onChange: (patch: { retail?: string; wholesale?: string }) => void; unit: string; extra?: boolean }) {
   return <div className="sp-price-pair">
     {!plan.retailUnavailable && <Input id={`${id}-retail`} label={`一般価格（円${unit}・税込）`} value={retail} onChange={v => onChange({ retail: v })} required number min={extra ? 0 : 1}/>}
-    {!plan.negotiable && <Input id={`${id}-wholesale`} label={`希望受取額（円${unit}・税込）`} value={wholesale} onChange={v => onChange({ wholesale: v })} required number min={extra ? 0 : 1}/>}
-    {!plan.retailUnavailable && !plan.negotiable && /^\d+$/.test(retail) && Number(retail) > 0 && <div className="sp-price-suggestion"><span>25％引きの目安：<b>{Math.round(Number(retail) * .75).toLocaleString("ja-JP")}円{unit}</b></span><button type="button" onClick={() => onChange({ wholesale: String(Math.round(Number(retail) * .75)) })}>受取額に入力</button></div>}
+    {!plan.negotiable && <Input id={`${id}-wholesale`} label={`貴社へのお支払額（希望・円${unit}・税込）`} value={wholesale} onChange={v => onChange({ wholesale: v })} required number min={extra ? 0 : 1}/>}
+    {!plan.retailUnavailable && !plan.negotiable && /^\d+$/.test(retail) && Number(retail) > 0 && <div className="sp-price-suggestion"><span>25％引きの目安：<b>{Math.round(Number(retail) * .75).toLocaleString("ja-JP")}円{unit}</b></span><button type="button" onClick={() => onChange({ wholesale: String(Math.round(Number(retail) * .75)) })}>お支払額に入力</button></div>}
   </div>;
 }
 
@@ -53,7 +53,7 @@ export function PricingFields({ value, onChange, files, onFiles, onReading, miss
       {([ ["plans", "フォームに入力", "人数別・貸切などを設定"], ["document", "料金表を提出", "ファイル添付・共有URL"] ] as const).map(([mode, title, sub]) => <label key={mode} className={value.mode === mode ? "is-selected" : ""}><input type="radio" name="pricing-mode" value={mode} checked={value.mode === mode} onChange={() => onChange({ ...value, mode })}/><span><strong>{title}</strong><small>{sub}</small></span></label>)}
     </div></fieldset>
     {value.mode === "plans" ? <>
-      <p className="sp-help">同じ体験に、通常参加・貸切・時間別などのプランを追加できます。すべて税込でご入力ください。</p>
+      <p className="sp-help">まず1名あたりの料金欄を表示しています。貸切・人数別・個別見積もり等は「料金の決まり方」で切り替えられます。すべて税込でご入力ください。</p>
       {value.plans.map((plan, index) => {
         const id = `price-${index}`;
         const updateTier = (j: number, patch: Partial<SupplierTier>) => changePlan(index, { tiers: plan.tiers.map((t, i) => i === j ? { ...t, ...patch } : t) });
@@ -64,7 +64,7 @@ export function PricingFields({ value, onChange, files, onFiles, onReading, miss
             <label className="sp-field" htmlFor={`${id}-type`}><span>料金の決まり方<small>必須</small></span><select id={`${id}-type`} required value={plan.type} onChange={e => changePlan(index, { type: e.target.value as SupplierPlan["type"] })}><option value="">選択してください</option>{Object.entries(PRICE_TYPES).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
           </div>
           {plan.type && plan.type !== "quote" && <>
-            <div className="sp-price-toggles"><Toggle checked={plan.retailUnavailable} onChange={v => changePlan(index, { retailUnavailable: v })}>一般向け価格なし</Toggle><Toggle checked={plan.negotiable} onChange={v => changePlan(index, { negotiable: v })}>希望受取額は相談して決めたい</Toggle></div>
+            <div className="sp-price-toggles"><Toggle checked={plan.retailUnavailable} onChange={v => changePlan(index, { retailUnavailable: v })}>一般向けの定価は設定していない</Toggle><Toggle checked={plan.negotiable} onChange={v => changePlan(index, { negotiable: v })}>貴社へのお支払額は相談して決めたい</Toggle><p className="sp-help sp-full">「定価を設定していない」は、通常の販売価格がなく、案件ごとに価格を決める場合です。販売価格が未定なら「個別見積もり」も選べます。</p></div>
             {plan.type === "tiered" ? <div className="sp-tier-list"><p className="sp-help">予約人数に応じて、参加者全員の1名あたり単価が変わる料金です。超過人数だけに追加する場合は「基本料金＋追加人数分」を選んでください。</p>
               {plan.tiers.map((tier, j) => <div className="sp-tier-card" key={j}><div className="sp-plan-heading"><h5>人数帯 {j + 1}</h5>{plan.tiers.length > 1 && <button type="button" className="sp-price-remove" aria-label={`プラン${index + 1}の人数帯${j + 1}を削除`} onClick={() => changePlan(index, { tiers: plan.tiers.filter((_, i) => i !== j) })}><Trash2 size={14}/>削除</button>}</div><div className="sp-price-grid">
                 <Input id={`${id}-tier-${j}-min`} label="最少人数（名）" value={tier.minPeople} onChange={v => updateTier(j, { minPeople: v })} number required max={10000}/>
@@ -79,7 +79,7 @@ export function PricingFields({ value, onChange, files, onFiles, onReading, miss
               {plan.type === "base_plus" && <div className="sp-extra-charge"><h5>追加1名あたりの料金</h5><p className="sp-help">含まれる人数を超えた人数分だけ加算します。</p><PricePair id={`${id}-extra`} plan={plan} retail={plan.extraRetail} wholesale={plan.extraWholesale} onChange={v => changePlan(index, { ...(v.retail !== undefined ? { extraRetail: v.retail } : {}), ...(v.wholesale !== undefined ? { extraWholesale: v.wholesale } : {}) })} unit="／追加1名" extra/></div>}
             </>}
           </>}
-          {plan.type && <div className="sp-plan-conditions"><Input id={`${id}-conditions`} label={plan.type === "quote" ? "見積もりに必要な条件・参考料金" : "このプランの条件・補足"} value={plan.conditions} onChange={v => changePlan(index, { conditions: v })} area required={plan.type === "quote"} placeholder={plan.type === "quote" ? "例：人数・希望日・体験時間によってお見積もり。参考料金があれば一般価格／希望受取額を区別して記載。" : "例：90分のプラン。貸切は平日のみ。"}/></div>}
+          {plan.type && <div className="sp-plan-conditions"><Input id={`${id}-conditions`} label={plan.type === "quote" ? "見積もりに必要な条件・参考料金" : "このプランの条件・補足"} value={plan.conditions} onChange={v => changePlan(index, { conditions: v })} area required={plan.type === "quote"} placeholder={plan.type === "quote" ? "例：人数・希望日・体験時間によってお見積もり。参考料金があれば一般価格／貴社へのお支払額を区別して記載。" : "例：90分のプラン。貸切は平日のみ。"}/></div>}
         </section>;
       })}
       {value.plans.length < MAX_PLANS && <button className="sp-price-add sp-add-plan" type="button" onClick={() => onChange({ ...value, plans: [...value.plans, emptyPlan("")] })}><Plus size={18}/>料金プランを追加</button>}
@@ -93,9 +93,9 @@ export function PricingFields({ value, onChange, files, onFiles, onReading, miss
       {!!missingFiles.length && <p className="sp-file-notice" role="status">下書きには添付ファイルを保存していません。再選択してください：{missingFiles.join("、")}<br/><button type="button" className="sp-price-remove" onClick={onDismissMissing}>添付せずに進む</button></p>}
       {fileError && <p className="sp-error" role="alert">{fileError}</p>}
       <Input id="price-doc-url" label="料金表の共有URL" value={value.document.url} max={1000} onChange={v => onChange({ ...value, document: { ...value.document, url: v } })} placeholder="https://" hint="Google Driveなど。担当者が閲覧できる設定にしてください。"/>
-      <div className="sp-price-toggles"><Toggle checked={value.document.negotiable} onChange={v => onChange({ ...value, document: { ...value.document, negotiable: v } })}>希望受取額は相談して決めたい</Toggle></div>
-      <Input id="price-doc-notes" label="希望受取額・料金表の補足" value={value.document.receiptNotes} onChange={v => onChange({ ...value, document: { ...value.document, receiptNotes: v } })} area max={2000} required={value.document.priceKind === "retail" && !value.document.negotiable} placeholder="例：卸価格は一般価格の25％引きを希望。貸切料金は別紙に記載。"/>
+      <div className="sp-price-toggles"><Toggle checked={value.document.negotiable} onChange={v => onChange({ ...value, document: { ...value.document, negotiable: v } })}>貴社へのお支払額は相談して決めたい</Toggle></div>
+      <Input id="price-doc-notes" label="貴社へのお支払額・料金表の補足" value={value.document.receiptNotes} onChange={v => onChange({ ...value, document: { ...value.document, receiptNotes: v } })} area max={2000} required={value.document.priceKind === "retail" && !value.document.negotiable} placeholder="例：当社からのお支払額は一般価格の25％引きを希望。貸切料金は別紙に記載。"/>
     </section>}
-    <details className="sp-price-extras"><summary>追加の料金条件を設定する <span>任意</span></summary><p className="sp-help">該当する項目だけご入力ください。金額は一般価格／希望受取額と、1名／1組などの単位を区別してください。</p><div className="sp-price-grid">{(Object.keys(EXTRA_LABELS) as (keyof typeof EXTRA_LABELS)[]).map(key => <Input key={key} id={`price-extra-${key}`} label={EXTRA_LABELS[key]} value={value.extras[key]} onChange={v => onChange({ ...value, extras: { ...value.extras, [key]: v } })} area max={key === "options" || key === "other" ? 2000 : key === "minimum" ? 1000 : 1500} placeholder={key === "children" ? "例：6〜12歳は一般5,000円／名、受取額3,750円／名。5歳以下は無料。" : key === "seasonal" ? "例：土日祝は一般・受取額ともに1組あたり2,000円追加。" : undefined}/>)}</div></details>
+    <details className="sp-price-extras"><summary>追加の料金条件を設定する <span>任意</span></summary><p className="sp-help">該当する項目だけご入力ください。金額は一般価格／貴社へのお支払額と、1名／1組などの単位を区別してください。</p><div className="sp-price-grid">{(Object.keys(EXTRA_LABELS) as (keyof typeof EXTRA_LABELS)[]).map(key => <Input key={key} id={`price-extra-${key}`} label={EXTRA_LABELS[key]} value={value.extras[key]} onChange={v => onChange({ ...value, extras: { ...value.extras, [key]: v } })} area max={key === "options" || key === "other" ? 2000 : key === "minimum" ? 1000 : 1500} placeholder={key === "children" ? "例：6〜12歳は一般5,000円／名、お支払額3,750円／名。5歳以下は無料。" : key === "seasonal" ? "例：土日祝は一般・受取額ともに1組あたり2,000円追加。" : undefined}/>)}</div></details>
   </div>;
 }

@@ -1,5 +1,5 @@
 import { validateSupplierPricing, formatSupplierPricing, type SupplierPricing } from "./supplier-pricing";
-import { parseSupplierAttachments, type SupplierAttachment } from "./supplier-attachments";
+import { parseSupplierAttachments, parseSupplierPhotos, MAX_SUPPLIER_TOTAL_BYTES, type SupplierAttachment } from "./supplier-attachments";
 import { SUPPLIER_POLICY_VERSION, SUPPLIER_PRICE_NOTE, SUPPLIER_SCOPE_NOTE } from "./supplier-policy";
 import { recipientAllowed, type PortalMailEnv } from "./portal/mail";
 
@@ -8,16 +8,16 @@ export const SUPPLIER_FIELD_LABELS = {
   location: "所在地", websiteUrl: "公式サイト・紹介ページ", message: "ご相談内容",
   title: "体験名", category: "体験の種類", description: "体験の内容・魅力", duration: "所要時間",
   capacity: "最少・最大人数", availability: "受入可能日時・予約締切", languages: "当日の対応言語・通訳",
-  meetingPoint: "開催・集合場所", included: "料金に含まれるもの", excluded: "含まれないもの",
+  meetingPoint: "開催・集合場所（予約確定後に共有）", meetingMapUrl: "集合・開催場所のGoogle マップURL（予約確定後に共有）", snsUrl: "事業者SNSアカウントURL", included: "料金に含まれるもの", excluded: "含まれないもの",
   cancellation: "キャンセル条件", priceUnit: "料金の単位・人数条件", retailPrice: "一般販売価格（税込・円）",
   wholesalePrice: "希望卸価格（税込・円）", photosUrl: "写真・資料の共有URL", notes: "補足事項",
 } as const;
 type Field = keyof typeof SUPPLIER_FIELD_LABELS;
-type Submission = { kind: "consult" | "apply"; requestId: string; fields: Partial<Record<Field, string>>; pricing?: SupplierPricing; attachments?: SupplierAttachment[] };
+type Submission = { kind: "consult" | "apply"; requestId: string; fields: Partial<Record<Field, string>>; pricing?: SupplierPricing; attachments?: SupplierAttachment[]; photos?: SupplierAttachment[]; photoPromotionConsent?: boolean };
 const LIMITS: Record<Field, number> = {
   company: 160, name: 120, email: 200, phone: 60, location: 300, websiteUrl: 1000, message: 3000,
   title: 160, category: 80, description: 4000, duration: 160, capacity: 160, availability: 1000,
-  languages: 300, meetingPoint: 1000, included: 1500, excluded: 1500, cancellation: 2000,
+  languages: 300, meetingPoint: 1000, meetingMapUrl: 1000, snsUrl: 1000, included: 1500, excluded: 1500, cancellation: 2000,
   priceUnit: 160, retailPrice: 9, wholesalePrice: 9, photosUrl: 1000, notes: 3000,
 };
 const COMMON: Field[] = ["company", "name", "email"];
@@ -39,16 +39,22 @@ export function parseSupplierSubmission(body: Record<string, unknown>): Submissi
   for (const key of [...COMMON, ...(body.kind === "consult" ? ["title", "message"] as Field[] : APPLY)]) if (!fields[key]) return null;
   if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(fields.email!)) return null;
   if (/[\r\n]/.test(fields.name! + fields.company!)) return null;
-  for (const key of ["websiteUrl", "photosUrl"] as const) {
+  for (const key of ["websiteUrl", "photosUrl", "meetingMapUrl", "snsUrl"] as const) {
     if (!fields[key]) continue;
     try { const url = new URL(fields[key]); if (!["https:", "http:"].includes(url.protocol) || url.username || url.password) return null; } catch { return null; }
   }
   let pricing: SupplierPricing | undefined;
   let attachments: SupplierAttachment[] = [];
+  let photos: SupplierAttachment[] = [];
   if (body.kind === "apply") {
+    if (typeof body.photoPromotionConsent !== "boolean") return null;
+    const parsedPhotos = parseSupplierPhotos(body.photos);
+    if (!parsedPhotos) return null;
+    photos = parsedPhotos;
     const parsedFiles = parseSupplierAttachments(body.attachments);
     if (!parsedFiles) return null;
     attachments = parsedFiles;
+    if (attachments.reduce((n, f) => n + f.content.length / 4 * 3, 0) + photos.reduce((n, f) => n + f.content.length / 4 * 3, 0) > MAX_SUPPLIER_TOTAL_BYTES) return null;
     if (body.pricing !== undefined) {
       const checked = validateSupplierPricing(body.pricing, attachments.length);
       if (!checked.data || (checked.data.mode === "plans" && attachments.length)) return null;
@@ -60,8 +66,8 @@ export function parseSupplierSubmission(body: Record<string, unknown>): Submissi
         if (!/^\d+$/.test(fields[key] || "") || Number(fields[key]) < 1 || Number(fields[key]) > 100_000_000) return null;
       }
     }
-  } else if (body.pricing !== undefined || (body.attachments !== undefined && (!Array.isArray(body.attachments) || body.attachments.length))) return null;
-  return { kind: body.kind, requestId: String(body.requestId).toLowerCase(), fields, ...(pricing ? { pricing } : {}), ...(attachments.length ? { attachments } : {}) };
+  } else if (body.pricing !== undefined || body.photos !== undefined || body.photoPromotionConsent !== undefined || (body.attachments !== undefined && (!Array.isArray(body.attachments) || body.attachments.length))) return null;
+  return { kind: body.kind, requestId: String(body.requestId).toLowerCase(), fields, ...(pricing ? { pricing } : {}), ...(attachments.length ? { attachments } : {}), ...(photos.length ? { photos, photoPromotionConsent: body.photoPromotionConsent as boolean } : {}) };
 }
 
 export function supplierNotification(s: Submission) {
@@ -74,6 +80,7 @@ export function supplierNotification(s: Submission) {
       ...Object.entries(s.fields).map(([key, value]) => `${SUPPLIER_FIELD_LABELS[key as Field]}: ${value}`), "",
       ...(s.pricing ? [formatSupplierPricing(s.pricing), ""] : []),
       ...(s.attachments?.length ? [`添付料金表：${s.attachments.map(f => f.filename).join("、")}`, ""] : []),
+      ...(s.photos?.length ? [`掲載用写真：${s.photos.map(f => f.filename).join("、")}`, `SNS等での写真利用許可：${s.photoPromotionConsent ? "許可あり" : "許可なし（掲載ページ用のみ）"}`, ""] : []),
       "プライバシーポリシーと対応のための情報利用に同意済み。",
       ...(s.kind === "apply" ? [`確認した条件: ${SUPPLIER_POLICY_VERSION}`, SUPPLIER_PRICE_NOTE, SUPPLIER_SCOPE_NOTE,
         "審査と掲載条件の合意が必要です。この登録による自動公開はありません。"] : [
@@ -123,11 +130,10 @@ function rateAllowed(ip: string | null) {
 
 /** Consultations send a team notification and thank-you receipt together; registration links remain manual. */
 export async function handleSupplierSubmission(request: Request, env: SupplierEnv, fetchImpl: typeof fetch = fetch): Promise<Response> {
-  // Malformed JSON, attachments and oversized bodies must consume the same quota as valid requests.
-  // Rejected requests never acquire a body reader or reach the mail provider.
-  if (!rateAllowed(request.headers.get("cf-connecting-ip"))) return reply({ ok: false, error: "rate_limited" }, 429);
+  // Reject cross-origin traffic before charging a shared IP quota; neither path reads a body.
   const origin = request.headers.get("origin");
   if (origin !== new URL(request.url).origin) return reply({ ok: false, error: "origin" }, 403);
+  if (!rateAllowed(request.headers.get("cf-connecting-ip"))) return reply({ ok: false, error: "rate_limited" }, 429);
   if (!request.headers.get("content-type")?.startsWith("application/json")) return reply({ ok: false, error: "content_type" }, 415);
   if (Number(request.headers.get("content-length")) > MAX_BODY_BYTES) return reply({ ok: false, error: "too_large" }, 413);
   let body: Record<string, unknown>;
@@ -146,14 +152,15 @@ export async function handleSupplierSubmission(request: Request, env: SupplierEn
     const parsed: unknown = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return reply({ ok: false, error: "invalid" }, 400);
     body = parsed as Record<string, unknown>;
-    if (bytes > (body.kind === "apply" ? 256_000 : MAX_TEXT_BODY_BYTES) && (body.kind !== "apply" || !Array.isArray(body.attachments) || !body.attachments.length)) return reply({ ok: false, error: "too_large" }, 413);
+    if (bytes > (body.kind === "apply" ? 256_000 : MAX_TEXT_BODY_BYTES) && (body.kind !== "apply" || !Array.isArray(body.photos) || !body.photos.length)) return reply({ ok: false, error: "too_large" }, 413);
   } catch { return reply({ ok: false, error: "bad_json" }, 400); }
   if (body.website) return reply({ ok: true, reference: "KHS-RECEIVED" });
   const submission = parseSupplierSubmission(body);
   if (!submission) {
     const pricingError = body.kind === "apply" && body.pricing !== undefined ? validateSupplierPricing(body.pricing, Array.isArray(body.attachments) ? body.attachments.length : 0).error : undefined;
+    const photoError = body.kind === "apply" && parseSupplierPhotos(body.photos) === null;
     const fileError = body.kind === "apply" && parseSupplierAttachments(body.attachments) === null;
-    return reply({ ok: false, error: "invalid", message: fileError ? "添付ファイルの形式・内容・サイズをご確認ください。PDF・Excel・画像、1件5MB・合計8MBまでです。" : pricingError || "必須項目と入力内容をご確認ください。" }, 400);
+    return reply({ ok: false, error: "invalid", message: photoError ? "掲載用の写真を1枚以上アップロードしてください。PNG・JPEG・WebP、1枚5MB、料金表を含め合計8MBまでです。" : fileError ? "添付ファイルの形式・内容・サイズをご確認ください。PDF・Excel・画像、1件5MB・合計8MBまでです。" : pricingError || "必須項目と入力内容をご確認ください。" }, 400);
   }
   if (!env.RESEND_API_KEY || !env.CONTACT_TO) return reply({ ok: false, error: "unconfigured" }, 503);
   const to = [...new Set([env.CONTACT_TO, env.ARCHIVE_TO].filter((x): x is string => !!x))];
@@ -161,7 +168,7 @@ export async function handleSupplierSubmission(request: Request, env: SupplierEn
   if (![...to, ...(consult ? [submission.fields.email!] : [])].every(x => recipientAllowed(env, x))) return reply({ ok: false, error: "unconfigured" }, 503);
   const { subject, text, reference } = supplierNotification(submission);
   const notification = { from: "KAMEHAME JAPAN <enquiries@kamehame-japan.com>", to, reply_to: submission.fields.email,
-    subject, text, ...(submission.attachments?.length ? { attachments: submission.attachments } : {}), tags: [{ name: "kind", value: `supplier-${submission.kind}` }] };
+    subject, text, ...(submission.photos?.length || submission.attachments?.length ? { attachments: [...(submission.photos || []), ...(submission.attachments || [])] } : {}), tags: [{ name: "kind", value: `supplier-${submission.kind}` }] };
   const payload = consult ? [notification, {
     from: "KAMEHAME JAPAN <hello@kamehame-japan.com>", to: [submission.fields.email!], reply_to: "hello@kamehame-japan.com",
     ...supplierAcknowledgement(submission), tags: [{ name: "kind", value: "supplier-ack" }],

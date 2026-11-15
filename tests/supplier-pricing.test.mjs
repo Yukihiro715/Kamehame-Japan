@@ -11,7 +11,8 @@ const { handleSupplierSubmission: handle, parseSupplierSubmission: parse } = awa
 const { SUPPLIER_POLICY_VERSION } = await vite.ssrLoadModule("/lib/supplier-policy.ts");
 const standard = () => ({ ...emptyPlan(), type: "per_person", minPeople: "1", maxPeople: "8", retail: "10000", wholesale: "7500" });
 const prices = plan => ({ ...emptyPricing(), plans: [plan] });
-const application = pricing => ({ kind: "apply", company: "サンプル工房", name: "確認担当", email: "test@example.com", consent: true, requestId: "11111111-2222-4333-8444-555555555555", policyVersion: SUPPLIER_POLICY_VERSION, location: "東京都", category: "茶道", title: "茶道体験", description: "茶道の体験です", duration: "90分", capacity: "1〜8名", availability: "毎日", languages: "日本語", meetingPoint: "茶室", included: "お茶", cancellation: "3日前まで無料", pricing });
+const photo = { filename: "tea.png", content: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO5bFZkAAAAASUVORK5CYII=" };
+const application = pricing => ({ kind: "apply", company: "サンプル工房", name: "確認担当", email: "test@example.com", consent: true, requestId: "11111111-2222-4333-8444-555555555555", policyVersion: SUPPLIER_POLICY_VERSION, location: "東京都", category: "茶道", title: "茶道体験", description: "茶道の体験です", duration: "90分", capacity: "1〜8名", availability: "毎日", languages: "日本語", meetingPoint: "茶室", photos: [photo], photoPromotionConsent: false, included: "お茶", cancellation: "3日前まで無料", pricing });
 const req = body => new Request("https://kamehame-japan.com/api/supplier", { method: "POST", headers: { "Content-Type": "application/json", Origin: "https://kamehame-japan.com" }, body: JSON.stringify(body) });
 const env = { CONTACT_TO: "ops@example.com", ARCHIVE_TO: "archive@example.com", RESEND_API_KEY: "test-key" };
 const pdf = { filename: "料金表.pdf", content: Buffer.from("%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF").toString("base64") };
@@ -44,7 +45,7 @@ test("unpublished retail rates and negotiable costs are explicit; inactive rates
   const checked = validate(p).data;
   assert.equal(checked.plans[0].retail, ""); assert.equal(checked.plans[0].wholesale, "");
   assert.deepEqual(checked.plans[0].tiers, []);
-  assert.match(format(checked), /一般価格：設定なし ／ 希望受取額：相談して決めたい/);
+  assert.match(format(checked), /一般価格：定価なし ／ ご希望のお支払額：相談して決めたい/);
   assert.doesNotMatch(format(checked), /12,345|98,765|111|222|333/);
   const zeroBase = validate(prices({ ...standard(), type: "base_plus", includedPeople: "0", extraRetail: "1000", extraWholesale: "0" }));
   assert.ok(zeroBase.data);
@@ -57,7 +58,7 @@ test("document submissions require either a real attachment or safe URL and clar
   p.document.url = "https://example.com/rates.pdf";
   assert.ok(validate(p).data);
   p.document.priceKind = "retail"; p.document.receiptNotes = "";
-  assert.match(validate(p).error, /希望受取額/);
+  assert.match(validate(p).error, /ご希望のお支払額/);
   p.document.negotiable = true;
   assert.ok(validate(p).data);
   for (const url of ["javascript:alert(1)", "https://user:pass@example.com", "file:///rates.pdf"]) { p.document.url = url; assert.ok(validate(p).error); }
@@ -86,7 +87,7 @@ test("application delivery includes all rate conditions and files only in the in
   assert.equal(calls[0].url, "https://api.resend.com/emails");
   const mail = JSON.parse(calls[0].init.body);
   assert.deepEqual(mail.to, [env.CONTACT_TO, env.ARCHIVE_TO]);
-  assert.deepEqual(mail.attachments, [pdf]);
+  assert.deepEqual(mail.attachments, [photo, pdf]);
   assert.match(mail.text, /6〜12歳は半額/);
   assert.match(mail.text, /料金表.pdf/);
   assert.doesNotMatch(mail.text, /基本プラン|undefined|NaN/);

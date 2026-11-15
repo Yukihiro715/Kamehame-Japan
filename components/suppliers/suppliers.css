@@ -75,3 +75,4 @@
 @media(max-width:360px){
  .sp-story-bottom{gap:16px}.sp-story-caption p{font-size:14px;letter-spacing:0}
 }
+.sp-photo-field>label{font-weight:700;display:block}.sp-photo-field>label small{font-weight:400;color:var(--sp-muted);margin-left:8px}.sp-photo-field>input[type=file]{display:block;width:100%;max-width:100%;padding:12px;background:white;border:1px solid var(--sp-line);border-radius:8px;font-size:16px}.sp-photo-field>em{display:block;font-size:12px;color:var(--sp-muted);font-style:normal;margin-top:8px}.sp-photo-consent{display:flex;align-items:flex-start;gap:12px;font-size:13px;line-height:1.8;padding:16px;background:#f2f3e9;border-radius:9px}.sp-photo-consent input{width:20px;height:20px;flex:none;margin:2px 0;accent-color:var(--sp-orange)}
