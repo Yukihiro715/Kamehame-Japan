@@ -2,6 +2,7 @@ export const MAX_SUPPLIER_FILES = 3;
 export const MAX_SUPPLIER_FILE_BYTES = 5 * 1024 * 1024;
 export const MAX_SUPPLIER_TOTAL_BYTES = 8 * 1024 * 1024;
 export const SUPPLIER_FILE_ACCEPT = ".pdf,.xlsx,.xls,.png,.jpg,.jpeg,.webp";
+export const SUPPLIER_PHOTO_ACCEPT = ".png,.jpg,.jpeg,.webp";
 export type SupplierAttachment = { filename: string; content: string };
 const extensions = /\.(pdf|xlsx|xls|png|jpe?g|webp)$/i;
 export function supplierFileError(files: { name: string; size: number }[]): string {
@@ -29,4 +30,14 @@ export function parseSupplierAttachments(raw: unknown): SupplierAttachment[] | n
     result.push({ filename: f.filename, content: f.content });
   }
   return result;
+}
+export function supplierPhotoError(files: { name: string; size: number }[]): string {
+  if (!files.length) return "掲載用の写真を1枚以上アップロードしてください。";
+  if (files.some(f => !/\.(png|jpe?g|webp)$/i.test(f.name))) return "写真はPNG・JPEG・WebPでアップロードしてください。";
+  return supplierFileError(files);
+}
+export function parseSupplierPhotos(raw: unknown): SupplierAttachment[] | null {
+  const files = parseSupplierAttachments(raw);
+  if (!files || supplierPhotoError(files.map(f => ({ name: f.filename, size: f.content.length / 4 * 3 - (f.content.endsWith("==") ? 2 : f.content.endsWith("=") ? 1 : 0) })))) return null;
+  return files;
 }
