@@ -91,6 +91,26 @@ test("the per-IP burst limit stops repeated submissions", async () => {
   assert.equal(sends, 10);
 });
 
+test("invalid and oversized requests consume quota before the body is read", async () => {
+  const ip = "192.0.2.231";
+  let sends = 0;
+  const send = async () => { sends++; return Response.json({ data: [{ id: "team" }, { id: "ack" }] }); };
+  // Previously these were rejected before the guard and never counted.
+  for (let i = 0; i < 4; i++) {
+    const invalid = req({ ...good, attachments: [{ filename: "rates.pdf", content: "bad" }] }, { "cf-connecting-ip": ip });
+    assert.equal((await handle(invalid, env, send)).status, 400);
+  }
+  for (let i = 0; i < 6; i++) {
+    const oversized = req(good, { "cf-connecting-ip": ip, "content-length": String(13 * 1024 * 1024) });
+    assert.equal((await handle(oversized, env, send)).status, 413);
+  }
+  const blocked = req(good, { "cf-connecting-ip": ip });
+  Object.defineProperty(blocked, "body", { get() { throw new Error("rate limit must not touch the body"); } });
+  assert.equal((await handle(blocked, env, send)).status, 429);
+  assert.equal(sends, 0);
+  assert.equal((await handle(req(good, { "cf-connecting-ip": "192.0.2.232" }), env, send)).status, 200, "other IPs keep their own quota");
+});
+
 
 test("receipt HTML escapes company and name, and never reflects the arbitrary message", () => {
   const ack = supplierAcknowledgement(parse({ ...good, company: '<img src="bad" onerror="alert(1)">', name: '<script>bad()</script>', message: 'https://untrusted.example/offer' }));
