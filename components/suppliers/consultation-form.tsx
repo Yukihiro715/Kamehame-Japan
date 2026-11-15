@@ -13,7 +13,7 @@ export function ConsultationForm() {
     e.preventDefault();
     if (busy) return;
     const data = new FormData(e.currentTarget);
-    const payload = { kind: 'consult', company: data.get('company'), name: data.get('name'), email: data.get('email'), websiteUrl: data.get('websiteUrl'), message: data.get('message'), website: data.get('website'), consent: data.get('consent') === 'on' };
+    const payload = { kind: 'consult', company: data.get('company'), name: data.get('name'), email: data.get('email'), phone: data.get('phone'), title: data.get('title'), websiteUrl: data.get('websiteUrl'), message: data.get('message'), website: data.get('website'), consent: data.get('consent') === 'on' };
     const content = JSON.stringify(payload);
     if (!request.current || request.current.content !== content) request.current = { id: crypto.randomUUID(), content };
     setBusy(true); setError('');
@@ -26,13 +26,15 @@ export function ConsultationForm() {
     } catch (err) { setError(err instanceof Error && err.name === 'Error' ? err.message : '通信に時間がかかっています。入力内容は残っていますので、再送をお試しください。'); }
     finally { setBusy(false); }
   }
-  if (complete) return <div className="kh-consult-receipt" ref={receiptRef} tabIndex={-1} role="status"><Check size={30}/><h3>ご相談を受け付けました。</h3><p>担当者が内容を確認し、メールでご連絡します。掲載をご希望の場合は、そのやり取りの中で体験情報の登録フォームをご案内します。</p><p className="sp-help">受付番号：{complete}</p></div>;
+  if (complete) return <div className="kh-consult-receipt" ref={receiptRef} tabIndex={-1} role="status"><Check size={30}/><h3>ご相談を受け付けました。</h3><p>ご入力のメールアドレスへ受付メールをお送りしました。担当者が内容を確認し、あらためてメールでご連絡します。</p><p>掲載をご希望の場合は、そのやり取りの中で体験情報の登録フォームをご案内します。</p><p className="sp-help">受付番号：{complete}</p></div>;
   return <form className="kh-consult-form" onSubmit={submit}>
     <fieldset disabled={busy}><div className="sp-honey" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off"/></label></div>
     <div className="kh-consult-fields">
       <label className="sp-field"><span>会社・施設名 <small>必須</small></span><input name="company" autoComplete="organization" required maxLength={160} placeholder="例：○○工房"/></label>
       <label className="sp-field"><span>お名前 <small>必須</small></span><input name="name" autoComplete="name" required maxLength={120}/></label>
       <label className="sp-field kh-full"><span>メールアドレス <small>必須</small></span><input name="email" type="email" autoComplete="email" required maxLength={200}/></label>
+      <label className="sp-field kh-full"><span>電話番号 <small>任意</small></span><input name="phone" type="tel" autoComplete="tel" maxLength={60} placeholder="例：03-1234-5678"/></label>
+      <label className="sp-field kh-full"><span>体験名・サービス名 <small>必須</small></span><input name="title" required maxLength={160} placeholder="例：茶道体験、陶芸ワークショップ（仮称でも可）"/></label>
       <label className="sp-field kh-full"><span>公式サイト・紹介ページ <small>任意</small></span><input name="websiteUrl" type="url" placeholder="https://" maxLength={1000}/></label>
       <label className="sp-field kh-full"><span>ご相談内容 <small>必須</small></span><textarea name="message" required maxLength={3000} rows={4} placeholder="体験の内容や開催エリア、集客のお悩みなど。詳しい料金や資料は、まだ揃っていなくても大丈夫です。"/></label>
     </div>

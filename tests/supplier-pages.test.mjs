@@ -16,6 +16,10 @@ test("the supplier LP renders Japanese metadata, the approved copy and a consult
   assert.match(html, /日本語またはご希望の言語/);
   assert.match(html, /5〜10％/);
   assert.match(html, /href="#consult"/);
+  assert.match(html, /電話番号/);
+  assert.match(html, /type="tel"/);
+  assert.match(html, /体験名・サービス名/);
+  assert.match(html, /<input(?=[^>]*\bname="title")(?=[^>]*\brequired)[^>]*>/);
   assert.doesNotMatch(html, /確認用フォーム|非公開プレビュー|PREVIEW-ONLY/);
   assert.doesNotMatch(html, /href="[^\"]*\/register\//);
   assert.match(readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8"), /<loc>https:\/\/kamehame-japan.com\/partners-lp\/<\/loc>/);
