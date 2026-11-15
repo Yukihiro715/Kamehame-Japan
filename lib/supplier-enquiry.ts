@@ -109,7 +109,7 @@ export interface SupplierEnv extends PortalMailEnv { CONTACT_TO?: string; ARCHIV
 const MAX_BODY_BYTES = 12 * 1024 * 1024;
 const MAX_TEXT_BODY_BYTES = 96_000;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
-// A bounded, per-isolate burst guard, in addition to the honeypot and origin check.
+// A bounded, per-isolate burst guard. Charge requests before reading or parsing a body.
 const attempts = new Map<string, { count: number; expires: number }>();
 function rateAllowed(ip: string | null) {
   if (!ip) return true;
@@ -123,6 +123,9 @@ function rateAllowed(ip: string | null) {
 
 /** Consultations send a team notification and thank-you receipt together; registration links remain manual. */
 export async function handleSupplierSubmission(request: Request, env: SupplierEnv, fetchImpl: typeof fetch = fetch): Promise<Response> {
+  // Malformed JSON, attachments and oversized bodies must consume the same quota as valid requests.
+  // Rejected requests never acquire a body reader or reach the mail provider.
+  if (!rateAllowed(request.headers.get("cf-connecting-ip"))) return reply({ ok: false, error: "rate_limited" }, 429);
   const origin = request.headers.get("origin");
   if (origin !== new URL(request.url).origin) return reply({ ok: false, error: "origin" }, 403);
   if (!request.headers.get("content-type")?.startsWith("application/json")) return reply({ ok: false, error: "content_type" }, 415);
@@ -152,7 +155,6 @@ export async function handleSupplierSubmission(request: Request, env: SupplierEn
     const fileError = body.kind === "apply" && parseSupplierAttachments(body.attachments) === null;
     return reply({ ok: false, error: "invalid", message: fileError ? "添付ファイルの形式・内容・サイズをご確認ください。PDF・Excel・画像、1件5MB・合計8MBまでです。" : pricingError || "必須項目と入力内容をご確認ください。" }, 400);
   }
-  if (!rateAllowed(request.headers.get("cf-connecting-ip"))) return reply({ ok: false, error: "rate_limited" }, 429);
   if (!env.RESEND_API_KEY || !env.CONTACT_TO) return reply({ ok: false, error: "unconfigured" }, 503);
   const to = [...new Set([env.CONTACT_TO, env.ARCHIVE_TO].filter((x): x is string => !!x))];
   const consult = submission.kind === "consult";
