@@ -1,3 +1,5 @@
+import { validateSupplierPricing, formatSupplierPricing, type SupplierPricing } from "./supplier-pricing";
+import { parseSupplierAttachments, type SupplierAttachment } from "./supplier-attachments";
 import { SUPPLIER_POLICY_VERSION, SUPPLIER_PRICE_NOTE, SUPPLIER_SCOPE_NOTE } from "./supplier-policy";
 import { recipientAllowed, type PortalMailEnv } from "./portal/mail";
 
@@ -11,7 +13,7 @@ export const SUPPLIER_FIELD_LABELS = {
   wholesalePrice: "希望卸価格（税込・円）", photosUrl: "写真・資料の共有URL", notes: "補足事項",
 } as const;
 type Field = keyof typeof SUPPLIER_FIELD_LABELS;
-type Submission = { kind: "consult" | "apply"; requestId: string; fields: Partial<Record<Field, string>> };
+type Submission = { kind: "consult" | "apply"; requestId: string; fields: Partial<Record<Field, string>>; pricing?: SupplierPricing; attachments?: SupplierAttachment[] };
 const LIMITS: Record<Field, number> = {
   company: 160, name: 120, email: 200, phone: 60, location: 300, websiteUrl: 1000, message: 3000,
   title: 160, category: 80, description: 4000, duration: 160, capacity: 160, availability: 1000,
@@ -19,7 +21,7 @@ const LIMITS: Record<Field, number> = {
   priceUnit: 160, retailPrice: 9, wholesalePrice: 9, photosUrl: 1000, notes: 3000,
 };
 const COMMON: Field[] = ["company", "name", "email"];
-const APPLY: Field[] = ["location", "category", "title", "description", "duration", "capacity", "availability", "languages", "meetingPoint", "included", "cancellation", "priceUnit", "retailPrice", "wholesalePrice"];
+const APPLY: Field[] = ["location", "category", "title", "description", "duration", "capacity", "availability", "languages", "meetingPoint", "included", "cancellation"];
 const CONSULT: Field[] = [...COMMON, "phone", "title", "websiteUrl", "message"];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -41,10 +43,25 @@ export function parseSupplierSubmission(body: Record<string, unknown>): Submissi
     if (!fields[key]) continue;
     try { const url = new URL(fields[key]); if (!["https:", "http:"].includes(url.protocol) || url.username || url.password) return null; } catch { return null; }
   }
-  if (body.kind === "apply") for (const key of ["retailPrice", "wholesalePrice"] as const) {
-    if (!/^\d+$/.test(fields[key]!) || Number(fields[key]) < 1 || Number(fields[key]) > 100_000_000) return null;
-  }
-  return { kind: body.kind, requestId: String(body.requestId).toLowerCase(), fields };
+  let pricing: SupplierPricing | undefined;
+  let attachments: SupplierAttachment[] = [];
+  if (body.kind === "apply") {
+    const parsedFiles = parseSupplierAttachments(body.attachments);
+    if (!parsedFiles) return null;
+    attachments = parsedFiles;
+    if (body.pricing !== undefined) {
+      const checked = validateSupplierPricing(body.pricing, attachments.length);
+      if (!checked.data || (checked.data.mode === "plans" && attachments.length)) return null;
+      pricing = checked.data;
+      delete fields.priceUnit; delete fields.retailPrice; delete fields.wholesalePrice;
+    } else {
+      if (attachments.length || !fields.priceUnit) return null;
+      for (const key of ["retailPrice", "wholesalePrice"] as const) {
+        if (!/^\d+$/.test(fields[key] || "") || Number(fields[key]) < 1 || Number(fields[key]) > 100_000_000) return null;
+      }
+    }
+  } else if (body.pricing !== undefined || (body.attachments !== undefined && (!Array.isArray(body.attachments) || body.attachments.length))) return null;
+  return { kind: body.kind, requestId: String(body.requestId).toLowerCase(), fields, ...(pricing ? { pricing } : {}), ...(attachments.length ? { attachments } : {}) };
 }
 
 export function supplierNotification(s: Submission) {
@@ -55,6 +72,8 @@ export function supplierNotification(s: Submission) {
     text: [
       title, `受付番号: ${reference}`, "",
       ...Object.entries(s.fields).map(([key, value]) => `${SUPPLIER_FIELD_LABELS[key as Field]}: ${value}`), "",
+      ...(s.pricing ? [formatSupplierPricing(s.pricing), ""] : []),
+      ...(s.attachments?.length ? [`添付料金表：${s.attachments.map(f => f.filename).join("、")}`, ""] : []),
       "プライバシーポリシーと対応のための情報利用に同意済み。",
       ...(s.kind === "apply" ? [`確認した条件: ${SUPPLIER_POLICY_VERSION}`, SUPPLIER_PRICE_NOTE, SUPPLIER_SCOPE_NOTE,
         "審査と掲載条件の合意が必要です。この登録による自動公開はありません。"] : [
@@ -87,7 +106,8 @@ export function supplierAcknowledgement(s: Submission) {
 }
 
 export interface SupplierEnv extends PortalMailEnv { CONTACT_TO?: string; ARCHIVE_TO?: string }
-const MAX_BODY_BYTES = 96_000;
+const MAX_BODY_BYTES = 12 * 1024 * 1024;
+const MAX_TEXT_BODY_BYTES = 96_000;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 // A bounded, per-isolate burst guard, in addition to the honeypot and origin check.
 const attempts = new Map<string, { count: number; expires: number }>();
@@ -109,15 +129,29 @@ export async function handleSupplierSubmission(request: Request, env: SupplierEn
   if (Number(request.headers.get("content-length")) > MAX_BODY_BYTES) return reply({ ok: false, error: "too_large" }, 413);
   let body: Record<string, unknown>;
   try {
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).length > MAX_BODY_BYTES) return reply({ ok: false, error: "too_large" }, 413);
+    // Bound streamed requests too, even when Content-Length is absent or false.
+    const reader = request.body?.getReader();
+    if (!reader) return reply({ ok: false, error: "bad_json" }, 400);
+    const decoder = new TextDecoder(); let raw = "", bytes = 0;
+    while (true) {
+      const chunk = await reader.read(); if (chunk.done) break;
+      bytes += chunk.value.byteLength;
+      if (bytes > MAX_BODY_BYTES) { await reader.cancel(); return reply({ ok: false, error: "too_large", message: "添付ファイルの合計は8MB以下にしてください。" }, 413); }
+      raw += decoder.decode(chunk.value, { stream: true });
+    }
+    raw += decoder.decode();
     const parsed: unknown = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return reply({ ok: false, error: "invalid" }, 400);
     body = parsed as Record<string, unknown>;
+    if (bytes > (body.kind === "apply" ? 256_000 : MAX_TEXT_BODY_BYTES) && (body.kind !== "apply" || !Array.isArray(body.attachments) || !body.attachments.length)) return reply({ ok: false, error: "too_large" }, 413);
   } catch { return reply({ ok: false, error: "bad_json" }, 400); }
   if (body.website) return reply({ ok: true, reference: "KHS-RECEIVED" });
   const submission = parseSupplierSubmission(body);
-  if (!submission) return reply({ ok: false, error: "invalid" }, 400);
+  if (!submission) {
+    const pricingError = body.kind === "apply" && body.pricing !== undefined ? validateSupplierPricing(body.pricing, Array.isArray(body.attachments) ? body.attachments.length : 0).error : undefined;
+    const fileError = body.kind === "apply" && parseSupplierAttachments(body.attachments) === null;
+    return reply({ ok: false, error: "invalid", message: fileError ? "添付ファイルの形式・内容・サイズをご確認ください。PDF・Excel・画像、1件5MB・合計8MBまでです。" : pricingError || "必須項目と入力内容をご確認ください。" }, 400);
+  }
   if (!rateAllowed(request.headers.get("cf-connecting-ip"))) return reply({ ok: false, error: "rate_limited" }, 429);
   if (!env.RESEND_API_KEY || !env.CONTACT_TO) return reply({ ok: false, error: "unconfigured" }, 503);
   const to = [...new Set([env.CONTACT_TO, env.ARCHIVE_TO].filter((x): x is string => !!x))];
@@ -125,7 +159,7 @@ export async function handleSupplierSubmission(request: Request, env: SupplierEn
   if (![...to, ...(consult ? [submission.fields.email!] : [])].every(x => recipientAllowed(env, x))) return reply({ ok: false, error: "unconfigured" }, 503);
   const { subject, text, reference } = supplierNotification(submission);
   const notification = { from: "KAMEHAME JAPAN <enquiries@kamehame-japan.com>", to, reply_to: submission.fields.email,
-    subject, text, tags: [{ name: "kind", value: `supplier-${submission.kind}` }] };
+    subject, text, ...(submission.attachments?.length ? { attachments: submission.attachments } : {}), tags: [{ name: "kind", value: `supplier-${submission.kind}` }] };
   const payload = consult ? [notification, {
     from: "KAMEHAME JAPAN <hello@kamehame-japan.com>", to: [submission.fields.email!], reply_to: "hello@kamehame-japan.com",
     ...supplierAcknowledgement(submission), tags: [{ name: "kind", value: "supplier-ack" }],
