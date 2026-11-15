@@ -6,41 +6,51 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url));
 const vite = await createServer({ appType: "custom", configFile: false, root, resolve: { alias: { "@": root } }, server: { middlewareMode: true } });
 after(() => vite.close());
-const { handleSupplierSubmission: handle, parseSupplierSubmission: parse, supplierNotification } = await vite.ssrLoadModule("/lib/supplier-enquiry.ts");
+const { handleSupplierSubmission: handle, parseSupplierSubmission: parse, supplierNotification, supplierAcknowledgement } = await vite.ssrLoadModule("/lib/supplier-enquiry.ts");
 const { SUPPLIER_POLICY_VERSION } = await vite.ssrLoadModule("/lib/supplier-policy.ts");
-const good = { kind: "consult", company: "体験工房", name: "山田", email: "test@example.com", message: "茶道体験の掲載について相談したいです。", websiteUrl: "https://example.com/experience", consent: true, requestId: "11111111-2222-4333-8444-555555555555" };
+const good = { kind: "consult", company: "体験工房", name: "山田", email: "test@example.com", title: "茶道体験", phone: "03-1234-5678", message: "茶道体験の掲載について相談したいです。", websiteUrl: "https://example.com/experience", consent: true, requestId: "11111111-2222-4333-8444-555555555555" };
 const env = { CONTACT_TO: "ops@example.com", RESEND_API_KEY: "test-key" };
 const req = (body, headers = {}) => new Request("https://kamehame-japan.com/api/supplier", { method: "POST", headers: { "content-type": "application/json", origin: "https://kamehame-japan.com", ...headers }, body: JSON.stringify(body) });
 
 test("consultations require company, contact, consent and a valid URL without confusing it with the honeypot", () => {
   assert.ok(parse(good));
-  for (const [key, value] of [["company", " "], ["email", "a\r\nBcc: other@example.com"], ["consent", false], ["name", "山田\nBCC"], ["message", ""], ["requestId", "bad"], ["websiteUrl", "javascript:alert(1)"], ["websiteUrl", "https://user:pass@example.com"], ["message", "x".repeat(3001)]]) assert.equal(parse({ ...good, [key]: value }), null, key);
+  assert.ok(parse({ ...good, phone: "" }), "phone is optional");
+  for (const [key, value] of [["company", " "], ["title", ""], ["title", "x".repeat(161)], ["phone", "x".repeat(61)], ["email", "a\r\nBcc: other@example.com"], ["consent", false], ["name", "山田\nBCC"], ["message", ""], ["requestId", "bad"], ["websiteUrl", "javascript:alert(1)"], ["websiteUrl", "https://user:pass@example.com"], ["message", "x".repeat(3001)]]) assert.equal(parse({ ...good, [key]: value }), null, key);
 });
 
-test("operations receive consultation details and the registration URL, with no mail automatically sent to the supplier", async () => {
+test("consultations notify operations and send a thank-you receipt without the registration link", async () => {
   const calls = [];
-  const res = await handle(req(good), env, async (url, init) => { calls.push({ url, init }); return Response.json({ id: "mail-test-1" }); });
+  const res = await handle(req(good), env, async (url, init) => { calls.push({ url, init }); return Response.json({ data: [{ id: "team-test" }, { id: "ack-test" }] }); });
   assert.equal(res.status, 200);
   assert.equal((await res.json()).reference, `KHS-${good.requestId}`);
   assert.equal(calls.length, 1);
-  const mail = JSON.parse(calls[0].init.body);
+  assert.equal(calls[0].url, "https://api.resend.com/emails/batch");
+  const [mail, ack] = JSON.parse(calls[0].init.body);
   assert.deepEqual(mail.to, [env.CONTACT_TO]);
   assert.equal(mail.reply_to, good.email);
   assert.match(mail.text, /https:\/\/example.com\/experience/);
   assert.match(mail.text, /https:\/\/kamehame-japan.com\/partners-lp\/register\//);
-  assert.equal(calls[0].init.headers["Idempotency-Key"], `supplier/consult/${good.requestId}`);
+  assert.equal(calls[0].init.headers["Idempotency-Key"], `supplier/consult-v2/${good.requestId}`);
+  assert.match(mail.text, /電話番号: 03-1234-5678/);
+  assert.match(mail.text, /体験名: 茶道体験/);
+  assert.deepEqual(ack.to, [good.email]);
+  assert.equal(ack.reply_to, "hello@kamehame-japan.com");
+  assert.match(ack.text, /掲載のご相談をいただき、ありがとうございます/);
+  assert.match(ack.text, /担当者が内容を確認/);
+  assert.doesNotMatch(ack.text + ack.html, /partners-lp\/register|相談内容:|ご相談内容:/);
+  assert.match(ack.html, /<html lang="ja">/);
 });
 
 test("a retry keeps the identical provider idempotency key and mail body", async () => {
   const calls = [];
-  const send = async (_, init) => { calls.push(init); return Response.json({ id: "mail-test-2" }); };
+  const send = async (_, init) => { calls.push(init); return Response.json({ data: [{ id: "team-test" }, { id: "ack-test" }] }); };
   await handle(req(good), env, send); await handle(req(good), env, send);
   assert.equal(calls[0].headers["Idempotency-Key"], calls[1].headers["Idempotency-Key"]);
   assert.equal(calls[0].body, calls[1].body);
 });
 
 test("invalid, cross-origin, honeypot, oversized and unconfigured requests never send", async () => {
-  let sent = 0; const send = async () => { sent++; return Response.json({ id: "mail" }); };
+  let sent = 0; const send = async () => { sent++; return Response.json({ data: [{ id: "team-test" }, { id: "ack-test" }] }); };
   assert.equal((await handle(req(null), env, send)).status, 400);
   assert.equal((await handle(req({ ...good, consent: false }), env, send)).status, 400);
   assert.equal((await handle(req(good, { origin: "https://other.example" }), env, send)).status, 403);
@@ -49,11 +59,12 @@ test("invalid, cross-origin, honeypot, oversized and unconfigured requests never
   assert.equal((await handle(req({ ...good, message: "x".repeat(96001) }), env, send)).status, 413);
   assert.equal((await handle(req(good), {}, send)).status, 503);
   assert.equal((await handle(req(good), { ...env, KH_ENV: "staging" }, send)).status, 503);
+  assert.equal((await handle(req(good), { ...env, KH_ENV: "staging", NOTIFY_ALLOWLIST: env.CONTACT_TO }, send)).status, 503, "visitor acknowledgement is also allowlisted in staging");
   assert.equal(sent, 0);
 });
 
 test("mail-provider errors and timeouts never show a successful receipt", async () => {
-  for (const send of [async () => new Response("error", { status: 500 }), async () => { throw new Error("timeout"); }, async () => Response.json({})]) {
+  for (const send of [async () => new Response("error", { status: 500 }), async () => { throw new Error("timeout"); }, async () => Response.json({}), async () => Response.json({ data: [{ id: "team-only" }] }), async () => Response.json({ data: [{ id: "team" }, {}] })]) {
     const res = await handle(req(good), env, send);
     assert.equal(res.status, 502); assert.equal((await res.json()).ok, false);
   }
@@ -74,8 +85,16 @@ test("detailed registrations require all details, integer prices and the current
 
 test("the per-IP burst limit stops repeated submissions", async () => {
   let sends = 0;
-  const send = async () => { sends++; return Response.json({ id: "mail" }); };
+  const send = async () => { sends++; return Response.json({ data: [{ id: "team-test" }, { id: "ack-test" }] }); };
   for (let i = 0; i < 10; i++) assert.equal((await handle(req(good, { "cf-connecting-ip": "192.0.2.1" }), env, send)).status, 200);
   assert.equal((await handle(req(good, { "cf-connecting-ip": "192.0.2.1" }), env, send)).status, 429);
   assert.equal(sends, 10);
+});
+
+
+test("receipt HTML escapes company and name, and never reflects the arbitrary message", () => {
+  const ack = supplierAcknowledgement(parse({ ...good, company: '<img src="bad" onerror="alert(1)">', name: '<script>bad()</script>', message: 'https://untrusted.example/offer' }));
+  assert.doesNotMatch(ack.html, /<img|<script|onerror="|untrusted\.example/);
+  assert.match(ack.html, /&lt;img/);
+  assert.match(ack.text, /このメールにそのままご返信/);
 });

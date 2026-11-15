@@ -20,7 +20,7 @@ const LIMITS: Record<Field, number> = {
 };
 const COMMON: Field[] = ["company", "name", "email"];
 const APPLY: Field[] = ["location", "category", "title", "description", "duration", "capacity", "availability", "languages", "meetingPoint", "included", "cancellation", "priceUnit", "retailPrice", "wholesalePrice"];
-const CONSULT: Field[] = [...COMMON, "websiteUrl", "message"];
+const CONSULT: Field[] = [...COMMON, "phone", "title", "websiteUrl", "message"];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export function parseSupplierSubmission(body: Record<string, unknown>): Submission | null {
@@ -34,7 +34,7 @@ export function parseSupplierSubmission(body: Record<string, unknown>): Submissi
     if (text.length > LIMITS[key] || /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(text)) return null;
     if (text) fields[key] = text;
   }
-  for (const key of [...COMMON, ...(body.kind === "consult" ? ["message" as Field] : APPLY)]) if (!fields[key]) return null;
+  for (const key of [...COMMON, ...(body.kind === "consult" ? ["title", "message"] as Field[] : APPLY)]) if (!fields[key]) return null;
   if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(fields.email!)) return null;
   if (/[\r\n]/.test(fields.name! + fields.company!)) return null;
   for (const key of ["websiteUrl", "photosUrl"] as const) {
@@ -65,6 +65,27 @@ export function supplierNotification(s: Submission) {
   };
 }
 
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]!));
+
+/** A receipt only: staff separately send the registration link after consultation. */
+export function supplierAcknowledgement(s: Submission) {
+  const reference = `KHS-${s.requestId}`;
+  const paragraphs = [
+    `${s.fields.company}\n${s.fields.name} 様`,
+    "このたびは、KAMEHAME JAPANへ掲載のご相談をいただき、ありがとうございます。",
+    "ご相談を受け付けました。担当者が内容を確認し、こちらのメールアドレスへあらためてご連絡いたします。",
+    "掲載に向けた詳しい体験情報や条件は、ご相談の後にご案内する登録フォームからお伺いします。",
+    "ご質問や補足したい内容がございましたら、このメールにそのままご返信ください。",
+    `受付番号：${reference}`,
+    "KAMEHAME JAPAN\n株式会社プロセント\nhello@kamehame-japan.com",
+  ];
+  return {
+    subject: "【KAMEHAME JAPAN】掲載のご相談ありがとうございます",
+    text: paragraphs.join("\n\n"),
+    html: `<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;background:#faf8f1;color:#242d29"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:32px 16px"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#fffdf8;border-radius:12px"><tr><td style="padding:32px 28px;font:16px/1.9 Arial,Meiryo,sans-serif;word-break:break-word"><p style="margin:0 0 28px;color:#c95025;font-size:13px;font-weight:bold;letter-spacing:2px">KAMEHAME JAPAN</p><h1 style="font-size:23px;line-height:1.6;margin:0 0 28px">ご相談ありがとうございます。</h1>${paragraphs.map(p => `<p style="margin:0 0 20px">${escapeHtml(p).replace(/\n/g, "<br>")}</p>`).join("")}</td></tr></table></td></tr></table></body></html>`,
+  };
+}
+
 export interface SupplierEnv extends PortalMailEnv { CONTACT_TO?: string; ARCHIVE_TO?: string }
 const MAX_BODY_BYTES = 96_000;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
@@ -80,7 +101,7 @@ function rateAllowed(ip: string | null) {
   return true;
 }
 
-/** Sends only to the configured operations mailbox. Staff send the registration link after consultation. */
+/** Consultations send a team notification and thank-you receipt together; registration links remain manual. */
 export async function handleSupplierSubmission(request: Request, env: SupplierEnv, fetchImpl: typeof fetch = fetch): Promise<Response> {
   const origin = request.headers.get("origin");
   if (origin !== new URL(request.url).origin) return reply({ ok: false, error: "origin" }, 403);
@@ -100,18 +121,25 @@ export async function handleSupplierSubmission(request: Request, env: SupplierEn
   if (!rateAllowed(request.headers.get("cf-connecting-ip"))) return reply({ ok: false, error: "rate_limited" }, 429);
   if (!env.RESEND_API_KEY || !env.CONTACT_TO) return reply({ ok: false, error: "unconfigured" }, 503);
   const to = [...new Set([env.CONTACT_TO, env.ARCHIVE_TO].filter((x): x is string => !!x))];
-  if (!to.every(x => recipientAllowed(env, x))) return reply({ ok: false, error: "unconfigured" }, 503);
+  const consult = submission.kind === "consult";
+  if (![...to, ...(consult ? [submission.fields.email!] : [])].every(x => recipientAllowed(env, x))) return reply({ ok: false, error: "unconfigured" }, 503);
   const { subject, text, reference } = supplierNotification(submission);
+  const notification = { from: "KAMEHAME JAPAN <enquiries@kamehame-japan.com>", to, reply_to: submission.fields.email,
+    subject, text, tags: [{ name: "kind", value: `supplier-${submission.kind}` }] };
+  const payload = consult ? [notification, {
+    from: "KAMEHAME JAPAN <hello@kamehame-japan.com>", to: [submission.fields.email!], reply_to: "hello@kamehame-japan.com",
+    ...supplierAcknowledgement(submission), tags: [{ name: "kind", value: "supplier-ack" }],
+  }] : notification;
   try {
-    const response = await fetchImpl("https://api.resend.com/emails", {
+    const response = await fetchImpl(`https://api.resend.com/emails${consult ? "/batch" : ""}`, {
       method: "POST", signal: AbortSignal.timeout(15_000),
-      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `supplier/${submission.kind}/${submission.requestId}` },
-      body: JSON.stringify({ from: "KAMEHAME JAPAN <enquiries@kamehame-japan.com>", to, reply_to: submission.fields.email,
-        subject, text, tags: [{ name: "kind", value: `supplier-${submission.kind}` }] }),
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `supplier/${consult ? "consult-v2" : "apply"}/${submission.requestId}` },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) return reply({ ok: false, error: "send_failed" }, 502);
-    const sent = await response.json() as { id?: string };
-    if (!sent.id) return reply({ ok: false, error: "send_failed" }, 502);
+    const sent = await response.json() as { id?: string; data?: { id?: string }[] };
+    const accepted = consult ? Array.isArray(sent.data) && sent.data.length === 2 && sent.data.every(mail => typeof mail?.id === "string" && mail.id.length > 0) : !!sent.id;
+    if (!accepted) return reply({ ok: false, error: "send_failed" }, 502);
     return reply({ ok: true, reference });
   } catch { return reply({ ok: false, error: "send_failed" }, 502); }
 }
