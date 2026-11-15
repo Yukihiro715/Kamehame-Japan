@@ -224,7 +224,7 @@ const worker = {
 
     // The document language: the app's root layout cannot see the locale
     // segment of the URL, so it reads it from this header (app/layout.tsx).
-    const lang = url.pathname.match(/^\/(en|es|ja|fr|zh-tw)(?:\/|$)/)?.[1];
+    const lang = /^\/partners-lp(?:\/|$)/.test(url.pathname) ? "ja" : url.pathname.match(/^\/(en|es|ja|fr|zh-tw)(?:\/|$)/)?.[1];
     const req = lang ? new Request(request, { headers: new Headers([...request.headers, ["x-kh-lang", lang]]) }) : request;
     const res = await handler.fetch(req, env, ctx);
     const out = withSecurityHeaders(closeDocumentLast(res));

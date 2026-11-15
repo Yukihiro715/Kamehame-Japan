@@ -199,6 +199,7 @@ export function buildEntries(read) {
   }
 
   add("/partners/", { priority: "0.4", changefreq: "monthly", key: src("app/partners/page.tsx") || null });
+  add("/partners-lp/", { priority: "0.5", changefreq: "monthly", key: join(src("app/partners-lp/page.tsx"), src("components/suppliers/page.tsx"), src("components/suppliers/reach-channels.tsx"), src("lib/supplier-policy.ts")) });
   // The Ofukuro Dinner founding-guest campaign (published 2026-10-23): its copy lives in lib/ofukuro-dinner.ts and the page.
   add("/ofukuro-dinner/", { priority: "0.7", changefreq: "weekly", key: (src("app/ofukuro-dinner/page.tsx") || "") + (src("lib/ofukuro-dinner.ts") || "") || null });
 
