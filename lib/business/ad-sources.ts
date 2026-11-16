@@ -3,13 +3,13 @@ import { metaConversions, metricNumber } from './metrics.mjs';
 
 export interface AdsEnv {
  GOOGLE_ADS_CLIENT_ID?:string; GOOGLE_ADS_CLIENT_SECRET?:string; GOOGLE_ADS_REFRESH_TOKEN?:string;
- GOOGLE_ADS_DEVELOPER_TOKEN?:string; GOOGLE_ADS_LOGIN_CUSTOMER_ID?:string;
+ GOOGLE_ADS_LOGIN_CUSTOMER_ID?:string;
  META_ADS_ACCESS_TOKEN?:string;
 }
 export function directAdsSources(e:AdsEnv) {
- return [...(e.GOOGLE_ADS_CLIENT_ID&&e.GOOGLE_ADS_CLIENT_SECRET&&e.GOOGLE_ADS_REFRESH_TOKEN&&e.GOOGLE_ADS_DEVELOPER_TOKEN?['google']:[]),...(e.META_ADS_ACCESS_TOKEN?['meta']:[])];
+ return [...(googleConfigured(e)?['google']:[]),...(e.META_ADS_ACCESS_TOKEN?['meta']:[])];
 }
-async function read<T>(url:string,init:RequestInit,source:string):Promise<T> {
+export async function read<T>(url:string,init:RequestInit,source:string):Promise<T> {
  let r:Response;
  // Workers supports manual/follow only. Never forward credentials to redirects.
  try {r=await fetch(url,{...init,redirect:'manual',signal:AbortSignal.timeout(20000)});} catch(e) {
@@ -22,10 +22,14 @@ async function read<T>(url:string,init:RequestInit,source:string):Promise<T> {
 }
 const n=(v:unknown)=>{const value=metricNumber(v);if(value===null)throw new ApiError(502,'invalid_report','媒体から数値を取得できませんでした。');return value;};
 function account(currency:string,zone:string){if(currency!=='JPY'||zone!=='Asia/Tokyo')throw new ApiError(422,'account_settings_mismatch','広告アカウントの通貨・タイムゾーンがJPY / Asia/Tokyoと一致しません。');}
+export function googleConfigured(e:AdsEnv){return !!(e.GOOGLE_ADS_CLIENT_ID&&e.GOOGLE_ADS_CLIENT_SECRET&&e.GOOGLE_ADS_REFRESH_TOKEN);}
+export async function googleAccessToken(e:AdsEnv){
+ const token=await read<{access_token?:string}>('https://oauth2.googleapis.com/token',{method:'POST',body:new URLSearchParams({grant_type:'refresh_token',client_id:e.GOOGLE_ADS_CLIENT_ID!,client_secret:e.GOOGLE_ADS_CLIENT_SECRET!,refresh_token:e.GOOGLE_ADS_REFRESH_TOKEN!})},'Google認証');
+ if(typeof token.access_token!=='string'||!token.access_token)throw new ApiError(502,'google_auth_failed');
+ return token.access_token;
+}
 export async function googleAds(e:AdsEnv,start:string,end:string) {
- const token=await read<{access_token?:string}>('https://oauth2.googleapis.com/token',{method:'POST',body:new URLSearchParams({grant_type:'refresh_token',client_id:e.GOOGLE_ADS_CLIENT_ID!,client_secret:e.GOOGLE_ADS_CLIENT_SECRET!,refresh_token:e.GOOGLE_ADS_REFRESH_TOKEN!})},'Google広告');
- if(typeof token.access_token!=='string')throw new ApiError(502,'google_auth_failed');
- const headers:Record<string,string>={Authorization:'Bearer '+token.access_token,'developer-token':e.GOOGLE_ADS_DEVELOPER_TOKEN!,'Content-Type':'application/json'};
+ const headers:Record<string,string>={Authorization:'Bearer '+await googleAccessToken(e),'Content-Type':'application/json'};
  if(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID) {if(!/^\d{10}$/.test(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID))throw new ApiError(503,'invalid_manager_id');headers['login-customer-id']=e.GOOGLE_ADS_LOGIN_CUSTOMER_ID;}
  const query=async(query:string,pageToken?:string)=>read<{results?:Array<{customer?:{id:string;currencyCode:string;timeZone:string};campaign?:{id:string;name:string};metrics?:{costMicros?:string;clicks?:string;impressions?:string;conversions?:number}}>;nextPageToken?:string}>('https://googleads.googleapis.com/v26/customers/1700154296/googleAds:search',{method:'POST',headers,body:JSON.stringify({query,...(pageToken?{pageToken}:{})})},'Google広告');
  const info=await query('SELECT customer.id, customer.currency_code, customer.time_zone FROM customer');

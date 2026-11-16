@@ -1,9 +1,10 @@
-import { directAdsSources, googleAds, metaAds, type AdsEnv } from './ad-sources';
+import { directAdsSources, googleAds, metaAds, googleConfigured, type AdsEnv } from './ad-sources';
+import { searchConsole, analytics } from './google-search';
 import type { SqlDb } from '@/lib/referral/db';
 import { ApiError } from '@/lib/portal/util';
 import { range, saveRecord } from './storage';
 export interface BusinessEnv extends AdsEnv {STRIPE_READ_KEY?:string; BUSINESS_METRICS_URL?:string; BUSINESS_METRICS_TOKEN?:string}
-export function syncSources(env:BusinessEnv){return [...new Set([...directAdsSources(env),...(env.STRIPE_READ_KEY?['stripe']:[]),...(env.BUSINESS_METRICS_URL&&env.BUSINESS_METRICS_TOKEN?['google','meta','seo','aio','organic']:[])])];}
+export function syncSources(env:BusinessEnv){return [...new Set([...directAdsSources(env),...(googleConfigured(env)?['seo','aio','organic']:[]),...(env.STRIPE_READ_KEY?['stripe']:[]),...(env.BUSINESS_METRICS_URL&&env.BUSINESS_METRICS_TOKEN?['google','meta','seo','aio','organic']:[])])];}
 export async function sync(db:SqlDb,env:BusinessEnv,input:unknown,actor:string){
  const parsed=range.safeParse(input);if(!parsed.success)throw new ApiError(400,'bad_period','期間は181日以内で指定してください。');
  const {source,start,end}=parsed.data;
@@ -27,6 +28,8 @@ export async function sync(db:SqlDb,env:BusinessEnv,input:unknown,actor:string){
   data={gross,refund,net:gross-refund,fees,payments,currency:'JPY'};
  }else if(source==='google'&&directAdsSources(env).includes('google')) {data=await googleAds(env,start,end);
  }else if(source==='meta'&&directAdsSources(env).includes('meta')) {data=await metaAds(env,start,end);
+ }else if(source==='seo'&&googleConfigured(env)){data=await searchConsole(env,start,end);
+ }else if((source==='aio'||source==='organic')&&googleConfigured(env)){data=await analytics(env,source,start,end);
  }else{
   // An operator-configured server bridge supplies the same normalized report contract.
   const url=new URL(env.BUSINESS_METRICS_URL!);if(url.protocol!=='https:')throw new ApiError(503,'source_unconfigured');
