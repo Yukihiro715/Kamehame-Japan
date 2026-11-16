@@ -1,0 +1,1149 @@
+{
+  "checkedAt": "2026-11-16",
+  "profiles": {
+    "nihonbashi": {
+      "destination": {
+        "en": "Mitsukoshimae Station, Tokyo",
+        "ja": "三越前駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Ningyocho Station, Tokyo",
+            "ja": "人形町駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shin-Nihombashi Station, Tokyo",
+            "ja": "新日本橋駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here",
+          "direct": true
+        },
+        {
+          "place": {
+            "en": "Mitsui Garden Hotel Nihonbashi PREMIER",
+            "ja": "三井ガーデンホテル日本橋プレミア"
+          },
+          "mode": "walking",
+          "source": "https://www.gardenhotels.co.jp/nihonbashi-premier/eng/access/",
+          "direct": true
+        },
+        {
+          "place": {
+            "en": "The Tokyo Station Hotel, Tokyo",
+            "ja": "東京ステーションホテル"
+          },
+          "mode": "transit",
+          "source": "https://www.tokyostationhotel.jp/"
+        }
+      ],
+      "nearby": {
+        "en": "Nihonbashi / COREDO Muromachi",
+        "ja": "日本橋・COREDO室町"
+      }
+    },
+    "shinjuku": {
+      "destination": {
+        "en": "Shinjuku Station, Tokyo",
+        "ja": "新宿駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shibuya Station, Tokyo",
+            "ja": "渋谷駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Keio Plaza Hotel Tokyo",
+            "ja": "京王プラザホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.keioplaza.co.jp/access/index.html",
+          "minutes": "5"
+        },
+        {
+          "place": {
+            "en": "Hilton Tokyo",
+            "ja": "ヒルトン東京"
+          },
+          "mode": "transit",
+          "source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        },
+        {
+          "place": {
+            "en": "Cerulean Tower Tokyu Hotel",
+            "ja": "セルリアンタワー東急ホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html"
+        }
+      ],
+      "nearby": {
+        "en": "Shinjuku",
+        "ja": "新宿"
+      }
+    },
+    "shibuya": {
+      "destination": {
+        "en": "Shibuya Station, Tokyo",
+        "ja": "渋谷駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shinjuku Station, Tokyo",
+            "ja": "新宿駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Cerulean Tower Tokyu Hotel",
+            "ja": "セルリアンタワー東急ホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html",
+          "minutes": "5"
+        },
+        {
+          "place": {
+            "en": "Keio Plaza Hotel Tokyo",
+            "ja": "京王プラザホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.keioplaza.co.jp/access/index.html"
+        },
+        {
+          "place": {
+            "en": "Hilton Tokyo",
+            "ja": "ヒルトン東京"
+          },
+          "mode": "transit",
+          "source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        }
+      ],
+      "nearby": {
+        "en": "Shibuya",
+        "ja": "渋谷"
+      }
+    },
+    "nerima": {
+      "destination": {
+        "en": "Nerima, Tokyo",
+        "ja": "東京都練馬区"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Ikebukuro Station, Tokyo",
+            "ja": "池袋駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shinjuku Station, Tokyo",
+            "ja": "新宿駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Sunshine City Prince Hotel Tokyo",
+            "ja": "サンシャインシティプリンスホテル"
+          },
+          "mode": "transit",
+          "source": "https://www.princehotels.co.jp/sunshine/a…752 tokens truncated…"source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        }
+      ]
+    },
+    "uguisudani": {
+      "destination": {
+        "en": "Uguisudani Station North Exit, Tokyo",
+        "ja": "鶯谷駅 北口"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Ueno Station, Tokyo",
+            "ja": "上野駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Nippori Station, Tokyo",
+            "ja": "日暮里駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "THE GATE HOTEL KAMINARIMON by HULIC",
+            "ja": "ザ・ゲートホテル雷門 by HULIC"
+          },
+          "mode": "walking",
+          "source": "https://www.gate-hotel.jp/asakusa-kaminarimon/access.html"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        },
+        {
+          "place": {
+            "en": "Mitsui Garden Hotel Nihonbashi PREMIER",
+            "ja": "三井ガーデンホテル日本橋プレミア"
+          },
+          "mode": "walking",
+          "source": "https://www.gardenhotels.co.jp/nihonbashi-premier/eng/access/"
+        }
+      ]
+    },
+    "namba": {
+      "destination": {
+        "en": "Nankai Namba Station, Osaka",
+        "ja": "南海なんば駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Shin-Osaka Station, Osaka",
+            "ja": "新大阪駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Osaka Station, Osaka",
+            "ja": "大阪駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Swissôtel Nankai Osaka",
+            "ja": "スイスホテル南海大阪"
+          },
+          "mode": "walking",
+          "source": "https://swissotelnankaiosaka.jp/access/en/",
+          "direct": true
+        }
+      ],
+      "nearby": {
+        "en": "Dotonbori / Namba",
+        "ja": "道頓堀・難波"
+      }
+    },
+    "kitasenju": {
+      "destination": {
+        "en": "Kita-Senju Station, Tokyo",
+        "ja": "北千住駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Ueno Station, Tokyo",
+            "ja": "上野駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "THE GATE HOTEL KAMINARIMON by HULIC",
+            "ja": "ザ・ゲートホテル雷門 by HULIC"
+          },
+          "mode": "walking",
+          "source": "https://www.gate-hotel.jp/asakusa-kaminarimon/access.html"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        },
+        {
+          "place": {
+            "en": "Mitsui Garden Hotel Nihonbashi PREMIER",
+            "ja": "三井ガーデンホテル日本橋プレミア"
+          },
+          "mode": "walking",
+          "source": "https://www.gardenhotels.co.jp/nihonbashi-premier/eng/access/"
+        }
+      ]
+    },
+    "adachi": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Kita-Senju Station, Tokyo",
+            "ja": "北千住駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Umejima Station, Tokyo",
+            "ja": "梅島駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Daishimae Station, Tokyo",
+            "ja": "大師前駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "THE GATE HOTEL KAMINARIMON by HULIC",
+            "ja": "ザ・ゲートホテル雷門 by HULIC"
+          },
+          "mode": "walking",
+          "source": "https://www.gate-hotel.jp/asakusa-kaminarimon/access.html"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        }
+      ]
+    },
+    "kichijoji": {
+      "destination": {
+        "en": "Kichijoji Station, Tokyo",
+        "ja": "吉祥寺駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Shinjuku Station, Tokyo",
+            "ja": "新宿駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Keio Plaza Hotel Tokyo",
+            "ja": "京王プラザホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.keioplaza.co.jp/access/index.html"
+        },
+        {
+          "place": {
+            "en": "Hilton Tokyo",
+            "ja": "ヒルトン東京"
+          },
+          "mode": "transit",
+          "source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        },
+        {
+          "place": {
+            "en": "Cerulean Tower Tokyu Hotel",
+            "ja": "セルリアンタワー東急ホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html"
+        }
+      ]
+    },
+    "asakusa": {
+      "destination": {
+        "en": "Asakusa Station Tokyo Metro, Tokyo",
+        "ja": "浅草駅 東京メトロ"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Ueno Station, Tokyo",
+            "ja": "上野駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "THE GATE HOTEL KAMINARIMON by HULIC",
+            "ja": "ザ・ゲートホテル雷門 by HULIC"
+          },
+          "mode": "walking",
+          "source": "https://www.gate-hotel.jp/asakusa-kaminarimon/access.html",
+          "minutes": "2"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        },
+        {
+          "place": {
+            "en": "Mitsui Garden Hotel Nihonbashi PREMIER",
+            "ja": "三井ガーデンホテル日本橋プレミア"
+          },
+          "mode": "walking",
+          "source": "https://www.gardenhotels.co.jp/nihonbashi-premier/eng/access/"
+        }
+      ],
+      "nearby": {
+        "en": "Asakusa / Senso-ji",
+        "ja": "浅草・浅草寺"
+      }
+    },
+    "tower": {
+      "destination": {
+        "en": "Tokyo Tower, Tokyo",
+        "ja": "東京タワー"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Hamamatsucho Station, Tokyo",
+            "ja": "浜松町駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Akabanebashi Station, Tokyo",
+            "ja": "赤羽橋駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        },
+        {
+          "place": {
+            "en": "Cerulean Tower Tokyu Hotel",
+            "ja": "セルリアンタワー東急ホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html"
+        }
+      ]
+    },
+    "arashiyama": {
+      "destination": {
+        "en": "Arashiyama Station Randen, Kyoto",
+        "ja": "嵐山駅 嵐電"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Kyoto Station, Kyoto",
+            "ja": "京都駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Saga-Arashiyama Station, Kyoto",
+            "ja": "嵯峨嵐山駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Arashiyama Station Hankyu, Kyoto",
+            "ja": "嵐山駅 阪急"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Suiran, a Luxury Collection Hotel, Kyoto",
+            "ja": "翠嵐 ラグジュアリーコレクションホテル 京都"
+          },
+          "mode": "walking",
+          "source": "https://www.onsen-tourism.kyoto/en/LB/LB_suirankyoto.html"
+        },
+        {
+          "place": {
+            "en": "HOTEL THE MITSUI KYOTO",
+            "ja": "HOTEL THE MITSUI KYOTO"
+          },
+          "mode": "driving",
+          "source": "https://www.hotelthemitsui.com/en/kyoto/access/"
+        },
+        {
+          "place": {
+            "en": "Hotel Granvia Kyoto",
+            "ja": "ホテルグランヴィア京都"
+          },
+          "mode": "transit",
+          "source": "https://www.granviakyoto.com/map/"
+        }
+      ],
+      "nearby": {
+        "en": "Arashiyama / bamboo grove",
+        "ja": "嵐山・竹林の小径"
+      }
+    },
+    "flower": {
+      "destination": {
+        "en": "Tea Ceremony Camellia FLOWER, 349-12 Masuyacho, Kyoto",
+        "ja": "茶道体験カメリア FLOWER 京都市東山区桝屋町349-12"
+      },
+      "scope": "venue",
+      "stations": [
+        {
+          "place": {
+            "en": "Gion-Shijo Station, Kyoto",
+            "ja": "祇園四条駅"
+          },
+          "mode": "walking",
+          "minutes": "15",
+          "source": "https://tea-kyoto.com/find-us/flower"
+        },
+        {
+          "place": {
+            "en": "Kyoto Station, Kyoto",
+            "ja": "京都駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Kiyomizu-michi bus stop, Kyoto",
+            "ja": "清水道バス停"
+          },
+          "mode": "walking",
+          "minutes": "10",
+          "source": "https://tea-kyoto.com/find-us/flower"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Park Hyatt Kyoto",
+            "ja": "パーク ハイアット 京都"
+          },
+          "mode": "walking",
+          "source": "https://www.hyatt.com/park-hyatt/en-US/itmph-park-hyatt-kyoto"
+        },
+        {
+          "place": {
+            "en": "Four Seasons Hotel Kyoto",
+            "ja": "フォーシーズンズホテル京都"
+          },
+          "mode": "driving",
+          "source": "https://www.fourseasons.com/kyoto/getting-here/"
+        },
+        {
+          "place": {
+            "en": "Hotel Granvia Kyoto",
+            "ja": "ホテルグランヴィア京都"
+          },
+          "mode": "transit",
+          "source": "https://www.granviakyoto.com/map/"
+        }
+      ],
+      "nearby": {
+        "en": "Ninenzaka / Yasaka Pagoda / Kiyomizu-dera",
+        "ja": "二年坂・八坂の塔・清水寺"
+      }
+    },
+    "garden": {
+      "destination": {
+        "en": "Tea Ceremony Camellia GARDEN, 18 Ryoanji Ikenoshitacho, Kyoto",
+        "ja": "茶道体験カメリア GARDEN 京都市右京区龍安寺池ノ下町18"
+      },
+      "scope": "venue",
+      "stations": [
+        {
+          "place": {
+            "en": "Ryoanji Station, Kyoto",
+            "ja": "龍安寺駅"
+          },
+          "mode": "walking",
+          "minutes": "5",
+          "source": "https://tea-kyoto.com/location/garden"
+        },
+        {
+          "place": {
+            "en": "Kyoto Station, Kyoto",
+            "ja": "京都駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Ryoanji-mae bus stop, Kyoto",
+            "ja": "竜安寺前バス停"
+          },
+          "mode": "walking",
+          "minutes": "1",
+          "source": "https://tea-kyoto.com/location/garden"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "ROKU KYOTO, LXR Hotels & Resorts",
+            "ja": "ROKU KYOTO"
+          },
+          "mode": "driving",
+          "source": "https://www.hilton.com/en/hotels/itmolol-roku-kyoto/"
+        },
+        {
+          "place": {
+            "en": "HOTEL THE MITSUI KYOTO",
+            "ja": "HOTEL THE MITSUI KYOTO"
+          },
+          "mode": "driving",
+          "source": "https://www.hotelthemitsui.com/en/kyoto/access/"
+        },
+        {
+          "place": {
+            "en": "Hotel Granvia Kyoto",
+            "ja": "ホテルグランヴィア京都"
+          },
+          "mode": "transit",
+          "source": "https://www.granviakyoto.com/map/"
+        }
+      ],
+      "nearby": {
+        "en": "Ryoan-ji / Ninna-ji",
+        "ja": "龍安寺・仁和寺"
+      }
+    },
+    "annex": {
+      "destination": {
+        "en": "Ninenzaka, Kyoto",
+        "ja": "二年坂 京都"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Gion-Shijo Station, Kyoto",
+            "ja": "祇園四条駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Kyoto Station, Kyoto",
+            "ja": "京都駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Park Hyatt Kyoto",
+            "ja": "パーク ハイアット 京都"
+          },
+          "mode": "walking",
+          "source": "https://www.hyatt.com/park-hyatt/en-US/itmph-park-hyatt-kyoto"
+        },
+        {
+          "place": {
+            "en": "Four Seasons Hotel Kyoto",
+            "ja": "フォーシーズンズホテル京都"
+          },
+          "mode": "driving",
+          "source": "https://www.fourseasons.com/kyoto/getting-here/"
+        },
+        {
+          "place": {
+            "en": "Hotel Granvia Kyoto",
+            "ja": "ホテルグランヴィア京都"
+          },
+          "mode": "transit",
+          "source": "https://www.granviakyoto.com/map/"
+        }
+      ],
+      "nearby": {
+        "en": "Ninenzaka / Yasaka Pagoda",
+        "ja": "二年坂・八坂の塔"
+      }
+    },
+    "setagaya": {
+      "destination": {
+        "en": "Chitose-Funabashi Station, Tokyo",
+        "ja": "千歳船橋駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Shinjuku Station, Tokyo",
+            "ja": "新宿駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shibuya Station, Tokyo",
+            "ja": "渋谷駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Keio Plaza Hotel Tokyo",
+            "ja": "京王プラザホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.keioplaza.co.jp/access/index.html"
+        },
+        {
+          "place": {
+            "en": "Hilton Tokyo",
+            "ja": "ヒルトン東京"
+          },
+          "mode": "transit",
+          "source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        },
+        {
+          "place": {
+            "en": "Cerulean Tower Tokyu Hotel",
+            "ja": "セルリアンタワー東急ホテル"
+          },
+          "mode": "walking",
+          "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html"
+        }
+      ]
+    },
+    "kappabashi": {
+      "destination": {
+        "en": "Kappabashi Dougu Street, Tokyo",
+        "ja": "かっぱ橋道具街"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tawaramachi Station, Tokyo",
+            "ja": "田原町駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Asakusa Station Tsukuba Express, Tokyo",
+            "ja": "浅草駅 つくばエクスプレス"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Ueno Station, Tokyo",
+            "ja": "上野駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "THE GATE HOTEL KAMINARIMON by HULIC",
+            "ja": "ザ・ゲートホテル雷門 by HULIC"
+          },
+          "mode": "walking",
+          "source": "https://www.gate-hotel.jp/asakusa-kaminarimon/access.html"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "walking",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        },
+        {
+          "place": {
+            "en": "Mitsui Garden Hotel Nihonbashi PREMIER",
+            "ja": "三井ガーデンホテル日本橋プレミア"
+          },
+          "mode": "walking",
+          "source": "https://www.gardenhotels.co.jp/nihonbashi-premier/eng/access/"
+        }
+      ],
+      "nearby": {
+        "en": "Kappabashi / Asakusa",
+        "ja": "かっぱ橋・浅草"
+      }
+    },
+    "gion": {
+      "destination": {
+        "en": "Gion-Shijo Station, Kyoto",
+        "ja": "祇園四条駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Kyoto Station, Kyoto",
+            "ja": "京都駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Kyoto-Kawaramachi Station, Kyoto",
+            "ja": "京都河原町駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Park Hyatt Kyoto",
+            "ja": "パーク ハイアット 京都"
+          },
+          "mode": "walking",
+          "source": "https://www.hyatt.com/park-hyatt/en-US/itmph-park-hyatt-kyoto"
+        },
+        {
+          "place": {
+            "en": "Four Seasons Hotel Kyoto",
+            "ja": "フォーシーズンズホテル京都"
+          },
+          "mode": "driving",
+          "source": "https://www.fourseasons.com/kyoto/getting-here/"
+        },
+        {
+          "place": {
+            "en": "Hotel Granvia Kyoto",
+            "ja": "ホテルグランヴィア京都"
+          },
+          "mode": "transit",
+          "source": "https://www.granviakyoto.com/map/"
+        }
+      ],
+      "nearby": {
+        "en": "Gion / Higashiyama",
+        "ja": "祇園・東山"
+      }
+    },
+    "osakaVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Osaka Station, Osaka",
+            "ja": "大阪駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Swissôtel Nankai Osaka",
+            "ja": "スイスホテル南海大阪"
+          },
+          "mode": "walking",
+          "source": "https://swissotelnankaiosaka.jp/access/en/"
+        }
+      ]
+    },
+    "kyotoVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Kyoto Station, Kyoto",
+            "ja": "京都駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Hotel Granvia Kyoto",
+            "ja": "ホテルグランヴィア京都"
+          },
+          "mode": "transit",
+          "source": "https://www.granviakyoto.com/map/"
+        },
+        {
+          "place": {
+            "en": "Four Seasons Hotel Kyoto",
+            "ja": "フォーシーズンズホテル京都"
+          },
+          "mode": "driving",
+          "source": "https://www.fourseasons.com/kyoto/getting-here/"
+        },
+        {
+          "place": {
+            "en": "HOTEL THE MITSUI KYOTO",
+            "ja": "HOTEL THE MITSUI KYOTO"
+          },
+          "mode": "driving",
+          "source": "https://www.hotelthemitsui.com/en/kyoto/access/"
+        }
+      ]
+    },
+    "nagoyaVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Nagoya Station, Nagoya",
+            "ja": "名古屋駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Nagoya Marriott Associa Hotel",
+            "ja": "名古屋マリオットアソシアホテル"
+          },
+          "mode": "transit",
+          "source": "https://www.associa.com/nma/access/index.html"
+        }
+      ]
+    },
+    "kanazawaVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Kanazawa Station, Kanazawa",
+            "ja": "金沢駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Hotel Nikko Kanazawa",
+            "ja": "ホテル日航金沢"
+          },
+          "mode": "transit",
+          "source": "https://hnkanazawa.jp/en/access/"
+        }
+      ]
+    },
+    "himejiVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Himeji Station, Himeji",
+            "ja": "姫路駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Daiwa Roynet Hotel Himeji",
+            "ja": "ダイワロイネットホテル姫路"
+          },
+          "mode": "transit",
+          "source": "https://www.daiwaroynet.jp/en/himeji/"
+        }
+      ]
+    },
+    "okinawaVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Naha Airport, Okinawa",
+            "ja": "那覇空港"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Hyatt Regency Naha, Okinawa",
+            "ja": "ハイアット リージェンシー 那覇 沖縄"
+          },
+          "mode": "driving",
+          "source": "https://www.hyatt.com/hyatt-regency/en-US/okarn-hyatt-regency-naha-okinawa/"
+        }
+      ]
+    }
+  },
+  "experiences": {
+    "nihonbashi-kendo-experience": "nihonbashi",
+    "nihonbashi-bushido-experience": "nihonbashi",
+    "nihonbashi-japanese-dance-salon": "nihonbashi",
+    "nihonbashi-english-rakugo-salon": "nihonbashi",
+    "nihonbashi-shamisen-salon": "nihonbashi",
+    "kanji-name-calligraphy": "shinjuku",
+    "nerima-herbal-bath-private-spa": "nerima",
+    "kyoto-ryokan-beauty-clinic": "fushimi",
+    "shibuya-ramen-class": "shibuya",
+    "dotonbori-ramen-class": "namba",
+    "yotsuya-tea-ceremony": "yotsuya",
+    "tokyo-kendo-experience-tour": "uguisudani",
+    "osaka-kendo-experience-tour": "osakaVariable",
+    "kyoto-kendo-experience-tour": "kyotoVariable",
+    "nagoya-kendo-experience-tour": "nagoyaVariable",
+    "kanazawa-kendo-experience-tour": "kanazawaVariable",
+    "himeji-kendo-experience-tour": "himejiVariable",
+    "okinawa-kendo-experience-tour": "okinawaVariable",
+    "samurai-street-walk-kitasenju": "kitasenju",
+    "tokyo-tate-samurai-sword-experience": "adachi",
+    "kichijoji-japanese-cuisine-class": "kichijoji",
+    "asakusa-english-rakugo-walk": "asakusa",
+    "tokyo-ninja-zen-meditation": "tower",
+    "arashiyama-ninja-experience": "arashiyama",
+    "arashiyama-stone-mill-matcha": "arashiyama",
+    "arashiyama-japanese-knife-workshop": "arashiyama",
+    "arashiyama-shuriken-casting": "arashiyama",
+    "kyoto-higashiyama-shared-tea-ceremony": "flower",
+    "kyoto-higashiyama-private-tea-ceremony": "flower",
+    "kyoto-higashiyama-annex-tea-ceremony": "annex",
+    "kyoto-garden-teahouse-tea-ceremony": "garden",
+    "setagaya-omotesenke-tea-ceremony": "setagaya",
+    "asakusa-soba-making-class": "kappabashi",
+    "asakusa-ramen-making-class": "kappabashi",
+    "evening-with-geiko": "gion"
+  }
+}

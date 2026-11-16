@@ -18,6 +18,7 @@ import { HeroCarousel } from "@/components/site/hero-carousel";
 import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { CancellationTable } from "@/components/site/cancellation-table";
+import { ExperienceAccess } from "@/components/site/experience-access";
 import { VariantDetail } from "@/components/site/variant-detail";
 import { ClubRentalProvider } from "@/components/site/club-rental-context";
 import { GOLF_CLUB_RENTAL_LIVE } from "@/lib/golf-club-rental";
@@ -533,6 +534,8 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                 )}
               </div>
             </section>
+
+            <ExperienceAccess exp={exp} lang={lang} />
 
             {/* ⑫ FAQ */}
             <section className="xp-section">
