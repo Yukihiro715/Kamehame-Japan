@@ -68,6 +68,12 @@ needed to check unmatched paid reservations are read from Stripe and cached in
 restricted reporting key and never infer a match from an ID prefix, customer
 name or amount. A failed or inconsistent lookup stops the financial read rather
 than appending a potentially duplicate supplier cost. No bookings are rewritten.
+Each read verifies at most 25 missing IDs, with at most five provider requests
+in flight. Every fully validated group is persisted immediately. If more IDs
+remain, the endpoint returns `stripe_identity_pending`; the dashboard displays
+progress and automatically reads again, using the cached groups. A later
+provider failure also retains completed groups. An incomplete identity set is
+never returned as a complete financial result.
 Reservation outcome and refund status remain separate: a completed, fully
 refunded experience retains its completed status and applicable supplier cost;
 only an explicit cancellation marks it cancelled.

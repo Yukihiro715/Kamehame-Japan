@@ -70,6 +70,30 @@ test('unverified charge identities fail closed instead of returning duplicate fi
  assert.equal((await db.first(`SELECT count(*) n FROM business_stripe_identities`)).n,0);
  assert.equal((await db.first(`SELECT count(*) n FROM business_records WHERE kind='booking'`)).n,1);
 });
+async function seedColdIdentities(db,count){
+ for(let n=0;n<count;n++){
+  const r=await createReservation(db,{requestId:'cold-request-'+n,flow:'experience',experienceSlug:master.autoCost.slug,experienceDate:base.date,guests:1,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
+  await applyPayment(db,r.id,{eventId:'cold-paid-'+n,paymentIntent:'pi_cold'+n,amountTotal:40000,paymentStatus:'paid',occurredAt:'2026-11-16T10:00:00Z'});
+  await saveRecord(db,'booking',{...base,id:'cold-case-'+n,stripeSource:'ch_cold'+n,costs:[{id:'cost-'+n,label:'Supplier',supplier:'Supplier',unit:1000+n,qty:1,status:'confirmed',payer:'company',paid:true,source:'agreement',note:''}]},0,'operator');
+ }
+}
+test('a cold cache above 25 identities makes bounded progress and completes without duplicate costs',async(t)=>{
+ const db=openTestDb();await saveRecord(db,'master',master,0,'test');await seedColdIdentities(db,26);
+ let reads=0,active=0,maxActive=0;
+ t.mock.method(globalThis,'fetch',async url=>{reads++;maxActive=Math.max(maxActive,++active);await new Promise(r=>setImmediate(r));active--;const id=new URL(url).pathname.split('/').at(-1);return Response.json({id,object:'charge',livemode:true,currency:'jpy',payment_intent:id.replace('ch_','pi_')});});
+ await assert.rejects(allData(db,{STRIPE_READ_KEY:'fixture-key'}),e=>e.code==='stripe_identity_pending'&&e.status===503);
+ assert.equal(reads,25);assert.equal(maxActive,5);assert.equal((await db.first('SELECT count(*) n FROM business_stripe_identities')).n,25);
+ let d=await allData(db,{STRIPE_READ_KEY:'fixture-key'});assert.equal(reads,26);assert.equal(d.bookings.length,26);assert.equal(d.bookings.reduce((s,b)=>s+costTotal(b),0),26325);
+ d=await allData(db,{STRIPE_READ_KEY:'fixture-key'});assert.equal(reads,26);assert.equal(d.bookings.length,26);assert.equal((await db.first(`SELECT count(*) n FROM business_records WHERE kind='booking'`)).n,26);
+});
+test('a failed later identity group retains verified progress and a retry starts with only missing IDs',async(t)=>{
+ const db=openTestDb();await seedColdIdentities(db,26);let fail=true;const reads=[];
+ t.mock.method(globalThis,'fetch',async url=>{const id=new URL(url).pathname.split('/').at(-1);reads.push(id);if(fail&&id==='ch_cold5')return Response.json({error:{message:'private-provider-details'}},{status:403});return Response.json({id,object:'charge',livemode:true,currency:'jpy',payment_intent:id.replace('ch_','pi_')});});
+ await assert.rejects(allData(db,{STRIPE_READ_KEY:'fixture-key'}),e=>e.code==='stripe_identity_failed'&&!e.message.includes('private-provider-details'));
+ assert.equal((await db.first('SELECT count(*) n FROM business_stripe_identities')).n,5);
+ fail=false;const start=reads.length,d=await allData(db,{STRIPE_READ_KEY:'fixture-key'});assert.equal(d.bookings.length,26);assert.equal(reads.length-start,21);
+ assert.ok(reads.slice(start).every(id=>Number(id.replace('ch_cold',''))>=5));assert.equal(d.bookings.reduce((s,b)=>s+costTotal(b),0),26325);
+});
 test('golf prices retain manual values and unknowns, validate GORA URLs and expose dated official references',async()=>{
  const db=openTestDb();const rows=await courseList(db,[]);assert.ok(rows.length>=9);
  const numazu=rows.find(c=>c.name==='沼津ゴルフクラブ');assert.equal(numazu.pricing.clubs,3300);assert.equal(numazu.pricing.weekday,null);
