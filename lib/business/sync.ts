@@ -30,7 +30,7 @@ export async function sync(db:SqlDb,env:BusinessEnv,input:unknown,actor:string){
  }else{
   // An operator-configured server bridge supplies the same normalized report contract.
   const url=new URL(env.BUSINESS_METRICS_URL!);if(url.protocol!=='https:')throw new ApiError(503,'source_unconfigured');
-  const r=await fetch(url,{method:'POST',headers:{Authorization:'Bearer '+env.BUSINESS_METRICS_TOKEN,'Content-Type':'application/json'},body:JSON.stringify({source,start,end}),redirect:'error',signal:AbortSignal.timeout(25000)});
+  const r=await fetch(url,{method:'POST',headers:{Authorization:'Bearer '+env.BUSINESS_METRICS_TOKEN,'Content-Type':'application/json'},body:JSON.stringify({source,start,end}),redirect:'manual',signal:AbortSignal.timeout(25000)});
   if(!r.ok)throw new ApiError(502,'source_failed','媒体の更新に失敗しました。保存済みデータを保持しています。');
   const report=await r.json() as {source:string;start:string;end:string;data:Record<string,unknown>};
   if(report.source!==source||report.start!==start||report.end!==end||!report.data)throw new ApiError(502,'invalid_report');data=report.data;

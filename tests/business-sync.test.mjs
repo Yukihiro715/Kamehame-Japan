@@ -61,3 +61,22 @@ test('only fully configured sources can refresh and invalid dates never reach pr
  await assert.rejects(sync(db,{}, {source:'google',...period},'test'),e=>e.code==='source_unconfigured');
  await assert.rejects(sync(db,env,{source:'google',start:"2026-11-01'",end:'2026-11-16'},'test'));
 });
+test('Workers-compatible redirect handling rejects redirects without forwarding secrets or saving reports',async(t)=>{
+ const db=openTestDb();let calls=0;
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  calls++;assert.equal(init.redirect,'manual');
+  return new Response(null,{status:302,headers:{Location:'https://untrusted.example/'}});
+ });
+ await assert.rejects(sync(db,{META_ADS_ACCESS_TOKEN:'test'},{source:'meta',...period},'test'),e=>e.code==='source_redirect_blocked');
+ assert.equal(calls,1);
+ await assert.rejects(sync(db,{BUSINESS_METRICS_URL:'https://bridge.example/',BUSINESS_METRICS_TOKEN:'test'},{source:'meta',...period},'test'));
+ assert.equal(calls,2);
+ assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,0);
+});
+test('transport failures distinguish timeout without exposing upstream error text',async(t)=>{
+ const db=openTestDb();
+ t.mock.method(globalThis,'fetch',async()=>{throw new DOMException('secret token in internal error','TimeoutError')});
+ await assert.rejects(sync(db,{META_ADS_ACCESS_TOKEN:'test'},{source:'meta',...period},'test'),e=>e.code==='source_timeout'&&!e.message.includes('secret'));
+ t.mock.method(globalThis,'fetch',async()=>{throw new TypeError('secret token in internal error')});
+ await assert.rejects(sync(db,{META_ADS_ACCESS_TOKEN:'test'},{source:'meta',...period},'test'),e=>e.code==='source_unreachable'&&!e.message.includes('secret'));
+});

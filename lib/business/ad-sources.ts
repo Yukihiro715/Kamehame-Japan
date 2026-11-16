@@ -11,7 +11,12 @@ export function directAdsSources(e:AdsEnv) {
 }
 async function read<T>(url:string,init:RequestInit,source:string):Promise<T> {
  let r:Response;
- try {r=await fetch(url,{...init,redirect:'error',signal:AbortSignal.timeout(20000)});} catch {throw new ApiError(502,'source_unreachable',`${source}に接続できませんでした。時間をおいて再実行してください。`);}
+ // Workers supports manual/follow only. Never forward credentials to redirects.
+ try {r=await fetch(url,{...init,redirect:'manual',signal:AbortSignal.timeout(20000)});} catch(e) {
+  if(e instanceof Error && (e.name==='TimeoutError'||e.name==='AbortError'))throw new ApiError(504,'source_timeout',`${source}の応答が20秒以内に返りませんでした。時間をおいて再実行してください。`);
+  throw new ApiError(502,'source_unreachable',`${source}への通信に失敗しました。管理者に通信設定の確認を依頼してください。`);
+ }
+ if(r.status>=300&&r.status<400)throw new ApiError(502,'source_redirect_blocked',`${source}から予期しない転送が返されたため、認証情報を送信せず停止しました。`);
  if(!r.ok)throw new ApiError(502,'source_access_failed',`${source}の認証・読み取り権限を確認してください（HTTP ${r.status}）。`);
  const d=await r.json() as T & {error?:unknown};if(!d || typeof d!=="object" || d.error)throw new ApiError(502,'source_access_failed',`${source}の認証・読み取り権限を確認してください。`);return d;
 }
