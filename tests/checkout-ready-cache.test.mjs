@@ -66,3 +66,31 @@ test("a published KV answer is used without any ledger call, and the publisher w
   assert.equal(await m.checkoutReadyCached({ ...env, READY_STATE }, Date.now()), true);
   assert.equal(calls, 2, "stale publication: one fallback ledger call");
 });
+
+test("publisher checks every tick but writes unchanged state only at the heartbeat, across isolates", async (t) => {
+  let now = 1800000000000, calls = 0, writes = 0, ready = true;
+  const store = new Map();
+  const READY_STATE = { get: async k => store.get(k) ?? null, put: async (k,v) => { writes++; store.set(k, JSON.parse(v)); } };
+  t.mock.method(Date, "now", () => now);
+  t.mock.method(globalThis, "fetch", async () => { calls++; return Response.json({ok:true, version:EXPERIENCE_POLICY_VERSION, ready}); });
+  const publish = async () => { m.resetCheckoutReadyCache(); return m.publishCheckoutReady({...env, READY_STATE}); };
+  await publish();
+  for (let i=0; i<2; i++) { now += 5*60000; await publish(); }
+  assert.equal(calls, 3); assert.equal(writes, 1);
+  now += 5*60000; await publish(); assert.equal(writes, 2, "15-minute heartbeat");
+  now += 5*60000; ready=false; await publish(); assert.equal(writes, 3, "unhealthy immediately published");
+  now += 5*60000; ready=true; await publish(); assert.equal(writes, 4, "recovery immediately published");
+  for (const invalid of [{ready:true,at:now+1,version:EXPERIENCE_POLICY_VERSION},{ready:true,at:now,version:"old"},{ready:"true",at:now,version:EXPERIENCE_POLICY_VERSION}]) {
+    store.set(m.READY_STATE_KEY, invalid); const before=writes; await publish(); assert.equal(writes,before+1);
+  }
+});
+
+test("failed KV publication is retried next tick and read errors do not suppress writes", async (t) => {
+  let writes=0, fail=true;
+  const READY_STATE = { get: async () => { throw Error("unavailable"); }, put: async () => { writes++; if(fail) throw Error("quota"); } };
+  t.mock.method(globalThis, "fetch", async () => Response.json({ok:true,version:EXPERIENCE_POLICY_VERSION,ready:true}));
+  await m.publishCheckoutReady({...env, READY_STATE});
+  fail=false;
+  await m.publishCheckoutReady({...env, READY_STATE});
+  assert.equal(writes,2);
+});
