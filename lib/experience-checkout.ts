@@ -79,6 +79,9 @@ export async function checkoutReady(env: ExperienceCheckoutEnv, timeoutMs = 2500
  *  payment (app/api/experience-checkout). */
 export const READY_STATE_KEY = "experience-checkout-ready";
 const READY_STATE_MAX_AGE_MS = 30 * 60_000;
+// Still check health every five minutes; only unchanged results may wait for
+// this heartbeat. Keep well below the reader's 30-minute stale cutoff.
+export const READY_STATE_HEARTBEAT_MS = 15 * 60_000;
 const MEMO_MS = 60_000;
 const READY_TTL_MS = 5 * 60_000;
 const READY_TIMEOUT_MS = 6_000;
@@ -91,14 +94,19 @@ export function resetCheckoutReadyCache() { readyCache = null; memo = null; }
 /** Ask the ledger now and publish the answer to KV (cron, and the readiness API's GET). */
 export async function publishCheckoutReady(env: ExperienceCheckoutEnv): Promise<ReadyEntry> {
   const entry = { value: await checkoutReady(env), at: Date.now() };
-  try { await env.READY_STATE?.put(READY_STATE_KEY, JSON.stringify({ ready: entry.value, at: entry.at, version: EXPERIENCE_POLICY_VERSION }), { expirationTtl: 24 * 3600 }); } catch { /* the cron retries in five minutes */ }
+  const previous = await readPublished(env, entry.at);
+  // Read persisted state, not isolate memory: cron invocations need not share
+  // an isolate. Changes (especially ready -> false) are published immediately.
+  if (!previous || previous.value !== entry.value || entry.at - previous.at >= READY_STATE_HEARTBEAT_MS) {
+    try { await env.READY_STATE?.put(READY_STATE_KEY, JSON.stringify({ ready: entry.value, at: entry.at, version: EXPERIENCE_POLICY_VERSION }), { expirationTtl: 24 * 3600 }); } catch { /* the cron retries in five minutes */ }
+  }
   memo = entry;
   return entry;
 }
 async function readPublished(env: ExperienceCheckoutEnv, now: number): Promise<ReadyEntry | null> {
   try {
     const j = await env.READY_STATE?.get(READY_STATE_KEY, "json") as { ready?: unknown; at?: unknown; version?: unknown } | null | undefined;
-    if (!j || typeof j.at !== "number" || j.version !== EXPERIENCE_POLICY_VERSION || now - j.at > READY_STATE_MAX_AGE_MS) return null;
+    if (!j || typeof j.ready !== "boolean" || typeof j.at !== "number" || !Number.isFinite(j.at) || j.at > now || j.version !== EXPERIENCE_POLICY_VERSION || now - j.at > READY_STATE_MAX_AGE_MS) return null;
     return { value: j.ready === true, at: j.at };
   } catch { return null; }
 }

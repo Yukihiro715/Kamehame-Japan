@@ -179,3 +179,20 @@ test("translation: the cron adds English to the cached details and names unknown
   const names = await (await vite.ssrLoadModule("/lib/golf-courses-db.ts")).loadCourseNames(null, kv);
   assert.equal(names[(await vite.ssrLoadModule("/lib/golf-course-images.ts")).normaliseCourseName("架空の森ゴルフ倶楽部")]?.en, "Fictional Forest Golf Club");
 });
+
+test("expired detail keys reuse only complete translations of unchanged freshly fetched text", async (t) => {
+  const now = new Date("2026-11-02T00:00:00Z");
+  const tours = g.parseGolfpaqListing(fx("month-2026-11.html"), g.firstPublicDay(now), "2027-01-31").sort((a,b)=>a.date.localeCompare(b.date)||a.perPersonYen-b.perPersonYen).slice(0,5);
+  for (const tour of tours) tour.details = {...g.parseGolfpaqDetail(fx("detail-30821.html"), now), en:{features:"Saved translation", at:now.toISOString(), tries:1}};
+  tours[1].details.notes = ["Changed terms"];
+  tours[2].details.en.incomplete = true;
+  tours[3].details.schedule = "Changed schedule";
+  tours[4].details.features = "Changed features";
+  const store = new Map([[g.GOLFPAQ_SNAPSHOT_KEY, JSON.stringify({updatedAt:"2026-11-01T00:00:00Z",tours})]]);
+  const kv = {get:async k=>store.has(k)?JSON.parse(store.get(k)):null, put:async(k,v)=>store.set(k,v)};
+  t.mock.method(globalThis,"fetch",async url=>new Response(String(url).endsWith("/booking/")?fx("index.html"):/coursecategory/.test(String(url))?fx("month-2026-11.html"):fx("detail-30821.html")));
+  const snapshot = await g.refreshGolfpaqSnapshot(kv, now, {detailFetches:5});
+  assert.equal(snapshot.tours.find(t=>t.id===tours[0].id).details.en.features,"Saved translation");
+  for (const tour of tours.slice(1)) assert.equal(snapshot.tours.find(t=>t.id===tour.id).details.en,undefined,"changed or incomplete needs translation");
+  assert.equal(JSON.parse(store.get(g.GOLFPAQ_DETAIL_PREFIX+tours[0].id)).fetchedAt,now.toISOString(),"detail itself is refreshed");
+});
