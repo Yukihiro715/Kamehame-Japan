@@ -333,6 +333,7 @@ export async function refreshGolfpaqSnapshot(kv?: GolfpaqKv | null, now = new Da
   if (fetchedMonths !== months.length) throw Error("golfpaq_refresh_incomplete");
   const unique = [...new Map(tours.map((t) => [t.id, t])).values()].sort((a, b) => a.date.localeCompare(b.date) || a.perPersonYen - b.perPersonYen);
   // Details: cached per tour for two weeks; new ones fetched a few at a time.
+  const previousDetails = new Map(previous?.tours.map((t) => [t.id, t.details]) ?? []);
   let budget = opts.detailFetches ?? DETAIL_FETCHES_PER_RUN, pending = 0;
   for (const t of unique) {
     let cached: GolfpaqTourDetails | null = null;
@@ -342,6 +343,11 @@ export async function refreshGolfpaqSnapshot(kv?: GolfpaqKv | null, now = new Da
     budget--;
     try {
       const d = await fetchGolfpaqDetail(t.detailUrl, now);
+      // Expiring the detail cache must not retranslate unchanged text. Reuse
+      // only a complete translation, after fetching and comparing fresh source
+      // text. Changed conditions/schedules still get a new translation.
+      const old = previousDetails.get(t.id);
+      if (old?.en && !old.en.incomplete && old.features === d.features && old.schedule === d.schedule && JSON.stringify(old.notes) === JSON.stringify(d.notes)) d.en = old.en;
       t.details = d;
       await kv.put(GOLFPAQ_DETAIL_PREFIX + t.id, JSON.stringify(d), { expirationTtl: DETAIL_TTL_SEC });
     } catch (err) { pending++; console.error("golfpaq detail:", t.id, err instanceof Error ? err.message : err); }
