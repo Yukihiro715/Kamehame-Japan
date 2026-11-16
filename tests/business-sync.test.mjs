@@ -41,7 +41,7 @@ test('Google Ads reports safe, actionable production/account/scope/API errors an
    const detail=field?{'@type':'type.googleapis.com/google.ads.googleads.v26.errors.GoogleAdsFailure',errors:[{errorCode:{[field]:reason},message:'secret-provider-message',trigger:{stringValue:'private-trigger'}}],requestId:'private-request-id'}:{'@type':'type.googleapis.com/google.rpc.ErrorInfo',reason,metadata:{consumer:'private-consumer'}};
    return json({error:{message:'secret-provider-message',details:[detail]}},403);
   });
-  await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code===expectedCode&&e.message.includes(action)&&e.message.includes(reason)&&!/secret|private/.test(e.message));
+  await assert.rejects(sync(db,{...env,GOOGLE_ADS_LOGIN_CUSTOMER_ID:'5258159341'},{source:'google',...period},'test'),e=>e.code===expectedCode&&e.message.includes(action)&&e.message.includes(reason)&&!/secret|private/.test(e.message));
   const previous=await db.first('SELECT revision, payload FROM business_records');
   assert.equal(previous.revision,5);assert.equal(previous.payload,'{"previous":true}');
  }
@@ -58,6 +58,56 @@ test('Google Ads unknown or malformed upstream errors stay generic and never exp
   t.mock.method(globalThis,'fetch',async(url)=>url.includes('/token')?json({access_token:'test-access'}):body===null?new Response('secret-error-page',{status:403}):json(body,403));
   await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code==='source_access_failed'&&e.message.includes('HTTP 403')&&!/secret|private|PRIVATE_UNKNOWN_REASON/.test(e.message));
  }
+ assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,0);
+});
+const permissionDenied=()=>json({error:{details:[{'@type':'type.googleapis.com/google.ads.googleads.v26.errors.GoogleAdsFailure',errors:[{errorCode:{authorizationError:'USER_PERMISSION_DENIED'}}]}]}},403);
+test('Google Ads retries denied direct reads through the verified manager and retains it for every report page',async(t)=>{
+ const db=openTestDb();const calls=[];let pages=0;
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  if(url.includes('/token'))return json({access_token:'test-access'});
+  assert.equal(url,'https://googleads.googleapis.com/v26/customers/1700154296/googleAds:search');
+  const b=JSON.parse(init.body);calls.push({manager:init.headers['login-customer-id'],...b});
+  if(!init.headers['login-customer-id'])return permissionDenied();
+  assert.equal(init.headers['login-customer-id'],'5258159341');
+  if(b.query.includes('FROM customer'))return json({results:[{customer:{id:'1700154296',currencyCode:'JPY',timeZone:'Asia/Tokyo'}}]});
+  if(++pages===2)assert.equal(b.pageToken,'two');
+  return json({results:[{campaign:{id:String(pages),name:'Test'},metrics:{costMicros:'1000000'}}],...(pages===1?{nextPageToken:'two'}:{})});
+ });
+ const r=await sync(db,env,{source:'google',...period},'test');
+ assert.equal(r.data.rows.length,2);assert.equal(calls.length,4);
+ assert.equal(calls[0].manager,undefined);assert.deepEqual(calls.slice(1).map(c=>c.manager),['5258159341','5258159341','5258159341']);
+ assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,1);
+});
+test('Google Ads manager fallback is bounded, honors explicit configuration and preserves reports on denial',async(t)=>{
+ const db=openTestDb();let calls=0;
+ await db.run(`INSERT INTO business_records VALUES ('snapshot:google:2026-11-01:2026-11-16','snapshot','{"previous":true}',5,'2026-11-01','test')`);
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  if(url.includes('/token'))return json({access_token:'test-access'});
+  calls++;assert.equal(init.headers['login-customer-id'],calls===1?undefined:'5258159341');return permissionDenied();
+ });
+ await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code==='google_ads_account_access_denied'&&e.message.includes('管理アカウント経由でも'));
+ assert.equal(calls,2);
+ calls=0;
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  if(url.includes('/token'))return json({access_token:'test-access'});
+  calls++;assert.equal(init.headers['login-customer-id'],'1234567890');return permissionDenied();
+ });
+ await assert.rejects(sync(db,{...env,GOOGLE_ADS_LOGIN_CUSTOMER_ID:'1234567890'},{source:'google',...period},'test'),e=>e.code==='google_ads_account_access_denied');
+ assert.equal(calls,1);assert.equal((await db.first('SELECT revision FROM business_records')).revision,5);
+});
+test('Google Ads never retries unrelated failures or accepts a wrong account through the manager',async(t)=>{
+ const db=openTestDb();let calls=0;
+ t.mock.method(globalThis,'fetch',async(url)=>{
+  if(url.includes('/token'))return json({access_token:'test-access'});
+  calls++;return json({error:{details:[{'@type':'type.googleapis.com/google.ads.googleads.v26.errors.GoogleAdsFailure',errors:[{errorCode:{authorizationError:'CLOUD_PROJECT_NOT_APPROVED_FOR_PRODUCTION'}}]}]}},403);
+ });
+ await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code==='google_ads_production_access_required');assert.equal(calls,1);
+ calls=0;
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  if(url.includes('/token'))return json({access_token:'test-access'});
+  calls++;return init.headers['login-customer-id']?json({results:[{customer:{id:'9999999999',currencyCode:'JPY',timeZone:'Asia/Tokyo'}}]}):permissionDenied();
+ });
+ await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code==='wrong_account');assert.equal(calls,2);
  assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,0);
 });
 test('Meta pagination uses only a cursor on fixed account; never sums duplicate conversion aliases',async(t)=>{
