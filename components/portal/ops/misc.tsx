@@ -44,11 +44,11 @@ export function OpsSettings() {
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
       <Card title="運営設定">
-        <p className="pt-note-box">要件書の「確定」事項（四半期精算、翌月末払い、最低振込額 3,000 円、手数料ホテル負担、紹介有効期間 30 日、仮予約時に帰属固定、料率未設定は対象外）はコードで固定しています。ここにあるのは運用上の補助設定です。</p>
-        <div className="pt-form">
+        <p className="pt-note-box">紹介リンクのドメインと、パートナーに表示する精算の注記を設定できます。精算・支払の共通ルールは下記をご確認ください。</p>
+        <div className="pt-form ops-settings-form">
           <Field label="公開オリジン（QR・リンクのドメイン）" hint="空なら本番 https://kamehame-japan.com（検証環境では検証環境のURL）。"><input value={s.public_origin ?? ""} onChange={(e) => setS({ ...s, public_origin: e.target.value })} placeholder="https://kamehame-japan.com" /></Field>
           <Field label="精算に関する注記（パートナー向け管理画面に表示）"><input value={s.settlement_note ?? ""} onChange={(e) => setS({ ...s, settlement_note: e.target.value })} /></Field>
-          <div className="pt-row"><Button onClick={() => void save()}>保存</Button></div>
+          <div className="pt-row pt-form-full"><Button onClick={() => void save()}>設定を保存</Button></div>
         </div>
         <dl className="pt-kv">
           <dt>精算期間</dt><dd>暦四半期（1–3 / 4–6 / 7–9 / 10–12 月、JST）</dd>

@@ -1,12 +1,13 @@
 /** Course display names kept in D1 (migration 0005) on top of the code map:
  *  operations fill in the English (and other-language) names for courses that
  *  appear on the partner's schedule, without a deploy. */
+import { coursePricingSchema, referencePricing, referenceCourseNames, pricingCourseKey, type CoursePricing } from "./golf-course-pricing";
 import type { SqlDb } from "@/lib/referral/db";
 import { COURSES, courseArea, courseNameEn, normaliseCourseName, type CourseInfo } from "./golf-course-images";
 import type { Lang } from "@/lib/i18n";
 import { GOLFPAQ_COURSE_NAMES_KEY, type GolfpaqKv } from "./golfpaq";
 
-export interface CourseRow { name: string; name_en: string | null; name_ja: string | null; name_es: string | null; name_fr: string | null; name_zh_tw: string | null; area: string | null; photo: string | null; note: string | null; updated_at: string; updated_by: string | null }
+export interface CourseRow { name: string; name_en: string | null; name_ja: string | null; name_es: string | null; name_fr: string | null; name_zh_tw: string | null; area: string | null; photo: string | null; note: string | null; updated_at: string; updated_by: string | null; pricing_json?: string | null }
 /** What a page needs per partner name: a display name per language and the area. */
 export interface CourseNames { en?: string; ja?: string; es?: string; fr?: string; "zh-tw"?: string; area?: string; /** The English name came from the cron's translation, not a person. */ auto?: boolean }
 export type AutoNames = Record<string, { ja: string; en: string; at: string }>;
@@ -49,31 +50,34 @@ export function displayCourseArea(course: string, names: CourseNameMap = {}): st
 /** Operations: every course the schedule mentions, with the stored names, the code-map seed and what is still missing. */
 export async function courseList(db: SqlDb, scheduled: { name: string; tours: number }[], auto: AutoNames = {}) {
   const rows = await db.all<CourseRow>(`SELECT * FROM golf_courses ORDER BY name`);
-  const byKey = new Map(rows.map((r) => [normaliseCourseName(r.name), r]));
+  const byKey = new Map(rows.map((r) => [pricingCourseKey(r.name), r]));
   const seen = new Set<string>();
-  const out: (Partial<CourseRow> & { name: string; tours: number; seed: CourseInfo | null; missingEn: boolean; autoEn: boolean; inSchedule: boolean })[] = [];
+  const out: (Partial<CourseRow> & { name: string; tours: number; seed: CourseInfo | null; missingEn: boolean; autoEn: boolean; inSchedule: boolean; pricing: CoursePricing | null })[] = [];
   const push = (name: string, tours: number, inSchedule: boolean) => {
-    const key = normaliseCourseName(name);
+    const key = pricingCourseKey(name);
     if (seen.has(key)) return;
     seen.add(key);
     const row = byKey.get(key);
     const seedEntry = Object.entries(COURSES).find(([k]) => normaliseCourseName(k) === key)?.[1] ?? null;
     const autoEn = !row?.name_en && !seedEntry ? auto[key]?.en ?? null : null;
     const name_en = row?.name_en ?? seedEntry?.en ?? autoEn ?? null;
-    out.push({ ...(row ?? {}), name: row?.name ?? name, tours, seed: seedEntry, name_en, area: row?.area ?? seedEntry?.area ?? null, missingEn: !name_en, autoEn: !!autoEn, inSchedule });
+    const stored=coursePricingSchema.safeParse(row?.pricing_json?JSON.parse(row.pricing_json):null);
+    out.push({ ...(row ?? {}), pricing:stored.success?stored.data:referencePricing(name), name: row?.name ?? name, tours, seed: seedEntry, name_en, area: row?.area ?? seedEntry?.area ?? null, missingEn: !name_en, autoEn: !!autoEn, inSchedule });
   };
   for (const s of scheduled) push(s.name, s.tours, true);
   for (const r of rows) push(r.name, 0, false);
+  for (const name of referenceCourseNames) push(name,0,false);
   return out.sort((a, b) => Number(b.missingEn) - Number(a.missingEn) || Number(b.autoEn) - Number(a.autoEn) || b.tours - a.tours);
 }
 
-export async function saveCourse(db: SqlDb, input: { name: unknown; name_en?: unknown; name_ja?: unknown; name_es?: unknown; name_fr?: unknown; name_zh_tw?: unknown; area?: unknown; note?: unknown; by: string }) {
+export async function saveCourse(db: SqlDb, input: { name: unknown; name_en?: unknown; name_ja?: unknown; name_es?: unknown; name_fr?: unknown; name_zh_tw?: unknown; area?: unknown; note?: unknown; pricing?: unknown; by: string }) {
   const clean = (v: unknown, n = 120) => (typeof v === "string" ? v.trim().slice(0, n) : "");
   const name = clean(input.name, 160);
   if (!name) throw new Error("name_required");
+  const pricing=input.pricing===undefined?null:JSON.stringify(coursePricingSchema.parse(input.pricing));
   const at = new Date().toISOString();
   await db.run(
-    `INSERT INTO golf_courses (name, name_en, name_ja, name_es, name_fr, name_zh_tw, area, note, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-     ON CONFLICT(name) DO UPDATE SET name_en = excluded.name_en, name_ja = excluded.name_ja, name_es = excluded.name_es, name_fr = excluded.name_fr, name_zh_tw = excluded.name_zh_tw, area = excluded.area, note = excluded.note, updated_at = excluded.updated_at, updated_by = excluded.updated_by`,
-    [name, clean(input.name_en) || null, clean(input.name_ja) || null, clean(input.name_es) || null, clean(input.name_fr) || null, clean(input.name_zh_tw) || null, clean(input.area, 40) || null, clean(input.note, 500) || null, at, input.by]);
+    `INSERT INTO golf_courses (name, name_en, name_ja, name_es, name_fr, name_zh_tw, area, note, updated_at, updated_by, pricing_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+     ON CONFLICT(name) DO UPDATE SET name_en = excluded.name_en, name_ja = excluded.name_ja, name_es = excluded.name_es, name_fr = excluded.name_fr, name_zh_tw = excluded.name_zh_tw, area = excluded.area, note = excluded.note, updated_at = excluded.updated_at, updated_by = excluded.updated_by, pricing_json = COALESCE(excluded.pricing_json, golf_courses.pricing_json)`,
+    [name, clean(input.name_en) || null, clean(input.name_ja) || null, clean(input.name_es) || null, clean(input.name_fr) || null, clean(input.name_zh_tw) || null, clean(input.area, 40) || null, clean(input.note, 500) || null, at, input.by, pricing]);
 }
