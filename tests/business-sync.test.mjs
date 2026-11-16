@@ -26,6 +26,40 @@ test('Google refresh exchanges server credentials, validates account and consume
  assert.equal(r.data.rows.length,2);assert.equal(r.data.rows[0].spend,123);
  assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,1);
 });
+test('Google Ads reports safe, actionable production/account/scope/API errors and retains cached data',async(t)=>{
+ const db=openTestDb();
+ await db.run(`INSERT INTO business_records VALUES ('snapshot:google:2026-11-01:2026-11-16','snapshot','{"previous":true}',5,'2026-11-01','test')`);
+ const cases=[
+  ['CLOUD_PROJECT_NOT_APPROVED_FOR_PRODUCTION','authorizationError','google_ads_production_access_required','Explorer'],
+  ['USER_PERMISSION_DENIED','authorizationError','google_ads_account_access_denied','GOOGLE_ADS_LOGIN_CUSTOMER_ID'],
+  ['ACCESS_TOKEN_SCOPE_INSUFFICIENT',null,'google_ads_scope_required','adwords'],
+  ['SERVICE_DISABLED',null,'google_ads_api_disabled','有効'],
+ ];
+ for(const [reason,field,expectedCode,action] of cases) {
+  t.mock.method(globalThis,'fetch',async(url)=>{
+   if(url.includes('/token'))return json({access_token:'test-access'});
+   const detail=field?{'@type':'type.googleapis.com/google.ads.googleads.v26.errors.GoogleAdsFailure',errors:[{errorCode:{[field]:reason},message:'secret-provider-message',trigger:{stringValue:'private-trigger'}}],requestId:'private-request-id'}:{'@type':'type.googleapis.com/google.rpc.ErrorInfo',reason,metadata:{consumer:'private-consumer'}};
+   return json({error:{message:'secret-provider-message',details:[detail]}},403);
+  });
+  await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code===expectedCode&&e.message.includes(action)&&e.message.includes(reason)&&!/secret|private/.test(e.message));
+  const previous=await db.first('SELECT revision, payload FROM business_records');
+  assert.equal(previous.revision,5);assert.equal(previous.payload,'{"previous":true}');
+ }
+});
+test('Google Ads unknown or malformed upstream errors stay generic and never expose provider payloads',async(t)=>{
+ const db=openTestDb();
+ const bodies=[
+  {error:{message:'secret-provider-message',details:[{'@type':'type.googleapis.com/google.ads.googleads.v26.errors.GoogleAdsFailure',errors:[{errorCode:{authorizationError:'PRIVATE_UNKNOWN_REASON'},message:'private-account'}]}]}},
+  {error:{details:'secret-malformed-details'}},
+  {error:{details:[null,{}, {errors:'private-malformed-errors'}]}},
+  {error:{details:[{'@type':'unexpected-type',reason:'SERVICE_DISABLED'}]}},
+ ];
+ for(const body of [...bodies,null]) {
+  t.mock.method(globalThis,'fetch',async(url)=>url.includes('/token')?json({access_token:'test-access'}):body===null?new Response('secret-error-page',{status:403}):json(body,403));
+  await assert.rejects(sync(db,env,{source:'google',...period},'test'),e=>e.code==='source_access_failed'&&e.message.includes('HTTP 403')&&!/secret|private|PRIVATE_UNKNOWN_REASON/.test(e.message));
+ }
+ assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,0);
+});
 test('Meta pagination uses only a cursor on fixed account; never sums duplicate conversion aliases',async(t)=>{
  const db=openTestDb();let pages=0;
  t.mock.method(globalThis,'fetch',async(url,init)=>{
