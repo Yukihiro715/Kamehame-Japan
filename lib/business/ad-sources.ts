@@ -63,7 +63,17 @@ export async function googleAds(e:AdsEnv,start:string,end:string) {
  const headers:Record<string,string>={Authorization:'Bearer '+await googleAccessToken(e),'Content-Type':'application/json'};
  if(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID) {if(!/^\d{10}$/.test(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID))throw new ApiError(503,'invalid_manager_id');headers['login-customer-id']=e.GOOGLE_ADS_LOGIN_CUSTOMER_ID;}
  const query=async(query:string,pageToken?:string)=>read<{results?:Array<{customer?:{id:string;currencyCode:string;timeZone:string};campaign?:{id:string;name:string};metrics?:{costMicros?:string;clicks?:string;impressions?:string;conversions?:number}}>;nextPageToken?:string}>('https://googleads.googleapis.com/v26/customers/1700154296/googleAds:search',{method:'POST',headers,body:JSON.stringify({query,...(pageToken?{pageToken}:{})})},'Google広告',googleAdsError);
- const info=await query('SELECT customer.id, customer.currency_code, customer.time_zone FROM customer');
+ const customerQuery='SELECT customer.id, customer.currency_code, customer.time_zone FROM customer';
+ const info=await query(customerQuery).catch(async(error:unknown)=>{
+  if(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID||!(error instanceof ApiError)||error.code!=='google_ads_account_access_denied')throw error;
+  // Verified KAMEHAME manager (Prosent). Retry only this account's read through
+  // that manager; direct access remains preferred and explicit config wins.
+  headers['login-customer-id']='5258159341';
+  try{return await query(customerQuery);}catch(managerError) {
+   if(managerError instanceof ApiError&&managerError.code==='google_ads_account_access_denied')throw new ApiError(502,'google_ads_account_access_denied','管理アカウント経由でも閲覧が許可されませんでした。トークン取得時のGoogleアカウントに、広告アカウント170-015-4296または管理アカウントへの閲覧権限があるか確認してください。（USER_PERMISSION_DENIED）');
+   throw managerError;
+  }
+ });
  const c=info.results?.[0]?.customer;if(!c||String(c.id)!=='1700154296')throw new ApiError(502,'wrong_account');account(c.currencyCode,c.timeZone);
  const rows=[];let next:string|undefined;
  for(let i=0;i<20;i++){
