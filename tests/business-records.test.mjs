@@ -6,7 +6,8 @@ import {openTestDb} from './helpers/sqlite-db.mjs';
 const root=fileURLToPath(new URL('..',import.meta.url));
 const vite=await createServer({appType:'custom',configFile:false,root,resolve:{alias:{'@':root}},server:{middlewareMode:true},logLevel:'silent'});
 after(()=>vite.close());
-const {createReservation,applyPayment,applyRefund}=await vite.ssrLoadModule('/lib/referral/reservations.ts');
+const {createReservation,applyPayment,applyRefund,confirmAttendance,setReservationOutcome}=await vite.ssrLoadModule('/lib/referral/reservations.ts');
+const {costTotal}=await vite.ssrLoadModule('/lib/business/model.ts');
 const {allData,saveRecord,importData}=await vite.ssrLoadModule('/lib/business/storage.ts');
 const {knownCosts}=await vite.ssrLoadModule('/lib/business/reservation-data.ts');
 const {courseList,saveCourse}=await vite.ssrLoadModule('/lib/golf-courses-db.ts');
@@ -30,6 +31,44 @@ test('uncertain, expired, overlapping and cancelled costs are never auto-filled'
  assert.equal(knownCosts(base,slug,[master,{...master,id:'conflict'}]).costs.length,0);
  assert.equal(knownCosts({...base,status:'キャンセル'},slug,[master]).costs.length,0);
  assert.equal(knownCosts({...base,people:null},slug,[master]).costs.length,0);
+});
+test('charge-only saved cases use Stripe-verified intent identities and never duplicate supplier costs',async(t)=>{
+ const db=openTestDb();await saveRecord(db,'master',master,0,'test');
+ const r=await createReservation(db,{requestId:'charge-request',flow:'experience',experienceSlug:master.autoCost.slug,experienceDate:base.date,guests:2,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
+ await applyPayment(db,r.id,{eventId:'charge-paid',paymentIntent:'pi_unrelatedIdentifier',amountTotal:40000,paymentStatus:'paid',occurredAt:'2026-11-16T10:00:00Z'});
+ const saved={...base,stripeSource:'ch_differentIdentifier',costs:[{id:'manual-cost',label:'Manual',supplier:'Supplier',unit:6543,qty:1,status:'confirmed',payer:'company',paid:true,source:'agreement',note:''}]};
+ await saveRecord(db,'booking',saved,0,'operator');let reads=0;
+ t.mock.method(globalThis,'fetch',async(url,init)=>{reads++;assert.equal(url,'https://api.stripe.com/v1/charges/ch_differentIdentifier');assert.equal(init.redirect,'manual');assert.equal(init.headers.Authorization,'Bearer fixture-key');return Response.json({id:'ch_differentIdentifier',object:'charge',livemode:true,currency:'jpy',payment_intent:'pi_unrelatedIdentifier'});});
+ for(let n=0;n<2;n++){const d=await allData(db,{STRIPE_READ_KEY:'fixture-key'});assert.equal(d.bookings.length,1);assert.equal(d.bookings[0].id,saved.id);assert.equal(costTotal(d.bookings[0]),6543);}
+ assert.equal(reads,1);assert.equal((await db.first(`SELECT count(*) n FROM business_records WHERE kind='booking'`)).n,1);
+});
+test('completed experiences keep automatic costs after a full refund; explicit cancellation stays separate',async()=>{
+ const db=openTestDb();await saveRecord(db,'master',master,0,'test');
+ const r=await createReservation(db,{requestId:'completed-refund',flow:'experience',experienceSlug:master.autoCost.slug,experienceDate:base.date,guests:2,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
+ await applyPayment(db,r.id,{eventId:'completed-paid',paymentIntent:'pi_completed',amountTotal:40000,paymentStatus:'paid',occurredAt:'2026-11-16T10:00:00Z'});
+ await confirmAttendance(db,r.id,{performedAt:'2026-12-01T03:00:00Z',by:'operator'});
+ await applyRefund(db,r.id,{eventId:'completed-refund',paymentIntent:'pi_completed',chargeId:'ch_completed',amountRefundedTotal:40000,occurredAt:'2026-12-02T03:00:00Z'});
+ let d=await allData(db);assert.equal(d.bookings.length,1);assert.equal(d.bookings[0].status,'実施済');assert.equal(d.bookings[0].received,0);assert.equal(costTotal(d.bookings[0]),24690);
+ await setReservationOutcome(db,r.id,'cancelled','operator','Explicit cancellation');d=await allData(db);assert.equal(d.bookings[0].status,'キャンセル');assert.equal(d.bookings[0].costs.length,0);
+});
+test('saved projected IDs and exact refund charge links preserve operator precedence without an external lookup',async(t)=>{
+ const db=openTestDb();const r=await createReservation(db,{requestId:'projection-request',flow:'experience',experienceSlug:master.autoCost.slug,experienceDate:base.date,guests:2,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
+ await applyPayment(db,r.id,{eventId:'projection-paid',paymentIntent:'pi_projection',amountTotal:40000,paymentStatus:'paid',occurredAt:'2026-11-16T10:00:00Z'});
+ await applyRefund(db,r.id,{eventId:'projection-refund',paymentIntent:'pi_projection',chargeId:'ch_projection',amountRefundedTotal:1000,occurredAt:'2026-11-16T11:00:00Z'});
+ t.mock.method(globalThis,'fetch',async()=>{throw Error('no provider read expected')});
+ await saveRecord(db,'booking',{...base,stripeSource:'ch_projection'},0,'operator');assert.equal((await allData(db)).bookings.length,1);
+ await db.run(`DELETE FROM business_records WHERE kind='booking'`);
+ await saveRecord(db,'booking',{...base,id:'reservation:'+r.id,stripeSource:''},0,'operator');assert.equal((await allData(db)).bookings.length,1);
+});
+test('unverified charge identities fail closed instead of returning duplicate financial records or caching wrong links',async(t)=>{
+ const db=openTestDb();const r=await createReservation(db,{requestId:'unverified-request',flow:'experience',experienceSlug:master.autoCost.slug,experienceDate:base.date,guests:2,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
+ await applyPayment(db,r.id,{eventId:'unverified-paid',paymentIntent:'pi_native',amountTotal:40000,paymentStatus:'paid',occurredAt:'2026-11-16T10:00:00Z'});
+ await saveRecord(db,'booking',{...base,stripeSource:'ch_saved'},0,'operator');
+ await assert.rejects(allData(db),e=>e.code==='stripe_identity_unconfigured');
+ t.mock.method(globalThis,'fetch',async()=>Response.json({id:'ch_wrong',object:'charge',livemode:true,currency:'jpy',payment_intent:'pi_native'}));
+ await assert.rejects(allData(db,{STRIPE_READ_KEY:'fixture-key'}),e=>e.code==='stripe_identity_invalid');
+ assert.equal((await db.first(`SELECT count(*) n FROM business_stripe_identities`)).n,0);
+ assert.equal((await db.first(`SELECT count(*) n FROM business_records WHERE kind='booking'`)).n,1);
 });
 test('golf prices retain manual values and unknowns, validate GORA URLs and expose dated official references',async()=>{
  const db=openTestDb();const rows=await courseList(db,[]);assert.ok(rows.length>=9);

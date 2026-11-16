@@ -60,6 +60,18 @@ request IDs, reservation IDs, external references or canonical Stripe IDs can
 link an existing stored case. Ambiguous or conflicting identities are rejected;
 names and amounts are never used as identity matches.
 
+Stored Stripe charge IDs (`ch_` / `py_`) and the reservation ledger's
+PaymentIntent IDs are resolved through an exact provider-verified relationship.
+Previously recorded refund links are reused; only missing charge relationships
+needed to check unmatched paid reservations are read from Stripe and cached in
+`business_stripe_identities` (migration 0028). These reads use the existing
+restricted reporting key and never infer a match from an ID prefix, customer
+name or amount. A failed or inconsistent lookup stops the financial read rather
+than appending a potentially duplicate supplier cost. No bookings are rewritten.
+Reservation outcome and refund status remain separate: a completed, fully
+refunded experience retains its completed status and applicable supplier cost;
+only an explicit cancellation marks it cancelled.
+
 On first encounter, a new record is inserted; an existing record is preserved
 and differing fields are queued for review. Later reads compare the source,
 current record and previous source baseline. A source change can automatically
