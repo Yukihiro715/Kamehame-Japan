@@ -1,3 +1,4 @@
+import { PortalShell } from "@/components/portal/shell";
 import type { Metadata } from "next";
 import "../portal.css";
 import "./business.css";
@@ -10,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function OpsLayout({ children }: { children: React.ReactNode }) {
-  return <div lang="ja">{children}</div>;
+  return <div lang="ja"><PortalShell kind="ops">{children}</PortalShell></div>;
 }

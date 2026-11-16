@@ -21,7 +21,7 @@ export type LineKind = "base" | "addon" | "arrangement" | "onsite";
 export interface NewLine { kind: LineKind; description: string; commissionable: boolean; taxRateBp?: number; quantity?: number; grossJpy: number; discountJpy?: number }
 export interface NewReservation {
   marketingAttribution?: MarketingAttribution;
-  requestId: string; externalRef?: string; flow: "contact" | "experience" | "golf"; experienceSlug: string;
+  customerName?: string; bookingOptions?: Record<string,unknown>; requestId: string; externalRef?: string; flow: "contact" | "experience" | "golf"; experienceSlug: string;
   experienceDate?: string; guests?: number; lang?: string; lines: NewLine[];
   /** True when the site cannot state the chargeable amount yet (quotes, enquiries). */
   amountPending?: boolean;
@@ -65,6 +65,7 @@ export async function createReservation(db: SqlDb, r: NewReservation, ref: Attri
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'provisional', 'unpaid', ?, ?, ?, ?, ?)`,
     params: [id, r.requestId, r.externalRef ?? null, r.flow, r.experienceSlug, r.experienceDate ?? null, r.guests ?? null, r.lang ?? null, r.amountPending || r.lines.length === 0 ? "pending" : "known", at, at, newHotelRef(), JSON.stringify(sanitizeAttribution(r.marketingAttribution, now) ?? null)],
   }];
+  if(r.customerName)statements.push({sql:`INSERT INTO business_booking_context (reservation_id,customer_name,options_json) VALUES (?,?,?)`,params:[id,r.customerName.slice(0,200),JSON.stringify(r.bookingOptions??{})]});
   r.lines.forEach((l, i) => {
     const tax = l.taxRateBp ?? policy?.tax_rate_bp ?? 1000;
     const discount = l.discountJpy ?? 0;

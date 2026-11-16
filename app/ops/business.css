@@ -18,3 +18,26 @@
 @media(max-width:760px){.ops-workspace .ops-close{display:flex;position:absolute;top:12px;right:10px}.ops-workspace .ops-backdrop{display:block;position:fixed;inset:0;z-index:29;background:#10281e66}.ops-workspace input,.ops-workspace select,.ops-workspace textarea{font-size:16px}.ops-workspace .sidebar{padding-top:46px}}
 
 .ops-workspace .business-eyebrow { color: #52685e; background: none; transform: none; font-style: normal; line-height: 1.5; letter-spacing: .08em; overflow-wrap: anywhere; }
+
+/* Keep the authenticated shell mounted during navigation and give all legacy pages a common rhythm. */
+.ops-workspace .ops-page-stack{display:flex;flex-direction:column;gap:24px;min-width:0}
+.ops-workspace .ops-page-stack>*{min-width:0;margin-block:0}
+.ops-workspace .pt-card{padding:24px;gap:20px;min-width:0;align-content:start}
+.ops-workspace .pt-card>*{min-width:0}
+.ops-workspace .pt-grid-2{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.ops-workspace .pt-grid-3{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.ops-workspace .pt-form{gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.ops-workspace .ops-settings-form{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.ops-workspace .pt-field{min-width:0;display:grid;gap:8px;align-content:start}
+.ops-workspace .pt-field input,.ops-workspace .pt-field textarea,.ops-workspace .pt-field select{width:100%}
+.ops-workspace .pt-note-box{margin:0;padding:16px;line-height:1.8}
+.ops-workspace .ops-section-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.ops-workspace .ops-section-tabs a{padding:9px 15px;border-radius:8px;background:#fff;border:1px solid var(--line)}
+.ops-workspace .ops-section-tabs a[aria-current=page]{background:#214b3d;color:#fff;border-color:#214b3d}
+.ops-workspace .pt-kv{display:grid;grid-template-columns:minmax(110px,auto) minmax(0,1fr);gap:12px 24px;margin:0}
+.ops-workspace .pt-kv dd{margin:0;overflow-wrap:anywhere}
+@media(max-width:760px){.ops-workspace .pt-grid-2,.ops-workspace .pt-grid-3,.ops-workspace .ops-settings-form{grid-template-columns:minmax(0,1fr)}.ops-workspace .pt-card{padding:20px}.ops-workspace .ops-page-stack{gap:20px}.ops-workspace input,.ops-workspace select,.ops-workspace textarea{font-size:16px}.ops-workspace .pt-kv{grid-template-columns:minmax(0,1fr);gap:5px}.ops-workspace .pt-kv dd{margin-bottom:12px}}
+.ops-workspace .business-import{padding:20px 24px}
+.ops-workspace .business-import summary{cursor:pointer;font-weight:600}
+.ops-workspace .business-import[open]>*+*{margin-top:16px}
+.ops-workspace .drawer input[type=checkbox]{width:auto}

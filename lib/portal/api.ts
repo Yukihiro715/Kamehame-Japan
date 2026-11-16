@@ -1,5 +1,6 @@
 import * as business from "@/lib/business/storage";
 import { sync as syncBusiness, syncSources, type BusinessEnv } from "@/lib/business/sync";
+import { productProvider } from "@/lib/business/providers";
 import { catalogFor, previewsFor } from "@/lib/catalog";
 import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguage } from "./official-brochures";
 import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
@@ -394,7 +395,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const catalog=catalogFor("ja"), live=catalog.experiences.filter(e=>e.status==="live");
       const areas:Record<string,number>={},categories:Record<string,number>={};
       for(const e of live){areas[e.city]=(areas[e.city]??0)+1;categories[e.category]=(categories[e.category]??0)+1;}
-      return json({count:live.length,preview:previewsFor("ja").experiences.length,unpublished:0,areas,categories,products:live.map(e=>({id:e.slug,name:e.title,area:catalog.cities.find(c=>c.slug===e.city)?.title??e.city,url:e.slug==='mt-fuji-golf-day'?'/en/golf-tours/':`/en/${e.city}/${e.slug}/`})),stale:false,updatedAt:new Date().toISOString(),note:"本番の公開カタログ。翻訳・日程違いは重複除外。",source:"https://kamehame-japan.com/en/"});
+      return json({count:live.length,preview:previewsFor("ja").experiences.length,unpublished:0,areas,categories,products:live.map(e=>({id:e.slug,name:e.title,provider:productProvider(e.slug),area:catalog.cities.find(c=>c.slug===e.city)?.title??e.city,url:e.slug==='mt-fuji-golf-day'?'/en/golf-tours/':`/en/${e.city}/${e.slug}/`})),stale:false,updatedAt:new Date().toISOString(),note:"本番の公開カタログ。翻訳・日程違いは重複除外。",source:"https://kamehame-japan.com/en/"});
     }
     if(post && id === "record") {
       const b=await readJson(ctx.request,500000);
@@ -417,7 +418,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     if (post) {
       const p = await requireOps(ctx, ...BOOKING);
       const b = await readJson(ctx.request);
-      try { await saveCourse(ctx.db, { name: b.name, name_en: b.name_en, name_ja: b.name_ja, name_es: b.name_es, name_fr: b.name_fr, name_zh_tw: b.name_zh_tw, area: b.area, note: b.note, by: p.email }); }
+      try { await saveCourse(ctx.db, { name: b.name, name_en: b.name_en, name_ja: b.name_ja, name_es: b.name_es, name_fr: b.name_fr, name_zh_tw: b.name_zh_tw, area: b.area, note: b.note, pricing: b.pricing, by: p.email }); }
       catch (e) { throw bad(e instanceof Error ? e.message : "bad_request"); }
       return json({ ok: true });
     }

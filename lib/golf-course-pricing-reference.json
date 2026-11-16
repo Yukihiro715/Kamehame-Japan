@@ -1,0 +1,189 @@
+[
+  {
+    "name": "富士カントリークラブ",
+    "aliases": [
+      "富士CC",
+      "Fuji Country Club"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": 2000,
+      "twoWeekend": 2000,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": null,
+      "shoes": null,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/220066/",
+      "source": "https://www.fujicountryclub.com/play_fee/",
+      "checkedOn": "2026-11-16",
+      "conditions": "通常ラウンドの料金は公式オンライン予約で日付・プランごとに確認。掲載されている5,000円/6,000円は薄暮料金のため通常1Rとして流用不可。\nビジターの1サム・2サム追加料金、税込。組合せ希望の申出がない場合に加算。2組以上のコンペでは組合せ希望不可。\n未確認（3B追加料金の明記を確認できず）\n公式で金額未確認。GDOにはクラブ3,300円〜・靴1,100円〜の記載があるが、参考候補として別途確認。\n上欄2Bは2026/12/30までのセルフ。2027/1/1から平日2,000円・休日3,000円。キャディ付は別料金。"
+    }
+  },
+  {
+    "name": "富士箱根カントリークラブ",
+    "aliases": [
+      "富士箱根CC",
+      "Fuji Hakone Country Club"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": 1100,
+      "twoWeekend": 2200,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": null,
+      "shoes": null,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/220073/",
+      "source": "https://www.fujihakone-cc.com/contents/charge/index.html",
+      "checkedOn": "2026-11-16",
+      "conditions": "公式料金表は日付別カレンダー（4B・税込）。2026年9月〜2027年2月の案内。通常1Rの単一平日/休日料金は未確認。\n2B加算。セルフデーは加算なし。\nセルフ3Bの割増は未確認。キャディ料金は4B3,300円・3B4,400円・2B6,600円であり、セルフ3B割増とは区別する。\nレンタル金額は公式未確認。"
+    }
+  },
+  {
+    "name": "富士クラシック",
+    "aliases": [
+      "Fuji Classic"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": null,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": null,
+      "shoes": null,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/190031/",
+      "source": "https://fuji-classic.com/green-fees",
+      "checkedOn": "2026-11-16",
+      "conditions": "国内居住者は専用予約へ。訪日客の最終料金も日付・プラン別の返信確認が必要。\n公式予約画面で日付によって2サム追加あり、返信時に確定と案内。金額未確認。\n未確認\n公式Green Feesページにクラブ・シューズのオプションあり。金額未確認。\n訪日客参考下限：平日19,000円〜／休日31,000円〜。国内居住者は専用予約で確認。"
+    }
+  },
+  {
+    "name": "沼津ゴルフクラブ",
+    "aliases": [
+      "沼津GC",
+      "Numazu Golf Club"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": null,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": 3300,
+      "shoes": 550,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/220056/",
+      "source": "https://numazugc.co.jp/charge/",
+      "checkedOn": "2026-11-16",
+      "conditions": "日付別料金カレンダー。表示基準は4B、1R、乗用カート、税込（利用税800円・振興基金50円含む）。\n通常のセルフは2Bから加算（金額未確認）。『セルフ営業』日は2B加算無料。特定セルフ営業日の条件を通常全日に一般化しない。\nキャディ付は3Bから加算（金額未確認）。\n税込。クラブはフルセット3,300円、単品550円、靴550円。"
+    }
+  },
+  {
+    "name": "御殿場ゴルフ倶楽部",
+    "aliases": [
+      "御殿場GC",
+      "Gotemba Golf Club"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": 1100,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": 1100,
+      "clubs": null,
+      "shoes": null,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/220029/",
+      "source": "https://www.gotembagolf.com/fee.html",
+      "checkedOn": "2026-11-16",
+      "conditions": "公式日付別カレンダーで確認（昼食別・税込）。検索に現れる2025年4月〜12月の通常料金表は旧情報なので採用しない。\n平日は特定日を除き2名から予約可、2Bは1人1,100円。土日祝は3名から予約可。当日欠員で2名になった場合のみ1人3,300円加算。\n公式ライブ料金ページは土日祝3名の場合1人1,100円。平日3Bの明記なし（無料と断定しない）。\n金額未確認。"
+    }
+  },
+  {
+    "name": "ピートダイGC VIPコース",
+    "aliases": [
+      "ピートダイゴルフクラブ VIPコース",
+      "Pete Dye Golf Club, VIP Course"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": null,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": 3300,
+      "shoes": 1100,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/90101/",
+      "source": "https://booking.pacificgolf.co.jp/?cc_id=31&p=guide.access_map",
+      "checkedOn": "2026-11-16",
+      "conditions": "公式予約で日付・プラン別に確認。会員会則の料金は一般ビジター料金に流用不可。\nプラン依存。4サム優待プランの人数減少時には平日2B2,200円/休日2B3,300円の例があるが、全プラン共通料金として扱わない。\nプラン依存。同4サム優待の例は平日3B1,650円/休日3B2,200円。予約プランの注記で確定。\n税込。数量限定のため事前問い合わせ。"
+    }
+  },
+  {
+    "name": "ノースショアカントリークラブ",
+    "aliases": [
+      "North Shore Country Club"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": null,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": null,
+      "shoes": null,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/80037/",
+      "source": "https://nscc.golftk.com/reservation.html",
+      "checkedOn": "2026-11-16",
+      "conditions": "公式予約カレンダーで日付・プラン別に確認。\nセルフ2B追加額は未確認。キャディ料金は2B6,600円（税込）で、2B割増とは区別する。\nセルフ3B追加額は未確認。キャディ料金は3B4,400円（税込）、4B3,850円（税込）。\n公式で金額未確認。GDOの参考掲載はクラブ3,300円〜、靴1,100円〜。現場確認前は確定値として登録しない。"
+    }
+  },
+  {
+    "name": "勝浦東急ゴルフコース",
+    "aliases": [
+      "Katsuura Tokyu Golf Course"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": null,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": null,
+      "shoes": null,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/120025/",
+      "source": "https://www.tokyu-golf-resort.com/katsuura/facility/",
+      "checkedOn": "2026-11-16",
+      "conditions": "セルフ、日付・予約プラン別。平日/休日の共通通常額は未確認。\n未確認\n未確認\n公式でクラブレンタルありと確認、金額未確認。GOLFPAQツアーの3,000円レンタルはツアー運営会社のサービスのためコース自身のレンタル価格として使わない。"
+    }
+  },
+  {
+    "name": "サンヒルズカントリークラブ",
+    "aliases": [
+      "サンヒルズ EAST",
+      "サンヒルズカントリークラブ EASTコース",
+      "Sunhills Country Club"
+    ],
+    "pricing": {
+      "weekday": null,
+      "weekend": null,
+      "twoWeekday": null,
+      "twoWeekend": null,
+      "threeWeekday": null,
+      "threeWeekend": null,
+      "clubs": 4200,
+      "shoes": 1200,
+      "goraUrl": "https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/90042/",
+      "source": "https://www.pacificgolf.co.jp/sunhills/price.asp",
+      "checkedOn": "2026-11-16",
+      "conditions": "EAST/WEST共通施設の案内。プレー料金はコース・日付・プラン別に公式予約で確認。ショートコース3,020円をEASTの1R料金として使用しない。\n未確認（通常EAST/WESTプランで確定が必要）\n未確認\n税込。2026-11-16取得の公式料金ページではセット4,200円/靴1,200円/セット＋靴5,000円。検索インデックスや別施設ページには旧3,850円/1,100円の記載が残るため、ライブの料金ページを優先。"
+    }
+  }
+]
