@@ -47,20 +47,12 @@ function client(db, env = {}, jar = new Map()) {
   };
 }
 async function signIn(c, email, kind) {
-  if (kind === "hotel") {
-    const { passwordHash } = await vite.ssrLoadModule("/lib/portal/password-auth.ts");
-    const password = "fixture-password-123", salt = "test-only-salt";
-    await c.db.run(`INSERT OR REPLACE INTO partner_passwords SELECT id,?,?,? FROM users WHERE email=?`, [salt, await passwordHash(password, salt), new Date().toISOString(), email]);
-    const r = await c.call("POST", "auth/password-login", { email, password, kind });
-    assert.equal(r.status, 200, JSON.stringify(r.body));
-    return;
-  }
-  const r1 = await c.call("POST", "auth/request-code", { email, kind });
-  assert.equal(r1.status, 200);
-  assert.ok(r1.body.devCode, "staging without mail shows the code");
-  const r2 = await c.call("POST", "auth/verify", { email, code: r1.body.devCode, kind });
-  assert.equal(r2.status, 200, JSON.stringify(r2.body));
-  return r1.body.devCode;
+ const {passwordHash}=await vite.ssrLoadModule('/lib/portal/password-auth.ts');
+ const password='fixture-password-123',salt='test-only-salt';
+ const table=kind==='ops'?'ops_passwords':'partner_passwords';
+ await c.db.run(`INSERT OR REPLACE INTO ${table} SELECT id,?,?,? FROM users WHERE email=?`,[salt,await passwordHash(password,salt),new Date().toISOString(),email]);
+ const r=await c.call('POST','auth/password-login',{email,password,kind});
+ assert.equal(r.status,200,JSON.stringify(r.body));
 }
 
 async function seed(db) {
@@ -79,30 +71,15 @@ async function seed(db) {
   ]);
 }
 
-test("sign-in: a code by mail, five attempts, a session cookie; unknown addresses get the same answer", async () => {
-  const db = openTestDb(); await seed(db);
-  const c = client(db);
-  const unknown = await c.call("POST", "auth/request-code", { email: "nobody@example.com", kind: "ops" });
-  assert.deepEqual(unknown.body, { ok: true, sent: false });
-  const r1 = await c.call("POST", "auth/request-code", { email: "Admin@Example.com ", kind: "ops" });
-  assert.equal(r1.body.mail, "unconfigured"); assert.match(r1.body.devCode, /^\d{6}$/);
-  for (let i = 0; i < 4; i++) assert.equal((await c.call("POST", "auth/verify", { email: "admin@example.com", code: "000000", kind: "ops" })).status, 401);
-  const fifth = await c.call("POST", "auth/verify", { email: "admin@example.com", code: "000000", kind: "ops" });
-  assert.equal(fifth.body.error, "locked");
-  const right = await c.call("POST", "auth/verify", { email: "admin@example.com", code: r1.body.devCode, kind: "ops" });
-  assert.equal(right.body.error, "locked", "the right code is dead after five wrong ones");
-  // a new code works
-  await signIn(c, "admin@example.com", "ops");
-  assert.ok(c.jar.get("kh_sess_ops"));
-  const me = await c.call("GET", "ops/me");
-  assert.equal(me.status, 200); assert.deepEqual(me.body.roles, ["ops_admin"]);
-  // the ops session does not open the hotel portal, and a forged cookie opens nothing
-  assert.equal((await c.call("GET", "hotel/me")).status, 401);
-  const forged = client(db); forged.jar.set("kh_sess_ops", "A".repeat(44));
-  assert.equal((await forged.call("GET", "ops/me")).status, 401);
-  // sign out revokes
-  await c.call("POST", "auth/signout", { kind: "ops" });
-  assert.equal((await c.call("GET", "ops/me")).status, 401);
+test('operations password session and retirement of OTP endpoints',async()=>{
+ const db=openTestDb();await seed(db);const c=client(db);
+ assert.equal((await c.call('POST','auth/request-code',{email:'admin@example.com',kind:'ops'})).status,410);
+ assert.equal((await c.call('POST','auth/verify',{email:'admin@example.com',kind:'ops',code:'123456'})).status,410);
+ assert.equal((await c.call('POST','auth/password-login',{email:'nobody@example.com',kind:'ops',password:'anything'})).status,401);
+ await signIn(c,'admin@example.com','ops');
+ assert.ok(c.jar.has('kh_sess_ops'));assert.ok(!c.jar.has('kh_sess_hotel'));
+ assert.equal((await c.call('GET','ops/me')).status,200);
+ assert.equal((await c.call('GET','hotel/me')).status,401);
 });
 
 test("request rules: no database → 503; state changes need the portal header and a same-origin Origin", async () => {
@@ -310,8 +287,8 @@ test('demo password session: isolated reads, writes denied, sign-out and existin
   assert.equal((await demo.call('GET', 'hotel/dashboard?hotel=hA')).status, 403);
   assert.equal((await demo.call('POST', 'auth/demo-login', { ...login, kind: 'ops' })).status, 401);
   const code = await demo.call('POST', 'auth/request-code', { email: login.email, kind: 'hotel' });
-  assert.equal(code.body.sent, false); assert.equal(code.body.devCode, undefined);
-  assert.equal((await demo.call('POST', 'auth/verify', { email: login.email, kind: 'hotel', code: '123456' })).status, 401);
+  assert.equal(code.status, 410); assert.equal(code.body.devCode, undefined);
+  assert.equal((await demo.call('POST', 'auth/verify', { email: login.email, kind: 'hotel', code: '123456' })).status, 410);
   const principalRequest = new Request(ORIGIN, { headers: { cookie: cookie.split(';')[0] } });
   assert.equal(await auth.principalFromRequest(db, principalRequest, 'hotel', Date.parse(signed.body.expiresAt) + 1), null);
   await demo.call('POST', 'auth/signout', { kind: 'hotel' });
@@ -354,7 +331,7 @@ test('partner password setup mail, login, reset revocation, token replay and OTP
   assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password })).status, 200);
   assert.equal((await c.call('GET', 'hotel/me')).status, 200);
   assert.equal((await c.call('GET', 'ops/me')).status, 401);
-  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'ops', email: 'password@example.com', password })).status, 403);
+  assert.equal((await c.call('POST', 'auth/password-login', { kind: 'ops', email: 'password@example.com', password })).status, 401);
   assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password }, { noOrigin: true })).status, 403);
   assert.equal((await c.call('POST', 'auth/request-code', { kind: 'hotel', email: 'password@example.com' })).body.devCode, undefined);
   await request('password@example.com');
@@ -733,4 +710,49 @@ test('agency QR preferences persist per partner, validate destinations and prese
   assert.equal(await db.first('SELECT * FROM partner_brochure_contacts WHERE hotel_id=?',['hB']),null);
   await db.run(`UPDATE memberships SET role='partner_agent' WHERE id='qr-member'`);
   assert.equal((await c.call('POST','hotel/brochures/brand',{...brand,contactOptions:options})).status,403);
+});
+
+test('ops password setup: bootstrap, portal isolation, expiry, replay and session revocation',async(t)=>{
+ const db=openTestDb();await seed(db);const mails=[];
+ t.mock.method(globalThis,'fetch',async(_url,init)=>{mails.push(JSON.parse(init.body));return new Response('{}',{status:200})});
+ const c=client(db,{RESEND_API_KEY:'test',NOTIFY_ALLOWLIST:'@example.com',PORTAL_BOOTSTRAP_ADMIN:'new-owner@example.com'});
+ const request=()=>c.call('POST','auth/password-request',{kind:'ops',email:'new-owner@example.com'});
+ assert.equal((await request()).status,200);
+ assert.match(mails.at(-1).text,/\/ops\/login\/#password-token=/);
+ const token=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
+ const set=(kind,token,password)=>c.call('POST','auth/password-set',{kind,token,password});
+ assert.equal((await set('hotel',token,'long-test-password')).status,400);
+ assert.equal((await set('ops',token,'short')).status,400);
+ assert.equal((await set('ops',token,'long-test-password')).status,200);
+ assert.equal((await set('ops',token,'replayed-password')).status,400);
+ assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'new-owner@example.com',password:'long-test-password'})).status,200);
+ assert.equal((await c.call('GET','ops/me')).status,200);
+ await request();const token2=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
+ assert.equal((await set('ops',token2,'changed-test-password')).status,200);
+ assert.equal((await c.call('GET','ops/me')).status,401);
+ assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'new-owner@example.com',password:'long-test-password'})).status,401);
+ await request();const token3=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
+ await db.run(`UPDATE ops_password_tokens SET expires_at='2000-01-01' WHERE consumed_by IS NULL`);
+ assert.equal((await set('ops',token3,'expired-test-password')).status,400);
+});
+
+test('business data is private, validation and optimistic writes preserve concurrent edits, import is repeatable',async()=>{
+ const db=openTestDb();await seed(db);const c=client(db);
+ assert.equal((await c.call('GET','ops/business/data')).status,401);
+ await signIn(c,'admin@example.com','ops');
+ const payload={id:'test-case',name:'Test Guest',product:'Test experience',date:'2026-11-20',people:2,status:'予約確定',sales:30000,received:30000,fee:1000,paymentDate:'2026-11-01',stripeSource:'',costs:[],complete:false,note:''};
+ const save=(p,revision)=>c.call('POST','ops/business/record',{kind:'booking',payload:p,revision});
+ assert.equal((await save(payload,0)).status,200);
+ assert.equal((await save({...payload,received:-1},1)).status,400);
+ const results=await Promise.all([save({...payload,note:'one'},1),save({...payload,note:'two'},1)]);
+ assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
+ const before=(await c.call('GET','ops/business/data')).body;
+ assert.equal(before.bookings.length,1);assert.equal(before.audit.length,2);
+ assert.equal((await c.call('POST','ops/business/import',{bookings:[payload],masters:[],snapshots:[]})).body.skipped,1);
+ const after=(await c.call('GET','ops/business/data')).body;assert.deepEqual(after.bookings,before.bookings);
+ assert.equal((await c.call('POST','ops/business/sync',{source:'google',start:'2026-11-01',end:'2026-11-10'})).status,503);
+ assert.equal((await c.call('POST','ops/business/record',{kind:'booking',payload,revision:2},{noOrigin:true})).status,403);
+ await db.run(`UPDATE memberships SET role='ops_booking' WHERE user_id='u-admin'`);
+ assert.equal((await c.call('GET','ops/business/data')).status,403);
+ assert.equal((await c.call('POST','ops/business/import',{bookings:[],masters:[],snapshots:[]})).status,403);
 });

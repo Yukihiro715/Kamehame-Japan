@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../portal.css";
+import "./business.css";
 
 /** The operations portal for the hotel referral programme (docs/HOTEL_REFERRAL.md).
  *  Japanese only, never indexed; every page fetches what the signed-in operator may do. */
