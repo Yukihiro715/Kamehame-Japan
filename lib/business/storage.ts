@@ -3,6 +3,7 @@ import type { Booking, Master } from "./model";
 import { z } from 'zod';
 import type { SqlDb } from '@/lib/referral/db';
 import { ApiError } from '@/lib/portal/util';
+import type { StripeIdentityEnv } from './stripe-identities';
 const text=z.string().max(2000), money=z.number().int().min(0).max(100000000).nullable();
 const status=z.enum(['confirmed','estimate','unknown']);
 const date=z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(v=>!Number.isNaN(Date.parse(v))&&new Date(v).toISOString().slice(0,10)===v);
@@ -11,10 +12,10 @@ export const booking=z.object({id:z.string().min(1).max(100),reservationId:z.str
 export const master=z.object({id:z.string().min(1).max(100),name:text,supplier:text,category:text,price:money,unit:text,status,source:text,note:text,autoCost:z.object({slug:z.string().min(1).max(150),from:date,through:z.union([date,z.literal('')]),quantity:z.enum(['person','booking'])}).optional()}).refine(m=>m.status!=='confirmed'||m.price!==null).refine(m=>!m.autoCost||m.status==='confirmed'&&!!m.source&&(!m.autoCost.through||m.autoCost.from<=m.autoCost.through));
 export const range=z.object({source:z.enum(['google','meta','stripe','seo','aio','organic']),start:date,end:date}).refine(v=>v.start<=v.end&&(Date.parse(v.end)-Date.parse(v.start))/86400000<=180);
 export const snapshot=range.and(z.object({id:z.string().max(150),data:z.record(z.unknown()),updatedAt:z.string().datetime().optional()}));
-export async function allData(db:SqlDb){
+export async function allData(db:SqlDb,env:StripeIdentityEnv={}){
  const rows=await db.all<{kind:string;payload:string;revision:number;updated_at:string}>(`SELECT kind,payload,revision,updated_at FROM business_records`);
  const items=(kind:string)=>rows.filter(r=>r.kind===kind).map(r=>{const p=JSON.parse(r.payload);return {...p,revision:r.revision,updatedAt:kind==='snapshot'?(p.updatedAt??r.updated_at):r.updated_at}});
- return {bookings:await reservationBookings(db,items('booking') as Booking[],items('master') as Master[]),masters:items('master'),snapshots:items('snapshot'),audit:await db.all(`SELECT * FROM business_audit ORDER BY created_at DESC LIMIT 50`)};
+ return {bookings:await reservationBookings(db,items('booking') as Booking[],items('master') as Master[],env),masters:items('master'),snapshots:items('snapshot'),audit:await db.all(`SELECT * FROM business_audit ORDER BY created_at DESC LIMIT 50`)};
 }
 export async function saveRecord(db:SqlDb,kind:'booking'|'master'|'snapshot',payload:unknown,revision:unknown,actor:string){
  const parsed=(kind==='booking'?booking:kind==='master'?master:snapshot).safeParse(payload);
