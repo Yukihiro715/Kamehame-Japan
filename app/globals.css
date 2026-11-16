@@ -2536,3 +2536,10 @@ body[data-kh-modal] .sticky-request { display:none; }
 .xp-fees th.coupon { background:#fff6ee; }
 .xp-fee-lead { margin-bottom:14px; }
 @media (max-width:640px) { .xp-fees { font-size:13px; } .xp-fees th, .xp-fees td { padding:9px 8px; } .xp-fees th:first-child, .xp-fees td:first-child { width:44%; } }
+
+/* iOS Safari auto-zooms focused controls below 16px. Shared across all pages;
+   preserve pinch zoom and never work around this through viewport restrictions. */
+@media (max-width: 1024px), (pointer: coarse) {
+  html body input:not([type="checkbox"]):not([type="radio"]),
+  html body select, html body textarea { font-size: max(16px, 1rem) !important; }
+}

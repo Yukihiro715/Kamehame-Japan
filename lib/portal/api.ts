@@ -5,7 +5,7 @@ import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguag
 import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
 import { saveBank, readBank } from "./bank";
 import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
-import { passwordLogin, requestPassword, setPassword } from "./password-auth";
+import { passwordLogin, requestPassword, setPassword, provisionPassword, changeInitialPassword } from "./password-auth";
 /** The portal API: one entry point, routed by path, every handler scoped on
  *  the server. Mounted at /api/portal/<path> (app/api/portal/[...path]/route.ts).
  *
@@ -23,7 +23,7 @@ import { notifyCase } from "./case-notify";
 import * as settle from "./settlement";
 import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMail } from "./mail";
 import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
-import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, revokeMembership, disableUser, sessionCookie, signOut, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
+import { OPS_MASTER_EMAIL, CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, revokeMembership, disableUser, sessionCookie, signOut, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { targetFor, createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, experiencePopularity, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
@@ -81,6 +81,12 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   if (ctx.method !== "POST") throw notFound();
   const body = await readJson(ctx.request);
   const ip = ctx.request.headers.get("cf-connecting-ip") ?? "unknown";
+  if (path[0] === "password-change-initial") {
+    const p = await principalFromRequest(ctx.db, ctx.request, "ops");
+    if (!p) throw new ApiError(401,"unauthenticated");
+    const ok = await changeInitialPassword(ctx.db,p,{password:body.password,currentPassword:body.currentPassword},ip);
+    return json({ok,...(ok?{}:{error:"password_change_invalid",message:"仮パスワードを確認し、異なる12〜128文字のパスワードを設定してください。"})},ok?200:400);
+  }
   if (["password-login", "password-request", "password-set"].includes(path[0])) {
     if (body.kind !== "hotel" && body.kind !== "ops") throw forbidden();
     if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { kind: kind(body), email: body.email, ip, origin: await publicOrigin(ctx) }));
@@ -360,7 +366,13 @@ async function qrResponse(text: string, format: string | undefined, name: string
 async function requireOps(ctx: Ctx, ...roles: Role[]): Promise<Principal> {
   const p = await principalFromRequest(ctx.db, ctx.request, "ops");
   if (!p) throw new ApiError(401, "unauthenticated");
+  if (await ctx.db.first(`SELECT user_id FROM ops_password_changes WHERE user_id=?`,[p.userId])) throw new ApiError(403,"password_change_required","初回パスワード変更が必要です。");
   if (!opsRole(p, ...roles)) throw forbidden();
+  return p;
+}
+async function requireMaster(ctx: Ctx) {
+  const p = await requireOps(ctx,"ops_admin");
+  if(p.email!==OPS_MASTER_EMAIL) throw forbidden();
   return p;
 }
 const ADMIN: Role[] = ["ops_admin"];
@@ -370,7 +382,11 @@ const FINANCE: Role[] = ["ops_admin", "ops_finance"];
 async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, id, action] = path;
   const get = ctx.method === "GET", post = ctx.method === "POST";
-  if (head === "me" && get) { const p = await requireOps(ctx); return json({ ok: true, user: { email: p.email, name: p.name }, roles: p.memberships.map((m) => m.role) }); }
+  if (head === "me" && get) {
+    const p=await principalFromRequest(ctx.db,ctx.request,"ops");if(!p)throw new ApiError(401,"unauthenticated");
+    const mustChangePassword=!!await ctx.db.first(`SELECT user_id FROM ops_password_changes WHERE user_id=?`,[p.userId]);
+    return json({ok:true,user:{email:p.email,name:p.name},roles:p.memberships.map(m=>m.role),isMaster:p.email===OPS_MASTER_EMAIL,mustChangePassword});
+  }
   if (head === "business") {
     const p = await requireOps(ctx, ...FINANCE);
     if (get && id === "data") return json({ ...await business.allData(ctx.db), user: {name:p.name??p.email,email:p.email,owner:opsRole(p,...ADMIN)}, syncSources:syncSources(ctx.env) });
@@ -593,17 +609,27 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       return json({ ok: true, link: { ...link, url: publicLinkUrl(await publicOrigin(ctx), link.token) } });
     }
   }
-  if (head === "members" && id && action === "revoke" && post) { const p = await requireOps(ctx, ...ADMIN); const ok = await revokeMembership(ctx.db, id, p.email); return json({ ok }); }
-  if (head === "users" && id && action === "disable" && post) { const p = await requireOps(ctx, ...ADMIN); await disableUser(ctx.db, id, p.email); return json({ ok: true }); }
+  if (head === "members" && id && action === "revoke" && post) {
+    const p = await requireOps(ctx,...ADMIN);
+    const target=await ctx.db.first<{email:string;scope_type:string}>(`SELECT u.email,m.scope_type FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.id=?`,[id]);
+    if(target?.scope_type==='ops') {await requireMaster(ctx);if(target.email===OPS_MASTER_EMAIL)throw forbidden();}
+    return json({ok:await revokeMembership(ctx.db,id,p.email)});
+  }
+  if (head === "users" && id && action === "disable" && post) {
+    const p=await requireMaster(ctx);
+    const target=await ctx.db.first<{email:string}>(`SELECT email FROM users WHERE id=?`,[id]);
+    if(target?.email===OPS_MASTER_EMAIL)throw forbidden();
+    await disableUser(ctx.db,id,p.email);return json({ok:true});
+  }
   if (head === "ops-members") {
-    if (get) { await requireOps(ctx, ...ADMIN); return json({ ok: true, members: await ctx.db.all(`SELECT m.id AS membership_id, u.id AS user_id, u.email, u.name, m.role, u.status, u.last_login_at FROM memberships m JOIN users u ON u.id = m.user_id WHERE m.scope_type = 'ops' AND m.revoked_at IS NULL ORDER BY u.email`) }); }
+    const p=await requireMaster(ctx);
+    if (get) return json({ok:true,members:await ctx.db.all(`SELECT m.id AS membership_id,u.id AS user_id,u.email,u.name,m.role,u.status,u.last_login_at,f.expires_at AS temporary_expires_at FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN ops_password_changes f ON f.user_id=u.id WHERE m.scope_type='ops' AND m.revoked_at IS NULL ORDER BY u.email`)});
     if (post) {
-      const p = await requireOps(ctx, ...ADMIN);
-      const b = await readJson(ctx.request);
-      const role = str(b.role, 20) as Role;
-      if (!OPS_ROLES.includes(role)) throw bad("bad_role");
-      const r = await inviteMember(ctx.db, ctx.env, { email: b.email, name: b.name, role, scopeType: "ops", scopeId: null, by: p.email, loginOrigin: await publicOrigin(ctx), scopeLabel: "運営" });
-      return json({ ok: true, ...r });
+      const b=await readJson(ctx.request),role=str(b.role,20) as Role;
+      if(!OPS_ROLES.includes(role))throw bad("bad_role");
+      if(typeof b.email!=='string'||b.email.trim().toLowerCase()===OPS_MASTER_EMAIL)throw forbidden();
+      const r=await inviteMember(ctx.db,ctx.env,{email:b.email,name:b.name,role,scopeType:"ops",scopeId:null,by:p.email,loginOrigin:await publicOrigin(ctx),scopeLabel:"運営",skipMail:true});
+      return json({ok:true,...r,...await provisionPassword(ctx.db,r.userId)});
     }
   }
   if (head === "links" && id && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); const s = str(b.status, 10); if (!["active", "paused", "retired"].includes(s)) throw bad("bad_status"); return json({ ok: await setLinkStatus(ctx.db, id, s as "active" | "paused" | "retired", p.email) }); }
