@@ -9,7 +9,8 @@ export interface AdsEnv {
 export function directAdsSources(e:AdsEnv) {
  return [...(googleConfigured(e)?['google']:[]),...(e.META_ADS_ACCESS_TOKEN?['meta']:[])];
 }
-export async function read<T>(url:string,init:RequestInit,source:string):Promise<T> {
+type ProviderError = (body:unknown)=>ApiError|undefined;
+export async function read<T>(url:string,init:RequestInit,source:string,providerError?:ProviderError):Promise<T> {
  let r:Response;
  // Workers supports manual/follow only. Never forward credentials to redirects.
  try {r=await fetch(url,{...init,redirect:'manual',signal:AbortSignal.timeout(20000)});} catch(e) {
@@ -17,8 +18,38 @@ export async function read<T>(url:string,init:RequestInit,source:string):Promise
   throw new ApiError(502,'source_unreachable',`${source}への通信に失敗しました。管理者に通信設定の確認を依頼してください。`);
  }
  if(r.status>=300&&r.status<400)throw new ApiError(502,'source_redirect_blocked',`${source}から予期しない転送が返されたため、認証情報を送信せず停止しました。`);
- if(!r.ok)throw new ApiError(502,'source_access_failed',`${source}の認証・読み取り権限を確認してください（HTTP ${r.status}）。`);
- const d=await r.json() as T & {error?:unknown};if(!d || typeof d!=="object" || d.error)throw new ApiError(502,'source_access_failed',`${source}の認証・読み取り権限を確認してください。`);return d;
+ if(!r.ok) {
+  let body:unknown;
+  if(providerError)try{body=await r.json();}catch{/* Non-JSON failures keep the generic HTTP error. */}
+  throw providerError?.(body)??new ApiError(502,'source_access_failed',`${source}の認証・読み取り権限を確認してください（HTTP ${r.status}）。`);
+ }
+ const d=await r.json() as T & {error?:unknown};if(!d || typeof d!=="object" || d.error)throw providerError?.(d)??new ApiError(502,'source_access_failed',`${source}の認証・読み取り権限を確認してください。`);return d;
+}
+// Only known provider codes may leave the server. Messages, metadata, and IDs in
+// Google's raw error response can contain credentials or private account details.
+const googleAdsDiagnostics:Record<string,{code:string;message:string}>={
+ CLOUD_PROJECT_NOT_APPROVED_FOR_PRODUCTION:{code:'google_ads_production_access_required',message:'Google Cloudの「KAMEHAME Dashboard」→「Google Ads APIの概要」で、アクセスレベルをTestからExplorer以上に変更してください。'},
+ USER_PERMISSION_DENIED:{code:'google_ads_account_access_denied',message:'認証したGoogleアカウントの広告アカウント170-015-4296への閲覧権限を確認してください。管理アカウント経由の場合はGOOGLE_ADS_LOGIN_CUSTOMER_IDの設定も確認してください。'},
+ ACCESS_TOKEN_SCOPE_INSUFFICIENT:{code:'google_ads_scope_required',message:'Google広告のOAuth権限（adwords）が不足しています。Google広告の権限を含めて再認可し、Refresh tokenを更新してください。'},
+ SERVICE_DISABLED:{code:'google_ads_api_disabled',message:'OAuthクライアントを作成したGoogle Cloudプロジェクトで、Google Ads APIを有効にしてください。'},
+};
+function record(value:unknown):Record<string,unknown>|undefined{return value!==null&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:undefined;}
+function googleAdsError(body:unknown):ApiError|undefined {
+ const details=record(record(body)?.error)?.details;
+ if(!Array.isArray(details))return;
+ const codes=new Set<string>();
+ for(const detail of details) {
+  const d=record(detail);if(!d)continue;
+  // google.rpc.ErrorInfo (scope/API failures).
+  if(d['@type']==='type.googleapis.com/google.rpc.ErrorInfo'&&typeof d.reason==='string')codes.add(d.reason);
+  // Versioned GoogleAdsFailure (production/account authorization failures).
+  if(typeof d['@type']!=='string'||!/^type\.googleapis\.com\/google\.ads\.googleads\.v\d+\.errors\.GoogleAdsFailure$/.test(d['@type'])||!Array.isArray(d.errors))continue;
+  for(const error of d.errors) {
+   const code=record(record(error)?.errorCode);
+   if(code)for(const value of Object.values(code))if(typeof value==='string')codes.add(value);
+  }
+ }
+ for(const [reason,diagnostic] of Object.entries(googleAdsDiagnostics))if(codes.has(reason))return new ApiError(502,diagnostic.code,`${diagnostic.message}（${reason}）`);
 }
 const n=(v:unknown)=>{const value=metricNumber(v);if(value===null)throw new ApiError(502,'invalid_report','媒体から数値を取得できませんでした。');return value;};
 function account(currency:string,zone:string){if(currency!=='JPY'||zone!=='Asia/Tokyo')throw new ApiError(422,'account_settings_mismatch','広告アカウントの通貨・タイムゾーンがJPY / Asia/Tokyoと一致しません。');}
@@ -31,7 +62,7 @@ export async function googleAccessToken(e:AdsEnv){
 export async function googleAds(e:AdsEnv,start:string,end:string) {
  const headers:Record<string,string>={Authorization:'Bearer '+await googleAccessToken(e),'Content-Type':'application/json'};
  if(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID) {if(!/^\d{10}$/.test(e.GOOGLE_ADS_LOGIN_CUSTOMER_ID))throw new ApiError(503,'invalid_manager_id');headers['login-customer-id']=e.GOOGLE_ADS_LOGIN_CUSTOMER_ID;}
- const query=async(query:string,pageToken?:string)=>read<{results?:Array<{customer?:{id:string;currencyCode:string;timeZone:string};campaign?:{id:string;name:string};metrics?:{costMicros?:string;clicks?:string;impressions?:string;conversions?:number}}>;nextPageToken?:string}>('https://googleads.googleapis.com/v26/customers/1700154296/googleAds:search',{method:'POST',headers,body:JSON.stringify({query,...(pageToken?{pageToken}:{})})},'Google広告');
+ const query=async(query:string,pageToken?:string)=>read<{results?:Array<{customer?:{id:string;currencyCode:string;timeZone:string};campaign?:{id:string;name:string};metrics?:{costMicros?:string;clicks?:string;impressions?:string;conversions?:number}}>;nextPageToken?:string}>('https://googleads.googleapis.com/v26/customers/1700154296/googleAds:search',{method:'POST',headers,body:JSON.stringify({query,...(pageToken?{pageToken}:{})})},'Google広告',googleAdsError);
  const info=await query('SELECT customer.id, customer.currency_code, customer.time_zone FROM customer');
  const c=info.results?.[0]?.customer;if(!c||String(c.id)!=='1700154296')throw new ApiError(502,'wrong_account');account(c.currencyCode,c.timeZone);
  const rows=[];let next:string|undefined;
