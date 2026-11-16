@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LedgerSettings } from "./cost-ledger";
 import { api, errorText, jst } from "../client";
 import { Button, Card, Field, Loading, Notice, Table } from "../ui";
 
@@ -59,6 +60,7 @@ export function OpsSettings() {
           <dt>丸め</dt><dd>紹介料は予約単位で四捨五入、税額は精算書単位・税率ごとに 1 回</dd>
         </dl>
       </Card>
+      <LedgerSettings/>
     </>
   );
 }

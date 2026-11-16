@@ -41,3 +41,10 @@
 .ops-workspace .business-import summary{cursor:pointer;font-weight:600}
 .ops-workspace .business-import[open]>*+*{margin-top:16px}
 .ops-workspace .drawer input[type=checkbox]{width:auto}
+
+.ops-workspace .ledger-review-panel>details,.ops-workspace .ledger-source-review{margin:20px 24px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.ops-workspace .ledger-review-panel summary{cursor:pointer;font-weight:600;margin-bottom:14px}
+.ops-workspace .ledger-review-panel .pt-row{margin-top:16px}
+.ops-workspace .ledger-review-panel>p{padding:0 24px 20px}
+.ops-workspace .pt-row input[type=checkbox]{width:18px;height:18px;flex:none}
+.ops-workspace .pt-card details p{margin-top:12px;overflow-wrap:anywhere}

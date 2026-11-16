@@ -1,3 +1,4 @@
+import { ledgerState, syncLedger, resolveLedgerReview } from "@/lib/business/ledger-sync";
 import * as business from "@/lib/business/storage";
 import { sync as syncBusiness, syncSources, type BusinessEnv } from "@/lib/business/sync";
 import { productProvider } from "@/lib/business/providers";
@@ -390,6 +391,9 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
   }
   if (head === "business") {
     const p = await requireOps(ctx, ...FINANCE);
+    if(get && id === "ledger-state")return json(await ledgerState(ctx.db,ctx.env));
+    if(post && id === "ledger-sync"){await requireOps(ctx,...ADMIN);return json(await syncLedger(ctx.db,ctx.env));}
+    if(post && id === "ledger-review")return json(await resolveLedgerReview(ctx.db,await readJson(ctx.request) as {sourceKey:unknown;hash:unknown;revision:unknown;action:unknown},p.email));
     if (get && id === "data") return json({ ...await business.allData(ctx.db), user: {name:p.name??p.email,email:p.email,owner:opsRole(p,...ADMIN)}, syncSources:syncSources(ctx.env) });
     if (get && id === "catalog") {
       const catalog=catalogFor("ja"), live=catalog.experiences.filter(e=>e.status==="live");
