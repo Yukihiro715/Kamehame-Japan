@@ -1,4 +1,4 @@
-/** Partner password sign-in and operations one-time-code access. Memberships are checked on every request. */
+/** Partner and operations password access. Memberships are checked on every request. */
 import { jstDate, randomId, type SqlDb } from "@/lib/referral/db";
 import { readCookie } from "@/lib/referral/links";
 import { inviteMail, loginCodeMail, mailLangOf, sendPortalMail, type MailLang, type PortalMailEnv } from "./mail";
@@ -51,7 +51,7 @@ export interface RequestCodeResult { ok: true; sent: boolean; mail?: string; dev
 /** The owner's operator. The address in PORTAL_BOOTSTRAP_ADMIN (a Worker
  *  secret set by the owner) becomes ops_admin on its first sign-in request
  *  whenever it holds no operator membership, so the owner is never locked out. */
-async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now: number) {
+export async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now: number) {
   const target = normalizeEmail(env.PORTAL_BOOTSTRAP_ADMIN);
   if (!target || target !== email) return;
   const has = await db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM memberships m JOIN users u ON u.id = m.user_id WHERE u.email = ? AND m.scope_type = 'ops' AND m.revoked_at IS NULL`, [email]);
@@ -187,7 +187,7 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
     ]);
   }
   const loginUrl = `${input.loginOrigin}/${input.scopeType === "ops" ? "ops" : "partner"}/login/`;
-  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, passwordLogin: input.scopeType === "hotel", roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
+  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, passwordLogin: true, roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
   return { userId: user.id, membershipId, mail };
 }
 

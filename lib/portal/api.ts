@@ -1,3 +1,6 @@
+import * as business from "@/lib/business/storage";
+import { sync as syncBusiness, syncSources, type BusinessEnv } from "@/lib/business/sync";
+import { catalogFor, previewsFor } from "@/lib/catalog";
 import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguage } from "./official-brochures";
 import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
 import { saveBank, readBank } from "./bank";
@@ -20,7 +23,7 @@ import { notifyCase } from "./case-notify";
 import * as settle from "./settlement";
 import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMail } from "./mail";
 import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
-import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
+import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, revokeMembership, disableUser, sessionCookie, signOut, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { targetFor, createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, experiencePopularity, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
@@ -32,7 +35,7 @@ import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, resolvePublicOrigin, str } from "./util";
 import type { PortalMailEnv } from "./mail";
 
-export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown; PORTAL_BANK_KEY?: string };
+export type PortalEnv = BusinessEnv & PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown; PORTAL_BANK_KEY?: string };
 
 export async function handlePortalApi(request: Request, env: PortalEnv, path: string[]): Promise<Response> {
   try {
@@ -79,31 +82,22 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   const body = await readJson(ctx.request);
   const ip = ctx.request.headers.get("cf-connecting-ip") ?? "unknown";
   if (["password-login", "password-request", "password-set"].includes(path[0])) {
-    if (body.kind !== "hotel") throw forbidden();
-    if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { email: body.email, ip, origin: await publicOrigin(ctx) }));
+    if (body.kind !== "hotel" && body.kind !== "ops") throw forbidden();
+    if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { kind: kind(body), email: body.email, ip, origin: await publicOrigin(ctx) }));
     if (path[0] === "password-set") {
-      const ok = await setPassword(ctx.db, { token: body.token, password: body.password, ip });
+      const ok = await setPassword(ctx.db, { kind: kind(body), token: body.token, password: body.password, ip });
       return json({ ok, ...(ok ? {} : { error: "password_reset_invalid" }) }, ok ? 200 : 400);
     }
-    const r = await passwordLogin(ctx.db, { email: body.email, password: body.password, ip });
+    const r = await passwordLogin(ctx.db, { kind: kind(body), email: body.email, password: body.password, ip });
     if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "password_locked" : "password_invalid" }, r.error === "locked" ? 429 : 401);
-    return json({ ok: true }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure) });
+    return json({ ok: true }, 200, { "set-cookie": sessionCookie(kind(body), r.token, ctx.secure) });
   }
   if (path[0] === "demo-login") {
     const r = await verifyDemoLogin(ctx.db, { email: body.email, password: body.password, kind: body.kind, ip: ctx.request.headers.get("cf-connecting-ip") ?? "unknown" });
     if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "demo_locked" : "demo_invalid" }, r.error === "locked" ? 429 : 401);
     return json({ ok: true, expiresAt: r.expiresAt }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure, DEMO_SESSION_SECONDS) });
   }
-  if (path[0] === "request-code") {
-    const r = await requestLoginCode(ctx.db, ctx.env, { email: body.email, kind: kind(body), lang: body.lang });
-    return json({ ok: true, sent: r.sent, mail: r.mail, ...(r.devCode ? { devCode: r.devCode } : {}) });
-  }
-  if (path[0] === "verify") {
-    const k = kind(body);
-    const r = await verifyLoginCode(ctx.db, { email: body.email, code: body.code, kind: k });
-    if (!r.ok || !r.token) return json({ ok: false, error: r.error }, 401);
-    return json({ ok: true, expiresAt: r.expiresAt }, 200, { "set-cookie": sessionCookie(k, r.token, ctx.secure) });
-  }
+  if (path[0] === "request-code" || path[0] === "verify") throw new ApiError(410, "password_required", "メールアドレスとパスワードでログインしてください。");
   if (path[0] === "signout") {
     const k = kind(body);
     await signOut(ctx.db, ctx.request, k);
@@ -377,6 +371,24 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, id, action] = path;
   const get = ctx.method === "GET", post = ctx.method === "POST";
   if (head === "me" && get) { const p = await requireOps(ctx); return json({ ok: true, user: { email: p.email, name: p.name }, roles: p.memberships.map((m) => m.role) }); }
+  if (head === "business") {
+    const p = await requireOps(ctx, ...FINANCE);
+    if (get && id === "data") return json({ ...await business.allData(ctx.db), user: {name:p.name??p.email,email:p.email,owner:opsRole(p,...ADMIN)}, syncSources:syncSources(ctx.env) });
+    if (get && id === "catalog") {
+      const catalog=catalogFor("ja"), live=catalog.experiences.filter(e=>e.status==="live");
+      const areas:Record<string,number>={},categories:Record<string,number>={};
+      for(const e of live){areas[e.city]=(areas[e.city]??0)+1;categories[e.category]=(categories[e.category]??0)+1;}
+      return json({count:live.length,preview:previewsFor("ja").experiences.length,unpublished:0,areas,categories,products:live.map(e=>({id:e.slug,name:e.title,area:catalog.cities.find(c=>c.slug===e.city)?.title??e.city,url:e.slug==='mt-fuji-golf-day'?'/en/golf-tours/':`/en/${e.city}/${e.slug}/`})),stale:false,updatedAt:new Date().toISOString(),note:"本番の公開カタログ。翻訳・日程違いは重複除外。",source:"https://kamehame-japan.com/en/"});
+    }
+    if(post && id === "record") {
+      const b=await readJson(ctx.request,500000);
+      if(b.kind!=="booking" && b.kind!=="master") throw bad("invalid_kind");
+      return json({ok:true,...await business.saveRecord(ctx.db,b.kind,b.payload,b.revision,p.email)});
+    }
+    if(post && id === "import") {await requireOps(ctx,...ADMIN);return json({ok:true,...await business.importData(ctx.db,await readJson(ctx.request,2000000),p.email)});}
+    if(post && id === "sync") {await requireOps(ctx,...ADMIN);return json(await syncBusiness(ctx.db,ctx.env,await readJson(ctx.request),p.email));}
+    throw notFound();
+  }
   if (head === "golf-courses") {
     // Display names for the courses on the shared-bus schedule (docs/GOLFPAQ_BUS_TOURS.md).
     if (get) {
