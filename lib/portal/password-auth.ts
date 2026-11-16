@@ -1,5 +1,5 @@
 import { randomId, type SqlDb } from "@/lib/referral/db";
-import { normalizeEmail, validEmail, sha256Hex, SESSION_TTL_MS, bootstrapAdmin, type PortalKind, type VerifyResult } from "./auth";
+import { normalizeEmail, validEmail, sha256Hex, SESSION_TTL_MS, bootstrapAdmin, type PortalKind, type Principal, type VerifyResult } from "./auth";
 import { DEMO_EMAIL } from "./demo-config";
 import { sendPortalMail, type PortalMailEnv } from "./mail";
 
@@ -41,11 +41,16 @@ export async function setPassword(db: SqlDb, input: { token: unknown; password: 
   const hash = await sha256Hex(input.token), at = new Date(now).toISOString();
   const row = await db.first<{ user_id: string; email: string }>(`SELECT t.user_id,u.email FROM ${prefix}_password_tokens t JOIN users u ON u.id=t.user_id WHERE token_hash=? AND consumed_by IS NULL AND expires_at>?`, [hash, at]);
   if (!row || !await eligible(db, row.email, kind)) return false;
+  if(kind === "ops") {
+    const provisional=await db.first<{salt:string;password_hash:string}>(`SELECT p.salt,p.password_hash FROM ops_passwords p JOIN ops_password_changes f ON f.user_id=p.user_id WHERE p.user_id=?`,[row.user_id]);
+    if(provisional && await passwordHash(input.password,provisional.salt)===provisional.password_hash)return false;
+  }
   const salt = hex(crypto.getRandomValues(new Uint8Array(32))), verifier = await passwordHash(input.password, salt), claim = randomId();
   // The batch is atomic. A concurrent or replayed token cannot change credentials or revoke sessions.
   const valid = `SELECT user_id FROM ${prefix}_password_tokens WHERE token_hash=? AND consumed_by IS NULL AND expires_at>?`;
   await db.batch([
     { sql: `INSERT INTO ${prefix}_passwords SELECT user_id,?,?,? FROM ${prefix}_password_tokens WHERE token_hash=? AND consumed_by IS NULL AND expires_at>? ON CONFLICT(user_id) DO UPDATE SET salt=excluded.salt,password_hash=excluded.password_hash,updated_at=excluded.updated_at`, params: [salt, verifier, at, hash, at] },
+    ...(kind === "ops" ? [{ sql: `DELETE FROM ops_password_changes WHERE user_id IN (${valid})`, params: [hash, at] }] : []),
     { sql: `UPDATE sessions SET revoked_at=? WHERE kind=? AND user_id IN (${valid})`, params: [at, kind, hash, at] },
     { sql: `UPDATE users SET status='active' WHERE id IN (${valid}) AND status!='disabled'`, params: [hash, at] },
     { sql: `UPDATE ${prefix}_password_tokens SET consumed_by=? WHERE user_id IN (${valid}) AND consumed_by IS NULL`, params: [claim, hash, at] },
@@ -64,7 +69,41 @@ export async function passwordLogin(db: SqlDb, input: { email: unknown; password
   const expected = c?.password_hash ?? "0".repeat(64);
   for (let i = 0; i < 64; i++) difference |= candidate.charCodeAt(i) ^ expected.charCodeAt(i);
   if (!user || !c || difference) return { ok: false, error: "invalid" };
+  if (kind === "ops") {
+    const pending = await db.first<{ expires_at: string }>(`SELECT expires_at FROM ops_password_changes WHERE user_id=?`, [user.id]);
+    if (pending && Date.parse(pending.expires_at) <= now) return { ok: false, error: "invalid" };
+  }
   const token = randomId() + randomId(), at = new Date(now).toISOString(), expiresAt = new Date(now + SESSION_TTL_MS[kind]).toISOString();
   const session = await db.run(`INSERT INTO sessions (id,user_id,kind,created_at,expires_at,last_seen_at) SELECT ?,u.id,?,?,?,? FROM users u JOIN ${prefix}_passwords c ON c.user_id=u.id WHERE u.id=? AND u.status!='disabled' AND c.password_hash=?`, [await sha256Hex(token), kind, at, expiresAt, at, user.id, c.password_hash]);
+  if(session.changes===1)await db.run(`UPDATE users SET last_login_at=? WHERE id=?`,[at,user.id]);
   return session.changes === 1 ? { ok: true, token, expiresAt } : { ok: false, error: "invalid" };
+}
+
+/** Only the master-authorized API calls this. The plaintext is returned once, never logged or stored. */
+export async function provisionPassword(db: SqlDb, userId: string, now = Date.now()) {
+  const password = randomId() + "aA9!", salt = hex(crypto.getRandomValues(new Uint8Array(32)));
+  const verifier = await passwordHash(password, salt), at = new Date(now).toISOString();
+  const expiresAt = new Date(now + 72 * 3600000).toISOString();
+  await db.batch([
+    {sql:`INSERT INTO ops_passwords VALUES (?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET salt=excluded.salt,password_hash=excluded.password_hash,updated_at=excluded.updated_at`,params:[userId,salt,verifier,at]},
+    {sql:`INSERT INTO ops_password_changes VALUES (?,?) ON CONFLICT(user_id) DO UPDATE SET expires_at=excluded.expires_at`,params:[userId,expiresAt]},
+    {sql:`UPDATE sessions SET revoked_at=? WHERE user_id=? AND kind='ops'`,params:[at,userId]},
+    {sql:`UPDATE ops_password_tokens SET consumed_by='provisioned' WHERE user_id=? AND consumed_by IS NULL`,params:[userId]},
+  ]);
+  return { temporaryPassword: password, expiresAt };
+}
+export async function changeInitialPassword(db: SqlDb, p: Principal, input: {password:unknown; currentPassword:unknown}, ip: string, now = Date.now()) {
+  if (!await allowed(db,"initial-change",ip,10,now)) return false;
+  if(typeof input.password!=="string" || input.password.length<12 || input.password.length>128 || typeof input.currentPassword!=="string" || input.currentPassword.length>128 || input.password===input.currentPassword) return false;
+  const row=await db.first<{salt:string;password_hash:string}>(`SELECT c.salt,c.password_hash FROM ops_passwords c JOIN ops_password_changes f ON f.user_id=c.user_id WHERE c.user_id=? AND f.expires_at>?`,[p.userId,new Date(now).toISOString()]);
+  if(!row || await passwordHash(input.currentPassword,row.salt)!==row.password_hash) return false;
+  const salt=hex(crypto.getRandomValues(new Uint8Array(32))), verifier=await passwordHash(input.password,salt),at=new Date(now).toISOString();
+  // A competing reset/provision must not be cleared by this operation.
+  await db.batch([
+    {sql:`UPDATE ops_passwords SET salt=?,password_hash=?,updated_at=? WHERE user_id=? AND password_hash=?`,params:[salt,verifier,at,p.userId,row.password_hash]},
+    {sql:`DELETE FROM ops_password_changes WHERE user_id=? AND EXISTS (SELECT 1 FROM ops_passwords WHERE user_id=? AND password_hash=?)`,params:[p.userId,p.userId,verifier]},
+    {sql:`UPDATE sessions SET revoked_at=? WHERE kind='ops' AND user_id=? AND EXISTS (SELECT 1 FROM ops_passwords WHERE user_id=? AND password_hash=?)`,params:[at,p.userId,p.userId,verifier]},
+    {sql:`UPDATE users SET status='active' WHERE id=? AND status!='disabled' AND EXISTS (SELECT 1 FROM ops_passwords WHERE user_id=? AND password_hash=?)`,params:[p.userId,p.userId,verifier]},
+  ]);
+  return (await db.first<{password_hash:string}>(`SELECT password_hash FROM ops_passwords WHERE user_id=?`,[p.userId]))?.password_hash===verifier;
 }

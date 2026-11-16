@@ -12,7 +12,7 @@ import { Button, Loading, Notice } from "./ui";
 
 export type Kind = "hotel" | "ops";
 export interface HotelInfo extends PartnerSite { id: string; name: string; public_id: string; status: string; brochure_url: string | null }
-export interface Me { demo?: boolean; user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
+export interface Me { mustChangePassword?: boolean; isMaster?: boolean; demo?: boolean; user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
 
 interface PortalState { kind: Kind; me: Me; hotel: HotelInfo | null; setHotel: (id: string) => void; refresh: () => void; lang: PortalLang; setLang: (l: PortalLang) => void }
 const Ctx = createContext<PortalState | null>(null);
@@ -90,6 +90,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
     if (error) return <div className={rootClass}><div className="pt-login"><div className="pt-login-box"><Notice tone="bad">{error}</Notice><Button onClick={() => void load()}>{lang === "en" ? "Try again" : "再読み込み"}</Button></div></div></div>;
     return <div className={rootClass} lang={lang}><Login kind={kind} onDone={load} lang={lang} onLang={applyLang} /></div>;
   }
+  if (kind === "ops" && me.mustChangePassword) return <div className={rootClass}><InitialPassword onDone={load} /></div>;
   if (isLogin && typeof window !== "undefined") { window.location.replace(`/${kind === "hotel" ? "partner" : "ops"}/`); return null; }
   const hotel = kind === "hotel" ? (me.hotels ?? []).find((h) => h.id === hotelId) ?? null : null;
   const setHotel = (id: string) => { setHotelId(id); try { localStorage.setItem(HOTEL_KEY, id); } catch { /* ignore */ } };
@@ -144,6 +145,16 @@ function LangSwitch({ lang, onChange }: { lang: PortalLang; onChange: (l: Portal
   return <select className="pt-lang" value={lang} onChange={(e) => onChange(asPortalLang(e.target.value))} aria-label={DICT[lang].shell.language}>{PORTAL_LANGS.map((l) => <option key={l} value={l}>{PORTAL_LANG_NAME[l]}</option>)}</select>;
 }
 
+function InitialPassword({onDone}:{onDone:()=>void}) {
+  const [currentPassword,setCurrent]=useState(""),[password,setPassword]=useState(""),[confirm,setConfirm]=useState(""),[error,setError]=useState(""),[busy,setBusy]=useState(false);
+  return <div className="pt-login"><div className="pt-login-box"><h1>初回パスワード変更</h1><p>業務画面を開く前に、ご自身のパスワードを設定してください。</p>{error&&<Notice tone="bad">{error}</Notice>}<form className="pt-form" onSubmit={async e=>{e.preventDefault();if(password!==confirm){setError("確認用パスワードが一致しません。");return}setBusy(true);setError("");try{await api("POST","auth/password-change-initial",{currentPassword,password});onDone()}catch(e){setError(errorText(e))}finally{setBusy(false)}}}>
+    <label className="pt-field">仮パスワード<input type="password" autoComplete="current-password" required maxLength={128} value={currentPassword} onChange={e=>setCurrent(e.target.value)}/></label>
+    <label className="pt-field">新しいパスワード（12〜128文字）<input type="password" autoComplete="new-password" required minLength={12} maxLength={128} value={password} onChange={e=>setPassword(e.target.value)}/></label>
+    <label className="pt-field">新しいパスワード（確認）<input type="password" autoComplete="new-password" required minLength={12} maxLength={128} value={confirm} onChange={e=>setConfirm(e.target.value)}/></label>
+    <Button type="submit" disabled={busy}>変更してログインに戻る</Button><Button kind="link" onClick={async()=>{await api("POST","auth/signout",{kind:"ops"});onDone()}}>ログアウト</Button>
+  </form></div></div>;
+}
+
 function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void; lang: PortalLang; onLang: (l: PortalLang) => void }) {
   const L = DICT[lang].login;
   const [email, setEmail] = useState("");
@@ -186,16 +197,16 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
           <p className="pt-brand" style={{ margin: 0 }}>KAMEHAME JAPAN <span>{kind === "hotel" ? DICT[lang].brand.loginPartner : DICT[lang].brand.loginOps}</span></p>
           {kind === "hotel" && <LangSwitch lang={lang} onChange={onLang} />}
         </div>
-        <h1>{resetToken ? (lang === "en" ? "Set password" : "パスワードを設定") : resetMode ? (lang === "en" ? "First-time setup / Reset" : "初回設定・パスワード再設定") : L.h}</h1>
+        <h1>{resetToken ? (lang === "en" ? "Set password" : "パスワードを設定") : resetMode ? (lang === "en" ? "Reset password" : "パスワード再設定") : L.h}</h1>
         {msg && <Notice tone="info">{msg}</Notice>}
         {(
           <form onSubmit={(e) => { e.preventDefault(); void request(); }}>
             {!resetToken && <label className="pt-field"><span className="pt-field-l">{L.email}</span><input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus /></label>}
             {!resetMode && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Password" : "パスワード"}</span><input type="password" autoComplete={resetToken ? "new-password" : "current-password"} minLength={resetToken ? 12 : undefined} required maxLength={128} value={password} onChange={e => setPassword(e.target.value)} /></label>}
             {resetToken && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Confirm password" : "パスワード（確認）"}</span><input type="password" autoComplete="new-password" minLength={12} maxLength={128} required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} /></label>}
-            <p className="pt-login-note">{(lang === "en" ? (resetToken ? "Use 12–128 characters." : "Use your personal email address and password.") : (resetToken ? "12〜128文字で設定してください。" : "ご自身のメールアドレスとパスワードでログインしてください。"))}</p>
+            <p className="pt-login-note">{(lang === "en" ? (resetToken ? "Use 12–128 characters." : "Use your personal email address and password.") : (resetToken ? "12〜128文字で設定してください。" : "管理者が発行したアカウントでログインしてください。"))}</p>
             <Button type="submit" disabled={busy}>{(resetToken ? (lang === "en" ? "Save password" : "パスワードを設定") : resetMode ? (lang === "en" ? "Send setup link" : "設定用リンクを送る") : L.signIn)}</Button>
-            {<Button kind="link" onClick={() => { setResetMode(!resetMode && !resetToken); setResetToken(""); setEmail(""); setPassword(""); setErr(null); setMsg(null); }}>{resetMode || resetToken ? (lang === "en" ? "Back to sign-in" : "ログインに戻る") : (lang === "en" ? "First-time setup / Forgot password" : "初回設定・パスワードを忘れた方")}</Button>}
+            {<Button kind="link" onClick={() => { setResetMode(!resetMode && !resetToken); setResetToken(""); setEmail(""); setPassword(""); setErr(null); setMsg(null); }}>{resetMode || resetToken ? (lang === "en" ? "Back to sign-in" : "ログインに戻る") : (lang === "en" ? "Forgot password" : "パスワードを忘れた方")}</Button>}
           </form>
         )}
         {err && <Notice tone="bad">{err}</Notice>}

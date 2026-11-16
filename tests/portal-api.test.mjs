@@ -224,7 +224,7 @@ test("operations: reasons are required, corrections keep history, manual lines a
   assert.ok(csv.body.includes("HP-0002"), "the current hotel is exported");
   assert.ok(!/(^|,)=SUM/m.test(csv.body));
   // roles: a booking operator cannot export or set rates; a finance user can
-  await admin.call("POST", "ops/ops-members", { email: "booking@example.com", role: "ops_booking" });
+  await auth.inviteMember(db, {}, {email:"booking@example.com",role:"ops_booking",scopeType:"ops",scopeId:null,by:"test-fixture",loginOrigin:ORIGIN,scopeLabel:"test",skipMail:true});
   const booking = client(db); await signIn(booking, "booking@example.com", "ops");
   assert.equal((await booking.call("GET", "ops/export.csv?from=2026-10-01&to=2026-10-31")).status, 403);
   assert.equal((await booking.call("POST", "ops/policies", { experienceSlug: "dotonbori-ramen-class", rateBp: 700 })).status, 403);
@@ -715,8 +715,8 @@ test('agency QR preferences persist per partner, validate destinations and prese
 test('ops password setup: bootstrap, portal isolation, expiry, replay and session revocation',async(t)=>{
  const db=openTestDb();await seed(db);const mails=[];
  t.mock.method(globalThis,'fetch',async(_url,init)=>{mails.push(JSON.parse(init.body));return new Response('{}',{status:200})});
- const c=client(db,{RESEND_API_KEY:'test',NOTIFY_ALLOWLIST:'@example.com',PORTAL_BOOTSTRAP_ADMIN:'new-owner@example.com'});
- const request=()=>c.call('POST','auth/password-request',{kind:'ops',email:'new-owner@example.com'});
+ const c=client(db,{RESEND_API_KEY:'test',NOTIFY_ALLOWLIST:'@prosent.co.jp',PORTAL_BOOTSTRAP_ADMIN:'yukihiro_ito@prosent.co.jp'});
+ const request=()=>c.call('POST','auth/password-request',{kind:'ops',email:'yukihiro_ito@prosent.co.jp'});
  assert.equal((await request()).status,200);
  assert.match(mails.at(-1).text,/\/ops\/login\/#password-token=/);
  const token=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
@@ -725,12 +725,12 @@ test('ops password setup: bootstrap, portal isolation, expiry, replay and sessio
  assert.equal((await set('ops',token,'short')).status,400);
  assert.equal((await set('ops',token,'long-test-password')).status,200);
  assert.equal((await set('ops',token,'replayed-password')).status,400);
- assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'new-owner@example.com',password:'long-test-password'})).status,200);
+ assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'yukihiro_ito@prosent.co.jp',password:'long-test-password'})).status,200);
  assert.equal((await c.call('GET','ops/me')).status,200);
  await request();const token2=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
  assert.equal((await set('ops',token2,'changed-test-password')).status,200);
  assert.equal((await c.call('GET','ops/me')).status,401);
- assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'new-owner@example.com',password:'long-test-password'})).status,401);
+ assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'yukihiro_ito@prosent.co.jp',password:'long-test-password'})).status,401);
  await request();const token3=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
  await db.run(`UPDATE ops_password_tokens SET expires_at='2000-01-01' WHERE consumed_by IS NULL`);
  assert.equal((await set('ops',token3,'expired-test-password')).status,400);
@@ -755,4 +755,56 @@ test('business data is private, validation and optimistic writes preserve concur
  await db.run(`UPDATE memberships SET role='ops_booking' WHERE user_id='u-admin'`);
  assert.equal((await c.call('GET','ops/business/data')).status,403);
  assert.equal((await c.call('POST','ops/business/import',{bookings:[],masters:[],snapshots:[]})).status,403);
+});
+
+
+test('master-only provisioning, first-login gate, password change, revocation and expiry',async()=>{
+ const db=openTestDb();await seed(db);
+ const owner=auth.OPS_MASTER_EMAIL;
+ await auth.bootstrapAdmin(db,{},owner,Date.now());
+ const master=client(db);await signIn(master,owner,'ops');
+ assert.equal((await master.call('GET','ops/me')).body.isMaster,true);
+ const admin=client(db);await signIn(admin,'admin@example.com','ops');
+ assert.equal((await admin.call('GET','ops/ops-members')).status,403);
+ assert.equal((await admin.call('POST','ops/ops-members',{email:'unauthorized@example.com',role:'ops_admin'})).status,403);
+ const issue=await master.call('POST','ops/ops-members',{email:'provisional@example.com',role:'ops_finance'});
+ assert.equal(issue.status,200,JSON.stringify(issue.body));
+ const temp=issue.body.temporaryPassword;
+ assert.ok(temp.length>=20);
+ const member=client(db),login=p=>member.call('POST','auth/password-login',{kind:'ops',email:'provisional@example.com',password:p});
+ assert.equal((await login(temp)).status,200);
+ assert.equal((await member.call('GET','ops/me')).body.mustChangePassword,true);
+ for(const route of ['ops/business/data','ops/reservations','ops/settings','ops/overview','ops/export.csv']) assert.equal((await member.call('GET',route)).status,403,route);
+ const change=(currentPassword,password)=>member.call('POST','auth/password-change-initial',{currentPassword,password});
+ assert.equal((await change(temp,temp)).status,400);
+ assert.equal((await change('wrong-password','member-final-password')).status,400);
+ assert.equal((await change(temp,'short')).status,400);
+ assert.equal((await change(temp,'member-final-password')).status,200);
+ assert.equal((await member.call('GET','ops/me')).status,401);
+ assert.equal((await login(temp)).status,401);
+ assert.equal((await login('member-final-password')).status,200);
+ assert.equal((await member.call('GET','ops/business/data')).status,200);
+ assert.equal((await member.call('GET','ops/me')).body.mustChangePassword,false);
+ assert.equal((await member.call('GET','ops/ops-members')).status,403);
+ const memberships=(await master.call('GET','ops/ops-members')).body.members;
+ const own=memberships.find(m=>m.email===owner);
+ assert.equal((await master.call('POST',`ops/members/${own.membership_id}/revoke`,{})).status,403);
+ assert.equal((await master.call('POST',`ops/users/${own.user_id}/disable`,{})).status,403);
+ assert.equal((await admin.call('POST',`ops/members/${issue.body.membershipId}/revoke`,{})).status,403);
+ const reissue=await master.call('POST','ops/ops-members',{email:'provisional@example.com',role:'ops_finance'});
+ assert.equal((await member.call('GET','ops/me')).status,401);
+ assert.equal((await login('member-final-password')).status,401);
+ await db.run(`UPDATE ops_password_changes SET expires_at='2000-01-01' WHERE user_id=?`,[issue.body.userId]);
+ assert.equal((await login(reissue.body.temporaryPassword)).status,401);
+ assert.equal((await master.call('POST',`ops/members/${issue.body.membershipId}/revoke`,{})).status,200);
+ assert.equal((await login(reissue.body.temporaryPassword)).status,401);
+});
+
+test('public password request never provisions an unknown account or a legacy bootstrap address',async(t)=>{
+ const db=openTestDb();await seed(db);let mails=0;
+ t.mock.method(globalThis,'fetch',async()=>{mails++;return new Response('{}')});
+ const c=client(db,{RESEND_API_KEY:'test',NOTIFY_ALLOWLIST:'@example.com',PORTAL_BOOTSTRAP_ADMIN:'outsider@example.com'});
+ assert.equal((await c.call('POST','auth/password-request',{kind:'ops',email:'outsider@example.com'})).status,200);
+ assert.equal(mails,0);
+ assert.equal(await db.first(`SELECT id FROM users WHERE email='outsider@example.com'`),null);
 });
