@@ -25,8 +25,27 @@ function Kpi({label,value,note,accent=false,negative=false,onClick}:{label:strin
 function SourceLink({value}:{value:string}){return /^https:\/\//.test(value)?<a href={value} target="_blank" rel="noreferrer" className="source-link">根拠を見る <ExternalLink size={12}/></a>:<span className="muted small">{value||'根拠未登録'}</span>}
 export default function Dashboard(){
 const [tab,setTab]=useState('overview'),[data,setData]=useState<Data>(empty),[loading,setLoading]=useState(true),[error,setError]=useState(''),[login,setLogin]=useState(''),[toast,setToast]=useState(''),[query,setQuery]=useState(''),[filter,setFilter]=useState('all'),[busy,setBusy]=useState<Record<string,boolean>>({}),[errors,setErrors]=useState<Record<string,string>>({}),[reconnect,setReconnect]=useState(''),[edit,setEdit]=useState<Booking|null>(null),[editMaster,setEditMaster]=useState<Master|null>(null),[saving,setSaving]=useState(false),[period,setPeriod]=useState('month'),[start,setStart]=useState(dateOffset(0).slice(0,7)+'-01'),[end,setEnd]=useState(dateOffset(0)),[catalog,setCatalog]=useState<Catalog|null>(null),[catError,setCatError]=useState('');
-async function read(){try{const res=await fetch('/api/portal/ops/business/data',{cache:'no-store'});const d:Data & Failure=await res.json();if(!res.ok){setLogin(res.status===401?'/ops/login/':'');throw new Error(d.message??d.error)}setData(d);setError('')}catch(e:unknown){setError(message(e))}finally{setLoading(false)}}
-useEffect(()=>{read();fetch('/api/portal/ops/business/catalog',{cache:'no-store'}).then(r=>r.json()).then((d:Catalog)=>d.error?setCatError(d.error):setCatalog(d)).catch(()=>setCatError('商品情報を取得できませんでした'))},[]);
+const [identityStatus,setIdentityStatus]=useState('');
+const active=useRef(true),readRetry=useRef<ReturnType<typeof setTimeout>|null>(null);
+async function read(){
+ if(readRetry.current){clearTimeout(readRetry.current);readRetry.current=null;}
+ let pending=false;
+ try{
+  const res=await fetch('/api/portal/ops/business/data',{cache:'no-store'});const d:Data & Failure=await res.json();
+  if(!active.current)return;
+  if(!res.ok){
+   setLogin(res.status===401?'/ops/login/':'');
+   if(d.error==='stripe_identity_pending'){
+    pending=true;setLoading(true);setError('');setIdentityStatus(d.message??'決済IDの照合を続けています。');
+    readRetry.current=setTimeout(()=>{readRetry.current=null;void read()},1500);return;
+   }
+   throw new Error(d.message??d.error);
+  }
+  setIdentityStatus('');setData(d);setError('');
+ }catch(e:unknown){if(active.current){setIdentityStatus('');setError(message(e))}}
+ finally{if(active.current&&!pending)setLoading(false)}
+}
+useEffect(()=>{active.current=true;void read();fetch('/api/portal/ops/business/catalog',{cache:'no-store'}).then(r=>r.json()).then((d:Catalog)=>{if(active.current)d.error?setCatError(d.error):setCatalog(d)}).catch(()=>{if(active.current)setCatError('商品情報を取得できませんでした')});return()=>{active.current=false;if(readRetry.current)clearTimeout(readRetry.current)}},[]);
 useEffect(()=>{const restore=()=>{const next=window.location.hash.slice(1);setTab(nav.some(n=>n[0]===next)?next:'overview');setQuery('');setFilter('all');setEdit(null);setEditMaster(null)};if(!nav.some(n=>n[0]===window.location.hash.slice(1)))window.history.replaceState({...window.history.state},'','#overview');restore();window.addEventListener('popstate',restore);window.addEventListener('hashchange',restore);return()=>{window.removeEventListener('popstate',restore);window.removeEventListener('hashchange',restore)}},[]);
 const attempted=useRef(new Set<string>()),inflight=useRef(new Set<string>());
 const rangeKey=start+':'+end;
@@ -55,7 +74,7 @@ const tabName=nav.find(n=>n[0]===tab)?.[1];
 return <div className="business-content"><div className="page-heading"><div><div className="business-eyebrow">KAMEHAME JAPAN</div><h1>{tabName}</h1><p>{tab==='overview'?'事業のいまを、ひとつの場所で。':tab==='bookings'?'案件ごとの原価と利益を、チームで正確に。':tab==='masters'?'繰り返し使う仕入条件を、ひとつの基準に。':tab==='search'?'検索される、見つかる、予約につながる。':tab==='products'?'体験のラインナップと、販売の土台を把握する。':tab==='history'?'いつ、誰が、何を変更したか。':'媒体ごとの費用と反応を確認する。'}</p></div>{['overview','ads','search'].includes(tab)?<button className="primary" onClick={syncAll} disabled={!data.user?.owner||!data.syncSources?.length||Object.values(activeBusy).some(Boolean)}><RefreshCw size={16} className={Object.values(activeBusy).some(Boolean)?'spin':''}/>{Object.values(activeBusy).some(Boolean)?'更新中…':'データを更新'}</button>:tab==='bookings'?<button className="primary" onClick={newBooking} disabled={!data.user}><Plus size={17}/>案件を追加</button>:tab==='masters'?<button className="primary" disabled={!data.user} onClick={()=>setEditMaster({id:crypto.randomUUID(),name:'',supplier:'',category:'体験',price:null,unit:'人',status:'unknown',source:'',note:'',revision:0})}><Plus size={17}/>卸値を追加</button>:null}</div>
 {error&&<div className="notice error"><AlertCircle size={18}/><div>{error}{login&&<p><a href={login} target="_top">ログイン画面へ</a></p>}</div><button onClick={read}>再読み込み</button></div>}
 {!loading&&data.syncSources?.length!==6&&<div className="notice">広告・検索は保存済みデータを表示します。更新日時をご確認ください。直接接続が未設定の媒体は更新できません。</div>}
-{loading&&<div className="notice"><RefreshCw size={17} className="spin"/>共有データを読み込んでいます…</div>}
+{loading&&<div className="notice" role="status"><RefreshCw size={17} className="spin"/>{identityStatus||'共有データを読み込んでいます…'}</div>}
 {['overview','ads','search'].includes(tab)&&<div className="period-row"><div className="period-tabs">{[['month','今月'],['previous','前月']].map(([v,l])=><button key={v} className={period===v?'selected':''} onClick={()=>choosePeriod(v)}>{l}</button>)}</div><div className="date-range"><input type="date" aria-label="集計開始日" value={start} onChange={e=>{setStart(e.target.value);setPeriod('custom')}}/><span>—</span><input type="date" aria-label="集計終了日" value={end} onChange={e=>{setEnd(e.target.value);setPeriod('custom')}}/></div></div>}
 {['overview','ads','search'].includes(tab)&&<><div className="source-strip">{Object.keys(sourceNames).map(k=><span key={k} title={snapshot(k)?.updatedAt??'この期間は未取得'}><i className={activeErrors[k]?'warn':snapshot(k)?'ok':''}/>{sourceNames[k]} {activeBusy[k]?'更新中':activeErrors[k]?'更新失敗':snapshot(k)?(data.syncSources?.includes(k)?'取得済':'保存データ / 未接続'):data.syncSources?.includes(k)?'未取得':'未接続'}</span>)}</div>{Object.entries(activeErrors).filter(([,v])=>v).map(([k,v])=><div className="notice error small" key={k}><AlertCircle size={15}/><span>{sourceNames[k]}：{v} {snapshot(k)?'以前の取得データを表示中。':''}</span></div>)}{!loading&&data.user&&!data.user.owner&&Object.keys(sourceNames).some(k=>!snapshot(k))&&<div className="notice">この期間の未取得データは、伊藤さんが期間を選択して取得すると共有されます。</div>}{reconnect&&<div className="notice"><a href={reconnect} target="_top">接続を許可してデータを取得する →</a></div>}</>}
 {tab==='overview'&&<><section className="kpi-grid"><Kpi label="売上" value={yen(net)} note="Stripe / 決済日ベース" accent onClick={()=>navigate('bookings')}/><Kpi label="広告費" value={yen(adSpend)} note="Google + Meta / 実消化額" onClick={()=>navigate('ads')}/><Kpi label="暫定営業利益" value={yen(netProfit)} note="登録原価、決済手数料、広告費控除後／固定費別" onClick={showProfit} negative={netProfit!=null&&netProfit<0}/><Kpi label="公開商品数" value={catalog?num(catalog.count)+' 商品':'—'} note="公開設定 / 独立LP・翻訳の重複を除外" onClick={()=>navigate('products')}/></section>
