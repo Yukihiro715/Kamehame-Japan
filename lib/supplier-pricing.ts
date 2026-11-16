@@ -56,7 +56,7 @@ export function validateSupplierPricing(raw: unknown, attachmentCount = 0): { da
       Object.assign(plan, { ...emptyPlan(plan.name), type: "quote", conditions: plan.conditions, tiers: [] });
       continue;
     }
-    const priceError = (r: string, w: string, zero = false) => !plan.retailUnavailable && !money(r, zero) ? "一般価格を整数の円で入力するか、「一般向けの定価は設定していない」を選んでください。" : !plan.negotiable && !money(w, zero) ? "ご希望のお支払額を整数の円で入力するか、「相談して決めたい」を選んでください。" : "";
+    const priceError = (r: string, w: string, zero = false) => !plan.retailUnavailable && !money(r, zero) ? "一般価格を整数の円で入力するか、「一般のお客様向けの定価がない」を選んでください。" : !plan.negotiable && !money(w, zero) ? "ご希望のお支払額を整数の円で入力するか、「相談して決めたい」を選んでください。" : "";
     if (plan.type === "tiered") {
       if (!plan.tiers.length) return fail("人数別料金を1つ以上追加してください。");
       plan.tiers.sort((a, b) => Number(a.minPeople) - Number(b.minPeople));

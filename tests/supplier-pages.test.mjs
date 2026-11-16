@@ -15,6 +15,8 @@ test("the supplier LP renders Japanese metadata, the approved copy and a consult
   assert.match(html, /インバウンド集客の、/);
   assert.match(html, /日本語またはご希望の言語/);
   assert.match(html, /5〜10％/);
+  assert.match(html, /貴社へのお支払額を、/);
+  assert.doesNotMatch(html, /希望卸価格|希望受取額/);
   assert.match(html, /href="#consult"/);
   assert.match(html, /電話番号/);
   assert.match(html, /type="tel"/);
@@ -29,6 +31,7 @@ test("the separate registration page is noindex and keeps the existing partner d
   assert.match(html, /name="robots" content="noindex, nofollow, noarchive"/);
   assert.match(html, /ご相談後、担当者からご案内した事業者様向け/);
   assert.match(html, /href="\/partners-lp\/"/);
+  assert.match(html, /貴社へのお支払額の希望/);
   const dashboard = await render("/partner/");
   assert.doesNotMatch(dashboard, /インバウンド集客の、/);
   assert.match(dashboard, /パートナー向け管理画面/);
