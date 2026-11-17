@@ -13,6 +13,7 @@ type State={sheetId:string;enabled:boolean;googleConfigured:boolean;lastAttemptA
 const useLedger=()=>{
   const [state,setState]=useState<State|null>(null),[error,setError]=useState('');
   const load=useCallback(async()=>{try{setState(await api<State>('GET','ops/business/ledger-state'));setError('');}catch(e){setError(errorText(e));}},[]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- load is an asynchronous API fetch; state updates follow the response
   useEffect(()=>{void load()},[load]);
   return {state,error,setError,load};
 };

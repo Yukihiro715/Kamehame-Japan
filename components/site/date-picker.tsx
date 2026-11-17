@@ -35,7 +35,12 @@ export function DatePicker({
   const input = useRef<HTMLInputElement>(null);
 
   // Once the earliest date is known, open the calendar on that month.
-  useEffect(() => { if (min && !value) setMonth(min.slice(0, 7)); }, [min, value]);
+  const resetKey = JSON.stringify([min, value]);
+  const [previousResetKey, setPreviousResetKey] = useState<string | null>(null);
+  if (resetKey !== previousResetKey) {
+    setPreviousResetKey(resetKey);
+    if (min && !value) setMonth(min.slice(0, 7));
+  }
 
   useEffect(() => {
     if (!open) return;

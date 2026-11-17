@@ -45,6 +45,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const travelCopy = GOLF_TRAVEL_COPY[lang];
   useEffect(() => {
     const query = readGolfTravelQuery(new URLSearchParams(window.location.search), MAX_PEOPLE);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate validated browser query after SSR without server/client markup mismatch
     if (query.golfers) setPeople(query.golfers);
     if (query.date) { setDay(query.date); setRequestedDate(query.date); }
     setFromFuji(query.fromFuji);
@@ -156,9 +157,14 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
  *  under the grid says how many tours that is and jumps to the list. */
 function Calendar({ tours, months, day, people, area, onPick, lang, C }: { tours: PublicTour[]; months: string[]; day: string; people: number; area: string; onPick: (d: string, scroll?: boolean) => void; lang: Lang; C: BusCopy }) {
   const [month, setMonth] = useState(() => (months.includes(day.slice(0, 7)) ? day.slice(0, 7) : months[0]));
-  useEffect(() => {
+  // Synchronize changed selection during render, not in a post-paint effect.
+  // Remember the input so manual month navigation remains independent.
+  const selectionKey = JSON.stringify([day, months]);
+  const [previousSelectionKey, setPreviousSelectionKey] = useState(selectionKey);
+  if (selectionKey !== previousSelectionKey) {
+    setPreviousSelectionKey(selectionKey);
     if (day && months.includes(day.slice(0, 7))) setMonth(day.slice(0, 7));
-  }, [day, months]);
+  }
   // Per day: tours that can take the chosen party (open, enough seats, matching departure) and the seats they have between them;
   // the cell shows the seats, so a pair can see at a glance that a "1" is not for them.
   const byDay = useMemo(() => {

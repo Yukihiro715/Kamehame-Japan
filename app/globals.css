@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "../vendor/shadcn-tailwind-4.13.0.css";
 
+/* MessageScroller reserves its scrollbar width to avoid content jumping. */
+@utility scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --ink: #171a21; --paper: #f7f2e7; --rice: #e9e1cf; --kame: #ee7c18; --kame-soft: #58c6ff; --blue: #274d9e; --gold: #ffc93c; --white: #fffdf8; --muted: #6f6c64;
   --font-display: 'Anton', 'Arial Black', 'Helvetica Neue', sans-serif;

@@ -44,8 +44,11 @@ export function ReviewPhotoGallery({ photos, alts, label, lang }: { photos: stri
     const overflow = body.style.overflow;
     const rootOverflow = document.documentElement.style.overflow;
     const modal = body.dataset.khModal;
+    // eslint-disable-next-line react-hooks/immutability -- DOM scroll lock is external state, restored by this effect cleanup
     body.style.overflow = "hidden";
+    // eslint-disable-next-line react-hooks/immutability -- DOM scroll lock is external state, not a React prop
     document.documentElement.style.overflow = "hidden";
+    // eslint-disable-next-line react-hooks/immutability -- external DOM marker for modal scroll locking
     body.dataset.khModal = "1";
     // Keep the current photo in view when the phone rotates or the window resizes.
     const resize = new ResizeObserver(() => {
