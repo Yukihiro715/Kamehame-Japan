@@ -25,7 +25,7 @@ async function render(path = "/") {
   );
 }
 
-test("renders development preview metadata", async () => {
+test("production pages do not carry development preview metadata", async () => {
   const response = await render();
 
   assert.equal(response.status, 200);
@@ -33,7 +33,7 @@ test("renders development preview metadata", async () => {
     response.headers.get("content-type") ?? "",
     /^text\/html\b/i,
   );
-  assert.match(await response.text(), developmentPreviewMeta);
+  assert.doesNotMatch(await response.text(), developmentPreviewMeta);
 });
 
 test("closes the document after the last inline script", async () => {
@@ -342,7 +342,7 @@ test("theme pages: a home tile lists every published experience in its categorie
   assert.ok(xml.includes("https://kamehame-japan.com/en/food/") && !xml.includes("/en/pop-culture/"), "sitemap lists live themes only");
 });
 
-test("kendo tours are published after approval; unapproved partners remain in preview", async () => {
+test("approved kendo tours and Yotsuya tea remain published", async () => {
   const pages = [
     ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥26,500", "/en/tokyo/"],
     ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥16,500", "/en/tokyo/"],
@@ -362,7 +362,7 @@ test("kendo tours are published after approval; unapproved partners remain in pr
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     assert.ok(text.includes(price), `price on ${path}`);
-    const approved = path.includes("-kendo-experience-tour/") || path.includes("/nihonbashi-");
+    const approved = true; // Kendo and Yotsuya were explicitly published (121d443).
     assert.equal(text.includes(PREVIEW_BANNER), !approved, `publication status on ${path}`);
     if (approved) {
       if (path.includes("-kendo-experience-tour/")) assert.ok(text.includes("for groups of up to five, two days before is accepted"));
@@ -394,7 +394,7 @@ test("kendo tours are published after approval; unapproved partners remain in pr
   assert.equal((await render("/en/himeji/")).status, 200, "published Himeji city");
 });
 
-test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages that never name the partners", async () => {
+test("workshop previews and approved salons preserve publication status and partner privacy", async () => {
   const pages = [
     ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥56,500"],
     ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥47,500"],
@@ -416,9 +416,21 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
-    assert.ok(text.includes(price), `price on ${path}`);
-    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
-    assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
+    const paused = path.includes("/arashiyama-stone-mill-matcha/");
+    if (paused) {
+      assert.ok(text.includes("Bookings are currently paused"), `paused booking notice on ${path}`);
+      assert.ok(!html.includes('<form'), `paused booking has no form on ${path}`);
+    } else assert.ok(text.includes(price), `price on ${path}`);
+    const published = path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/");
+    assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
+    if (published) assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    // 90de9eb explicitly introduced these rakugo artists; the operator and
+    // unrelated partner identities must still stay off the public page.
+    const privatePartners = path.includes("/nihonbashi-english-rakugo-salon/")
+      ? new RegExp(partners.source.replace("Kanariya|Eiraku|Koraku|Ichirin|", ""), partners.flags)
+      : partners;
+    assert.doesNotMatch(html, privatePartners, `operator names stay private on ${path}`);
+    if (path.includes("/nihonbashi-english-rakugo-salon/")) assert.ok(text.includes("Ichirin, Koraku and Kanariya Eiraku"), "confirmed artist introduction");
     if (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/")) {
       // KAMEHAME's standard cancellation (2026-10-23: the stricter of ours and the salon's two-day rule); a minimum of three guests; socks.
       assert.ok(text.includes("Up to 7 days before the date") && text.includes("6 days before or later, including no-shows"), `salon cancellation table on ${path}`);
@@ -439,8 +451,8 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
       const alt = await render(path.replace("/en/", `/${lang}/`));
       assert.equal(alt.status, 200, `${lang} ${path}`);
       const altHtml = await alt.text();
-      assert.doesNotMatch(altHtml, partners, `partner names stay private on ${lang} ${path}`);
-      if (lang === "ja") assert.ok(altHtml.includes("プレビュー — このページはまだ公開していません") && !altHtml.includes(title), `Japanese text on ${path}`);
+      assert.doesNotMatch(altHtml, privatePartners, `operator names stay private on ${lang} ${path}`);
+      if (lang === "ja") { assert.equal(altHtml.includes("プレビュー — このページはまだ公開していません"), !published, `Japanese publication status on ${path}`); assert.ok(!altHtml.includes(title), `Japanese text on ${path}`); }
       if (lang === "ja" && arashiyama) assert.ok(altHtml.includes("開催30日前まで") && altHtml.includes("貸切または20名以上") && !altHtml.includes("15分前にお越しください"), `Japanese cancellation terms on ${path}`);
     }
   }
@@ -449,7 +461,7 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
   assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
 });
 
-test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setagaya and Asakusa noodle previews never name the partners", async () => {
+test("partner handover: approved tea pages and unapproved previews preserve terms and privacy", async () => {
   // The Yotsuya tea page carries the owner's table (2026-11-14: ¥17,500 for 1–3 / ¥16,000 for 4–10 per person) and the host's photos.
   const tea = await (await render("/en/tokyo/yotsuya-tea-ceremony/")).text();
   const teaText = tea.replace(/<[^>]+>/g, " ");
@@ -482,16 +494,28 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     for (const s of needs) assert.ok(text.includes(s), `${s} on ${path}`);
-    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
-    assert.match(html, /name="robots" content="noindex/, `noindex on ${path}`);
-    assert.doesNotMatch(text, partners, `partner names stay private on ${path}`);
-    assert.ok(!xml.includes(path), `${path} not in the sitemap`);
-    for (const l of listings) assert.ok(!l.includes(`href="${path}"`), `${path} not listed`);
-    // other locales resolve (English fallback) and keep the names private
+    const published = path.startsWith("/en/kyoto/"); // Camellia pages published in 0c97e4c.
+    assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
+    assert.equal(/name="robots" content="noindex/.test(html), !published, `indexing status on ${path}`);
+    // Published Camellia map pins (481265d) and verified access guides (#69,
+    // #70) deliberately name the destination; other operators remain private.
+    const privatePartners = published
+      ? /Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介/i
+      : partners;
+    assert.doesNotMatch(text, privatePartners, `unpublished operator names stay private on ${path}`);
+    if (published) {
+      const venue = path.includes("/kyoto-garden-") ? "Tea Ceremony Camellia GARDEN" : "Tea Ceremony Camellia FLOWER";
+      assert.ok(html.includes(encodeURIComponent(venue)), `verified venue map on ${path}`);
+      if (!path.includes("-annex-")) assert.ok(text.includes(venue), `verified access destination on ${path}`);
+    }
+    assert.equal(xml.includes(path), published, `${path} sitemap status`);
+    assert.equal(listings.some(l => l.includes(`href="${path}"`)), published, `${path} listing status`);
+    // Only private tea has approved English fallback; other Kyoto tea locales remain 404.
     for (const lang of ["ja", "fr"]) {
       const alt = await render(path.replace("/en/", `/${lang}/`));
-      assert.equal(alt.status, 200, `${lang} ${path}`);
-      assert.doesNotMatch((await alt.text()).replace(/<[^>]+>/g, " "), partners, `partner names stay private on ${lang} ${path}`);
+      const englishOnly = /kyoto-(garden-teahouse|higashiyama-shared|higashiyama-annex)-tea-ceremony/.test(path);
+      assert.equal(alt.status, englishOnly ? 404 : 200, `${lang} ${path}`);
+      assert.doesNotMatch((await alt.text()).replace(/<[^>]+>/g, " "), privatePartners, `unpublished operator names stay private on ${lang} ${path}`);
     }
   }
 });
@@ -593,22 +617,22 @@ test("sends baseline security headers", async () => {
 });
 
 
-test("private spa preview: the owner's price, the spa's terms, no public address or operator name", async () => {
+test("published private spa: approved price and terms, no public address or operator name", async () => {
   for (const lang of ["en", "ja"]) {
     const res = await render(`/${lang}/tokyo/nerima-herbal-bath-private-spa/`);
     assert.equal(res.status, 200);
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, " ");
-    assert.match(html, /noindex/);
+    assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
     assert.ok(text.includes("¥24,500") && !text.includes("¥18,000") && !text.includes("¥14,400"), `sale price only on ${lang}`);
-    assert.ok(text.includes(lang === "en" ? "Closed on Tuesdays" : "火曜定休"), `Tuesday closure on ${lang}`);
+    assert.ok(text.includes(lang === "en" ? "Normally closed on Tuesdays" : "火曜定休"), `Tuesday closure on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "camera" : "カメラ"), `camera disclosure on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "Up to 7 days before the date" : "開催7日前まで"), `cancellation table on ${lang}`);
     assert.ok(!/changed once|1回無料|drowning|溺水/.test(text), `no reschedule or drowning wording on ${lang}`);
     assert.doesNotMatch(html, /石神癒|[Ss]hakuji|shakujinoyu|hidukiminato|ガムナミエス|Gamunamiesu|上石神井|Kamishakujii|リフュージュ|Refuge Happiness|\b城\s|\bJo\b|Jō\b/, `operator name and address stay off ${lang}`);
   }
   const listing = await (await render("/en/tokyo/")).text();
-  assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));
+  assert.ok(listing.includes("nerima-herbal-bath-private-spa"));
 });
 
 test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seven menus, the owner's pricing, demo-only form", async () => {

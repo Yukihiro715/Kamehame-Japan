@@ -108,7 +108,12 @@ export function buildEntries(read) {
   // English lives at the root; every other locale sits under its prefix.
   const homePath = (lang) => (lang === "en" ? "/" : `/${lang}/`);
   const expPath = (lang, e) => `/${lang}/${e.city}/${e.slug}/`;
-  const expKey = (lang, slug) => join(entryBlock(cat.en, slug), lang === "en" ? "" : entryBlock(cat[lang], slug));
+  // Match catalogFor's explicit fallback allowlist, not arbitrary missing
+  // translations. These pages render the English entry, so its content must
+  // also control lastmod rather than falling back to the date of every build.
+  const fallbackBlock = catalog.match(/const APPROVED_ENGLISH_FALLBACK = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? "";
+  const englishFallback = new Set([...fallbackBlock.matchAll(/"([a-z-]+)"/g)].map((m) => m[1]));
+  const expKey = (lang, slug) => join(entryBlock(cat.en, slug), lang === "en" ? "" : (entryBlock(cat[lang], slug) ?? (englishFallback.has(slug) ? "" : null)));
   const inCity = (c) => experiences.filter((e) => e.city === c);
   const inCategory = (c) => experiences.filter((e) => e.category === c);
   const collectionsCopy = src("lib/collections.ts");
@@ -137,8 +142,11 @@ export function buildEntries(read) {
   }
 
   for (const e of experiences) {
-    for (const lang of LANGS) {
-      add(expPath(lang, e), { priority: "0.9", alternates: siblings((l) => expPath(l, e)), key: expKey(lang, e.slug) });
+    // A live English entry does not imply that every locale has a route.
+    // Only authored translations and explicitly approved fallbacks resolve.
+    const langs = LANGS.filter((lang) => expKey(lang, e.slug) != null);
+    for (const lang of langs) {
+      add(expPath(lang, e), { priority: "0.9", alternates: siblings((l) => expPath(l, e), langs), key: expKey(lang, e.slug) });
     }
   }
 

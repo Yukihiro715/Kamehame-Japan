@@ -14,7 +14,7 @@ import { autoAcknowledge } from "../lib/portal/settlement";
 import { expireQuotes } from "../lib/portal/cases";
 
 interface Env extends AdsEnv {
-  ASSETS: Fetcher;
+  ASSETS: { fetch(request: Request): Promise<Response> };
   /** D1 (the commission ledger, lib/referral). Absent until the deploy workflow has created the database. */
   DB?: unknown;
   /** "staging" on the verification Worker: every page behind Basic auth, noindex everywhere. */

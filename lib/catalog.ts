@@ -240,7 +240,8 @@ export interface Experience {
    *  where the partner's brand must not be searchable. */
   teacher?: { img: string; alt: string; credentials: string[]; comment: string };
   whatYoullDo: string[];
-  master: { title: string; bio: string; quote: string };
+  /** Optional: clinic/consultation pages do not necessarily have a host profile. */
+  master?: { title: string; bio: string; quote: string };
   itinerary: string[];
   goodToKnow: string[];
   story: { heading: string; body: string };

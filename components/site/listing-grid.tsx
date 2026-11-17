@@ -37,15 +37,23 @@ function writeQuery(f: Filters, sort: Sort, view: View) {
   window.history.replaceState(null, "", `${window.location.pathname}${s ? `?${s}` : ""}`);
 }
 
+function Chip<K extends keyof Filters>({ k, v, label, filters, onToggle }: { k: K; v: Filters[K][number]; label: string; filters: Filters; onToggle: <T extends keyof Filters>(key: T, value: Filters[T][number]) => void }) {
+  const selected = (filters[k] as unknown[]).includes(v);
+  return <button type="button" className={`lg-chip${selected ? " on" : ""}`} aria-pressed={selected} onClick={() => onToggle(k, v)}>{label}</button>;
+}
+function Group({ title, children }: { title: string; children: React.ReactNode }) {
+  return <div className="lg-group"><p className="lg-group-h">{title}</p><div className="lg-chips">{children}</div></div>;
+}
+
 export function ListingGrid({ items, lang, eagerCount = 4 }: { items: ListingItem[]; lang: Lang; eagerCount?: number }) {
   const L = listingCopy(lang);
   const [f, setF] = useState<Filters>(EMPTY);
   const [sort, setSort] = useState<Sort>("recommended");
   const [view, setView] = useState<View>("grid");
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- the URL and the stored view exist only after mount
   useEffect(() => {
     const q = readQuery();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate browser URL/localStorage after SSR; no React-derived state loop
     setF(q.f); setSort(q.sort);
     let stored: string | null = null;
     try { stored = localStorage.getItem(VIEW_KEY); } catch { stored = null; }
@@ -82,10 +90,7 @@ export function ListingGrid({ items, lang, eagerCount = 4 }: { items: ListingIte
     const cur = f[k] as unknown[];
     update({ ...f, [k]: cur.includes(v) ? cur.filter((x) => x !== v) : [...cur, v] } as Filters);
   };
-  const Chip = <K extends keyof Filters>({ k, v, label }: { k: K; v: Filters[K][number]; label: string }) => (
-    <button type="button" className={`lg-chip${(f[k] as unknown[]).includes(v) ? " on" : ""}`} aria-pressed={(f[k] as unknown[]).includes(v)} onClick={() => toggle(k, v)}>{label}</button>
-  );
-  const Group = ({ title, children }: { title: string; children: React.ReactNode }) => <div className="lg-group"><p className="lg-group-h">{title}</p><div className="lg-chips">{children}</div></div>;
+
 
   return (
     <div className="lg">
@@ -105,12 +110,12 @@ export function ListingGrid({ items, lang, eagerCount = 4 }: { items: ListingIte
       {open && (
         <div className="lg-panel" role="region" aria-label={L.filters}>
           <div className="lg-panel-h"><b>{L.filters}</b><button type="button" className="lg-close" aria-label="Close" onClick={() => setOpen(false)}><X size={18} /></button></div>
-          {cities.length > 1 && <Group title={L.city}>{cities.map(([v, label]) => <Chip key={v} k="city" v={v} label={label} />)}</Group>}
-          {cats.length > 1 && <Group title={L.interest}>{cats.map(([v, label]) => <Chip key={v} k="cat" v={v} label={label} />)}</Group>}
-          {durs.length > 1 && <Group title={L.duration}>{durs.map((b) => <Chip key={b} k="dur" v={b} label={L.dur[b]} />)}</Group>}
-          {prices.length > 1 && <Group title={L.price}>{prices.map((b) => <Chip key={b} k="price" v={b} label={L.priceBand[b]} />)}</Group>}
-          {groups.length > 1 && <Group title={L.group}><Chip k="group" v="private" label={L.privateOnly} /><Chip k="group" v="small" label={L.smallGroup} /></Group>}
-          {bookings.length > 1 && <Group title={L.booking}><Chip k="booking" v="instant" label={L.instant} /><Chip k="booking" v="request" label={L.onRequest} /></Group>}
+          {cities.length > 1 && <Group title={L.city}>{cities.map(([v, label]) => <Chip filters={f} onToggle={toggle} key={v} k="city" v={v} label={label} />)}</Group>}
+          {cats.length > 1 && <Group title={L.interest}>{cats.map(([v, label]) => <Chip filters={f} onToggle={toggle} key={v} k="cat" v={v} label={label} />)}</Group>}
+          {durs.length > 1 && <Group title={L.duration}>{durs.map((b) => <Chip filters={f} onToggle={toggle} key={b} k="dur" v={b} label={L.dur[b]} />)}</Group>}
+          {prices.length > 1 && <Group title={L.price}>{prices.map((b) => <Chip filters={f} onToggle={toggle} key={b} k="price" v={b} label={L.priceBand[b]} />)}</Group>}
+          {groups.length > 1 && <Group title={L.group}><Chip filters={f} onToggle={toggle} k="group" v="private" label={L.privateOnly} /><Chip filters={f} onToggle={toggle} k="group" v="small" label={L.smallGroup} /></Group>}
+          {bookings.length > 1 && <Group title={L.booking}><Chip filters={f} onToggle={toggle} k="booking" v="instant" label={L.instant} /><Chip filters={f} onToggle={toggle} k="booking" v="request" label={L.onRequest} /></Group>}
           <div className="lg-panel-f">
             <button type="button" className="lg-link" onClick={() => update(EMPTY)} disabled={!active}>{L.clear}</button>
             <button type="button" className="lg-done" onClick={() => setOpen(false)}>{L.done} · {shown.length}</button>

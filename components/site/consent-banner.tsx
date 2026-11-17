@@ -40,6 +40,7 @@ export function ConsentBanner({ lang }: { lang: Lang }) {
   useEffect(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem(CONSENT_KEY); } catch { /* private mode */ }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read persisted browser consent after SSR; default remains closed for hydration
     if (stored !== "granted" && stored !== "denied") setOpen(true);
     // The footer link re-opens this from anywhere on the page.
     const onOpen = () => setOpen(true);
