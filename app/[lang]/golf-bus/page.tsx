@@ -1,3 +1,5 @@
+import { serializeJsonLd, absolute } from "@/lib/seo";
+import { faqJsonLd } from "@/lib/experience-seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -178,6 +180,11 @@ export default async function GolfBusPage({ params }: Props) {
           </div>
         </section>
       </main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({ "@context": "https://schema.org", "@graph": [
+        { "@type": "CollectionPage", "@id": `${absolute(`/${lang}/golf-bus/`)}#webpage`, url: absolute(`/${lang}/golf-bus/`), name: C.heroTitle, description: C.heroLede, inLanguage: lang, isPartOf: { "@id": `${absolute("/")}#website` } },
+        faqJsonLd(C.faq, `/${lang}/golf-bus/`, lang),
+        { "@type": "ItemList", name: C.heroTitle, itemListElement: tours.map((tour, index) => ({ "@type": "ListItem", position: index + 1, name: `${tour.date} · ${lang === "ja" ? tour.course : tour.courseEn}`, url: absolute(`/${lang}/golf-bus/`), description: `${tour.pickup} · JPY ${tour.perPersonYen}` })) },
+      ] }) }} />
       <SiteFooter lang={lang} />
     </>
   );

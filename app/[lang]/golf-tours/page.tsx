@@ -1,3 +1,4 @@
+import { serializeJsonLd, absolute } from "@/lib/seo";
 import { JOURNAL_COPY } from "@/lib/journal-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -128,6 +129,7 @@ export default async function GolfToursPage({ params }: Props) {
           <Link className={journalStyles.all} href={`/${lang}/journal/`}>{JOURNAL_COPY[lang].all} <ArrowRight size={16} /></Link>
         </section>}
       </main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({ "@context": "https://schema.org", "@type": "CollectionPage", name: C.landTitle, description: C.landLede, url: absolute(`/${lang}/golf-tours/`), inLanguage: lang, mainEntity: { "@type": "ItemList", itemListElement: [{ "@type": "ListItem", position: 1, name: C.customH, url: absolute(customHref) }, { "@type": "ListItem", position: 2, name: C.sharedH, url: absolute(busHref) }] } }) }} />
       <SiteFooter lang={lang} />
     </>
   );

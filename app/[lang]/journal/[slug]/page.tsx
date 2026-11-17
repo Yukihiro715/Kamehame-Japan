@@ -1,3 +1,5 @@
+import { experienceFacts, FACT_COPY } from "@/lib/experience-seo";
+import { serializeJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -54,16 +56,22 @@ export default async function ArticlePage({ params }: Props) {
     .map((s) => experiences.find((e) => e.slug === s))
     .filter((e): e is NonNullable<typeof e> => Boolean(e));
 
+  const compared = article.comparison ? catalogFor("en").experiences
+    .filter(e => e.category === article.comparison!.category && (!article.comparison!.city || e.city === article.comparison!.city))
+    .map(e => ({ ...(experiences.find(local => local.slug === e.slug) ?? e), contentLang: experiences.some(local => local.slug === e.slug) ? lang : "en" as const })) : [];
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${absolute(`/${lang}/journal/${slug}/`)}#article`,
     headline: c.title,
     description: c.standfirst,
     image: absolute(article.img),
     datePublished: article.date,
     ...(article.editorial ? { author: { "@type": "Organization", name: article.editorial.author, url: absolute(`/${lang}/about/`) }, dateModified: article.date } : {}),
     inLanguage: lang,
-    publisher: { "@type": "Organization", name: "KAMEHAME JAPAN", url: SITE_ORIGIN },
+    publisher: { "@id": `${SITE_ORIGIN}/#organization` },
+    about: related.map(e => ({ "@id": `${absolute(`/${lang}/${e.city}/${e.slug}/`)}#experience` })),
+    isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
     mainEntityOfPage: absolute(`/${lang}/journal/${slug}/`),
   };
 
@@ -99,6 +107,11 @@ export default async function ArticlePage({ params }: Props) {
             })}
           </div>
 
+          {compared.length > 0 && <div className="article-table-scroll" role="region" aria-label={c.title} tabIndex={0}>
+            <table className="article-table"><caption>{c.title}</caption><thead><tr><th scope="col">{T.articleRelatedH}</th><th scope="col">{FACT_COPY[lang].area}</th><th scope="col">{FACT_COPY[lang].duration}</th><th scope="col">{FACT_COPY[lang].language}</th><th scope="col">{FACT_COPY[lang].ages}</th><th scope="col">{FACT_COPY[lang].price}</th></tr></thead>
+            <tbody>{compared.map(e => <tr key={e.slug}><th scope="row"><Link href={`/${e.contentLang}/${e.city}/${e.slug}/`} hrefLang={e.contentLang}>{e.title}{e.contentLang !== lang ? " (English)" : ""}</Link></th><td>{e.area}</td><td>{e.duration}</td><td>{e.langTag ?? (e.interpreter === false ? "—" : T.interpreterGuide)}</td><td>{e.ages}</td><td>{experienceFacts(e, e.contentLang).find(f => f.name === FACT_COPY[e.contentLang].price)?.value}</td></tr>)}</tbody></table>
+          </div>}
+
           {article.cta && <section className="article-booking"><h2>{J.plan}</h2><p>{article.cta.text}</p><Link className="underlined-link" href={article.cta.href}>{article.cta.label} <ArrowRight size={18} /></Link></section>}
 
           {relatedReading.length > 0 && <section className="article-reading"><h2>{J.related}</h2><ul>{relatedReading.map((a) => <li key={a.slug}><Link href={`/${lang}/journal/${a.slug}/`}>{a.copy[lang]!.title}</Link></li>)}</ul></section>}
@@ -130,7 +143,7 @@ export default async function ArticlePage({ params }: Props) {
         </article>
       </div>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
       <SiteFooter lang={lang} />
     </main>
   );

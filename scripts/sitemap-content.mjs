@@ -135,8 +135,8 @@ export function buildEntries(read) {
         members = experiences.filter((e) => cats.includes(e.category));
         key = join(themeBlock(themesSrc, c), lang, members.map((e) => e.slug).join(","));
       }
-      else if (c === "tours") { members = []; key = join(langBlock(collectionsCopy, lang), tours.join(",")); }
-      else { members = experiences; key = join(langBlock(collectionsCopy, lang), experiences.map((e) => e.slug).join(",")); }
+      else if (c === "tours") { members = []; key = join(src("lib/booking-guidance.ts"), langBlock(collectionsCopy, lang), tours.join(",")); }
+      else { members = experiences; key = join(src("lib/booking-guidance.ts"), langBlock(collectionsCopy, lang), experiences.map((e) => e.slug).join(",")); }
       add(`/${lang}/${c}/`, { priority: "0.8", alternates: siblings((l) => `/${l}/${c}/`), key, deps: members.map((e) => expPath(lang, e)) });
     }
   }
@@ -146,7 +146,7 @@ export function buildEntries(read) {
     // Only authored translations and explicitly approved fallbacks resolve.
     const langs = LANGS.filter((lang) => expKey(lang, e.slug) != null);
     for (const lang of langs) {
-      add(expPath(lang, e), { priority: "0.9", alternates: siblings((l) => expPath(l, e), langs), key: expKey(lang, e.slug) });
+      add(expPath(lang, e), { priority: "0.9", alternates: siblings((l) => expPath(l, e), langs), key: join(expKey(lang, e.slug), src("lib/experience-seo.ts"), src("components/site/experience-facts.tsx")) });
     }
   }
 
@@ -179,7 +179,7 @@ export function buildEntries(read) {
     const langs = LANGS.filter((l) => copyFor(l));
     for (const lang of langs) {
       articlePaths[lang].push(`/${lang}/journal/${slug}/`);
-      add(`/${lang}/journal/${slug}/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/journal/${slug}/`, langs), key: join(head, copyFor(lang), golfSlugs.has(slug) ? src("lib/journal-copy.ts") : "") });
+      add(`/${lang}/journal/${slug}/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/journal/${slug}/`, langs), key: join(head, copyFor(lang), golfSlugs.has(slug) ? src("lib/journal-copy.ts") : "", /comparison:/.test(head) ? catalog + cat[lang] : "") });
     }
   }
 
@@ -196,8 +196,8 @@ export function buildEntries(read) {
   for (const page of STATIC_PAGES) {
     for (const lang of LANGS) {
       const opts = { priority: "0.5", changefreq: "monthly", alternates: siblings((l) => `/${l}/${page}/`) };
-      if (page === "about") opts.key = langBlock(aboutSrc, lang);
-      else if (page === "faq") opts.key = langBlock(faqSrc, lang);
+      if (page === "about") opts.key = join(langBlock(aboutSrc, lang), src("lib/booking-guidance.ts"));
+      else if (page === "faq") opts.key = join(langBlock(faqSrc, lang), src("lib/booking-guidance.ts"));
       else if (page === "journal") { opts.key = "journal"; opts.deps = articlePaths[lang]; }
       else if (page === "contact" || page === "trade") opts.key = i18nKeys(langBlock(i18n, lang), pageKeys[page]);
       else if (page === "privacy") opts.date = privacyDate;

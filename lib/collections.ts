@@ -1,3 +1,4 @@
+import { BOOKING_GUIDANCE } from "@/lib/booking-guidance";
 // Resolves a /{lang}/{collection}/ slug (city, category, tours, experiences)
 // into everything the shared listing template needs, in the given language.
 
@@ -348,9 +349,9 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
     photos: [tr.img], city: tr.city, cityLabel: cityTitle(tr.city), category: "tours", categoryLabel: S.tourTag, durationLabel: tr.duration, minutes: parseMinutes(tr.duration), priceYen: parseYen(tr.price), isPrivate: true, bookingType: tr.bookingType === "instant" ? "instant" : "request", rating: null,
   });
 
-  const FAQ_GUIDE: Faq = { q: S.faqGuideQ, a: S.faqGuideA };
+  const FAQ_GUIDE: Faq = { q: S.faqGuideQ, a: BOOKING_GUIDANCE[lang].language };
   const FAQ_BOOK: Faq = { q: S.faqBookQ, a: S.faqBookA };
-  const FAQ_CANCEL: Faq = { q: S.faqCancelQ, a: cancellationFor(lang) };
+  const FAQ_CANCEL: Faq = { q: S.faqCancelQ, a: BOOKING_GUIDANCE[lang].cancellation };
 
   const city = cities.find((c) => c.slug === slug);
   if (city) {
