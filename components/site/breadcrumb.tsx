@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import { SITE_ORIGIN } from "@/lib/catalog";
 
@@ -20,7 +21,7 @@ export function Breadcrumbs({ trail }: { trail: Crumb[] }) {
           {c.href ? <Link href={c.href}>{c.label}</Link> : <span aria-current="page">{c.label}</span>}
         </span>
       ))}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
     </nav>
   );
 }

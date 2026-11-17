@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -142,7 +143,7 @@ export default async function CollectionPage({ params }: Props) {
         </div>
       </section>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({ "@context": "https://schema.org", "@graph": [faqJsonLd, { "@type": "ItemList", name: data.h1, itemListElement: data.items.map((item, i) => ({ "@type": "ListItem", position: i + 1, name: item.title, url: new URL(item.href, "https://kamehame-japan.com").href })) }] }) }} />
       <SiteFooter lang={lang} />
     </main>
   );

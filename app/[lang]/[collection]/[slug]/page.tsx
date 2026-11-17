@@ -1,3 +1,6 @@
+import { ExperienceFacts } from "@/components/site/experience-facts";
+import { experienceJsonLd } from "@/lib/experience-seo";
+import { serializeJsonLd } from "@/lib/seo";
 import { BookingRequestHeading } from "@/components/site/quote-request-switch";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -178,7 +181,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   // Locale FAQs preserve the source ordering; identify the booking question
   // through the English source so no language can keep the old pay=confirmed text.
   const bookingFaqIndex = catalogFor("en").experiences.find(v => v.slug === exp.slug)?.faq?.findIndex(f => f.q === "How does booking work?" || f.q === "How long until the date is confirmed?");
-  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq.map((f, i) => provisional && i === 1 ? { ...f, a: `${P.note} ${P.refund}` } : f))];
+  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq.flatMap((f, i) => exp.interpreter === false && i === 0 ? [] : [provisional && i === 1 ? { ...f, a: `${P.note} ${P.refund}` } : f]))];
   const flow = provisional ? P.flow : exp.flow ?? D.flow;
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const ctaLabel = provisional ? P.cta : live ? D.requestAvailability : T.comingSoonCta;
@@ -251,6 +254,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             )}
           </aside>
           <div className="xp-main">
+            <ExperienceFacts exp={exp} lang={lang} />
             {/* ③ Overview */}
             <section className="xp-section" id="overview">
               <h2>{D.overviewH}</h2>
@@ -599,9 +603,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
         </section>
       )}
 
-      {!bookingUnavailable && !consultOnly && <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
-      }} />}
+      {!preview && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(experienceJsonLd(exp, lang, faq)) }} />}
       <SiteFooter lang={lang} />
     </main>
   );
@@ -680,7 +682,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
       </section>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
+        __html: serializeJsonLd(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
       }} />
       <SiteFooter lang={lang} />
     </main>

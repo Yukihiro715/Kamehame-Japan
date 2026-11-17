@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
 import { headers } from "next/headers";
@@ -92,7 +93,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         {/* Google Tag Manager — GA4, Ads conversions and Search Console
             verification are all configured inside the container. */}
         <script dangerouslySetInnerHTML={{ __html: gtmSnippet }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({ "@context": "https://schema.org", "@graph": [organizationJsonLd, { "@type": "WebSite", "@id": `${SITE_ORIGIN}/#website`, url: `${SITE_ORIGIN}/`, name: SITE_NAME, publisher: { "@id": `${SITE_ORIGIN}/#organization` } }] }) }} />
       </head>
       <body>
         <RouteChangeEvent />
