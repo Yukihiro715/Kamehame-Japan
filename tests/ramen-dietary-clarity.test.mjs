@@ -7,6 +7,9 @@ test('Tokyo and Osaka ramen distinguish dietary plans from halal certification i
   const path=`/${lang}/${city}/${slug}/`;
   const r=await worker.fetch(new Request('https://kamehame-japan.com'+path),{ASSETS:{fetch:async()=>new Response('Not found',{status:404})}},{waitUntil(){},passThroughOnException(){}});
   assert.equal(r.status,200,path);const html=await r.text();assert.ok(html.includes(phrase),path);
+  const faqAnswers = [...html.matchAll(/<details\b[^>]*>[\s\S]*?<\/details>/g)].map(match => match[0]).filter(answer => answer.includes(phrase));
+  assert.equal(faqAnswers.length, 1, `${path}: one visible dietary FAQ`);
+  assert.equal(faqAnswers[0].split(phrase).length - 1, 1, `${path}: warning appears once in its FAQ`);
   assert.doesNotMatch(html,/ベジタリアン・ヴィーガンは追加料金なし|sin coste adicional|sans supplément|不加價/);
  }
 });
