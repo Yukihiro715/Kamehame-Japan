@@ -1,3 +1,5 @@
+import { measureGolf } from "./golf-ads";
+
 // Google Tag Manager container. Everything else (GA4, Ads conversions,
 // Search Console verification) is configured inside GTM, not in this repo —
 // so tags can change without a deploy.
@@ -18,4 +20,5 @@ export function track(event: string, params: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event, ...params });
+  void measureGolf(event, params).catch(() => { /* Measurement cannot interrupt a booking. */ });
 }
