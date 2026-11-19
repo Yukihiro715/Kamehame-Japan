@@ -36,3 +36,25 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
  }
  const missing=await render('/previews/partner-listings/not-a-listing/');assert.equal(missing.status,404);
 });
+
+
+test('Ginza sumi-e preview shows confirmed details without supplier pricing', async () => {
+  for (const lang of ['en', 'ja']) {
+    const response = await render(`/previews/partner-listings/sumi-e-ink-painting/?lang=${lang}`);
+    const html = await response.text();
+    assert.equal(response.status, 200);
+    assert.match(html, /SPACE KONA/);
+    assert.match(html, /3-12-16/);
+    assert.match(html, lang === 'ja' ? /3階/ : /3rd floor/);
+    assert.match(html, /80/);
+    assert.match(html, lang === 'ja' ? /コースター3枚/ : /three coasters/);
+    assert.match(html, lang === 'ja' ? /別途オプション/ : /not included in the standard lesson/);
+    assert.match(html, /noindex/);
+    assert.ok(!html.includes('<form'));
+    assert.ok(!html.includes('11,500'));
+    assert.ok(!html.includes('15,000'));
+    assert.ok(!html.includes('17,500'));
+    assert.ok(!html.includes('18,500'));
+    assert.ok(!html.includes('23,000'));
+  }
+});
