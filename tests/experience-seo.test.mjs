@@ -18,7 +18,13 @@ test('every published experience has linked identity, visible facts and exact lo
   assert.deepEqual(entity.additionalProperty.map(({name,value})=>({name,value})),experienceFacts(exp,lang));
   if(faq.length)assert.deepEqual(faqEntity.mainEntity.map(f=>({q:f.name,a:f.acceptedAnswer.text})),faq);
   if(exp.consultationOnly||exp.pricePending||exp.bookingPaused)assert.equal(entity.offers,undefined);
-  else {assert.ok((entity.offers.price ?? Number(entity.offers.lowPrice))>0,`${lang}/${exp.slug}`);assert.equal(entity.offers.url,entity.url);assert.equal(entity.offers.priceCurrency,'JPY');assert.equal(entity.offers.availability,undefined,'no claim that an unconfirmed date is in stock');}
+  else {
+   assert.ok((entity.offers.price ?? Number(entity.offers.lowPrice))>0,`${lang}/${exp.slug}`);
+   assert.equal(entity.offers.url,entity.url);
+   assert.equal(entity.offers.priceCurrency,'JPY');
+   assert.equal(entity.offers.availability,'https://schema.org/LimitedAvailability',`${lang}/${exp.slug}`);
+   for(const offer of entity.offers.offers??[])assert.equal(offer.availability,entity.offers.availability);
+  }
  }
 });
 test('group quotes and golf fee do not turn into misleading per-person prices',()=>{
@@ -50,6 +56,7 @@ test('built HTML exposes experience graphs and comparison links without running 
   assert.ok(html.includes('id="booking-facts"'));assert.ok(schemas.some(s=>s['@type']==='FAQPage'));
   const entity=schemas.find(s=>Array.isArray(s['@type'])&&s['@type'].includes('Service'));
   assert.ok(entity);assert.equal(entity.name,catalogFor(lang).experiences.find(e=>e.slug==="nihonbashi-kendo-experience").title);assert.equal(entity.offers.price,Number(catalogFor(lang).experiences.find(e=>e.slug==="nihonbashi-kendo-experience").price.replace(/[^\d]/g,"")));
+  assert.equal(entity.offers.availability,'https://schema.org/LimitedAvailability');
   for(const slug of ['choosing-kendo-experience-japan','choosing-tea-ceremony-kyoto']){
    const article=await render(`/${lang}/journal/${slug}/`);
    assert.ok(article.includes('<caption>'));assert.ok(article.includes('"@type":"Article"'));
