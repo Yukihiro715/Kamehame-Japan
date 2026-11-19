@@ -58,3 +58,14 @@ test('Ginza sumi-e preview shows confirmed details without supplier pricing', as
     assert.ok(!html.includes('23,000'));
   }
 });
+
+test('supplied artwork and confirmed terrace terms appear without opening sales', async () => {
+ for (const lang of ['ja', 'en']) {
+  const sumi = await (await render(`/previews/partner-listings/sumi-e-ink-painting/?lang=${lang}`)).text();
+  for(const name of ['scroll','fuji','landscape']) assert.ok(sumi.includes(`/images/partner-listings/sumi-e/${name}.webp`));
+  assert.match(sumi, lang === 'ja' ? /作品例/ : /Artwork examples/);
+  const terrace = await (await render(`/previews/partner-listings/arashiyama-private-terrace-gathering/?lang=${lang}`)).text();
+  assert.match(terrace, /50%/); assert.match(terrace, /100%/); assert.match(terrace, /14/);
+  assert.match(terrace, /noindex/); assert.ok(!terrace.includes('<form'));
+ }
+});
