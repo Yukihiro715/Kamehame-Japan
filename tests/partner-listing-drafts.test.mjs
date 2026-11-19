@@ -69,3 +69,18 @@ test('supplied artwork and confirmed terrace terms appear without opening sales'
   assert.match(terrace, /noindex/); assert.ok(!terrace.includes('<form'));
  }
 });
+
+test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
+ const cases = {
+  'tokyo-underground-idol-live': ['700', '約2時間', '年齢制限なし'],
+  'tokyo-ninja-zen-night-walk': ['開始1日前まで全額返金', '原則雨天決行', '18歳以上'],
+  'arashiyama-private-terrace-gathering': ['最低保証額なし', '利用日時・利用時間・人数'],
+  'sumi-e-ink-painting': ['材料費を含む', '英語対応費を含む', '体験日の3日前', '同伴・見学不可', '別々のコースは選べません'],
+ };
+ for(const [slug,phrases] of Object.entries(cases)) {
+  const html=await (await render(`/previews/partner-listings/${slug}/?lang=ja`)).text();
+  for(const phrase of phrases) assert.ok(html.includes(phrase),`${slug}: ${phrase}`);
+  assert.match(html,/noindex/); assert.ok(!html.includes('<form'));
+  assert.doesNotMatch(html,/11,500|17,500|18,500|23,000|5,000|8,000/);
+ }
+});
