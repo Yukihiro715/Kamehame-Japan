@@ -81,6 +81,24 @@ test('confirmed partner answers replace pending questions without publishing sup
   const html=await (await render(`/previews/partner-listings/${slug}/?lang=ja`)).text();
   for(const phrase of phrases) assert.ok(html.includes(phrase),`${slug}: ${phrase}`);
   assert.match(html,/noindex/); assert.ok(!html.includes('<form'));
-  assert.doesNotMatch(html,/11,500|17,500|18,500|23,000|5,000|8,000/);
+  assert.doesNotMatch(html,/(?<![0-9])(11,500|17,500|18,500|23,000|5,000|8,000)(?![0-9])/);
  }
+});
+
+test('2027 sumi-e retail pricing is approved but checkout stays disabled', async () => {
+  for (const lang of ['en', 'ja']) {
+    const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
+    for (const amount of ['38,000', '22,000', '30,500', '32,000']) assert.ok(html.includes(amount));
+    assert.match(html, /2027/);
+    assert.match(html, lang === 'ja' ? /税込/ : /tax included/);
+    assert.match(html, lang === 'ja' ? /1名参加は総額38,000円/ : /38,000 total for one guest/);
+    assert.match(html, lang === 'ja' ? /2〜6名参加は1名22,000円/ : /22,000 per person for 2–6 guests/);
+    assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
+    assert.match(html, /noindex/);
+    assert.ok(!html.includes('<form'));
+    assert.ok(!html.includes('checkout.stripe.com'));
+    for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
+    assert.ok(!html.includes('Selling prices are being confirmed'));
+    assert.ok(!html.includes('販売価格確認中'));
+  }
 });
