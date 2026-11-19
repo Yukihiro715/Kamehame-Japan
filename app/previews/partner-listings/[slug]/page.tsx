@@ -31,7 +31,13 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
       <p className="listing-draft-eyebrow">{copy.area}</p>
       <h1>{copy.title}</h1>
       <p className="listing-draft-lead">{copy.lead}</p>
-      <p className="listing-draft-photo">{ja ? "実際の体験写真を準備中" : "Experience photos are being prepared"}</p>
+      {draft.images && <div className="listing-draft-gallery">{draft.images.map((photo) => <figure key={photo.src}>
+        {/* Provider-supplied static assets; preserve the full artwork without cropping. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={photo.src} alt={photo[ja ? "ja" : "en"]} width={720} height={960} loading="lazy" />
+        <figcaption>{photo[ja ? "ja" : "en"]}</figcaption>
+      </figure>)}</div>}
+      <p className="listing-draft-photo">{draft.mediaNote?.[ja ? "ja" : "en"] ?? (ja ? "掲載写真を選定・準備中" : "Listing photos are being selected and prepared")}</p>
     </section>
     <div className="listing-draft-grid">
       <section><h2>{ja ? "体験の内容" : "The experience"}</h2><ul>{copy.highlights.map((x) => <li key={x}>{x}</li>)}</ul>
