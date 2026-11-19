@@ -119,18 +119,18 @@ export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "sumi-e-ink-painting",
     en: {
-      title: "Sumi-e Japanese Ink Painting", area: "Venue to be confirmed",
-      lead: "Explore Japanese ink painting in a proposed private lesson. English support and private arrangements are available; the lesson format and booking conditions are being prepared.",
-      details: [["Theme", "Japanese ink painting"], ["Format", "Private arrangements available"], ["Language", "English support available"]],
-      highlights: ["Discover Japanese ink painting", "A private setting with English support"],
-      pending: ["Venue, lesson content, materials and duration", "Party-size prices and dates", "Cancellation conditions and photos"],
+      title: "Sumi-e Japanese Ink Painting in Ginza", area: "Tokyo · Ginza",
+      lead: "Explore Japanese ink painting in Ginza and create a piece to take home. Choose from four formats: a shikishi art board, a set of three coasters, a lampshade or a hanging scroll. English support and private arrangements are available.",
+      details: [["Venue", "SPACE KONA, 3rd floor, 保立ビル, 3-12-16 Ginza, Tokyo"], ["Duration", "80 minutes"], ["Participants", "Ages 4 and over; up to 6 guests"], ["Start times", "Weekdays: 10:00, 11:30 or 13:00. Weekends and Japanese public holidays: 17:00. Subject to availability."], ["Formats", "Shikishi art board / three coasters / lampshade / hanging scroll"], ["Language", "English support available"], ["Demonstration", "An optional demonstration can be arranged separately; it is not included in the standard lesson"], ["Price", "Selling prices are being confirmed; not open for booking"]],
+      highlights: ["Choose motifs such as cherry blossoms, Mt. Fuji, samurai, koi, dragons, bamboo or plum blossoms", "Create your own work and take it home", "Four creative formats in an 80-minute session", "English support and private arrangements available"],
+      pending: ["Selling prices, inclusions and available dates", "Materials, tools and English-support charges", "Booking deadline, cancellation terms and child/accompanying-adult conditions", "Whether different formats can be combined in one group", "Experience photos"],
     },
     ja: {
-      title: "水墨画体験", area: "開催エリア・会場確認中",
-      lead: "墨の表現に触れる水墨画体験の下書きです。英語対応と貸切に対応可能との回答を受け、具体的なレッスン内容を調整しています。",
-      details: [["テーマ", "水墨画"], ["開催形式", "貸切対応可"], ["対応言語", "英語対応可"]],
-      highlights: ["日本の水墨画に触れる", "英語対応・貸切で相談可能"],
-      pending: ["会場・内容・材料・所要時間", "人数別料金・開催日", "取消条件・写真"],
+      title: "銀座・水墨画体験", area: "東京 · 銀座",
+      lead: "銀座で墨の表現に触れ、自分の作品を持ち帰る水墨画体験です。色紙、コースター3枚、ランプシェード、掛軸の4種類から制作内容を選びます。英語対応・貸切の相談も可能です。",
+      details: [["会場", "東京都中央区銀座3-12-16 保立ビル SPACE KONA 3階"], ["所要時間", "80分"], ["参加条件", "4歳以上・最大6名"], ["開始時刻", "平日10:00／11:30／13:00、土日祝17:00。空き状況は要確認"], ["制作内容", "色紙／コースター3枚／ランプシェード／掛軸"], ["対応言語", "英語対応可"], ["実演", "別途オプションとして相談可能。基本の体験料金には含まれません"], ["料金", "販売価格確認中・予約受付前"]],
+      highlights: ["桜・富士山・侍・鯉・龍・竹・梅などのモチーフを描く", "制作した作品を持ち帰れる", "80分で楽しむ4種類の制作体験", "英語対応・貸切で相談可能"],
+      pending: ["販売価格・含まれる内容・開催日ごとの空き状況", "材料・道具・英語対応費の扱い", "予約締切・取消条件・子どもと保護者の参加条件", "同じ組で異なる制作コースを選べるか", "実際の体験写真"],
     },
   },
 ];
