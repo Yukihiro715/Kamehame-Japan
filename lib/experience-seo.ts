@@ -47,7 +47,9 @@ export function experienceJsonLd(exp: Experience, lang: Lang, faq: { q: string; 
   const amount = amounts?.length ? Math.min(...amounts) : exp.priceUnit === "group" ? first?.total : Number(exp.price.replace(/[^\d]/g, ""));
   const product = productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, yen(amount || 0), exp.slug);
   const unit = exp.priceUnit === "group" ? `${t(lang).perGroupShort} · ${t(lang).detail.estimateFor(exp.partySize?.min ?? first?.party ?? 1)}` : t(lang).perPerson;
-  const offer = (price: number, name?: string) => ({ "@type": "Offer", url: `${SITE_ORIGIN}${url}`, priceCurrency: "JPY", price, ...(name ? { name } : {}),
+  // Booking requests are open, with availability confirmed for the requested date.
+  const availability = "https://schema.org/LimitedAvailability";
+  const offer = (price: number, name?: string) => ({ "@type": "Offer", url: `${SITE_ORIGIN}${url}`, priceCurrency: "JPY", price, availability, ...(name ? { name } : {}),
     seller: { "@id": `${SITE_ORIGIN}/#organization` },
     priceSpecification: { "@type": "UnitPriceSpecification", price, priceCurrency: "JPY", unitText: unit, ...(exp.taxIncluded ? { valueAddedTaxIncluded: true } : {}) },
   });
@@ -62,7 +64,7 @@ export function experienceJsonLd(exp: Experience, lang: Lang, faq: { q: string; 
     areaServed: { "@type": "Place", name: exp.area },
     additionalProperty: experienceFacts(exp, lang).map(f => ({ "@type": "PropertyValue", name: f.name, value: f.value })),
     ...(priced && amount > 0 ? { offers: variantOffers?.length ? {
-      "@type": "AggregateOffer", url: `${SITE_ORIGIN}${url}`, priceCurrency: "JPY",
+      "@type": "AggregateOffer", url: `${SITE_ORIGIN}${url}`, priceCurrency: "JPY", availability,
       lowPrice: String(Math.min(...variantOffers.map(o => o.price))), highPrice: String(Math.max(...variantOffers.map(o => o.price))), offerCount: variantOffers.length, offers: variantOffers,
     } : offer(amount) } : {}),
   };
