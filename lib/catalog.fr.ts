@@ -383,7 +383,7 @@ export const experiencesFr: Experience[] = [
     tagline: "Pétrissez, étalez et coupez des nouilles fraîches, préparez un chashu de poulet, puis finissez trois petits bols — tonkotsu, shoyu et miso — à déguster côte à côte. Un atelier pratique de 90 minutes dans une petite cuisine à ramen, à quelques minutes de Shibuya.",
     overview: [
       "Le ramen est le plat réconfortant du quotidien au Japon, et le plus court chemin pour le comprendre est de le faire. Dans une petite cuisine-atelier près de Shibuya, vous transformez farine et eau en nouilles à la main, passez la pâte dans la machine à nouilles et finissez trois petits bols pour comparer les trois grands bouillons en une seule séance.",
-      "L'atelier se déroule en anglais et dure environ 90 minutes. Tout est fourni — ingrédients, tabliers, ustensiles — et vous mangez ce que vous avez préparé. Des versions végétarienne et végane peuvent être préparées sans supplément, et un bouillon compatible halal sur préavis (le supplément est confirmé avec votre devis) : dites-le-nous lors de votre demande.",
+      "L'atelier se déroule en anglais et dure environ 90 minutes. Tout est fourni — ingrédients, tabliers, ustensiles — et vous mangez ce que vous avez préparé. Les options végétarienne et végane sont des formules distinctes, dont la disponibilité et le prix sont confirmés avant le paiement, et un bouillon compatible halal sur préavis (le supplément est confirmé avec votre devis) : dites-le-nous lors de votre demande.",
     ],
     duration: "90 minutes", price: "¥26,500", group: "Petit groupe · 1 à 16 personnes", ages: "Dès 6 ans (les plus jeunes peuvent regarder avec un parent)", area: "Tokyo (à quelques minutes de Shibuya)",
     img: "/images/ramen-noodle-machine.jpg", alt: "Deux participants passant une feuille de pâte dans une machine à nouilles manuelle, les nouilles fraîches tombant dans le bac",
@@ -401,7 +401,7 @@ export const experiencesFr: Experience[] = [
       { icon: "brush", title: "Des nouilles faites maison", body: "De la farine, de l'eau et vos mains : pétrissez la pâte, passez-la dans la machine à nouilles et coupez vos nouilles." },
       { icon: "meal", title: "Trois bols, trois styles", body: "Tonkotsu, shoyu et miso en petits bols, finis avec un chashu de poulet et des garnitures, pour goûter les différences côte à côte." },
       { icon: "chat", title: "En anglais", body: "Une petite cuisine, un instructeur qui explique chaque étape en anglais, et aucune expérience requise." },
-      { icon: "group", title: "Végétarien, végan et compatible halal sur demande", body: "Dites-le lors de votre demande : végétarien et végan sans supplément, bouillon compatible halal sur préavis avec un supplément confirmé avec votre devis." },
+      { icon: "group", title: "Végétarien, végan et compatible halal sur demande", body: "Dites-le lors de votre demande : formules végétarienne et végane distinctes, avec prix confirmé avant le paiement, bouillon compatible halal sur préavis avec un supplément confirmé avec votre devis." },
     ],
     included: [
       "Un atelier pratique de 90 minutes en anglais",
@@ -438,7 +438,7 @@ export const experiencesFr: Experience[] = [
     faq: [
       { q: "Faut-il savoir cuisiner ?", a: "Non. L'instructeur montre chaque étape et la pâte est tolérante. Si vous savez pétrir, vous savez faire des nouilles." },
       { q: "Que prépare-t-on exactement ?", a: "Des nouilles fraîches faites maison, un chashu de poulet et trois petits bols — tonkotsu, shoyu et miso — finis avec des garnitures, pour goûter les trois styles côte à côte. Les bols végétariens, végans et compatibles halal ont un contenu différent." },
-      { q: "Y a-t-il une option végétarienne, végane ou halal ?", a: "Oui. Les bols végétariens et végans sont préparés sans supplément. Un bouillon compatible halal peut être préparé sur préavis ; le supplément est confirmé avec votre devis. Dites-le-nous lors de votre demande." },
+      { q: "Y a-t-il une option végétarienne, végane ou halal ?", a: "Oui. Les options végétarienne et végane sont des formules distinctes ; leur disponibilité et leur prix sont confirmés avant le paiement. Un bouillon compatible halal peut être préparé sur préavis ; le supplément est confirmé avec votre devis. Dites-le-nous lors de votre demande. Cette expérience n’est pas certifiée halal. Une préparation sans porc ni alcool peut être envisagée sur demande ; faites confirmer sa compatibilité avec vos besoins par l’organisateur avant de payer." },
       { q: "Dans quelle langue se déroule l'atelier ?", a: "En anglais. L'instructeur anime l'atelier en anglais et en japonais." },
       { q: "Les enfants peuvent-ils participer ?", a: "Dès 6 ans environ. Les plus jeunes ne peuvent pas participer mais peuvent regarder aux côtés d'un parent ; la cuisine est accessible avec une poussette. Les enfants paient le tarif adulte." },
       { q: "Je voyage seul. Puis-je participer ?", a: "Oui, dès une personne." },
@@ -462,7 +462,7 @@ export const experiencesFr: Experience[] = [
     tagline: "Pétrissez, étalez et coupez des nouilles fraîches, préparez un chashu de poulet, puis finissez trois petits bols — tonkotsu, shoyu et miso — à déguster côte à côte. Un atelier pratique de 90 minutes dans une petite cuisine à ramen, en plein Dotonbori, à Osaka.",
     overview: [
       "Le ramen est le plat réconfortant du quotidien au Japon, et le plus court chemin pour le comprendre est de le faire. Dans une petite cuisine-atelier de Dotonbori, la rue gourmande la plus animée d'Osaka, vous transformez farine et eau en nouilles à la main, passez la pâte dans la machine à nouilles et finissez trois petits bols pour comparer les trois grands bouillons en une seule séance.",
-      "L'atelier se déroule en anglais et dure environ 90 minutes. Tout est fourni — ingrédients, tabliers, ustensiles — et vous mangez ce que vous avez préparé. Des versions végétarienne et végane peuvent être préparées sans supplément, et un bouillon compatible halal sur préavis (le supplément est confirmé avec votre devis) : dites-le-nous lors de votre demande.",
+      "L'atelier se déroule en anglais et dure environ 90 minutes. Tout est fourni — ingrédients, tabliers, ustensiles — et vous mangez ce que vous avez préparé. Les options végétarienne et végane sont des formules distinctes, dont la disponibilité et le prix sont confirmés avant le paiement, et un bouillon compatible halal sur préavis (le supplément est confirmé avec votre devis) : dites-le-nous lors de votre demande.",
     ],
     duration: "90 minutes", price: "¥26,500", group: "Petit groupe · 1 à 16 personnes", ages: "Dès 6 ans (les plus jeunes peuvent regarder avec un parent)", area: "Osaka (Dotonbori)",
     img: "/images/ramen-osaka-boiling.jpg", alt: "Deux participants soulevant des nouilles tout juste cuites hors des paniers, au comptoir de la cuisine-atelier",
@@ -481,7 +481,7 @@ export const experiencesFr: Experience[] = [
       { icon: "brush", title: "Des nouilles faites maison", body: "De la farine, de l'eau et vos mains : pétrissez la pâte, passez-la dans la machine à nouilles et coupez vos nouilles." },
       { icon: "meal", title: "Trois bols, trois styles", body: "Tonkotsu, shoyu et miso en petits bols, finis avec un chashu de poulet et des garnitures, pour goûter les différences côte à côte." },
       { icon: "chat", title: "En anglais", body: "Une petite cuisine, un instructeur qui explique chaque étape en anglais, et aucune expérience requise." },
-      { icon: "group", title: "Végétarien, végan et compatible halal sur demande", body: "Dites-le lors de votre demande : végétarien et végan sans supplément, bouillon compatible halal sur préavis avec un supplément confirmé avec votre devis." },
+      { icon: "group", title: "Végétarien, végan et compatible halal sur demande", body: "Dites-le lors de votre demande : formules végétarienne et végane distinctes, avec prix confirmé avant le paiement, bouillon compatible halal sur préavis avec un supplément confirmé avec votre devis." },
     ],
     included: [
       "Un atelier pratique de 90 minutes en anglais",
@@ -518,7 +518,7 @@ export const experiencesFr: Experience[] = [
     faq: [
       { q: "Faut-il savoir cuisiner ?", a: "Non. L'instructeur montre chaque étape et la pâte est tolérante. Si vous savez pétrir, vous savez faire des nouilles." },
       { q: "Que prépare-t-on exactement ?", a: "Des nouilles fraîches faites maison, un chashu de poulet et trois petits bols — tonkotsu, shoyu et miso — finis avec des garnitures, pour goûter les trois styles côte à côte. Les bols végétariens, végans et compatibles halal ont un contenu différent." },
-      { q: "Y a-t-il une option végétarienne, végane ou halal ?", a: "Oui. Les bols végétariens et végans sont préparés sans supplément. Un bouillon compatible halal peut être préparé sur préavis ; le supplément est confirmé avec votre devis. Dites-le-nous lors de votre demande." },
+      { q: "Y a-t-il une option végétarienne, végane ou halal ?", a: "Oui. Les options végétarienne et végane sont des formules distinctes ; leur disponibilité et leur prix sont confirmés avant le paiement. Un bouillon compatible halal peut être préparé sur préavis ; le supplément est confirmé avec votre devis. Dites-le-nous lors de votre demande. Cette expérience n’est pas certifiée halal. Une préparation sans porc ni alcool peut être envisagée sur demande ; faites confirmer sa compatibilité avec vos besoins par l’organisateur avant de payer." },
       { q: "Dans quelle langue se déroule l'atelier ?", a: "En anglais. L'instructeur anime l'atelier en anglais et en japonais." },
       { q: "Les enfants peuvent-ils participer ?", a: "Dès 6 ans environ. Les plus jeunes ne peuvent pas participer mais peuvent regarder aux côtés d'un parent ; la cuisine n'est pas accessible avec une poussette. Les enfants paient le tarif adulte." },
       { q: "Je voyage seul. Puis-je participer ?", a: "Oui, dès une personne." },
