@@ -1,5 +1,6 @@
 import { isBucket, MAX_IMAGE_BYTES, type R2Like } from "./review-media";
 import { REVIEWS_PUBLISHED, type Review } from "./reviews";
+import { sanitizeReviewJpeg } from "./review-jpeg";
 
 // Website publication only. The approved review and uploads stay in the
 // private MEDIA bucket; the repository has only irreversible fingerprints.
@@ -146,30 +147,47 @@ export function stripWebpMetadata(bytes: ArrayBuffer): Uint8Array<ArrayBuffer> |
   return out.subarray(0, write);
 }
 
-export async function serveSiteGolfReviewPhoto(request: Request, bucket: unknown, images: ImageBinding, approval = APPROVAL): Promise<Response> {
-  const failure = () => new Response("Not found", { status: 404, headers: { "cache-control": "no-store" } });
+export async function serveSiteGolfReviewPhoto(request: Request, bucket: unknown, images?: ImageBinding, approval = APPROVAL): Promise<Response> {
+  const failure = (stage?: string) => {
+    if (stage) console.warn("approved review image unavailable:", stage);
+    return new Response("Not found", { status: 404, headers: { "cache-control": "no-store" } });
+  };
   const url = new URL(request.url);
   const match = photoPattern.exec(url.pathname);
   if (!REVIEWS_PUBLISHED || !match || url.search || !["GET", "HEAD"].includes(request.method) || !isBucket(bucket)) return failure();
   try {
     const selection = await approvedGolfReview(bucket, approval);
     const key = selection?.orderedPhotoKeys[Number(match[1]) - 1];
-    if (!selection || !key) return failure();
+    if (!selection || !key) return failure("record or media consent");
     const actual = await bucket.get(key);
+    if (!actual?.body) return failure("object missing");
     // Late object replacement must not re-use a past site's image approval.
-    if (!actual?.body || !(millis(actual.uploaded) <= selection.submitted) ||
-        actual.httpMetadata?.contentType !== "image/jpeg" || actual.size > MAX_IMAGE_BYTES) return failure();
-    const transformed = (await images.input(actual.body).transform({ width: match[2] ? 600 : 1200 }).output({ format: "image/webp", quality: 82 })).response();
-    if (!transformed.ok || transformed.headers.get("content-type") !== "image/webp") return failure();
-    const transformedBytes = await transformed.arrayBuffer();
-    if (transformedBytes.byteLength > MAX_TRANSFORMED_BYTES) return failure();
-    const clean = stripWebpMetadata(transformedBytes);
-    if (!clean) return failure();
+    if (!(millis(actual.uploaded) <= selection.submitted)) return failure("object time");
+    if (actual.httpMetadata?.contentType !== "image/jpeg" || actual.size > MAX_IMAGE_BYTES) return failure("object type or size");
+    const original = await new Response(actual.body).arrayBuffer();
+    if (original.byteLength !== actual.size || original.byteLength > MAX_IMAGE_BYTES) return failure("object byte size");
+    const jpeg = sanitizeReviewJpeg(original);
+    if (!jpeg) return failure("JPEG structure");
+
+    // Images is an optimization, not a requirement. The JPEG fallback uses
+    // the same consent checks and never serves unfiltered source bytes.
+    let clean = jpeg;
+    let type = "image/jpeg";
+    try {
+      if (images) {
+        const transformed = (await images.input(new Blob([jpeg]).stream()).transform({ width: match[2] ? 600 : 1200 }).output({ format: "image/webp", quality: 82 })).response();
+        if (transformed.ok && transformed.headers.get("content-type")?.split(";")[0] === "image/webp") {
+          const transformedBytes = await transformed.arrayBuffer();
+          const webp = transformedBytes.byteLength <= MAX_TRANSFORMED_BYTES && stripWebpMetadata(transformedBytes);
+          if (webp) { clean = webp; type = "image/webp"; }
+        }
+      }
+    } catch { /* fall back when Images is not provisioned or returns an error */ }
     return new Response(request.method === "HEAD" ? null : clean, { headers: {
-      "content-type": "image/webp", "content-length": String(clean.byteLength),
+      "content-type": type, "content-length": String(clean.byteLength),
       "cache-control": "no-store", "x-robots-tag": "noindex",
     } });
   } catch {
-    return failure();
+    return failure("processing");
   }
 }
