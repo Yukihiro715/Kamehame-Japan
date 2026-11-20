@@ -1,8 +1,10 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
+import { headers } from "next/headers";
 import { ReviewPhotoGallery } from "./review-photo-gallery";
 import { Stars } from "@/components/site/reviews";
 import { reviewDate, reviewsFor, ownReviewsFor } from "@/lib/published-reviews";
 import { reviewTranslationFor } from "@/lib/review-translations";
+import { SITE_GOLF_REVIEW_HEADER, SITE_GOLF_REVIEW_ID, siteGolfReview } from "@/lib/site-reviewed-golf";
 import { t, type Lang } from "@/lib/i18n";
 import styles from "./golf-guest-review.module.css";
 
@@ -40,8 +42,18 @@ export function GolfGuestQuote({ lang, landing = false }: { lang: Lang; landing?
   );
 }
 
-export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: string }) {
-  const list = ownReviewsFor("mt-fuji-golf-day");
+const newPhotoCopy = {
+  en: { label: (name: string) => `Photos shared by ${name}`, alts: ["Two guests on the golf course", "A guest golfing", "View of the golf course"] },
+  ja: { label: (name: string) => `${name}さん提供の写真`, alts: ["ゴルフ場での2人の記念写真", "プレー中のお客様", "ゴルフ場の風景"] },
+  es: { label: (name: string) => `Fotos compartidas por ${name}`, alts: ["Dos visitantes en el campo de golf", "Un visitante jugando al golf", "Vista del campo de golf"] },
+  fr: { label: (name: string) => `Photos partagées par ${name}`, alts: ["Deux visiteurs sur le parcours de golf", "Un visiteur joue au golf", "Vue du parcours de golf"] },
+  "zh-tw": { label: (name: string) => `${name}提供的照片`, alts: ["兩位旅客在高爾夫球場合照", "正在打高爾夫球的旅客", "高爾夫球場景色"] },
+};
+
+export async function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: string }) {
+  const incoming = (await headers()).get(SITE_GOLF_REVIEW_HEADER) === "1" ? await siteGolfReview() : null;
+  const existing = ownReviewsFor("mt-fuji-golf-day");
+  const list = incoming ? [incoming, ...existing] : existing;
   if (!list.length) return null;
   const c = copy[lang];
   return (
@@ -51,6 +63,8 @@ export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: stri
       {list.map((review) => {
   const translation = reviewTranslationFor(review.id, lang);
   const paragraphs = (translation?.body ?? review.body).split("\n\n");
+  const photoLabel = review.id === SITE_GOLF_REVIEW_ID ? newPhotoCopy[lang].label(review.author) : c.photos;
+  const photoAlts = review.id === SITE_GOLF_REVIEW_ID ? newPhotoCopy[lang].alts : c.alts;
   return (<article key={review.id} className={styles.story}>
         <header className={styles.storyHeader}>
           <div><Stars rating={review.rating} size={17} /></div>
@@ -63,8 +77,8 @@ export function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: stri
           <blockquote lang="en">{review.body.split("\n\n").map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</blockquote>
         </details>}
         {!!review.photos?.length && <figure className={styles.figure}>
-          <ReviewPhotoGallery photos={review.photos ?? []} alts={c.alts} label={c.photos} lang={lang} />
-          <figcaption>{c.photos}<span className={styles.photoHint}>{c.photoHint}</span></figcaption>
+          <ReviewPhotoGallery photos={review.photos ?? []} alts={photoAlts} label={photoLabel} lang={lang} />
+          <figcaption>{photoLabel}<span className={styles.photoHint}>{c.photoHint}</span></figcaption>
         </figure>}
       </article>);
       })}
