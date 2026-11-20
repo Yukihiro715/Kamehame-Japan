@@ -1,0 +1,56 @@
+.hero:global(.collection-hero) {
+  height: clamp(180px, 20vw, 270px);
+}
+
+.hero img {
+  object-position: center 26%;
+}
+
+.hero :global(.collection-hero-copy) {
+  padding-bottom: clamp(22px, 3vw, 36px);
+}
+
+.body:global(.collection-body) {
+  padding-top: clamp(20px, 3vw, 36px);
+}
+
+.single:global(.lg-items) {
+  grid-template-columns: minmax(0, 30rem);
+  margin-top: 0;
+}
+
+.body :global(.lc-comparison .lc-media) {
+  aspect-ratio: 2 / 1;
+}
+
+.body :global(.lc-comparison .lc-title) {
+  font-size: clamp(20px, 2.5vw, 26px);
+}
+
+.body :global(.lc-comparison .lc-title a:focus-visible::after) {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.body :global(.lc-summary) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.body :global(.lc-action) {
+  justify-self: start;
+  margin-top: 8px;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: .875rem;
+  font-weight: 700;
+}
+
+.body :global(.lc-comparison:hover .lc-action),
+.body :global(.lc-comparison:focus-within .lc-action) {
+  background: var(--kame);
+  color: var(--ink);
+}
