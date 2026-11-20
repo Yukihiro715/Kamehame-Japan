@@ -9,6 +9,8 @@ import { HeroCarousel } from "@/components/site/hero-carousel";
 import { SupportForm } from "@/components/site/support-form";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { BABYSITTER_PHOTOS, supportCopy } from "@/lib/support";
+import { BABYSITTER_FEES as FEES, feeYen } from "@/lib/support-fees";
+import { Fx, FxNote } from "@/components/site/money";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -104,7 +106,24 @@ export default async function BabysitterPage({ params }: Props) {
           <section className="xp-section" id="pricing">
             <h2>{B.priceH}</h2>
             <p className="xp-note">{B.priceLead}</p>
-            <ul className="check-list">{B.price.map((c) => <li key={c}><span className="tick">·</span><span>{c}</span></li>)}</ul>
+            <table className="xp-pricing sp-fees">
+              <tbody>
+                <tr><td><b>{B.fee.english}</b><small>{B.fee.minimum(FEES.minHours)}</small></td><td className="total"><Fx>{feeYen(FEES.hourEn)}</Fx> <span className="sp-unit">{B.fee.perHour}</span></td></tr>
+                <tr><td><b>{B.fee.japanese}</b><small>{B.fee.minimum(FEES.minHours)}</small></td><td className="total"><Fx>{feeYen(FEES.hourJa)}</Fx> <span className="sp-unit">{B.fee.perHour}</span></td></tr>
+                <tr><td>{B.fee.night}</td><td>+<Fx>{feeYen(FEES.night)}</Fx> <span className="sp-unit">{B.fee.perHour}</span></td></tr>
+                <tr><td>{B.fee.weekend}</td><td>+<Fx>{feeYen(FEES.weekend)}</Fx> <span className="sp-unit">{B.fee.perHour}</span></td></tr>
+                <tr><td>{B.fee.peak}</td><td>+<Fx>{feeYen(FEES.peak)}</Fx> <span className="sp-unit">{B.fee.perHour}</span></td></tr>
+                <tr><td>{B.fee.bath}</td><td>+<Fx>{feeYen(FEES.bath)}</Fx> <span className="sp-unit">{B.fee.perTime}</span></td></tr>
+                <tr><td>{B.fee.second(FEES.secondPct, FEES.secondOlderPct)}<small>{B.fee.third}</small></td><td /></tr>
+                <tr><td>{B.fee.notice2}</td><td>+<Fx>{feeYen(FEES.notice2)}</Fx></td></tr>
+                <tr><td>{B.fee.notice1}</td><td>+<Fx>{feeYen(FEES.notice1)}</Fx></td></tr>
+                <tr><td>{B.fee.transport}</td><td>{B.fee.transportNote}</td></tr>
+              </tbody>
+            </table>
+            <p className="xp-pricing-note">{B.fee.note}</p>
+            <FxNote lang={lang} />
+            <h3 className="sp-cancel-h">{B.fee.cancelH}</h3>
+            <ul className="check-list">{B.fee.cancel.map((c) => <li key={c}><span className="tick">·</span><span>{c}</span></li>)}</ul>
           </section>
 
           <section className="xp-section">
