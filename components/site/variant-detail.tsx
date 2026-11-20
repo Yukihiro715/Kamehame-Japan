@@ -156,7 +156,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
             {clubRental && <><GolfClubRental lang={lang} />{jump}</>}
 
             {/* 3b. The private car, the driver and the assistant */}
-            <GolfTransfer copy={vc.transfer} />
+            <GolfTransfer copy={vc.transfer} lang={lang} />
             {jump}
 
             {/* Golf uses its verified booking review section above; show only one review source. */}
