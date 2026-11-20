@@ -2586,7 +2586,8 @@ body[data-kh-modal] .sticky-request { display:none; }
 @media (max-width:760px) { .support-banner { grid-template-columns:96px minmax(0,1fr); gap:16px; padding:16px; margin-bottom:32px; } .sb-photo { width:96px; } .sb-copy b { font-size:17px; } :is([lang="ja"], [lang="zh-tw"]) .sb-copy b { font-size:16px; } .sb-body { font-size:13px; } .sb-cta { grid-column:1 / -1; justify-content:center; } }
 /* babysitter page */
 .sp .sp-flag { color:var(--kame); }
-.sp .xp-mv .gallery-item:nth-child(4) { grid-column:2 / 4; }
+.sp .xp-mv .gallery-track:has(.gallery-item:nth-child(2):last-child) { grid-template-columns:3fr 2fr; grid-template-rows:1fr; }
+.sp .xp-mv .gallery-track:has(.gallery-item:nth-child(2):last-child) .gallery-item:first-child { grid-row:auto; }
 .sp-card .bk-price small { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--kame); }
 .sp-card-body { margin:-4px 0 0; font-size:14px; line-height:1.7; color:#4a463e; }
 .bk-points { list-style:none; margin:0; padding:0; display:grid; gap:8px; font-size:13px; color:#4a463e; }

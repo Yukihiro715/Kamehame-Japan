@@ -22,16 +22,15 @@ export interface SupportService {
 
 export const SUPPORT_SERVICES: SupportService[] = [
   { slug: "babysitter", live: true, img: "/images/support-babysitter.webp" },
-  { slug: "transfer", live: false, img: "/images/golf-transfer-car.webp", imgTemporary: true },
-  { slug: "interpreter", live: false, img: "/images/craft-hands.jpg", imgTemporary: true },
+  { slug: "transfer", live: false, img: "/images/support-transfer.webp" },
+  { slug: "interpreter", live: false, img: "/images/support-interpreter.webp" },
   { slug: "planner", live: false, img: "/images/tour-journey.jpg", imgTemporary: true },
 ];
 
+/** Licensed stock photos (PIXTA, standard licence). More follow once chosen. */
 export const BABYSITTER_PHOTOS = [
   { img: "/images/support-babysitter.webp" },
   { img: "/images/support-babysitter-2.webp" },
-  { img: "/images/support-babysitter-3.webp" },
-  { img: "/images/support-babysitter-4.webp" },
 ];
 
 export interface SupportCopy {
@@ -111,7 +110,7 @@ const en: SupportCopy = {
     h1: "Babysitting at your hotel, in English",
     tagline: "A screened, English-speaking babysitter comes to your hotel or apartment while you play golf, go to dinner or take an experience that is not for children. Arranged by KAMEHAME JAPAN with vetted local agencies, quoted per request, with one contact throughout: us.",
     conditions: ["Tokyo · Yokohama · Kyoto · Osaka (other cities on request)", "Ages 0–12", "English-speaking sitters", "Quoted per request"],
-    photoAlts: ["A babysitter reading a picture book with a young child", "A babysitter holding a baby", "A smiling child playing with wooden toys", "A baby in a sitter's arms"],
+    photoAlts: ["A babysitter reading a picture book with a young child", "A babysitter reading a picture book to two children"],
     aboutH: "How it works",
     about: [
       "Tell us the date, where the children will be, the hours, their ages and the language you would like. We check a sitter's availability with our partner agencies and send you a quote, usually within one business day. Nothing is paid until you confirm.",
@@ -189,7 +188,7 @@ const ja: SupportCopy = {
     h1: "ホテルで受けられる英語ベビーシッター",
     tagline: "ゴルフ、夕食、お子さま向けではない体験の間、審査済みの英語が話せるシッターがホテルや滞在先に伺います。KAMEHAME JAPANが提携する保育事業者と手配し、料金は都度お見積もり。窓口は最後までKAMEHAME JAPANです。",
     conditions: ["東京・横浜・京都・大阪（他都市は応相談）", "0〜12歳", "英語の話せるシッター", "個別見積もり"],
-    photoAlts: ["絵本を読み聞かせるベビーシッターと子ども", "赤ちゃんを抱くベビーシッター", "木のおもちゃで遊ぶ笑顔の子ども", "シッターに抱かれる赤ちゃん"],
+    photoAlts: ["絵本を読み聞かせるベビーシッターと子ども", "2人の子どもに絵本を読み聞かせるベビーシッター"],
     aboutH: "仕組み",
     about: [
       "日程、お子さまが過ごす場所、時間帯、年齢、希望の言語をお知らせください。提携事業者にシッターの空きを確認し、通常1営業日以内にお見積もりをお送りします。確定までお支払いはありません。",
@@ -267,7 +266,7 @@ const es: SupportCopy = {
     h1: "Canguro en tu hotel, en inglés",
     tagline: "Una canguro seleccionada que habla inglés acude a tu hotel o apartamento mientras juegas al golf, sales a cenar o haces una experiencia que no es para niños. Organizado por KAMEHAME JAPAN con agencias locales verificadas, con presupuesto por solicitud y un solo contacto de principio a fin: nosotros.",
     conditions: ["Tokio · Yokohama · Kioto · Osaka (otras ciudades bajo petición)", "De 0 a 12 años", "Canguros que hablan inglés", "Presupuesto por solicitud"],
-    photoAlts: ["Una canguro leyendo un cuento con una niña", "Una canguro con un bebé en brazos", "Una niña sonriente jugando con juguetes de madera", "Un bebé en brazos de una canguro"],
+    photoAlts: ["Una canguro leyendo un cuento con una niña", "Una canguro leyendo un cuento a dos niños"],
     aboutH: "Cómo funciona",
     about: [
       "Dinos la fecha, dónde estarán los niños, el horario, sus edades y el idioma que prefieres. Consultamos la disponibilidad de una canguro con nuestras agencias asociadas y te enviamos un presupuesto, normalmente en un día laborable. No se paga nada hasta que confirmes.",
@@ -345,7 +344,7 @@ const fr: SupportCopy = {
     h1: "Garde d'enfants à votre hôtel, en anglais",
     tagline: "Une baby-sitter sélectionnée et anglophone vient à votre hôtel ou appartement pendant que vous jouez au golf, dînez ou vivez une expérience qui n'est pas pour les enfants. Organisé par KAMEHAME JAPAN avec des agences locales vérifiées, sur devis, avec un seul interlocuteur du début à la fin : nous.",
     conditions: ["Tokyo · Yokohama · Kyoto · Osaka (autres villes sur demande)", "De 0 à 12 ans", "Gardes anglophones", "Devis sur demande"],
-    photoAlts: ["Une baby-sitter lisant un album avec une petite fille", "Une baby-sitter tenant un bébé", "Une enfant souriante jouant avec des jouets en bois", "Un bébé dans les bras d'une garde"],
+    photoAlts: ["Une baby-sitter lisant un album avec une petite fille", "Une baby-sitter lisant un album à deux enfants"],
     aboutH: "Comment ça marche",
     about: [
       "Indiquez-nous la date, où seront les enfants, les horaires, leur âge et la langue souhaitée. Nous vérifions la disponibilité d'une garde auprès de nos agences partenaires et vous envoyons un devis, généralement sous un jour ouvré. Rien n'est payé avant votre confirmation.",
@@ -423,7 +422,7 @@ const zh: SupportCopy = {
     h1: "到飯店的英語保母服務",
     tagline: "當您打高爾夫、外出用餐或參加不適合孩子的體驗時，經審核、會說英語的保母會到您的飯店或住處。由 KAMEHAME JAPAN 與審核過的在地機構安排，個別報價，自始至終只有一個聯絡窗口：我們。",
     conditions: ["東京 · 橫濱 · 京都 · 大阪（其他城市可洽）", "0 至 12 歲", "會說英語的保母", "個別報價"],
-    photoAlts: ["為幼兒讀繪本的保母", "抱著嬰兒的保母", "玩木頭玩具的微笑孩子", "保母懷中的嬰兒"],
+    photoAlts: ["為幼兒讀繪本的保母", "為兩個孩子讀繪本的保母"],
     aboutH: "服務方式",
     about: [
       "告訴我們日期、孩子所在地點、時段、年齡與希望的語言。我們向合作機構確認保母檔期，通常在一個工作天內寄出報價。確認前不需付款。",
