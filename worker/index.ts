@@ -12,7 +12,7 @@ import { d1Db, isD1Like } from "../lib/referral/db";
 import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
 import { autoAcknowledge } from "../lib/portal/settlement";
 import { expireQuotes } from "../lib/portal/cases";
-import { isSiteGolfReviewPhoto, SITE_GOLF_REVIEW_HEADER, serveSiteGolfReviewPhoto } from "../lib/site-reviewed-golf";
+import { isSiteGolfReviewPage, isSiteGolfReviewPhoto, SITE_GOLF_REVIEW_HEADER, serveSiteGolfReviewPhoto } from "../lib/site-reviewed-golf";
 
 interface Env extends AdsEnv {
   ASSETS: { fetch(request: Request): Promise<Response> };
@@ -234,7 +234,7 @@ const worker = {
     // The document language: the app's root layout cannot see the locale
     // segment of the URL, so it reads it from this header (app/layout.tsx).
     const lang = /^\/partners-lp(?:\/|$)/.test(url.pathname) ? "ja" : url.pathname.match(/^\/(en|es|ja|fr|zh-tw)(?:\/|$)/)?.[1];
-    const siteGolfPage = siteGolfEnabled && /^\/(en|es|ja|fr|zh-tw)\/tokyo\/mt-fuji-golf-day\/?$/.test(url.pathname);
+    const siteGolfPage = isSiteGolfReviewPage(url.hostname, url.pathname, env.KH_ENV);
     let req = request;
     if (lang || siteGolfPage || request.headers.has(SITE_GOLF_REVIEW_HEADER)) {
       const headers = new Headers(request.headers);

@@ -1,10 +1,9 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { headers } from "next/headers";
 import { ReviewPhotoGallery } from "./review-photo-gallery";
 import { Stars } from "@/components/site/reviews";
-import { reviewDate, reviewsFor, ownReviewsFor } from "@/lib/published-reviews";
+import { reviewDate, reviewsFor, type Review } from "@/lib/published-reviews";
 import { reviewTranslationFor } from "@/lib/review-translations";
-import { SITE_GOLF_REVIEW_HEADER, SITE_GOLF_REVIEW_ID, siteGolfReview } from "@/lib/site-reviewed-golf";
+import { SITE_GOLF_REVIEW_ID } from "@/lib/site-reviewed-golf";
 import { t, type Lang } from "@/lib/i18n";
 import styles from "./golf-guest-review.module.css";
 
@@ -50,10 +49,7 @@ const newPhotoCopy = {
   "zh-tw": { label: (name: string) => `${name}提供的照片`, alts: ["兩位旅客在高爾夫球場合照", "正在打高爾夫球的旅客", "高爾夫球場景色"] },
 };
 
-export async function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel: string }) {
-  const incoming = (await headers()).get(SITE_GOLF_REVIEW_HEADER) === "1" ? await siteGolfReview() : null;
-  const existing = ownReviewsFor("mt-fuji-golf-day");
-  const list = incoming ? [incoming, ...existing] : existing;
+export function GolfGuestReview({ lang, ctaLabel, list }: { lang: Lang; ctaLabel: string; list: Review[] }) {
   if (!list.length) return null;
   const c = copy[lang];
   return (
@@ -65,7 +61,7 @@ export async function GolfGuestReview({ lang, ctaLabel }: { lang: Lang; ctaLabel
   const paragraphs = (translation?.body ?? review.body).split("\n\n");
   const photoLabel = review.id === SITE_GOLF_REVIEW_ID ? newPhotoCopy[lang].label(review.author) : c.photos;
   const photoAlts = review.id === SITE_GOLF_REVIEW_ID ? newPhotoCopy[lang].alts : c.alts;
-  return (<article key={review.id} className={styles.story}>
+  return (<article id={review.id} key={review.id} className={styles.story}>
         <header className={styles.storyHeader}>
           <div><Stars rating={review.rating} size={17} /></div>
           <div className={styles.meta}><b>{review.author}</b><span>·</span><time dateTime={review.date}>{reviewDate(review.date!, lang)}</time><span className={styles.verified}><ShieldCheck size={14} aria-hidden="true" />{t(lang).reviewVerified}</span></div>

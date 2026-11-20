@@ -30,7 +30,8 @@ import { countOf, listPrice, perPersonOf, perPersonRefText, pricingForVariant, t
 import { Fx, FxNote } from "@/components/site/money";
 import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience } from "@/lib/catalog";
 import { articleDate, articlesForExperience } from "@/lib/articles";
-import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/published-reviews";
+import { REVIEWS_PUBLISHED, reviewsFor, type Review } from "@/lib/published-reviews";
+import { verifiedGolfAggregate, PRIVATE_GOLF_EXPERIENCE } from "@/lib/site-golf-reviews-context";
 import { langHome, t, type Lang } from "@/lib/i18n";
 
 /** The golf page (one URL, two areas, three party sizes). In order: a short
@@ -60,7 +61,7 @@ function sentences(text: string, lang: Lang): string[] {
 
 /** `clubRental`: the chosen-model club rental option (lib/golf-club-rental.ts), on only for the unlisted preview page while the owner reviews it. */
 /** golfWays: show the cards to the shared-bus tours and the landing that compares the two (only while those pages are live). */
-export function VariantDetail({ exp, lang, clubRental = false, golfWays = false }: { exp: Experience; lang: Lang; clubRental?: boolean; golfWays?: boolean }) {
+export function VariantDetail({ exp, lang, clubRental = false, golfWays = false, golfReviews }: { exp: Experience; lang: Lang; clubRental?: boolean; golfWays?: boolean; golfReviews?: Review[] }) {
   const W = golfWays ? busCopy(lang) : null;
   const T = t(lang);
   const D = T.detail;
@@ -76,7 +77,9 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   const photos: GolfPhoto[] = [{ img: exp.img, alt: exp.alt }, ...exp.gallery.filter((g) => g.img !== exp.img)];
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
-  const hasGolfGuest = exp.slug === "mt-fuji-golf-day" && reviews.some((r) => r.id === "tyler-takane-2026-11" && r.verified);
+  const privateGolf = exp.slug === PRIVATE_GOLF_EXPERIENCE;
+  const privateReviews = privateGolf ? golfReviews ?? reviews.filter(r => r.verified && r.source === "direct") : [];
+  const reviewAggregate = privateGolf ? verifiedGolfAggregate(privateReviews) : undefined;
   const pricings = Object.fromEntries(variants.map((v) => [v.id, pricingForVariant(exp, v, lang)]));
   const avail = exp.availability;
   const size = exp.partySize ?? { min: 2, max: 4 };
@@ -134,7 +137,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
 
           {/* 2. The one place to choose the party size and the area */}
           <aside className="xp-side vh-side">
-            <GolfOptions variants={variants} copy={O} lang={lang} ctaLabel={ctaLabel} parties={parties} summary={vc.summary} />
+            <GolfOptions variants={variants} copy={O} lang={lang} ctaLabel={ctaLabel} parties={parties} summary={vc.summary} reviewAggregate={reviewAggregate} />
           </aside>
 
           <div className="xp-main">
@@ -149,7 +152,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
 
             <SupportBanner lang={lang} />
 
-            {hasGolfGuest && <GolfGuestReview lang={lang} ctaLabel={ctaLabel} />}
+            {privateReviews.length > 0 && <GolfGuestReview lang={lang} ctaLabel={ctaLabel} list={privateReviews} />}
 
             {/* 3a. What's included, as icon cards (the one list of inclusions on the page) */}
             <GolfInclusions copy={clubRental ? { ...vc.inclusions, items: vc.inclusions.items.map((it) => (it.id === "clubs" ? { ...it, note: R.inclusionNote } : it)) } : vc.inclusions} />
@@ -334,7 +337,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
       )}
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: serializeJsonLd(experienceJsonLd(exp, lang, faq)),
+        __html: serializeJsonLd(experienceJsonLd(exp, lang, faq, reviewAggregate)),
       }} />
       <SiteFooter lang={lang} />
     </main>

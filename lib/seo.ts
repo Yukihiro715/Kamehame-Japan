@@ -7,7 +7,7 @@
 import type { Metadata } from "next";
 import { SITE_ORIGIN } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
-import { ownAggregateFor, REVIEWS_PUBLISHED } from "@/lib/published-reviews";
+import { ownAggregateFor, REVIEWS_PUBLISHED, type Aggregate } from "@/lib/published-reviews";
 
 export const SITE_NAME = "KAMEHAME JAPAN";
 
@@ -83,8 +83,8 @@ export function withAlternates(meta: Metadata, languages: Record<string, string>
  *  the host venue or a partner collected are shown on the page with their
  *  provenance but are not ours to declare to search engines. */
 /** `highPrice` with `offerCount` (the number of priced options behind the range) makes an AggregateOffer; Search Console flags the range without the count. */
-export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string, highPrice?: number, offerCount?: number) {
-  const agg = slug && REVIEWS_PUBLISHED ? ownAggregateFor(slug) : null;
+export function productJsonLd(title: string, description: string, img: string, url: string, price: string, slug?: string, highPrice?: number, offerCount?: number, aggregate?: Aggregate | null) {
+  const agg = slug && REVIEWS_PUBLISHED ? aggregate === undefined ? ownAggregateFor(slug) : aggregate : null;
   const low = price.replace(/[^\d]/g, "");
   return {
     "@context": "https://schema.org",
