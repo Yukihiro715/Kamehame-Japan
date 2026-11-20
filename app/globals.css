@@ -2590,7 +2590,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 .sp-card-body { margin:-4px 0 0; font-size:14px; line-height:1.7; color:#4a463e; }
 .sp-card .bk-price b { font-family:var(--font-display); font-weight:400; font-size:30px; letter-spacing:.02em; line-height:1.1; }
 .sp-from { font-family:var(--font-sans); font-size:13px; color:var(--muted); letter-spacing:0; }
-.sp-card .sp-from-note { text-transform:none; letter-spacing:0; color:#4a463e; font-size:12px; line-height:1.5; }
+.sp-card .sp-from-note { text-transform:none; letter-spacing:0; color:var(--muted); font-size:12px; line-height:1.5; }
 .sp-card-title { font-size:20px; margin-top:-2px; }
 .bk-points { list-style:none; margin:0; padding:0; display:grid; gap:8px; font-size:13px; color:#4a463e; }
 .bk-points li { display:flex; align-items:center; gap:8px; }
