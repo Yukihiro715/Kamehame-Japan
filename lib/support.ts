@@ -16,21 +16,22 @@ export interface SupportService {
   /** Only live services link to a page and take requests; the rest show "Coming soon". */
   live: boolean;
   img: string;
-  /** Temporary photo until a licensed image is chosen (see docs: PIXTA candidates). */
-  imgTemporary?: boolean;
 }
 
 export const SUPPORT_SERVICES: SupportService[] = [
   { slug: "babysitter", live: true, img: "/images/support-babysitter.webp" },
   { slug: "transfer", live: false, img: "/images/support-transfer.webp" },
   { slug: "interpreter", live: false, img: "/images/support-interpreter.webp" },
-  { slug: "planner", live: false, img: "/images/tour-journey.jpg", imgTemporary: true },
+  { slug: "planner", live: false, img: "/images/support-planner.webp" },
 ];
 
 /** Licensed stock photos (PIXTA, standard licence). More follow once chosen. */
 export const BABYSITTER_PHOTOS = [
   { img: "/images/support-babysitter.webp" },
   { img: "/images/support-babysitter-2.webp" },
+  { img: "/images/support-babysitter-3.webp" },
+  { img: "/images/support-babysitter-4.webp" },
+  { img: "/images/support-babysitter-5.webp" },
 ];
 
 export interface SupportCopy {
@@ -103,14 +104,14 @@ const en: SupportCopy = {
     babysitter: { title: "Babysitting during your experience", line: "An English-speaking, screened sitter looks after the children at your hotel or apartment while you are at an experience or out for the evening.", alt: "A babysitter reading a picture book with a young child", facts: ["Tokyo · Yokohama · Kyoto · Osaka", "Ages 0–12", "Quoted per request"] },
     transfer: { title: "Transfers & private car", line: "Airport pick-up, a return transfer between your hotel and the experience venue, or a car with driver for the whole day.", alt: "A driver holding the door of a private car", facts: ["Airport · hotel ↔ venue · full day", "Driver included"] },
     interpreter: { title: "Interpreter guide for the day", line: "A licensed guide-interpreter beside you for a day of experiences, shopping, sightseeing or meetings.", alt: "A guide explaining a sight to visitors", facts: ["English · Chinese · more on request", "Half day · full day"] },
-    planner: { title: "Travel planner", line: "From the shape of your days in Japan to the bookings behind them: experiences, restaurants, transport, in one plan.", alt: "Travellers planning a route on a map", facts: ["Whole-trip planning", "Bookings handled"] },
+    planner: { title: "Travel planner", line: "From the shape of your days in Japan to the bookings behind them: experiences, restaurants, transport, in one plan.", alt: "A group of visitors with a map and a Tokyo guidebook in the street", facts: ["Whole-trip planning", "Bookings handled"] },
   },
   banner: { kicker: "Travel support", title: "Support during your trip, from KAMEHAME JAPAN", body: "A babysitter while you are at this experience, an interpreter guide, transfers, planning for the rest of your days in Japan. One contact for all of it.", cta: "See travel support" },
   baby: {
     h1: "Babysitting at your hotel, in English",
     tagline: "A screened, English-speaking babysitter comes to your hotel or apartment while you play golf, go to dinner or take an experience that is not for children. Arranged by KAMEHAME JAPAN with vetted local agencies, quoted per request, with one contact throughout: us.",
     conditions: ["Tokyo · Yokohama · Kyoto · Osaka (other cities on request)", "Ages 0–12", "English-speaking sitters", "Quoted per request"],
-    photoAlts: ["A babysitter reading a picture book with a young child", "A babysitter reading a picture book to two children"],
+    photoAlts: ["A babysitter reading a picture book with a toddler on her lap", "A sitter reading to four children of different backgrounds", "A sitter and a girl reading together on a sofa", "A sitter playing with a girl in a bright bedroom", "A boy reading a picture book on a bed"],
     aboutH: "How it works",
     about: [
       "Tell us the date, where the children will be, the hours, their ages and the language you would like. We check a sitter's availability with our partner agencies and send you a quote, usually within one business day. Nothing is paid until you confirm.",
@@ -181,14 +182,14 @@ const ja: SupportCopy = {
     babysitter: { title: "体験中のベビーシッター", line: "体験や夜の外出の間、英語の話せる審査済みシッターがホテルや滞在先でお子さまをお預かりします。", alt: "絵本を読み聞かせるベビーシッターと子ども", facts: ["東京・横浜・京都・大阪", "0〜12歳", "個別見積もり"] },
     transfer: { title: "往復送迎・1日貸切車両", line: "空港送迎、ホテルと体験施設の往復送迎、1日貸切のドライバー付き車両。", alt: "送迎車のドアを開けるドライバー", facts: ["空港・ホテル⇄体験施設・1日貸切", "ドライバー付き"] },
     interpreter: { title: "1日の通訳ガイド", line: "体験、買い物、観光、商談に1日同行する通訳案内士。", alt: "来訪者に名所を説明するガイド", facts: ["英語・中国語ほか", "半日・1日"] },
-    planner: { title: "旅行プランナー", line: "日本での滞在日程の組み立てから、体験・レストラン・移動の手配まで、旅全体をひとつのプランに。", alt: "地図でルートを考える旅行者", facts: ["旅全体のプランニング", "手配込み"] },
+    planner: { title: "旅行プランナー", line: "日本での滞在日程の組み立てから、体験・レストラン・移動の手配まで、旅全体をひとつのプランに。", alt: "地図と東京のガイドブックを広げる外国人旅行者のグループ", facts: ["旅全体のプランニング", "手配込み"] },
   },
   banner: { kicker: "旅行サポート", title: "旅行中のサポートはKAMEHAME JAPANへ", body: "体験中のベビーシッター、通訳ガイド、送迎、旅全体のプランニング。旅行中の困りごとはひとつの窓口でご相談ください。", cta: "旅行サポートを見る" },
   baby: {
     h1: "ホテルで受けられる英語ベビーシッター",
     tagline: "ゴルフ、夕食、お子さま向けではない体験の間、審査済みの英語が話せるシッターがホテルや滞在先に伺います。KAMEHAME JAPANが提携する保育事業者と手配し、料金は都度お見積もり。窓口は最後までKAMEHAME JAPANです。",
     conditions: ["東京・横浜・京都・大阪（他都市は応相談）", "0〜12歳", "英語の話せるシッター", "個別見積もり"],
-    photoAlts: ["絵本を読み聞かせるベビーシッターと子ども", "2人の子どもに絵本を読み聞かせるベビーシッター"],
+    photoAlts: ["膝の上の幼児に絵本を読み聞かせるベビーシッター", "さまざまな国の4人の子どもに絵本を読むシッター", "ソファで一緒に絵本を読むシッターと女の子", "明るい寝室で女の子と遊ぶシッター", "ベッドで絵本を読む男の子"],
     aboutH: "仕組み",
     about: [
       "日程、お子さまが過ごす場所、時間帯、年齢、希望の言語をお知らせください。提携事業者にシッターの空きを確認し、通常1営業日以内にお見積もりをお送りします。確定までお支払いはありません。",
@@ -259,14 +260,14 @@ const es: SupportCopy = {
     babysitter: { title: "Canguro durante tu experiencia", line: "Una canguro seleccionada que habla inglés cuida a los niños en tu hotel o apartamento mientras estás en una experiencia o sales por la noche.", alt: "Una canguro leyendo un cuento con una niña", facts: ["Tokio · Yokohama · Kioto · Osaka", "De 0 a 12 años", "Presupuesto por solicitud"] },
     transfer: { title: "Traslados y coche privado", line: "Recogida en el aeropuerto, traslado de ida y vuelta entre tu hotel y el lugar de la experiencia, o un coche con conductor para todo el día.", alt: "Un conductor sosteniendo la puerta de un coche privado", facts: ["Aeropuerto · hotel ↔ lugar · día completo", "Conductor incluido"] },
     interpreter: { title: "Guía intérprete por un día", line: "Un guía intérprete titulado a tu lado durante un día de experiencias, compras, visitas o reuniones.", alt: "Un guía explicando un lugar a visitantes", facts: ["Inglés · chino · otros bajo petición", "Medio día · día completo"] },
-    planner: { title: "Planificador de viaje", line: "De la forma de tus días en Japón a las reservas que hay detrás: experiencias, restaurantes, transporte, en un solo plan.", alt: "Viajeros planificando una ruta en un mapa", facts: ["Planificación de todo el viaje", "Reservas gestionadas"] },
+    planner: { title: "Planificador de viaje", line: "De la forma de tus días en Japón a las reservas que hay detrás: experiencias, restaurantes, transporte, en un solo plan.", alt: "Un grupo de visitantes con un mapa y una guía de Tokio en la calle", facts: ["Planificación de todo el viaje", "Reservas gestionadas"] },
   },
   banner: { kicker: "Apoyo al viaje", title: "Apoyo durante tu viaje, de KAMEHAME JAPAN", body: "Una canguro durante esta experiencia, un guía intérprete, traslados, la planificación del resto de tus días en Japón. Un solo contacto para todo.", cta: "Ver el apoyo al viaje" },
   baby: {
     h1: "Canguro en tu hotel, en inglés",
     tagline: "Una canguro seleccionada que habla inglés acude a tu hotel o apartamento mientras juegas al golf, sales a cenar o haces una experiencia que no es para niños. Organizado por KAMEHAME JAPAN con agencias locales verificadas, con presupuesto por solicitud y un solo contacto de principio a fin: nosotros.",
     conditions: ["Tokio · Yokohama · Kioto · Osaka (otras ciudades bajo petición)", "De 0 a 12 años", "Canguros que hablan inglés", "Presupuesto por solicitud"],
-    photoAlts: ["Una canguro leyendo un cuento con una niña", "Una canguro leyendo un cuento a dos niños"],
+    photoAlts: ["Una canguro leyendo un cuento con un niño pequeño en el regazo", "Una canguro leyendo a cuatro niños de distintos orígenes", "Una canguro y una niña leyendo juntas en el sofá", "Una canguro jugando con una niña en un dormitorio luminoso", "Un niño leyendo un cuento en la cama"],
     aboutH: "Cómo funciona",
     about: [
       "Dinos la fecha, dónde estarán los niños, el horario, sus edades y el idioma que prefieres. Consultamos la disponibilidad de una canguro con nuestras agencias asociadas y te enviamos un presupuesto, normalmente en un día laborable. No se paga nada hasta que confirmes.",
@@ -337,14 +338,14 @@ const fr: SupportCopy = {
     babysitter: { title: "Garde d'enfants pendant votre expérience", line: "Une garde anglophone et sélectionnée s'occupe des enfants à votre hôtel ou appartement pendant que vous êtes à une expérience ou sortez le soir.", alt: "Une baby-sitter lisant un album avec une petite fille", facts: ["Tokyo · Yokohama · Kyoto · Osaka", "De 0 à 12 ans", "Devis sur demande"] },
     transfer: { title: "Transferts et voiture privée", line: "Accueil à l'aéroport, aller-retour entre votre hôtel et le lieu de l'expérience, ou une voiture avec chauffeur pour la journée.", alt: "Un chauffeur tenant la portière d'une voiture privée", facts: ["Aéroport · hôtel ↔ lieu · journée entière", "Chauffeur compris"] },
     interpreter: { title: "Guide-interprète pour la journée", line: "Un guide-interprète agréé à vos côtés pour une journée d'expériences, de shopping, de visites ou de rendez-vous.", alt: "Un guide présentant un site à des visiteurs", facts: ["Anglais · chinois · autres sur demande", "Demi-journée · journée"] },
-    planner: { title: "Planificateur de voyage", line: "De l'organisation de vos journées au Japon aux réservations qui vont avec : expériences, restaurants, transports, en un seul plan.", alt: "Des voyageurs traçant un itinéraire sur une carte", facts: ["Planification du séjour entier", "Réservations prises en charge"] },
+    planner: { title: "Planificateur de voyage", line: "De l'organisation de vos journées au Japon aux réservations qui vont avec : expériences, restaurants, transports, en un seul plan.", alt: "Un groupe de visiteurs avec une carte et un guide de Tokyo dans la rue", facts: ["Planification du séjour entier", "Réservations prises en charge"] },
   },
   banner: { kicker: "Services voyage", title: "Un soutien pendant votre voyage, par KAMEHAME JAPAN", body: "Une baby-sitter pendant cette expérience, un guide-interprète, des transferts, la planification du reste de vos journées au Japon. Un seul interlocuteur pour tout.", cta: "Voir les services voyage" },
   baby: {
     h1: "Garde d'enfants à votre hôtel, en anglais",
     tagline: "Une baby-sitter sélectionnée et anglophone vient à votre hôtel ou appartement pendant que vous jouez au golf, dînez ou vivez une expérience qui n'est pas pour les enfants. Organisé par KAMEHAME JAPAN avec des agences locales vérifiées, sur devis, avec un seul interlocuteur du début à la fin : nous.",
     conditions: ["Tokyo · Yokohama · Kyoto · Osaka (autres villes sur demande)", "De 0 à 12 ans", "Gardes anglophones", "Devis sur demande"],
-    photoAlts: ["Une baby-sitter lisant un album avec une petite fille", "Une baby-sitter lisant un album à deux enfants"],
+    photoAlts: ["Une baby-sitter lisant un album à un tout-petit sur ses genoux", "Une garde lisant à quatre enfants d'origines différentes", "Une garde et une fillette lisant ensemble sur un canapé", "Une garde jouant avec une fillette dans une chambre lumineuse", "Un garçon lisant un album sur un lit"],
     aboutH: "Comment ça marche",
     about: [
       "Indiquez-nous la date, où seront les enfants, les horaires, leur âge et la langue souhaitée. Nous vérifions la disponibilité d'une garde auprès de nos agences partenaires et vous envoyons un devis, généralement sous un jour ouvré. Rien n'est payé avant votre confirmation.",
@@ -415,14 +416,14 @@ const zh: SupportCopy = {
     babysitter: { title: "體驗期間的保母服務", line: "您參加體驗或夜間外出時，會說英語、經審核的保母在飯店或住處照顧孩子。", alt: "為幼兒讀繪本的保母", facts: ["東京 · 橫濱 · 京都 · 大阪", "0 至 12 歲", "個別報價"] },
     transfer: { title: "接送與一日包車", line: "機場接送、飯店與體驗場地之間的來回接送，或含司機的一日包車。", alt: "為私人車輛開門的司機", facts: ["機場 · 飯店⇄場地 · 一日包車", "含司機"] },
     interpreter: { title: "一日口譯導遊", line: "持證口譯導遊全日陪同您的體驗、購物、觀光或洽談。", alt: "向訪客介紹景點的導遊", facts: ["英語 · 中文 · 其他可洽", "半日 · 全日"] },
-    planner: { title: "旅行規劃師", line: "從日本行程的安排到背後的預訂：體驗、餐廳、交通，整合成一份計畫。", alt: "在地圖上規劃路線的旅人", facts: ["整趟行程規劃", "代為預訂"] },
+    planner: { title: "旅行規劃師", line: "從日本行程的安排到背後的預訂：體驗、餐廳、交通，整合成一份計畫。", alt: "在街頭攤開地圖與東京旅遊書的外國旅客", facts: ["整趟行程規劃", "代為預訂"] },
   },
   banner: { kicker: "旅行支援", title: "旅途中的支援，交給 KAMEHAME JAPAN", body: "體驗期間的保母、口譯導遊、接送、其餘行程的規劃。所有事項只需一個窗口。", cta: "查看旅行支援" },
   baby: {
     h1: "到飯店的英語保母服務",
     tagline: "當您打高爾夫、外出用餐或參加不適合孩子的體驗時，經審核、會說英語的保母會到您的飯店或住處。由 KAMEHAME JAPAN 與審核過的在地機構安排，個別報價，自始至終只有一個聯絡窗口：我們。",
     conditions: ["東京 · 橫濱 · 京都 · 大阪（其他城市可洽）", "0 至 12 歲", "會說英語的保母", "個別報價"],
-    photoAlts: ["為幼兒讀繪本的保母", "為兩個孩子讀繪本的保母"],
+    photoAlts: ["抱著幼兒讀繪本的保母", "為四位不同背景的孩子讀繪本的保母", "與女孩一起在沙發上看書的保母", "在明亮臥室裡與女孩玩耍的保母", "在床上看繪本的男孩"],
     aboutH: "服務方式",
     about: [
       "告訴我們日期、孩子所在地點、時段、年齡與希望的語言。我們向合作機構確認保母檔期，通常在一個工作天內寄出報價。確認前不需付款。",
