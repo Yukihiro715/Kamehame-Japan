@@ -6,6 +6,7 @@ import { threadSubject } from "@/lib/mail-copy";
 import { golfCustomerEmail } from "@/lib/golf-customer-email";
 import { catalogFor } from "@/lib/catalog";
 import { isLang } from "@/lib/i18n";
+import { sumiEPreviewSlug, sumiEPreviewTitle } from "@/lib/partner-listing-drafts";
 import { notifySlack, slackMessage } from "@/lib/slack";
 import { GOLF_OWN_CLUBS_DISCOUNT_JPY, GOLF_PRICE_VERSION, golfPackagePrice, golfTotalWithOwnClubs, isArrangement, isGolfArea, isGolfGolfers, ownClubsCount, type GolfCourseMode } from "@/lib/golf-prices";
 import { clubRentalTotal, clubSetById, clubSetName, GOLF_CLUB_RENTAL_CUTOFF_DAYS, GOLF_CLUB_RENTAL_JPY, GOLF_CLUB_RENTAL_VERSION, isClubSetId } from "@/lib/golf-club-rental";
@@ -50,6 +51,7 @@ const REPLY = "hello@kamehame-japan.com";
 function jaTitle(e: Enquiry): string | undefined {
   if (!e.experience) return undefined;
   if (e.experience === terraceSlug) return terraceName;
+  if (e.experience === sumiEPreviewSlug) return sumiEPreviewTitle.ja;
   return catalogFor("ja").experiences.find((x) => x.slug === e.experience)?.title;
 }
 
@@ -57,6 +59,7 @@ function jaTitle(e: Enquiry): string | undefined {
 function titleFor(e: Enquiry): string | undefined {
   if (!e.experience || !isLang(e.lang)) return undefined;
   if (e.experience === terraceSlug) return terraceName;
+  if (e.experience === sumiEPreviewSlug) return sumiEPreviewTitle[e.lang === "ja" ? "ja" : "en"];
   return catalogFor(e.lang).experiences.find((x) => x.slug === e.experience)?.title;
 }
 

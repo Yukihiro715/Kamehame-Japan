@@ -103,7 +103,7 @@ test("experience requests accept optional blank notes and retain booking details
 
 test("blank notes do not bypass required general/trade messages or missing booking details", async (t) => {
   t.mock.method(globalThis, "fetch", () => { throw Error("invalid requests must not send mail"); });
-  for (const patch of [{}, { experience: "not-a-product" }, { experience: "osaka-kendo-experience-tour", dates: "" }, { experience: "osaka-kendo-experience-tour", party: "0" }, { experience: "osaka-kendo-experience-tour", kind: "trade" }]) {
+  for (const patch of [{}, { experience: "not-a-product" }, { experience: "sumi-e-ink-painting" }, { experience: "osaka-kendo-experience-tour", dates: "" }, { experience: "osaka-kendo-experience-tour", party: "0" }, { experience: "osaka-kendo-experience-tour", kind: "trade" }]) {
     const response = await POST(new Request("https://kamehame-japan.com/api/contact", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...enquiry, message: "", ...patch }),
@@ -171,6 +171,17 @@ test("as shipped, the follow-up is paused: no scheduling call, and the team noti
 });
 
 const { ledgerRecord } = await vite.ssrLoadModule("/lib/ledger.ts");
+test("Sumi-e enquiries carry the experience title into team mail, acknowledgement and ledger", async (t) => {
+  const experience = "sumi-e-ink-painting";
+  const calls = await submit(t, { experience });
+  const [internal, ack] = calls.at(-1).body;
+  assert.match(internal.text, /銀座・水墨画体験/);
+  assert.match(ack.subject, /Sumi-e Japanese Ink Painting in Ginza/);
+  const record = ledgerRecord({ ...enquiry, experience }, {}, { ackSent: true, followUpScheduled: false });
+  assert.equal(record.experienceTitle, "銀座・水墨画体験");
+  assert.equal(record.freeCancelUntil, undefined);
+});
+
 test("internal mail and legacy ledger retain the same inquiry and source", () => {
   const touch={landing:"https://example.com/golf",referrer:"",at:Date.now(),utm_source:"meta",utm_medium:"paid_social"};
   const e={...enquiry,requestId:"12345678-1234-1234-1234-123456789abc",attribution:{version:1,first:touch,last:touch}};
