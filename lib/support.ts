@@ -101,7 +101,7 @@ const en: SupportCopy = {
   comingSoonBody: "Not open for requests yet. We will list it here as soon as it is ready.",
   category: "Travel support",
   services: {
-    babysitter: { title: "Babysitting during your experience", line: "An English-speaking, screened sitter looks after the children at your hotel or apartment while you are at an experience or out for the evening.", alt: "A babysitter reading a picture book with a young child", facts: ["Tokyo · Yokohama · Kyoto · Osaka", "Ages 0–12", "From ¥16,050 (3 hours)"] },
+    babysitter: { title: "Babysitting during your experience", line: "An English-speaking, screened sitter looks after the children at your hotel or apartment while you are at an experience or out for the evening.", alt: "A babysitter reading a picture book with a young child", facts: ["Tokyo · Yokohama", "Ages 0–12", "From ¥15,450 (3 hours)"] },
     transfer: { title: "Transfers & private car", line: "Airport pick-up, a return transfer between your hotel and the experience venue, or a car with driver for the whole day.", alt: "A driver holding the door of a private car", facts: ["Airport · hotel ↔ venue · full day", "Driver included"] },
     interpreter: { title: "Interpreter guide for the day", line: "A licensed guide-interpreter beside you for a day of experiences, shopping, sightseeing or meetings.", alt: "A guide explaining a sight to visitors", facts: ["English · Chinese · more on request", "Half day · full day"] },
     planner: { title: "Travel planner", line: "From the shape of your days in Japan to the bookings behind them: experiences, restaurants, transport, in one plan.", alt: "A group of visitors with a map and a Tokyo guidebook in the street", facts: ["Whole-trip planning", "Bookings handled"] },
@@ -110,7 +110,7 @@ const en: SupportCopy = {
   baby: {
     h1: "Babysitting at your hotel, in English",
     tagline: "A screened, English-speaking babysitter comes to your hotel or apartment while you play golf, go to dinner or take an experience that is not for children. Arranged by KAMEHAME JAPAN with vetted local agencies, quoted per request, with one contact throughout: us.",
-    conditions: ["Tokyo · Yokohama · Kyoto · Osaka (other cities on request)", "Ages 0–12", "English-speaking sitters", "From ¥16,050 for 3 hours"],
+    conditions: ["Tokyo · Yokohama (Kansai on request)", "Ages 0–12", "English-speaking sitters", "From ¥15,450 for 3 hours"],
     photoAlts: ["A babysitter reading a picture book with a toddler on her lap", "A sitter reading to four children of different backgrounds", "A sitter and a girl reading together on a sofa", "A sitter playing with a girl in a bright bedroom", "A boy reading a picture book on a bed"],
     aboutH: "How it works",
     about: [
@@ -147,7 +147,7 @@ const en: SupportCopy = {
       { q: "Can the sitter come to the golf club or the restaurant?", a: "Usually the sitter cares for the children at your hotel, which is calmer for them. Care at a venue is possible when the venue agrees and has a suitable room; ask us and we check." },
       { q: "How much notice do you need?", a: "A week or more is ideal. We can often arrange shorter notice, sometimes with a surcharge; it is always worth asking." },
       { q: "Can one sitter look after two children?", a: "Yes, for most ages. For three or more children, or more than one infant, we may propose two sitters." },
-      { q: "What about a baby under one?", a: "Yes, from newborn in most cities. Tell us feeding and sleeping routines and we brief the sitter." },
+      { q: "What about a baby under one?", a: "Yes, from newborn. Tell us feeding and sleeping routines and we brief the sitter." },
       { q: "What if my child is ill on the day?", a: "Sitters do not care for a child with a fever or a contagious illness. Tell us as early as you can; the cancellation terms in your quote apply, and we do what we can." },
       { q: "Who do I talk to on the day?", a: "Us. You get a number for the day with your confirmation, and the sitter's agency is reachable through us at any time." },
     ],
@@ -179,7 +179,7 @@ const ja: SupportCopy = {
   comingSoonBody: "まだ受付を開始していません。準備ができ次第ここに掲載します。",
   category: "旅行サポート",
   services: {
-    babysitter: { title: "体験中のベビーシッター", line: "体験や夜の外出の間、英語の話せる審査済みシッターがホテルや滞在先でお子さまをお預かりします。", alt: "絵本を読み聞かせるベビーシッターと子ども", facts: ["東京・横浜・京都・大阪", "0〜12歳", "¥16,050〜（3時間）"] },
+    babysitter: { title: "体験中のベビーシッター", line: "体験や夜の外出の間、英語の話せる審査済みシッターがホテルや滞在先でお子さまをお預かりします。", alt: "絵本を読み聞かせるベビーシッターと子ども", facts: ["東京・横浜", "0〜12歳", "¥15,450〜（3時間）"] },
     transfer: { title: "往復送迎・1日貸切車両", line: "空港送迎、ホテルと体験施設の往復送迎、1日貸切のドライバー付き車両。", alt: "送迎車のドアを開けるドライバー", facts: ["空港・ホテル⇄体験施設・1日貸切", "ドライバー付き"] },
     interpreter: { title: "1日の通訳ガイド", line: "体験、買い物、観光、商談に1日同行する通訳案内士。", alt: "来訪者に名所を説明するガイド", facts: ["英語・中国語ほか", "半日・1日"] },
     planner: { title: "旅行プランナー", line: "日本での滞在日程の組み立てから、体験・レストラン・移動の手配まで、旅全体をひとつのプランに。", alt: "地図と東京のガイドブックを広げる外国人旅行者のグループ", facts: ["旅全体のプランニング", "手配込み"] },
@@ -188,7 +188,7 @@ const ja: SupportCopy = {
   baby: {
     h1: "ホテルで受けられる英語ベビーシッター",
     tagline: "ゴルフ、夕食、お子さま向けではない体験の間、審査済みの英語が話せるシッターがホテルや滞在先に伺います。KAMEHAME JAPANが提携する保育事業者と手配し、料金は都度お見積もり。窓口は最後までKAMEHAME JAPANです。",
-    conditions: ["東京・横浜・京都・大阪（他都市は応相談）", "0〜12歳", "英語の話せるシッター", "3時間 ¥16,050〜"],
+    conditions: ["東京・横浜（関西は応相談）", "0〜12歳", "英語の話せるシッター", "3時間 ¥15,450〜"],
     photoAlts: ["膝の上の幼児に絵本を読み聞かせるベビーシッター", "さまざまな国の4人の子どもに絵本を読むシッター", "ソファで一緒に絵本を読むシッターと女の子", "明るい寝室で女の子と遊ぶシッター", "ベッドで絵本を読む男の子"],
     aboutH: "仕組み",
     about: [
@@ -225,7 +225,7 @@ const ja: SupportCopy = {
       { q: "ゴルフ場やレストランまで来てもらえますか？", a: "通常はホテルでお預かりします。お子さまにとって落ち着いて過ごせるためです。会場側の了承と適した部屋があれば会場での保育も可能です。ご相談ください。" },
       { q: "どのくらい前に申し込めばいいですか？", a: "1週間以上前が理想です。それより短くても手配できることが多く、割増になる場合があります。まずはお問い合わせください。" },
       { q: "1人のシッターで2人見てもらえますか？", a: "多くの年齢で可能です。3人以上、または乳児が複数の場合は2人のシッターをご提案することがあります。" },
-      { q: "1歳未満の赤ちゃんも？", a: "多くの都市で新生児からお受けします。授乳と睡眠のリズムをお知らせください。" },
+      { q: "1歳未満の赤ちゃんも？", a: "新生児からお受けします。授乳と睡眠のリズムをお知らせください。" },
       { q: "当日、子どもが体調を崩したら？", a: "発熱や感染症の疑いがある場合はお預かりできません。できるだけ早くお知らせください。お見積もりの取消規定に従い、できる限り対応します。" },
       { q: "当日の連絡先は？", a: "KAMEHAME JAPANです。確定時に当日の連絡先をお伝えし、事業者へもいつでも私たちを通じて連絡できます。" },
     ],
@@ -257,7 +257,7 @@ const es: SupportCopy = {
   comingSoonBody: "Aún no acepta solicitudes. Lo publicaremos aquí en cuanto esté listo.",
   category: "Apoyo al viaje",
   services: {
-    babysitter: { title: "Canguro durante tu experiencia", line: "Una canguro seleccionada que habla inglés cuida a los niños en tu hotel o apartamento mientras estás en una experiencia o sales por la noche.", alt: "Una canguro leyendo un cuento con una niña", facts: ["Tokio · Yokohama · Kioto · Osaka", "De 0 a 12 años", "Desde ¥16,050 (3 horas)"] },
+    babysitter: { title: "Canguro durante tu experiencia", line: "Una canguro seleccionada que habla inglés cuida a los niños en tu hotel o apartamento mientras estás en una experiencia o sales por la noche.", alt: "Una canguro leyendo un cuento con una niña", facts: ["Tokio · Yokohama", "De 0 a 12 años", "Desde ¥15,450 (3 horas)"] },
     transfer: { title: "Traslados y coche privado", line: "Recogida en el aeropuerto, traslado de ida y vuelta entre tu hotel y el lugar de la experiencia, o un coche con conductor para todo el día.", alt: "Un conductor sosteniendo la puerta de un coche privado", facts: ["Aeropuerto · hotel ↔ lugar · día completo", "Conductor incluido"] },
     interpreter: { title: "Guía intérprete por un día", line: "Un guía intérprete titulado a tu lado durante un día de experiencias, compras, visitas o reuniones.", alt: "Un guía explicando un lugar a visitantes", facts: ["Inglés · chino · otros bajo petición", "Medio día · día completo"] },
     planner: { title: "Planificador de viaje", line: "De la forma de tus días en Japón a las reservas que hay detrás: experiencias, restaurantes, transporte, en un solo plan.", alt: "Un grupo de visitantes con un mapa y una guía de Tokio en la calle", facts: ["Planificación de todo el viaje", "Reservas gestionadas"] },
@@ -266,7 +266,7 @@ const es: SupportCopy = {
   baby: {
     h1: "Canguro en tu hotel, en inglés",
     tagline: "Una canguro seleccionada que habla inglés acude a tu hotel o apartamento mientras juegas al golf, sales a cenar o haces una experiencia que no es para niños. Organizado por KAMEHAME JAPAN con agencias locales verificadas, con presupuesto por solicitud y un solo contacto de principio a fin: nosotros.",
-    conditions: ["Tokio · Yokohama · Kioto · Osaka (otras ciudades bajo petición)", "De 0 a 12 años", "Canguros que hablan inglés", "Desde ¥16,050 por 3 horas"],
+    conditions: ["Tokio · Yokohama (Kansai bajo petición)", "De 0 a 12 años", "Canguros que hablan inglés", "Desde ¥15,450 por 3 horas"],
     photoAlts: ["Una canguro leyendo un cuento con un niño pequeño en el regazo", "Una canguro leyendo a cuatro niños de distintos orígenes", "Una canguro y una niña leyendo juntas en el sofá", "Una canguro jugando con una niña en un dormitorio luminoso", "Un niño leyendo un cuento en la cama"],
     aboutH: "Cómo funciona",
     about: [
@@ -303,7 +303,7 @@ const es: SupportCopy = {
       { q: "¿Puede la canguro venir al club de golf o al restaurante?", a: "Normalmente cuida a los niños en tu hotel, que es más tranquilo para ellos. El cuidado en el lugar es posible cuando el lugar lo acepta y tiene una sala adecuada; pregúntanos y lo comprobamos." },
       { q: "¿Con cuánta antelación hay que avisar?", a: "Una semana o más es lo ideal. A menudo podemos organizarlo con menos tiempo, a veces con recargo; siempre vale la pena preguntar." },
       { q: "¿Puede una canguro cuidar a dos niños?", a: "Sí, en la mayoría de edades. Para tres o más niños, o más de un bebé, podemos proponer dos canguros." },
-      { q: "¿Y un bebé de menos de un año?", a: "Sí, desde recién nacido en la mayoría de ciudades. Dinos las rutinas de alimentación y sueño y se lo explicamos a la canguro." },
+      { q: "¿Y un bebé de menos de un año?", a: "Sí, desde recién nacido. Dinos las rutinas de alimentación y sueño y se lo explicamos a la canguro." },
       { q: "¿Y si mi hijo está enfermo ese día?", a: "Las canguros no cuidan a un niño con fiebre o una enfermedad contagiosa. Avísanos lo antes posible; se aplican las condiciones de cancelación de tu presupuesto y hacemos lo que podemos." },
       { q: "¿Con quién hablo ese día?", a: "Con nosotros. Recibes un número para el día con tu confirmación, y la agencia de la canguro está localizable a través de nosotros en todo momento." },
     ],
@@ -335,7 +335,7 @@ const fr: SupportCopy = {
   comingSoonBody: "Pas encore ouvert aux demandes. Nous l'afficherons ici dès qu'il sera prêt.",
   category: "Services voyage",
   services: {
-    babysitter: { title: "Garde d'enfants pendant votre expérience", line: "Une garde anglophone et sélectionnée s'occupe des enfants à votre hôtel ou appartement pendant que vous êtes à une expérience ou sortez le soir.", alt: "Une baby-sitter lisant un album avec une petite fille", facts: ["Tokyo · Yokohama · Kyoto · Osaka", "De 0 à 12 ans", "À partir de ¥16,050 (3 h)"] },
+    babysitter: { title: "Garde d'enfants pendant votre expérience", line: "Une garde anglophone et sélectionnée s'occupe des enfants à votre hôtel ou appartement pendant que vous êtes à une expérience ou sortez le soir.", alt: "Une baby-sitter lisant un album avec une petite fille", facts: ["Tokyo · Yokohama", "De 0 à 12 ans", "À partir de ¥15,450 (3 h)"] },
     transfer: { title: "Transferts et voiture privée", line: "Accueil à l'aéroport, aller-retour entre votre hôtel et le lieu de l'expérience, ou une voiture avec chauffeur pour la journée.", alt: "Un chauffeur tenant la portière d'une voiture privée", facts: ["Aéroport · hôtel ↔ lieu · journée entière", "Chauffeur compris"] },
     interpreter: { title: "Guide-interprète pour la journée", line: "Un guide-interprète agréé à vos côtés pour une journée d'expériences, de shopping, de visites ou de rendez-vous.", alt: "Un guide présentant un site à des visiteurs", facts: ["Anglais · chinois · autres sur demande", "Demi-journée · journée"] },
     planner: { title: "Planificateur de voyage", line: "De l'organisation de vos journées au Japon aux réservations qui vont avec : expériences, restaurants, transports, en un seul plan.", alt: "Un groupe de visiteurs avec une carte et un guide de Tokyo dans la rue", facts: ["Planification du séjour entier", "Réservations prises en charge"] },
@@ -344,7 +344,7 @@ const fr: SupportCopy = {
   baby: {
     h1: "Garde d'enfants à votre hôtel, en anglais",
     tagline: "Une baby-sitter sélectionnée et anglophone vient à votre hôtel ou appartement pendant que vous jouez au golf, dînez ou vivez une expérience qui n'est pas pour les enfants. Organisé par KAMEHAME JAPAN avec des agences locales vérifiées, sur devis, avec un seul interlocuteur du début à la fin : nous.",
-    conditions: ["Tokyo · Yokohama · Kyoto · Osaka (autres villes sur demande)", "De 0 à 12 ans", "Gardes anglophones", "À partir de ¥16,050 pour 3 h"],
+    conditions: ["Tokyo · Yokohama (Kansai sur demande)", "De 0 à 12 ans", "Gardes anglophones", "À partir de ¥15,450 pour 3 h"],
     photoAlts: ["Une baby-sitter lisant un album à un tout-petit sur ses genoux", "Une garde lisant à quatre enfants d'origines différentes", "Une garde et une fillette lisant ensemble sur un canapé", "Une garde jouant avec une fillette dans une chambre lumineuse", "Un garçon lisant un album sur un lit"],
     aboutH: "Comment ça marche",
     about: [
@@ -381,7 +381,7 @@ const fr: SupportCopy = {
       { q: "La garde peut-elle venir au golf ou au restaurant ?", a: "En général, la garde s'occupe des enfants à votre hôtel, plus calme pour eux. Une garde sur place est possible si le lieu l'accepte et dispose d'une pièce adaptée ; demandez-nous, nous vérifions." },
       { q: "Quel délai faut-il prévoir ?", a: "Une semaine ou plus, idéalement. Nous pouvons souvent organiser plus court, parfois avec majoration ; cela vaut toujours la peine de demander." },
       { q: "Une garde peut-elle s'occuper de deux enfants ?", a: "Oui, pour la plupart des âges. Pour trois enfants ou plus, ou plus d'un bébé, nous pouvons proposer deux gardes." },
-      { q: "Et un bébé de moins d'un an ?", a: "Oui, dès la naissance dans la plupart des villes. Indiquez-nous les rythmes de repas et de sommeil et nous les transmettons à la garde." },
+      { q: "Et un bébé de moins d'un an ?", a: "Oui, dès la naissance. Indiquez-nous les rythmes de repas et de sommeil et nous les transmettons à la garde." },
       { q: "Et si mon enfant est malade ce jour-là ?", a: "Les gardes ne s'occupent pas d'un enfant fiévreux ou contagieux. Prévenez-nous au plus tôt ; les conditions d'annulation de votre devis s'appliquent et nous faisons notre possible." },
       { q: "À qui m'adresser le jour J ?", a: "À nous. Vous recevez un numéro pour la journée avec votre confirmation, et l'agence de la garde est joignable par notre intermédiaire à tout moment." },
     ],
@@ -413,7 +413,7 @@ const zh: SupportCopy = {
   comingSoonBody: "尚未開放申請。準備就緒後會在此刊登。",
   category: "旅行支援",
   services: {
-    babysitter: { title: "體驗期間的保母服務", line: "您參加體驗或夜間外出時，會說英語、經審核的保母在飯店或住處照顧孩子。", alt: "為幼兒讀繪本的保母", facts: ["東京 · 橫濱 · 京都 · 大阪", "0 至 12 歲", "¥16,050 起（3 小時）"] },
+    babysitter: { title: "體驗期間的保母服務", line: "您參加體驗或夜間外出時，會說英語、經審核的保母在飯店或住處照顧孩子。", alt: "為幼兒讀繪本的保母", facts: ["東京 · 橫濱", "0 至 12 歲", "¥15,450 起（3 小時）"] },
     transfer: { title: "接送與一日包車", line: "機場接送、飯店與體驗場地之間的來回接送，或含司機的一日包車。", alt: "為私人車輛開門的司機", facts: ["機場 · 飯店⇄場地 · 一日包車", "含司機"] },
     interpreter: { title: "一日口譯導遊", line: "持證口譯導遊全日陪同您的體驗、購物、觀光或洽談。", alt: "向訪客介紹景點的導遊", facts: ["英語 · 中文 · 其他可洽", "半日 · 全日"] },
     planner: { title: "旅行規劃師", line: "從日本行程的安排到背後的預訂：體驗、餐廳、交通，整合成一份計畫。", alt: "在街頭攤開地圖與東京旅遊書的外國旅客", facts: ["整趟行程規劃", "代為預訂"] },
@@ -422,7 +422,7 @@ const zh: SupportCopy = {
   baby: {
     h1: "到飯店的英語保母服務",
     tagline: "當您打高爾夫、外出用餐或參加不適合孩子的體驗時，經審核、會說英語的保母會到您的飯店或住處。由 KAMEHAME JAPAN 與審核過的在地機構安排，個別報價，自始至終只有一個聯絡窗口：我們。",
-    conditions: ["東京 · 橫濱 · 京都 · 大阪（其他城市可洽）", "0 至 12 歲", "會說英語的保母", "3 小時 ¥16,050 起"],
+    conditions: ["東京 · 橫濱（關西可洽）", "0 至 12 歲", "會說英語的保母", "3 小時 ¥15,450 起"],
     photoAlts: ["抱著幼兒讀繪本的保母", "為四位不同背景的孩子讀繪本的保母", "與女孩一起在沙發上看書的保母", "在明亮臥室裡與女孩玩耍的保母", "在床上看繪本的男孩"],
     aboutH: "服務方式",
     about: [
@@ -459,7 +459,7 @@ const zh: SupportCopy = {
       { q: "保母可以到球場或餐廳嗎？", a: "通常在您的飯店照顧孩子，對孩子較為安穩。若場地同意並有合適的房間，也可在場地托育；請詢問我們確認。" },
       { q: "需要提前多久申請？", a: "最好一週以上。較短的時間多半也能安排，有時需加價；歡迎先詢問。" },
       { q: "一位保母可以照顧兩個孩子嗎？", a: "多數年齡可以。三位以上，或不只一位嬰兒時，我們可能建議兩位保母。" },
-      { q: "未滿一歲的嬰兒可以嗎？", a: "多數城市從新生兒起即可。請告知餵食與睡眠作息，我們會向保母說明。" },
+      { q: "未滿一歲的嬰兒可以嗎？", a: "從新生兒起即可。請告知餵食與睡眠作息，我們會向保母說明。" },
       { q: "當天孩子生病怎麼辦？", a: "保母不照顧發燒或有傳染病的孩子。請盡早告知；依報價中的取消規定處理，我們會盡力協助。" },
       { q: "當天聯絡誰？", a: "我們。確認時會提供當天的聯絡電話，保母所屬機構也可隨時透過我們聯繫。" },
     ],
