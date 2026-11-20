@@ -110,6 +110,10 @@ test('confirmed partner answers replace pending questions without publishing sup
 test('Sumi-e preview shows revised deadlines while selling prices are under review', async () => {
   for (const lang of ['en', 'ja']) {
     const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
+    assert.match(html, /class="site-header solid"/);
+    assert.match(html, /class="subpage detail-page xp xp2"/);
+    assert.match(html, /class="gallery" id="photos"/);
+    assert.match(html, /id="booking-facts"/);
     assert.match(html, lang === 'ja' ? /販売価格を確認中/ : /Pricing is being confirmed/);
     assert.match(html, lang === 'ja' ? /土日祝は18:00のみ/ : /public holidays: 18:00 only/);
     assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
