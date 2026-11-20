@@ -20,3 +20,37 @@
 .xp-mv.sumi-e-review-gallery .gallery-item button:hover img {
   transform: none;
 }
+
+.xp-pricing.sumi-e-pricing th:first-child {
+  width: 36%;
+  white-space: normal;
+}
+
+.xp-pricing.sumi-e-pricing th:nth-child(2),
+.xp-pricing.sumi-e-pricing td:nth-child(2) {
+  width: 29%;
+}
+
+.xp-pricing.sumi-e-pricing tbody th {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  font-size: 14px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.xp-pricing.sumi-e-pricing tbody tr:last-child th {
+  border-bottom: 0;
+}
+
+@media (max-width: 520px) {
+  .xp-pricing.sumi-e-pricing :is(th, td, tbody th) {
+    padding: 10px 8px;
+    overflow-wrap: anywhere;
+  }
+
+  .xp-pricing.sumi-e-pricing td.total {
+    font-size: 14px;
+  }
+}
