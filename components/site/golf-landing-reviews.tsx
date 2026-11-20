@@ -1,7 +1,7 @@
 import { ownReviewsFor, reviewDate, type Review } from "@/lib/published-reviews";
 import { SITE_GOLF_REVIEW_ID } from "@/lib/site-reviewed-golf";
 import { verifiedPrivateGolfReviews } from "@/lib/site-golf-reviews-context";
-import { reviewTranslationFor } from "@/lib/review-translations";
+import { golfReviewTranslationFor } from "@/lib/review-translations";
 import type { Lang } from "@/lib/i18n";
 import { GolfReviewCarousel, type GolfReviewSlide } from "./golf-review-carousel";
 const services = {
@@ -13,7 +13,7 @@ const services = {
 };
 export function golfLandingSlides(lang: Lang, privateReviews: Review[]): GolfReviewSlide[] {
   return [privateReviews, ownReviewsFor("golf-bus")].flatMap((reviews, group) => reviews.map(review => {
-    const translation = reviewTranslationFor(review.id, lang);
+    const translation = golfReviewTranslationFor(review, lang);
     const originalExcerpt = review.id === "tyler-takane-2026-11" ? "the booking process was quick, easy, informative, and they got me on an awesome course!" : review.id === SITE_GOLF_REVIEW_ID ? review.body.split("\n\n")[0] : review.body;
     return { id:review.id, author:review.author, date:review.date ? reviewDate(review.date,lang) : "", rating:review.rating, service:services[lang][group], excerpt:translation?.excerpt ?? originalExcerpt, language:translation ? lang : "en", translated:!!translation, photo:review.photos?.[0]?.replace(/\.webp$/, "-600.webp"), href:group === 0 ? `/${lang}/tokyo/mt-fuji-golf-day/#${review.id === SITE_GOLF_REVIEW_ID ? review.id : "reviews"}` : `/${lang}/golf-bus/#reviews` };
   }));
