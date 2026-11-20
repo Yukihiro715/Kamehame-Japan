@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { partnerListingDrafts } from "@/lib/partner-listing-drafts";
+import { Breadcrumbs } from "@/components/site/breadcrumb";
+import { Gallery } from "@/components/site/gallery";
+import { HeroCarousel } from "@/components/site/hero-carousel";
+import { SiteFooter } from "@/components/site/site-footer";
+import { SiteHeader } from "@/components/site/site-header";
+import factsStyles from "@/components/site/experience-facts.module.css";
+import { FACT_COPY } from "@/lib/experience-seo";
+import { langHome, t } from "@/lib/i18n";
+import { partnerListingDrafts, type ListingDraft } from "@/lib/partner-listing-drafts";
 import "./preview.css";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ lang?: string }> };
@@ -20,6 +28,7 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
   const draft = partnerListingDrafts.find((d) => d.slug === slug);
   if (!draft) notFound();
   const ja = lang === "ja";
+  if (slug === "sumi-e-ink-painting") return <SumiEReview draft={draft} lang={ja ? "ja" : "en"} />;
   const copy = draft[ja ? "ja" : "en"];
   return <main className="listing-draft" lang={ja ? "ja" : "en"}>
     <header className="listing-draft-header">
@@ -47,4 +56,55 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
     </div>
     <footer>KAMEHAME JAPAN · {ja ? "確認用ページ" : "Review preview"}</footer>
   </main>;
+}
+
+function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }) {
+  const ja = lang === "ja";
+  const copy = draft[lang];
+  const T = t(lang);
+  const photos = (draft.images ?? []).map(photo => ({ img: photo.src, alt: photo[lang] }));
+
+  return (
+    <main className="subpage detail-page xp xp2" lang={lang}>
+      <SiteHeader variant="solid" lang={lang} languageLinks={{ en: "?lang=en", ja: "?lang=ja" }} />
+      <Breadcrumbs trail={[
+        { label: T.home, href: langHome(lang) },
+        { label: ja ? "東京" : "Tokyo", href: `/${lang}/tokyo/` },
+        { label: copy.title },
+      ]} />
+      <p className="xp-preview-banner" role="status">{ja ? "掲載内容の確認用プレビュー · 予約受付前" : "Listing review preview · Not open for booking"}</p>
+      <header className="xp-head">
+        <p className="eyebrow">{copy.area}</p>
+        <h1>{copy.title}</h1>
+      </header>
+      <section className="xp-mv sumi-e-review-gallery" aria-label={T.detail.gallery}>
+        <div className="xp-hero-photo"><HeroCarousel photos={photos} lang={lang} /></div>
+        <Gallery photos={photos} lang={lang} note={draft.mediaNote?.[lang]} />
+      </section>
+      <div className="xp-cols">
+        <div className="xp-main">
+          <section className="xp-section">
+            <h2>{T.detail.overviewH}</h2>
+            <p className="xp-lede">{copy.lead}</p>
+            <ul className="check-list">{copy.highlights.map(highlight => (
+              <li key={highlight}><span className="tick" aria-hidden="true">✓</span><span>{highlight}</span></li>
+            ))}</ul>
+          </section>
+          <section className={`xp-section ${factsStyles.facts}`} id="booking-facts">
+            <h2>{FACT_COPY[lang].heading}</h2>
+            <dl>{copy.details.map(([label, value]) => (
+              <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
+            ))}</dl>
+          </section>
+        </div>
+        <aside className="xp-side" aria-labelledby="sumi-e-booking-status">
+          <div className="bk-card">
+            <h2 className="bk-quote-heading" id="sumi-e-booking-status">{ja ? "確認中の内容" : "Details being confirmed"}</h2>
+            <ul className="check-list">{copy.pending.map(item => <li key={item}>{item}</li>)}</ul>
+          </div>
+        </aside>
+      </div>
+      <SiteFooter lang={lang} />
+    </main>
+  );
 }

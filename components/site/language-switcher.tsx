@@ -84,7 +84,7 @@ function switchTo(code: string) {
 
 // Header dropdown: globe icon + current language. Unpublished languages are
 // listed with a SOON tag instead of pretending to switch.
-export function LanguageSwitcher({ lang = "en" }: { lang?: Lang }) {
+export function LanguageSwitcher({ lang = "en", links }: { lang?: Lang; links?: Partial<Record<Lang, string>> }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -100,6 +100,7 @@ export function LanguageSwitcher({ lang = "en" }: { lang?: Lang }) {
   }, [open]);
 
   const current = LOCALES.find((l) => l.code === lang) ?? LOCALES[0];
+  const locales = links ? LOCALES.filter((locale) => links[locale.code]) : LOCALES;
 
   return (
     <div className="lang-switch" ref={ref}>
@@ -115,7 +116,7 @@ export function LanguageSwitcher({ lang = "en" }: { lang?: Lang }) {
       </button>
       {open && (
         <div className="lang-menu" role="listbox" aria-label="Site language">
-          {LOCALES.map((l) => (
+          {locales.map((l) => (
             <button
               key={l.code}
               type="button"
@@ -126,7 +127,10 @@ export function LanguageSwitcher({ lang = "en" }: { lang?: Lang }) {
               onClick={() => {
                 if (!l.available) return;
                 setOpen(false);
-                if (l.code !== current.code) switchTo(l.code);
+                if (l.code === current.code) return;
+                const href = links?.[l.code];
+                if (href) window.location.href = href;
+                else switchTo(l.code);
               }}
             >
               <l.Flag />
