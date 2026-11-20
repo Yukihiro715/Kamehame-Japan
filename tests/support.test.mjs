@@ -42,6 +42,8 @@ test("travel support: index and babysitting page in five languages, no partner d
 });
 
 test("travel support: the home section, the header link and the banner on experience pages", async () => {
+  const sitemap = (await import("node:fs")).readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+  for (const lang of ["en", "ja", "fr"]) assert.ok(sitemap.includes(`/${lang}/support/babysitter/`) && sitemap.includes(`/${lang}/support/`), `${lang}: support pages in the sitemap`);
   const home = await (await render("/ja/")).text();
   assert.ok(home.includes('class="support-section"') && home.includes('href="/ja/support/"'), "home has the section and its link");
   assert.ok((home.match(/support-section[\s\S]*?<\/section>/)?.[0].match(/class="lc lc-grid sc/g) ?? []).length === 4, "four service cards in the section");
