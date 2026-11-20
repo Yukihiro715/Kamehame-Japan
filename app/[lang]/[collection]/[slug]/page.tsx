@@ -18,6 +18,7 @@ import { HeroCarousel } from "@/components/site/hero-carousel";
 import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { CancellationTable } from "@/components/site/cancellation-table";
+import { SupportBanner } from "@/components/site/support-banner";
 import { VariantDetail } from "@/components/site/variant-detail";
 import { ClubRentalProvider } from "@/components/site/club-rental-context";
 import { GOLF_CLUB_RENTAL_LIVE } from "@/lib/golf-club-rental";
@@ -311,6 +312,9 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               </section>
             )}
 
+            {/* Travel support: childcare at the hotel while the guests are at this experience */}
+            <SupportBanner lang={lang} />
+
             {/* ④″ Consultation-only products: the partner's published fee list, with the coupon column */}
             {consultOnly && exp.feeTable && (
               <section className="xp-section" id="pricing">
@@ -406,8 +410,8 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             {/* Artist introductions for the three Amazing Japan Lounge programmes. */}
             {(["nihonbashi-japanese-dance-salon", "nihonbashi-english-rakugo-salon", "nihonbashi-shamisen-salon"].includes(exp.slug)) && exp.master?.bio && (
               <section className="xp-section" id="artists">
-                <h2>{exp.master.title}</h2>
-                <p className="xp-overview-p">{exp.master.bio}</p>
+                <h2>{exp.master!.title}</h2>
+                <p className="xp-overview-p">{exp.master!.bio}</p>
               </section>
             )}
 

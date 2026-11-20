@@ -12,6 +12,25 @@ import { yen } from "@/lib/pricing";
 import { GOLF_ARRANGEMENT_EXTRA_JPY, GOLF_ARRANGEMENT_FEE_JPY, isArrangement } from "@/lib/golf-prices";
 import type { TranslatedField } from "@/lib/translate";
 
+const SUPPORT_PLACE_JA = { hotel: "宿泊ホテル", apartment: "サービスアパートメント・民泊", venue: "体験の会場", other: "その他" } as const;
+const SUPPORT_LANG_JA = { en: "英語", ja: "日本語", zh: "中国語", other: "その他" } as const;
+
+/** The babysitting request's answers as Japanese rows (shared by the mailbox copy and Slack). */
+export function supportRowsJa(e: Enquiry): [string, string | undefined][] {
+  const s = e.support;
+  if (!s) return [];
+  return [
+    ["種別", "旅行サポート（ベビーシッター）の見積もり依頼"],
+    ["日付", e.dates],
+    ["保育時間", `${s.start}〜${s.end}`],
+    ["場所", `${SUPPORT_PLACE_JA[s.place]} — ${s.placeDetail}`],
+    ["お子さま", `${e.party ?? "?"}名（${s.ages}）`],
+    ["希望言語", SUPPORT_LANG_JA[s.language]],
+    ["外出先", s.golfVenue],
+    ["移動時間", s.golfVenue || s.travel ? (s.travel ? "外出先との往復を保育時間に含める" : "含めない") : undefined],
+  ];
+}
+
 const LANG_JA: Record<string, string> = { en: "英語", ja: "日本語", es: "スペイン語", fr: "フランス語", "zh-tw": "繁体字中国語" };
 
 /** The Japanese golf copy, for turning the form's option keys back into words. */
@@ -96,7 +115,9 @@ export function slackSummary(e: Enquiry, jaTitle: string | undefined, ja: Partia
   const level = e.levelKey ? levelJa(e.levelKey, e.handicap, e.areaId) ?? e.level : t("level", e.level);
   const rental = e.rentalKeys ? rentalJa(e.rentalKeys, e.areaId) ?? e.rental : t("rental", e.rental);
   const course = e.courseMode && (e.courseMode === "specific" ? `希望コース指定${e.course ? ` — ${t("course", e.course)}` : ""}${e.courseUrl ? ` (${e.courseUrl})` : ""}` : "おすすめコース");
-  const rows: [string, string | undefined][] = trade
+  const rows: [string, string | undefined][] = e.support
+    ? [...supportRowsJa(e), ["お名前", e.name], ["メール", e.email], ["WhatsApp", e.whatsapp], ["備考", t("message", e.message || undefined)]]
+    : trade
     ? [["会社", e.company], ["国", e.country], ["お名前", e.name], ["メール", e.email], ["日程", t("dates", e.dates)], ["人数", t("party", e.party)], ["備考", t("message", e.message || undefined)]]
     : [
         ["体験名", e.experience ? `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}` : "一般のお問い合わせ"],
@@ -145,7 +166,7 @@ export function notificationBody(e: Enquiry, jaTitle: string | undefined, extras
     ["申込ID", e.requestId],
     ["紹介元ホテル", e.referralHotel],
     ["流入記録", attributionNote(e.attribution)],
-    ["種別", trade ? "取引先からの問い合わせ" : "お客様からの予約リクエスト"],
+    ...(e.support ? supportRowsJa(e) : [["種別", trade ? "取引先からの問い合わせ" : "お客様からの予約リクエスト"] as [string, string | undefined]]),
     ["体験", e.experience && `${jaTitle ?? e.experience}${jaTitle ? ` (${e.experience})` : ""}`],
     ["メール", e.email],
     ["会社名", e.company],

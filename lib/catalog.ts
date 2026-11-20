@@ -237,7 +237,8 @@ export interface Experience {
    *  where the partner's brand must not be searchable. */
   teacher?: { img: string; alt: string; credentials: string[]; comment: string };
   whatYoullDo: string[];
-  master: { title: string; bio: string; quote: string };
+  /** The host profile; optional where a partner has not supplied one (the page shows it only for selected slugs). */
+  master?: { title: string; bio: string; quote: string };
   itinerary: string[];
   goodToKnow: string[];
   story: { heading: string; body: string };

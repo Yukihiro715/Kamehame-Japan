@@ -21,7 +21,7 @@ export const langPath = (lang: Lang, path: string) => `/${lang}${path}`; // path
 const strings = {
   en: {
     // header / footer
-    navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Experiences", navTours: "Private tours", navApproach: "Our approach",
+    navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Experiences", navSupport: "Travel support", navTours: "Private tours", navApproach: "Our approach",
     findExperience: "Find an experience",
     footerLegal: "Legal notice", footerTerms: "Terms", footerPrivacy: "Privacy & cookies", footerAbout: "About", navFaq: "FAQ", footerOperated: "Operated by {operator} · Travel arrangements by ELNX TRAVEL Co., Ltd.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
@@ -246,7 +246,7 @@ const strings = {
     eyebrowHero: (cities: string[]) => [...cities, "With the masters"].join(" · "),
   },
   es: {
-    navTokyo: "Tokio", navKyoto: "Kioto", navExperiences: "Experiencias", navTours: "Tours privados", navApproach: "Nuestra filosofía",
+    navTokyo: "Tokio", navKyoto: "Kioto", navExperiences: "Experiencias", navSupport: "Apoyo al viaje", navTours: "Tours privados", navApproach: "Nuestra filosofía",
     findExperience: "Buscar experiencia",
     footerLegal: "Aviso legal", footerTerms: "Condiciones", footerPrivacy: "Privacidad y cookies", footerAbout: "Nosotros", navFaq: "Preguntas frecuentes", footerOperated: "Operado por {operator} · Organización de viajes: ELNX TRAVEL Co., Ltd.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
@@ -458,7 +458,7 @@ const strings = {
     eyebrowHero: (cities: string[]) => [...cities, "Con los maestros"].join(" · "),
   },
   ja: {
-    navTokyo: "東京", navKyoto: "京都", navExperiences: "体験一覧", navTours: "プライベートツアー", navApproach: "私たちの考え方",
+    navTokyo: "東京", navKyoto: "京都", navExperiences: "体験一覧", navSupport: "旅行サポート", navTours: "プライベートツアー", navApproach: "私たちの考え方",
     findExperience: "体験を探す",
     footerLegal: "特定商取引法に基づく表記", footerTerms: "利用規約", footerPrivacy: "プライバシーとCookie", footerAbout: "私たちについて", navFaq: "よくあるご質問", footerOperated: "運営:{operator}／旅行手配:株式会社ELNX TRAVEL",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
@@ -670,7 +670,7 @@ const strings = {
     eyebrowHero: (cities: string[]) => [...cities, "師のもとで"].join(" · "),
   },
   fr: {
-    navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Expériences", navTours: "Journées privées", navApproach: "Notre approche",
+    navTokyo: "Tokyo", navKyoto: "Kyoto", navExperiences: "Expériences", navSupport: "Services voyage", navTours: "Journées privées", navApproach: "Notre approche",
     findExperience: "Trouver une expérience",
     footerLegal: "Mentions légales", footerTerms: "Conditions", footerPrivacy: "Confidentialité et cookies", footerAbout: "À propos", navFaq: "Questions fréquentes", footerOperated: "Exploité par {operator} · Organisation des voyages : ELNX TRAVEL Co., Ltd.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",
@@ -881,7 +881,7 @@ const strings = {
     eyebrowHero: (cities: string[]) => [...cities, "Auprès des maîtres"].join(" · "),
   },
   "zh-tw": {
-    navTokyo: "東京", navKyoto: "京都", navExperiences: "體驗", navTours: "私人一日遊", navApproach: "我們的理念",
+    navTokyo: "東京", navKyoto: "京都", navExperiences: "體驗", navSupport: "旅行支援", navTours: "私人一日遊", navApproach: "我們的理念",
     findExperience: "尋找體驗",
     footerLegal: "法律聲明", footerTerms: "使用條款", footerPrivacy: "隱私權與 Cookie", footerAbout: "關於我們", navFaq: "常見問題", footerOperated: "由 {operator} 營運 · 旅遊安排：ELNX TRAVEL Co., Ltd.",
     langNote: "English · Español · 日本語 · Français · 繁體中文",

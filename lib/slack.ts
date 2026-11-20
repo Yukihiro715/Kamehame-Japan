@@ -27,9 +27,9 @@ function chunks(text: string, max = 2900): string[] {
  *  A delivery failure is the only footer; the mailbox copy keeps the full record. */
 export function slackMessage(e: Enquiry, experienceTitle: string | undefined, delivered: boolean, summary: string) {
   const trade = e.kind === "trade";
-  const title = trade ? "🤝 取引先からの問い合わせ" : "🆕 新しい問い合わせ";
+  const title = e.support ? "👶 旅行サポート（ベビーシッター）の依頼" : trade ? "🤝 取引先からの問い合わせ" : "🆕 新しい問い合わせ";
   return {
-    text: `${title}: ${experienceTitle ?? e.experience ?? e.company ?? ""} — ${e.name}`,
+    text: `${title}: ${e.support ? `${e.dates ?? ""} ${e.support.start}–${e.support.end}` : experienceTitle ?? e.experience ?? e.company ?? ""} — ${e.name}`,
     blocks: [
       { type: "header", text: { type: "plain_text", text: title } },
       ...chunks(summary).map((t) => ({ type: "section", text: { type: "mrkdwn", text: esc(t) } })),

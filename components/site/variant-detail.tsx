@@ -1,4 +1,5 @@
 import golfPageStyles from "./golf-page.module.css";
+import { SupportBanner } from "@/components/site/support-banner";
 import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 import Link from "next/link";
 import { Check, Clock3, Wine } from "lucide-react";
@@ -144,6 +145,8 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
               {isArrangement() && <div className="xp-note"><h3>{golfPlanningCopy[lang].heading}</h3><p>{golfPlanningCopy[lang].support}</p><h3>{golfPlanningCopy[lang].budgetHeading}</h3><p>{golfPlanningCopy[lang].budgetExplainer}</p></div>}
               {vc.intro.guideNote && <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>}
             </section>
+
+            <SupportBanner lang={lang} />
 
             {hasGolfGuest && <GolfGuestReview lang={lang} ctaLabel={ctaLabel} />}
 

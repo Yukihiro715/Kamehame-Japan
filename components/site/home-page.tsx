@@ -12,6 +12,8 @@ import { themeIsLive } from "@/lib/themes";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
 import { listPrice, pricingFor, yen } from "@/lib/pricing";
 import { OFUKURO_CAMPAIGN, OFUKURO_FOUNDING, ofukuroFoundingRows, yenOf } from "@/lib/ofukuro-dinner";
+import { SupportCard } from "@/components/site/support-card";
+import { SUPPORT_SERVICES, supportCopy } from "@/lib/support";
 import { Fx } from "@/components/site/money";
 import { t, type Lang } from "@/lib/i18n";
 
@@ -321,6 +323,7 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
 export function HomePage({ lang, popular = [], golfLanding = false }: { lang: Lang; popular?: Experience[]; golfLanding?: boolean }) {
   const C = COPY[lang];
   const T = t(lang);
+  const SP = supportCopy(lang);
   const { cities, categories, experiences } = catalogFor(lang);
   const p = (path: string) => `/${lang}${path}`;
   // catalogFor() already withholds placeholders; the filter only matters
@@ -500,6 +503,18 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
             {featuredCards.map((item) => <ListingCard key={item.href} item={item} lang={lang} />)}
           </div>
         )}
+      </section>
+
+      {/* Travel support (2026-11): babysitting at the hotel takes requests; transfers, an interpreter guide and a planner are listed as coming soon. */}
+      <section className="support-section" id="support" aria-labelledby="support-heading">
+        <div className="section-heading horizontal">
+          <div><p className="eyebrow dark"><span /> {SP.eyebrow}</p><h2 id="support-heading">{SP.title[0]}<br />{SP.title[1]}</h2></div>
+          <Link className="underlined-link" href={p("/support/")}>{SP.all} <ArrowRight /></Link>
+        </div>
+        <p className="support-lead">{SP.lead}</p>
+        <div className="lg-items lg-items-grid home-cards support-cards">
+          {SUPPORT_SERVICES.map((s) => <SupportCard key={s.slug} service={s} lang={lang} />)}
+        </div>
       </section>
 
       {TOURS_PUBLISHED && (
