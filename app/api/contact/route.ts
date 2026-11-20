@@ -295,6 +295,12 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ ok: false, error: "bad_json" }, { status: 400 });
   }
 
+  // Old copies of the closed listing can still try to submit its former form.
+  // Stop before creating referral or ledger records or sending notifications.
+  if (clean(body?.experience, MAX.experience) === sumiEPreviewSlug) {
+    return Response.json({ ok: false, error: "experience_closed" }, { status: 410 });
+  }
+
   const enquiry = parse(body);
   if (!enquiry) return Response.json({ ok: false, error: "invalid" }, { status: 400 });
 
