@@ -70,6 +70,26 @@ test('supplied artwork and confirmed terrace terms appear without opening sales'
  }
 });
 
+test("Bamboo Sky Terrace is listed in Kyoto and links to quote enquiries in each language", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const path = `/${lang}/kyoto/bamboo-sky-terrace/`;
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /<h1>Bamboo Sky Terrace<\/h1>/);
+    assert.match(html, /<link rel="canonical" href="https:\/\/kamehame-japan\.com\//);
+    assert.ok(html.includes(`https://kamehame-japan.com${path}`));
+    assert.ok(html.includes(`href="/${lang}/contact/#enquiry"`));
+    assert.doesNotMatch(html, /noindex|<form\b|checkout\.stripe\.com|"@type":"Product"/);
+    if (lang === "ja") {
+      assert.match(html, /最大50名/);
+      assert.match(html, /飲食は別途お見積もり/);
+    }
+    const kyotoHtml = await (await render(`/${lang}/kyoto/`)).text();
+    assert.ok(kyotoHtml.includes(`href="${path}"`));
+  }
+});
+
 test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
  const cases = {
   'tokyo-underground-idol-live': ['700', '約2時間', '年齢制限なし'],
