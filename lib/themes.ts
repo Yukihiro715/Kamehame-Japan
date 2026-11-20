@@ -14,7 +14,7 @@ export interface Theme {
   tags: string[];
   img: string;
   mark: string;
-  copy: Record<Lang, { title: string; sub: string; h1: string; lead: string; heroAlt: string }>;
+  copy: Record<Lang, { title: string; sub: string; h1: string; lead: string; heroAlt: string; heroImg?: string }>;
 }
 
 export const THEMES: Theme[] = [
@@ -61,7 +61,8 @@ export const THEMES: Theme[] = [
   {
     slug: "sports", tags: ["Sport"], img: "/images/cat-sumo.jpg", mark: "武",
     copy: {
-      en: { title: "Sports & Outdoors", sub: "Golf / Sumo", h1: "Sports & outdoors experiences in Japan", lead: "Japan outdoors and in motion: a tee time booked at a course that welcomes visitors, and more to come.", heroAlt: "Sumo wrestlers at morning practice" },
+      // English hero photo: Marion & Christoph Aistleitner, CC0 (https://commons.wikimedia.org/wiki/File:Fuji_Kawaguchi_357.JPG).
+      en: { title: "Sports & Outdoors", sub: "Golf / Sumo", h1: "Sports & Outdoors in Japan", lead: "Explore sports and outdoor experiences for your trip to Japan.", heroImg: "/images/sports-mount-fuji.webp", heroAlt: "Mount Fuji above Lake Kawaguchi" },
       es: { title: "Deporte y aire libre", sub: "Golf / Sumo", h1: "Experiencias de deporte y aire libre en Japón", lead: "Japón al aire libre y en movimiento: una hora de salida reservada en un campo que recibe visitantes, y más por venir.", heroAlt: "Luchadores de sumo en el entrenamiento matinal" },
       ja: { title: "スポーツ・アウトドア", sub: "ゴルフ / 相撲", h1: "日本のスポーツ・アウトドアの体験", lead: "屋外で、体を動かして味わう日本。ビジターを受け入れるコースでのティータイム手配ほか、順次追加予定。", heroAlt: "朝稽古の力士たち" },
       fr: { title: "Sport et plein air", sub: "Golf / Sumo", h1: "Expériences de sport et de plein air au Japon", lead: "Le Japon en plein air et en mouvement : un départ réservé sur un parcours qui accueille les visiteurs, et d'autres à venir.", heroAlt: "Lutteurs de sumo à l'entraînement du matin" },

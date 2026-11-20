@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
+import { ListingCard } from "@/components/site/listing-card";
 import { ListingGrid } from "@/components/site/listing-grid";
 import { articleDate, articlesForCollection } from "@/lib/articles";
 import { catalogFor } from "@/lib/catalog";
@@ -14,6 +15,7 @@ import { collectionSlugs, getCollection } from "@/lib/collections";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
+import sportsStyles from "./sports.module.css";
 
 interface Props { params: Promise<{ lang: string; collection: string }> }
 
@@ -44,9 +46,23 @@ export default async function CollectionPage({ params }: Props) {
   const data = getCollection(collection, lang);
   if (!data) notFound();
   const T = t(lang);
+  const sportsOverview = collection === "sports" && lang === "en";
   const golfRating = data.items.some(i => i.slug === PRIVATE_GOLF_EXPERIENCE) ? verifiedGolfAggregate(await verifiedPrivateGolfReviews()) : null;
-  const items = golfRating ? data.items.map(item => withPrivateGolfRating(item, golfRating)) : data.items;
   const busTours = (collection === "golf" || collection === "sports") && await golfpaqEnabled();
+  const items = data.items.map(item => {
+    const rated = withPrivateGolfRating(item, golfRating);
+    if (!sportsOverview || !busTours || item.slug !== PRIVATE_GOLF_EXPERIENCE) return rated;
+    return {
+      ...rated,
+      href: "/en/golf-tours/",
+      title: "Golf in Japan",
+      line: "Shared bus tours from Tokyo or custom tee-time booking.",
+      photos: [item.img],
+      priceYen: null,
+      isPrivate: false,
+      comparison: { action: "Compare Golf Options", ratingContext: "Custom booking" },
+    };
+  });
 
   // Articles attached to any experience in this city or category.
   const { experiences, cities } = catalogFor(lang);
@@ -70,16 +86,16 @@ export default async function CollectionPage({ params }: Props) {
 
       <Breadcrumbs trail={[{ label: T.home, href: langHome(lang) }, { label: data.crumb }]} />
 
-      <section className="collection-hero">
+      <section className={`collection-hero${sportsOverview ? ` ${sportsStyles.hero}` : ""}`}>
         <img src={data.heroImg} alt={data.heroAlt} />
         <div className="collection-hero-copy">
-          <p className="eyebrow"><span /> {T.eyebrowHero(heroCities.map((c) => c.title))}</p>
+          {!sportsOverview && <p className="eyebrow"><span /> {T.eyebrowHero(heroCities.map((c) => c.title))}</p>}
           <h1>{data.h1}</h1>
         </div>
       </section>
 
-      <section className="collection-body">
-        {busTours && (collection === "golf" || collection === "sports") ? (
+      <section className={`collection-body${sportsOverview ? ` ${sportsStyles.body}` : ""}`}>
+        {busTours && !sportsOverview ? (
           <div className="gb-two-inline">
             <p className="eyebrow"><span /> Two ways to play golf in Japan</p>
             <div className="gb-two-inline-grid">
@@ -92,9 +108,13 @@ export default async function CollectionPage({ params }: Props) {
         ) : null}
         {/* The listing itself: count, sort, grid/list and in-place filters (components/site/listing-grid.tsx).
             The city and interest pages stay as crawlable links under "also explore". */}
-        <ListingGrid items={items} lang={lang} />
+        {sportsOverview && items.length === 1 ? (
+          <div className={`lg-items ${sportsStyles.single}`}>
+            <ListingCard item={items[0]} lang={lang} eager />
+          </div>
+        ) : <ListingGrid items={items} lang={lang} />}
 
-        <p className="collection-lead below">{data.lead}</p>
+        {!sportsOverview && <p className="collection-lead below">{data.lead}</p>}
         {/* Crawlable links to the city and interest pages this listing overlaps with. */}
         <div className="refine-row below" aria-label={T.refine}>
           <span className="refine-label">{T.refine}</span>
