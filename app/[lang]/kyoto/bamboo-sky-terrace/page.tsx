@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
+import { EnquiryForm } from "@/components/site/enquiry-form";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { terraceCopy, terraceName, terracePath } from "@/lib/bamboo-sky-terrace";
+import { terraceCopy, terraceName, terracePath, terraceSlug } from "@/lib/bamboo-sky-terrace";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { SITE_NAME, socialMeta, withAlternates } from "@/lib/seo";
 
@@ -55,7 +56,7 @@ export default async function BambooSkyTerracePage({ params }: Props) {
           <section className="prose-closing">
             <h2>{copy.quote}</h2>
             <p>{copy.prompt}</p>
-            <Link className="contact-cta" href={`/${lang}/contact/#enquiry`}>{copy.link}</Link>
+            <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: terraceSlug, title: terraceName }} />
           </section>
         </article>
       </div>

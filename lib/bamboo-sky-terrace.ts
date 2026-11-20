@@ -1,7 +1,8 @@
 import type { Lang } from "@/lib/i18n";
 
 export const terraceName = "Bamboo Sky Terrace";
-export const terracePath = (lang: Lang) => `/${lang}/kyoto/bamboo-sky-terrace/`;
+export const terraceSlug = "bamboo-sky-terrace";
+export const terracePath = (lang: Lang) => `/${lang}/kyoto/${terraceSlug}/`;
 
 export const terraceCopy = {
   en: {
@@ -15,7 +16,6 @@ export const terraceCopy = {
     ],
     quote: "Enquire about a quote",
     prompt: "Tell us your preferred date, start time, length of use and number of guests. We’ll confirm availability and terms with your quote.",
-    link: "Contact us",
   },
   ja: {
     kyoto: "京都",
@@ -28,7 +28,6 @@ export const terraceCopy = {
     ],
     quote: "お見積もりのご相談",
     prompt: "ご希望の利用日・開始時刻・利用時間・人数をお知らせください。空き状況と利用条件はお見積もり時にご案内します。",
-    link: "お問い合わせ",
   },
   es: {
     kyoto: "Kioto",
@@ -41,7 +40,6 @@ export const terraceCopy = {
     ],
     quote: "Consulta de presupuesto",
     prompt: "Indícanos la fecha, la hora de inicio, la duración y el número de asistentes. Te confirmaremos la disponibilidad y las condiciones con el presupuesto.",
-    link: "Contactar",
   },
   fr: {
     kyoto: "Kyoto",
@@ -54,7 +52,6 @@ export const terraceCopy = {
     ],
     quote: "Demander un devis",
     prompt: "Indiquez la date, l’heure de début, la durée et le nombre de personnes. Nous préciserons les disponibilités et les conditions dans le devis.",
-    link: "Nous contacter",
   },
   "zh-tw": {
     kyoto: "京都",
@@ -67,6 +64,5 @@ export const terraceCopy = {
     ],
     quote: "洽詢報價",
     prompt: "請提供希望使用的日期、開始時間、使用時長及人數。我們會在報價時確認可用時段與使用條件。",
-    link: "聯絡我們",
   },
-} satisfies Record<Lang, { kyoto: string; lead: string; details: string; facts: [string, string][]; quote: string; prompt: string; link: string }>;
+} satisfies Record<Lang, { kyoto: string; lead: string; details: string; facts: [string, string][]; quote: string; prompt: string }>;

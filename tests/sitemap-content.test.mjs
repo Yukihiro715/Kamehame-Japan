@@ -30,3 +30,12 @@ test('untranslated, unapproved locales are not advertised as sitemap alternates'
   assert.deepEqual(entries.filter(e=>e.path.includes(slug)).map(e=>e.path), [`/en/kyoto/${slug}/`]);
   assert.deepEqual(Object.keys(entries.find(e=>e.path===`/en/kyoto/${slug}/`).alternates), ['en']);
 });
+
+test('shared Bamboo Sky Terrace copy contributes to each locale’s sitemap key', () => {
+  const path = '/ja/kyoto/bamboo-sky-terrace/';
+  const terraceKey = (readSource) => buildEntries(readSource).entries.find(e => e.path === path)?.key;
+  const updated = (file) => file === 'lib/bamboo-sky-terrace.ts'
+    ? read(file).replace('Bamboo Sky Terrace', 'Updated venue name')
+    : read(file);
+  assert.notEqual(hashOf(terraceKey(read)), hashOf(terraceKey(updated)));
+});

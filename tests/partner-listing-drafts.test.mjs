@@ -62,15 +62,16 @@ test('Ginza sumi-e preview shows confirmed details without supplier pricing', as
 test('supplied artwork and confirmed terrace terms appear without opening sales', async () => {
  for (const lang of ['ja', 'en']) {
   const sumi = await (await render(`/previews/partner-listings/sumi-e-ink-painting/?lang=${lang}`)).text();
-  for(const name of ['scroll','fuji','landscape']) assert.ok(sumi.includes(`/images/partner-listings/sumi-e/${name}.webp`));
-  assert.match(sumi, lang === 'ja' ? /作品例/ : /Artwork examples/);
+  for (const name of ['rensui-koi', 'rensui-plum']) assert.ok(sumi.includes(`/images/partner-listings/sumi-e/${name}.webp`));
+  assert.match(sumi, lang === 'ja' ? /講師の蓮水さんによるお手本/ : /Examples painted by the instructor, Rensui/);
+  assert.doesNotMatch(sumi, /\/images\/partner-listings\/sumi-e\/(scroll|fuji|landscape)\.webp/);
   const terrace = await (await render(`/previews/partner-listings/arashiyama-private-terrace-gathering/?lang=${lang}`)).text();
   assert.match(terrace, /50%/); assert.match(terrace, /100%/); assert.match(terrace, /14/);
   assert.match(terrace, /noindex/); assert.ok(!terrace.includes('<form'));
  }
 });
 
-test("Bamboo Sky Terrace is listed in Kyoto and links to quote enquiries in each language", async () => {
+test("Bamboo Sky Terrace is listed in Kyoto and accepts venue-specific enquiries", async () => {
   for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
     const path = `/${lang}/kyoto/bamboo-sky-terrace/`;
     const response = await render(path);
@@ -79,8 +80,9 @@ test("Bamboo Sky Terrace is listed in Kyoto and links to quote enquiries in each
     assert.match(html, /<h1>Bamboo Sky Terrace<\/h1>/);
     assert.match(html, /<link rel="canonical" href="https:\/\/kamehame-japan\.com\//);
     assert.ok(html.includes(`https://kamehame-japan.com${path}`));
-    assert.ok(html.includes(`href="/${lang}/contact/#enquiry"`));
-    assert.doesNotMatch(html, /noindex|<form\b|checkout\.stripe\.com|"@type":"Product"/);
+    assert.match(html, /<form[^>]+action="\/api\/contact"/);
+    assert.match(html, /class="form-context"[^>]*>.*?<b>Bamboo Sky Terrace<\/b>/s);
+    assert.doesNotMatch(html, /noindex|checkout\.stripe\.com|"@type":"Product"/);
     if (lang === "ja") {
       assert.match(html, /最大50名/);
       assert.match(html, /飲食は別途お見積もり/);
@@ -105,20 +107,18 @@ test('confirmed partner answers replace pending questions without publishing sup
  }
 });
 
-test('2027 sumi-e retail pricing is approved but checkout stays disabled', async () => {
+test('Sumi-e preview shows revised deadlines while selling prices are under review', async () => {
   for (const lang of ['en', 'ja']) {
     const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
-    for (const amount of ['38,000', '22,000', '30,500', '32,000']) assert.ok(html.includes(amount));
-    assert.match(html, /2027/);
-    assert.match(html, lang === 'ja' ? /税込/ : /tax included/);
-    assert.match(html, lang === 'ja' ? /1名参加は総額38,000円/ : /38,000 total for one guest/);
-    assert.match(html, lang === 'ja' ? /2〜6名参加は1名22,000円/ : /22,000 per person for 2–6 guests/);
+    assert.match(html, lang === 'ja' ? /販売価格を確認中/ : /Pricing is being confirmed/);
+    assert.match(html, lang === 'ja' ? /土日祝は18:00のみ/ : /public holidays: 18:00 only/);
+    assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
+    assert.match(html, lang === 'ja' ? /前日の20:00まで/ : /20:00 the day before/);
+    assert.doesNotMatch(html, /38,000|22,000|30,500|32,000/);
     assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
     assert.match(html, /noindex/);
     assert.ok(!html.includes('<form'));
     assert.ok(!html.includes('checkout.stripe.com'));
     for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
-    assert.ok(!html.includes('Selling prices are being confirmed'));
-    assert.ok(!html.includes('販売価格確認中'));
   }
 });
