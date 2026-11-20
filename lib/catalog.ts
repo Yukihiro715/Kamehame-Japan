@@ -183,6 +183,9 @@ export interface Experience {
   price: string;
   /** Review-only product whose selling price has not been agreed. */
   pricePending?: boolean;
+  /** Temporarily unavailable even when the review URL remains accessible. */
+  bookingPaused?: boolean;
+  bookingNotice?: string;
   /** Medical consultation booked without a price: the fee is decided at the
    *  consultation and paid at the clinic, so no amount is shown anywhere in
    *  the booking display (card, sticky bar, form, listing, structured data).
@@ -237,7 +240,8 @@ export interface Experience {
    *  where the partner's brand must not be searchable. */
   teacher?: { img: string; alt: string; credentials: string[]; comment: string };
   whatYoullDo: string[];
-  master: { title: string; bio: string; quote: string };
+  /** Optional: clinic/consultation pages do not necessarily have a host profile. */
+  master?: { title: string; bio: string; quote: string };
   itinerary: string[];
   goodToKnow: string[];
   story: { heading: string; body: string };
@@ -272,6 +276,8 @@ export interface Experience {
     peakWindows?: { from: string; to: string }[];
     /** Per-person products: a smaller party pays as this many guests (e.g. a solo guest pays for two). */
     minCharge?: number;
+    /** Per-person products: additional charge when exactly one guest attends. */
+    soloSupplement?: number;
   };
   /** Localised text for `pricing.plans`, keyed by plan id. */
   planText?: Record<string, { label: string; name: string; performers: string; blurb: string }>;
@@ -367,7 +373,7 @@ export interface Experience {
 }
 
 /** Fields that are authored once (English) and shared by every locale. */
-export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "consultationOnly" | "thumb" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
+export type StructuralKeys = "partySize" | "pricing" | "video" | "status" | "bookingType" | "priceUnit" | "pricePending" | "bookingPaused" | "consultationOnly" | "thumb" | "availability" | "map" | "taxIncluded" | "cancellationTiers" | "cancellationCutoffTime" | "dietary" | "interpreter" | "skipSiteFaq";
 
 export interface Tour {
   slug: string;
@@ -713,7 +719,7 @@ export const experiences: Experience[] = [
     // condition sheet (confirmed by the operator 2026-10-11) and its terms
     // page. Wholesale ¥14,400 per person incl. tax; the sale price follows
     // the owner's rule (wholesale + ¥4,500 ad cost, 20% margin, rounded up
-    // to ¥500) → ¥24,000. Children's price: the operator has none yet, so
+    // to ¥500 incl. tax): one guest ¥24,500 (2026-11-14). Children's price: the operator has none yet, so
     // children are quoted. Cancellation from the operator's current terms
     // was the spa's own; 2026-10-23 the owner set KAMEHAME's standard
     // instead (free until 7 days before, then the full price) and ruled out
@@ -729,13 +735,13 @@ export const experiences: Experience[] = [
       "A home spa in Nerima that takes one group a day. You start at the work table: a sachet of Japanese cypress and aromatic herbs, then three packs of your own herbal bath blend, mixed by hand with the staff showing you how. One pack is steeped in two litres of hot water and goes into the bath; the other two go home with you.",
       "Then the slow part. Wash, soak for about thirty minutes in the private hot-spring bath, change into a yukata, and take the rest of the time as you like: a nap, the herbal tea and spring water that come with the room, or a meal you brought along. The staff speak Japanese and work with translated materials and translation tools; a dedicated interpreter is not included.",
     ],
-    duration: "About 3.5 hours", price: "¥24,000", priceUnit: "group", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
+    duration: "About 3.5 hours", price: "¥24,500", priceUnit: "group", group: "Private · 1–3 guests", ages: "Children by prior arrangement, with a guardian", area: "Tokyo (Nerima)",
     img: "/images/nerima-herbal-bath.webp", alt: "The private bath and tea space of the home spa",
     thumb: "/images/nerima-herbal-bath-thumb.webp",
     gallery: [],
     galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
     partySize: { min: 1, max: 3, default: 2 },
-    pricing: { tiers: [{ party: 1, total: 24000 }, { party: 2, total: 42000 }, { party: 3, total: 60000 }] },
+    pricing: { tiers: [{ party: 1, total: 24500 }, { party: 2, total: 42000 }, { party: 3, total: 60000 }] },
     availability: { daily: false, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions start at 11:00 or 16:30; normally closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
@@ -791,7 +797,7 @@ export const experiences: Experience[] = [
     ],
     faq: [
       { q: "Is this a private experience?", a: "Yes. The spa takes one group a day, of one to three guests; larger groups can be asked about." },
-      { q: "How much is it?", a: "Group totals, tax included: ¥24,000 for one guest, ¥42,000 for two guests, or ¥60,000 for three guests. Includes the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
+      { q: "How much is it?", a: "Group totals, tax included: ¥24,500 for one guest, ¥42,000 for two guests, or ¥60,000 for three guests. Includes the sachet, the three bath packs, the private bath, the herbal sauna, yukata, towels and tea. Children are quoted individually: tell us their ages when you request." },
       { q: "Is English spoken?", a: "The staff speak Japanese and use translated written materials and translation tools. An interpreter guide can be arranged for an extra charge; ask when you request." },
       { q: "Can children join?", a: "Yes, with a guardian, by prior arrangement. Tell us their ages and how many; the spa confirms participation and the price. Mixed bathing in the private bath is for children up to six." },
       { q: "Can we take the bath blends home?", a: "Yes: two of the three packs you make go home with you, packed on the day. Postal delivery is not offered." },
@@ -937,7 +943,7 @@ export const experiences: Experience[] = [
   {
     // Tokyo calligraphy teacher; the partner's own brand is deliberately not
     // shown (guests would find it and book around us). Built from the condition
-    // sheet, 2026-09; live since 2026-09-24 at ¥19,800 per person. Dates come from the
+    // sheet, 2026-09; live since 2026-09-24; repriced to ¥21,500 on 2026-11-14. Dates come from the
     // teacher's lesson calendar and are replaced every three months: ◎ slots have
     // the studio booked; ▲ slots need the studio booked when a request comes in.
     // The calendar has two tables (■ teacher/space, ★ summary); a slot is open
@@ -947,7 +953,7 @@ export const experiences: Experience[] = [
     tagline: "Create a one-of-a-kind kanji artwork inspired by your own name, in a private class in Tokyo. Before the day we ask about your name and its meaning, and the teacher prepares three kanji for you; you choose the one that feels most like you and turn it into art with brush and ink.",
     overview: ["This is not a calligraphy class about writing perfectly or following strict rules. What matters is what your kanji means to you, and expressing it in your own way.", "You start by exploring how the brush moves — lines, dry-brush texture, the moods of ink. Then you choose a style, Cute, Bold or Elegant, and develop your character with one-to-one guidance from the teacher. No experience with brushes or kanji is needed.", "A red seal completes the piece, and it goes home with you: a kanji chosen for you and shaped by your own hands — a piece of art from your time in Tokyo, not just a souvenir."],
     overviewFigure: { img: "/images/kanji-styles.jpg", alt: "Style examples: six kanji brushed in the Cute, Bold and Elegant styles", caption: "The three styles to choose from — Cute, Bold and Elegant (examples)." },
-    duration: "About 2 hours", price: "¥19,800", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
+    duration: "About 2 hours", price: "¥21,500", priceUnit: "person", group: "Private · 2–4 guests", ages: "Ages 10+", area: "Tokyo (Shinjuku)",
     img: "/images/kanji-hero-results.jpg", alt: "Two guests smiling with the kanji they brushed in a Tokyo calligraphy class",
     gallery: [
       { img: "/images/kanji-teacher-demo.jpg", alt: "The teacher demonstrates a stroke while a guest practises beside her" },
@@ -1114,7 +1120,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any cooking experience?", a: "No. The instructor shows every step, and the dough is forgiving. If you can knead, you can make noodles." },
       { q: "What do we actually make?", a: "Fresh noodles from scratch, chicken chashu, and three small bowls — tonkotsu, shoyu and miso — finished with toppings, so you can taste the three styles side by side. Vegetarian, vegan and halal-friendly bowls differ in content." },
-      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes, but vegetarian and vegan options are separate plans, not included in the standard class price. We confirm their availability and price before payment. A halal-friendly broth may be possible with advance notice and a separately quoted supplement; tell us when requesting your date." },
+      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes, but vegetarian and vegan options are separate plans, not included in the standard class price. We confirm their availability and price before payment. A halal-friendly broth may be possible with advance notice and a separately quoted supplement; tell us when requesting your date. This experience is not halal-certified. Pork- and alcohol-free arrangements may be available on request; confirm suitability with the operator before payment." },
       { q: "Which language is the class in?", a: "English. The instructor runs the class in English and Japanese." },
       { q: "Can children join?", a: "From about age 6. Younger children cannot take part but may watch alongside a parent; the kitchen is stroller accessible. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
@@ -1206,7 +1212,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need any cooking experience?", a: "No. The instructor shows every step, and the dough is forgiving. If you can knead, you can make noodles." },
       { q: "What do we actually make?", a: "Fresh noodles from scratch, chicken chashu, and three small bowls — tonkotsu, shoyu and miso — finished with toppings, so you can taste the three styles side by side. Vegetarian, vegan and halal-friendly bowls differ in content." },
-      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes, but vegetarian and vegan options are separate plans, not included in the standard class price. We confirm their availability and price before payment. A halal-friendly broth may be possible with advance notice and a separately quoted supplement; tell us when requesting your date." },
+      { q: "Is there a vegetarian, vegan or halal option?", a: "Yes, but vegetarian and vegan options are separate plans, not included in the standard class price. We confirm their availability and price before payment. A halal-friendly broth may be possible with advance notice and a separately quoted supplement; tell us when requesting your date. This experience is not halal-certified. Pork- and alcohol-free arrangements may be available on request; confirm suitability with the operator before payment." },
       { q: "Which language is the class in?", a: "English. The instructor runs the class in English and Japanese." },
       { q: "Can children join?", a: "From about age 6. Younger children cannot take part but may watch alongside a parent; the kitchen is not stroller accessible. Children pay the adult price." },
       { q: "I'm travelling alone. Can I join?", a: "Yes, from one guest." },
@@ -1241,7 +1247,7 @@ export const experiences: Experience[] = [
       "Kendo is the samurai's sword turned into a discipline, and this is the real thing: a working dojo in Nihonbashi where visitors learn kendo with an instructor. You start with how kendo came to be and why every exchange begins and ends with a bow, then learn the footwork, the grip and the swing, and put them together in striking practice until spirit, sword and body land as one.",
       "The last part is a match. You face the other guests, then the instructor, in full protective armour. Nobody needs to have held a sword before; the session is built for beginners and adjusted to each person's age and fitness. The dojo lends everything — uniform, armour and shinai — and photographs the session for you.",
     ],
-    duration: "About 2 hours", price: "¥25,000", priceUnit: "person", group: "Small class · 1–8 guests", ages: "Ages 6+ (reduced rates for ages 6–15 and 65+)", area: "Tokyo (Nihonbashi)",
+    duration: "About 2 hours", price: "¥26,500", priceUnit: "person", group: "Small class · 1–8 guests", ages: "Ages 6+ (reduced rates for ages 6–15 and 65+)", area: "Tokyo (Nihonbashi)",
     img: "/images/kendo-match.jpg", alt: "A guest in kendo uniform squaring up to the armoured instructor with shinai raised, in a wooden-floored dojo",
     gallery: [
       { img: "/images/kendo-grip.jpg", alt: "The instructor correcting a guest's grip on the shinai, swords crossed" },
@@ -1305,7 +1311,7 @@ export const experiences: Experience[] = [
       { q: "Is everything provided?", a: "Yes. Uniform, protective armour and shinai are lent at no extra cost. Come in everyday clothes; there are changing rooms and lockers." },
       { q: "Which language is the session in?", a: "English. The instructor teaches in English and Japanese." },
       { q: "Can I join alone?", a: "Yes, from one guest. Many guests come on their own." },
-      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; children aged 6 to 15 pay ¥15,000 and guests aged 65 and over ¥18,000 (adults ¥25,000) — tell us everyone's age in your request and the quote applies it. Younger children cannot join a shared session; a private session can be arranged instead." },
+      { q: "Can children join?", a: "From age 6, provided they can follow the instructor's directions safely; for children aged 6–15 or guests aged 65 and over, tell us everyone's age and request a quote before paying. The standard adult rate is ¥26,500. Younger children cannot join a shared session; a private session can be arranged instead." },
       { q: "Is this a samurai show?", a: "No. It is not a costume or role-play experience. You train in a real dojo, in the kendo that is practised in Japan today, and learn where its traditions come from." },
       { q: "How large is the class?", a: "Up to eight guests share a session. Larger groups, and a private session for your party only, are quoted individually." },
       { q: "I am not sporty. Can I keep up?", a: "Yes. The session is adjusted to each person's age and fitness, and there is no need to perform every movement perfectly. Older guests join regularly; where the etiquette involves kneeling, a chair is provided." },
@@ -1330,7 +1336,7 @@ export const experiences: Experience[] = [
       "This is not a samurai show, and the dojo is clear that it is not meant to be fun in the usual sense. Bushido has no single correct answer. What you take from the forms and the words the samurai left behind will be different for everyone, and the hour is built to let you find out what that is.",
       "It moves through three things. Tradition: the Nihon Kendo Kata, performed with a wooden sword, which explore principles inherited from Japan's swordsmanship traditions through a fixed sequence of movements — why the bow, why the distance, why this is more than practising with a sword. Words: the sayings the samurai handed down, read with the thoughts behind them. Reflection: what you feel, and how you read it. The session is in English, there is no strenuous exercise, and the dojo photographs it for you.",
     ],
-    duration: "About 1 hour", price: "¥10,000", priceUnit: "person", group: "Small class · 2–8 guests", ages: "Ages 15+", area: "Tokyo (Nihonbashi)",
+    duration: "About 1 hour", price: "¥16,500", priceUnit: "person", group: "Small class · 2–8 guests", ages: "Ages 15+", area: "Tokyo (Nihonbashi)",
     img: "/images/bushido-20261022-3.jpg", alt: "Two practitioners demonstrating a standing sword form without armour",
     gallery: [
       { img: "/images/bushido-20261022-1.jpg", alt: "Two practitioners bowing to each other on the dojo floor" },
@@ -1422,7 +1428,7 @@ export const experiences: Experience[] = [
       "The tea ceremony distils Japanese hospitality into a single bowl, and this is a chance to sit inside it rather than watch from the door. Your host is the third generation of her family to teach tea: licensed as an instructor of the Sōhen school in 1993, more than forty years in the practice, and teaching several hundred students a month. She has welcomed visitors from abroad to this tearoom for years.",
       "The ninety minutes follow the shape of a real gathering. You meet at the gallery in Yotsuya, learn how the ceremony came to be and the etiquette of a guest, enter the tearoom the traditional way, and watch the host prepare tea — every movement with a reason. Then you whisk a bowl yourself, under her guidance, and sit for a short meditation before questions and photographs. In English, for a group of up to ten, with socks the only thing to bring.",
     ],
-    duration: "About 1.5 hours", price: "¥17,000", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
+    duration: "About 1.5 hours", price: "¥17,500", priceUnit: "group", group: "Small class · 1–10 guests", ages: "Ages 5+", area: "Tokyo (Yotsuya, Shinjuku-ku)",
     img: "/images/tea-yotsuya-drink.jpg", alt: "A guest drinking matcha in the tearoom",
     gallery: [
       { img: "/images/tea-yotsuya-tatami.jpg", alt: "The host kneeling before guests seated on the tatami of the tearoom" },
@@ -1435,9 +1441,9 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the host's tearoom in Yotsuya.",
     partySize: { min: 1, max: 10, default: 2 },
-    // Whole-group totals at the owner's rates (2026-10-23): 1 guest ¥17,000,
-    // 2–4 guests ¥15,500 each, 5–10 guests ¥14,000 each.
-    pricing: { tiers: [{ party: 1, total: 17000 }, { party: 2, total: 31000 }, { party: 3, total: 46500 }, { party: 4, total: 62000 }, { party: 5, total: 70000 }, { party: 6, total: 84000 }, { party: 7, total: 98000 }, { party: 8, total: 112000 }, { party: 9, total: 126000 }, { party: 10, total: 140000 }] },
+    // Owner-approved prices from confirmed wholesale costs (2026-11-14):
+    // 1–3 guests ¥17,500 each; 4–10 guests ¥16,000 each.
+    pricing: { tiers: [{ party: 1, total: 17500 }, { party: 2, total: 35000 }, { party: 3, total: 52500 }, { party: 4, total: 64000 }, { party: 5, total: 80000 }, { party: 6, total: 96000 }, { party: 7, total: 112000 }, { party: 8, total: 128000 }, { party: 9, total: 144000 }, { party: 10, total: 160000 }] },
     taxIncluded: true,
     interpreter: false,
     langTag: "Taught in English",
@@ -1488,7 +1494,7 @@ export const experiences: Experience[] = [
       { q: "Can children join?", a: "Yes, from age 5. For guests aged 5–18, tell us their ages so we can quote the applicable child or youth rate before payment." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are the one thing to bring; the host can suggest a more comfortable way to sit if kneeling is difficult." },
       { q: "How large is the group?", a: "Up to ten guests share a session. Larger groups are quoted individually." },
-      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,000 for one guest, ¥15,500 per person for two to four guests, and ¥14,000 per person for five to ten guests. Tax is included." },
+      { q: "How is the price worked out?", a: "Per person, with a lower rate for groups: ¥17,500 per person for one to three guests, and ¥16,000 per person for four to ten guests. Tax is included." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
     ],
@@ -1511,7 +1517,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working kendo dojo in Higashi-Nippori, Arakawa, about ten to twelve minutes on foot from JR Uguisudani station. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (Arakawa, near Uguisudani station)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Tokyo (Arakawa, near Uguisudani station)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1580,7 +1586,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Tokyo?", a: "Yes: Osaka, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -1603,7 +1609,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Osaka that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Osaka (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Osaka (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1672,7 +1678,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Osaka?", a: "Yes: Tokyo, Kyoto, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -1695,7 +1701,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Kyoto that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Nagoya, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kyoto (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kyoto (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1764,7 +1770,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Kyoto?", a: "Yes: Tokyo, Osaka, Nagoya, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -1787,7 +1793,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday afternoons, usually from 13:30, in a working dojo or hall in Nagoya that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Nagoya (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Nagoya (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1856,7 +1862,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Nagoya?", a: "Yes: Tokyo, Osaka, Kyoto, Okinawa, Kanazawa and Himeji. Tell us the city in your request; Okinawa also starts in the early afternoon; the other cities run in the morning." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -1879,7 +1885,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday afternoons, usually from 13:00, in a working dojo or hall in Okinawa that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Kanazawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Okinawa (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Okinawa (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -1948,7 +1954,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Okinawa?", a: "Yes: Tokyo, Osaka, Kyoto, Nagoya, Kanazawa and Himeji. Tell us the city in your request; Nagoya also starts in the early afternoon; the other cities run in the morning." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -1971,7 +1977,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Kanazawa that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Himeji — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kanazawa (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Kanazawa (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -2040,7 +2046,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Kanazawa?", a: "Yes: Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Himeji. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -2063,7 +2069,7 @@ export const experiences: Experience[] = [
       "This is the kendo tour that schools, companies and travelling families book when the whole group wants to hold a sword. It is run by an operator that has taken visitors into Japanese dojos since 2016 under the supervision of the All Japan Kendo Federation, with instructors who hold fifth to seventh dan and more than thirty years of kendo, and it scales from a couple to a coachload: every participant is dressed in armour, bows the way a dojo bows, learns what the samurai lived by, practises strikes and ends with a match.",
       "Sessions run on weekday mornings, usually from 10:00, in a working dojo or hall in Himeji that the operator chooses for your date from venues within thirty to fifty minutes of the city centre. The session is in English and Japanese; uniform, armour and shinai are lent, and you leave with a tenugui towel. The same tour runs in Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Kanazawa — tell us where you will be.",
     ],
-    duration: "About 1.5 to 2 hours", price: "¥19,800", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Himeji (dojo chosen for your date)",
+    duration: "About 1.5 to 2 hours", price: "¥27,500", priceUnit: "person", group: "Groups · 2–200 guests", ages: "Ages 9+ (reduced rate for ages 9–13)", area: "Himeji (dojo chosen for your date)",
     img: "/images/kendotour-line.jpg", alt: "A row of guests in kendo uniforms holding shinai out in front of them in a dojo, instructors beyond",
     gallery: [
       { img: "/images/kendotour-guests.jpg", alt: "Guests in armour lined up with shinai in a bright hall" },
@@ -2132,7 +2138,7 @@ export const experiences: Experience[] = [
       { q: "Which languages?", a: "English and Japanese. For another language, bring your own interpreter or ask us." },
       { q: "Does the tour run outside Himeji?", a: "Yes: Tokyo, Osaka, Kyoto, Nagoya, Okinawa and Kanazawa. Tell us the city in your request; Nagoya and Okinawa sessions start in the early afternoon." },
       { q: "Anything we should know before we come?", a: "Follow the instructors' and staff's directions throughout: the dojo is a place of training, so keep voices down and leave what you find there untouched. Take off earrings and other accessories when you change. The men, the helmet, is hard to wear over glasses and can damage them, so remove them or wear contact lenses. Valuables stay with you inside the dojo. Never swing or strike with the shinai carelessly, and take care with partners who are smaller than you. Equipment comes in limited sizes; if nothing fits safely, the instructors offer an adapted programme. Don't push yourself: drink water and rest when you need to. The session is in English and Japanese; for other languages, bring your own interpreter." },
-      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. The operator needs the list two weeks before the date, a month before for groups of 70 or more." },
+      { q: "Why do you need our height and gender?", a: "To prepare armour and uniforms in the right sizes. Please send each participant's gender and approximate height: normally two weeks before; for groups of up to five, two days before is accepted; for 70 or more, one month before. No special form is required." },
       { q: "What is the cancellation policy?", a: "Free until 15 days before the session; from 14 to 7 days before, half the price; from 6 days before, including no-shows, the full price. Once the equipment is ordered, a smaller group is not refunded. Groups of 70 or more: free cancellation ends a month before." },
       { q: "How does booking work?", a: "Choose a weekday and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send; the operator then books the venue, instructors and equipment, and cancellation terms start." },
     ],
@@ -2156,7 +2162,7 @@ export const experiences: Experience[] = [
       "Kitasenju was the first post town on the road north out of Edo, and its back streets still keep the scale of that time. This experience puts you in samurai dress and walks you through them with a professional samurai performer, past the old gateway of Senju-juku, local shops and a temple, before returning to the venue for the hands-on part.",
       "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
     ],
-    duration: "About 2.5 hours", price: "¥40,000", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
+    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
     img: "/images/samurai-walk-pair.jpg", alt: "A guest in a black kimono and the samurai master in hakama walking down a Kitasenju shopping street",
     gallery: [
       { img: "/images/samurai-walk-master.jpg", alt: "The samurai master in a black kimono holding a sword in front of a calligraphy scroll" },
@@ -2164,6 +2170,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 5 },
+    pricing: { soloSupplement: 18500 },
     availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
     availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
     scheduleNote: "Timings counted from the 4:00 pm start; the walk is about an hour.",
@@ -2200,7 +2207,7 @@ export const experiences: Experience[] = [
       { time: "2:30", title: "Change and finish" },
     ],
     venue: {
-      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥55,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
+      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥75,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
       afterBooking: ["The venue's name and address", "Directions from Kitasenju station", "A phone number for the day"],
       img: "/images/samurai-walk-master.jpg", alt: "The samurai master with a sword before a calligraphy scroll",
     },
@@ -2215,7 +2222,7 @@ export const experiences: Experience[] = [
       { q: "What do we actually do?", a: "You dress in samurai attire, walk Kitasenju's old streets with a samurai performer for about an hour, then take a sword workshop with a bushido talk back at the venue. Photos in costume and Japanese tea close the session." },
       { q: "Is it taught in English?", a: "The experience is run for international guests with English guidance. Tell us your language when you request and we will confirm what is available for your date." },
       { q: "Can children join?", a: "From age 6, accompanied by an adult aged 18 or over. Children pay the same price as adults. Under 6 cannot take part." },
-      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥55,000; groups of two to five pay ¥40,000 per person." },
+      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥75,000; groups of two to five pay ¥56,500 per person." },
       { q: "When does it run?", a: "On selected dates from August to December 2026, from 4:00 pm to about 6:30 pm. Tell us your preferred date and we confirm the nearest one that runs." },
       { q: "What should I wear?", a: "Comfortable clothes you can change out of easily, and shoes you can walk in: the samurai attire goes on at the venue and the walk lasts about an hour." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
@@ -2224,7 +2231,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in samurai attire", "Walk Kitasenju's old post-town streets for an hour", "Train with a sword-fighting instructor and hear about bushido", "Photos in costume and Japanese tea"],
     master: { title: "Your instructor", bio: "A samurai performer and sword-fighting instructor trained in Yagyu Shinkage-ryu swordsmanship, who has guided international guests through Kitasenju for years.", quote: "" },
     itinerary: ["0:00 — Dress as a samurai", "0:20 — Street walk through Kitasenju", "1:20 — Back at the venue", "1:30 — Samurai workshop and bushido", "2:20 — Photos and tea", "2:30 — Change and finish"],
-    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥55,000; two to five pay ¥40,000 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
+    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥75,000; two to five pay ¥56,500 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
     story: { heading: "The first town on the road north", body: "Travellers leaving Edo for the north spent their first night at Senju-juku. The poet Basho set off from here on his Narrow Road. Walking it in samurai dress, with someone who can read the street for you, puts you inside that story rather than in front of it." },
   },
   {
@@ -2240,7 +2247,7 @@ export const experiences: Experience[] = [
       "Tate is the art behind every sword fight you have seen in a Japanese film: not real combat, but precision, rhythm, posture and trust between partners. In this private session a performer from a classical sword-performance school dresses you in samurai costume, gives a short introduction to bushido, and teaches the movements and timing of a fight scene step by step.",
       "You rehearse with a partner, then perform a short duel together. The master then performs kenbu, the sword dance, for you; you try a few characters with a brush and keep the sheet; and the session closes with matcha and traditional sweets. Groups are private, two to six guests, on Mondays, Tuesdays, Thursdays and Saturdays from September to November 2026.",
     ],
-    duration: "About 90 minutes", price: "¥33,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
+    duration: "About 90 minutes", price: "¥47,500", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
     img: "/images/tate-swords-window.jpg", alt: "Two guests in kimono crossing swords by the shoji window of a tatami room",
     gallery: [
       { img: "/images/tate-group.jpg", alt: "A group of guests in kimono and hakama posing with swords after the workshop" },
@@ -2384,7 +2391,7 @@ export const experiences: Experience[] = [
       "This is a small cooking seminar, not a show: a professional chef demonstrates, then you cook. You start with sushi rice — washing, cooking and seasoning it properly — and go on to a dish using shibazuke pickles and crunchy soy-sauce almonds, a roll with Japanese wagyu roast beef, and nigiri with a chef's demonstration alongside.",
       "Then you sit down to eat: premium chirashi sushi with seasonal fish prepared by the chef, and a soft-serve dessert made with moromi, the soy-sauce mash. The chef began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills before coming home to teach. The seminar is designed for international visitors and runs for eight guests on announced dates.",
     ],
-    duration: "2 hours", price: "¥18,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
+    duration: "2 hours", price: "¥29,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
     img: "/images/kichijoji-chef-counter.jpg", alt: "The chef in whites at the kitchen counter, preparing sushi rolls",
     gallery: [
       { img: "/images/kichijoji-rolls.jpg", alt: "A row of salmon-topped sushi rolls on a slate board" },
@@ -2473,7 +2480,7 @@ export const experiences: Experience[] = [
       "Rakugo is one of Japan's oldest living performing arts: a storyteller on a cushion, a fan and a hand towel for props, and every character played by the same voice. In Asakusa, the district where Tokyo's popular entertainment grew up, an association of performers presents it entirely in English, together with traditional variety entertainment, at a public venue a few steps from the Kaminarimon gate.",
       "After the performance, an English-speaking guide walks you through Asakusa for an hour: the well-known landmarks, and the streets linked to the theatres and entertainers of old Tokyo. The afternoon ends near the stations. It runs on the second and fourth Sundays from October to December 2026, for two to ten guests.",
     ],
-    duration: "About 4 hours", price: "¥12,000", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
+    duration: "About 4 hours", price: "¥21,500", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
     img: "/images/rakugo-performer.jpg", alt: "A rakugo performer in a grey kimono kneeling on a red cushion, telling a story in English",
     gallery: [
       { img: "/images/rakugo-audience.jpg", alt: "The audience seated in the small hall before the performance" },
@@ -2803,7 +2810,7 @@ export const experiences: Experience[] = [
       "The ninja were not acrobats; they were people who had to stay calm, decide fast and keep going. The practice behind that has three parts — hand seals, breathing and body work — organised around the five elements of earth, water, fire, wind and void. This afternoon session teaches it as a meditation method, with no religious content, led by a ninjutsu master with more than ten years of teaching, in Japan and abroad.",
       "You learn the nine seals of the kuji in order, from preparing to face yourself to finding a wider awareness; practise yin and yang breathing and the ninja's silent footwork; and sit — on a cushion or a chair — through a meditation on the elements. Sessions run from 1:30 pm to 4:30 pm for up to fifteen guests aged sixteen and over, in Japanese with English interpretation.",
     ],
-    duration: "3 hours", price: "¥30,000", priceUnit: "person", group: "Up to 15 guests", ages: "Ages 16+", area: "Tokyo (near Tokyo Tower, Minato)",
+    duration: "3 hours", price: "¥44,000", priceUnit: "person", group: "Up to 15 guests", ages: "Ages 16+", area: "Tokyo (near Tokyo Tower, Minato)",
     img: "/images/zen-meditation-hall.jpg", alt: "The entrance of a temple meditation hall with a black curtain bearing the characters for zazen",
     gallery: [
       { img: "/images/tokyo-tower-red.jpg", alt: "Tokyo Tower lit red above the night skyline" },
@@ -2892,12 +2899,12 @@ export const experiences: Experience[] = [
       "The costume plan adds a ninja outfit to change into, worn through the session and the photos. Nothing is needed beyond comfortable clothes and closed shoes, and children are welcome with an adult.",
     ],
     duration: "45–60 minutes", price: "¥17,500", priceUnit: "person", group: "1 to 12 per session · private sessions up to 16", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
-    img: "/images/ninja-arashiyama-hero.jpg", alt: "Three guests in black ninja costumes striking poses in a wood-panelled training room",
+    img: "/images/partner-arashiyama/kyoto-ninja-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/ninja-blowgun.jpg", alt: "A guest in a ninja costume aiming a blowpipe at the targets" },
-      { img: "/images/ninja-shuriken-throw.jpg", alt: "A guest laughing as she pulls a throwing star from the target" },
-      { img: "/images/ninja-pose.jpg", alt: "Three guests in ninja costume making hand seals in front of the targets" },
-      { img: "/images/ninja-shuriken-box.jpg", alt: "A wooden box of black throwing stars on a table" },
+      { img: "/images/partner-arashiyama/experience-1128091-29-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1128091-10-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1128091-11-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1128091-31-800.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's studio.",
     partySize: { min: 1, max: 16 },
@@ -2931,7 +2938,7 @@ export const experiences: Experience[] = [
     schedule: [
       { time: "-0:15", title: "Arrive and check in", body: "Change into your costume if you chose the costume plan." },
       { time: "0:00", title: "Blowpipe", body: "Aim and breath: the blowpipe at the targets." },
-      { time: "0:20", title: "Shuriken", body: "How to hold and throw a shuriken so it sticks.", img: "/images/ninja-shuriken-throw.jpg" },
+      { time: "0:20", title: "Shuriken", body: "How to hold and throw a shuriken so it sticks.", img: "/images/partner-arashiyama/experience-1128091-29-800.jpg" },
       { time: "0:40", title: "Hand seals", body: "The in-musubi, the ninja's hand seals, with the instructor." },
       { time: "0:50", title: "Photos", body: "Photos in the training room, in costume if you are wearing one." },
       { time: "1:00", title: "End of the session" },
@@ -2939,7 +2946,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A ninja training studio on an upper floor of a building in central Arashiyama, Kyoto, a short walk from the station and the bamboo grove — the exact address and entrance come with your confirmation", "Please be at the studio by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "Regular sessions may include other guests; a private session takes your group only (up to 16)", "Not accessible for wheelchairs or strollers", "Comfortable clothes and closed-toe shoes"],
       afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
-      img: "/images/ninja-target-room.jpg", alt: "The training room with its row of targets",
+      img: "/images/partner-arashiyama/experience-1128091-29-800.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. costume plan for all of us; children's ages",
@@ -2975,18 +2982,19 @@ export const experiences: Experience[] = [
     // the day before, start time arranged around the group's day) with the
     // partner's cancellation scale. Venue name stays off the page. Preview.
     slug: "arashiyama-stone-mill-matcha", city: "kyoto", category: "tea-ceremony", bookingType: "request", status: "preview",
+    bookingPaused: true, bookingNotice: "Bookings are currently paused. Reopening and available dates are being confirmed.",
     title: "Stone-Mill Matcha Grinding in Arashiyama, Kyoto",
-    tagline: "Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five to sixty minutes, in English or Japanese.",
+    tagline: "Bookings are currently paused. Reopening and available dates are being confirmed. Turn a granite mill by hand to grind tencha leaves into matcha, whisk it with a bamboo chasen, and drink the bowl you made on a covered terrace in Arashiyama. Forty-five to sixty minutes, in English or Japanese.",
     overview: [
       "Matcha is tea leaf ground to a powder fine enough to drink, and the grinding is the slow part. On a covered terrace in Arashiyama you turn a traditional stone mill yourself, feel how little comes out of each turn, and understand why good matcha costs what it does.",
       "Then you whisk the powder you made into a bowl with a bamboo chasen and drink it, looking out over the street. The session takes 45 to 60 minutes and is taught in English or Japanese; the tencha, the mill and the utensils are provided.",
     ],
     duration: "45–60 minutes", price: "¥13,500", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "All ages (children with an adult)", area: "Kyoto (Arashiyama)",
-    img: "/images/matcha-stone-mill.jpg", alt: "Hands turning a granite stone mill with bright green matcha powder gathering in the groove",
+    img: "/images/partner-arashiyama/experience-1197289-2-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/matcha-whisk.jpg", alt: "Whisking matcha in a bowl with a bamboo chasen" },
-      { img: "/images/matcha-powder.jpg", alt: "Freshly ground matcha powder falling from a stone mill" },
-      { img: "/images/matcha-sweets.jpg", alt: "A bowl of matcha and a plate of seasonal Japanese sweets by a window" },
+      { img: "/images/partner-arashiyama/experience-1197289-1-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1197289-3-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1197289-4-800.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's terrace.",
     partySize: { min: 1, max: 40 },
@@ -3018,7 +3026,7 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "-0:15", title: "Arrive and check in" },
-      { time: "0:00", title: "The mill", body: "How the stone mill works and how to turn it; then grind your tencha.", img: "/images/matcha-powder.jpg" },
+      { time: "0:00", title: "The mill", body: "How the stone mill works and how to turn it; then grind your tencha.", img: "/images/partner-arashiyama/experience-1197289-1-800.jpg" },
       { time: "0:25", title: "Whisk", body: "Sift the powder, add hot water and whisk with the chasen." },
       { time: "0:35", title: "Drink", body: "Your bowl of matcha on the terrace." },
       { time: "0:45", title: "End of the session" },
@@ -3026,7 +3034,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A café terrace on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "The terrace is covered but semi-outdoor: dress for the weather", "Please be at the terrace by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The venue's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day"],
-      img: "/images/matcha-sweets.jpg", alt: "Matcha and sweets on the terrace",
+      img: "/images/partner-arashiyama/experience-1197289-1-800.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. children's ages; a preferred time of day",
@@ -3044,7 +3052,7 @@ export const experiences: Experience[] = [
       { q: "What if we are late?", a: "Please be there by your start time. The instructor can wait about 5 to 10 minutes; after that you may not be able to join, so call the number on your confirmation if you are delayed." },
       { q: "Is the terrace accessible?", a: "No: it is up a flight of stairs and cannot take wheelchairs or strollers." },
       { q: "What is the cancellation policy?", a: "Regular sessions of up to 19 guests: free until 30 days before the date; from 29 to 14 days before, half the price; from 13 days before, including no-shows, the full price. Private sessions and groups of 20 or more: free until 45 days before; from 44 to 29 days before, half; from 28 days before, the full price. One free date change up to 14 days before (29 days before for private sessions and groups of 20 or more), if another time has room. Days are counted in Japan time." },
-      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+      { q: "Can I book now?", a: "Bookings are currently paused. Reopening and available dates are being confirmed." },
     ],
     whatYoullDo: ["Grind tencha into matcha on a stone mill", "Whisk it with a bamboo chasen", "Drink your bowl on a covered terrace"],
     master: { title: "Your instructor", bio: "The terrace's staff teach the mill and the whisk in English and Japanese.", quote: "" },
@@ -3073,11 +3081,12 @@ export const experiences: Experience[] = [
       "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Engraving can be added on the custom plan for a fee.",
     ],
     duration: "About 60 minutes", price: "¥27,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
-    img: "/images/knife-arashiyama-hero.jpg", alt: "An instructor in an apron smiling behind a table of Japanese kitchen knives and wooden handles",
+    img: "/images/partner-arashiyama/kyoto-knife-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/knife-sharpening.jpg", alt: "Hands sharpening a blade on a wet whetstone" },
-      { img: "/images/knife-paper-test.jpg", alt: "The instructor testing an edge on a sheet of paper" },
-      { img: "/images/knife-tomato.jpg", alt: "A finished knife slicing cleanly through a tomato" },
+      { img: "/images/partner-arashiyama/experience-1212742-2-480.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212742-1-480.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212742-6-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212742-3-480.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's workshop.",
     partySize: { min: 1, max: 40 },
@@ -3111,7 +3120,7 @@ export const experiences: Experience[] = [
     schedule: [
       { time: "-0:15", title: "Arrive and check in" },
       { time: "0:00", title: "Choose your blade", body: "Several blade shapes to pick from; the instructor explains what each is for." },
-      { time: "0:10", title: "Sharpen", body: "The angle, the pressure and the rhythm on the whetstone, with the instructor beside you.", img: "/images/knife-sharpening.jpg" },
+      { time: "0:10", title: "Sharpen", body: "The angle, the pressure and the rhythm on the whetstone, with the instructor beside you.", img: "/images/partner-arashiyama/experience-1212742-2-480.jpg" },
       { time: "0:40", title: "Fit the handle", body: "Attach the prepared handle and finish the knife." },
       { time: "0:55", title: "Test the edge", body: "Paper, then a tomato." },
       { time: "1:00", title: "End of the workshop" },
@@ -3119,7 +3128,7 @@ export const experiences: Experience[] = [
     venue: {
       known: ["A workshop on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Knives are sharp: follow the instructor's safety instructions; from age 6", "Please be at the workshop by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "You take the finished knife home the same day; it cannot go in cabin baggage", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The workshop's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on packing the knife in checked luggage"],
-      img: "/images/knife-craftsman.jpg", alt: "A craftsman inspecting a blade",
+      img: "/images/partner-arashiyama/experience-1212742-2-480.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. custom plan for two, beginner plan for one; left-handed",
@@ -3166,11 +3175,12 @@ export const experiences: Experience[] = [
       "Choose the standard size or a mini shuriken about half as large, small enough to carry. On some days other weapon shapes or a necklace finish are available; ask the staff on the day. The session is taught in English or Japanese.",
     ],
     duration: "About 60 minutes", price: "¥20,000", priceUnit: "person", group: "1 to 12 guests · private sessions on request", ages: "Ages 6+ (hot metal is handled by the instructor)", area: "Kyoto (Arashiyama)",
-    img: "/images/shuriken-arashiyama-hero.jpg", alt: "A guest in a leather apron holding up a freshly cast metal shuriken in front of the targets",
+    img: "/images/partner-arashiyama/kyoto-shuriken-800.jpg", alt: "Partner-provided experience photo",
     gallery: [
-      { img: "/images/shuriken-pour.jpg", alt: "Molten metal poured from a ladle into a sand mould" },
-      { img: "/images/shuriken-quench.jpg", alt: "Hands quenching a cast shuriken in a wooden tub of water" },
-      { img: "/images/shuriken-finished.jpg", alt: "A finished four-pointed shuriken on an anvil" },
+      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "Partner-provided experience photo" },
+      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "Partner-provided experience photo" },
     ],
     galleryNote: "Photos from the partner's studio.",
     partySize: { min: 1, max: 12 },
@@ -3203,14 +3213,14 @@ export const experiences: Experience[] = [
     schedule: [
       { time: "-0:15", title: "Arrive and check in" },
       { time: "0:00", title: "Design and mould", body: "Choose standard or mini, shape the design and prepare the sand mould." },
-      { time: "0:20", title: "The pour", body: "The instructor pours the molten metal into your mould.", img: "/images/shuriken-pour.jpg" },
-      { time: "0:30", title: "Quench and polish", body: "Cool the star in water, then file and polish it.", img: "/images/shuriken-quench.jpg" },
+      { time: "0:20", title: "The pour", body: "The instructor pours the molten metal into your mould.", img: "/images/partner-arashiyama/experience-1212731-11-480.jpg" },
+      { time: "0:30", title: "Quench and polish", body: "Cool the star in water, then file and polish it.", img: "/images/partner-arashiyama/experience-1212731-11-480.jpg" },
       { time: "1:00", title: "End of the session" },
     ],
     venue: {
       known: ["A ninja studio on an upper floor of a building in central Arashiyama, Kyoto — the exact address and entrance come with your confirmation", "Hot metal is handled by the instructor; guests wear aprons and gloves and follow the safety instructions; from age 6", "Please be at the studio by your start time: the instructor can wait about 5 to 10 minutes, after which the session may go ahead without you", "Check in with the name or booking number on your confirmation", "You take the finished shuriken home the same day", "Not accessible for wheelchairs or strollers"],
       afterBooking: ["The studio's name, address and entrance instructions", "Directions from Arashiyama's stations", "A phone number for the day", "Advice on carrying the shuriken home, confirmed with the studio"],
-      img: "/images/ninja-target-room.jpg", alt: "The studio's training room",
+      img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Partner-provided experience photo",
     },
     notesLabel: "Requests (optional)",
     notesHint: "e.g. two standard, one mini; children's ages",
@@ -3654,7 +3664,7 @@ export const experiences: Experience[] = [
       "Omotesenke is one of the three main schools descended from Sen no Rikyu, and this is its tea as it is practised today, in a tearoom in a quiet part of Setagaya, half an hour from Shinjuku. The teacher, who runs the school, takes one group at a time, so the ninety minutes are yours.",
       "The session begins with an explanation of the ceremony and the etiquette of a guest, then the entry into the tearoom and the ceremony itself: two kinds of sweets, matcha prepared for each of you, and the small gestures that make a guest at a tea gathering. Kaishi paper, a fan and a sweet pick are provided for the ceremony. Sessions are on Saturdays and Sundays, starting at 11:00 or 15:00, and the tearoom takes guests from mid-January 2027.",
     ],
-    duration: "About 1.5 hours", price: "¥24,500", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (children 6–17 at a reduced price)", area: "Tokyo (Kyodo, Setagaya-ku)",
+    duration: "About 1.5 hours", price: "¥25,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (children 6–17 at a reduced price)", area: "Tokyo (Kyodo, Setagaya-ku)",
     img: "/images/craft-hands.jpg", alt: "A tea ceremony host placing a tea bowl on the tatami before seated guests",
     gallery: [
       { img: "/images/cat-tea.jpg", alt: "Matcha being prepared at a tea gathering" },
@@ -3711,7 +3721,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Do I need to know anything about tea?", a: "No. The session starts with an explanation, and the teacher guides each gesture as it comes." },
       { q: "When does it run?", a: "On Saturdays and Sundays, starting at 11:00 or 15:00, from mid-January 2027. Other times can be asked for. Requests close five days before the date, at 17:00 Japan time." },
-      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 17 pay ¥15,000 instead of ¥24,500; the table above shows adult prices and our reply adjusts for children." },
+      { q: "Can children join?", a: "Yes, from age six. Children aged 6 to 17 pay ¥16,000 instead of ¥25,000; the table above shows adult prices and our reply adjusts for children." },
       { q: "Do we sit on the floor?", a: "Yes, on tatami. Socks are required; bare feet are not allowed in the tearoom. Tell us if kneeling is difficult." },
       { q: "Is the session private?", a: "Yes. The teacher takes one group at a time, from two to six guests." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
@@ -3727,10 +3737,10 @@ export const experiences: Experience[] = [
     // SOBAGIRI RAKUJYO (株式会社RAKUJYO), Matsugaya, Taito-ku: 60-minute
     // soba-making class (30 min making, 30 min eating) on Kappabashi
     // kitchenware street near Asakusa. Built 2026-10-22 from the partner's
-    // condition sheet (Drive folder SOBAGIRI) and its public site. Wholesale
+    // condition sheet (Drive folder SOBAGIRI) and its public site. Provisional cost
     // ¥6,500 (Mon–Thu) / ¥7,500 (Fri–Sun and holidays) incl. tax; the sale
     // prices follow the owner's rule (wholesale + ¥4,500 ad cost, 20% margin,
-    // rounded up to ¥500) and are provisional: ¥14,000 / ¥15,000. The page
+    // rounded up to ¥500 incl. tax), using provisional costs: ¥14,500 / ¥16,000. The page
     // shows the higher rate and says weekdays are lower. Cancellation terms
     // follow the partner's travel-agency (B2B) scale, to be confirmed. The
     // studio's name may be published per the sheet but stays off the page
@@ -3743,7 +3753,7 @@ export const experiences: Experience[] = [
       "Kappabashi is the street where Tokyo's restaurants buy their knives, pots and plastic food, a ten-minute walk from Asakusa. The studio on it teaches the one thing the street's tools are for: making noodles by hand. In thirty minutes you mix, knead, roll and cut soba from pure buckwheat flour, the way it has been done since the Edo period, with tools chosen or made for beginners.",
       "Then you eat it. The soba you cut is cooked at once and served the way you choose: a cold Edo-style dipping sauce, a Kyoto-style one, hot wagyu sukiyaki broth, chicken and soft-boiled egg, shrimp and salt, braised pork, walnut sauce, or a vegan broth. The soba itself contains no wheat. Six guests make a session private; smaller groups share the room.",
     ],
-    duration: "1 hour", price: "¥15,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
+    duration: "1 hour", price: "¥16,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
     img: "/images/soba-asakusa-hero.jpg", alt: "Two guests in aprons cutting soba noodles with wide knives at the studio's wooden table",
     gallery: [
       { img: "/images/soba-asakusa-cutting.jpg", alt: "A wide soba knife cutting folded dough into thin noodles" },
@@ -3803,7 +3813,7 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-      { q: "How much is it?", a: "¥15,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,000 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
+      { q: "How much is it?", a: "¥16,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,500 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
       { q: "Is the soba gluten-free?", a: "The noodles are 100% buckwheat with no wheat flour. Most broths and sauces contain soy sauce; the vegan broth is made with gluten-free tamari. Tell us about allergies when you request; the studio cannot use ingredients brought by guests." },
       { q: "Which broths can we choose from?", a: "Cold: Edo-style dipping sauce, Kyoto-style dipping sauce, salt only, walnut sauce. Hot: wagyu sukiyaki, chicken and soft-boiled egg, shrimp and salt, braised pork. A vegan broth is ¥500 extra. Choose on the day or tell us in your request." },
       { q: "Which language is the class in?", a: "The instructor speaks Japanese; the steps are shown and English materials are provided. The class is designed so that children can follow it." },
@@ -3829,7 +3839,7 @@ export const experiences: Experience[] = [
       "The studio on Kappabashi street took the hand-cutting technique it teaches for soba and applied it to ramen: a flour developed for noodles, a method that works without a machine, and tools chosen or made so that first-timers can follow it. In thirty minutes you mix, knead, roll and cut your own ramen noodles.",
       "Then they go into a bowl. The noodles you cut are cooked at once and served in the studio's ramen broth, with toppings, at the table where you made them. Six guests make a session private; smaller groups share the room. A ten-minute walk from Asakusa.",
     ],
-    duration: "1 hour", price: "¥15,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
+    duration: "1 hour", price: "¥16,000", priceUnit: "person", group: "Small class · 2–6 guests", ages: "Ages 10+", area: "Tokyo (Kappabashi, near Asakusa)",
     img: "/images/ramen-asakusa-hero.jpg", alt: "A bowl of ramen beside hands cutting fresh noodles with a wide knife",
     gallery: [
       { img: "/images/ramen-asakusa-bowl.jpg", alt: "A bowl of ramen with chashu pork, egg and nori" },
@@ -3888,7 +3898,7 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-      { q: "How much is it?", a: "¥15,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,000 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
+      { q: "How much is it?", a: "¥16,000 per person on Fridays, Saturdays, Sundays and public holidays, and ¥14,500 per person from Monday to Thursday; the price in our reply follows your date. Children pay the adult price." },
       { q: "What goes in the bowl?", a: "The studio's ramen broth with toppings such as chashu pork, a seasoned egg and nori. Tell us about allergies or ingredients you avoid when you request; the studio cannot use ingredients brought by guests." },
       { q: "Which language is the class in?", a: "The instructor speaks Japanese; the steps are shown and English materials are provided. The class is designed so that children can follow it." },
       { q: "Can we have the room to ourselves?", a: "A booking for six makes the session private automatically, from Monday to Thursday. On Fridays, weekends and holidays private sessions are only possible for groups of eight or more, arranged individually." },
@@ -4214,7 +4224,7 @@ const golfPage = (e: Experience, lang: Lang) => isArrangement() ? applyGolfArran
 
 /** Locale files carry text only; numbers, media and flags come from the
  *  English entry with the same slug so they cannot drift between languages. */
-const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "consultationOnly", "thumb", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
+const STRUCTURAL: StructuralKeys[] = ["partySize", "pricing", "video", "status", "bookingType", "priceUnit", "pricePending", "bookingPaused", "consultationOnly", "thumb", "availability", "map", "taxIncluded", "cancellationTiers", "cancellationCutoffTime", "dietary", "interpreter", "skipSiteFaq"];
 function withStructure(localized: Experience[]): Experience[] {
   return localized.map((e) => {
     const base = experiences.find((x) => x.slug === e.slug);
@@ -4236,9 +4246,10 @@ function withStructure(localized: Experience[]): Experience[] {
 }
 
 /** Keep existing review URLs available when these approved pages go live.
- *  Japanese copy is available; other locales retain their English fallback
- *  until their own translation is added. */
+ *  Locales without authored copy retain English content until their own
+ *  translation is added. Booking controls still use the selected locale. */
 const APPROVED_ENGLISH_FALLBACK = new Set([
+  "kyoto-higashiyama-private-tea-ceremony",
   "nerima-herbal-bath-private-spa", "yotsuya-tea-ceremony", "kyoto-ryokan-beauty-clinic",
   "nihonbashi-japanese-dance-salon", "nihonbashi-english-rakugo-salon", "nihonbashi-shamisen-salon",
 ]);

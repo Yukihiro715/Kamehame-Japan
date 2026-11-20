@@ -9,6 +9,7 @@
 
 import { catalogFor } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
+import { GOLF_ARTICLES } from "@/lib/golf-articles";
 
 export interface Article {
   slug: string;
@@ -24,19 +25,106 @@ export interface Article {
   /** Hero image, site-root-relative. */
   img: string;
   alt: string;
+  /** Editorial context is explicit; no invented individual author or guest testimonial. */
+  editorial?: { author: string; note: string; imageCaption: string };
+  relatedArticles?: string[];
+  comparison?: { category: string; city?: string };
+  cta?: { label: string; href: string; text: string };
   /** Per-locale copy. An article renders only in the locales present here. */
   copy: Partial<Record<Lang, ArticleCopy>>;
 }
 
 export interface ArticleCopy {
+  /** Optional localized image and booking copy. */
+  alt?: string;
+  cta?: Article["cta"];
+  editorial?: Article["editorial"];
   title: string;
   /** One sentence: used on cards, in metadata and as the share description. */
   standfirst: string;
   /** Body paragraphs. A string starting with "## " becomes a subheading. */
-  body: string[];
+  body: ArticleBlock[];
 }
 
+export type ArticleBlock = string
+  | { type: "table"; caption: string; headings: string[]; rows: string[][] }
+  | { type: "link"; text: string; label: string; href: string };
+
 const ARTICLES: Article[] = [
+  ...GOLF_ARTICLES,
+  {
+    slug: "choosing-kendo-experience-japan",
+    date: "2026-11-17",
+    minutes: 3,
+    experiences: ["nihonbashi-kendo-experience", "nihonbashi-bushido-experience"],
+    img: "/og/nihonbashi-kendo-experience.jpg",
+    alt: "Kendo practice in Japan",
+    comparison: {"category": "kendo"},
+    copy: {
+      en: {
+        title: "Choosing a kendo experience in Japan: location, language and age requirements",
+        standfirst: "Compare the currently listed kendo experiences by city, duration, language, age requirements and starting price.",
+        body: ["## Start with the session you want", "A sword demonstration, formal kata and a class wearing protective armour can be different experiences. Read what you will do on the selected page rather than choosing from the word “samurai” alone.", "## Check the requirements for your party", "Read the age requirements and language support for each session. Tell us the ages of children, whether anyone will watch without participating, and any mobility needs before booking.", "## Plan the journey and the total", "The comparison below uses our current listings. Starting prices are for the stated party size; private sessions, extra services and your journey can change the total. Open each page for inclusions, access from stations and hotels, and cancellation conditions."],
+      },
+      ja: {
+        title: "日本の剣道体験の選び方：場所・対応言語・対象年齢で比較",
+        standfirst: "現在掲載中の剣道体験を、都市・所要時間・対応言語・対象年齢・基本料金で比較します。",
+        body: ["## 体験で何をするかを先に決める", "演武の見学、日本剣道形、防具を着けて行う稽古は内容が異なります。「サムライ」という名称だけで選ばず、各ページの体験内容をご確認ください。", "## 参加する方の条件を確認する", "対象年齢と対応言語を確認してください。お子様の年齢、見学のみの方の有無、移動や動作に配慮が必要な点は、ご予約前にお知らせください。", "## 移動と総額をあわせて考える", "下の比較表は現在の掲載情報に連動しています。基本料金は記載の人数条件に基づきます。貸切や追加サービス、会場への交通費で総額は変わります。各体験ページで、含まれるもの・駅やホテルからのアクセス・キャンセル条件をご確認ください。"],
+      },
+      es: {
+        title: "Cómo elegir una experiencia de kendo en Japón",
+        standfirst: "Compare ciudad, duración, idioma, edad y precio de las experiencias de kendo publicadas.",
+        body: ["## Compare el contenido", "Una demostración, las formas kata y una clase con armadura pueden ser actividades diferentes. Lea el programa de cada página.", "## Confirme los requisitos", "Compruebe la edad y el idioma. Indique las edades de los niños, los acompañantes que solo observan y las necesidades de movilidad antes de reservar.", "## Planifique el coste total", "La tabla refleja las fichas actuales. Abra cada página para comprobar las condiciones del precio, las inclusiones, el acceso y la cancelación."],
+      },
+      fr: {
+        title: "Choisir une expérience de kendo au Japon",
+        standfirst: "Comparez la ville, la durée, la langue, l’âge et le tarif des activités publiées.",
+        body: ["## Comparez le programme", "Une démonstration, les formes kata et un cours avec armure peuvent être des activités différentes. Consultez le programme de chaque page.", "## Vérifiez les conditions", "Vérifiez l’âge et la langue. Indiquez l’âge des enfants, les accompagnateurs spectateurs et les besoins de mobilité avant la réservation.", "## Prévoyez le coût total", "Le tableau reprend les fiches actuelles. Ouvrez chaque page pour vérifier les conditions tarifaires, les prestations incluses, l’accès et l’annulation."],
+      },
+      "zh-tw": {
+        title: "日本劍道體驗怎麼選：比較地點、語言與年齡",
+        standfirst: "比較目前刊登的劍道體驗，包括城市、時間、語言、年齡及起始價格。",
+        body: ["## 先比較體驗內容", "演武觀賞、劍道形與穿著護具的練習可能是不同活動。請閱讀各頁面的實際內容。", "## 確認參加條件", "確認年齡限制與語言。預訂前請告知兒童年齡、僅觀看的陪同者，以及行動方面的需求。", "## 一起規劃交通與總額", "下表連動目前刊登資訊。請開啟各頁面確認價格人數條件、包含項目、交通與取消條件。"],
+      },
+    },
+  },
+  {
+    slug: "choosing-tea-ceremony-kyoto",
+    date: "2026-11-17",
+    minutes: 3,
+    experiences: ["kyoto-higashiyama-private-tea-ceremony", "kyoto-higashiyama-annex-tea-ceremony"],
+    img: "/images/tea-kyoto-annex-hero.jpg",
+    alt: "Tea ceremony in Kyoto",
+    comparison: {"category": "tea-ceremony", "city": "kyoto"},
+    copy: {
+      en: {
+        title: "Choosing a tea ceremony in Kyoto: compare the session before the price",
+        standfirst: "Compare the current Kyoto tea ceremony options, then check group size, language, clothing and access before you book.",
+        body: ["## Decide what the visit should include", "Check the selected page for the tea session, clothing options and any other included activities. Do not assume that kimono rental or dressing is included because it appears in a photograph.", "## Match the session to your party", "Check age requirements, group size and language support. If sitting on the floor is difficult, tell us in advance so we can confirm the arrangement with the venue.", "## Check the location and final conditions", "Use the access section on each page to plan from your hotel or station. Some routes end at an area landmark; follow your booking confirmation for the actual meeting point. The table below reflects our current listings, and each page explains pricing and cancellation."],
+      },
+      ja: {
+        title: "京都の茶道体験の選び方：料金の前に内容を比較",
+        standfirst: "掲載中の京都の茶道体験を比較し、人数・言語・服装・アクセスを確認して選びます。",
+        body: ["## 体験に含めたいことを決める", "茶道の内容、着物の選択肢、ほかに含まれる体験を各ページで確認してください。写真に写っているだけで、着物レンタルや着付けが料金に含まれるとは限りません。", "## 参加人数と条件をあわせる", "対象年齢、人数、対応言語を確認してください。正座が難しい場合は事前にお知らせいただき、会場に対応可否を確認します。", "## 場所と予約条件を確認する", "各ページのアクセス欄でホテルや駅からの移動をご確認ください。経路の目的地が周辺の目印の場合もあるため、実際の集合場所は予約確定の案内をご参照ください。下表は現在の掲載情報に連動し、各ページに料金とキャンセル条件を記載しています。"],
+      },
+      es: {
+        title: "Cómo elegir una ceremonia del té en Kioto",
+        standfirst: "Compare las opciones publicadas y revise idioma, grupo, vestimenta y acceso.",
+        body: ["## Revise lo incluido", "No dé por incluido el alquiler de kimono solo porque aparezca en una foto. Consulte la descripción de la actividad elegida.", "## Considere a su grupo", "Compruebe la edad, el idioma y el tamaño del grupo. Si sentarse en el suelo resulta difícil, avísenos para consultar al recinto.", "## Confirme el encuentro y las condiciones", "La tabla refleja las fichas actuales. Algunas rutas terminan en un punto de referencia de la zona; siga su confirmación para llegar al encuentro real. Revise precios y cancelación en cada página."],
+      },
+      fr: {
+        title: "Choisir une cérémonie du thé à Kyoto",
+        standfirst: "Comparez les options publiées et vérifiez la langue, le groupe, la tenue et l’accès.",
+        body: ["## Vérifiez les prestations", "Ne supposez pas que le kimono est inclus simplement parce qu’il figure sur une photo. Consultez la description de l’activité.", "## Tenez compte de votre groupe", "Vérifiez l’âge, la langue et la taille du groupe. Si vous avez du mal à vous asseoir au sol, prévenez-nous afin que nous consultions le lieu.", "## Confirmez le rendez-vous et les conditions", "Le tableau reprend les fiches actuelles. Certains itinéraires aboutissent à un repère du quartier ; suivez votre confirmation pour le rendez-vous exact. Consultez les tarifs et l’annulation sur chaque page."],
+      },
+      "zh-tw": {
+        title: "京都茶道體驗怎麼選：先比較內容與條件",
+        standfirst: "比較目前刊登的京都茶道選項，確認人數、語言、服裝與交通。",
+        body: ["## 確認包含項目", "不能僅因照片出現和服，就假設包含租借或穿著服務。請查看所選活動的說明。", "## 配合同行者的條件", "請確認年齡、人數及語言。若不方便坐在地板上，請先告知，以便向會場確認安排。", "## 確認集合地點與預訂條件", "下表連動目前刊登資訊。有些交通路線只到附近地標，實際集合地點請依確認信指示。價格與取消條件請查看各頁面。"],
+      },
+    },
+  },
+
   {
     slug: "booking-a-maiko-evening",
     date: "2026-08-20",
@@ -329,6 +417,7 @@ export const articlesFor = (lang: Lang): Article[] => {
   const listed = new Set(catalogFor(lang).experiences.map((e) => e.slug));
   return ARTICLES
     .filter((a) => a.copy[lang] && a.experiences.some((slug) => listed.has(slug)))
+    .map((a) => ({ ...a, alt: a.copy[lang]!.alt ?? a.alt, cta: a.copy[lang]!.cta ?? a.cta, editorial: a.copy[lang]!.editorial ?? a.editorial }))
     .sort((a, b) => b.date.localeCompare(a.date));
 };
 

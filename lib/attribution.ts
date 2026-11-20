@@ -3,7 +3,7 @@ export const ATTRIBUTION_KEY = 'kh-attribution-v1';
 export const ATTRIBUTION_TTL = 30 * 86400000;
 const fields = ['utm_source','utm_medium','utm_campaign','utm_id','utm_content','utm_term','gclid','gbraid','wbraid','fbclid','campaign_id','adset_id','ad_id'] as const;
 export type Touch = Partial<Record<typeof fields[number], string>> & { landing: string; referrer: string; at: number };
-export type Attribution = { version: 1; first: Touch; last: Touch };
+export type Attribution = { version: 1; first: Touch; last: Touch; ga?: { clientId: string; sessionId?: string } };
 const clean = (v: unknown, n = 200) => typeof v === 'string' ? v.replace(/[\r\n\x00-\x1f]/g, '').slice(0,n) : '';
 function urlOnly(v: unknown, originOnly = false): string {
   try { const u = new URL(String(v)); return /^https?:$/.test(u.protocol) ? u.origin + (originOnly ? '' : u.pathname) : ''; } catch { return ''; }
@@ -20,11 +20,13 @@ export function sanitizeAttribution(v: unknown, now = Date.now()): Attribution |
     return out;
   }
   const first=touch(a.first),last=touch(a.last);
-  return first && last && first.at <= last.at ? {version:1,first,last} : undefined;
+  const clientId = typeof a.ga?.clientId === 'string' && /^\d{1,20}\.\d{1,20}$/.test(a.ga.clientId) ? a.ga.clientId : undefined;
+  const sessionId = typeof a.ga?.sessionId === 'string' && /^\d{1,20}$/.test(a.ga.sessionId) ? a.ga.sessionId : undefined;
+  return first && last && first.at <= last.at ? {version:1,first,last,...(clientId ? {ga:{clientId,...(sessionId ? {sessionId} : {})}} : {})} : undefined;
 }
 export function captureTouch(href: string, referrer: string, at = Date.now()): Touch {
   const u=new URL(href);const t:Touch={landing:urlOnly(href),referrer:urlOnly(referrer,true),at};
-  if(t.referrer===u.origin)t.referrer='';
+  if(t.referrer===u.origin || /(^|\.)stripe\.com$/.test(t.referrer ? new URL(t.referrer).hostname : ''))t.referrer='';
   for(const k of fields){const s=clean(u.searchParams.get(k),/clid|braid/.test(k)?500:200);if(s)t[k]=s;}
   return t;
 }

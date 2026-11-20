@@ -1,2 +1,1 @@
-import { PortalShell } from "@/components/portal/shell";
-export default function Page() { return <PortalShell kind="ops"><p /></PortalShell>; }
+export default function Page() { return <><p /></>; }

@@ -16,7 +16,23 @@ export const PARTNER_EMAIL = "partners@kamehame-japan.com";
  *  cancellation link and the ledger's stop control are unchanged either way. */
 export const FOLLOW_UP_ENABLED = false;
 
-export type EnquiryKind = "guest" | "trade";
+/** "support": a travel-support request (lib/support.ts), today babysitting. */
+export type EnquiryKind = "guest" | "trade" | "support";
+
+/** The babysitting request's own answers, kept apart so the team's record and
+ *  the acknowledgement can label them. Times are "HH:MM"; `travel` means the
+ *  guests' travel to and from a venue counts as care hours. */
+export interface SupportRequest {
+  service: "babysitter";
+  place: "hotel" | "apartment" | "venue" | "other";
+  placeDetail: string;
+  start: string;
+  end: string;
+  ages: string;
+  language: "en" | "ja" | "zh" | "other";
+  golfVenue?: string;
+  travel?: boolean;
+}
 
 export interface Enquiry {
   attribution?: import("./attribution").Attribution;
@@ -31,6 +47,8 @@ export interface Enquiry {
   transfer?: "none" | "introduce" | "unsure";
   addonIds?: string[];
   kind: EnquiryKind;
+  /** Travel-support requests only. */
+  support?: SupportRequest;
   name: string;
   email: string;
   company?: string;

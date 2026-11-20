@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   if (!request.headers.get("content-type")?.startsWith("application/json")) return Response.json({ ok: false }, { status: 415, headers });
   try {
     const text = await request.text();
-    if (text.length > 12000) return Response.json({ ok: false }, { status: 413, headers });
+    if (text.length > 24000) return Response.json({ ok: false }, { status: 413, headers });
     let body: Record<string, unknown>;
     try { body = JSON.parse(text); } catch { return Response.json({ ok: false, error: "invalid" }, { status: 400, headers }); }
     const order = body && parseExperienceOrder(body);

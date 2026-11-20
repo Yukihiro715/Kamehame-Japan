@@ -1,8 +1,13 @@
+import { ledgerState, syncLedger, resolveLedgerReview } from "@/lib/business/ledger-sync";
+import * as business from "@/lib/business/storage";
+import { sync as syncBusiness, syncSources, type BusinessEnv } from "@/lib/business/sync";
+import { productProvider } from "@/lib/business/providers";
+import { catalogFor, previewsFor } from "@/lib/catalog";
 import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguage } from "./official-brochures";
 import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
 import { saveBank, readBank } from "./bank";
 import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
-import { passwordLogin, requestPassword, setPassword } from "./password-auth";
+import { passwordLogin, requestPassword, setPassword, provisionPassword, changeInitialPassword } from "./password-auth";
 /** The portal API: one entry point, routed by path, every handler scoped on
  *  the server. Mounted at /api/portal/<path> (app/api/portal/[...path]/route.ts).
  *
@@ -20,7 +25,7 @@ import { notifyCase } from "./case-notify";
 import * as settle from "./settlement";
 import { disputeResolvedMail, payoutPaidMail, sendPortalMail, statementIssuedMail } from "./mail";
 import { d1Db, isD1Like, jstDate, type SqlDb } from "@/lib/referral/db";
-import { CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, requestLoginCode, revokeMembership, disableUser, sessionCookie, signOut, verifyLoginCode, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
+import { OPS_MASTER_EMAIL, CASE_ROLES, canSeeHotel, canSeeProfile, hasSiteRole, hotelIdsOf, inviteMember, opsRole, principalFromRequest, revokeMembership, disableUser, sessionCookie, signOut, HOTEL_ROLES, OPS_ROLES, type Principal, type Role } from "./auth";
 import { targetFor, createLink, linksOfHotel, materialLinks, publicLinkUrl, setLinkStatus, MEDIUMS, type Medium } from "./links-admin";
 import { experienceTerms, experiencePopularity, hotelDashboard, hotelReservations } from "./metrics";
 import * as ops from "./ops";
@@ -32,7 +37,7 @@ import { qrPng, qrSvg } from "./qr";
 import { ApiError, bad, forbidden, int, isoDate, json, notFound, presetPeriod, readJson, resolvePublicOrigin, str } from "./util";
 import type { PortalMailEnv } from "./mail";
 
-export type PortalEnv = PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown; PORTAL_BANK_KEY?: string };
+export type PortalEnv = BusinessEnv & PortalMailEnv & GolfpaqEnquiryEnv & cases.StripeEnv & { DB?: unknown; MEDIA?: unknown; PORTAL_BANK_KEY?: string };
 
 export async function handlePortalApi(request: Request, env: PortalEnv, path: string[]): Promise<Response> {
   try {
@@ -78,32 +83,29 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
   if (ctx.method !== "POST") throw notFound();
   const body = await readJson(ctx.request);
   const ip = ctx.request.headers.get("cf-connecting-ip") ?? "unknown";
+  if (path[0] === "password-change-initial") {
+    const p = await principalFromRequest(ctx.db, ctx.request, "ops");
+    if (!p) throw new ApiError(401,"unauthenticated");
+    const ok = await changeInitialPassword(ctx.db,p,{password:body.password,currentPassword:body.currentPassword},ip);
+    return json({ok,...(ok?{}:{error:"password_change_invalid",message:"仮パスワードを確認し、異なる12〜128文字のパスワードを設定してください。"})},ok?200:400);
+  }
   if (["password-login", "password-request", "password-set"].includes(path[0])) {
-    if (body.kind !== "hotel") throw forbidden();
-    if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { email: body.email, ip, origin: await publicOrigin(ctx) }));
+    if (body.kind !== "hotel" && body.kind !== "ops") throw forbidden();
+    if (path[0] === "password-request") return json(await requestPassword(ctx.db, ctx.env, { kind: kind(body), email: body.email, ip, origin: await publicOrigin(ctx) }));
     if (path[0] === "password-set") {
-      const ok = await setPassword(ctx.db, { token: body.token, password: body.password, ip });
+      const ok = await setPassword(ctx.db, { kind: kind(body), token: body.token, password: body.password, ip });
       return json({ ok, ...(ok ? {} : { error: "password_reset_invalid" }) }, ok ? 200 : 400);
     }
-    const r = await passwordLogin(ctx.db, { email: body.email, password: body.password, ip });
+    const r = await passwordLogin(ctx.db, { kind: kind(body), email: body.email, password: body.password, ip });
     if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "password_locked" : "password_invalid" }, r.error === "locked" ? 429 : 401);
-    return json({ ok: true }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure) });
+    return json({ ok: true }, 200, { "set-cookie": sessionCookie(kind(body), r.token, ctx.secure) });
   }
   if (path[0] === "demo-login") {
     const r = await verifyDemoLogin(ctx.db, { email: body.email, password: body.password, kind: body.kind, ip: ctx.request.headers.get("cf-connecting-ip") ?? "unknown" });
     if (!r.ok || !r.token) return json({ ok: false, error: r.error === "locked" ? "demo_locked" : "demo_invalid" }, r.error === "locked" ? 429 : 401);
     return json({ ok: true, expiresAt: r.expiresAt }, 200, { "set-cookie": sessionCookie("hotel", r.token, ctx.secure, DEMO_SESSION_SECONDS) });
   }
-  if (path[0] === "request-code") {
-    const r = await requestLoginCode(ctx.db, ctx.env, { email: body.email, kind: kind(body), lang: body.lang });
-    return json({ ok: true, sent: r.sent, mail: r.mail, ...(r.devCode ? { devCode: r.devCode } : {}) });
-  }
-  if (path[0] === "verify") {
-    const k = kind(body);
-    const r = await verifyLoginCode(ctx.db, { email: body.email, code: body.code, kind: k });
-    if (!r.ok || !r.token) return json({ ok: false, error: r.error }, 401);
-    return json({ ok: true, expiresAt: r.expiresAt }, 200, { "set-cookie": sessionCookie(k, r.token, ctx.secure) });
-  }
+  if (path[0] === "request-code" || path[0] === "verify") throw new ApiError(410, "password_required", "メールアドレスとパスワードでログインしてください。");
   if (path[0] === "signout") {
     const k = kind(body);
     await signOut(ctx.db, ctx.request, k);
@@ -366,7 +368,13 @@ async function qrResponse(text: string, format: string | undefined, name: string
 async function requireOps(ctx: Ctx, ...roles: Role[]): Promise<Principal> {
   const p = await principalFromRequest(ctx.db, ctx.request, "ops");
   if (!p) throw new ApiError(401, "unauthenticated");
+  if (await ctx.db.first(`SELECT user_id FROM ops_password_changes WHERE user_id=?`,[p.userId])) throw new ApiError(403,"password_change_required","初回パスワード変更が必要です。");
   if (!opsRole(p, ...roles)) throw forbidden();
+  return p;
+}
+async function requireMaster(ctx: Ctx) {
+  const p = await requireOps(ctx,"ops_admin");
+  if(p.email!==OPS_MASTER_EMAIL) throw forbidden();
   return p;
 }
 const ADMIN: Role[] = ["ops_admin"];
@@ -376,7 +384,32 @@ const FINANCE: Role[] = ["ops_admin", "ops_finance"];
 async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, id, action] = path;
   const get = ctx.method === "GET", post = ctx.method === "POST";
-  if (head === "me" && get) { const p = await requireOps(ctx); return json({ ok: true, user: { email: p.email, name: p.name }, roles: p.memberships.map((m) => m.role) }); }
+  if (head === "me" && get) {
+    const p=await principalFromRequest(ctx.db,ctx.request,"ops");if(!p)throw new ApiError(401,"unauthenticated");
+    const mustChangePassword=!!await ctx.db.first(`SELECT user_id FROM ops_password_changes WHERE user_id=?`,[p.userId]);
+    return json({ok:true,user:{email:p.email,name:p.name},roles:p.memberships.map(m=>m.role),isMaster:p.email===OPS_MASTER_EMAIL,mustChangePassword});
+  }
+  if (head === "business") {
+    const p = await requireOps(ctx, ...FINANCE);
+    if(get && id === "ledger-state")return json(await ledgerState(ctx.db,ctx.env));
+    if(post && id === "ledger-sync"){await requireOps(ctx,...ADMIN);return json(await syncLedger(ctx.db,ctx.env));}
+    if(post && id === "ledger-review")return json(await resolveLedgerReview(ctx.db,await readJson(ctx.request) as {sourceKey:unknown;hash:unknown;revision:unknown;action:unknown},p.email));
+    if (get && id === "data") return json({ ...await business.allData(ctx.db,ctx.env), user: {name:p.name??p.email,email:p.email,owner:opsRole(p,...ADMIN)}, syncSources:syncSources(ctx.env) });
+    if (get && id === "catalog") {
+      const catalog=catalogFor("ja"), live=catalog.experiences.filter(e=>e.status==="live");
+      const areas:Record<string,number>={},categories:Record<string,number>={};
+      for(const e of live){areas[e.city]=(areas[e.city]??0)+1;categories[e.category]=(categories[e.category]??0)+1;}
+      return json({count:live.length,preview:previewsFor("ja").experiences.length,unpublished:0,areas,categories,products:live.map(e=>({id:e.slug,name:e.title,provider:productProvider(e.slug),area:catalog.cities.find(c=>c.slug===e.city)?.title??e.city,url:e.slug==='mt-fuji-golf-day'?'/en/golf-tours/':`/en/${e.city}/${e.slug}/`})),stale:false,updatedAt:new Date().toISOString(),note:"本番の公開カタログ。翻訳・日程違いは重複除外。",source:"https://kamehame-japan.com/en/"});
+    }
+    if(post && id === "record") {
+      const b=await readJson(ctx.request,500000);
+      if(b.kind!=="booking" && b.kind!=="master") throw bad("invalid_kind");
+      return json({ok:true,...await business.saveRecord(ctx.db,b.kind,b.payload,b.revision,p.email)});
+    }
+    if(post && id === "import") {await requireOps(ctx,...ADMIN);return json({ok:true,...await business.importData(ctx.db,await readJson(ctx.request,2000000),p.email)});}
+    if(post && id === "sync") {await requireOps(ctx,...ADMIN);return json(await syncBusiness(ctx.db,ctx.env,await readJson(ctx.request),p.email));}
+    throw notFound();
+  }
   if (head === "golf-courses") {
     // Display names for the courses on the shared-bus schedule (docs/GOLFPAQ_BUS_TOURS.md).
     if (get) {
@@ -389,7 +422,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     if (post) {
       const p = await requireOps(ctx, ...BOOKING);
       const b = await readJson(ctx.request);
-      try { await saveCourse(ctx.db, { name: b.name, name_en: b.name_en, name_ja: b.name_ja, name_es: b.name_es, name_fr: b.name_fr, name_zh_tw: b.name_zh_tw, area: b.area, note: b.note, by: p.email }); }
+      try { await saveCourse(ctx.db, { name: b.name, name_en: b.name_en, name_ja: b.name_ja, name_es: b.name_es, name_fr: b.name_fr, name_zh_tw: b.name_zh_tw, area: b.area, note: b.note, pricing: b.pricing, by: p.email }); }
       catch (e) { throw bad(e instanceof Error ? e.message : "bad_request"); }
       return json({ ok: true });
     }
@@ -581,17 +614,27 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       return json({ ok: true, link: { ...link, url: publicLinkUrl(await publicOrigin(ctx), link.token) } });
     }
   }
-  if (head === "members" && id && action === "revoke" && post) { const p = await requireOps(ctx, ...ADMIN); const ok = await revokeMembership(ctx.db, id, p.email); return json({ ok }); }
-  if (head === "users" && id && action === "disable" && post) { const p = await requireOps(ctx, ...ADMIN); await disableUser(ctx.db, id, p.email); return json({ ok: true }); }
+  if (head === "members" && id && action === "revoke" && post) {
+    const p = await requireOps(ctx,...ADMIN);
+    const target=await ctx.db.first<{email:string;scope_type:string}>(`SELECT u.email,m.scope_type FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.id=?`,[id]);
+    if(target?.scope_type==='ops') {await requireMaster(ctx);if(target.email===OPS_MASTER_EMAIL)throw forbidden();}
+    return json({ok:await revokeMembership(ctx.db,id,p.email)});
+  }
+  if (head === "users" && id && action === "disable" && post) {
+    const p=await requireMaster(ctx);
+    const target=await ctx.db.first<{email:string}>(`SELECT email FROM users WHERE id=?`,[id]);
+    if(target?.email===OPS_MASTER_EMAIL)throw forbidden();
+    await disableUser(ctx.db,id,p.email);return json({ok:true});
+  }
   if (head === "ops-members") {
-    if (get) { await requireOps(ctx, ...ADMIN); return json({ ok: true, members: await ctx.db.all(`SELECT m.id AS membership_id, u.id AS user_id, u.email, u.name, m.role, u.status, u.last_login_at FROM memberships m JOIN users u ON u.id = m.user_id WHERE m.scope_type = 'ops' AND m.revoked_at IS NULL ORDER BY u.email`) }); }
+    const p=await requireMaster(ctx);
+    if (get) return json({ok:true,members:await ctx.db.all(`SELECT m.id AS membership_id,u.id AS user_id,u.email,u.name,m.role,u.status,u.last_login_at,f.expires_at AS temporary_expires_at FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN ops_password_changes f ON f.user_id=u.id WHERE m.scope_type='ops' AND m.revoked_at IS NULL ORDER BY u.email`)});
     if (post) {
-      const p = await requireOps(ctx, ...ADMIN);
-      const b = await readJson(ctx.request);
-      const role = str(b.role, 20) as Role;
-      if (!OPS_ROLES.includes(role)) throw bad("bad_role");
-      const r = await inviteMember(ctx.db, ctx.env, { email: b.email, name: b.name, role, scopeType: "ops", scopeId: null, by: p.email, loginOrigin: await publicOrigin(ctx), scopeLabel: "運営" });
-      return json({ ok: true, ...r });
+      const b=await readJson(ctx.request),role=str(b.role,20) as Role;
+      if(!OPS_ROLES.includes(role))throw bad("bad_role");
+      if(typeof b.email!=='string'||b.email.trim().toLowerCase()===OPS_MASTER_EMAIL)throw forbidden();
+      const r=await inviteMember(ctx.db,ctx.env,{email:b.email,name:b.name,role,scopeType:"ops",scopeId:null,by:p.email,loginOrigin:await publicOrigin(ctx),scopeLabel:"運営",skipMail:true});
+      return json({ok:true,...r,...await provisionPassword(ctx.db,r.userId)});
     }
   }
   if (head === "links" && id && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); const s = str(b.status, 10); if (!["active", "paused", "retired"].includes(s)) throw bad("bad_status"); return json({ ok: await setLinkStatus(ctx.db, id, s as "active" | "paused" | "retired", p.email) }); }

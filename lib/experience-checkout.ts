@@ -1,8 +1,10 @@
+import { sanitizeAttribution, type Attribution } from "@/lib/attribution";
 import { catalogFor } from "@/lib/catalog";
 import { pricingFor, quote } from "@/lib/pricing";
 import { GEIKO_CHECKOUT_PRICES } from "@/lib/geiko-checkout-prices";
 import { isLang, type Lang } from "@/lib/i18n";
-import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy, checkoutProductConfigured } from "@/lib/provisional-booking";
+import { PRIVATE_TEA_CHECKOUT_PRICES } from "@/lib/private-tea-checkout-prices";
 
 export interface ExperienceCheckoutEnv {
   EXPERIENCE_CHECKOUT_ENABLED?: string;
@@ -20,6 +22,7 @@ export interface ReadyStateKv {
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 }
 export interface ExperienceOrder {
+  attribution?: Attribution;
   requestId: string; slug: string; title: string; name: string; email: string; message: string; lang: Lang;
   date: string; time: string; guests: number; quantity: number; price: string; amount: number;
   city?: string; chargeUnit?: "group" | "guest"; plan?: string; interpreter?: string;
@@ -165,7 +168,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const slug = typeof body.experience === "string" ? body.experience : "";
   const product = EXPERIENCE_PRODUCTS[slug];
   const x = product && catalogFor("en").experiences.find(x => x.slug === slug && x.status === "live");
-  if (!x || !product || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
+  if (!x || !product || !checkoutProductConfigured(slug) || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
   if ((product.adultOnly || product.eligibilityRequired) && body.adultOnly !== true) return null;
   if (product.groupPricing && body.adultOnly !== true) return null;
   if (body.addOns !== undefined && (!Array.isArray(body.addOns) || body.addOns.length)) return null;
@@ -182,9 +185,10 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const cutoff = (a?.cutoffTime ?? "17:00").split(":").map(Number);
   const today = new Date(now + 9 * 3600000);
   today.setUTCDate(today.getUTCDate() + (a?.cutoffDays ?? 3) + (today.getUTCHours()*60 + today.getUTCMinutes() >= cutoff[0]*60 + cutoff[1] ? 1 : 0));
-  if (date < today.toISOString().slice(0,10) || d.getTime() > now + 366*86400000) return null;
+  if ((!a?.cutoffHours && date < today.toISOString().slice(0,10)) || d.getTime() > now + 366*86400000) return null;
   const times = a?.dates ? a.dates.find(v => v.date === date)?.times ?? [] : a?.startTimes ?? ["10:00"];
   if (product.timeOnConfirmation ? time !== "" : !times.includes(time)) return null;
+  if (a?.cutoffHours && Date.parse(`${date}T${time}:00+09:00`) < now + a.cutoffHours * 3600000) return null;
   if (a?.closed?.some(w => w.from <= w.to ? date.slice(5) >= w.from && date.slice(5) <= w.to : date.slice(5) >= w.from || date.slice(5) <= w.to)) return null;
   if (product.adultOnly && [0,6].includes(d.getUTCDay())) return null;
   const quantity = product.groupPricing ? 1 : Math.max(product.minCharge, guests);
@@ -200,8 +204,16 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
     if (!selected || selected.amount !== q?.total) return null;
     price = selected.price; amount = selected.amount;
     title += ` — ${view.plans.find(p => p.id === plan)!.label} (${guests} guests)`;
-  } else if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
-  return { requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
+  } else {
+    if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
+    if (product.privateTeaPricing) {
+      const q = quote(pricingFor(x, "en"), "", guests, date);
+      const selected = q && PRIVATE_TEA_CHECKOUT_PRICES[`${q.peak ? "peak" : "regular"}_${guests === 1 ? "solo" : "guest"}`];
+      if (!selected || selected.amount * quantity !== q?.total) return null;
+      price = selected.price; amount = q.total;
+    }
+  }
+  return { attribution: sanitizeAttribution(body.attribution, now), requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
     city: x.city, chargeUnit: product.groupPricing ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
     date, time: product.timeOnConfirmation ? "To be confirmed" : time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
 }
@@ -214,6 +226,8 @@ export function checkoutParameters(order: ExperienceOrder, reference: string, cr
     success_url: `${ORIGIN}/${order.lang}/booked/?stay=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${ORIGIN}/${order.lang}/${order.city ?? "tokyo"}/${order.slug}/?checkout=cancelled#request-form`,
     expires_at: String(Math.floor(createdAt/1000) + 3600),
+    "metadata[request_id]": order.requestId,
+    "payment_intent_data[metadata][request_id]": order.requestId,
     "metadata[booking_flow]": "experience_provisional", "metadata[booking_reference]": reference,
     "metadata[experience_slug]": order.slug, "metadata[policy_version]": order.policyVersion,
     "metadata[plan]": order.plan ?? "", "metadata[guests]": String(order.guests),
@@ -229,7 +243,10 @@ export function checkoutParameters(order: ExperienceOrder, reference: string, cr
 
 export async function openExperienceCheckout(env: ExperienceCheckoutEnv, order: ExperienceOrder) {
   const c = provisionalCopy(order.lang);
-  const row = await experienceLedger(env, "experience_create", { order, receipt: { subject: c.paid, text: `${c.pending}\n\n${c.refund}` } });
+  // Marketing context is fixed in D1. Keep it out of the business order's
+  // strict idempotency comparison: consent/GA callbacks can change on retry.
+  const { attribution: _attribution, ...businessOrder } = order;
+  const row = await experienceLedger(env, "experience_create", { order: businessOrder, receipt: { subject: c.paid, text: `${c.pending}\n\n${c.refund}` } });
   const reference = row.id;
   if (!experienceReference(reference) || typeof row.createdAt !== "number") throw Error("invalid_ledger_response");
   if (row.status === "paid_pending") return { ok: false, error: "already_paid" };

@@ -1,4 +1,4 @@
-/** Partner password sign-in and operations one-time-code access. Memberships are checked on every request. */
+/** Partner and operations password access. Memberships are checked on every request. */
 import { jstDate, randomId, type SqlDb } from "@/lib/referral/db";
 import { readCookie } from "@/lib/referral/links";
 import { inviteMail, loginCodeMail, mailLangOf, sendPortalMail, type MailLang, type PortalMailEnv } from "./mail";
@@ -48,11 +48,11 @@ async function eligibleUser(db: SqlDb, email: string, kind: PortalKind) {
 
 export interface RequestCodeResult { ok: true; sent: boolean; mail?: string; devCode?: string }
 
-/** The owner's operator. The address in PORTAL_BOOTSTRAP_ADMIN (a Worker
- *  secret set by the owner) becomes ops_admin on its first sign-in request
- *  whenever it holds no operator membership, so the owner is never locked out. */
-async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now: number) {
-  const target = normalizeEmail(env.PORTAL_BOOTSTRAP_ADMIN);
+/** Only the designated master can bootstrap an operator account. */
+export const OPS_MASTER_EMAIL = "yukihiro_ito@prosent.co.jp";
+
+export async function bootstrapAdmin(db: SqlDb, env: PortalMailEnv, email: string, now: number) {
+  const target = OPS_MASTER_EMAIL;
   if (!target || target !== email) return;
   const has = await db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM memberships m JOIN users u ON u.id = m.user_id WHERE u.email = ? AND m.scope_type = 'ops' AND m.revoked_at IS NULL`, [email]);
   if ((has?.n ?? 0) > 0) return;
@@ -159,7 +159,7 @@ export async function canSeeProfile(db: SqlDb, p: Principal, profileId: string):
 
 // ---- invitations and membership management --------------------------------
 
-export interface InviteInput { email: unknown; name?: unknown; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null; by: string; loginOrigin: string; scopeLabel: string; lang?: unknown }
+export interface InviteInput { email: unknown; name?: unknown; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null; by: string; loginOrigin: string; scopeLabel: string; lang?: unknown; skipMail?: boolean }
 
 /** Create (or reuse) the user, add the membership and mail the sign-in steps. */
 export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteInput, now = Date.now()): Promise<{ userId: string; membershipId: string; mail: string }> {
@@ -187,7 +187,7 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
     ]);
   }
   const loginUrl = `${input.loginOrigin}/${input.scopeType === "ops" ? "ops" : "partner"}/login/`;
-  const mail = await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, passwordLogin: input.scopeType === "hotel", roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
+  const mail = input.skipMail ? "not_requested" : await sendPortalMail(env, { to: email, ...inviteMail({ name, loginUrl, scopeLabel: input.scopeLabel, passwordLogin: true, roleLabel: lang === "en" ? ROLE_LABEL_EN[input.role] : ROLE_LABEL[input.role], lang }) });
   return { userId: user.id, membershipId, mail };
 }
 

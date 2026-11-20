@@ -1,3 +1,5 @@
+import { experienceFacts, FACT_COPY } from "@/lib/experience-seo";
+import { serializeJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -8,10 +10,12 @@ import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { articleBySlug, articleDate, articlesFor } from "@/lib/articles";
 import { catalogFor, SITE_ORIGIN } from "@/lib/catalog";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
+import { JOURNAL_COPY } from "@/lib/journal-copy";
 import { listPrice } from "@/lib/pricing";
 import { absolute, socialMeta, withAlternates } from "@/lib/seo";
 
 interface Props { params: Promise<{ lang: string; slug: string }> }
+const headingId = (index: number) => `section-${index}`;
 
 export function generateStaticParams() {
   return LANGS.flatMap((lang) => articlesFor(lang).map((a) => ({ lang, slug: a.slug })));
@@ -43,21 +47,31 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound();
   const c = article.copy[lang]!;
   const T = t(lang);
+  const J = JOURNAL_COPY[lang];
+  const relatedReading = (article.relatedArticles ?? []).map((s) => articleBySlug(s, lang)).filter((a): a is NonNullable<typeof a> => Boolean(a));
+  const headings = c.body.flatMap((block, index) => typeof block === "string" && block.startsWith("## ") ? [{ title: block.slice(3), id: headingId(index) }] : []);
 
   const { experiences } = catalogFor(lang);
   const related = article.experiences
     .map((s) => experiences.find((e) => e.slug === s))
     .filter((e): e is NonNullable<typeof e> => Boolean(e));
 
+  const compared = article.comparison ? catalogFor("en").experiences
+    .filter(e => e.category === article.comparison!.category && (!article.comparison!.city || e.city === article.comparison!.city))
+    .map(e => ({ ...(experiences.find(local => local.slug === e.slug) ?? e), contentLang: experiences.some(local => local.slug === e.slug) ? lang : "en" as const })) : [];
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${absolute(`/${lang}/journal/${slug}/`)}#article`,
     headline: c.title,
     description: c.standfirst,
     image: absolute(article.img),
     datePublished: article.date,
+    ...(article.editorial ? { author: { "@type": "Organization", name: article.editorial.author, url: absolute(`/${lang}/about/`) }, dateModified: article.date } : {}),
     inLanguage: lang,
-    publisher: { "@type": "Organization", name: "KAMEHAME JAPAN", url: SITE_ORIGIN },
+    publisher: { "@id": `${SITE_ORIGIN}/#organization` },
+    about: related.map(e => ({ "@id": `${absolute(`/${lang}/${e.city}/${e.slug}/`)}#experience` })),
+    isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
     mainEntityOfPage: absolute(`/${lang}/journal/${slug}/`),
   };
 
@@ -77,18 +91,34 @@ export default async function ArticlePage({ params }: Props) {
       <div className="prose-layout">
         <article className="detail-main">
           <p className="journal-meta">{articleDate(article.date, lang)} · {T.readMinutes(article.minutes)}</p>
+          {article.editorial && <p className="journal-byline">{J.by} <Link href={`/${lang}/about/`}>{article.editorial.author}</Link> · {J.planningNotes}</p>}
           <h1>{c.title}</h1>
           <p className="detail-tagline">{c.standfirst}</p>
+          {article.editorial && <p className="journal-image-note">{article.editorial.imageCaption}</p>}
+          {article.editorial && <nav className="article-toc" aria-label={J.contents}><b>{J.contents}</b><ul>{headings.map((heading) => <li key={heading.id}><a href={`#${heading.id}`}>{heading.title}</a></li>)}</ul></nav>}
 
           <div className="article-body">
-            {c.body.map((para, i) =>
-              para.startsWith("## ")
-                ? <h2 key={i}>{para.slice(3)}</h2>
-                : <p key={i}>{para}</p>,
-            )}
+            {c.body.map((block, i) => {
+              if (typeof block === "string") return block.startsWith("## ")
+                ? <h2 id={headingId(i)} key={i}>{block.slice(3)}</h2>
+                : <p key={i}>{block}</p>;
+              if (block.type === "link") return <p key={i} className="article-inline-link">{block.text} <a href={block.href}>{block.label}</a></p>;
+              return <div key={i} className="article-table-scroll" role="region" aria-label={block.caption} tabIndex={0}><table className="article-table"><caption>{block.caption}</caption><thead><tr>{block.headings.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, col) => col === 0 ? <th scope="row" key={col}>{cell}</th> : <td key={col}>{cell}</td>)}</tr>)}</tbody></table></div>;
+            })}
           </div>
 
-          {related.length > 0 && (
+          {compared.length > 0 && <div className="article-table-scroll" role="region" aria-label={c.title} tabIndex={0}>
+            <table className="article-table"><caption>{c.title}</caption><thead><tr><th scope="col">{T.articleRelatedH}</th><th scope="col">{FACT_COPY[lang].area}</th><th scope="col">{FACT_COPY[lang].duration}</th><th scope="col">{FACT_COPY[lang].language}</th><th scope="col">{FACT_COPY[lang].ages}</th><th scope="col">{FACT_COPY[lang].price}</th></tr></thead>
+            <tbody>{compared.map(e => <tr key={e.slug}><th scope="row"><Link href={`/${e.contentLang}/${e.city}/${e.slug}/`} hrefLang={e.contentLang}>{e.title}{e.contentLang !== lang ? " (English)" : ""}</Link></th><td>{e.area}</td><td>{e.duration}</td><td>{e.langTag ?? (e.interpreter === false ? "—" : T.interpreterGuide)}</td><td>{e.ages}</td><td>{experienceFacts(e, e.contentLang).find(f => f.name === FACT_COPY[e.contentLang].price)?.value}</td></tr>)}</tbody></table>
+          </div>}
+
+          {article.cta && <section className="article-booking"><h2>{J.plan}</h2><p>{article.cta.text}</p><Link className="underlined-link" href={article.cta.href}>{article.cta.label} <ArrowRight size={18} /></Link></section>}
+
+          {relatedReading.length > 0 && <section className="article-reading"><h2>{J.related}</h2><ul>{relatedReading.map((a) => <li key={a.slug}><Link href={`/${lang}/journal/${a.slug}/`}>{a.copy[lang]!.title}</Link></li>)}</ul></section>}
+
+          {article.editorial && <aside className="article-editorial-note" aria-label={J.editorial}><b>{J.about}</b><p>{article.editorial.note}</p></aside>}
+
+          {!article.cta && related.length > 0 && (
             <section className="prose-closing">
               <h2>{T.articleRelatedH}</h2>
               <div className="article-cta">
@@ -113,7 +143,7 @@ export default async function ArticlePage({ params }: Props) {
         </article>
       </div>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
       <SiteFooter lang={lang} />
     </main>
   );

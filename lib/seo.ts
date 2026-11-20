@@ -91,7 +91,7 @@ export function productJsonLd(title: string, description: string, img: string, u
     "@type": "Product",
     name: title,
     description,
-    image: `${SITE_ORIGIN}${img}`,
+    image: new URL(img, SITE_ORIGIN).href,
     url: `${SITE_ORIGIN}${url}`,
     // A range (the golf packages by area and party size) or a single lowest price.
     offers: highPrice
@@ -100,3 +100,6 @@ export function productJsonLd(title: string, description: string, img: string, u
     ...(agg && { aggregateRating: { "@type": "AggregateRating", ratingValue: agg.average, reviewCount: agg.count, bestRating: 5, worstRating: 1 } }),
   };
 }
+
+/** Escape HTML delimiters even inside otherwise valid JSON strings. */
+export const serializeJsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003c");

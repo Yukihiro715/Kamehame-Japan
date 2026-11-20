@@ -1,5 +1,7 @@
 "use client";
 
+import { collectAttribution } from "@/lib/attribution-client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bus, CalendarDays, Check, ChevronLeft, ChevronRight, ShieldCheck, Users, Utensils, X } from "lucide-react";
 import { GOLFPAQ_RENTAL_JPY, GOLFPAQ_SHOE_RENTAL_JPY, enquiryTotal, yen, type PublicTour } from "@/lib/golfpaq";
@@ -43,6 +45,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
   const travelCopy = GOLF_TRAVEL_COPY[lang];
   useEffect(() => {
     const query = readGolfTravelQuery(new URLSearchParams(window.location.search), MAX_PEOPLE);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate validated browser query after SSR without server/client markup mismatch
     if (query.golfers) setPeople(query.golfers);
     if (query.date) { setDay(query.date); setRequestedDate(query.date); }
     setFromFuji(query.fromFuji);
@@ -154,9 +157,14 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
  *  under the grid says how many tours that is and jumps to the list. */
 function Calendar({ tours, months, day, people, area, onPick, lang, C }: { tours: PublicTour[]; months: string[]; day: string; people: number; area: string; onPick: (d: string, scroll?: boolean) => void; lang: Lang; C: BusCopy }) {
   const [month, setMonth] = useState(() => (months.includes(day.slice(0, 7)) ? day.slice(0, 7) : months[0]));
-  useEffect(() => {
+  // Synchronize changed selection during render, not in a post-paint effect.
+  // Remember the input so manual month navigation remains independent.
+  const selectionKey = JSON.stringify([day, months]);
+  const [previousSelectionKey, setPreviousSelectionKey] = useState(selectionKey);
+  if (selectionKey !== previousSelectionKey) {
+    setPreviousSelectionKey(selectionKey);
     if (day && months.includes(day.slice(0, 7))) setMonth(day.slice(0, 7));
-  }, [day, months]);
+  }
   // Per day: tours that can take the chosen party (open, enough seats, matching departure) and the seats they have between them;
   // the cell shows the seats, so a pair can see at a glance that a "1" is not for them.
   const byDay = useMemo(() => {
@@ -274,11 +282,11 @@ function Enquiry({ tour, initialPeople, lang, C, onBack }: { tour: PublicTour; i
         id: tour.id, date: tour.date, people, rental: renters > 0, renters, name, email, phone, hotel, note, lang, consent, request_id: requestId, website,
         golfers: party.map((g) => ({ name: g.name.trim(), clubs: g.clubs, hand: g.hand, shoes: g.shoes, shoeSize: g.shoes ? g.shoeSize.trim() : "" })),
       };
-      const r = await fetch("/api/golfpaq/enquiry", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+      const r = await fetch("/api/golfpaq/enquiry", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({...payload, attribution: await collectAttribution()}) });
       const j = (await r.json().catch(() => ({}))) as { ok?: boolean; reference?: string; error?: string };
       if (!r.ok || !j.ok) { setError(C.errors[j.error ?? ""] ?? C.errors.default); setStatus("idle"); return; }
       setReference(j.reference ?? ""); setStatus("done");
-      track("bus_tour_enquiry", { tour_id: tour.id, date: tour.date, golfers: people, rentals: renters, shoes: shoeRenters, value: money.total, currency: "JPY" });
+      track("bus_tour_enquiry", { enquiry_id: requestId, booking_reference: j.reference, tour_id: tour.id, date: tour.date, golfers: people, rentals: renters, shoes: shoeRenters, value: money.total, currency: "JPY" });
     } catch { setError(C.errors.default); setStatus("idle"); }
   }
 

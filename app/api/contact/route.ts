@@ -1,6 +1,6 @@
 import { sanitizeAttribution } from "@/lib/attribution";
 import { GOLF_ARRANGEMENT_POLICY_VERSION } from "@/lib/golf-arrangement-policy";
-import { CONTACT_EMAIL, FOLLOW_UP_ENABLED, TRADE_EMAIL, type Enquiry } from "@/lib/contact";
+import { CONTACT_EMAIL, FOLLOW_UP_ENABLED, TRADE_EMAIL, type Enquiry, type SupportRequest } from "@/lib/contact";
 import { threadSubject } from "@/lib/mail-copy";
 import { golfCustomerEmail } from "@/lib/golf-customer-email";
 import { catalogFor } from "@/lib/catalog";
@@ -157,7 +157,7 @@ function clean(v: unknown, max: number): string {
 }
 
 function parse(body: Record<string, unknown>): Enquiry | null {
-  const kind = body.kind === "trade" ? "trade" : "guest";
+  const kind = body.kind === "trade" ? "trade" : body.kind === "support" ? "support" : "guest";
   const name = clean(body.name, MAX.name);
   const email = clean(body.email, MAX.email);
   // The message keeps its line breaks; everything else is single-line.
@@ -170,7 +170,23 @@ function parse(body: Record<string, unknown>): Enquiry | null {
   const party = clean(body.party, MAX.party) || undefined;
   const experienceRequest = kind === "guest" && !!dates && /^[1-9]\d*$/.test(party ?? "") &&
     catalogFor("en").experiences.some((x) => x.slug === experience && x.status === "live");
-  if (!name || !email || (!message && !area && !experienceRequest)) return null;
+  // Travel support (babysitting): the request is the date, the place, the
+  // hours, the children and their ages; notes are optional. Anything else
+  // under kind "support" is refused rather than guessed at.
+  let support: SupportRequest | undefined;
+  if (kind === "support") {
+    const time = /^([01]\d|2[0-4]):[0-5]\d$/;
+    const place = String(body.place);
+    const language = String(body.language);
+    const placeDetail = clean(body.place_detail, 200);
+    const ages = clean(body.ages, 80);
+    if (body.service !== "babysitter" || !dates || !/^\d{4}-\d{2}-\d{2}$/.test(dates) || !/^[1-9]$/.test(party ?? "")) return null;
+    if (!["hotel", "apartment", "venue", "other"].includes(place) || !["en", "ja", "zh", "other"].includes(language)) return null;
+    if (!time.test(String(body.start)) || !time.test(String(body.end)) || !placeDetail || !ages) return null;
+    const golfVenue = body.golf ? clean(body.golf_venue, 160) || undefined : undefined;
+    support = { service: "babysitter", place: place as SupportRequest["place"], placeDetail, start: String(body.start), end: String(body.end), ages, language: language as SupportRequest["language"], golfVenue, travel: !!body.golf && !!body.travel };
+  }
+  if (!name || !email || (!message && !area && !experienceRequest && !support)) return null;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
 
   // The golf page: the choice is validated against the price master and the
@@ -208,7 +224,7 @@ function parse(body: Record<string, unknown>): Enquiry | null {
     assistant: ["none", "required", "unsure"].includes(String(body.assistant)) ? body.assistant as Enquiry["assistant"] : undefined,
     transfer: ["none", "introduce", "unsure"].includes(String(body.transfer)) ? body.transfer as Enquiry["transfer"] : undefined,
     addonIds: Array.isArray(body.addon_ids) ? body.addon_ids.filter((x): x is string => typeof x === "string").slice(0, 10) : undefined,
-    kind, name, email, message,
+    kind, support, name, email, message,
     company: clean(body.company, MAX.company) || undefined,
     country: clean(body.country, MAX.country) || undefined,
     dates,

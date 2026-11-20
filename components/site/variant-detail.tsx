@@ -1,4 +1,8 @@
+import { ExperienceFacts } from "@/components/site/experience-facts";
+import { experienceJsonLd } from "@/lib/experience-seo";
+import { serializeJsonLd } from "@/lib/seo";
 import golfPageStyles from "./golf-page.module.css";
+import { SupportBanner } from "@/components/site/support-banner";
 import { golfPlanningCopy } from "@/lib/golf-planning-copy";
 import Link from "next/link";
 import { Check, Clock3, Wine } from "lucide-react";
@@ -28,7 +32,6 @@ import { cancellationFor, catalogFor, cityBySlug, previewsFor, type Experience }
 import { articleDate, articlesForExperience } from "@/lib/articles";
 import { REVIEWS_PUBLISHED, reviewsFor } from "@/lib/published-reviews";
 import { langHome, t, type Lang } from "@/lib/i18n";
-import { productJsonLd } from "@/lib/seo";
 
 /** The golf page (one URL, two areas, three party sizes). In order: a short
  *  title block, the photos, the one options panel (beside the photos on wide
@@ -67,7 +70,6 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   const O = vc.options;
   const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
-  const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
   // The hero photo leads and the gallery follows, one fixed order for both areas; `gallery` never repeats the hero.
@@ -87,7 +89,6 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
   // The booking service charges the same fee in both areas, so its table has one "Fee" column.
   const feeColumns = isArrangement() ? [{ id: "fee", short: vc.prices.totalCol, tiers: variants[0].tiers }] : variants;
   const minPrice = Math.min(...totals);
-  const maxPrice = Math.max(...totals);
   const addOns = exp.addOns ?? [];
   const ctaLabel = exp.cta?.label ?? D.requestCta;
   const stop = lang === "ja" || lang === "zh-tw" ? "。" : ".";
@@ -137,6 +138,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
           </aside>
 
           <div className="xp-main">
+            <ExperienceFacts exp={exp} lang={lang} />
             {/* 3. What the day is and what the guide does */}
             <section className="xp-section" id="about">
               <h2>{H.about}</h2>
@@ -144,6 +146,8 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
               {isArrangement() && <div className="xp-note"><h3>{golfPlanningCopy[lang].heading}</h3><p>{golfPlanningCopy[lang].support}</p><h3>{golfPlanningCopy[lang].budgetHeading}</h3><p>{golfPlanningCopy[lang].budgetExplainer}</p></div>}
               {vc.intro.guideNote && <p className="xp-note vh-guide-note">{vc.intro.guideNote}</p>}
             </section>
+
+            <SupportBanner lang={lang} />
 
             {hasGolfGuest && <GolfGuestReview lang={lang} ctaLabel={ctaLabel} />}
 
@@ -155,7 +159,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
             {clubRental && <><GolfClubRental lang={lang} />{jump}</>}
 
             {/* 3b. The private car, the driver and the assistant */}
-            <GolfTransfer copy={vc.transfer} />
+            <GolfTransfer copy={vc.transfer} lang={lang} />
             {jump}
 
             {/* Golf uses its verified booking review section above; show only one review source. */}
@@ -329,7 +333,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
       )}
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, exp.price, exp.slug, maxPrice, totals.length)),
+        __html: serializeJsonLd(experienceJsonLd(exp, lang, faq)),
       }} />
       <SiteFooter lang={lang} />
     </main>

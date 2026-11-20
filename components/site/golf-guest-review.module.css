@@ -30,3 +30,5 @@
   .story { padding:18px; }
   .cta { width:100%; box-sizing:border-box; }
 }
+
+.story + .story { margin-top:20px; }

@@ -1,16 +1,20 @@
+import { serializeJsonLd, absolute } from "@/lib/seo";
+import { JOURNAL_COPY } from "@/lib/journal-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bus, CheckCircle2, Flag, UserRound, Languages, ArrowRight, Circle, Plus } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { GolfGuestQuote } from "@/components/site/golf-guest-review";
+import { GolfLandingReviews } from "@/components/site/golf-landing-reviews";
+import journalStyles from "@/components/site/golf-journal-links.module.css";
 import { GolfTravelComparison } from "@/components/site/golf-travel-choice";
 import { busCopy, type BusCopy } from "@/lib/golfpaq-copy";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
 import { isLang, LANGS } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
+import { articlesForExperience } from "@/lib/articles";
 
 /** The golf landing page for advertising: the two ways to play (shared bus
  *  tour vs. custom booking) explained side by side, each leading to its own
@@ -87,7 +91,7 @@ export default async function GolfToursPage({ params }: Props) {
               </Link>
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>
-            <GolfGuestQuote lang={lang} landing />
+            <GolfLandingReviews lang={lang} />
           </div>
         </section>
 
@@ -119,7 +123,13 @@ export default async function GolfToursPage({ params }: Props) {
             </div>
           </div>
         </section>
+        {articlesForExperience("mt-fuji-golf-day", lang, 3).length > 0 && <section className={`${journalStyles.section} gb-wrap`} aria-labelledby="golf-reading-heading">
+          <h2 id="golf-reading-heading">{JOURNAL_COPY[lang].planningGuides}</h2>
+          <ul className={journalStyles.list}>{articlesForExperience("mt-fuji-golf-day", lang, 3).map((article) => <li key={article.slug}><Link href={`/${lang}/journal/${article.slug}/`}><span>{article.copy[lang]!.title}</span><ArrowRight size={18} aria-hidden="true" /></Link></li>)}</ul>
+          <Link className={journalStyles.all} href={`/${lang}/journal/`}>{JOURNAL_COPY[lang].all} <ArrowRight size={16} /></Link>
+        </section>}
       </main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({ "@context": "https://schema.org", "@type": "CollectionPage", name: C.landTitle, description: C.landLede, url: absolute(`/${lang}/golf-tours/`), inLanguage: lang, mainEntity: { "@type": "ItemList", itemListElement: [{ "@type": "ListItem", position: 1, name: C.customH, url: absolute(customHref) }, { "@type": "ListItem", position: 2, name: C.sharedH, url: absolute(busHref) }] } }) }} />
       <SiteFooter lang={lang} />
     </>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { attributionNote, type Attribution } from "@/lib/attribution";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst, pct, yen } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, ReasonAction, Table } from "../ui";
@@ -9,6 +10,10 @@ interface Detail { reservation: Rec; lines: Rec[]; referral: Rec | null; entry: 
 
 const s = (v: unknown) => (v === null || v === undefined ? "—" : String(v));
 const n = (v: unknown) => (typeof v === "number" ? v : v === null || v === undefined ? null : Number(v));
+function marketingNote(raw: unknown) {
+  try { return attributionNote(JSON.parse(String(raw ?? 'null')) as Attribution | undefined); }
+  catch { return '流入情報: 未確認（記録を読み取れません）'; }
+}
 const KIND_JA: Record<string, string> = { base: "基本体験", addon: "追加オプション", arrangement: "別途手配費", onsite: "現地払い" };
 
 export function OpsReservationDetail({ id }: { id: string }) {
@@ -42,6 +47,11 @@ export function OpsReservationDetail({ id }: { id: string }) {
           <ReasonAction label="キャンセル" kind="danger" onConfirm={(reason) => act("outcome", { outcome: "cancelled", reason })} />
           <ReasonAction label="未実施（無断キャンセル）" kind="danger" onConfirm={(reason) => act("outcome", { outcome: "no_show", reason })} />
         </div>
+      </Card>
+
+      <Card title="予約の流入元">
+        <p className="pt-muted">申込時点の記録。広告課金の証明ではありません。決済は申込ID・予約IDで照合します。</p>
+        <pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{marketingNote(r.marketing_attribution_json)}</pre>
       </Card>
 
       <Card title="紹介元と紹介料">

@@ -1,3 +1,4 @@
+import { BOOKING_GUIDANCE } from "@/lib/booking-guidance";
 // Copy for the standing pages (About, FAQ). Kept apart from the catalog because
 // it changes on its own rhythm — and because every locale needs the same shape.
 
@@ -597,5 +598,12 @@ const FAQ: Record<Lang, FaqCopy> = {
   },
 };
 
-export const aboutFor = (lang: Lang) => ABOUT[lang];
-export const faqFor = (lang: Lang) => FAQ[lang];
+export const aboutFor = (lang: Lang) => ({ ...ABOUT[lang],
+  sections: ABOUT[lang].sections.map((section, index) => index === 2 ? { ...section, body: [BOOKING_GUIDANCE[lang].language, ...section.body.slice(1)] } : section),
+  promises: ABOUT[lang].promises.map((promise, index) => index === 2 ? { ...promise, body: BOOKING_GUIDANCE[lang].included } : promise),
+});
+export const faqFor = (lang: Lang) => ({ ...FAQ[lang], groups: FAQ[lang].groups.map((group, gi) => ({ ...group, items: group.items.map((item, ii) => {
+  const G = BOOKING_GUIDANCE[lang];
+  const answer = gi === 0 && ii === 3 ? G.transport : gi === 1 && ii === 0 ? G.language : gi === 3 && ii === 1 ? G.included : gi === 3 && ii === 2 ? G.cancellation : undefined;
+  return answer ? { ...item, a: answer } : item;
+}) })) });

@@ -9,6 +9,7 @@ import { GOLF_ARRANGEMENT_COPY } from "@/lib/golf-arrangement-copy";
 import { isArrangement } from "@/lib/golf-prices";
 import { arrangementMailCopy } from "@/lib/golf-arrangement-mail-copy";
 import type { Enquiry } from "@/lib/contact";
+import { supportCopy } from "@/lib/support";
 
 interface AckCopy {
   /** One subject for the whole exchange — acknowledgement, the follow-up and
@@ -226,6 +227,27 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
     courseRecommended: a.form.recommendedCourse, courseSpecific: a.form.specificCourse,
   } } : original;
   const trade = e.kind === "trade";
+  // Travel support (babysitting): its own thanks and its own echo lines.
+  if (e.support) {
+    const S = supportCopy(lang);
+    const L = S.form.labels;
+    const s = e.support;
+    const lines = [
+      `${L.service}: ${S.services.babysitter.title}`,
+      e.dates && `${L.date}: ${e.dates}`,
+      `${L.hours}: ${s.start}–${s.end}`,
+      `${L.place}: ${S.form.placeOpts[s.place]} — ${s.placeDetail}`,
+      e.party && `${L.children}: ${e.party}`,
+      `${L.ages}: ${s.ages}`,
+      `${L.language}: ${S.form.languageOpts[s.language]}`,
+      s.golfVenue && `${L.golfVenue}: ${s.golfVenue}`,
+      s.travel && `${L.travel}: ${L.travelYes}`,
+      e.whatsapp && `${c.labels.whatsapp}: ${e.whatsapp}`,
+      e.message && `${L.notes}: ${e.message}`,
+    ].filter((l): l is string => typeof l === "string" && l.length > 0);
+    const text = [c.hello(e.name), "", S.mail.thanks, "", S.mail.next, "", c.echoH, ...lines.map((l) => `  ${l}`), "", c.addMore, "", c.sign].join("\n");
+    return { subject: threadSubject(e), text };
+  }
   const echo = [
     e.company && `${c.labels.company}: ${e.company}`,
     e.country && `${c.labels.country}: ${e.country}`,
@@ -266,6 +288,7 @@ export function acknowledgement(e: Enquiry, experienceTitle?: string): { subject
 /** The subject shared by every email in one enquiry's exchange. */
 export function threadSubject(e: Enquiry, experienceTitle?: string): string {
   const c = COPY[isLang(e.lang) ? e.lang : "en"];
+  if (e.support) return supportCopy(isLang(e.lang) ? e.lang : "en").mail.subject(e.dates);
   return e.kind === "trade" ? c.subjectTrade : c.subject(experienceTitle, e.dates);
 }
 

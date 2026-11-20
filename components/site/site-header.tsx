@@ -15,6 +15,7 @@ export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "ov
   const navigation: [string, string][] = [
     ...cities.map((c) => [c.title, `/${lang}/${c.slug}/`] as [string, string]),
     [T.navExperiences, `/${lang}/experiences/`],
+    [T.navSupport, `/${lang}/support/`],
     ...(TOURS_PUBLISHED ? [[T.navTours, `/${lang}/tours/`] as [string, string]] : []),
     [T.navApproach, `/${lang}/about/`],
   ];

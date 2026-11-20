@@ -108,7 +108,12 @@ export function buildEntries(read) {
   // English lives at the root; every other locale sits under its prefix.
   const homePath = (lang) => (lang === "en" ? "/" : `/${lang}/`);
   const expPath = (lang, e) => `/${lang}/${e.city}/${e.slug}/`;
-  const expKey = (lang, slug) => join(entryBlock(cat.en, slug), lang === "en" ? "" : entryBlock(cat[lang], slug));
+  // Match catalogFor's explicit fallback allowlist, not arbitrary missing
+  // translations. These pages render the English entry, so its content must
+  // also control lastmod rather than falling back to the date of every build.
+  const fallbackBlock = catalog.match(/const APPROVED_ENGLISH_FALLBACK = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? "";
+  const englishFallback = new Set([...fallbackBlock.matchAll(/"([a-z-]+)"/g)].map((m) => m[1]));
+  const expKey = (lang, slug) => join(entryBlock(cat.en, slug), lang === "en" ? "" : (entryBlock(cat[lang], slug) ?? (englishFallback.has(slug) ? "" : null)));
   const inCity = (c) => experiences.filter((e) => e.city === c);
   const inCategory = (c) => experiences.filter((e) => e.category === c);
   const collectionsCopy = src("lib/collections.ts");
@@ -130,15 +135,18 @@ export function buildEntries(read) {
         members = experiences.filter((e) => cats.includes(e.category));
         key = join(themeBlock(themesSrc, c), lang, members.map((e) => e.slug).join(","));
       }
-      else if (c === "tours") { members = []; key = join(langBlock(collectionsCopy, lang), tours.join(",")); }
-      else { members = experiences; key = join(langBlock(collectionsCopy, lang), experiences.map((e) => e.slug).join(",")); }
+      else if (c === "tours") { members = []; key = join(src("lib/booking-guidance.ts"), langBlock(collectionsCopy, lang), tours.join(",")); }
+      else { members = experiences; key = join(src("lib/booking-guidance.ts"), langBlock(collectionsCopy, lang), experiences.map((e) => e.slug).join(",")); }
       add(`/${lang}/${c}/`, { priority: "0.8", alternates: siblings((l) => `/${l}/${c}/`), key, deps: members.map((e) => expPath(lang, e)) });
     }
   }
 
   for (const e of experiences) {
-    for (const lang of LANGS) {
-      add(expPath(lang, e), { priority: "0.9", alternates: siblings((l) => expPath(l, e)), key: expKey(lang, e.slug) });
+    // A live English entry does not imply that every locale has a route.
+    // Only authored translations and explicitly approved fallbacks resolve.
+    const langs = LANGS.filter((lang) => expKey(lang, e.slug) != null);
+    for (const lang of langs) {
+      add(expPath(lang, e), { priority: "0.9", alternates: siblings((l) => expPath(l, e), langs), key: join(expKey(lang, e.slug), src("lib/experience-seo.ts"), src("components/site/experience-facts.tsx")) });
     }
   }
 
@@ -151,7 +159,12 @@ export function buildEntries(read) {
   // Articles render only in the locales they have been written for, and only
   // while one of the experiences they are tagged with is on the site
   // (lib/articles.ts articlesFor).
-  const articles = src("lib/articles.ts");
+  const articles = src("lib/articles.ts") + "\n" + src("lib/golf-articles.ts");
+  const golfTranslations = Object.fromEntries(LANGS.filter((lang) => lang !== "en").map((lang) => {
+    const text = src(`lib/golf-articles.${lang}.json`);
+    return [lang, text ? JSON.parse(text) : {}];
+  }));
+  const golfSlugs = new Set([...src("lib/golf-articles.ts").matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]));
   const listed = new Set(experiences.map((e) => e.slug));
   const articlePaths = Object.fromEntries(LANGS.map((l) => [l, []]));
   for (const m of articles.matchAll(/slug:\s*"([a-z0-9-]+)",\s*\n\s*date:/g)) {
@@ -160,10 +173,13 @@ export function buildEntries(read) {
     const tags = [...(block.match(/experiences:\s*\[([^\]]*)\]/)?.[1] ?? "").matchAll(/"([a-z0-9-]+)"/g)].map((t) => t[1]);
     if (!tags.some((t) => listed.has(t))) continue;
     const head = block.slice(0, block.indexOf("copy:"));
-    const langs = LANGS.filter((l) => langBlock(block, l, "      "));
+    const copyFor = (lang) => golfSlugs.has(slug) && golfTranslations[lang]?.[slug]
+      ? JSON.stringify(golfTranslations[lang][slug])
+      : langBlock(block, lang, "      ");
+    const langs = LANGS.filter((l) => copyFor(l));
     for (const lang of langs) {
       articlePaths[lang].push(`/${lang}/journal/${slug}/`);
-      add(`/${lang}/journal/${slug}/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/journal/${slug}/`, langs), key: join(head, langBlock(block, lang, "      ")) });
+      add(`/${lang}/journal/${slug}/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/journal/${slug}/`, langs), key: join(head, copyFor(lang), golfSlugs.has(slug) ? src("lib/journal-copy.ts") : "", /comparison:/.test(head) ? catalog + cat[lang] : "") });
     }
   }
 
@@ -180,8 +196,8 @@ export function buildEntries(read) {
   for (const page of STATIC_PAGES) {
     for (const lang of LANGS) {
       const opts = { priority: "0.5", changefreq: "monthly", alternates: siblings((l) => `/${l}/${page}/`) };
-      if (page === "about") opts.key = langBlock(aboutSrc, lang);
-      else if (page === "faq") opts.key = langBlock(faqSrc, lang);
+      if (page === "about") opts.key = join(langBlock(aboutSrc, lang), src("lib/booking-guidance.ts"));
+      else if (page === "faq") opts.key = join(langBlock(faqSrc, lang), src("lib/booking-guidance.ts"));
       else if (page === "journal") { opts.key = "journal"; opts.deps = articlePaths[lang]; }
       else if (page === "contact" || page === "trade") opts.key = i18nKeys(langBlock(i18n, lang), pageKeys[page]);
       else if (page === "privacy") opts.date = privacyDate;
@@ -191,6 +207,7 @@ export function buildEntries(read) {
   }
 
   add("/partners/", { priority: "0.4", changefreq: "monthly", key: src("app/partners/page.tsx") || null });
+  add("/partners-lp/", { priority: "0.5", changefreq: "monthly", key: join(src("app/partners-lp/page.tsx"), src("components/suppliers/page.tsx"), src("components/suppliers/reach-channels.tsx"), src("lib/supplier-policy.ts")) });
   // The Ofukuro Dinner founding-guest campaign (published 2026-10-23): its copy lives in lib/ofukuro-dinner.ts and the page.
   add("/ofukuro-dinner/", { priority: "0.7", changefreq: "weekly", key: (src("app/ofukuro-dinner/page.tsx") || "") + (src("lib/ofukuro-dinner.ts") || "") || null });
 

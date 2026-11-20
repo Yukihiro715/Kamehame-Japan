@@ -1,0 +1,6 @@
+.facts { scroll-margin-top: 6rem; }
+.facts dl { margin: 1rem 0 0; font-size: .92rem; line-height: 1.7; }
+.facts dl > div { display: grid; grid-template-columns: minmax(7rem, 30%) minmax(0, 1fr); gap: 1rem; padding: .8rem 0; border-bottom: 1px solid #e9e6df; }
+.facts dt { font-weight: 600; }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+@media (max-width: 520px) { .facts dl > div { grid-template-columns: 1fr; gap: .2rem; } }

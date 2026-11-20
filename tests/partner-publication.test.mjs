@@ -24,7 +24,7 @@ test("spa booking quotes use group totals and reject Tuesday requests", () => {
   for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
     const spa = catalogFor(lang).experiences.find(e => e.slug === newlyPublished[0]);
     const pricing = pricingFor(spa, lang);
-    for (const [party, total] of [[1, 24000], [2, 42000], [3, 60000]]) assert.equal(quote(pricing, "", party)?.total, total, `${lang}, ${party} guests`);
+    for (const [party, total] of [[1, 24500], [2, 42000], [3, 60000]]) assert.equal(quote(pricing, "", party)?.total, total, `${lang}, ${party} guests`);
     assert.equal(quote(pricing, "", 4), null);
     assert.equal(isBookable("2026-12-08", { closedWeekdays: spa.availability.closedWeekdays }), false);
     assert.equal(isBookable("2026-12-09", { closedWeekdays: spa.availability.closedWeekdays }), true);
@@ -50,7 +50,7 @@ test("published pages render without preview or noindex and appear in sitemap an
       assert.ok(sitemap.includes(path), `sitemap: ${path}`);
       assert.ok(listing.includes(`href="${path}"`), `listing: ${path}`);
       if (slug === newlyPublished[0]) {
-        for (const price of ["¥24,000", "¥42,000", "¥60,000"]) assert.ok(html.includes(price), `${path}: ${price}`);
+        for (const price of ["¥24,500", "¥42,000", "¥60,000"]) assert.ok(html.includes(price), `${path}: ${price}`);
         assert.ok(html.includes(lang === "ja" ? "原則火曜定休" : "Normally closed on Tuesdays"));
         assert.ok(!html.includes("¥14,400"), "wholesale price is not exposed");
       }

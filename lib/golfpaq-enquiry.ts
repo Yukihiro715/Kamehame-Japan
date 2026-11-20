@@ -2,6 +2,7 @@
  *  feed, price it on the server, keep it (D1), mail the customer (total
  *  only), staff and the travel partner (with the breakdown), alert Slack.
  *  No payment, no seat is taken here (要件 2, 4). */
+import { sanitizeAttribution, attributionNote } from "./attribution";
 import { d1Db, isD1Like, randomId } from "@/lib/referral/db";
 import { loadCourseNames } from "./golf-courses-db";
 import { recipientAllowed, type PortalMailEnv } from "@/lib/portal/mail";
@@ -38,7 +39,7 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
   if (request.headers.get("origin") !== new URL(request.url).origin) return json({ ok: false, error: "origin" }, 403);
   if (!request.headers.get("content-type")?.startsWith("application/json")) return json({ ok: false, error: "content_type" }, 415);
   const bodyText = await request.text();
-  if (bodyText.length > 8000) return json({ ok: false }, 413);
+  if (bodyText.length > 20000) return json({ ok: false }, 413);
   let b: Record<string, unknown>;
   try { b = JSON.parse(bodyText); } catch { return json({ ok: false, error: "invalid" }, 400); }
   const id = clean(b.id, 80), date = clean(b.date, 12), name = clean(b.name, 120), email = clean(b.email, 200).toLowerCase(), phone = clean(b.phone, 40), hotel = clean(b.hotel, 120), note = typeof b.note === "string" ? b.note.trim().slice(0, 1000) : "";
@@ -67,16 +68,17 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
     const existing = await db.first<{ reference: string; total_yen: number }>(`SELECT reference, total_yen FROM bus_tour_enquiries WHERE request_id = ?`, [requestId]);
     if (existing) return json({ ok: true, reference: existing.reference, total: existing.total_yen, duplicate: true });
   }
+  const attribution = sanitizeAttribution(b.attribution, now.getTime());
   const reference = newReference(), at = now.toISOString();
   const facts: InternalFacts = {
-    reference, tour: pub, people, renters, shoeRenters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, shoesYen: money.shoes, totalYen: money.total,
+    attribution, reference, tour: pub, people, renters, shoeRenters, perPersonYen: tour.perPersonYen, toursYen: money.tours, rentalsYen: money.rentals, shoesYen: money.shoes, totalYen: money.total,
     name, email, phone: phone || undefined, hotel: hotel || undefined, note: note || undefined, lang, ...(golfers ? { golfers } : {}), sourceYen: tour.sourceYen, feeYen: GOLFPAQ_FEE_JPY, seatsShown: pub.seats, snapshotUpdatedAt: snapshot!.updatedAt, tourId: tour.id,
   };
   if (db) {
     await db.run(
-      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, shoe_renters, shoes_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, hotel, note, lang, golfers_json, status, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
-      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, shoeRenters, money.shoes, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, hotel || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at]);
+      `INSERT INTO bus_tour_enquiries (id, reference, request_id, tour_id, tour_date, course, pickup, departure_area, departure_time, people, renters, source_yen, fee_yen, per_person_yen, tours_yen, rentals_yen, shoe_renters, shoes_yen, total_yen, seats_shown, snapshot_updated_at, name, email, phone, hotel, note, lang, golfers_json, status, created_at, updated_at, marketing_attribution_json)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?, ?)`,
+      [randomId(), reference, requestId, tour.id, tour.date, tour.course, tour.pickup, pub.departure.area, pub.departure.time ?? null, people, renters, tour.sourceYen, GOLFPAQ_FEE_JPY, tour.perPersonYen, money.tours, money.rentals, shoeRenters, money.shoes, money.total, pub.seats, snapshot!.updatedAt, name, email, phone || null, hotel || null, note || null, lang, golfers ? JSON.stringify(golfers) : null, at, at, JSON.stringify(attribution ?? null)]);
   }
   const from = "KAMEHAME JAPAN <hello@kamehame-japan.com>";
   // Match the contact form's internal sender so booking-ledger webhooks see
@@ -99,6 +101,7 @@ export async function handleGolfpaqEnquiry(request: Request, env: GolfpaqEnquiry
     `${people}名 / 総額 ¥${money.total.toLocaleString("en-US")}（レンタルクラブ ${renters}名 ¥${money.rentals.toLocaleString("en-US")}・レンタルシューズ ${shoeRenters}名 ¥${money.shoes.toLocaleString("en-US")}）`,
     ...golferLinesJa(facts).filter(Boolean),
     `お名前: ${name} / メール: ${email} / 電話: ${phone || "—"} / 言語: ${lang}`,
+    attributionNote(attribution),
     `宿泊ホテル: ${hotel || "—"}`,
     `備考: ${note || "—"}`,
     `顧客メール: ${mailJa[customerMail] ?? customerMail} / 社内: ${mailJa[staffMail] ?? staffMail} / 提携先（GOLFPAQ）: ${mailJa[partnerMail] ?? partnerMail}`,

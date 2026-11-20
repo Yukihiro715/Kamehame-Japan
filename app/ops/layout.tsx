@@ -1,5 +1,7 @@
+import { PortalShell } from "@/components/portal/shell";
 import type { Metadata } from "next";
 import "../portal.css";
+import "./business.css";
 
 /** The operations portal for the hotel referral programme (docs/HOTEL_REFERRAL.md).
  *  Japanese only, never indexed; every page fetches what the signed-in operator may do. */
@@ -9,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function OpsLayout({ children }: { children: React.ReactNode }) {
-  return <div lang="ja">{children}</div>;
+  return <div lang="ja"><PortalShell kind="ops">{children}</PortalShell></div>;
 }
