@@ -1,4 +1,4 @@
-/** Review copy only. Commercial terms and source messages stay in the private
+/** Review copy only. Supplier terms and source messages stay in the private
  * listing ledger. These drafts never enter the public catalog or checkout. */
 export interface ListingDraftCopy {
   title: string;
@@ -15,6 +15,15 @@ export interface ListingDraft {
   en: ListingDraftCopy;
   ja: ListingDraftCopy;
 }
+
+/** Proposed retail prices including tax for sessions from 1 January 2027. */
+export const sumiEProposedPrices = [
+  { name: { ja: "色紙", en: "Shikishi art board" }, solo: 38_000, perGuest: 22_000 },
+  { name: { ja: "コースター3枚", en: "Three coasters" }, solo: 38_000, perGuest: 22_000 },
+  { name: { ja: "ランプシェード", en: "Lampshade" }, solo: 30_500, perGuest: 30_500 },
+  { name: { ja: "掛軸", en: "Hanging scroll" }, solo: 32_000, perGuest: 32_000 },
+];
+
 export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "tokyo-underground-idol-live",
@@ -129,14 +138,14 @@ export const partnerListingDrafts: ListingDraft[] = [
     en: {
       title: "Sumi-e Japanese Ink Painting in Ginza", area: "Tokyo · Ginza",
       lead: "Explore Japanese ink painting in Ginza and create a piece to take home. Choose from four formats: a shikishi art board, a set of three coasters, a lampshade or a hanging scroll. English support and private arrangements are available.",
-      details: [["Venue", "SPACE KONA, 3rd floor, 保立ビル, 3-12-16 Ginza, Tokyo"], ["Duration", "80 minutes"], ["Participants", "Ages 4 and over; up to 6 guests"], ["Start times", "Weekdays: 10:00, 11:30 or 13:00. Weekends and Japanese public holidays: 18:00 only. Subject to availability."], ["Formats", "Shikishi art board / three coasters / lampshade / hanging scroll"], ["Language", "English support included"], ["Materials", "Materials included"], ["Booking deadline", "23:59 three days before the experience (Japan time)"], ["Cancellation deadline", "20:00 the day before the experience (Japan time)"], ["Children and observers", "No separate child rate. Non-participating companions and observers are not allowed"], ["Group format", "All participants in the same group must choose the same format"], ["Demonstration", "An optional demonstration can be arranged separately; it is not included in the standard lesson"], ["Pricing", "Pricing is being confirmed."], ["Booking status", "Preview only; not open for booking. Private arrangements and demonstrations are quoted separately."]],
+      details: [["Venue", "SPACE KONA, 3rd floor, 保立ビル, 3-12-16 Ginza, Tokyo"], ["Duration", "80 minutes"], ["Participants", "Ages 4 and over; up to 6 guests"], ["Start times", "Weekdays: 10:00, 11:30 or 13:00. Weekends and Japanese public holidays: 18:00 only. Subject to availability."], ["Formats", "Shikishi art board / three coasters / lampshade / hanging scroll"], ["Language", "English support included"], ["Materials", "Materials included"], ["Booking deadline", "23:59 three days before the experience (Japan time)"], ["Cancellation deadline", "20:00 the day before the experience (Japan time)"], ["Children and observers", "No separate child rate. Non-participating companions and observers are not allowed"], ["Group format", "All participants in the same group must choose the same format"], ["Demonstration", "An optional demonstration can be arranged separately; it is not included in the standard lesson"], ["Booking status", "Preview only; not open for booking. Private arrangements and demonstrations are quoted separately."]],
       highlights: ["Choose motifs such as cherry blossoms, Mt. Fuji, samurai, koi, dragons, bamboo or plum blossoms", "Create your own work and take it home", "Four creative formats in an 80-minute session", "English support and private arrangements available"],
       pending: ["Available dates", "Tool provision", "Pricing and cancellation fees, if applicable", "Whether the confirmed terms also apply to experiences held in 2026"],
     },
     ja: {
       title: "銀座・水墨画体験", area: "東京 · 銀座",
       lead: "銀座で墨の表現に触れ、自分の作品を持ち帰る水墨画体験です。色紙、コースター3枚、ランプシェード、掛軸の4種類から制作内容を選びます。英語対応・貸切の相談も可能です。",
-      details: [["会場", "東京都中央区銀座3-12-16 保立ビル SPACE KONA 3階"], ["所要時間", "80分"], ["参加条件", "4歳以上・最大6名"], ["開始時刻", "平日10:00／11:30／13:00、土日祝は18:00のみ。空き状況は要確認"], ["制作内容", "色紙／コースター3枚／ランプシェード／掛軸"], ["対応言語", "英語対応費を含む"], ["材料", "材料費を含む"], ["予約締切", "体験日の3日前23:59まで（日本時間）"], ["キャンセル締切", "体験日前日の20:00まで（日本時間）"], ["子ども・見学", "子ども料金の設定なし。参加しない方の同伴・見学不可"], ["グループの制作内容", "同じグループでは同一コースを選択。別々のコースは選べません"], ["実演", "別途オプションとして相談可能。基本の体験料金には含まれません"], ["料金", "販売価格を確認中です。"], ["受付状況", "確認用プレビュー・予約受付前。貸切・実演は別途見積です。"]],
+      details: [["会場", "東京都中央区銀座3-12-16 保立ビル SPACE KONA 3階"], ["所要時間", "80分"], ["参加条件", "4歳以上・最大6名"], ["開始時刻", "平日10:00／11:30／13:00、土日祝は18:00のみ。空き状況は要確認"], ["制作内容", "色紙／コースター3枚／ランプシェード／掛軸"], ["対応言語", "英語対応費を含む"], ["材料", "材料費を含む"], ["予約締切", "体験日の3日前23:59まで（日本時間）"], ["キャンセル締切", "体験日前日の20:00まで（日本時間）"], ["子ども・見学", "子ども料金の設定なし。参加しない方の同伴・見学不可"], ["グループの制作内容", "同じグループでは同一コースを選択。別々のコースは選べません"], ["実演", "別途オプションとして相談可能。基本の体験料金には含まれません"], ["受付状況", "確認用プレビュー・予約受付前。貸切・実演は別途見積です。"]],
       highlights: ["桜・富士山・侍・鯉・龍・竹・梅などのモチーフを描く", "制作した作品を持ち帰れる", "80分で楽しむ4種類の制作体験", "英語対応・貸切で相談可能"],
       pending: ["開催日ごとの空き状況", "道具の提供範囲", "販売価格・キャンセル料の有無と条件", "2026年実施分にも同じ条件が適用されるか"],
     },

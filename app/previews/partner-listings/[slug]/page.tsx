@@ -3,12 +3,14 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
+import { Fx } from "@/components/site/money";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import factsStyles from "@/components/site/experience-facts.module.css";
 import { FACT_COPY } from "@/lib/experience-seo";
 import { langHome, t } from "@/lib/i18n";
-import { partnerListingDrafts, type ListingDraft } from "@/lib/partner-listing-drafts";
+import { partnerListingDrafts, sumiEProposedPrices, type ListingDraft } from "@/lib/partner-listing-drafts";
+import { yen } from "@/lib/pricing";
 import "./preview.css";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ lang?: string }> };
@@ -63,6 +65,8 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
   const copy = draft[lang];
   const T = t(lang);
   const photos = (draft.images ?? []).map(photo => ({ img: photo.src, alt: photo[lang] }));
+  const startingPrice = Math.min(...sumiEProposedPrices.map(course => course.perGuest));
+  const status = ja ? "販売価格案（税込）" : "Proposed retail prices (tax included)";
 
   return (
     <main className="subpage detail-page xp xp2" lang={lang}>
@@ -82,6 +86,19 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
         <Gallery photos={photos} lang={lang} note={draft.mediaNote?.[lang]} />
       </section>
       <div className="xp-cols">
+        <aside className="xp-side" aria-labelledby="sumi-e-price-label">
+          <div className="bk-card" id="booking">
+            <div className="bk-price">
+              <small id="sumi-e-price-label">{status}</small>
+              <b><Fx>{`${ja ? "" : "From "}${yen(startingPrice)}${ja ? "〜" : ""}`}</Fx><span className="bk-unit">{T.perPerson}</span></b>
+              <small className="bk-total">
+                {ja ? "色紙・コースター、2〜6名で参加の場合" : "Shikishi art board or coasters, for groups of 2–6"}
+              </small>
+            </div>
+            <a className="bk-cta" href="#pricing">{ja ? "4コースの料金を見る" : "Compare all four course prices"}</a>
+            <p className="xp-note">{ja ? "販売価格を確認中です。" : "Pricing is being confirmed."}</p>
+          </div>
+        </aside>
         <div className="xp-main">
           <section className="xp-section">
             <h2>{T.detail.overviewH}</h2>
@@ -90,19 +107,41 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
               <li key={highlight}><span className="tick" aria-hidden="true">✓</span><span>{highlight}</span></li>
             ))}</ul>
           </section>
+          <section className="xp-section" id="pricing">
+            <h2>{ja ? "コースと料金" : "Courses and prices"}</h2>
+            <p className="plan-compare-lead">
+              {ja ? "2027年1月1日以降の税込価格案です。販売条件は確認中です。" : "Proposed prices for sessions from 1 January 2027. Tax included. Terms are being confirmed."}
+            </p>
+            <table className="xp-pricing compact sumi-e-pricing">
+              <thead>
+                <tr>
+                  <th scope="col">{ja ? "コース" : "Course"}</th>
+                  <th scope="col">{ja ? "1名参加（総額）" : "1 guest (total)"}</th>
+                  <th scope="col">{ja ? "2〜6名参加（1名あたり）" : "2–6 guests (per person)"}</th>
+                </tr>
+              </thead>
+              <tbody>{sumiEProposedPrices.map(course => (
+                <tr key={course.name.en}>
+                  <th scope="row">{course.name[lang]}</th>
+                  <td className="total"><Fx>{yen(course.solo)}</Fx></td>
+                  <td className="total"><Fx>{yen(course.perGuest)}</Fx></td>
+                </tr>
+              ))}</tbody>
+            </table>
+          </section>
           <section className={`xp-section ${factsStyles.facts}`} id="booking-facts">
             <h2>{FACT_COPY[lang].heading}</h2>
             <dl>{copy.details.map(([label, value]) => (
               <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
             ))}</dl>
           </section>
+          <section className="xp-section faq-list">
+            <details>
+              <summary>{ja ? "確認中の内容" : "Details being confirmed"}</summary>
+              <ul className="check-list">{copy.pending.map(item => <li key={item}>{item}</li>)}</ul>
+            </details>
+          </section>
         </div>
-        <aside className="xp-side" aria-labelledby="sumi-e-booking-status">
-          <div className="bk-card">
-            <h2 className="bk-quote-heading" id="sumi-e-booking-status">{ja ? "確認中の内容" : "Details being confirmed"}</h2>
-            <ul className="check-list">{copy.pending.map(item => <li key={item}>{item}</li>)}</ul>
-          </div>
-        </aside>
       </div>
       <SiteFooter lang={lang} />
     </main>

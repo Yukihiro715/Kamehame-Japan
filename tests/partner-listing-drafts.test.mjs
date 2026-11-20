@@ -107,18 +107,32 @@ test('confirmed partner answers replace pending questions without publishing sup
  }
 });
 
-test('Sumi-e preview shows revised deadlines while selling prices are under review', async () => {
+test('Sumi-e preview compares four proposed retail prices without opening bookings', async () => {
   for (const lang of ['en', 'ja']) {
     const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
     assert.match(html, /class="site-header solid"/);
     assert.match(html, /class="subpage detail-page xp xp2"/);
     assert.match(html, /class="gallery" id="photos"/);
     assert.match(html, /id="booking-facts"/);
+    assert.match(html, /class="bk-card" id="booking".*?¥22,000.*?href="#pricing"/s);
     assert.match(html, lang === 'ja' ? /販売価格を確認中/ : /Pricing is being confirmed/);
     assert.match(html, lang === 'ja' ? /土日祝は18:00のみ/ : /public holidays: 18:00 only/);
     assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
     assert.match(html, lang === 'ja' ? /前日の20:00まで/ : /20:00 the day before/);
-    assert.doesNotMatch(html, /38,000|22,000|30,500|32,000/);
+    assert.match(html, lang === 'ja' ? /2027年1月1日以降の税込価格案/ : /Proposed prices for sessions from 1 January 2027. Tax included/);
+    const priceTable = html.match(/<table class="xp-pricing compact sumi-e-pricing".*?<\/table>/s)?.[0];
+    assert.ok(priceTable);
+    const courses = [...priceTable.matchAll(/<tr><th scope="row">([^<]+)<\/th><td class="total">([^<]+)<\/td><td class="total">([^<]+)<\/td><\/tr>/g)]
+      .map(row => row.slice(1));
+    const names = lang === 'ja'
+      ? ['色紙', 'コースター3枚', 'ランプシェード', '掛軸']
+      : ['Shikishi art board', 'Three coasters', 'Lampshade', 'Hanging scroll'];
+    assert.deepEqual(courses, [
+      [names[0], '¥38,000', '¥22,000'],
+      [names[1], '¥38,000', '¥22,000'],
+      [names[2], '¥30,500', '¥30,500'],
+      [names[3], '¥32,000', '¥32,000'],
+    ]);
     assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
     assert.match(html, /noindex/);
     assert.ok(!html.includes('<form'));
