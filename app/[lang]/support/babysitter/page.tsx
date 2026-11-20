@@ -70,8 +70,10 @@ export default async function BabysitterPage({ params }: Props) {
           <div className="bk-card sp-card" id="booking">
             <div className="bk-price">
               <small>{B.card.eyebrow}</small>
-              <b className="bk-quote-heading">{B.card.title}</b>
+              <b>{B.card.from && <span className="sp-from">{B.card.from} </span>}<Fx brief>{feeYen(FEES.fromTotal)}</Fx>{!B.card.from && <span className="from-suffix">〜</span>}</b>
+              <small className="sp-from-note">{B.card.fromNote(FEES.minHours)}</small>
             </div>
+            <b className="bk-quote-heading sp-card-title">{B.card.title}</b>
             <p className="sp-card-body">{B.card.body}</p>
             <a className="bk-cta" href="#request-form">{B.card.cta}</a>
             <ul className="bk-points">

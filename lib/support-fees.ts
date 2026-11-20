@@ -18,6 +18,8 @@ export const BABYSITTER_FEES = {
   night: up50(BASE.night), weekend: up50(BASE.weekend), peak: up50(BASE.peak), bath: up50(BASE.bath),
   notice2: up50(BASE.notice2), notice1: up50(BASE.notice1),
   minHours: 3,
+  /** The lowest booking: the minimum hours with an English-speaking sitter on a weekday. */
+  fromTotal: up50(BASE.hourEn) * 3,
   /** Second child: this share of the second child's hourly fee; lower when either child is four or older. Third child free. */
   secondPct: 50, secondOlderPct: 30,
 };

@@ -33,7 +33,7 @@ test("travel support: index and babysitting page in five languages, no partner d
     assert.ok(!/href="https?:\/\/(?!kamehame-japan\.com)/.test(body), `${lang}: no external links in the page body`);
     assert.ok(ph.includes("sp-form") && ph.includes('name="place_detail"') && ph.includes('name="ages"') && ph.includes('name="language"') && ph.includes('name="whatsapp"'), `${lang}: the form asks place, ages, language, contact`);
     // Fees carry our margin; the agency's own figures never appear.
-    assert.ok(pt.includes("¥5,350") && pt.includes("¥4,050"), `${lang}: the guide hourly fees are shown`);
+    assert.ok(pt.includes("¥5,350") && pt.includes("¥4,050") && pt.includes("¥16,050"), `${lang}: the guide hourly fees and the lowest booking are shown`);
     assert.ok(!/3,960|2,970|33,000|5,500|1,650|3,300|35\s?%/.test(pt), `${lang}: no agency base figure or margin on the page`);
     assert.ok(ph.includes("/images/support-babysitter.webp"), `${lang}: the sitter photo`);
     assert.ok(ph.includes('"@type":"FAQPage"'), `${lang}: FAQ structured data`);
