@@ -303,6 +303,7 @@ export function VariantDetail({ exp, lang, clubRental = false, golfWays = false 
                 </div>
               </section>
             )}
+            <SupportBanner lang={lang} place="end" />
           </div>
         </div>
         <StickyRequestBar price={yen(minPrice)} condition={countOf(O.golfers, size.min)} label={ctaLabel} lang={lang} watchHero="#golf-options" watchTarget="#request" golf={O} />
