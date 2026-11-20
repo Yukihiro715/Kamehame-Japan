@@ -206,6 +206,13 @@ export function buildEntries(read) {
     }
   }
 
+  // Travel support (lib/support.ts): the index and the babysitting page, in every language.
+  const supportSrc = join(src("lib/support.ts"), src("lib/support-fees.ts"));
+  for (const lang of LANGS) {
+    add(`/${lang}/support/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/support/`), key: join(langBlock(src("lib/support.ts"), lang) || supportSrc, src("app/[lang]/support/page.tsx")) });
+    add(`/${lang}/support/babysitter/`, { priority: "0.7", changefreq: "monthly", alternates: siblings((l) => `/${l}/support/babysitter/`), key: join(supportSrc, src("app/[lang]/support/babysitter/page.tsx")) });
+  }
+
   add("/partners/", { priority: "0.4", changefreq: "monthly", key: src("app/partners/page.tsx") || null });
   add("/partners-lp/", { priority: "0.5", changefreq: "monthly", key: join(src("app/partners-lp/page.tsx"), src("components/suppliers/page.tsx"), src("components/suppliers/reach-channels.tsx"), src("lib/supplier-policy.ts")) });
   // The Ofukuro Dinner founding-guest campaign (published 2026-10-23): its copy lives in lib/ofukuro-dinner.ts and the page.
