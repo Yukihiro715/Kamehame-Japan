@@ -4,7 +4,7 @@
 // the resulting figures; the quote confirms the final amount.
 import { yen } from "@/lib/pricing";
 
-const MARGIN = 1.35;
+const MARGIN = 1.30;
 const BASE = {
   hourEn: 3960, hourJa: 2970,
   night: 550, weekend: 330, peak: 550, bath: 1100,
