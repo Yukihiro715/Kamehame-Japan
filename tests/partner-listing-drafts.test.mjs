@@ -34,7 +34,10 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
   assert.ok(!html.includes('<form'),slug);
   assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/, slug);
   assert.ok(!html.includes('\"@type\":\"Product\"'),slug);
-  assert.ok(html.includes(lang==='ja'?'予約受付前':'Not open for booking'));
+  const bookingNotice = slug === "sumi-e-ink-painting"
+    ? (lang === 'ja' ? 'お問い合わせ・予約受付停止中' : 'Closed to enquiries and bookings')
+    : (lang === 'ja' ? '予約受付前' : 'Not open for booking');
+  assert.ok(html.includes(bookingNotice), slug);
  }
  const missing=await render('/previews/partner-listings/not-a-listing/');assert.equal(missing.status,404);
 });
