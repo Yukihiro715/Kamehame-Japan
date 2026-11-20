@@ -31,10 +31,13 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
   assert.match(html,/noindex/);
-  if (slug !== "sumi-e-ink-painting") assert.ok(!html.includes('<form'),slug);
+  assert.ok(!html.includes('<form'),slug);
   assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/, slug);
   assert.ok(!html.includes('\"@type\":\"Product\"'),slug);
-  assert.ok(html.includes(lang==='ja'?'予約受付前':'Not open for booking'));
+  const bookingNotice = slug === "sumi-e-ink-painting"
+    ? (lang === 'ja' ? 'お問い合わせ・予約受付停止中' : 'Closed to enquiries and bookings')
+    : (lang === 'ja' ? '予約受付前' : 'Not open for booking');
+  assert.ok(html.includes(bookingNotice), slug);
  }
  const missing=await render('/previews/partner-listings/not-a-listing/');assert.equal(missing.status,404);
 });
@@ -108,7 +111,7 @@ test('confirmed partner answers replace pending questions without publishing sup
  }
 });
 
-test('Sumi-e preview shows four proposed prices and offers enquiries only', async () => {
+test('Sumi-e preview retains reference prices but does not accept enquiries or bookings', async () => {
   for (const lang of ['en', 'ja']) {
     const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
     assert.match(html, /class="site-header solid"/);
@@ -116,11 +119,11 @@ test('Sumi-e preview shows four proposed prices and offers enquiries only', asyn
     assert.match(html, /class="gallery" id="photos"/);
     assert.match(html, /id="booking-facts"/);
     assert.match(html, /class="bk-card" id="booking".*?¥22,000.*?href="#pricing"/s);
-    assert.match(html, lang === 'ja' ? /販売価格を確認中/ : /Pricing is being confirmed/);
+    assert.match(html, lang === 'ja' ? /表示は参考価格案/ : /proposed prices are for reference only/);
     assert.match(html, lang === 'ja' ? /土日祝は18:00のみ/ : /public holidays: 18:00 only/);
     assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
     assert.match(html, lang === 'ja' ? /前日の20:00まで/ : /20:00 the day before/);
-    assert.match(html, lang === 'ja' ? /2027年1月1日以降の税込価格案/ : /Proposed prices for sessions from 1 January 2027. Tax included/);
+    assert.match(html, lang === 'ja' ? /2027年1月1日以降を想定した税込価格案/ : /Proposed prices for sessions from 1 January 2027. Tax included/);
     const priceTable = html.match(/<table class="xp-pricing compact sumi-e-pricing".*?<\/table>/s)?.[0];
     assert.ok(priceTable);
     const courses = [...priceTable.matchAll(/<tr><th scope="row">([^<]+)<\/th><td class="total">([^<]+)<\/td><td class="total">([^<]+)<\/td><\/tr>/g)]
@@ -134,14 +137,9 @@ test('Sumi-e preview shows four proposed prices and offers enquiries only', asyn
       [names[2], '¥30,500', '¥30,500'],
       [names[3], '¥32,000', '¥32,000'],
     ]);
-    assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
+    assert.match(html, lang === 'ja' ? /お問い合わせ・予約受付停止中/ : /Closed to enquiries and bookings/);
     assert.match(html, /noindex/);
-    assert.match(html, /href="#request-form"/);
-    assert.match(html, /id="request-form".*?<form[^>]+action="\/api\/contact"/s);
-    assert.equal((html.match(/<form\b/g) ?? []).length, 1);
-    assert.match(html, lang === "ja"
-      ? /class="form-context"[^>]*>.*?<b>銀座・水墨画体験<\/b>/s
-      : /class="form-context"[^>]*>.*?<b>Sumi-e Japanese Ink Painting in Ginza<\/b>/s);
+    assert.doesNotMatch(html, /<form\b|#request-form|id="request-form"/);
     assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/);
     for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
   }
