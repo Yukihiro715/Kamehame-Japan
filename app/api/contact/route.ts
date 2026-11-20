@@ -1,4 +1,5 @@
 import { sanitizeAttribution } from "@/lib/attribution";
+import { terraceName, terraceSlug } from "@/lib/bamboo-sky-terrace";
 import { GOLF_ARRANGEMENT_POLICY_VERSION } from "@/lib/golf-arrangement-policy";
 import { CONTACT_EMAIL, FOLLOW_UP_ENABLED, TRADE_EMAIL, type Enquiry, type SupportRequest } from "@/lib/contact";
 import { threadSubject } from "@/lib/mail-copy";
@@ -48,12 +49,14 @@ const REPLY = "hello@kamehame-japan.com";
 /** The experience's Japanese title, for the team's Slack alert. */
 function jaTitle(e: Enquiry): string | undefined {
   if (!e.experience) return undefined;
+  if (e.experience === terraceSlug) return terraceName;
   return catalogFor("ja").experiences.find((x) => x.slug === e.experience)?.title;
 }
 
 /** The experience's title in the visitor's language, for the acknowledgement. */
 function titleFor(e: Enquiry): string | undefined {
   if (!e.experience || !isLang(e.lang)) return undefined;
+  if (e.experience === terraceSlug) return terraceName;
   return catalogFor(e.lang).experiences.find((x) => x.slug === e.experience)?.title;
 }
 

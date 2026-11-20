@@ -216,11 +216,12 @@ export function buildEntries(read) {
   }
 
   const terraceSrc = src("lib/bamboo-sky-terrace.ts");
+  const terraceShared = terraceSrc.split("export const terraceCopy =")[0];
   const terracePage = src("app/[lang]/kyoto/bamboo-sky-terrace/page.tsx");
   for (const lang of LANGS) {
     add(`/${lang}/kyoto/bamboo-sky-terrace/`, {
       priority: "0.7", changefreq: "monthly", alternates: siblings((l) => `/${l}/kyoto/bamboo-sky-terrace/`),
-      key: join(terracePage, langBlock(terraceSrc, lang)),
+      key: join(terracePage, terraceShared, langBlock(terraceSrc, lang)),
     });
   }
 
