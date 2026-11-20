@@ -1,22 +1,23 @@
 import Link from "next/link";
-import { ArrowRight, Baby } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { supportCopy } from "@/lib/support";
 import type { Lang } from "@/lib/i18n";
 
-/** A low, wide link from an experience page to the travel-support index, for
- *  guests who want childcare while they are at the experience. It sits under
- *  the overview, never near the booking button, and stays one line tall on a
- *  phone. */
+/** The travel-support banner on experience pages: a photo, the message that
+ *  KAMEHAME JAPAN handles the rest of the trip (babysitting, interpreter
+ *  guide, transfers, planning), and a link to the index. It sits under the
+ *  overview; the booking box stays the page's main action. */
 export function SupportBanner({ lang }: { lang: Lang }) {
   const S = supportCopy(lang);
   return (
     <Link className="support-banner" href={`/${lang}/support/`}>
-      <span className="sb-icon" aria-hidden="true"><Baby size={18} /></span>
+      <span className="sb-photo" aria-hidden="true"><img src="/images/support-banner.webp" alt="" loading="lazy" decoding="async" /></span>
       <span className="sb-copy">
+        <small className="sb-kicker">{S.banner.kicker}</small>
         <b>{S.banner.title}</b>
-        <small>{S.banner.body}</small>
+        <span className="sb-body">{S.banner.body}</span>
       </span>
-      <span className="sb-cta">{S.banner.cta} <ArrowRight size={14} /></span>
+      <span className="sb-cta">{S.banner.cta} <ArrowRight size={15} /></span>
     </Link>
   );
 }

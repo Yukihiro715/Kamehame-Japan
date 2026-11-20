@@ -64,6 +64,8 @@ export interface SupportCopy {
     notCare: string;
     priceH: string;
     priceLead: string;
+    /** Labels for the fee table; figures come from lib/support-fees.ts. */
+    fee: { perHour: string; english: string; japanese: string; minimum: (h: number) => string; night: string; weekend: string; peak: string; bath: string; perTime: string; second: (pct: number, older: number) => string; third: string; notice2: string; notice1: string; transport: string; transportNote: string; cancelH: string; cancel: string[]; note: string };
     price: string[];
     flowH: string;
     flow: { title: string; body: string }[];
@@ -93,7 +95,7 @@ const en: SupportCopy = {
   eyebrow: "Travel support",
   title: ["Help around", "the experience."],
   lead: "A babysitter while you are at an experience in Japan, transfers between your hotel and the venue or a private car for the day, an interpreter guide for a day, planning for the whole trip. One contact for all of it: KAMEHAME JAPAN.",
-  indexLead: "Services that make the experiences easier to say yes to. Babysitting takes requests now; the others open soon.",
+  indexLead: "A babysitter while you are at an experience in Japan, transfers between your hotel and the venue or a private car for the day, an interpreter guide for a day, planning for the whole trip. One contact for all of it: KAMEHAME JAPAN. Babysitting takes requests now; the others open soon.",
   all: "All travel support",
   comingSoon: "Coming soon",
   comingSoonBody: "Not open for requests yet. We will list it here as soon as it is ready.",
@@ -104,7 +106,7 @@ const en: SupportCopy = {
     interpreter: { title: "Interpreter guide for the day", line: "A licensed guide-interpreter beside you for a day of experiences, shopping, sightseeing or meetings.", alt: "A guide explaining a sight to visitors", facts: ["English · Chinese · more on request", "Half day · full day"] },
     planner: { title: "Travel planner", line: "From the shape of your days in Japan to the bookings behind them: experiences, restaurants, transport, in one plan.", alt: "Travellers planning a route on a map", facts: ["Whole-trip planning", "Bookings handled"] },
   },
-  banner: { kicker: "Travelling with children?", title: "Need childcare while you are at this experience?", body: "An English-speaking sitter at your hotel while you are out, arranged by us.", cta: "Travel support" },
+  banner: { kicker: "Travel support", title: "Support during your trip, from KAMEHAME JAPAN", body: "A babysitter while you are at this experience, an interpreter guide, transfers, planning for the rest of your days in Japan. One contact for all of it.", cta: "See travel support" },
   baby: {
     h1: "Babysitting at your hotel, in English",
     tagline: "A screened, English-speaking babysitter comes to your hotel or apartment while you play golf, go to dinner or take an experience that is not for children. Arranged by KAMEHAME JAPAN with vetted local agencies, quoted per request, with one contact throughout: us.",
@@ -127,8 +129,9 @@ const en: SupportCopy = {
     careLead: "Tell us what matters to you and we brief the sitter before the day.",
     care: ["Play and read in English, indoors or in the hotel's play area", "Meals and snacks you have prepared or ordered, and feeding for infants", "Naps, bath time and the bedtime routine", "Short walks nearby, with your permission", "Simple homework or quiet activities for older children", "A written note of the hours at the end"],
     notCare: "Sitters do not drive, give medication other than what you have left clear written instructions for, or care for a child who is unwell with a fever; tell us about allergies and medical needs when you request so we can say in advance what is possible.",
-    priceH: "How the fee works",
-    priceLead: "Every request is quoted individually, before anything is booked.",
+        priceH: "Fees",
+    priceLead: "Guide prices, tax included. Your quote confirms the exact amount for your dates before anything is booked.",
+    fee: { perHour: "per hour", english: "English-speaking sitter", japanese: "Japanese-speaking sitter", minimum: (h) => `Minimum ${h} hours per booking, then in 30-minute steps`, night: "Night and early morning (20:00–8:00)", weekend: "Weekends and public holidays", peak: "Golden Week, Obon, New Year", bath: "Bath assistance", perTime: "per time", second: (pct, older) => `Second child: +${pct}% of the hourly fee (+${older}% when either child is four or older)`, third: "Third child at the same time: no extra charge", notice2: "Requests after 18:00 two business days before", notice1: "Requests after 18:00 one business day before", transport: "Sitter's transport", transportNote: "at cost", cancelH: "Cancellation", cancel: ["Free until 18:00 two business days before", "50% of the fee after that", "100% after 18:00 one business day before"], note: "Weekday 8:00–20:00 is the standard rate. Payment by card link once you confirm the quote; nothing is charged before." },
     price: ["An hourly rate for the hours you book, with a minimum booking length", "Early mornings, late evenings, weekends and public holidays carry a surcharge", "A second child usually costs a reduced additional rate", "The sitter's transport to your hotel is added at cost", "Short notice (under a week) may not be available or may carry a surcharge", "Payment by card link once you confirm; cancellation terms come with the quote"],
     flowH: "From request to the day",
     flow: [
@@ -170,7 +173,7 @@ const ja: SupportCopy = {
   eyebrow: "旅行サポート",
   title: ["体験のまわりを、", "ととのえる。"],
   lead: "日本でのアクティビティ体験中のシッターサービス、ホテルや体験施設までの往復送迎・1日貸切車両、1日の通訳ガイド、旅行全体のプランニング。窓口はKAMEHAME JAPANひとつで可能です。",
-  indexLead: "体験に「行ける」と言いやすくするためのサービスです。ベビーシッターは受付中、ほかは順次開始します。",
+  indexLead: "日本でのアクティビティ体験中のシッターサービス、ホテルや体験施設までの往復送迎・1日貸切車両、1日の通訳ガイド、旅行全体のプランニング。窓口はKAMEHAME JAPANひとつで可能です。ベビーシッターは受付中、ほかは順次開始します。",
   all: "旅行サポート一覧",
   comingSoon: "準備中",
   comingSoonBody: "まだ受付を開始していません。準備ができ次第ここに掲載します。",
@@ -181,7 +184,7 @@ const ja: SupportCopy = {
     interpreter: { title: "1日の通訳ガイド", line: "体験、買い物、観光、商談に1日同行する通訳案内士。", alt: "来訪者に名所を説明するガイド", facts: ["英語・中国語ほか", "半日・1日"] },
     planner: { title: "旅行プランナー", line: "日本での滞在日程の組み立てから、体験・レストラン・移動の手配まで、旅全体をひとつのプランに。", alt: "地図でルートを考える旅行者", facts: ["旅全体のプランニング", "手配込み"] },
   },
-  banner: { kicker: "お子さま連れの方へ", title: "参加中、お子さまを預けたい方へ", body: "体験の間、英語の話せるシッターがホテルでお預かりします。手配はKAMEHAME JAPANが行います。", cta: "旅行サポートを見る" },
+  banner: { kicker: "旅行サポート", title: "旅行中のサポートはKAMEHAME JAPANへ", body: "体験中のベビーシッター、通訳ガイド、送迎、旅全体のプランニング。旅行中の困りごとはひとつの窓口でご相談ください。", cta: "旅行サポートを見る" },
   baby: {
     h1: "ホテルで受けられる英語ベビーシッター",
     tagline: "ゴルフ、夕食、お子さま向けではない体験の間、審査済みの英語が話せるシッターがホテルや滞在先に伺います。KAMEHAME JAPANが提携する保育事業者と手配し、料金は都度お見積もり。窓口は最後までKAMEHAME JAPANです。",
@@ -204,8 +207,9 @@ const ja: SupportCopy = {
     careLead: "大切にしていることをお知らせください。当日前にシッターへ伝えます。",
     care: ["室内やホテルのキッズスペースでの英語での遊び・読み聞かせ", "ご用意いただいた食事・おやつ、乳児の授乳", "お昼寝、入浴、寝かしつけ", "許可をいただいた近くの散歩", "年長のお子さまの簡単な宿題や静かな活動", "終了時の簡単な報告"],
     notCare: "運転、書面の指示がない投薬、発熱など体調の悪いお子さまの保育はお受けできません。アレルギーや医療上の配慮はお申し込み時にお知らせください。事前に可否をお伝えします。",
-    priceH: "料金の考え方",
-    priceLead: "すべて手配前に個別にお見積もりします。",
+        priceH: "料金",
+    priceLead: "税込の目安料金です。手配前にお見積もりで日程ごとの正確な金額を確認いただきます。",
+    fee: { perHour: "／時間", english: "英語の話せるシッター", japanese: "日本語のシッター", minimum: (h) => `1回あたり最低${h}時間、以降30分単位`, night: "夜間・早朝（20:00〜8:00）", weekend: "土日祝", peak: "GW・お盆・年末年始", bath: "入浴補助", perTime: "／回", second: (pct, older) => `2人目のお子さま：時間料金の+${pct}%（どちらかが4歳以上なら+${older}%）`, third: "3人同時：3人目は無料", notice2: "2営業日前18:00以降のご依頼", notice1: "1営業日前18:00以降のご依頼", transport: "シッターの交通費", transportNote: "実費", cancelH: "取消規定", cancel: ["2営業日前18:00まで無料", "以降は料金の50%", "1営業日前18:00以降は100%"], note: "平日8:00〜20:00が基準料金です。お支払いはお見積もり確定後にカード決済リンクで。それまで請求はありません。" },
     price: ["ご予約時間に対する時間料金。最低利用時間があります", "早朝・夜間・週末・祝日は割増", "2人目のお子さまは通常、割安な追加料金", "シッターの交通費は実費", "1週間を切るご依頼は手配できない、または割増となる場合があります", "確定後にカード決済リンクでお支払い。取消規定はお見積もりに記載"],
     flowH: "お申し込みから当日まで",
     flow: [
@@ -247,7 +251,7 @@ const es: SupportCopy = {
   eyebrow: "Apoyo al viaje",
   title: ["Todo lo que rodea", "a la experiencia."],
   lead: "Una canguro mientras estás en una experiencia en Japón, traslados entre tu hotel y el lugar o un coche privado para el día, un guía intérprete por un día, la planificación de todo el viaje. Un solo contacto para todo: KAMEHAME JAPAN.",
-  indexLead: "Servicios que hacen más fácil decir que sí a una experiencia. El servicio de canguro ya acepta solicitudes; los demás abrirán pronto.",
+  indexLead: "Una canguro mientras estás en una experiencia en Japón, traslados entre tu hotel y el lugar o un coche privado para el día, un guía intérprete por un día, la planificación de todo el viaje. Un solo contacto para todo: KAMEHAME JAPAN. El servicio de canguro ya acepta solicitudes; los demás abrirán pronto.",
   all: "Todo el apoyo al viaje",
   comingSoon: "Próximamente",
   comingSoonBody: "Aún no acepta solicitudes. Lo publicaremos aquí en cuanto esté listo.",
@@ -258,7 +262,7 @@ const es: SupportCopy = {
     interpreter: { title: "Guía intérprete por un día", line: "Un guía intérprete titulado a tu lado durante un día de experiencias, compras, visitas o reuniones.", alt: "Un guía explicando un lugar a visitantes", facts: ["Inglés · chino · otros bajo petición", "Medio día · día completo"] },
     planner: { title: "Planificador de viaje", line: "De la forma de tus días en Japón a las reservas que hay detrás: experiencias, restaurantes, transporte, en un solo plan.", alt: "Viajeros planificando una ruta en un mapa", facts: ["Planificación de todo el viaje", "Reservas gestionadas"] },
   },
-  banner: { kicker: "¿Viajas con niños?", title: "¿Necesitas cuidado de niños durante esta experiencia?", body: "Una canguro que habla inglés en tu hotel mientras sales, organizada por nosotros.", cta: "Apoyo al viaje" },
+  banner: { kicker: "Apoyo al viaje", title: "Apoyo durante tu viaje, de KAMEHAME JAPAN", body: "Una canguro durante esta experiencia, un guía intérprete, traslados, la planificación del resto de tus días en Japón. Un solo contacto para todo.", cta: "Ver el apoyo al viaje" },
   baby: {
     h1: "Canguro en tu hotel, en inglés",
     tagline: "Una canguro seleccionada que habla inglés acude a tu hotel o apartamento mientras juegas al golf, sales a cenar o haces una experiencia que no es para niños. Organizado por KAMEHAME JAPAN con agencias locales verificadas, con presupuesto por solicitud y un solo contacto de principio a fin: nosotros.",
@@ -281,8 +285,9 @@ const es: SupportCopy = {
     careLead: "Dinos qué es importante para ti y se lo explicamos a la canguro antes del día.",
     care: ["Jugar y leer en inglés, en la habitación o en la zona infantil del hotel", "Comidas y meriendas que hayas preparado o pedido, y alimentación de bebés", "Siestas, baño y rutina de dormir", "Paseos cortos cerca, con tu permiso", "Deberes sencillos o actividades tranquilas para los mayores", "Una nota escrita de las horas al final"],
     notCare: "Las canguros no conducen, no administran medicamentos salvo con tus instrucciones claras por escrito, ni cuidan a un niño con fiebre; indícanos alergias y necesidades médicas al solicitar para que podamos decirte de antemano qué es posible.",
-    priceH: "Cómo funciona la tarifa",
-    priceLead: "Cada solicitud se presupuesta individualmente, antes de reservar nada.",
+        priceH: "Tarifas",
+    priceLead: "Precios orientativos, impuestos incluidos. Tu presupuesto confirma el importe exacto para tus fechas antes de reservar nada.",
+    fee: { perHour: "por hora", english: "Canguro que habla inglés", japanese: "Canguro que habla japonés", minimum: (h) => `Mínimo ${h} horas por reserva, luego en tramos de 30 minutos`, night: "Noche y madrugada (20:00–8:00)", weekend: "Fines de semana y festivos", peak: "Golden Week, Obon, Año Nuevo", bath: "Ayuda con el baño", perTime: "por vez", second: (pct, older) => `Segundo niño: +${pct}% de la tarifa por hora (+${older}% si alguno tiene cuatro años o más)`, third: "Tercer niño al mismo tiempo: sin cargo adicional", notice2: "Solicitudes después de las 18:00 dos días laborables antes", notice1: "Solicitudes después de las 18:00 un día laborable antes", transport: "Transporte de la canguro", transportNote: "a su coste", cancelH: "Cancelación", cancel: ["Gratis hasta las 18:00 dos días laborables antes", "50% de la tarifa después", "100% después de las 18:00 un día laborable antes"], note: "La tarifa estándar es de lunes a viernes de 8:00 a 20:00. Pago con enlace de tarjeta al confirmar el presupuesto; no se cobra nada antes." },
     price: ["Una tarifa por hora para las horas reservadas, con una duración mínima", "Madrugadas, noches, fines de semana y festivos tienen recargo", "Un segundo niño suele tener una tarifa adicional reducida", "El transporte de la canguro a tu hotel se añade a su coste", "Con poca antelación (menos de una semana) puede no haber disponibilidad o haber recargo", "Pago con enlace de tarjeta al confirmar; las condiciones de cancelación llegan con el presupuesto"],
     flowH: "De la solicitud al día",
     flow: [
@@ -324,7 +329,7 @@ const fr: SupportCopy = {
   eyebrow: "Services voyage",
   title: ["Tout ce qui entoure", "l'expérience."],
   lead: "Une baby-sitter pendant que vous vivez une expérience au Japon, des transferts entre votre hôtel et le lieu ou une voiture privée pour la journée, un guide-interprète pour une journée, la planification de tout le séjour. Un seul interlocuteur pour tout : KAMEHAME JAPAN.",
-  indexLead: "Des services qui rendent les expériences plus faciles à dire oui. La garde d'enfants prend les demandes dès maintenant ; les autres ouvrent bientôt.",
+  indexLead: "Une baby-sitter pendant que vous vivez une expérience au Japon, des transferts entre votre hôtel et le lieu ou une voiture privée pour la journée, un guide-interprète pour une journée, la planification de tout le séjour. Un seul interlocuteur pour tout : KAMEHAME JAPAN. La garde d'enfants prend les demandes dès maintenant ; les autres ouvrent bientôt.",
   all: "Tous les services voyage",
   comingSoon: "Bientôt disponible",
   comingSoonBody: "Pas encore ouvert aux demandes. Nous l'afficherons ici dès qu'il sera prêt.",
@@ -335,7 +340,7 @@ const fr: SupportCopy = {
     interpreter: { title: "Guide-interprète pour la journée", line: "Un guide-interprète agréé à vos côtés pour une journée d'expériences, de shopping, de visites ou de rendez-vous.", alt: "Un guide présentant un site à des visiteurs", facts: ["Anglais · chinois · autres sur demande", "Demi-journée · journée"] },
     planner: { title: "Planificateur de voyage", line: "De l'organisation de vos journées au Japon aux réservations qui vont avec : expériences, restaurants, transports, en un seul plan.", alt: "Des voyageurs traçant un itinéraire sur une carte", facts: ["Planification du séjour entier", "Réservations prises en charge"] },
   },
-  banner: { kicker: "Vous voyagez avec des enfants ?", title: "Besoin d'une garde pendant cette expérience ?", body: "Une baby-sitter anglophone à votre hôtel pendant votre sortie, organisée par nous.", cta: "Services voyage" },
+  banner: { kicker: "Services voyage", title: "Un soutien pendant votre voyage, par KAMEHAME JAPAN", body: "Une baby-sitter pendant cette expérience, un guide-interprète, des transferts, la planification du reste de vos journées au Japon. Un seul interlocuteur pour tout.", cta: "Voir les services voyage" },
   baby: {
     h1: "Garde d'enfants à votre hôtel, en anglais",
     tagline: "Une baby-sitter sélectionnée et anglophone vient à votre hôtel ou appartement pendant que vous jouez au golf, dînez ou vivez une expérience qui n'est pas pour les enfants. Organisé par KAMEHAME JAPAN avec des agences locales vérifiées, sur devis, avec un seul interlocuteur du début à la fin : nous.",
@@ -358,8 +363,9 @@ const fr: SupportCopy = {
     careLead: "Dites-nous ce qui compte pour vous : nous le transmettons à la garde avant le jour J.",
     care: ["Jouer et lire en anglais, en chambre ou dans l'espace enfants de l'hôtel", "Repas et goûters que vous avez préparés ou commandés, et biberons pour les bébés", "Siestes, bain et rituel du coucher", "Courtes promenades à proximité, avec votre accord", "Devoirs simples ou activités calmes pour les plus grands", "Un compte rendu écrit des heures à la fin"],
     notCare: "Les gardes ne conduisent pas, ne donnent pas de médicaments sans vos consignes écrites claires et ne gardent pas un enfant fiévreux ; signalez allergies et besoins médicaux lors de la demande pour que nous puissions dire à l'avance ce qui est possible.",
-    priceH: "Comment fonctionne le tarif",
-    priceLead: "Chaque demande fait l'objet d'un devis individuel, avant toute réservation.",
+        priceH: "Tarifs",
+    priceLead: "Prix indicatifs, taxes comprises. Votre devis confirme le montant exact pour vos dates avant toute réservation.",
+    fee: { perHour: "de l'heure", english: "Garde anglophone", japanese: "Garde japonophone", minimum: (h) => `Minimum ${h} heures par réservation, puis par tranches de 30 minutes`, night: "Nuit et tôt le matin (20 h–8 h)", weekend: "Week-ends et jours fériés", peak: "Golden Week, Obon, Nouvel An", bath: "Aide au bain", perTime: "par fois", second: (pct, older) => `Deuxième enfant : +${pct} % du tarif horaire (+${older} % si l'un des deux a quatre ans ou plus)`, third: "Troisième enfant en même temps : sans supplément", notice2: "Demandes après 18 h deux jours ouvrés avant", notice1: "Demandes après 18 h un jour ouvré avant", transport: "Transport de la garde", transportNote: "au coût réel", cancelH: "Annulation", cancel: ["Gratuite jusqu'à 18 h deux jours ouvrés avant", "50 % du tarif ensuite", "100 % après 18 h un jour ouvré avant"], note: "Le tarif de base s'applique en semaine de 8 h à 20 h. Paiement par lien carte à la confirmation du devis ; rien n'est débité avant." },
     price: ["Un tarif horaire pour les heures réservées, avec une durée minimale", "Tôt le matin, tard le soir, week-ends et jours fériés : majoration", "Un deuxième enfant coûte généralement un supplément réduit", "Le transport de la garde jusqu'à votre hôtel est ajouté au coût réel", "À moins d'une semaine, la garde peut être indisponible ou majorée", "Paiement par lien carte à la confirmation ; les conditions d'annulation accompagnent le devis"],
     flowH: "De la demande au jour J",
     flow: [
@@ -401,7 +407,7 @@ const zh: SupportCopy = {
   eyebrow: "旅行支援",
   title: ["體驗之外，", "一併安排。"],
   lead: "在日本參加體驗期間的保母服務、飯店與體驗場地之間的接送或一日包車、一日口譯導遊、整趟旅程的規劃。所有事項只需一個窗口：KAMEHAME JAPAN。",
-  indexLead: "讓您更容易對體驗說「好」的服務。保母服務現已受理申請，其餘項目陸續開放。",
+  indexLead: "在日本參加體驗期間的保母服務、飯店與體驗場地之間的接送或一日包車、一日口譯導遊、整趟旅程的規劃。所有事項只需一個窗口：KAMEHAME JAPAN。保母服務現已受理申請，其餘項目陸續開放。",
   all: "所有旅行支援",
   comingSoon: "即將推出",
   comingSoonBody: "尚未開放申請。準備就緒後會在此刊登。",
@@ -412,7 +418,7 @@ const zh: SupportCopy = {
     interpreter: { title: "一日口譯導遊", line: "持證口譯導遊全日陪同您的體驗、購物、觀光或洽談。", alt: "向訪客介紹景點的導遊", facts: ["英語 · 中文 · 其他可洽", "半日 · 全日"] },
     planner: { title: "旅行規劃師", line: "從日本行程的安排到背後的預訂：體驗、餐廳、交通，整合成一份計畫。", alt: "在地圖上規劃路線的旅人", facts: ["整趟行程規劃", "代為預訂"] },
   },
-  banner: { kicker: "帶孩子旅行？", title: "參加這項體驗時，需要有人照顧孩子嗎？", body: "您外出期間，由我們安排會說英語的保母到您的飯店照顧孩子。", cta: "旅行支援" },
+  banner: { kicker: "旅行支援", title: "旅途中的支援，交給 KAMEHAME JAPAN", body: "體驗期間的保母、口譯導遊、接送、其餘行程的規劃。所有事項只需一個窗口。", cta: "查看旅行支援" },
   baby: {
     h1: "到飯店的英語保母服務",
     tagline: "當您打高爾夫、外出用餐或參加不適合孩子的體驗時，經審核、會說英語的保母會到您的飯店或住處。由 KAMEHAME JAPAN 與審核過的在地機構安排，個別報價，自始至終只有一個聯絡窗口：我們。",
@@ -435,8 +441,9 @@ const zh: SupportCopy = {
     careLead: "告訴我們您在意的事，我們會在當天前向保母說明。",
     care: ["在室內或飯店兒童區用英語遊戲、讀繪本", "您準備或訂購的餐點與點心，以及嬰兒餵食", "午睡、洗澡與就寢流程", "經您同意後在附近短暫散步", "較大孩子的簡單作業或安靜活動", "結束時的簡短書面紀錄"],
     notCare: "保母不開車、不在沒有您明確書面指示下給藥，也不照顧發燒等身體不適的孩子；請在申請時告知過敏與醫療需求，我們會事先說明可行範圍。",
-    priceH: "費用的計算方式",
-    priceLead: "每筆申請都在安排前個別報價。",
+        priceH: "費用",
+    priceLead: "含稅參考價。安排前會以報價確認您日期的確切金額。",
+    fee: { perHour: "／小時", english: "英語保母", japanese: "日語保母", minimum: (h) => `每次最少 ${h} 小時，之後以 30 分鐘為單位`, night: "夜間與清晨（20:00–8:00）", weekend: "週末與假日", peak: "黃金週、盂蘭盆節、新年", bath: "洗澡協助", perTime: "／次", second: (pct, older) => `第二位孩子：時薪的 +${pct}%（其中一位滿四歲則為 +${older}%）`, third: "三位同時：第三位免費", notice2: "兩個工作天前 18:00 之後的申請", notice1: "一個工作天前 18:00 之後的申請", transport: "保母交通費", transportNote: "實報實銷", cancelH: "取消規定", cancel: ["兩個工作天前 18:00 之前免費", "之後為費用的 50%", "一個工作天前 18:00 之後為 100%"], note: "平日 8:00–20:00 為標準費率。確認報價後以信用卡連結付款，在此之前不收費。" },
     price: ["依預訂時數計算的時薪，設有最低時數", "清晨、深夜、週末與假日加價", "第二位孩子通常以較低的加收費用計算", "保母前往您飯店的交通費實報實銷", "一週內的臨時申請可能無法安排或需加價", "確認後以信用卡連結付款；取消規定隨報價附上"],
     flowH: "從申請到當天",
     flow: [

@@ -32,7 +32,9 @@ test("travel support: index and babysitting page in five languages, no partner d
     const body = ph.slice(0, ph.indexOf("<footer")).replace(/<script[\s\S]*?<\/script>/g, "");
     assert.ok(!/href="https?:\/\/(?!kamehame-japan\.com)/.test(body), `${lang}: no external links in the page body`);
     assert.ok(ph.includes("sp-form") && ph.includes('name="place_detail"') && ph.includes('name="ages"') && ph.includes('name="language"') && ph.includes('name="whatsapp"'), `${lang}: the form asks place, ages, language, contact`);
-    assert.ok(!/[¥￥]\s?\d/.test(pt), `${lang}: no amount on the page (quoted per request)`);
+    // Fees carry our margin; the agency's own figures never appear.
+    assert.ok(pt.includes("¥5,350") && pt.includes("¥4,050"), `${lang}: the guide hourly fees are shown`);
+    assert.ok(!/3,960|2,970|33,000|5,500|1,650|3,300|35\s?%/.test(pt), `${lang}: no agency base figure or margin on the page`);
     assert.ok(ph.includes("/images/support-babysitter.webp"), `${lang}: the sitter photo`);
     assert.ok(ph.includes('"@type":"FAQPage"'), `${lang}: FAQ structured data`);
   }
@@ -46,6 +48,7 @@ test("travel support: the home section, the header link and the banner on experi
     const html = await (await render(path)).text();
     const banners = html.match(/class="support-banner"/g) ?? [];
     assert.equal(banners.length, 1, `${path}: one banner`);
+    assert.ok(html.includes("/images/support-banner.webp"), `${path}: the banner carries a photo`);
     assert.ok(html.indexOf('class="support-banner"') > html.indexOf('id="booking"') || html.indexOf('class="support-banner"') > html.indexOf("xp-main"), `${path}: the banner sits in the main column, not above the booking box`);
   }
   const header = await (await render("/fr/about/")).text();
