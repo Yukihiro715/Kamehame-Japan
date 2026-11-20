@@ -6,7 +6,8 @@ import { ListingCard } from "@/components/site/listing-card";
 import { getCollection } from "@/lib/collections";
 import { SiteFooter } from "@/components/site/site-footer";
 import { articleDate, latestArticles } from "@/lib/articles";
-import { featuredReviews } from "@/lib/reviews";
+import { PRIVATE_GOLF_EXPERIENCE, verifiedGolfAggregate, verifiedPrivateGolfReviews, withPrivateGolfRating } from "@/lib/site-golf-reviews-context";
+import { featuredReviews, type Aggregate } from "@/lib/reviews";
 import { RatingSummary, Stars } from "@/components/site/reviews";
 import { themeIsLive } from "@/lib/themes";
 import { catalogFor, isLive, TOURS_PUBLISHED, type Experience } from "@/lib/catalog";
@@ -277,8 +278,8 @@ const COPY = {
 /** The home page's one-experience presentation: a full card with the facts a
  *  visitor decides on (where, how long, how many, from what price), used
  *  while the catalog holds a single bookable experience. */
-function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
-  exp: Experience; lang: Lang; cityTitle?: string; mark: string; eyebrow: string; cta: string;
+function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta, reviewAggregate }: {
+  exp: Experience; lang: Lang; cityTitle?: string; mark: string; eyebrow: string; cta: string; reviewAggregate?: Aggregate;
 }) {
   const T = t(lang);
   const D = T.detail;
@@ -298,7 +299,7 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
       <div className="feature-copy">
         <p className="experience-city"><MapPin size={14} /> {cityTitle ?? exp.area} · {exp.langTag ?? T.interpreterIncluded}</p>
         <h3>{exp.title}</h3>
-        <RatingSummary experience={exp.slug} lang={lang} size={13} />
+        <RatingSummary experience={exp.slug} lang={lang} size={13} aggregate={reviewAggregate} />
         <p>{exp.tagline}</p>
         <ul className="feature-facts">
           <li><Clock3 size={14} /> {exp.duration}</li>
@@ -320,7 +321,7 @@ function FeaturedExperience({ exp, lang, cityTitle, mark, eyebrow, cta }: {
 }
 
 /** popular: the "Popular right now" cards (lib/popular.ts), golfLanding: send the golf category card to the golf landing page. */
-export function HomePage({ lang, popular = [], golfLanding = false }: { lang: Lang; popular?: Experience[]; golfLanding?: boolean }) {
+export async function HomePage({ lang, popular = [], golfLanding = false }: { lang: Lang; popular?: Experience[]; golfLanding?: boolean }) {
   const C = COPY[lang];
   const T = t(lang);
   const SP = supportCopy(lang);
@@ -337,6 +338,7 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
   const rest = live.filter((e) => !popularSlugs.has(e.slug));
   // The same compact cards as the listing pages (components/site/listing-card.tsx), six of them, skipping the popular row and the campaign card.
   const featuredCards = (getCollection("experiences", lang)?.items ?? []).filter((i) => i.slug !== "ofukuro-dinner" && !popularSlugs.has(i.slug)).slice(0, 6);
+  const golfRating = solo?.slug === PRIVATE_GOLF_EXPERIENCE || featuredCards.some(i => i.slug === PRIVATE_GOLF_EXPERIENCE) ? verifiedGolfAggregate(await verifiedPrivateGolfReviews()) : null;
   const heroHref = p("/experiences/");
   const heroCta = C.heroCta;
   const markFor = (e: Experience) => categories.find((c) => c.slug === e.category)?.mark ?? "";
@@ -497,10 +499,10 @@ export function HomePage({ lang, popular = [], golfLanding = false }: { lang: La
           {!solo && <Link className="underlined-link" href={p("/experiences/")}>{C.expLink} <ArrowRight /></Link>}
         </div>
         {solo ? (
-          <FeaturedExperience exp={solo} lang={lang} cityTitle={cityTitle(solo.city)} mark={markFor(solo)} eyebrow={C.featureEyebrow} cta={C.featureCta} />
+          <FeaturedExperience exp={solo} lang={lang} cityTitle={cityTitle(solo.city)} mark={markFor(solo)} eyebrow={C.featureEyebrow} cta={C.featureCta} reviewAggregate={solo.slug === PRIVATE_GOLF_EXPERIENCE ? golfRating ?? undefined : undefined} />
         ) : (
           <div className="lg-items lg-items-grid home-cards">
-            {featuredCards.map((item) => <ListingCard key={item.href} item={item} lang={lang} />)}
+            {featuredCards.map((item) => <ListingCard key={item.href} item={withPrivateGolfRating(item, golfRating)} lang={lang} />)}
           </div>
         )}
       </section>

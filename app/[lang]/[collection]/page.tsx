@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { ListingGrid } from "@/components/site/listing-grid";
 import { articleDate, articlesForCollection } from "@/lib/articles";
 import { catalogFor } from "@/lib/catalog";
+import { PRIVATE_GOLF_EXPERIENCE, verifiedGolfAggregate, verifiedPrivateGolfReviews, withPrivateGolfRating } from "@/lib/site-golf-reviews-context";
 import { collectionSlugs, getCollection } from "@/lib/collections";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
@@ -43,6 +44,8 @@ export default async function CollectionPage({ params }: Props) {
   const data = getCollection(collection, lang);
   if (!data) notFound();
   const T = t(lang);
+  const golfRating = data.items.some(i => i.slug === PRIVATE_GOLF_EXPERIENCE) ? verifiedGolfAggregate(await verifiedPrivateGolfReviews()) : null;
+  const items = golfRating ? data.items.map(item => withPrivateGolfRating(item, golfRating)) : data.items;
   const busTours = (collection === "golf" || collection === "sports") && await golfpaqEnabled();
 
   // Articles attached to any experience in this city or category.
@@ -89,7 +92,7 @@ export default async function CollectionPage({ params }: Props) {
         ) : null}
         {/* The listing itself: count, sort, grid/list and in-place filters (components/site/listing-grid.tsx).
             The city and interest pages stay as crawlable links under "also explore". */}
-        <ListingGrid items={data.items} lang={lang} />
+        <ListingGrid items={items} lang={lang} />
 
         <p className="collection-lead below">{data.lead}</p>
         {/* Crawlable links to the city and interest pages this listing overlaps with. */}

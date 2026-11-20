@@ -22,6 +22,14 @@ const APPROVAL = {
 
 export const SITE_GOLF_REVIEW_ID = "verified-round-2026-11-b";
 export const SITE_GOLF_REVIEW_HEADER = "x-kh-site-golf-review";
+
+export function isSiteGolfReviewPage(hostname: string, pathname: string, environment?: string): boolean {
+  return hostname === "kamehame-japan.com" && environment !== "staging" && (
+    pathname === "/" ||
+    /^\/(en|es|ja|fr|zh-tw)(?:\/(?:sports|golf|tokyo|experiences|golf-tours|tokyo\/mt-fuji-golf-day))?\/?$/.test(pathname)
+  );
+}
+
 const PHOTO_BASE = "/media/guest-reviews/verified-round-2026-11-b";
 const MAX_META_BYTES = 16_384;
 const MAX_TRANSFORMED_BYTES = 3 * 1024 * 1024;
