@@ -33,6 +33,8 @@ export function isSiteGolfReviewPage(hostname: string, pathname: string, environ
 const PHOTO_BASE = "/media/guest-reviews/verified-round-2026-11-b";
 const MAX_META_BYTES = 16_384;
 const MAX_TRANSFORMED_BYTES = 3 * 1024 * 1024;
+const WEBP_QUALITY = 82;
+const WEBP_CACHE_VERSION = 1;
 const digest = async (text: string) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text))), b => b.toString(16).padStart(2, "0")).join("");
 const millis = (v: unknown) => v instanceof Date ? v.getTime() : typeof v === "string" ? Date.parse(v) : NaN;
 
@@ -163,6 +165,7 @@ export async function serveSiteGolfReviewPhoto(request: Request, bucket: unknown
   const url = new URL(request.url);
   const match = photoPattern.exec(url.pathname);
   if (!REVIEWS_PUBLISHED || !match || url.search || !["GET", "HEAD"].includes(request.method) || !isBucket(bucket)) return failure();
+  const width = match[2] ? 600 : 1200;
   try {
     const selection = await approvedGolfReview(bucket, approval);
     const key = selection?.orderedPhotoKeys[Number(match[1]) - 1];
@@ -172,6 +175,19 @@ export async function serveSiteGolfReviewPhoto(request: Request, bucket: unknown
     // Late object replacement must not re-use a past site's image approval.
     if (!(millis(actual.uploaded) <= selection.submitted)) return failure("object time");
     if (actual.httpMetadata?.contentType !== "image/jpeg" || actual.size > MAX_IMAGE_BYTES) return failure("object type or size");
+
+    // Recheck publication consent and the source object before allowing a browser
+    // to reuse a WebP. Shared caches must not serve it after consent is revoked.
+    const validator = images && actual.etag
+      ? `"${await digest(JSON.stringify([WEBP_CACHE_VERSION, width, WEBP_QUALITY, actual.etag]))}"`
+      : null;
+    const headers = new Headers({ "cache-control": "no-store", "x-robots-tag": "noindex" });
+    if (validator && request.headers.get("if-none-match")?.split(",").some((tag) => tag.trim().replace(/^W\//, "") === validator)) {
+      await actual.body.cancel().catch(() => {});
+      headers.set("etag", `W/${validator}`);
+      headers.set("cache-control", "private, no-cache");
+      return new Response(null, { status: 304, headers });
+    }
     const original = await new Response(actual.body).arrayBuffer();
     if (original.byteLength !== actual.size || original.byteLength > MAX_IMAGE_BYTES) return failure("object byte size");
     const jpeg = sanitizeReviewJpeg(original);
@@ -183,7 +199,7 @@ export async function serveSiteGolfReviewPhoto(request: Request, bucket: unknown
     let type = "image/jpeg";
     try {
       if (images) {
-        const transformed = (await images.input(new Blob([jpeg]).stream()).transform({ width: match[2] ? 600 : 1200 }).output({ format: "image/webp", quality: 82 })).response();
+        const transformed = (await images.input(new Blob([jpeg]).stream()).transform({ width }).output({ format: "image/webp", quality: WEBP_QUALITY })).response();
         if (transformed.ok && transformed.headers.get("content-type")?.split(";")[0] === "image/webp") {
           const transformedBytes = await transformed.arrayBuffer();
           const webp = transformedBytes.byteLength <= MAX_TRANSFORMED_BYTES && stripWebpMetadata(transformedBytes);
@@ -191,10 +207,13 @@ export async function serveSiteGolfReviewPhoto(request: Request, bucket: unknown
         }
       }
     } catch { /* fall back when Images is not provisioned or returns an error */ }
-    return new Response(request.method === "HEAD" ? null : clean, { headers: {
-      "content-type": type, "content-length": String(clean.byteLength),
-      "cache-control": "no-store", "x-robots-tag": "noindex",
-    } });
+    if (type === "image/webp" && validator) {
+      headers.set("etag", `W/${validator}`);
+      headers.set("cache-control", "private, no-cache");
+    }
+    headers.set("content-type", type);
+    headers.set("content-length", String(clean.byteLength));
+    return new Response(request.method === "HEAD" ? null : clean, { headers });
   } catch {
     return failure("processing");
   }

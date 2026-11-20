@@ -52,7 +52,7 @@ const fake = (changes = {}, uploaded = '2099-01-05T09:59:59Z') => {
       hits.push(path);
       if (path === key) return { size: 512, async text() { return JSON.stringify({ ...example, ...changes }); } };
       if (!pics.includes(path)) return null;
-      return { size: withMetadata.length, uploaded: new Date(uploaded), httpMetadata: { contentType: 'image/jpeg' }, body: new Blob([withMetadata]).stream() };
+      return { size: withMetadata.length, etag: 'source-etag', uploaded: new Date(uploaded), httpMetadata: { contentType: 'image/jpeg' }, body: new Blob([withMetadata]).stream() };
     },
     async put() { throw new Error('no writes'); },
   };
@@ -93,12 +93,41 @@ test('approved image is first; the response retains pixels and strips metadata',
   const response = await serveSiteGolfReviewPhoto(new Request('https://test.example' + first), bucket, images, approval);
   assert.equal(response.status, 200);
   assert.equal(bucket.hits.at(-1), ordered[0]);
-  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.equal(response.headers.get('cache-control'), 'private, no-cache');
   const result = Buffer.from(await response.arrayBuffer());
   assert.deepEqual(result, Buffer.from(stripWebpMetadata(sampleImage)));
   assert.doesNotMatch(result.toString('ascii'), /EXIF|ICCP|XMP /);
   assert.match(result.toString('ascii'), /VP8 /);
   assert.equal(result[20] & 0x2c, 0);
+});
+
+test('thumbnail and full-size WebPs request different widths and revalidate without bypassing consent', async () => {
+  const bucket = fake();
+  const [first] = (await approvedGolfReview(bucket, approval)).review.photos;
+  const origin = 'https://test.example';
+  const thumbnail = origin + first.replace('.webp', '-600.webp');
+  const widths = [];
+  const trackedImages = {
+    input(input) {
+      const image = images.input(input);
+      return { transform({ width }) { widths.push(width); return image.transform(); } };
+    },
+  };
+  const thumb = await serveSiteGolfReviewPhoto(new Request(thumbnail), bucket, trackedImages, approval);
+  const full = await serveSiteGolfReviewPhoto(new Request(origin + first), bucket, trackedImages, approval);
+  assert.deepEqual(widths, [600, 1200]);
+  assert.equal(thumb.headers.get('content-type'), 'image/webp');
+  const etag = thumb.headers.get('etag');
+  assert.ok(etag);
+  assert.notEqual(etag, full.headers.get('etag'));
+  const conditional = new Request(thumbnail, { headers: { 'if-none-match': etag } });
+  const unchanged = await serveSiteGolfReviewPhoto(conditional, bucket, trackedImages, approval);
+  assert.equal(unchanged.status, 304);
+  assert.equal(unchanged.headers.get('etag'), etag);
+  assert.equal(unchanged.body, null);
+  assert.deepEqual(widths, [600, 1200]);
+  assert.equal((await serveSiteGolfReviewPhoto(conditional, fake({ mediaConsent: false }), trackedImages, approval)).status, 404);
+  assert.equal((await serveSiteGolfReviewPhoto(conditional, fake({}, '2099-01-05T10:00:02Z'), trackedImages, approval)).status, 404);
 });
 
 test('rejects replacement after submission, missing permission, and raw key requests', async () => {
@@ -119,6 +148,8 @@ test('same-origin route falls back to sanitized JPEG when image optimization is 
   const response = await serveSiteGolfReviewPhoto(request, bucket, faulty, approval);
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'image/jpeg');
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.equal(response.headers.get('etag'), null);
   assert.equal(bucket.hits.at(-1), ordered[0]);
   const bytes = Buffer.from(await response.arrayBuffer());
   assert.deepEqual(bytes, Buffer.from(sanitizeReviewJpeg(arrayBuffer(jpeg))));
