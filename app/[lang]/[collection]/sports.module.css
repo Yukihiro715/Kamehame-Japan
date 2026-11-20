@@ -3,7 +3,13 @@
 }
 
 .hero img {
-  object-position: center 26%;
+  object-position: center 14%;
+}
+
+@media (max-width: 440px) {
+  .hero img {
+    object-position: center 32%;
+  }
 }
 
 .hero :global(.collection-hero-copy) {
