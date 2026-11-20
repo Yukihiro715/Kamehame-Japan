@@ -586,6 +586,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                 </div>
               </section>
             )}
+            <SupportBanner lang={lang} place="end" />
           </div>
 
         </div>

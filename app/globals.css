@@ -2574,6 +2574,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 /* the banner on experience pages: a photo, room above and below, one message, one link; the booking button stays the page's main action */
 .support-banner { display:grid; grid-template-columns:132px minmax(0,1fr) auto; align-items:center; gap:22px; margin:8px 0 40px; padding:18px 22px 18px 18px; border:1px solid var(--border); border-radius:16px; background:var(--white); color:var(--ink); text-decoration:none; transition:border-color .2s, box-shadow .2s, transform .2s; }
 .support-banner:hover { border-color:var(--ink); box-shadow:0 12px 28px rgba(0,0,0,.08); transform:translateY(-1px); }
+.support-banner.sb-end { margin:40px 0 8px; }
 .sb-photo { display:block; width:132px; aspect-ratio:1; border-radius:12px; overflow:hidden; background:#e9e4da; }
 .sb-photo img { width:100%; height:100%; object-fit:cover; display:block; }
 .sb-copy { display:grid; gap:6px; min-width:0; }

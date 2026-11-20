@@ -46,10 +46,11 @@ test("travel support: the home section, the header link and the banner on experi
   assert.ok((home.match(/support-section[\s\S]*?<\/section>/)?.[0].match(/class="lc lc-grid sc/g) ?? []).length === 4, "four service cards in the section");
   for (const path of ["/en/tokyo/mt-fuji-golf-day/", "/en/kyoto/kyoto-ryokan-beauty-clinic/", "/ja/tokyo/kanji-name-calligraphy/"]) {
     const html = await (await render(path)).text();
-    const banners = html.match(/class="support-banner"/g) ?? [];
-    assert.equal(banners.length, 1, `${path}: one banner`);
+    const banners = html.match(/class="support-banner sb-(mid|end)"/g) ?? [];
+    assert.equal(banners.length, 2, `${path}: one banner under the overview and one by the articles`);
+    assert.ok(/class="support-banner sb-mid" href="\/[a-z-]+\/support\/" target="_blank" rel="noopener"/.test(html), `${path}: the banner opens in a new tab`);
     assert.ok(html.includes("/images/support-banner.webp"), `${path}: the banner carries a photo`);
-    assert.ok(html.indexOf('class="support-banner"') > html.indexOf('id="booking"') || html.indexOf('class="support-banner"') > html.indexOf("xp-main"), `${path}: the banner sits in the main column, not above the booking box`);
+    assert.ok(html.indexOf('class="support-banner sb-mid"') > html.indexOf("xp-main"), `${path}: the banner sits in the main column, not above the booking box`);
   }
   const header = await (await render("/fr/about/")).text();
   assert.ok(header.includes('href="/fr/support/"'), "header links to travel support in every language");
