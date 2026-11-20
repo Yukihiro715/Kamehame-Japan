@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { ListingCard } from "@/components/site/listing-card";
 import { ListingGrid } from "@/components/site/listing-grid";
 import { articleDate, articlesForCollection } from "@/lib/articles";
+import { terraceCopy, terraceName, terracePath } from "@/lib/bamboo-sky-terrace";
 import { catalogFor } from "@/lib/catalog";
 import { PRIVATE_GOLF_EXPERIENCE, verifiedGolfAggregate, verifiedPrivateGolfReviews, withPrivateGolfRating } from "@/lib/site-golf-reviews-context";
 import { collectionSlugs, getCollection } from "@/lib/collections";
@@ -115,6 +116,13 @@ export default async function CollectionPage({ params }: Props) {
         ) : <ListingGrid items={items} lang={lang} />}
 
         {!sportsOverview && <p className="collection-lead below">{data.lead}</p>}
+        {collection === "kyoto" && (
+          <div className="contact-route">
+            <h2>{terraceName}</h2>
+            <p>{terraceCopy[lang].lead}</p>
+            <Link className="underlined-link" href={terracePath(lang)}>{terraceCopy[lang].details} <ArrowRight size={15} /></Link>
+          </div>
+        )}
         {/* Crawlable links to the city and interest pages this listing overlaps with. */}
         <div className="refine-row below" aria-label={T.refine}>
           <span className="refine-label">{T.refine}</span>
