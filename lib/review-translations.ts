@@ -1,3 +1,4 @@
+import type { Review } from "./reviews";
 import type { Lang } from "@/lib/i18n";
 
 type Translation = { body: string; excerpt: string };
@@ -26,3 +27,11 @@ const translations: Record<string, Record<Exclude<Lang, "en">, Translation>> = {
 
 export const reviewTranslationFor = (id: string, lang: Lang): Translation | null =>
   lang === "en" ? null : translations[id]?.[lang] ?? null;
+
+/** Server-projected approved localization takes priority over legacy review
+ * translations, and the carousel uses its verbatim first paragraph. */
+export function golfReviewTranslationFor(review: Review, lang: Lang): Translation | null {
+  if (lang === "en") return null;
+  const text = review.i18n?.[lang]?.body;
+  return text ? { body: text, excerpt: text.split("\n\n")[0] } : reviewTranslationFor(review.id, lang);
+}

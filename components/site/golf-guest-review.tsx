@@ -2,7 +2,7 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import { ReviewPhotoGallery } from "./review-photo-gallery";
 import { Stars } from "@/components/site/reviews";
 import { reviewDate, reviewsFor, type Review } from "@/lib/published-reviews";
-import { reviewTranslationFor } from "@/lib/review-translations";
+import { golfReviewTranslationFor } from "@/lib/review-translations";
 import { SITE_GOLF_REVIEW_ID } from "@/lib/site-reviewed-golf";
 import { t, type Lang } from "@/lib/i18n";
 import styles from "./golf-guest-review.module.css";
@@ -24,7 +24,7 @@ export function GolfGuestQuote({ lang, landing = false }: { lang: Lang; landing?
   const review = guestReview();
   if (!review) return null;
   const c = copy[lang];
-  const translation = reviewTranslationFor(review.id, lang);
+  const translation = golfReviewTranslationFor(review, lang);
   const href = landing ? `/${lang}/tokyo/mt-fuji-golf-day/#reviews` : "#reviews";
   return (
     <aside className={`${styles.quote} ${landing ? styles.landing : ""}`} aria-label={c.eyebrow}>
@@ -57,7 +57,7 @@ export function GolfGuestReview({ lang, ctaLabel, list }: { lang: Lang; ctaLabel
       <p className={styles.eyebrow}>{c.eyebrow}</p>
       <h2 id="golf-guest-title">{c.title}</h2>
       {list.map((review) => {
-  const translation = reviewTranslationFor(review.id, lang);
+  const translation = golfReviewTranslationFor(review, lang);
   const paragraphs = (translation?.body ?? review.body).split("\n\n");
   const photoLabel = review.id === SITE_GOLF_REVIEW_ID ? newPhotoCopy[lang].label(review.author) : c.photos;
   const photoAlts = review.id === SITE_GOLF_REVIEW_ID ? newPhotoCopy[lang].alts : c.alts;

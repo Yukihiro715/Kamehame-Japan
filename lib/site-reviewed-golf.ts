@@ -1,9 +1,12 @@
 import { isBucket, MAX_IMAGE_BYTES, type R2Like } from "./review-media";
 import { REVIEWS_PUBLISHED, type Review } from "./reviews";
 import { sanitizeReviewJpeg } from "./review-jpeg";
+import { SITE_REVIEW_LOCALIZATIONS } from "./site-review-localized-envelope";
+import { openSiteReviewLocalizations } from "./site-review-localization";
 
 // Website publication only. The approved review and uploads stay in the
-// private MEDIA bucket; the repository has only irreversible fingerprints.
+// private MEDIA bucket; only fingerprints and encrypted localization material
+// are stored in code.
 const APPROVAL = {
   month: "2026-11",
   record: "be01e6fb2c86ee2ca14e33bcb2dcf873f98688506f8fabc161265f91c5e8f734",
@@ -43,7 +46,7 @@ type ApprovedGolfReview = {
   orderedPhotoKeys: string[];
 };
 
-export async function approvedGolfReview(bucket: R2Like, approval: Approval = APPROVAL): Promise<ApprovedGolfReview | null> {
+export async function approvedGolfReview(bucket: R2Like, approval: Approval = APPROVAL, includeTranslations = false): Promise<ApprovedGolfReview | null> {
   const monthPrefix = `reviews/${approval.month}/`;
   const metaKeyPattern = new RegExp(`^${monthPrefix}[0-9a-f-]{36}/meta\\.json$`);
   let cursor: string | undefined;
@@ -89,9 +92,11 @@ export async function approvedGolfReview(bucket: R2Like, approval: Approval = AP
   // Show the gallery only if the approved cover and all assigned slots are
   // present. Revoking just media consent does not hide the review text.
   const orderedPhotoKeys = approval.photos.every((hash) => allowedKeys.has(hash)) ? approval.photos.map((hash) => allowedKeys.get(hash)!) : [];
+  const i18n = includeTranslations ? await openSiteReviewLocalizations(SITE_REVIEW_LOCALIZATIONS, key, approval.body) : undefined;
   const review: Review = {
     id: SITE_GOLF_REVIEW_ID, author, body, country: "", experience: approval.experience,
     rating: approval.rating, date: approval.date, source: "direct", verified: true,
+    ...(i18n ? { i18n } : {}),
     photos: orderedPhotoKeys.map((_, i) => `${PHOTO_BASE}/${i + 1}.webp`),
   };
   return { review, submitted: at, orderedPhotoKeys };
@@ -101,7 +106,7 @@ export async function siteGolfReview(): Promise<Review | null> {
   try {
     if (!REVIEWS_PUBLISHED) return null;
     const { env } = await import("cloudflare:workers");
-    return isBucket(env.MEDIA) ? (await approvedGolfReview(env.MEDIA))?.review ?? null : null;
+    return isBucket(env.MEDIA) ? (await approvedGolfReview(env.MEDIA, APPROVAL, true))?.review ?? null : null;
   } catch {
     // Storage unavailability never prevents the golf page from rendering.
     return null;
