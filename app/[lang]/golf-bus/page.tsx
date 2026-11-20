@@ -1,7 +1,11 @@
+import { serializeJsonLd, absolute } from "@/lib/seo";
+import { faqJsonLd } from "@/lib/experience-seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bus, CheckCircle2, MapPin, UserRound, Flag, Search, Send, Mail, CreditCard, BadgeCheck, Clock, Users, JapaneseYen, CalendarX2, ShieldCheck } from "lucide-react";
+import { BusGuestReview } from "@/components/site/bus-guest-review";
+import { RatingSummary } from "@/components/site/reviews";
 import { BusTours } from "@/components/site/bus-tours";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -57,6 +61,7 @@ export default async function GolfBusPage({ params }: Props) {
           <div className="gb-hero-text">
             <p className="gb-eyebrow">KAMEHAME JAPAN · GOLF · SHARED BUS TOURS</p>
             <h1>{C.heroTitle}</h1>
+            <div className="gb-hero-reviews"><RatingSummary experience="golf-bus" lang={lang} href="#reviews" size={17} /></div>
             <p className="gb-hero-lede">{C.heroLede}</p>
             <ul className="gb-features">
               {C.features.map((f, i) => { const Icon = featureIcons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
@@ -73,6 +78,8 @@ export default async function GolfBusPage({ params }: Props) {
             <p className="gb-glance-more"><a href="#details">{C.glanceMore} ↓</a></p>
           </div>
         </section>
+
+        <div className="gb-wrap"><BusGuestReview lang={lang} /></div>
 
         <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} />
 
@@ -173,6 +180,11 @@ export default async function GolfBusPage({ params }: Props) {
           </div>
         </section>
       </main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({ "@context": "https://schema.org", "@graph": [
+        { "@type": "CollectionPage", "@id": `${absolute(`/${lang}/golf-bus/`)}#webpage`, url: absolute(`/${lang}/golf-bus/`), name: C.heroTitle, description: C.heroLede, inLanguage: lang, isPartOf: { "@id": `${absolute("/")}#website` } },
+        faqJsonLd(C.faq, `/${lang}/golf-bus/`, lang),
+        { "@type": "ItemList", name: C.heroTitle, itemListElement: tours.map((tour, index) => ({ "@type": "ListItem", position: index + 1, name: `${tour.date} · ${lang === "ja" ? tour.course : tour.courseEn}`, url: absolute(`/${lang}/golf-bus/`), description: `${tour.pickup} · JPY ${tour.perPersonYen}` })) },
+      ] }) }} />
       <SiteFooter lang={lang} />
     </>
   );

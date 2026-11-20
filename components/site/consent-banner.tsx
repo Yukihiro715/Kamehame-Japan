@@ -6,17 +6,17 @@ import { readAttribution } from "@/lib/attribution-client";
 import { CONSENT_KEY } from "@/lib/consent";
 import { t, type Lang } from "@/lib/i18n";
 
-type Choice = "granted" | "denied";
+import { GOLF_ADS_CONSENT, golfPage, initGolfLanding, setGolfAdsConsent } from "@/lib/golf-ads";
 
-/** Timezones that mean "probably in the EEA, the UK or Switzerland". Used
- *  only to decide whether to show the banner unprompted; the legal defaults
- *  are enforced by region inside Consent Mode, so a miss fails safe. */
-function inStrictRegion() {
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
-    return tz.startsWith("Europe/") || ["Atlantic/Canary", "Atlantic/Madeira", "Atlantic/Azores", "Atlantic/Reykjavik"].includes(tz);
-  } catch { return false; }
-}
+const golfDisclosure: Record<Lang, string> = {
+  en: "With your consent, OpenAI also measures golf enquiries and payments from ChatGPT ads.",
+  ja: "同意すると、OpenAIもChatGPT広告経由のゴルフのお問い合わせ・決済を計測します。",
+  es: "Con tu consentimiento, OpenAI también mide las consultas y los pagos de golf procedentes de anuncios de ChatGPT.",
+  fr: "Avec votre accord, OpenAI mesure aussi les demandes et paiements de golf issus des publicités ChatGPT.",
+  "zh-tw": "經您同意，OpenAI 也會衡量來自 ChatGPT 廣告的高爾夫詢問與付款。",
+};
+
+type Choice = "granted" | "denied";
 
 function update(choice: Choice) {
   const w = window as unknown as { dataLayer?: unknown[] };
@@ -40,6 +40,7 @@ function update(choice: Choice) {
   fbq?.("consent", choice === "granted" ? "grant" : "revoke");
   w.dataLayer.push({ event: "consent_choice", consent_choice: choice });
   try { localStorage.setItem(CONSENT_KEY, choice); } catch { /* private mode */ }
+  setGolfAdsConsent(choice);
   readAttribution();
 }
 
@@ -50,7 +51,12 @@ export function ConsentBanner({ lang }: { lang: Lang }) {
   useEffect(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem(CONSENT_KEY); } catch { /* private mode */ }
-    if (stored !== "granted" && stored !== "denied" && inStrictRegion()) setOpen(true);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read persisted browser consent after SSR; default remains closed for hydration
+    if (stored !== "granted" && stored !== "denied") setOpen(true);
+    if (stored === "granted" && golfPage()) {
+      try { if (!localStorage.getItem(GOLF_ADS_CONSENT)) setOpen(true); } catch { /* storage blocked */ }
+    }
+    initGolfLanding();
     // The footer link re-opens this from anywhere on the page.
     const onOpen = () => setOpen(true);
     window.addEventListener("kh:consent", onOpen);
@@ -66,7 +72,7 @@ export function ConsentBanner({ lang }: { lang: Lang }) {
       <div className="consent-copy">
         <b>{C.title}</b>
         <p>
-          {C.body}{" "}
+          {C.body} {golfDisclosure[lang]}{" "}
           <Link href={`/${lang}/privacy/`}>{C.more}</Link>
         </p>
       </div>

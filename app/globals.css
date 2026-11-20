@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "../vendor/shadcn-tailwind-4.13.0.css";
 
+/* MessageScroller reserves its scrollbar width to avoid content jumping. */
+@utility scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --ink: #171a21; --paper: #f7f2e7; --rice: #e9e1cf; --kame: #ee7c18; --kame-soft: #58c6ff; --blue: #274d9e; --gold: #ffc93c; --white: #fffdf8; --muted: #6f6c64;
   --font-display: 'Anton', 'Arial Black', 'Helvetica Neue', sans-serif;
@@ -551,6 +556,8 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
 .journal-card { display:block; background:var(--white); border:2px solid var(--ink); box-shadow:6px 6px 0 rgba(23,26,33,.85); text-decoration:none; color:inherit; transition:transform .15s ease, box-shadow .15s ease; }
 .journal-card:hover { transform:translate(-2px,-2px); box-shadow:8px 8px 0 rgba(23,26,33,.85); }
 .journal-card img { width:100%; height:190px; object-fit:cover; display:block; border-bottom:2px solid var(--ink); }
+/* Keep the photographed rental set visible in both card and article crops. */
+.journal-card img[src*="/golf-clubs/"], .detail-gallery.single .gallery-main[src*="/golf-clubs/"] { object-fit:contain; background:#e9eae4; }
 .journal-card > div { padding:20px 22px 24px; }
 .journal-card h2, .journal-card h3 { margin:6px 0 10px; font-family:var(--font-display); font-weight:400; font-size:20px; letter-spacing:.02em; text-transform:uppercase; line-height:1.2; }
 .journal-card p { margin:0; font-size:13px; line-height:1.75; color:#4a463e; }
@@ -561,6 +568,32 @@ a.rating-summary:hover span:last-child { text-decoration:underline; }
 
 .article-body h2 { margin:38px 0 14px; font-family:var(--font-display); font-weight:400; font-size:21px; letter-spacing:.04em; text-transform:uppercase; }
 .article-body p { margin:0 0 16px; font-size:15px; line-height:1.95; color:#3f3b34; }
+.journal-byline { font-size:13px; color:var(--muted); }
+.journal-byline a { color:inherit; text-underline-offset:3px; }
+.journal-image-note { font-size:12px; line-height:1.65; color:var(--muted); }
+.article-toc { margin:28px 0 36px; padding:22px 26px; border:1px solid var(--border); background:var(--rice); }
+.article-toc ul, .article-reading ul { margin:12px 0 0; padding-left:20px; }
+.article-toc li, .article-reading li { margin:9px 0; line-height:1.6; }
+.article-toc a, .article-reading a, .article-inline-link a { color:inherit; text-underline-offset:4px; }
+.article-body h2[id] { scroll-margin-top:100px; }
+.article-table-scroll { max-width:100%; overflow-x:auto; margin:26px 0; border:1px solid var(--border); }
+.article-table { width:100%; border-collapse:collapse; font-size:13px; line-height:1.65; text-align:left; }
+.article-table caption { text-align:left; padding:16px; font-weight:600; color:var(--ink); }
+.article-table th, .article-table td { padding:12px 15px; border-top:1px solid var(--border); vertical-align:top; min-width:110px; }
+.article-table thead { background:var(--rice); }
+.article-table tbody th { font-weight:600; }
+.article-booking { margin-top:38px; padding:26px; border-left:4px solid var(--ink); background:var(--rice); }
+.article-booking h2, .article-reading h2 { font-size:22px; line-height:1.3; margin:0 0 12px; }
+.article-booking p { font-size:15px; line-height:1.8; }
+.article-reading { margin-top:36px; }
+.article-editorial-note { margin-top:36px; padding-top:22px; border-top:1px solid var(--border); font-size:12px; line-height:1.8; color:var(--muted); }
+.article-editorial-note p { margin-top:6px; }
+.golf-journal-links { padding-top:42px; padding-bottom:52px; }
+.golf-journal-links ul { padding-left:20px; }
+.golf-journal-links li { margin:16px 0; line-height:1.65; }
+.golf-journal-links a { color:inherit; text-underline-offset:4px; }
+.golf-journal-links svg { display:inline; vertical-align:middle; }
+@media(max-width:600px) { .article-toc, .article-booking { padding:18px; } .article-table th, .article-table td { padding:10px; } }
 .article-links { display:grid; gap:12px; }
 .article-links a { display:flex; gap:14px; align-items:center; border:1px solid var(--border); background:var(--white); padding:10px; text-decoration:none; color:inherit; }
 .article-links a:hover { border-color:var(--ink); }
@@ -1697,6 +1730,9 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gt-media { display:grid; gap:10px; min-width:0; }
 .gt-media img { display:block; width:100%; height:auto; aspect-ratio:16 / 9; object-fit:cover; border-radius:16px; background:#e9e4da; }
 .gt-media .gt-photo2 { aspect-ratio:4 / 3; width:46%; justify-self:end; margin-top:-18%; margin-right:14px; border:4px solid var(--white); box-shadow:0 10px 30px rgba(0,0,0,.14); }
+.gt-arrival { grid-column:1 / -1; margin:0; }
+.gt-arrival img { display:block; width:100%; height:auto; aspect-ratio:16 / 9; object-fit:cover; border-radius:12px; }
+.gt-arrival figcaption { margin-top:8px; font-size:.875rem; }
 .gt-text h2 { margin-bottom:14px; }
 .gt-lede { margin:0 0 18px; font-size:16px; line-height:1.7; color:#3d3a34; }
 .gt-points { list-style:none; margin:0; padding:0; display:grid; gap:12px; }
@@ -1917,6 +1953,9 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-hero-text { position:relative; z-index:1; max-width:1180px; width:100%; margin:0 auto; padding:120px clamp(20px,5vw,48px) 48px; display:grid; gap:14px; }
 .gb-hero h1 { margin:0; font-family:var(--font-display); font-weight:400; font-size:clamp(40px,7vw,80px); line-height:1; letter-spacing:.02em; text-wrap:balance; }
 .gb-hero-lede { margin:0; max-width:620px; font-size:clamp(16px,2vw,20px); line-height:1.5; }
+.gb-hero-reviews .rating-summary { margin:0; min-height:44px; padding:8px 12px; border-radius:8px; color:#fff; background:rgba(0,0,0,.55); font-size:14px; }
+.gb-hero-reviews .rating-summary b { color:#fff; font-size:15px; }
+.gb-hero-reviews .rating-summary:focus-visible { outline:3px solid var(--kame); outline-offset:4px; }
 .gb-features { list-style:none; margin:4px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
 .gb-features li { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:13px; backdrop-filter:blur(4px); background:rgba(0,0,0,.2); }
 .gb-hero-cta { width:auto; margin-top:6px; }
@@ -2556,3 +2595,9 @@ body[data-kh-modal] .sticky-request { display:none; }
 @media (max-width:560px) { .sp-flow.xp-flow { grid-template-columns:1fr; } }
 .sp-golf { display:grid; gap:12px; padding:12px 14px; border-left:3px solid var(--kame); background:#fff8f1; }
 .sp-form .form-check { background:var(--white); }
+/* iOS Safari auto-zooms focused controls below 16px. Shared across all pages;
+   preserve pinch zoom and never work around this through viewport restrictions. */
+@media (max-width: 1024px), (pointer: coarse) {
+  html body input:not([type="checkbox"]):not([type="radio"]),
+  html body select, html body textarea { font-size: max(16px, 1rem) !important; }
+}

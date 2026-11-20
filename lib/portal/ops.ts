@@ -1,6 +1,7 @@
 /** Operations: partners, settlement profiles, policies, reservation actions,
  *  exceptions, export. Every change is reasoned and logged; original data is
  *  never deleted to correct something (要件 6). */
+import { ledgerSheetId } from "@/lib/business/ledger-contract";
 import { catalogFor } from "@/lib/catalog";
 import { jstDate, randomId, type SqlDb, type SqlStatement } from "@/lib/referral/db";
 import { netFromGross, taxOnTotal } from "@/lib/referral/money";
@@ -424,12 +425,15 @@ export async function settingsGet(db: SqlDb) {
 }
 export async function settingsSet(db: SqlDb, input: { values: unknown; by: string }) {
   const values = input.values && typeof input.values === "object" ? input.values as Record<string, unknown> : {};
-  const allowed = ["public_origin", "visit_window_minutes", "min_payout_jpy", "settlement_note", "ops_notify_email"];
+  const allowed = ["public_origin", "visit_window_minutes", "min_payout_jpy", "settlement_note", "ops_notify_email", "business_ledger_sheet_id", "business_ledger_sync"];
   const at = now_();
   const statements: SqlStatement[] = [];
   for (const [k, v] of Object.entries(values)) {
     if (!allowed.includes(k)) throw bad("unknown_setting", k);
-    statements.push({ sql: `INSERT INTO portal_settings (key, value, updated_at, updated_by) VALUES (?, ?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at, updated_by = excluded.updated_by`, params: [k, str(v, 500), at, input.by] });
+    if(k==='business_ledger_sheet_id'&&v!==''&&!ledgerSheetId(v))throw bad('invalid_ledger_sheet');
+    if(k==='business_ledger_sync'&&!['true','false'].includes(String(v)))throw bad('invalid_ledger_enabled');
+    const value=k==='business_ledger_sheet_id'?ledgerSheetId(v):str(v,500);
+    statements.push({ sql: `INSERT INTO portal_settings (key, value, updated_at, updated_by) VALUES (?, ?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at, updated_by = excluded.updated_by`, params: [k, value, at, input.by] });
   }
   statements.push(audit(input.by, "settings.update", "settings", "portal", null, values, at));
   await db.batch(statements);

@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -83,7 +84,7 @@ export default async function FaqPage({ params }: Props) {
         </article>
       </div>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
       <SiteFooter lang={lang} />
     </main>
   );

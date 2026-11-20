@@ -1,6 +1,6 @@
 "use client";
 import "./provisional-consent.css";
-import { readAttribution } from "@/lib/attribution-client";
+import { collectAttribution } from "@/lib/attribution-client";
 import { QuoteRequestSwitch, quoteCopy } from "./quote-request-switch";
 
 import { useRef, useState, type FormEvent } from "react";
@@ -16,7 +16,7 @@ import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
-import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy, checkoutTimeCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy, checkoutTimeCopy, checkoutStandardCopy } from "@/lib/provisional-booking";
 import { CancellationTable } from "@/components/site/cancellation-table";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -106,19 +106,19 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           } catch { /* storage blocked: the in-memory attempt still protects retries */ }
           attempt.current = { signature, id };
         }
-        const res = await fetch("/api/experience-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: attempt.current.id }) });
+        const res = await fetch("/api/experience-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: attempt.current.id, attribution: await collectAttribution() }) });
         const json = await res.json() as { ok?: boolean; url?: string };
         if (!res.ok || !json.ok || !json.url) { setStatus("failed"); return; }
         const target = new URL(json.url);
         if (target.protocol !== "https:" || !["checkout.stripe.com", "book.stripe.com"].includes(target.hostname)) { setStatus("failed"); return; }
-        track("begin_checkout", { experience: x.slug, value: b.estimate?.total, currency: "JPY", language: lang });
+        track("begin_checkout", { enquiry_id: attempt.current.id, experience: x.slug, value: b.estimate?.total, currency: "JPY", language: lang });
         window.location.assign(target.href);
         return;
       }
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug, attribution: readAttribution() }),
+        body: JSON.stringify({ ...data, kind, lang, experience: experience?.slug, attribution: await collectAttribution() }),
       });
       const json = (await res.json()) as { ok: boolean; request_id?: string };
       if (!json.ok) { setStatus("failed"); return; }
@@ -317,7 +317,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
             <CancellationTable exp={{ cancellationTiers: x.cancellationTiers }} text={x.cancellationText ?? ""} lang={lang} />
           </details>
           <p>{P.cancellation}</p>
-          <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{P.standard}</span></label>
+          <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{checkoutStandardCopy(lang, x.slug)}</span></label>
           {(EXPERIENCE_PRODUCTS[x.slug].adultOnly || EXPERIENCE_PRODUCTS[x.slug].eligibilityRequired || EXPERIENCE_PRODUCTS[x.slug].groupPricing) && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{checkoutAdultCopy(lang, x.slug)}</span></label>}
           <label className="form-check"><input name="checkout_consent" type="checkbox" required /><span>{P.consent} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{T.footerTerms}</a></span></label>
 

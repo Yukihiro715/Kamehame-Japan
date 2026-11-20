@@ -1,3 +1,4 @@
+import { attributionNote } from "./attribution";
 /** Mail for shared-bus golf tour enquiries. Customer-facing text shows one
  *  tax-inclusive total and the rental option only; the partner's price and
  *  the amount added per person appear in staff and partner mail alone. */
@@ -19,7 +20,7 @@ const rentalsEn = (f: EnquiryFacts) => { const x = [f.renters ? `rental clubs fo
 const rentalsJa = (f: EnquiryFacts) => { const x = [f.renters ? `レンタルクラブ ${f.renters}名` : "", f.shoeRenters ? `レンタルシューズ ${f.shoeRenters}名` : ""].filter(Boolean); return x.length ? `（${x.join("、")}）` : ""; };
 const golferLinesEn = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "Golfers:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "(name to follow)"}${g.clubs ? ` · rental clubs (${g.hand === "left" ? "left" : "right"}-handed)` : " · own clubs"}${g.shoes ? ` · shoe rental${g.shoeSize ? ` size ${g.shoeSize}` : ""}` : ""}`)] : []);
 export const golferLinesJa = (f: EnquiryFacts): string[] => (f.golfers?.length ? ["", "参加者:", ...f.golfers.map((g, i) => `  ${i + 1}. ${g.name || "（未記入）"}${g.clubs ? `／レンタルクラブ（${g.hand === "left" ? "左" : "右"}利き）` : "／クラブ持参"}${g.shoes ? `／シューズレンタル${g.shoeSize ? ` ${g.shoeSize}` : ""}` : ""}`)] : []);
-export interface InternalFacts extends EnquiryFacts { sourceYen: number; feeYen: number; seatsShown: number | null; snapshotUpdatedAt: string | null; tourId: string }
+export interface InternalFacts extends EnquiryFacts { attribution?: import("./attribution").Attribution; sourceYen: number; feeYen: number; seatsShown: number | null; snapshotUpdatedAt: string | null; tourId: string }
 
 const dateEn = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 const dateJa = (d: string) => { const x = new Date(`${d}T00:00:00Z`); return `${x.getUTCFullYear()}年${x.getUTCMonth() + 1}月${x.getUTCDate()}日（${"日月火水木金土"[x.getUTCDay()]}）`; };
@@ -97,6 +98,7 @@ export function staffNotification(f: InternalFacts): { subject: string; text: st
     subject: `[乗合ゴルフ] ${f.tour.date} ${f.tour.course} ${f.people}名 ${f.reference}`,
     text: [
       `受付番号: ${f.reference}`,
+      attributionNote(f.attribution),
       `ツアー: ${f.tour.course}（${f.tourId}）`,
       `日程: ${f.tour.date} / 出発: ${f.tour.pickup}${f.tour.departure.time ? ` ${f.tour.departure.time}` : ""}`,
       `人数: ${f.people}名 / レンタルクラブ: ${f.renters}名 / レンタルシューズ: ${f.shoeRenters ?? 0}名 / 表示残席: ${f.seatsShown ?? "?"}（データ更新 ${f.snapshotUpdatedAt ?? "?"}）`,

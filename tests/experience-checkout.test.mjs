@@ -12,9 +12,12 @@ const root=fileURLToPath(new URL('..',import.meta.url));
 const vite=await createServer({appType:'custom',configFile:false,root,resolve:{alias:{'@':root}},server:{middlewareMode:true}});
 after(()=>vite.close());
 const m=await vite.ssrLoadModule('/lib/experience-checkout.ts');
-const {EXPERIENCE_PRODUCTS,provisionalCopy}=await vite.ssrLoadModule('/lib/provisional-booking.ts');
+const {EXPERIENCE_PRODUCTS,provisionalCopy,checkoutProductConfigured}=await vite.ssrLoadModule('/lib/provisional-booking.ts');
+const {PRIVATE_TEA_CHECKOUT_PRICES}=await vite.ssrLoadModule('/lib/private-tea-checkout-prices.ts');
+// Payment tests use isolated fixture IDs; never create real checkout sessions.
+for (const [key,p] of Object.entries(PRIVATE_TEA_CHECKOUT_PRICES)) p.price='price_fixture'+key.replaceAll('_','');
 const {catalogFor}=await vite.ssrLoadModule('/lib/catalog.ts');
-const {pricingFor}=await vite.ssrLoadModule('/lib/pricing.ts');
+const {pricingFor,quote}=await vite.ssrLoadModule('/lib/pricing.ts');
 const {BookingProvider,firstOpenDate}=await vite.ssrLoadModule('/components/site/booking-context.tsx');
 const {EnquiryForm}=await vite.ssrLoadModule('/components/site/enquiry-form.tsx');
 const {CurrencyProvider}=await vite.ssrLoadModule('/components/site/currency-context.tsx');
@@ -26,16 +29,16 @@ const reference='KJ-E-11111111222243338444555555555555';
 const env={EXPERIENCE_CHECKOUT_ENABLED:'true',STRIPE_CHECKOUT_KEY:'rk_live_example',STRIPE_READ_KEY:'rk_live_read',STRIPE_WEBHOOK_SECRET:'whsec_example',GOLF_AUTOMATION_URL:'https://script.google.com/macros/s/example/exec',GOLF_AUTOMATION_TOKEN:'test-token'};
 
 test('server prices: minimum charge, allowed quantities, adult eligibility and tampered prices',()=>{
-  assert.equal(order.amount,39600);assert.equal(order.quantity,2);assert.equal(order.guests,2);
-  for(const guests of [2,3,4])assert.equal(m.parseExperienceOrder({...base,guests},now).amount,19800*guests);
+  assert.equal(order.amount,43000);assert.equal(order.quantity,2);assert.equal(order.guests,2);
+  for(const guests of [2,3,4])assert.equal(m.parseExperienceOrder({...base,guests},now).amount,21500*guests);
   assert.equal(m.parseExperienceOrder({...base,guests:5},now),null);
-  assert.equal(m.parseExperienceOrder({...base,amount:1,price:'price_fake'},now).amount,39600);
+  assert.equal(m.parseExperienceOrder({...base,amount:1,price:'price_fake'},now).amount,43000);
   assert.equal(m.parseExperienceOrder({...base,experience:'mt-fuji-golf-day'},now),null);
   for(const change of [{guests:1},{guests:1.5},{consent:false},{standard:false},{date:'2026-02-30'},{time:'03:00'},{date:'2026-10-22'},{email:'bad'},{name:'Header\r\nInjected'},{request_id:'invalid'}])assert.equal(m.parseExperienceOrder({...base,...change},now),null);
   assert.equal(m.parseExperienceOrder({...base,date:'2026-10-23'},Date.parse('2026-10-22T09:00:00Z')),null,'18:00 JST cutoff');
   const k={...base,experience:'tokyo-kendo-experience-tour',time:'10:00',guests:2};
   assert.equal(m.parseExperienceOrder(k,now),null);
-  assert.equal(m.parseExperienceOrder({...k,adultOnly:true},now).amount,39600);
+  assert.equal(m.parseExperienceOrder({...k,adultOnly:true},now).amount,55000);
   assert.equal(m.parseExperienceOrder({...k,adultOnly:true,date:'2026-11-07'},now),null,'weekend');
   assert.equal(m.parseExperienceOrder({...base,experience:'shibuya-ramen-class',time:'11:00',guests:16},now).amount,424000);
 });
@@ -48,7 +51,7 @@ test('enabled non-golf experiences support their priced party range and correct 
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:2,time:'10:00',adultOnly:true},now),null);
   }
   const products=published.filter(x=>!enquiryOnly.has(x.slug));
-  assert.equal(products.length,12);
+  assert.equal(products.length,13);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
     const product=EXPERIENCE_PRODUCTS[x.slug];
@@ -57,7 +60,7 @@ test('enabled non-golf experiences support their priced party range and correct 
       const o=m.parseExperienceOrder(input,now);
       assert.ok(o,x.slug+' '+guests);
       assert.equal(o.city,x.city);
-      assert.equal(o.amount,product.groupPricing?({2:179000,3:209000,4:231000,5:271000})[guests]:product.amount*Math.max(guests,product.minCharge));
+      assert.equal(o.amount,product.privateTeaPricing?quote(pricingFor(x,'en'),'',guests,input.date).total:product.groupPricing?({2:179000,3:209000,4:231000,5:271000})[guests]:product.amount*Math.max(guests,product.minCharge));
       assert.match(m.checkoutParameters(o,reference,now).get('cancel_url'),new RegExp('/'+x.city+'/'+x.slug+'/'));
     }
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:product.max+1,adultOnly:true},now),null);
@@ -126,7 +129,7 @@ test('retry uses same Stripe idempotency key; no redirect until session is persi
   const old=globalThis.fetch,calls=[];let failPersist=true;const createdAt=Date.now();
   try{
     globalThis.fetch=async(url,init)=>{
-      if(String(url).startsWith('https://api.stripe.com')){calls.push(init);return Response.json({id:'cs_live_example',url:'https://checkout.stripe.com/c/pay/example',status:'open',livemode:true,amount_total:39600,currency:'jpy'});}
+      if(String(url).startsWith('https://api.stripe.com')){calls.push(init);return Response.json({id:'cs_live_example',url:'https://checkout.stripe.com/c/pay/example',status:'open',livemode:true,amount_total:43000,currency:'jpy'});}
       const b=JSON.parse(init.body);
       if(b.action==='experience_create')return Response.json({ok:true,id:reference,createdAt,status:'awaiting_payment'});
       return Response.json({ok:!failPersist});
@@ -138,7 +141,8 @@ test('retry uses same Stripe idempotency key; no redirect until session is persi
   }finally{globalThis.fetch=old;}
 });
 
-function gasRuntime(){
+function gasRuntime(orderOverride=order){
+  const order=orderOverride;
   const c=vm.createContext({console,Date,JSON,Number,String,Error,isNaN});
   vm.runInContext(readFileSync(new URL('../docs/experience-checkout.gs',import.meta.url),'utf8'),c);
   const jobs=[],writes=[],sends=[];
@@ -150,7 +154,7 @@ function gasRuntime(){
   c.props_=()=>({getProperty:k=>k==='TEAM_EMAIL'?'team@example.com':'true'});
   c.LockService={getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})};
   const created=c.experienceAction_({action:'experience_create',order,receipt:{subject:'Payment received',text:'Pending host confirmation'}});
-  const session={id:'cs_live_example',reference:created.id,paymentStatus:'paid',status:'complete',amount:39600,subtotal:39600,currency:'jpy',livemode:true,flow:'experience_provisional',policyVersion:'2026-10-22',slug:order.slug,items:[{price:order.price,quantity:2}],moreItems:false};
+  const session={id:'cs_live_example',reference:created.id,paymentStatus:'paid',status:'complete',amount:order.amount,subtotal:order.amount,currency:'jpy',livemode:true,flow:'experience_provisional',policyVersion:'2026-10-22',slug:order.slug,items:[{price:order.price,quantity:order.quantity}],moreItems:false};
   const event=(id='evt_example',patch={},eventType='checkout.session.completed')=>({action:'experience_event',eventId:id,eventType,session:{...session,...patch}});
   return {c,jobs,writes,sends,created,session,event};
 }
@@ -205,7 +209,7 @@ test('enabled request form renders paid-provisional copy, charge minimum and con
     const x=catalogFor(lang).experiences.find(x=>x.slug==='kanji-name-calligraphy');
     const b={slug:x.slug,title:x.title,provisionalCheckout:true,leadDays:1,cutoffTime:'18:00',minGuests:2,defaultGuests:2,listedMax:4,maxGuests:4,startTimes:x.availability.startTimes,interpreter:false,cancellationText:x.cancellation,cancellationTiers:x.cancellationTiers};
     const html=renderToStaticMarkup(React.createElement(CurrencyProvider,null,React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang),lang},React.createElement(EnquiryForm,{kind:'guest',lang,fallbackEmail:'hello@kamehame-japan.com',experience:x}))));
-    assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_consent'));assert.ok(html.includes('39,600'));assert.ok(html.includes('required=""'));
+    assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_consent'));assert.ok(html.includes('43,000'));assert.ok(html.includes('required=""'));
     assert.ok(!html.includes('No payment now'));
   }
 });
@@ -265,17 +269,84 @@ test('earliest displayed date skips weekends, closures and empty announced slots
 
 
 test('Nihonbashi validates party limits, eligibility and date-only requests including weekends',()=>{
-  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,25000],['nihonbashi-bushido-experience',2,10000]]) {
+  for(const [slug,min,amount] of [['nihonbashi-kendo-experience',1,26500],['nihonbashi-bushido-experience',2,16500]]) {
     const input={...base,experience:slug,date:'2026-11-07',time:'',guests:min,adultOnly:true};
     const o=m.parseExperienceOrder(input,now);
     assert.equal(o.amount,amount*min);assert.equal(o.time,'To be confirmed');
     for(const patch of [{adultOnly:false},{guests:min-1},{guests:9},{time:'10:00'}]) assert.equal(m.parseExperienceOrder({...input,...patch},now),null);
     for(const lang of ['en','ja','es','fr','zh-tw']) {
       const x=catalogFor(lang).experiences.find(e=>e.slug===slug);
+      assert.equal(x.price, '¥'+amount.toLocaleString('en-US'));
+      for(let guests=min;guests<=8;guests++) {
+        assert.equal(quote(pricingFor(x,lang), 'select', guests, input.date).total, amount*guests);
+        const priced=m.parseExperienceOrder({...input,lang,guests,amount:1,price:'price_fake'},now);
+        assert.equal(priced.amount,amount*guests);
+        assert.equal(m.checkoutParameters(priced,reference,now).get('line_items[0][price]'),EXPERIENCE_PRODUCTS[slug].price);
+      }
+      if(slug==='nihonbashi-kendo-experience') assert.doesNotMatch(JSON.stringify(x.faq), /¥15,000|¥18,000/);
       const b={slug,title:x.title,provisionalCheckout:true,minGuests:min,defaultGuests:min,listedMax:8,maxGuests:8,interpreter:false};
       const html=renderToStaticMarkup(React.createElement(CurrencyProvider,{lang},React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang)},React.createElement(EnquiryForm,{lang,card:true}))));
       assert.ok(html.includes('checkout_adult'));assert.ok(!html.includes('name="time"'));
     }
   }
   for(const lang of ['en','ja','es','fr','zh-tw']) assert.equal(catalogFor(lang).experiences.find(e=>e.slug==='kanji-name-calligraphy').partySize.min,2);
+});
+
+const teaInput={...base,experience:'kyoto-higashiyama-private-tea-ceremony',date:'2026-12-31',time:'15:00',guests:3,adultOnly:true};
+test('private tea prices match displayed totals across seasons, year boundary, all party sizes and languages',()=>{
+  const expected={
+    '2026-12-27':[25000,33000,49500,66000,82500],
+    '2026-12-28':[27500,38000,57000,76000,95000],
+    '2027-01-03':[27500,38000,57000,76000,95000],
+    '2027-01-04':[25000,33000,49500,66000,82500],
+    '2027-03-01':[27500,38000,57000,76000,95000],
+    '2027-04-30':[27500,38000,57000,76000,95000],
+    '2027-05-01':[25000,33000,49500,66000,82500],
+    '2026-11-30':[27500,38000,57000,76000,95000],
+    '2026-12-01':[25000,33000,49500,66000,82500],
+  };
+  for(const [date,totals] of Object.entries(expected))for(let guests=1;guests<=5;guests++)for(const lang of ['en','ja','es','fr','zh-tw']) {
+    const o=m.parseExperienceOrder({...teaInput,date,guests,lang,amount:1,price:'price_tampered'},now);
+    const x=catalogFor(lang).experiences.find(e=>e.slug===teaInput.experience);
+    assert.ok(x, `private tea must exist in the ${lang} catalog without a test-only fallback`);
+    assert.equal(o.amount,totals[guests-1]);
+    assert.equal(o.amount,quote(pricingFor(x,lang),'',guests,date).total);
+    assert.equal(o.quantity,guests);assert.equal(o.city,'kyoto');
+    const p=m.checkoutParameters(o,reference,now);
+    assert.equal(p.get('line_items[0][price]'),o.price);
+    assert.equal(p.get('line_items[0][quantity]'),String(guests));
+  }
+});
+test('private tea rejects unpaid extras, invalid parties, times, age consent and missing Stripe configuration',()=>{
+  for(const change of [{guests:0},{guests:6},{adultOnly:false},{time:'15:30'},{addOns:['kimono']},{plan:'fake'}]) assert.equal(m.parseExperienceOrder({...teaInput,...change},now),null);
+  const price=PRIVATE_TEA_CHECKOUT_PRICES.peak_guest.price;
+  try {
+    PRIVATE_TEA_CHECKOUT_PRICES.peak_guest.price='';
+    assert.equal(checkoutProductConfigured(teaInput.experience),false);
+    assert.equal(m.parseExperienceOrder(teaInput,now),null);
+  } finally {PRIVATE_TEA_CHECKOUT_PRICES.peak_guest.price=price;}
+});
+test('private tea respects the published rolling 24-hour cutoff',()=>{
+  const at=Date.parse('2026-11-14T06:00:00Z'); // 15:00 JST
+  assert.ok(m.parseExperienceOrder({...teaInput,date:'2026-11-15',time:'15:00'},at));
+  assert.equal(m.parseExperienceOrder({...teaInput,date:'2026-11-15',time:'14:00'},at),null);
+  assert.equal(m.parseExperienceOrder({...teaInput,date:'2026-11-15',time:'15:00'},at+1),null);
+});
+test('private tea uses existing paid-pending ledger and notification queue without duplicate fulfillment',()=>{
+  const o=m.parseExperienceOrder(teaInput,now);
+  const {c,jobs,writes,sends,event}=gasRuntime(o);
+  c.experienceAction_(event());c.processExperienceQueue();c.processExperienceQueue();
+  assert.equal(jobs[0].status,'paid_pending');assert.equal(jobs[0].order.amount,57000);
+  assert.equal(sends.length,2);assert.ok(writes.some(j=>j.paidAt&&j.order.city==='kyoto'));
+});
+test('private tea consent and provisional payment form render in all supported languages',()=>{
+  for(const lang of ['en','ja','es','fr','zh-tw']) {
+    const x=catalogFor(lang).experiences.find(e=>e.slug===teaInput.experience);
+    assert.ok(x, `private tea must exist in the ${lang} catalog without a test-only fallback`);
+    const b={slug:x.slug,title:x.title,provisionalCheckout:true,leadDays:1,cutoffTime:'00:00',cutoffHours:24,minGuests:1,defaultGuests:3,listedMax:5,maxGuests:5,startTimes:x.availability.startTimes,interpreter:false,cancellationText:x.cancellation,cancellationTiers:x.cancellationTiers};
+    const html=renderToStaticMarkup(React.createElement(CurrencyProvider,null,React.createElement(BookingProvider,{experience:b,pricing:pricingFor(x,lang),lang},React.createElement(EnquiryForm,{kind:'guest',lang,fallbackEmail:'hello@kamehame-japan.com',experience:x}))));
+    assert.ok(html.includes(provisionalCopy(lang).cta));assert.ok(html.includes('checkout_adult'));assert.ok(html.includes('checkout_consent'));
+    assert.ok(html.includes('action="/api/experience-checkout"'));
+    if(lang==='en'){assert.ok(html.includes('aged 4 or over'));assert.ok(html.includes('Kimono rental'));assert.ok(!html.includes('aged 14'));}
+  }
 });

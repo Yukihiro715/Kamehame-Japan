@@ -1,3 +1,6 @@
+import { ExperienceFacts } from "@/components/site/experience-facts";
+import { experienceJsonLd } from "@/lib/experience-seo";
+import { serializeJsonLd } from "@/lib/seo";
 import { BookingRequestHeading } from "@/components/site/quote-request-switch";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -10,7 +13,7 @@ import { BookingBox } from "@/components/site/booking-box";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { BookingProvider } from "@/components/site/booking-context";
 import { experienceCheckoutEnabled } from "@/lib/experience-checkout";
-import { EXPERIENCE_PRODUCTS, provisionalCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutProductConfigured } from "@/lib/provisional-booking";
 import { BookingCard } from "@/components/site/booking-card";
 import { DateList } from "@/components/site/date-list";
 import { Gallery } from "@/components/site/gallery";
@@ -19,6 +22,7 @@ import { VideoFacade } from "@/components/site/video-facade";
 import { StickyRequestBar } from "@/components/site/sticky-request-bar";
 import { CancellationTable } from "@/components/site/cancellation-table";
 import { SupportBanner } from "@/components/site/support-banner";
+import { ExperienceAccess } from "@/components/site/experience-access";
 import { VariantDetail } from "@/components/site/variant-detail";
 import { ClubRentalProvider } from "@/components/site/club-rental-context";
 import { GOLF_CLUB_RENTAL_LIVE } from "@/lib/golf-club-rental";
@@ -141,14 +145,15 @@ const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Langua
 async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
   const D = T.detail;
-  const provisional = !!EXPERIENCE_PRODUCTS[exp.slug] && await experienceCheckoutEnabled();
+  const provisional = checkoutProductConfigured(exp.slug) && await experienceCheckoutEnabled();
   const P = provisionalCopy(lang);
   const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const preview = isPreview(exp);
   // A page in preview shows the full booking flow so it can be checked end to end.
-  const live = (isLive(exp) || preview) && !exp.pricePending;
+  const bookingUnavailable = Boolean(exp.pricePending || exp.bookingPaused);
+  const live = (isLive(exp) || preview) && !bookingUnavailable;
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
@@ -177,7 +182,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   // Locale FAQs preserve the source ordering; identify the booking question
   // through the English source so no language can keep the old pay=confirmed text.
   const bookingFaqIndex = catalogFor("en").experiences.find(v => v.slug === exp.slug)?.faq?.findIndex(f => f.q === "How does booking work?" || f.q === "How long until the date is confirmed?");
-  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq.map((f, i) => provisional && i === 1 ? { ...f, a: `${P.note} ${P.refund}` } : f))];
+  const faq = [...(exp.faq ?? []).map((f, i) => provisional && i === bookingFaqIndex ? { ...f, a: `${P.note} ${P.refund}` } : f), ...(exp.skipSiteFaq ? [] : D.siteFaq.flatMap((f, i) => exp.interpreter === false && i === 0 ? [] : [provisional && i === 1 ? { ...f, a: `${P.note} ${P.refund}` } : f]))];
   const flow = provisional ? P.flow : exp.flow ?? D.flow;
   const cancellation = exp.cancellation ?? cancellationFor(lang);
   const ctaLabel = provisional ? P.cta : live ? D.requestAvailability : T.comingSoonCta;
@@ -243,13 +248,14 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
           <aside className="xp-side">
             {live ? <BookingCard lang={lang} headline={headlinePrice} /> : (
               <div className="bk-card">
-                <p className="soon-flag">{exp.pricePending ? exp.price : T.comingSoon}</p>
-                <p className="xp-note">{T.comingSoonBody}</p>
-                {!exp.pricePending && <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>}
+                <p className="soon-flag">{exp.bookingPaused ? exp.bookingNotice : exp.pricePending ? exp.price : T.comingSoon}</p>
+                {!exp.bookingPaused && <p className="xp-note">{T.comingSoonBody}</p>}
+                {!bookingUnavailable && <a className="bk-cta" href="#request-form">{T.comingSoonCta}</a>}
               </div>
             )}
           </aside>
           <div className="xp-main">
+            <ExperienceFacts exp={exp} lang={lang} />
             {/* ③ Overview */}
             <section className="xp-section" id="overview">
               <h2>{D.overviewH}</h2>
@@ -342,7 +348,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             )}
 
             {/* ④′ Flat pricing table (products without plans) */}
-            {plans.length === 0 && !exp.pricePending && !consultOnly && (
+            {plans.length === 0 && !bookingUnavailable && !consultOnly && (
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
                 <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />
@@ -537,6 +543,8 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               </div>
             </section>
 
+            <ExperienceAccess exp={exp} lang={lang} />
+
             {/* ⑫ FAQ */}
             <section className="xp-section">
               <h2>{D.faqH}</h2>
@@ -550,16 +558,16 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             {/* ⑬ Flow, cancellation, request */}
             <section className="xp-section xp-request" id="request">
               <h2>{D.flowH}</h2>
-              <ol className="xp-flow">
+              {!exp.bookingPaused && <ol className="xp-flow">
                 {flow.map((f, i) => <li key={f.title}><span>{i + 1}</span><div><b>{f.title}</b><p>{f.body}</p></div></li>)}
-              </ol>
+              </ol>}
               <h3 className="xp-cancel-h">{D.cancellationH}</h3>
               <CancellationTable exp={exp} text={cancellation} lang={lang} />
 
               {exp.perk && <div className="xp-perk-banner"><b>{exp.perk.badge}</b><div><strong>{exp.perk.short}</strong><small>{exp.perk.body}</small></div></div>}
-              <BookingRequestHeading lang={lang} defaultTitle={provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta} />
-              {!provisional && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
-              {!exp.pricePending && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
+              {exp.bookingPaused ? <p className="xp-note">{exp.bookingNotice}</p> : <BookingRequestHeading lang={lang} defaultTitle={provisional ? P.heading : live ? exp.cta?.heading ?? D.requestH : T.comingSoonCta} />}
+              {!provisional && !exp.bookingPaused && <p className="xp-note">{live ? exp.cta?.lead ?? D.requestLead : T.comingSoonBody}</p>}
+              {!bookingUnavailable && <EnquiryForm kind="guest" lang={lang} fallbackEmail={CONTACT_EMAIL} experience={{ slug: exp.slug, title: exp.title }} />}
             </section>
 
             {reading.length > 0 && (
@@ -581,7 +589,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
           </div>
 
         </div>
-        {!exp.pricePending && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={provisional ? P.cta : live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
+        {!bookingUnavailable && <StickyRequestBar price={headlinePrice} condition={headlineCondition} label={provisional ? P.cta : live ? exp.cta?.label ?? D.requestCta : ctaLabel} lang={lang} watchHero="#booking" watchTarget="#request-form" />}
       </BookingProvider>
 
       {moreInCity.length > 0 && (
@@ -599,9 +607,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
         </section>
       )}
 
-      {!exp.pricePending && !consultOnly && <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(exp.title, exp.tagline, exp.img, url, exp.price, exp.slug)),
-      }} />}
+      {!preview && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(experienceJsonLd(exp, lang, faq)) }} />}
       <SiteFooter lang={lang} />
     </main>
   );
@@ -680,7 +686,7 @@ function TourDetail({ tour, lang }: { tour: Tour; lang: Lang }) {
       </section>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
+        __html: serializeJsonLd(productJsonLd(tour.title, tour.tagline, tour.img, url, tour.price)),
       }} />
       <SiteFooter lang={lang} />
     </main>

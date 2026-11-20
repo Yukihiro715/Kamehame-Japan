@@ -28,7 +28,7 @@ export async function recordStripeEvent(db: SqlDb, event: StripeEvent, now = Dat
     if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
       if (str(o.currency) && str(o.currency) !== "jpy") { await note("ignored", "currency"); return "ignored"; }
       const meta = (o.metadata && typeof o.metadata === "object" ? o.metadata : {}) as Record<string, unknown>;
-      const reservation = await findReservation(db, str(meta.reservation_id), str(o.client_reference_id), str(meta.booking_reference));
+      const reservation = await findReservation(db, str(meta.reservation_id), str(o.client_reference_id), str(meta.booking_reference), str(meta.request_id));
       if (!reservation) { await note("ignored", "no reservation for session"); return "unmatched"; }
       const totals = (o.total_details && typeof o.total_details === "object" ? o.total_details : {}) as Record<string, unknown>;
       await applyPayment(db, reservation, {
@@ -80,11 +80,18 @@ export async function recordStripeEvent(db: SqlDb, event: StripeEvent, now = Dat
   }
 }
 
-async function findReservation(db: SqlDb, reservationId: string | null, clientRef: string | null, bookingRef: string | null): Promise<string | null> {
+async function findReservation(db: SqlDb, reservationId: string | null, clientRef: string | null, bookingRef: string | null, requestId: string | null): Promise<string | null> {
   if (reservationId) { const r = await db.first<{ id: string }>(`SELECT id FROM reservations WHERE id = ?`, [reservationId]); if (r) return r.id; }
   for (const ref of [clientRef, bookingRef]) {
     if (!ref) continue;
     const r = await db.first<{ id: string }>(`SELECT id FROM reservations WHERE external_ref = ?`, [ref]);
+    if (r) return r.id;
+  }
+  // Shared/manual payment links must carry the original request UUID (in
+  // client_reference_id or metadata.request_id), never a name/email guess.
+  for (const id of [requestId, clientRef]) {
+    if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) continue;
+    const r = await db.first<{ id: string }>(`SELECT id FROM reservations WHERE request_id = ?`, [id.toLowerCase()]);
     if (r) return r.id;
   }
   return null;

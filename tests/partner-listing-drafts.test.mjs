@@ -1,0 +1,104 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+const developmentPreviewMeta =
+  /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
+
+async function render(path = "/") {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+  const { default: worker } = await import(workerUrl.href);
+
+  return worker.fetch(
+    new Request(`http://localhost${path}`, {
+      headers: { accept: "text/html" },
+    }),
+    {
+      ASSETS: {
+        fetch: async () => new Response("Not found", { status: 404 }),
+      },
+    },
+    {
+      waitUntil() {},
+      passThroughOnException() {},
+    },
+  );
+}
+
+test('partner listing drafts stay unlisted and cannot accept reservations',async()=>{
+ const slugs=['tokyo-underground-idol-live','tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
+ for(const slug of slugs)for(const lang of ['en','ja']){
+  const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
+  assert.equal(response.status,200,slug);const html=await response.text();
+  assert.match(html,/noindex/);assert.ok(!html.includes('<form'),slug);
+  assert.ok(!html.includes('\"@type\":\"Product\"'),slug);
+  assert.ok(html.includes(lang==='ja'?'予約受付前':'Not open for booking'));
+ }
+ const missing=await render('/previews/partner-listings/not-a-listing/');assert.equal(missing.status,404);
+});
+
+
+test('Ginza sumi-e preview shows confirmed details without supplier pricing', async () => {
+  for (const lang of ['en', 'ja']) {
+    const response = await render(`/previews/partner-listings/sumi-e-ink-painting/?lang=${lang}`);
+    const html = await response.text();
+    assert.equal(response.status, 200);
+    assert.match(html, /SPACE KONA/);
+    assert.match(html, /3-12-16/);
+    assert.match(html, lang === 'ja' ? /3階/ : /3rd floor/);
+    assert.match(html, /80/);
+    assert.match(html, lang === 'ja' ? /コースター3枚/ : /three coasters/);
+    assert.match(html, lang === 'ja' ? /別途オプション/ : /not included in the standard lesson/);
+    assert.match(html, /noindex/);
+    assert.ok(!html.includes('<form'));
+    assert.ok(!html.includes('11,500'));
+    assert.ok(!html.includes('15,000'));
+    assert.ok(!html.includes('17,500'));
+    assert.ok(!html.includes('18,500'));
+    assert.ok(!html.includes('23,000'));
+  }
+});
+
+test('supplied artwork and confirmed terrace terms appear without opening sales', async () => {
+ for (const lang of ['ja', 'en']) {
+  const sumi = await (await render(`/previews/partner-listings/sumi-e-ink-painting/?lang=${lang}`)).text();
+  for(const name of ['scroll','fuji','landscape']) assert.ok(sumi.includes(`/images/partner-listings/sumi-e/${name}.webp`));
+  assert.match(sumi, lang === 'ja' ? /作品例/ : /Artwork examples/);
+  const terrace = await (await render(`/previews/partner-listings/arashiyama-private-terrace-gathering/?lang=${lang}`)).text();
+  assert.match(terrace, /50%/); assert.match(terrace, /100%/); assert.match(terrace, /14/);
+  assert.match(terrace, /noindex/); assert.ok(!terrace.includes('<form'));
+ }
+});
+
+test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
+ const cases = {
+  'tokyo-underground-idol-live': ['700', '約2時間', '年齢制限なし'],
+  'tokyo-ninja-zen-night-walk': ['開始1日前まで全額返金', '原則雨天決行', '18歳以上'],
+  'arashiyama-private-terrace-gathering': ['最低保証額なし', '利用日時・利用時間・人数'],
+  'sumi-e-ink-painting': ['材料費を含む', '英語対応費を含む', '体験日の3日前', '同伴・見学不可', '別々のコースは選べません'],
+ };
+ for(const [slug,phrases] of Object.entries(cases)) {
+  const html=await (await render(`/previews/partner-listings/${slug}/?lang=ja`)).text();
+  for(const phrase of phrases) assert.ok(html.includes(phrase),`${slug}: ${phrase}`);
+  assert.match(html,/noindex/); assert.ok(!html.includes('<form'));
+  assert.doesNotMatch(html,/(?<![0-9])(11,500|17,500|18,500|23,000|5,000|8,000)(?![0-9])/);
+ }
+});
+
+test('2027 sumi-e retail pricing is approved but checkout stays disabled', async () => {
+  for (const lang of ['en', 'ja']) {
+    const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
+    for (const amount of ['38,000', '22,000', '30,500', '32,000']) assert.ok(html.includes(amount));
+    assert.match(html, /2027/);
+    assert.match(html, lang === 'ja' ? /税込/ : /tax included/);
+    assert.match(html, lang === 'ja' ? /1名参加は総額38,000円/ : /38,000 total for one guest/);
+    assert.match(html, lang === 'ja' ? /2〜6名参加は1名22,000円/ : /22,000 per person for 2–6 guests/);
+    assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
+    assert.match(html, /noindex/);
+    assert.ok(!html.includes('<form'));
+    assert.ok(!html.includes('checkout.stripe.com'));
+    for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
+    assert.ok(!html.includes('Selling prices are being confirmed'));
+    assert.ok(!html.includes('販売価格確認中'));
+  }
+});

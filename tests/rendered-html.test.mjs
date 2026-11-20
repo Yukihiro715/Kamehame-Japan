@@ -25,7 +25,7 @@ async function render(path = "/") {
   );
 }
 
-test("renders development preview metadata", async () => {
+test("production pages do not carry development preview metadata", async () => {
   const response = await render();
 
   assert.equal(response.status, 200);
@@ -33,7 +33,7 @@ test("renders development preview metadata", async () => {
     response.headers.get("content-type") ?? "",
     /^text\/html\b/i,
   );
-  assert.match(await response.text(), developmentPreviewMeta);
+  assert.doesNotMatch(await response.text(), developmentPreviewMeta);
 });
 
 test("closes the document after the last inline script", async () => {
@@ -342,18 +342,18 @@ test("theme pages: a home tile lists every published experience in its categorie
   assert.ok(xml.includes("https://kamehame-japan.com/en/food/") && !xml.includes("/en/pop-culture/"), "sitemap lists live themes only");
 });
 
-test("kendo tours are published after approval; unapproved partners remain in preview", async () => {
+test("approved kendo tours and Yotsuya tea remain published", async () => {
   const pages = [
-    ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥25,000", "/en/tokyo/"],
-    ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥10,000", "/en/tokyo/"],
-    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥17,000", "/en/tokyo/"],
-    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥19,800", "/en/tokyo/"],
-    ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥19,800", "/en/osaka/"],
-    ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥19,800", "/en/kyoto/"],
-    ["/en/nagoya/nagoya-kendo-experience-tour/", "Kendo Experience Tour in Nagoya with Dan-ranked Instructors", "¥19,800", "/en/nagoya/"],
-    ["/en/okinawa/okinawa-kendo-experience-tour/", "Kendo Experience Tour in Okinawa with Dan-ranked Instructors", "¥19,800", "/en/okinawa/"],
-    ["/en/kanazawa/kanazawa-kendo-experience-tour/", "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors", "¥19,800", "/en/kanazawa/"],
-    ["/en/himeji/himeji-kendo-experience-tour/", "Kendo Experience Tour in Himeji with Dan-ranked Instructors", "¥19,800", "/en/himeji/"],
+    ["/en/tokyo/nihonbashi-kendo-experience/", "Kendo Experience in a Nihonbashi Dojo, Tokyo", "¥26,500", "/en/tokyo/"],
+    ["/en/tokyo/nihonbashi-bushido-experience/", "Bushido Experience in a Tokyo Dojo: the Nihon Kendo Kata", "¥16,500", "/en/tokyo/"],
+    ["/en/tokyo/yotsuya-tea-ceremony/", "Tea Ceremony in a Yotsuya Tearoom, Tokyo", "¥17,500", "/en/tokyo/"],
+    ["/en/tokyo/tokyo-kendo-experience-tour/", "Kendo Experience Tour in Tokyo with Dan-ranked Instructors", "¥27,500", "/en/tokyo/"],
+    ["/en/osaka/osaka-kendo-experience-tour/", "Kendo Experience Tour in Osaka with Dan-ranked Instructors", "¥27,500", "/en/osaka/"],
+    ["/en/kyoto/kyoto-kendo-experience-tour/", "Kendo Experience Tour in Kyoto with Dan-ranked Instructors", "¥27,500", "/en/kyoto/"],
+    ["/en/nagoya/nagoya-kendo-experience-tour/", "Kendo Experience Tour in Nagoya with Dan-ranked Instructors", "¥27,500", "/en/nagoya/"],
+    ["/en/okinawa/okinawa-kendo-experience-tour/", "Kendo Experience Tour in Okinawa with Dan-ranked Instructors", "¥27,500", "/en/okinawa/"],
+    ["/en/kanazawa/kanazawa-kendo-experience-tour/", "Kendo Experience Tour in Kanazawa with Dan-ranked Instructors", "¥27,500", "/en/kanazawa/"],
+    ["/en/himeji/himeji-kendo-experience-tour/", "Kendo Experience Tour in Himeji with Dan-ranked Instructors", "¥27,500", "/en/himeji/"],
   ];
   for (const [path, title, price, city] of pages) {
     const res = await render(path);
@@ -362,7 +362,7 @@ test("kendo tours are published after approval; unapproved partners remain in pr
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     assert.ok(text.includes(price), `price on ${path}`);
-    const approved = path.includes("-kendo-experience-tour/") || path.includes("/nihonbashi-");
+    const approved = true; // Kendo and Yotsuya were explicitly published (121d443).
     assert.equal(text.includes(PREVIEW_BANNER), !approved, `publication status on ${path}`);
     if (approved) {
       if (path.includes("-kendo-experience-tour/")) assert.ok(text.includes("for groups of up to five, two days before is accepted"));
@@ -394,13 +394,13 @@ test("kendo tours are published after approval; unapproved partners remain in pr
   assert.equal((await render("/en/himeji/")).status, 200, "published Himeji city");
 });
 
-test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages that never name the partners", async () => {
+test("workshop previews and approved salons preserve publication status and partner privacy", async () => {
   const pages = [
-    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥40,000"],
-    ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥33,000"],
-    ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥18,500"],
-    ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥12,000"],
-    ["/en/tokyo/tokyo-ninja-zen-meditation/", "Ninja Zen Meditation in Tokyo: Breathing, Hand Seals and Stillness", "¥30,000"],
+    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥56,500"],
+    ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥47,500"],
+    ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥29,500"],
+    ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥21,500"],
+    ["/en/tokyo/tokyo-ninja-zen-meditation/", "Ninja Zen Meditation in Tokyo: Breathing, Hand Seals and Stillness", "¥44,000"],
     ["/en/kyoto/arashiyama-ninja-experience/", "Ninja Experience in Arashiyama, Kyoto: Blowpipe, Shuriken and Hand Seals", "¥17,500"],
     ["/en/kyoto/arashiyama-stone-mill-matcha/", "Stone-Mill Matcha Grinding in Arashiyama, Kyoto", "¥13,500"],
     ["/en/kyoto/arashiyama-japanese-knife-workshop/", "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto", "¥27,000"],
@@ -416,9 +416,21 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
-    assert.ok(text.includes(price), `price on ${path}`);
-    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
-    assert.doesNotMatch(html, partners, `partner names stay private on ${path}`);
+    const paused = path.includes("/arashiyama-stone-mill-matcha/");
+    if (paused) {
+      assert.ok(text.includes("Bookings are currently paused"), `paused booking notice on ${path}`);
+      assert.ok(!html.includes('<form'), `paused booking has no form on ${path}`);
+    } else assert.ok(text.includes(price), `price on ${path}`);
+    const published = path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/");
+    assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
+    if (published) assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    // 90de9eb explicitly introduced these rakugo artists; the operator and
+    // unrelated partner identities must still stay off the public page.
+    const privatePartners = path.includes("/nihonbashi-english-rakugo-salon/")
+      ? new RegExp(partners.source.replace("Kanariya|Eiraku|Koraku|Ichirin|", ""), partners.flags)
+      : partners;
+    assert.doesNotMatch(html, privatePartners, `operator names stay private on ${path}`);
+    if (path.includes("/nihonbashi-english-rakugo-salon/")) assert.ok(text.includes("Ichirin, Koraku and Kanariya Eiraku"), "confirmed artist introduction");
     if (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/")) {
       // KAMEHAME's standard cancellation (2026-10-23: the stricter of ours and the salon's two-day rule); a minimum of three guests; socks.
       assert.ok(text.includes("Up to 7 days before the date") && text.includes("6 days before or later, including no-shows"), `salon cancellation table on ${path}`);
@@ -439,8 +451,8 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
       const alt = await render(path.replace("/en/", `/${lang}/`));
       assert.equal(alt.status, 200, `${lang} ${path}`);
       const altHtml = await alt.text();
-      assert.doesNotMatch(altHtml, partners, `partner names stay private on ${lang} ${path}`);
-      if (lang === "ja") assert.ok(altHtml.includes("プレビュー — このページはまだ公開していません") && !altHtml.includes(title), `Japanese text on ${path}`);
+      assert.doesNotMatch(altHtml, privatePartners, `operator names stay private on ${lang} ${path}`);
+      if (lang === "ja") { assert.equal(altHtml.includes("プレビュー — このページはまだ公開していません"), !published, `Japanese publication status on ${path}`); assert.ok(!altHtml.includes(title), `Japanese text on ${path}`); }
       if (lang === "ja" && arashiyama) assert.ok(altHtml.includes("開催30日前まで") && altHtml.includes("貸切または20名以上") && !altHtml.includes("15分前にお越しください"), `Japanese cancellation terms on ${path}`);
     }
   }
@@ -449,27 +461,27 @@ test("samurai, rakugo, cooking, ninja and Arashiyama workshops: preview pages th
   assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
 });
 
-test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setagaya and Asakusa noodle previews never name the partners", async () => {
-  // The Yotsuya tea page carries the owner's table (2026-10-23: ¥17,000 / ¥15,500 / ¥14,000 per person) and the host's photos.
+test("partner handover: approved tea pages and unapproved previews preserve terms and privacy", async () => {
+  // The Yotsuya tea page carries the owner's table (2026-11-14: ¥17,500 for 1–3 / ¥16,000 for 4–10 per person) and the host's photos.
   const tea = await (await render("/en/tokyo/yotsuya-tea-ceremony/")).text();
   const teaText = tea.replace(/<[^>]+>/g, " ");
-  for (const s of ["¥17,000", "¥31,000", "¥46,500", "¥62,000", "¥70,000", "¥140,000", "¥15,500", "¥14,000", "five to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
+  for (const s of ["¥17,500", "¥35,000", "¥52,500", "¥64,000", "¥80,000", "¥160,000", "¥16,000", "four to ten guests"]) assert.ok(teaText.includes(s), `tea table: ${s}`);
   for (const s of ["¥8,800", "¥7,700", "¥6,600", "quoted with your request"]) assert.ok(!teaText.includes(s), `host's public rate not shown: ${s}`);
   assert.ok(tea.includes("/images/tea-yotsuya-class.jpg") && tea.includes("/images/tea-yotsuya-tatami.jpg"), "host photos on the tea page");
   assert.ok(!tea.includes("craft-hands.jpg") && !tea.includes("Placeholder photos"), "no placeholder photos left on the tea page");
   for (const lang of ["ja", "es", "fr", "zh-tw"]) {
     const alt = await (await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`)).text();
     assert.ok(alt.includes("/images/tea-yotsuya-class.jpg") && !alt.includes("craft-hands.jpg"), `${lang} tea photos`);
-    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥140,000"), `${lang} tea table`);
+    assert.ok(alt.replace(/<[^>]+>/g, " ").includes("¥160,000"), `${lang} tea table`);
   }
   const pages = [
     ["/en/kyoto/kyoto-garden-teahouse-tea-ceremony/", "Private Tea Ceremony in a Garden Teahouse, West Kyoto", ["¥37,500", "¥50,000", "¥250,000", "1 Mar–30 Apr", "Sundays are not available in winter"]],
     ["/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/", "Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥11,500", "¥92,000", "¥9,500", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-private-tea-ceremony/", "Private Tea Ceremony in a Higashiyama Teahouse, Kyoto", ["¥25,000", "¥33,000", "¥82,500", "Kimono for the ceremony"]],
     ["/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/", "Private Tea Ceremony at an Annex Tearoom in Higashiyama, Kyoto", ["¥38,000", "¥95,000", "ryurei", "Larger parties are quoted on request"]],
-    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥24,500", "¥15,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
-    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 days before", "6 days before or later"]],
-    ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥15,000", "¥14,000", "Up to 15 days before the date"]],
+    ["/en/tokyo/setagaya-omotesenke-tea-ceremony/", "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo", ["¥25,000", "¥16,000", "Saturdays and Sundays", "mid-January 2027", "Up to 7 days before the date", "6 days before or later"]],
+    ["/en/tokyo/asakusa-soba-making-class/", "Soba Noodle-Making Class near Asakusa, Tokyo", ["¥16,000", "¥14,500", "100% buckwheat", "Up to 15 days before the date", "14 to 8 days before", "7 days before", "6 days before or later"]],
+    ["/en/tokyo/asakusa-ramen-making-class/", "Ramen Noodle-Making Class near Asakusa, Tokyo", ["¥16,000", "¥14,500", "Up to 15 days before the date"]],
   ];
   const partners = /Camellia|camelliakyoto|tea-kyoto\.com|Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介|Masuya-cho|Ikenoshita|605-0826|616-8003/i;
   const { readFileSync } = await import("node:fs");
@@ -482,16 +494,28 @@ test("partner handover 2026-10-22: Yotsuya tea table and photos; Camellia, Setag
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     for (const s of needs) assert.ok(text.includes(s), `${s} on ${path}`);
-    assert.ok(text.includes(PREVIEW_BANNER), `preview banner on ${path}`);
-    assert.match(html, /name="robots" content="noindex/, `noindex on ${path}`);
-    assert.doesNotMatch(text, partners, `partner names stay private on ${path}`);
-    assert.ok(!xml.includes(path), `${path} not in the sitemap`);
-    for (const l of listings) assert.ok(!l.includes(`href="${path}"`), `${path} not listed`);
-    // other locales resolve (English fallback) and keep the names private
+    const published = path.startsWith("/en/kyoto/"); // Camellia pages published in 0c97e4c.
+    assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
+    assert.equal(/name="robots" content="noindex/.test(html), !published, `indexing status on ${path}`);
+    // Published Camellia map pins (481265d) and verified access guides (#69,
+    // #70) deliberately name the destination; other operators remain private.
+    const privatePartners = published
+      ? /Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介/i
+      : partners;
+    assert.doesNotMatch(text, privatePartners, `unpublished operator names stay private on ${path}`);
+    if (published) {
+      const venue = path.includes("/kyoto-garden-") ? "Tea Ceremony Camellia GARDEN" : "Tea Ceremony Camellia FLOWER";
+      assert.ok(html.includes(encodeURIComponent(venue)), `verified venue map on ${path}`);
+      if (!path.includes("-annex-")) assert.ok(text.includes(venue), `verified access destination on ${path}`);
+    }
+    assert.equal(xml.includes(path), published, `${path} sitemap status`);
+    assert.equal(listings.some(l => l.includes(`href="${path}"`)), published, `${path} listing status`);
+    // Only private tea has approved English fallback; other Kyoto tea locales remain 404.
     for (const lang of ["ja", "fr"]) {
       const alt = await render(path.replace("/en/", `/${lang}/`));
-      assert.equal(alt.status, 200, `${lang} ${path}`);
-      assert.doesNotMatch((await alt.text()).replace(/<[^>]+>/g, " "), partners, `partner names stay private on ${lang} ${path}`);
+      const englishOnly = /kyoto-(garden-teahouse|higashiyama-shared|higashiyama-annex)-tea-ceremony/.test(path);
+      assert.equal(alt.status, englishOnly ? 404 : 200, `${lang} ${path}`);
+      assert.doesNotMatch((await alt.text()).replace(/<[^>]+>/g, " "), privatePartners, `unpublished operator names stay private on ${lang} ${path}`);
     }
   }
 });
@@ -593,22 +617,22 @@ test("sends baseline security headers", async () => {
 });
 
 
-test("private spa preview: the owner's price, the spa's terms, no public address or operator name", async () => {
+test("published private spa: approved price and terms, no public address or operator name", async () => {
   for (const lang of ["en", "ja"]) {
     const res = await render(`/${lang}/tokyo/nerima-herbal-bath-private-spa/`);
     assert.equal(res.status, 200);
     const html = await res.text();
     const text = html.replace(/<[^>]+>/g, " ");
-    assert.match(html, /noindex/);
-    assert.ok(text.includes("¥24,000") && !text.includes("¥18,000") && !text.includes("¥14,400"), `sale price only on ${lang}`);
-    assert.ok(text.includes(lang === "en" ? "Closed on Tuesdays" : "火曜定休"), `Tuesday closure on ${lang}`);
+    assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    assert.ok(text.includes("¥24,500") && !text.includes("¥18,000") && !text.includes("¥14,400"), `sale price only on ${lang}`);
+    assert.ok(text.includes(lang === "en" ? "Normally closed on Tuesdays" : "火曜定休"), `Tuesday closure on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "camera" : "カメラ"), `camera disclosure on ${lang}`);
     assert.ok(text.includes(lang === "en" ? "Up to 7 days before the date" : "開催7日前まで"), `cancellation table on ${lang}`);
     assert.ok(!/changed once|1回無料|drowning|溺水/.test(text), `no reschedule or drowning wording on ${lang}`);
     assert.doesNotMatch(html, /石神癒|[Ss]hakuji|shakujinoyu|hidukiminato|ガムナミエス|Gamunamiesu|上石神井|Kamishakujii|リフュージュ|Refuge Happiness|\b城\s|\bJo\b|Jō\b/, `operator name and address stay off ${lang}`);
   }
   const listing = await (await render("/en/tokyo/")).text();
-  assert.ok(!listing.includes("nerima-herbal-bath-private-spa"));
+  assert.ok(listing.includes("nerima-herbal-bath-private-spa"));
 });
 
 test("Ofukuro Dinner concept preview: unlisted, noindex, detail-page shell, seven menus, the owner's pricing, demo-only form", async () => {
@@ -658,5 +682,97 @@ test("golf planning: all five languages expose optional budget and travel inputs
       assert.ok(html.includes("Support on your golf day"));
       assert.ok(html.includes("¥5,000 covers research and a suitable proposal"));
     }
+  }
+});
+
+
+test("private tea routes are reachable in every supported locale", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const path = `/${lang}/kyoto/kyoto-higashiyama-private-tea-ceremony/`;
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes("Private Tea Ceremony in a Higashiyama Teahouse, Kyoto"), path);
+    // The Node worker harness has no Cloudflare payment bindings, so checkout
+    // readiness is false. Payment controls are covered in experience-checkout.
+    assert.ok(html.includes('name="date"'), path);
+    assert.ok(html.includes('name="time"'), path);
+  }
+});
+
+test('Nihonbashi advertising-inclusive prices render consistently in every locale', async () => {
+  for (const lang of ['en', 'ja', 'es', 'fr', 'zh-tw']) {
+    for (const [slug, price, total] of [
+      ['nihonbashi-kendo-experience', '¥26,500', '¥53,000'],
+      ['nihonbashi-bushido-experience', '¥16,500', '¥33,000'],
+    ]) {
+      const path=`/${lang}/tokyo/${slug}/`;
+      const response=await render(path);
+      assert.equal(response.status,200,path);
+      const html=await response.text();
+      const text=html.replace(/<[^>]+>/g,' ');
+      assert.ok(text.includes(price),path+' unit price');
+      assert.ok(text.includes(total),path+' two-person total');
+      assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    }
+  }
+});
+
+test('additional advertising-inclusive prices render with the existing publication boundaries', async () => {
+  for(const city of ['tokyo','osaka','kyoto','nagoya','okinawa','kanazawa','himeji']) {
+    const path=`/en/${city}/${city}-kendo-experience-tour/`;
+    const response=await render(path);assert.equal(response.status,200,path);
+    const html=await response.text();assert.ok(html.includes('¥27,500'));assert.ok(html.includes('¥55,000'));
+    assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+  }
+  for(const lang of ['en','ja'])for(const [slug,price] of [
+    ['samurai-street-walk-kitasenju','¥56,500'],['tokyo-tate-samurai-sword-experience','¥47,500'],
+    ['kichijoji-japanese-cuisine-class','¥29,500'],['asakusa-english-rakugo-walk','¥21,500'],['tokyo-ninja-zen-meditation','¥44,000'],
+  ]){
+    const path=`/${lang}/tokyo/${slug}/`;
+    const response=await render(path);assert.equal(response.status,200,path);
+    const html=await response.text();assert.ok(html.includes(price),path);assert.match(html, /noindex/);
+    if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥75,000'));assert.ok(html.includes('¥113,000'));}
+  }
+});
+
+test('remaining advertising-inclusive prices render across languages and retain preview status',async()=>{
+ for(const lang of ['en','ja','es','fr','zh-tw'])for(const [slug,prices,preview] of [
+  ['kanji-name-calligraphy',['¥21,500','¥43,000'],false],
+  ['yotsuya-tea-ceremony',['¥17,500','¥35,000','¥160,000'],false],
+  ['nerima-herbal-bath-private-spa',['¥24,500','¥42,000','¥60,000'],false],
+  ['setagaya-omotesenke-tea-ceremony',['¥25,000','¥16,000'],true],
+  ['asakusa-soba-making-class',['¥16,000','¥14,500'],true],
+  ['asakusa-ramen-making-class',['¥16,000','¥14,500'],true],
+ ]){
+  const path=`/${lang}/tokyo/${slug}/`,response=await render(path);assert.equal(response.status,200,path);
+  const html=await response.text(),text=html.replace(/<[^>]+>/g,' ');
+  for(const price of prices)assert.ok(text.includes(price),path+' '+price);
+  assert.equal(/<meta name="robots" content="noindex/.test(html),preview,path);
+ }
+});
+
+test("street walk per-person headline and solo supplement agree across all locales", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const response = await render(`/${lang}/tokyo/samurai-street-walk-kitasenju/`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    const text = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ");
+    // The first price is the booking headline, not a later FAQ or pricing table.
+    assert.equal(text.match(/¥[\d,]+/)?.[0], "¥56,500", `${lang} advertised rate`);
+    assert.ok(text.includes("¥75,000"), `${lang} solo rate`);
+    assert.ok(text.includes("¥113,000"), `${lang} two-guest quote`);
+    assert.match(html, /noindex/, `${lang} remains unlisted`);
+  }
+});
+
+test("Yotsuya ten-guest total is current across all locales", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const response = await render(`/${lang}/tokyo/yotsuya-tea-ceremony/`);
+    assert.equal(response.status, 200);
+    const text = (await response.text()).replace(/<[^>]+>/g, " ");
+    assert.ok(text.includes("¥160,000"), `${lang} ten-guest total`);
+    for (const total of ["¥17,500", "¥35,000", "¥52,500", "¥64,000", "¥80,000", "¥96,000", "¥112,000", "¥128,000", "¥144,000", "¥160,000"]) assert.ok(text.includes(total), `${lang} total ${total}`);
+    for (const stale of ["¥140,000", "¥145,000", "¥14,500"]) assert.ok(!text.includes(stale), `${lang} has no stale price ${stale}`);
   }
 });

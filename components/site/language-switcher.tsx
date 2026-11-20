@@ -69,6 +69,12 @@ function pathFor(target: Lang): string {
   }
   if (path.startsWith("/partners")) return path; // Japanese-only page
   if (path.startsWith("/previews")) return path; // unlisted concept previews, English-only
+  // Journal translations are optional. Use the rendered hreflang declarations
+  // instead of sending readers to an article that does not exist in that language.
+  if (path.startsWith("/journal/") && typeof document !== "undefined") {
+    const alternate = document.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${target}"]`);
+    return alternate ? new URL(alternate.href).pathname : `/${target}/journal/`;
+  }
   return path === "/" ? (target === "en" ? "/" : `/${target}/`) : `/${target}${path}`;
 }
 

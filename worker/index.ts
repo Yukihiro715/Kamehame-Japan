@@ -1,5 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
+import { syncLedger } from "../lib/business/ledger-sync";
+import type { AdsEnv } from "../lib/business/ad-sources";
 import handler from "vinext/server/app-router-entry";
 import { publishCheckoutReady, type ReadyStateKv } from "../lib/experience-checkout";
 import { golfpaqVisible, refreshGolfpaqSnapshot } from "../lib/golfpaq";
@@ -11,8 +13,8 @@ import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
 import { autoAcknowledge } from "../lib/portal/settlement";
 import { expireQuotes } from "../lib/portal/cases";
 
-interface Env {
-  ASSETS: Fetcher;
+interface Env extends AdsEnv {
+  ASSETS: { fetch(request: Request): Promise<Response> };
   /** D1 (the commission ledger, lib/referral). Absent until the deploy workflow has created the database. */
   DB?: unknown;
   /** "staging" on the verification Worker: every page behind Basic auth, noindex everywhere. */
@@ -224,7 +226,7 @@ const worker = {
 
     // The document language: the app's root layout cannot see the locale
     // segment of the URL, so it reads it from this header (app/layout.tsx).
-    const lang = url.pathname.match(/^\/(en|es|ja|fr|zh-tw)(?:\/|$)/)?.[1];
+    const lang = /^\/partners-lp(?:\/|$)/.test(url.pathname) ? "ja" : url.pathname.match(/^\/(en|es|ja|fr|zh-tw)(?:\/|$)/)?.[1];
     const req = lang ? new Request(request, { headers: new Headers([...request.headers, ["x-kh-lang", lang]]) }) : request;
     const res = await handler.fetch(req, env, ctx);
     const out = withSecurityHeaders(closeDocumentLast(res));
@@ -237,6 +239,7 @@ const scheduled = {
   /** Every five minutes (vite.config.ts triggers): ask the ledger whether
    *  checkout is ready and publish the answer to KV for the page renders. */
   async scheduled(_event: unknown, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil((async()=>{if(isD1Like(env.DB)){try{await syncLedger(d1Db(env.DB),env);}catch{console.error('business ledger sync: failed; previous records retained');}}})());
     ctx.waitUntil(publishCheckoutReady(env as unknown as Parameters<typeof publishCheckoutReady>[0]));
     ctx.waitUntil((async () => {
       // The partner's schedule (at most every three hours), then English for a few

@@ -1,7 +1,7 @@
 "use client";
 import { golfPlanningCopy, golfPlanningNotes } from "@/lib/golf-planning-copy";
 
-import { readAttribution } from "@/lib/attribution-client";
+import { collectAttribution } from "@/lib/attribution-client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Check, Mail } from "lucide-react";
 import type { Experience, ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
@@ -154,7 +154,7 @@ export function GolfRequestForm({ lang, fallbackEmail, experience, variants, cop
     if (requestId.current.key !== key) requestId.current = { key, id: crypto.randomUUID() };
     setStatus("sending");
     try {
-      const res = await fetch("/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: requestId.current.id, attribution: readAttribution() }) });
+      const res = await fetch("/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...payload, request_id: requestId.current.id, attribution: await collectAttribution() }) });
       const json = (await res.json()) as { ok: boolean };
       if (!json.ok) { setStatus("failed"); return; }
       // GTM turns this into the GA4 / Ads conversion once the confirmation page
