@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
-import { EnquiryForm } from "@/components/site/enquiry-form";
 import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { Fx } from "@/components/site/money";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import factsStyles from "@/components/site/experience-facts.module.css";
-import { CONTACT_EMAIL } from "@/lib/contact";
 import { FACT_COPY } from "@/lib/experience-seo";
 import { langHome, t } from "@/lib/i18n";
 import { partnerListingDrafts, sumiEPreviewSlug, sumiEProposedPrices, type ListingDraft } from "@/lib/partner-listing-drafts";
@@ -78,7 +76,7 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
         { label: ja ? "東京" : "Tokyo", href: `/${lang}/tokyo/` },
         { label: copy.title },
       ]} />
-      <p className="xp-preview-banner" role="status">{ja ? "掲載内容の確認用プレビュー · 予約受付前" : "Listing review preview · Not open for booking"}</p>
+      <p className="xp-preview-banner" role="status">{ja ? "掲載内容の確認用プレビュー · お問い合わせ・予約受付停止中" : "Listing review preview · Closed to enquiries and bookings"}</p>
       <header className="xp-head">
         <p className="eyebrow">{copy.area}</p>
         <h1>{copy.title}</h1>
@@ -97,9 +95,8 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
                 {ja ? "色紙・コースター、2〜6名で参加の場合" : "Shikishi art board or coasters, for groups of 2–6"}
               </small>
             </div>
-            <a className="bk-cta" href="#request-form">{ja ? "この体験について問い合わせる" : "Enquire about this experience"}</a>
             <a className="underlined-link" href="#pricing">{ja ? "4コースの料金を見る" : "Compare all four course prices"}</a>
-            <p className="xp-note">{ja ? "販売価格を確認中です。" : "Pricing is being confirmed."}</p>
+            <p className="xp-note">{ja ? "表示は参考価格案です。現在お申し込みいただけません。" : "These proposed prices are for reference only. This experience is unavailable."}</p>
           </div>
         </aside>
         <div className="xp-main">
@@ -113,7 +110,7 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
           <section className="xp-section" id="pricing">
             <h2>{ja ? "コースと料金" : "Courses and prices"}</h2>
             <p className="plan-compare-lead">
-              {ja ? "2027年1月1日以降の税込価格案です。販売条件は確認中です。" : "Proposed prices for sessions from 1 January 2027. Tax included. Terms are being confirmed."}
+              {ja ? "2027年1月1日以降を想定した税込価格案です。現在販売していません。" : "Proposed prices for sessions from 1 January 2027. Tax included. Not available for sale."}
             </p>
             <table className="xp-pricing compact sumi-e-pricing">
               <thead>
@@ -143,18 +140,6 @@ function SumiEReview({ draft, lang }: { draft: ListingDraft; lang: "en" | "ja" }
               <summary>{ja ? "確認中の内容" : "Details being confirmed"}</summary>
               <ul className="check-list">{copy.pending.map(item => <li key={item}>{item}</li>)}</ul>
             </details>
-          </section>
-          <section className="xp-section xp-request" aria-labelledby="request-form">
-            <h2 id="request-form">{ja ? "体験についてのお問い合わせ" : "Enquire about this experience"}</h2>
-            <p className="xp-note">{ja
-              ? "希望日・人数・気になるコースがあればお知らせください。お問い合わせにはメールで返信します。"
-              : "Tell us your preferred date, group size and any course you’re interested in. We’ll reply by email."}</p>
-            <EnquiryForm
-              kind="guest"
-              lang={lang}
-              fallbackEmail={CONTACT_EMAIL}
-              experience={{ slug: draft.slug, title: copy.title, href: `/previews/partner-listings/${draft.slug}/?lang=${lang}` }}
-            />
           </section>
         </div>
       </div>
