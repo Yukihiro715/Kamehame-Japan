@@ -30,7 +30,9 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
-  assert.match(html,/noindex/);assert.ok(!html.includes('<form'),slug);
+  assert.match(html,/noindex/);
+  if (slug !== "sumi-e-ink-painting") assert.ok(!html.includes('<form'),slug);
+  assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/, slug);
   assert.ok(!html.includes('\"@type\":\"Product\"'),slug);
   assert.ok(html.includes(lang==='ja'?'予約受付前':'Not open for booking'));
  }
@@ -50,7 +52,6 @@ test('Ginza sumi-e preview shows confirmed details without supplier pricing', as
     assert.match(html, lang === 'ja' ? /コースター3枚/ : /three coasters/);
     assert.match(html, lang === 'ja' ? /別途オプション/ : /not included in the standard lesson/);
     assert.match(html, /noindex/);
-    assert.ok(!html.includes('<form'));
     assert.ok(!html.includes('11,500'));
     assert.ok(!html.includes('15,000'));
     assert.ok(!html.includes('17,500'));
@@ -102,12 +103,12 @@ test('confirmed partner answers replace pending questions without publishing sup
  for(const [slug,phrases] of Object.entries(cases)) {
   const html=await (await render(`/previews/partner-listings/${slug}/?lang=ja`)).text();
   for(const phrase of phrases) assert.ok(html.includes(phrase),`${slug}: ${phrase}`);
-  assert.match(html,/noindex/); assert.ok(!html.includes('<form'));
+  assert.match(html,/noindex/);
   assert.doesNotMatch(html,/(?<![0-9])(11,500|17,500|18,500|23,000|5,000|8,000)(?![0-9])/);
  }
 });
 
-test('Sumi-e preview compares four proposed retail prices without opening bookings', async () => {
+test('Sumi-e preview shows four proposed prices and offers enquiries only', async () => {
   for (const lang of ['en', 'ja']) {
     const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
     assert.match(html, /class="site-header solid"/);
@@ -135,8 +136,13 @@ test('Sumi-e preview compares four proposed retail prices without opening bookin
     ]);
     assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
     assert.match(html, /noindex/);
-    assert.ok(!html.includes('<form'));
-    assert.ok(!html.includes('checkout.stripe.com'));
+    assert.match(html, /href="#request-form"/);
+    assert.match(html, /id="request-form".*?<form[^>]+action="\/api\/contact"/s);
+    assert.equal((html.match(/<form\b/g) ?? []).length, 1);
+    assert.match(html, lang === "ja"
+      ? /class="form-context"[^>]*>.*?<b>銀座・水墨画体験<\/b>/s
+      : /class="form-context"[^>]*>.*?<b>Sumi-e Japanese Ink Painting in Ginza<\/b>/s);
+    assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/);
     for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
   }
 });
