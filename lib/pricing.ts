@@ -30,7 +30,7 @@ export interface PricingView {
   planMode?: "supplement";
   extraGuest?: { regular: number; peak: number; included: number; upTo: number };
   peakWindows?: { from: string; to: string }[];
-  addOns?: { id: string; name: string; description: string; price?: number; priceFrom?: boolean }[];
+  addOns?: { id: string; name: string; description: string; price?: number; priceFrom?: boolean; /** Priced per guest (multiplied by the party size). */ perGuest?: boolean }[];
   /** Per-person products: the price per guest and the largest party it covers. */
   perPerson?: number;
   maxGuests?: number;
@@ -177,6 +177,13 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
 }
 
 export interface Quote { total: number; peak: boolean; base: number; extraCount: number; extraEach: number }
+
+/** Fixed-price extras chosen in the form, for the estimate: per-guest extras
+ *  are multiplied by the party; "from" prices and unpriced extras add nothing
+ *  (they are confirmed with the quote). */
+export function addOnTotal(view: PricingView, chosen: string[], guests: number): number {
+  return (view.addOns ?? []).reduce((sum, a) => chosen.includes(a.id) && a.price && !a.priceFrom ? sum + a.price * (a.perGuest ? guests : 1) : sum, 0);
+}
 
 /** Price of a plan for a party on a date (or, for per-person products, the
  *  party's total). Null when the party is larger than the listed range

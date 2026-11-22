@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { quote, type PricingView, type Quote } from "@/lib/pricing";
+import { quote, type PricingView, type Quote, addOnTotal } from "@/lib/pricing";
 import { track } from "@/lib/analytics";
 import { readGolfTravelQuery, type GolfTransferChoice } from "@/lib/golf-travel";
 
@@ -275,7 +275,12 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
       },
       toggleAddOn: (id) => setState((s) => ({ ...s, addOns: s.addOns.includes(id) ? s.addOns.filter((x) => x !== id) : [...s.addOns, id] })),
       experience, pricing: activePricing, minDate,
-      estimate: activePricing && !largeParty && !customQuote && !quoteRequested && !experience.consultationOnly ? quote(activePricing, state.plan, guestsNumber, state.date || undefined) : null,
+      estimate: (() => {
+        if (!activePricing || largeParty || customQuote || quoteRequested || experience.consultationOnly) return null;
+        const q = quote(activePricing, state.plan, guestsNumber, state.date || undefined);
+        // Fixed-price extras (e.g. the front-area ticket) count towards the estimate.
+        return q ? { ...q, total: q.total + addOnTotal(activePricing, state.addOns, guestsNumber) } : null;
+      })(),
       guestsNumber, largeParty, variantView, customQuote,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- pickDefault/variantTime derive from `experience`

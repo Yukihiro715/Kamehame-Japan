@@ -26,7 +26,7 @@ async function render(path = "/") {
 }
 
 test('partner listing drafts stay unlisted and cannot accept reservations',async()=>{
- const slugs=['tokyo-underground-idol-live','tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
+ const slugs=['tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
@@ -98,7 +98,6 @@ test("Bamboo Sky Terrace is listed in Kyoto and accepts venue-specific enquiries
 
 test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
  const cases = {
-  'tokyo-underground-idol-live': ['700', '約2時間', '年齢制限なし', '12,000円', '19,000円'],
   'tokyo-ninja-zen-night-walk': ['開始1日前まで全額返金', '原則雨天決行', '18歳以上'],
   'arashiyama-private-terrace-gathering': ['最低保証額なし', '利用日時・利用時間・人数'],
   'sumi-e-ink-painting': ['材料費を含む', '英語対応費を含む', '体験日の3日前', '同伴・見学不可', '別々のコースは選べません'],

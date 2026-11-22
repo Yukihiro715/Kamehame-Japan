@@ -5,7 +5,7 @@ import { BookingRequestHeading } from "@/components/site/quote-request-switch";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check, Car, Flag } from "lucide-react";
+import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check, Car, Flag, Ticket } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -90,6 +90,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /** Party-size price table with the collapsible high-season table under it. */
+/** Optional extras (plan-priced and flat-priced products alike), e.g. a kimono for the ceremony or the front-area ticket. */
+function AddOnList({ pricing, D }: { pricing: PricingView; D: ReturnType<typeof t>["detail"] }) {
+  if (!pricing.addOns || pricing.addOns.length === 0) return null;
+  return (
+    <>
+      <h3 style={{ marginTop: 22 }}>{D.addOnsH}</h3>
+      {pricing.addOns.map((a) => (
+        <div className="addon" key={a.id}>
+          {a.id === "front" ? <Ticket size={18} /> : <Wine size={18} />}
+          <div>
+            <b>{a.name}</b>
+            <p>{a.description}</p>
+            <small><Fx>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</Fx></small>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
 function PriceTable({ pricing, D, perGroup, lang }: { pricing: PricingView; D: ReturnType<typeof t>["detail"]; perGroup: boolean; lang: Lang }) {
   return (
     <>
@@ -302,21 +322,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                   {pricing.moreOnRequest && <p>{D.sixPlus((eg?.upTo ?? Math.max(...pricing.rows.map((r) => r.party))) + 1)}</p>}
                   {exp.taxIncluded && <p>{D.taxIncluded}. {D.noPayment}</p>}
                 </div>
-                {pricing.addOns && pricing.addOns.length > 0 && (
-                  <>
-                    <h3 style={{ marginTop: 22 }}>{D.addOnsH}</h3>
-                    {pricing.addOns.map((a) => (
-                      <div className="addon" key={a.id}>
-                        <Wine size={18} />
-                        <div>
-                          <b>{a.name}</b>
-                          <p>{a.description}</p>
-                          <small><Fx>{a.price ? `${a.priceFrom && D.fromPrice ? `${D.fromPrice} ` : ""}${yen(a.price)}${a.priceFrom ? D.fromSuffix : ""}` : D.priceOnRequest}</Fx></small>
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                )}
+                <AddOnList pricing={pricing} D={D} />
               </section>
             )}
 
@@ -354,6 +360,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
               <section className="xp-section" id="pricing">
                 <h2>{D.pricingH}</h2>
                 <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />
+                <AddOnList pricing={pricing} D={D} />
               </section>
             )}
 
