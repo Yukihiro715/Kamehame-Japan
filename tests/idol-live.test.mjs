@@ -23,10 +23,12 @@ test("idol live: live product page in five languages with selling prices, no cos
     assert.ok(!/noindex/.test(html), `${lang}: indexable (live, not preview)`);
     assert.ok(body.includes("12,000"), `${lang}: standard price`);
     assert.ok(body.includes("19,000"), `${lang}: front price`);
-    assert.ok(body.includes("7,000"), `${lang}: front supplement`);
+    assert.ok((html.match(/class="bk-plan /g) ?? []).length === 2, `${lang}: two ticket types in the booking box`);
+    assert.ok(!html.includes("form-addons"), `${lang}: no add-on block`);
     assert.ok(body.includes("700"), `${lang}: drink charge`);
     assert.doesNotMatch(body, /(?<![0-9,])(5,000|8,000)(?![0-9])/, `${lang}: no cost prices`);
     assert.doesNotMatch(html, /BUZZ|Premium!!/i, `${lang}: group not named`);
+    assert.ok(!/会場名|venue's name|nombre de la sala|nom de la salle|場地名稱/.test(body), `${lang}: venue never named`);
     assert.ok(html.includes('id="request-form"') || html.includes("enquiry") || html.includes('id="request"'), `${lang}: request section`);
     assert.ok(html.includes('id="access"'), `${lang}: access section`);
     assert.ok(html.includes("/images/idol-live-venue.webp"), `${lang}: organiser photos`);

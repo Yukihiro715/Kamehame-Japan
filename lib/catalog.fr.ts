@@ -561,9 +561,10 @@ export const experiencesFr: Experience[] = [
     langTag: "Spectacle en japonais",
     includedShort: "Entrée pour une soirée · Billet numérique · Zone standard ou avant",
     cancellation: "Les billets sont émis pour une date précise : une réservation confirmée ne peut être ni annulée, ni modifiée, ni remboursée. Si l’organisateur annule la représentation, vous êtes intégralement remboursé.",
-    addOns: [
-      { id: "front", name: "Billet avant : ¥19,000 par personne", description: "La zone avant la plus proche de la scène, au lieu de l’arrière de la fosse. ¥7,000 de plus par personne que le billet standard ; tout le groupe prend le même type de billet.", price: 7000, perGuest: true },
-    ],
+    planText: {
+      standard: { label: "Standard", name: "Billet standard", performers: "Arrière de la fosse", blurb: "La fosse principale derrière la zone avant : toute la salle, la scène et le public sous les yeux." },
+      front: { label: "Avant", name: "Billet avant", performers: "Au plus près de la scène", blurb: "La zone avant la plus proche de la scène, parmi les fans les plus engagés." },
+    },
     highlights: [
       { icon: "dance", title: "Un groupe d’idoles en activité, de près", body: "Chant, chorégraphies et changements de costumes d’un groupe qui se produit chaque semaine dans les salles de Tokyo, sur une scène à quelques mètres de vous." },
       { icon: "group", title: "La même fosse que les fans", body: "Pas de carré touristes. Vous êtes parmi les habitués, vous apprenez les appels au fil de la soirée et vous voyez comment un idol live fonctionne vraiment." },
@@ -581,8 +582,8 @@ export const experiencesFr: Experience[] = [
     ],
     scheduleNote: "Une soirée type avec ouverture à 18:30. Le déroulé varie selon la date ; l’heure de début confirmée arrive avec votre billet.",
     venue: {
-      known: ["Un petit live house de Tokyo, dans le secteur de Shinjuku, Shibuya ou Ikebukuro ; la salle est fixée pour chaque date et indiquée dans votre confirmation", "Fosse debout avec une scène basse ; le concert dure environ deux heures", "Un drink charge de ¥700 par personne se règle en espèces à l’entrée", "Le spectacle est en japonais ; aucune assistance en anglais sur place"],
-      afterBooking: ["Le nom, l’adresse et la gare la plus proche de la salle", "Votre billet numérique, à présenter à l’entrée", "Les heures d’ouverture et de début confirmées pour votre date"],
+      known: ["Un petit live house de Tokyo, dans le secteur de Shinjuku, Shibuya ou Ikebukuro ; la salle est fixée pour chaque date et son adresse arrive avec votre confirmation", "Fosse debout avec une scène basse ; le concert dure environ deux heures", "Un drink charge de ¥700 par personne se règle en espèces à l’entrée", "Le spectacle est en japonais ; aucune assistance en anglais sur place"],
+      afterBooking: ["L’adresse de la salle et la gare la plus proche", "Votre billet numérique, à présenter à l’entrée", "Les heures d’ouverture et de début confirmées pour votre date"],
       img: "/images/idol-live-venue.webp", alt: "Le live house vu depuis la fosse",
     },
     notesLabel: "Quelque chose à nous signaler (facultatif)",
@@ -590,10 +591,10 @@ export const experiencesFr: Experience[] = [
     flow: [
       { title: "Choisissez une date et envoyez votre demande", body: "Indiquez la date, la taille de votre groupe et le type de billet. L’envoi de la demande est gratuit." },
       { title: "Nous confirmons la représentation sous 24 heures", body: "Nous vérifions qu’il y a un concert à votre date et qu’il reste des billets, puis nous répondons avec le total et la zone de la salle." },
-      { title: "Payez pour confirmer ; votre billet suit", body: "Votre réservation est confirmée à réception du paiement. Le billet numérique, le nom et l’adresse de la salle et l’heure de début arrivent avant le jour J." },
+      { title: "Payez pour confirmer ; votre billet suit", body: "Votre réservation est confirmée à réception du paiement. Le billet numérique, l’adresse de la salle et l’heure de début arrivent avant le jour J." },
     ],
     faq: [
-      { q: "Quel groupe se produit ?", a: "Un groupe d’idoles en activité qui joue régulièrement dans les salles de Tokyo. L’affiche est confirmée pour chaque date, et le nom du groupe et de la salle figurent dans votre confirmation." },
+      { q: "Quel groupe se produit ?", a: "Un groupe d’idoles en activité qui joue régulièrement dans les salles de Tokyo. L’affiche est confirmée pour chaque date ; l’adresse de la salle arrive avec votre confirmation." },
       { q: "Quelle différence entre le billet standard et le billet avant ?", a: "Le billet standard (¥12,000) donne accès à l’arrière de la fosse ; le billet avant (¥19,000), à la zone la plus proche de la scène. Les deux sont debout. Tout le groupe prend le même type." },
       { q: "Qu’est-ce que le drink charge de ¥700 ?", a: "Les live houses japonais demandent à chaque spectateur un forfait boisson à l’entrée, en espèces, contre une consommation. Il n’est pas compris dans le prix du billet." },
       { q: "Y a-t-il de l’anglais sur place ?", a: "Non. Le spectacle et les annonces sont en japonais et le personnel ne parle pas forcément anglais. Nous vous expliquons avant le jour J où aller et à quoi vous attendre ; une fois à l’intérieur, vous suivez la salle." },

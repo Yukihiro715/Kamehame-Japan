@@ -27,7 +27,8 @@ export interface PricingView {
   moreOnRequest: boolean;
   plans?: PlanView[];
   /** "supplement": plans are flat amounts on top of `rows` / `highSeason` (see Experience.pricing.plans). */
-  planMode?: "supplement";
+  /** "perPerson": each plan is a per-person price (e.g. ticket types); the table shows the cheapest. */
+  planMode?: "supplement" | "perPerson";
   extraGuest?: { regular: number; peak: number; included: number; upTo: number };
   peakWindows?: { from: string; to: string }[];
   addOns?: { id: string; name: string; description: string; price?: number; priceFrom?: boolean; /** Priced per guest (multiplied by the party size). */ perGuest?: boolean }[];
@@ -155,6 +156,26 @@ export function pricingFor(exp: Experience, lang: Lang): PricingView {
     };
   }
 
+  // Per-person ticket types: each plan is a price per guest; the reference
+  // table and the headline use the cheapest, the estimate the chosen plan.
+  if (pr?.plans?.length) {
+    const text = exp.planText ?? {};
+    const plans: PlanView[] = pr.plans.map((p) => ({
+      id: p.id, regular: p.regular ?? 0, peak: p.peak ?? p.regular ?? 0, recommended: !!p.recommended,
+      label: text[p.id]?.label ?? p.id, name: text[p.id]?.name ?? exp.title,
+      performers: text[p.id]?.performers ?? "", blurb: text[p.id]?.blurb ?? "",
+    }));
+    const cheapest = Math.min(...plans.map((p) => p.regular));
+    const parties = [...new Set([size.min, 2, 4, size.max].filter((n) => n >= size.min && n <= size.max))].sort((a, b) => a - b);
+    return {
+      unit: "person",
+      rows: parties.map((party) => ({ party, total: cheapest * party, perPerson: cheapest })),
+      minCharge: 1, moreOnRequest: false,
+      plans, planMode: "perPerson", addOns: exp.addOns,
+      perPerson: cheapest, maxGuests: size.max,
+    };
+  }
+
   // Per person: a short reference table across the party range.
   const unit = parseYen(exp.price);
   const minCharge = pr?.minCharge ?? 1;
@@ -189,6 +210,12 @@ export function addOnTotal(view: PricingView, chosen: string[], guests: number):
  *  party's total). Null when the party is larger than the listed range
  *  (quoted individually) or there is nothing to price. */
 export function quote(view: PricingView, planId: string, guests: number, iso?: string): Quote | null {
+  if (view.planMode === "perPerson") {
+    const plan = view.plans?.find((p) => p.id === planId) ?? view.plans?.[0];
+    if (!plan || (view.maxGuests && guests > view.maxGuests)) return null;
+    const total = plan.regular * guests;
+    return { total, peak: false, base: total, extraCount: 0, extraEach: 0 };
+  }
   if (!view.plans?.length && view.unit === "person" && view.perPerson) {
     if (view.maxGuests && guests > view.maxGuests) return null;
     const total = view.perPerson * Math.max(guests, view.minCharge ?? 1) + (guests === 1 ? view.soloSupplement ?? 0 : 0);

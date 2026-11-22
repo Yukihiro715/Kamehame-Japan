@@ -1267,9 +1267,11 @@ export const experiences: Experience[] = [
     skipSiteFaq: true,
     includedShort: "Admission for one evening · Digital ticket · Standard or front area",
     cancellation: "Tickets are issued for a specific date, so a confirmed booking cannot be cancelled, changed or refunded. If the organiser cancels the performance, you receive a full refund.",
-    addOns: [
-      { id: "front", name: "Front area ticket: ¥19,000 per person", description: "The forward area closest to the stage, instead of the rear of the floor. ¥7,000 per guest more than the standard ticket; everyone in your party takes the same ticket type.", price: 7000, perGuest: true },
-    ],
+    pricing: { plans: [{ id: "standard", regular: 12000 }, { id: "front", regular: 19000 }] },
+    planText: {
+      standard: { label: "Standard", name: "Standard ticket", performers: "Rear of the floor", blurb: "The main floor behind the front area: the whole room, the stage and the crowd in view." },
+      front: { label: "Front", name: "Front area ticket", performers: "Closest to the stage", blurb: "The forward area nearest the stage, among the most committed fans." },
+    },
     highlights: [
       { icon: "dance", title: "A working idol group, up close", body: "Singing, choreographed dance and costume changes from a group that plays Tokyo's live houses every week, on a stage a few metres from you." },
       { icon: "group", title: "The same floor as the fans", body: "No tourist section. You stand among the regulars, learn the calls as you go, and see how an idol live actually works." },
@@ -1296,8 +1298,8 @@ export const experiences: Experience[] = [
     ],
     scheduleNote: "A typical evening with doors at 18:30. The running order varies by date; the confirmed start time comes with your ticket.",
     venue: {
-      known: ["A small live house in Tokyo, in the Shinjuku, Shibuya or Ikebukuro area; the venue is fixed for each date and named in your confirmation", "A standing floor with a low stage; the show runs about two hours", "A drink charge of ¥700 per person is paid in cash at the door", "The performance is in Japanese; there is no English support at the venue"],
-      afterBooking: ["The venue's name, address and nearest station", "Your digital ticket, to show at the door", "The confirmed doors and start time for your date"],
+      known: ["A small live house in Tokyo, in the Shinjuku, Shibuya or Ikebukuro area; the venue is fixed for each date and its address comes with your confirmation", "A standing floor with a low stage; the show runs about two hours", "A drink charge of ¥700 per person is paid in cash at the door", "The performance is in Japanese; there is no English support at the venue"],
+      afterBooking: ["The venue's address and nearest station", "Your digital ticket, to show at the door", "The confirmed doors and start time for your date"],
       img: "/images/idol-live-venue.webp", alt: "The live house seen from the floor",
     },
     notesLabel: "Anything we should know (optional)",
@@ -1305,10 +1307,10 @@ export const experiences: Experience[] = [
     flow: [
       { title: "Choose a date and send your request", body: "Pick the date, your party size and the ticket type. Sending the request costs nothing." },
       { title: "We confirm the performance within 24 hours", body: "We check that there is a show on your date and that tickets are available, and reply with the total and the venue area." },
-      { title: "Pay to confirm; your ticket follows", body: "Your booking is confirmed when your payment arrives. Your digital ticket, the venue's name and address and the start time come before the day." },
+      { title: "Pay to confirm; your ticket follows", body: "Your booking is confirmed when your payment arrives. Your digital ticket, the venue's address and the start time come before the day." },
     ],
     faq: [
-      { q: "Which group performs?", a: "A working idol group that plays Tokyo's live houses regularly. The line-up is confirmed for each date, and we name the group and the venue in your confirmation." },
+      { q: "Which group performs?", a: "A working idol group that plays Tokyo's live houses regularly. The line-up is confirmed for each date; the venue's address comes with your confirmation." },
       { q: "What is the difference between a standard and a front ticket?", a: "A standard ticket (¥12,000) is for the rear of the floor; a front ticket (¥19,000) is for the forward area closest to the stage. Both are standing. Everyone in your party takes the same type." },
       { q: "What is the ¥700 drink charge?", a: "Japanese live houses charge every guest a drink fee at the door, paid in cash, in exchange for one drink. It is not included in the ticket price." },
       { q: "Is there any English at the venue?", a: "No. The performance and the announcements are in Japanese and the staff may not speak English. We brief you before the day on where to go and what to expect; once inside, you follow the room." },

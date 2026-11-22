@@ -5,7 +5,7 @@ import { BookingRequestHeading } from "@/components/site/quote-request-switch";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check, Car, Flag, Ticket } from "lucide-react";
+import { ArrowRight, Brush, Clock3, Languages, MapPin, Users, MessageCircle, Sparkles, Camera, Utensils, Music, CalendarDays, ShieldCheck, Wine, Leaf, WheatOff, Beef, UtensilsCrossed, Check, Car, Flag } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
@@ -98,7 +98,7 @@ function AddOnList({ pricing, D }: { pricing: PricingView; D: ReturnType<typeof 
       <h3 style={{ marginTop: 22 }}>{D.addOnsH}</h3>
       {pricing.addOns.map((a) => (
         <div className="addon" key={a.id}>
-          {a.id === "front" ? <Ticket size={18} /> : <Wine size={18} />}
+          <Wine size={18} />
           <div>
             <b>{a.name}</b>
             <p>{a.description}</p>
@@ -194,6 +194,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   const plans = pricing.plans ?? [];
   const eg = pricing.extraGuest;
   const supplementPlans = pricing.planMode === "supplement";
+  const ticketPlans = pricing.planMode === "perPerson";
 
   const highlights = (exp.highlights ?? D.defaultHighlights.map((h, i) => ({ ...h, icon: (["group", "spark", "interpreter"] as const)[i] })));
   const schedule: { time: string; title: string; body?: string; img?: string }[] =
@@ -288,7 +289,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                 {exp.includedShort && <li><Sparkles size={15} /><span>{exp.includedShort}</span></li>}
                 {exp.taxIncluded && <li><ShieldCheck size={15} /><span>{D.taxIncluded}</span></li>}
                 {avail && <li><Clock3 size={15} /><span>{avail.cutoffHours ? D.availCutoffHours(avail.cutoffHours) : D.availCutoff(avail.cutoffDays, avail.cutoffTime)}</span></li>}
-                {plans.length > 0 && <li><Users size={15} /><span>{D.performerNote}</span></li>}
+                {plans.length > 0 && !ticketPlans && <li><Users size={15} /><span>{D.performerNote}</span></li>}
               </ul>
               {exp.overviewFigure && (
                 <figure className="xp-overview-fig">
@@ -299,10 +300,10 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
             </section>
 
             {/* ④ Plans (plan-priced products) */}
-            {plans.length > 0 && (eg || supplementPlans) && (
+            {plans.length > 0 && (eg || supplementPlans || ticketPlans) && (
               <section className="xp-section" id="pricing">
-                <h2>{D.plansH}</h2>
-                <p className="plan-compare-lead">{supplementPlans ? D.plansLeadSupplement : D.plansLead}</p>
+                <h2>{ticketPlans ? D.ticketsH : D.plansH}</h2>
+                <p className="plan-compare-lead">{supplementPlans ? D.plansLeadSupplement : ticketPlans ? D.plansLeadPerPerson : D.plansLead}</p>
                 {/* Supplement plans: the party-size table is the price; plans add a flat amount. */}
                 {supplementPlans && <PriceTable pricing={pricing} D={D} perGroup={perGroup} lang={lang} />}
                 <ul className="plan-compare">
@@ -312,6 +313,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                       <span className="plan-compare-what"><b>{p.performers}</b><small>{p.blurb}</small></span>
                       <span className="plan-compare-price">{supplementPlans
                         ? (p.supplement ? <span><Fx>{`+${yen(p.supplement)}`}</Fx></span> : <small>{D.planBase}</small>)
+                        : ticketPlans ? <span><Fx>{yen(p.regular)}</Fx><span className="from-suffix">{T.perPerson}</span></span>
                         : <>{D.fromPrice && <small>{D.fromPrice}</small>}<span><Fx>{yen(p.regular)}</Fx>{D.fromSuffix && <span className="from-suffix">{D.fromSuffix}</span>}</span></>}</span>
                     </li>
                   ))}

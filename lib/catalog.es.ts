@@ -562,9 +562,10 @@ export const experiencesEs: Experience[] = [
     langTag: "Actuación en japonés",
     includedShort: "Entrada para una función · Entrada digital · Zona estándar o frontal",
     cancellation: "Las entradas se emiten para una fecha concreta, por lo que una reserva confirmada no puede cancelarse, cambiarse ni reembolsarse. Si el organizador cancela la función, recibes el reembolso completo.",
-    addOns: [
-      { id: "front", name: "Entrada frontal: ¥19,000 por persona", description: "La zona delantera más cercana al escenario, en lugar de la parte trasera de la pista. ¥7,000 más por persona que la entrada estándar; todo el grupo elige el mismo tipo de entrada.", price: 7000, perGuest: true },
-    ],
+    planText: {
+      standard: { label: "Estándar", name: "Entrada estándar", performers: "Parte trasera de la pista", blurb: "La pista principal detrás de la zona frontal: toda la sala, el escenario y el público a la vista." },
+      front: { label: "Frontal", name: "Entrada frontal", performers: "Lo más cerca del escenario", blurb: "La zona delantera más próxima al escenario, entre los fans más entregados." },
+    },
     highlights: [
       { icon: "dance", title: "Un grupo idol en activo, muy de cerca", body: "Canto, coreografías y cambios de vestuario de un grupo que actúa cada semana en las salas de Tokio, en un escenario a pocos metros de ti." },
       { icon: "group", title: "La misma pista que los fans", body: "Sin zona para turistas. Estás entre los habituales, aprendes las consignas sobre la marcha y ves cómo funciona de verdad un idol live." },
@@ -582,8 +583,8 @@ export const experiencesEs: Experience[] = [
     ],
     scheduleNote: "Una noche típica con apertura a las 18:30. El orden varía según la fecha; la hora de inicio confirmada llega con tu entrada.",
     venue: {
-      known: ["Un pequeño live house de Tokio, en la zona de Shinjuku, Shibuya o Ikebukuro; la sala se fija para cada fecha y se indica en tu confirmación", "Pista de pie con escenario bajo; el concierto dura unas dos horas", "Un cargo por bebida de ¥700 por persona se paga en efectivo en la puerta", "La actuación es en japonés; no hay asistencia en inglés en la sala"],
-      afterBooking: ["El nombre, la dirección y la estación más cercana de la sala", "Tu entrada digital, para mostrar en la puerta", "La hora confirmada de apertura y de inicio para tu fecha"],
+      known: ["Un pequeño live house de Tokio, en la zona de Shinjuku, Shibuya o Ikebukuro; la sala se fija para cada fecha y su dirección llega con tu confirmación", "Pista de pie con escenario bajo; el concierto dura unas dos horas", "Un cargo por bebida de ¥700 por persona se paga en efectivo en la puerta", "La actuación es en japonés; no hay asistencia en inglés en la sala"],
+      afterBooking: ["La dirección de la sala y la estación más cercana", "Tu entrada digital, para mostrar en la puerta", "La hora confirmada de apertura y de inicio para tu fecha"],
       img: "/images/idol-live-venue.webp", alt: "El live house visto desde la pista",
     },
     notesLabel: "Algo que debamos saber (opcional)",
@@ -591,10 +592,10 @@ export const experiencesEs: Experience[] = [
     flow: [
       { title: "Elige una fecha y envía tu solicitud", body: "Indica la fecha, el tamaño del grupo y el tipo de entrada. Enviar la solicitud no cuesta nada." },
       { title: "Confirmamos la función en 24 horas", body: "Comprobamos que hay concierto en tu fecha y que quedan entradas, y respondemos con el total y la zona de la sala." },
-      { title: "Paga para confirmar; después llega tu entrada", body: "Tu reserva queda confirmada al recibir el pago. La entrada digital, el nombre y la dirección de la sala y la hora de inicio llegan antes del día." },
+      { title: "Paga para confirmar; después llega tu entrada", body: "Tu reserva queda confirmada al recibir el pago. La entrada digital, la dirección de la sala y la hora de inicio llegan antes del día." },
     ],
     faq: [
-      { q: "¿Qué grupo actúa?", a: "Un grupo idol en activo que actúa con regularidad en las salas de Tokio. El cartel se confirma para cada fecha, y el nombre del grupo y de la sala figuran en tu confirmación." },
+      { q: "¿Qué grupo actúa?", a: "Un grupo idol en activo que actúa con regularidad en las salas de Tokio. El cartel se confirma para cada fecha; la dirección de la sala llega con tu confirmación." },
       { q: "¿Qué diferencia hay entre la entrada estándar y la frontal?", a: "La entrada estándar (¥12,000) es para la parte trasera de la pista; la frontal (¥19,000), para la zona delantera más cercana al escenario. Ambas son de pie. Todo el grupo elige el mismo tipo." },
       { q: "¿Qué es el cargo por bebida de ¥700?", a: "Los live houses japoneses cobran a cada asistente una tarifa por bebida en la puerta, en efectivo, a cambio de una consumición. No está incluida en el precio de la entrada." },
       { q: "¿Hay algo en inglés en la sala?", a: "No. La actuación y los anuncios son en japonés y es posible que el personal no hable inglés. Te explicamos antes del día adónde ir y qué esperar; una vez dentro, sigues a la sala." },

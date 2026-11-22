@@ -31,6 +31,8 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
   if (!b) return null;
   const { pricing, experience: x } = b;
   const plans = pricing?.plans ?? [];
+  // Group-priced plans carry seasons and a group total; per-person ticket types do not.
+  const groupPlans = plans.length > 0 && pricing?.planMode !== "perPerson";
   const plan = plans.find((p) => p.id === b.plan);
   // Group-priced products: the cheapest plan for the base party, shown per person.
   const groupRow = pricing?.unit === "group" ? pricing.rows[0] : undefined;
@@ -91,7 +93,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
 
       {plans.length > 0 && (
         <fieldset className="bk-plans">
-          <legend>{D.planLabel}</legend>
+          <legend>{pricing?.planMode === "perPerson" ? D.ticketLabel : D.planLabel}</legend>
           {plans.map((p) => (
             <label key={p.id} className={`bk-plan ${b.plan === p.id ? "on" : ""}`}>
               <input type="radio" name="bk-plan" value={p.id} checked={b.plan === p.id} onChange={() => b.set({ plan: p.id })} />
@@ -131,10 +133,10 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       ) : <div className="bk-est" aria-live="polite">
         {b.estimate ? (
           <>
-            <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
+            <span>{[D.estimateH, plan?.label, D.estimateFor(b.guestsNumber), groupPlans && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span>
             <b><Yen n={b.estimate.total} /></b>
             <JpyRef n={b.estimate.total} lang={lang} />
-            {x.provisionalCheckout ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}
+            {x.provisionalCheckout ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{groupPlans ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {groupPlans && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}
           </>
         ) : (
           <>

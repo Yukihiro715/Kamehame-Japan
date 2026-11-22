@@ -46,6 +46,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
   const b = useBooking();
   const x = b?.experience;
   const plans = b?.pricing?.plans ?? [];
+  const groupPlans = plans.length > 0 && b?.pricing?.planMode !== "perPerson";
   const addOns = b?.pricing?.addOns ?? [];
   const card = variant === "card";
   const [needDate, setNeedDate] = useState(false);
@@ -84,7 +85,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       if (plan) data.plan = `${plan.label} — ${plan.name}`;
       if (b.addOns.length) data.addons = addOns.filter((a) => b.addOns.includes(a.id)).map((a) => a.name).join(", ");
       if (x?.interpreter !== false) data.interpreter = F.interpreterOpts[b.interpreter] ?? b.interpreter;
-      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${[plans.length ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : "", D.estimateFor(b.guestsNumber)].filter(Boolean).join(", ")})`;
+      if (b.estimate) data.estimate = `${yen(b.estimate.total)} (${[groupPlans ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : "", D.estimateFor(b.guestsNumber)].filter(Boolean).join(", ")})`;
       if (b.quoteRequested || (x?.provisionalCheckout && b.largeParty)) { data.message = `[Custom quote: children / special arrangements]\n${data.message ?? ""}`; delete data.estimate; }
       delete data.date; delete data.guests; delete data.time;
     }
@@ -197,7 +198,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
         <>
           {plans.length > 0 && !card && (
             <label className="form-row">
-              <span>{F.plan}</span>
+              <span>{b?.pricing?.planMode === "perPerson" ? D.ticketLabel : F.plan}</span>
               <select name="plan-id" value={b.plan} onChange={(e) => b.set({ plan: e.target.value })}>
                 {plans.map((p) => <option key={p.id} value={p.id}>{p.label} — {p.name} · {b?.pricing?.planMode === "supplement" ? (p.supplement ? `+${yen(p.supplement)}` : D.planBaseShort) : yen(p.regular)}</option>)}
               </select>
@@ -248,7 +249,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           {!card && x?.consultationOnly && <div className="form-estimate"><span>{D.consultOnlyPrice}</span><small>{D.consultOnlyNote}{x.perk ? ` ${x.perk}.` : ""}</small></div>}
           {!card && !x?.consultationOnly && <div className="form-estimate" aria-live="polite">
             {b.estimate ? (
-              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), plans.length && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} />{provisional ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{plans.length ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {plans.length && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}</>
+              <><span>{[D.estimateH, plans.find((p) => p.id === b.plan)?.label, D.estimateFor(b.guestsNumber), groupPlans && b.date ? (b.estimate.peak ? D.seasonPeak : D.seasonRegular) : ""].filter(Boolean).join(" · ")}</span><b><Yen n={b.estimate.total} /></b><JpyRef n={b.estimate.total} lang={lang} />{provisional ? (b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? <small>{D.minChargeNote(b.pricing.minCharge)}</small> : null) : <small>{groupPlans ? D.priceTotalNote : b.pricing?.minCharge && b.guestsNumber < b.pricing.minCharge ? D.minChargeNote(b.pricing.minCharge) : D.pricePartyNote}. {groupPlans && !b.date ? D.pickDateForSeason : D.estimateNote}</small>}</>
             ) : (
               <><span>{D.estimateH}</span><small>{b.largeParty ? D.largeGroupNote(b.guestsNumber) : D.quoteIndividually}</small></>
             )}
