@@ -137,7 +137,9 @@ export function buildEntries(read) {
       }
       else if (c === "tours") { members = []; key = join(src("lib/booking-guidance.ts"), langBlock(collectionsCopy, lang), tours.join(",")); }
       else { members = experiences; key = join(src("lib/booking-guidance.ts"), langBlock(collectionsCopy, lang), experiences.map((e) => e.slug).join(",")); }
-      add(`/${lang}/${c}/`, { priority: "0.8", alternates: siblings((l) => `/${l}/${c}/`), key, deps: members.map((e) => expPath(lang, e)) });
+      const deps = members.map((e) => expPath(lang, e));
+      if (c === "kyoto") deps.push(`/${lang}/kyoto/bamboo-sky-terrace/`);
+      add(`/${lang}/${c}/`, { priority: "0.8", alternates: siblings((l) => `/${l}/${c}/`), key, deps });
     }
   }
 
@@ -211,6 +213,16 @@ export function buildEntries(read) {
   for (const lang of LANGS) {
     add(`/${lang}/support/`, { priority: "0.6", changefreq: "monthly", alternates: siblings((l) => `/${l}/support/`), key: join(langBlock(src("lib/support.ts"), lang) || supportSrc, src("app/[lang]/support/page.tsx")) });
     add(`/${lang}/support/babysitter/`, { priority: "0.7", changefreq: "monthly", alternates: siblings((l) => `/${l}/support/babysitter/`), key: join(supportSrc, src("app/[lang]/support/babysitter/page.tsx")) });
+  }
+
+  const terraceSrc = src("lib/bamboo-sky-terrace.ts");
+  const terraceShared = terraceSrc.split("export const terraceCopy =")[0];
+  const terracePage = src("app/[lang]/kyoto/bamboo-sky-terrace/page.tsx");
+  for (const lang of LANGS) {
+    add(`/${lang}/kyoto/bamboo-sky-terrace/`, {
+      priority: "0.7", changefreq: "monthly", alternates: siblings((l) => `/${l}/kyoto/bamboo-sky-terrace/`),
+      key: join(terracePage, terraceShared, langBlock(terraceSrc, lang)),
+    });
   }
 
   add("/partners/", { priority: "0.4", changefreq: "monthly", key: src("app/partners/page.tsx") || null });

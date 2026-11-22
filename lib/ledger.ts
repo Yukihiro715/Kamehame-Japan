@@ -1,4 +1,5 @@
 import { attributionNote } from "@/lib/attribution";
+import { terraceName, terraceSlug } from "@/lib/bamboo-sky-terrace";
 // The booking ledger (a Google Sheet) gets a row for every enquiry.
 //
 // The sheet is owned by the team and edited by hand, so the Worker never
@@ -10,6 +11,7 @@ import { attributionNote } from "@/lib/attribution";
 
 import { catalogFor } from "@/lib/catalog";
 import type { Enquiry } from "@/lib/contact";
+import { sumiEPreviewSlug, sumiEPreviewTitle } from "@/lib/partner-listing-drafts";
 import type { TranslatedField } from "@/lib/translate";
 
 /** The site-wide tiers, used when an experience sets none of its own. */
@@ -79,6 +81,8 @@ function freeCancelUntil(experienceDate: string | undefined, tiers: { until: num
 
 export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, string>>, status: { ackSent: boolean; followUpScheduled: boolean }): LedgerRecord {
   const x = e.experience ? catalogFor("ja").experiences.find((v) => v.slug === e.experience) : undefined;
+  const terraceQuote = e.experience === terraceSlug;
+  const sumiEEnquiry = e.experience === sumiEPreviewSlug;
   const [experienceDate, departure] = splitDates(e.dates);
   const now = new Date(Date.now() + 9 * 3600_000); // JST
   const receivedAt = `${now.toISOString().slice(0, 10)} ${now.toISOString().slice(11, 16)}`;
@@ -92,7 +96,7 @@ export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, str
     phone: e.whatsapp,
     lang: e.lang,
     experienceSlug: e.experience,
-    experienceTitle: x?.title,
+    experienceTitle: sumiEEnquiry ? sumiEPreviewTitle.ja : terraceQuote ? terraceName : x?.title,
     category: e.kind === "trade" ? "取引先" : (x && CATEGORY_JA[x.category]) || x?.title || "その他",
     area: e.areaId ? x?.variants?.find((v) => v.id === e.areaId)?.short ?? e.area : e.area,
     areaId: e.areaId,
@@ -118,7 +122,7 @@ export function ledgerRecord(e: Enquiry, ja: Partial<Record<TranslatedField, str
     messageJa: ja.message,
     company: e.company,
     country: e.country,
-    freeCancelUntil: freeCancelUntil(experienceDate, x?.cancellationTiers),
+    freeCancelUntil: terraceQuote || sumiEEnquiry ? undefined : freeCancelUntil(experienceDate, x?.cancellationTiers),
     partner: e.areaId ? "Rion Japan" : undefined,
     ackSent: status.ackSent,
     followUpScheduled: status.followUpScheduled,

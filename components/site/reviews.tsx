@@ -1,5 +1,5 @@
 import { Star, ShieldCheck } from "lucide-react";
-import { aggregateFor, distributionFor, ownReviewsFor, reviewDate, reviewsFor, type Review } from "@/lib/published-reviews";
+import { aggregateFor, distributionFor, ownReviewsFor, reviewDate, reviewsFor, type Aggregate, type Review } from "@/lib/published-reviews";
 import { t, type Lang } from "@/lib/i18n";
 
 /** Five stars with the last one clipped to the fractional part. */
@@ -23,9 +23,9 @@ export function Stars({ rating, size = 14 }: { rating: number; size?: number }) 
 
 /** Compact "★★★★★ 4.9 (12)" for cards and page headings. */
 export function RatingSummary({
-  experience, lang, href, size = 14,
-}: { experience: string; lang: Lang; href?: string; size?: number }) {
-  const agg = aggregateFor(experience);
+  experience, lang, href, size = 14, aggregate,
+}: { experience: string; lang: Lang; href?: string; size?: number; aggregate?: Aggregate | null }) {
+  const agg = aggregate === undefined ? aggregateFor(experience) : aggregate;
   if (!agg) return null;
   const T = t(lang);
   const inner = (

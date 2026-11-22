@@ -12,6 +12,7 @@ import { d1Db, isD1Like } from "../lib/referral/db";
 import { handleReferralArrival, REFERRAL_PATH } from "../lib/referral/links";
 import { autoAcknowledge } from "../lib/portal/settlement";
 import { expireQuotes } from "../lib/portal/cases";
+import { isSiteGolfReviewPage, isSiteGolfReviewPhoto, SITE_GOLF_REVIEW_HEADER, serveSiteGolfReviewPhoto } from "../lib/site-reviewed-golf";
 
 interface Env extends AdsEnv {
   ASSETS: { fetch(request: Request): Promise<Response> };
@@ -212,6 +213,12 @@ const worker = {
       }));
     }
 
+    const siteGolfEnabled = url.hostname === "kamehame-japan.com" && env.KH_ENV !== "staging";
+    if (isSiteGolfReviewPhoto(url.pathname)) {
+      if (!siteGolfEnabled) return withSecurityHeaders(new Response("Not found", { status: 404 }));
+      return withSecurityHeaders(await serveSiteGolfReviewPhoto(request, env.MEDIA, env.IMAGES));
+    }
+
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       const res = await handleImageOptimization(request, {
@@ -227,9 +234,19 @@ const worker = {
     // The document language: the app's root layout cannot see the locale
     // segment of the URL, so it reads it from this header (app/layout.tsx).
     const lang = /^\/partners-lp(?:\/|$)/.test(url.pathname) ? "ja" : url.pathname.match(/^\/(en|es|ja|fr|zh-tw)(?:\/|$)/)?.[1];
-    const req = lang ? new Request(request, { headers: new Headers([...request.headers, ["x-kh-lang", lang]]) }) : request;
+    const siteGolfPage = isSiteGolfReviewPage(url.hostname, url.pathname, env.KH_ENV);
+    let req = request;
+    if (lang || siteGolfPage || request.headers.has(SITE_GOLF_REVIEW_HEADER)) {
+      const headers = new Headers(request.headers);
+      if (lang) headers.set("x-kh-lang", lang);
+      // Only this Worker may say the current request is a published site page.
+      headers.delete(SITE_GOLF_REVIEW_HEADER);
+      if (siteGolfPage) headers.set(SITE_GOLF_REVIEW_HEADER, "1");
+      req = new Request(request, { headers });
+    }
     const res = await handler.fetch(req, env, ctx);
     const out = withSecurityHeaders(closeDocumentLast(res));
+    if (siteGolfPage) out.headers.set("cache-control", "no-store");
     if (PRIVATE_PAGE.test(url.pathname) || env.KH_ENV === "staging") out.headers.set("x-robots-tag", "noindex, nofollow");
     return out;
   },

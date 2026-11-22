@@ -30,6 +30,8 @@ const localBindingConfig = {
   // Workers AI: translates what a visitor typed into Japanese for the team's
   // notification (lib/translate.ts). No key needed; the free tier covers it.
   ai: { binding: "AI" },
+  // Resize approved review photos from private R2 without a public origin URL.
+  images: { binding: "IMAGES" },
   // Checkout readiness (lib/experience-checkout.ts): a cron asks the ledger
   // every five minutes and publishes the answer to KV, so page renders never
   // wait for Google Apps Script. The namespace is created by the deploy

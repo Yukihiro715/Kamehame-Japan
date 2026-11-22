@@ -8,7 +8,11 @@ import { CurrencySwitcher } from "@/components/site/currency-switcher";
 import { catalogFor, TOURS_PUBLISHED } from "@/lib/catalog";
 import { t, type Lang } from "@/lib/i18n";
 
-export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "overlay" | "solid"; lang?: Lang }) {
+export function SiteHeader({ variant = "overlay", lang = "en", languageLinks }: {
+  variant?: "overlay" | "solid";
+  lang?: Lang;
+  languageLinks?: Partial<Record<Lang, string>>;
+}) {
   const T = t(lang);
   // Cities appear once they have something bookable in them.
   const { cities } = catalogFor(lang);
@@ -26,7 +30,7 @@ export function SiteHeader({ variant = "overlay", lang = "en" }: { variant?: "ov
         {navigation.map(([label, href]) => <Link key={label} href={href}>{label}</Link>)}
       </nav>
       <div className="header-tools">
-        <LanguageSwitcher lang={lang} />
+        <LanguageSwitcher lang={lang} links={languageLinks} />
         <CurrencySwitcher lang={lang} />
         <Button asChild className="header-cta"><Link href={`/${lang}/experiences/`}>{T.findExperience}</Link></Button>
         <Sheet>

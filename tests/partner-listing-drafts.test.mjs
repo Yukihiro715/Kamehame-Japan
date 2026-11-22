@@ -30,9 +30,14 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
-  assert.match(html,/noindex/);assert.ok(!html.includes('<form'),slug);
+  assert.match(html,/noindex/);
+  assert.ok(!html.includes('<form'),slug);
+  assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/, slug);
   assert.ok(!html.includes('\"@type\":\"Product\"'),slug);
-  assert.ok(html.includes(lang==='ja'?'予約受付前':'Not open for booking'));
+  const bookingNotice = slug === "sumi-e-ink-painting"
+    ? (lang === 'ja' ? 'お問い合わせ・予約受付停止中' : 'Closed to enquiries and bookings')
+    : (lang === 'ja' ? '予約受付前' : 'Not open for booking');
+  assert.ok(html.includes(bookingNotice), slug);
  }
  const missing=await render('/previews/partner-listings/not-a-listing/');assert.equal(missing.status,404);
 });
@@ -50,7 +55,6 @@ test('Ginza sumi-e preview shows confirmed details without supplier pricing', as
     assert.match(html, lang === 'ja' ? /コースター3枚/ : /three coasters/);
     assert.match(html, lang === 'ja' ? /別途オプション/ : /not included in the standard lesson/);
     assert.match(html, /noindex/);
-    assert.ok(!html.includes('<form'));
     assert.ok(!html.includes('11,500'));
     assert.ok(!html.includes('15,000'));
     assert.ok(!html.includes('17,500'));
@@ -62,12 +66,34 @@ test('Ginza sumi-e preview shows confirmed details without supplier pricing', as
 test('supplied artwork and confirmed terrace terms appear without opening sales', async () => {
  for (const lang of ['ja', 'en']) {
   const sumi = await (await render(`/previews/partner-listings/sumi-e-ink-painting/?lang=${lang}`)).text();
-  for(const name of ['scroll','fuji','landscape']) assert.ok(sumi.includes(`/images/partner-listings/sumi-e/${name}.webp`));
-  assert.match(sumi, lang === 'ja' ? /作品例/ : /Artwork examples/);
+  for (const name of ['rensui-koi', 'rensui-plum']) assert.ok(sumi.includes(`/images/partner-listings/sumi-e/${name}.webp`));
+  assert.match(sumi, lang === 'ja' ? /講師の蓮水さんによるお手本/ : /Examples painted by the instructor, Rensui/);
+  assert.doesNotMatch(sumi, /\/images\/partner-listings\/sumi-e\/(scroll|fuji|landscape)\.webp/);
   const terrace = await (await render(`/previews/partner-listings/arashiyama-private-terrace-gathering/?lang=${lang}`)).text();
   assert.match(terrace, /50%/); assert.match(terrace, /100%/); assert.match(terrace, /14/);
   assert.match(terrace, /noindex/); assert.ok(!terrace.includes('<form'));
  }
+});
+
+test("Bamboo Sky Terrace is listed in Kyoto and accepts venue-specific enquiries", async () => {
+  for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
+    const path = `/${lang}/kyoto/bamboo-sky-terrace/`;
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /<h1>Bamboo Sky Terrace<\/h1>/);
+    assert.match(html, /<link rel="canonical" href="https:\/\/kamehame-japan\.com\//);
+    assert.ok(html.includes(`https://kamehame-japan.com${path}`));
+    assert.match(html, /<form[^>]+action="\/api\/contact"/);
+    assert.match(html, /class="form-context"[^>]*>.*?<b>Bamboo Sky Terrace<\/b>/s);
+    assert.doesNotMatch(html, /noindex|checkout\.stripe\.com|"@type":"Product"/);
+    if (lang === "ja") {
+      assert.match(html, /最大50名/);
+      assert.match(html, /飲食は別途お見積もり/);
+    }
+    const kyotoHtml = await (await render(`/${lang}/kyoto/`)).text();
+    assert.ok(kyotoHtml.includes(`href="${path}"`));
+  }
 });
 
 test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
@@ -80,25 +106,41 @@ test('confirmed partner answers replace pending questions without publishing sup
  for(const [slug,phrases] of Object.entries(cases)) {
   const html=await (await render(`/previews/partner-listings/${slug}/?lang=ja`)).text();
   for(const phrase of phrases) assert.ok(html.includes(phrase),`${slug}: ${phrase}`);
-  assert.match(html,/noindex/); assert.ok(!html.includes('<form'));
+  assert.match(html,/noindex/);
   assert.doesNotMatch(html,/(?<![0-9])(11,500|17,500|18,500|23,000|5,000|8,000)(?![0-9])/);
  }
 });
 
-test('2027 sumi-e retail pricing is approved but checkout stays disabled', async () => {
+test('Sumi-e preview retains reference prices but does not accept enquiries or bookings', async () => {
   for (const lang of ['en', 'ja']) {
     const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
-    for (const amount of ['38,000', '22,000', '30,500', '32,000']) assert.ok(html.includes(amount));
-    assert.match(html, /2027/);
-    assert.match(html, lang === 'ja' ? /税込/ : /tax included/);
-    assert.match(html, lang === 'ja' ? /1名参加は総額38,000円/ : /38,000 total for one guest/);
-    assert.match(html, lang === 'ja' ? /2〜6名参加は1名22,000円/ : /22,000 per person for 2–6 guests/);
-    assert.match(html, lang === 'ja' ? /予約受付前/ : /not open for booking/);
+    assert.match(html, /class="site-header solid"/);
+    assert.match(html, /class="subpage detail-page xp xp2"/);
+    assert.match(html, /class="gallery" id="photos"/);
+    assert.match(html, /id="booking-facts"/);
+    assert.match(html, /class="bk-card" id="booking".*?¥22,000.*?href="#pricing"/s);
+    assert.match(html, lang === 'ja' ? /表示は参考価格案/ : /proposed prices are for reference only/);
+    assert.match(html, lang === 'ja' ? /土日祝は18:00のみ/ : /public holidays: 18:00 only/);
+    assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
+    assert.match(html, lang === 'ja' ? /前日の20:00まで/ : /20:00 the day before/);
+    assert.match(html, lang === 'ja' ? /2027年1月1日以降を想定した税込価格案/ : /Proposed prices for sessions from 1 January 2027. Tax included/);
+    const priceTable = html.match(/<table class="xp-pricing compact sumi-e-pricing".*?<\/table>/s)?.[0];
+    assert.ok(priceTable);
+    const courses = [...priceTable.matchAll(/<tr><th scope="row">([^<]+)<\/th><td class="total">([^<]+)<\/td><td class="total">([^<]+)<\/td><\/tr>/g)]
+      .map(row => row.slice(1));
+    const names = lang === 'ja'
+      ? ['色紙', 'コースター3枚', 'ランプシェード', '掛軸']
+      : ['Shikishi art board', 'Three coasters', 'Lampshade', 'Hanging scroll'];
+    assert.deepEqual(courses, [
+      [names[0], '¥38,000', '¥22,000'],
+      [names[1], '¥38,000', '¥22,000'],
+      [names[2], '¥30,500', '¥30,500'],
+      [names[3], '¥32,000', '¥32,000'],
+    ]);
+    assert.match(html, lang === 'ja' ? /お問い合わせ・予約受付停止中/ : /Closed to enquiries and bookings/);
     assert.match(html, /noindex/);
-    assert.ok(!html.includes('<form'));
-    assert.ok(!html.includes('checkout.stripe.com'));
+    assert.doesNotMatch(html, /<form\b|#request-form|id="request-form"/);
+    assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/);
     for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
-    assert.ok(!html.includes('Selling prices are being confirmed'));
-    assert.ok(!html.includes('販売価格確認中'));
   }
 });

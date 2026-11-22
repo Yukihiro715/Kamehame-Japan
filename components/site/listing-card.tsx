@@ -1,8 +1,8 @@
 "use client";
 
 /** One experience in a listing: a swipeable photo (dots on phones, arrows on
- *  hover), the interest, the title and one line of facts. The description
- *  stays on the experience page. Arrows and dots sit beside the link, not
+ *  hover), the interest, the title and one line of facts or a comparison summary.
+ *  Arrows and dots sit beside the link, not
  *  inside it, so the markup stays valid and a drag never counts as a tap. */
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -34,8 +34,10 @@ export function ListingCard({ item, lang = "en", view = "grid", eager = false }:
     setSeen((s) => Math.max(s, n + 2));
   };
   const soon = item.kind === "experience" && !item.live;
+  const comparison = item.comparison;
+  const Heading = comparison ? "h2" : "h3";
   return (
-    <article className={`lc lc-${view}${soon ? " is-soon" : ""}`}>
+    <article className={`lc lc-${view}${soon ? " is-soon" : ""}${comparison ? " lc-comparison" : ""}`}>
       <div className="lc-media">
         <Link className="lc-photos" href={item.href} aria-label={item.title} tabIndex={-1}>
           <div className="lc-track" ref={track}>
@@ -57,15 +59,20 @@ export function ListingCard({ item, lang = "en", view = "grid", eager = false }:
         {soon && <span className="soon-badge">{T.comingSoon}</span>}
       </div>
       <div className="lc-body">
-        <p className="lc-cat"><span>{item.categoryLabel}</span></p>
-        <h3 className="lc-title"><Link href={item.href}>{item.title}</Link></h3>
-        <p className="lc-facts">
-          <span>{item.cityLabel}</span>
-          {item.durationLabel && <span><Clock3 size={12} /> {item.durationLabel}</span>}
-          {item.price && <span className="lc-price">{T.from} <b><Fx>{item.price}</Fx></b> {item.kind === "experience" ? (item.unit === "group" ? T.perGroupShort : T.perPerson) : ""}</span>}
-        </p>
-        {item.priceNote && <small className="lc-note"><Fx>{item.priceNote}</Fx></small>}
-        {item.rating && <p className="lc-rating"><Star size={12} fill="currentColor" /> {item.rating.average.toFixed(1)} <span>{L.reviews(item.rating.count)}</span></p>}
+        {!comparison && <p className="lc-cat"><span>{item.categoryLabel}</span></p>}
+        <Heading className="lc-title"><Link href={item.href} aria-label={comparison ? `${comparison.action}: ${item.title}` : undefined}>{item.title}</Link></Heading>
+        {comparison ? <p className="lc-summary">{item.line}</p> : (
+          <>
+            <p className="lc-facts">
+              <span>{item.cityLabel}</span>
+              {item.durationLabel && <span><Clock3 size={12} /> {item.durationLabel}</span>}
+              {item.price && <span className="lc-price">{T.from} <b><Fx>{item.price}</Fx></b> {item.kind === "experience" ? (item.unit === "group" ? T.perGroupShort : T.perPerson) : ""}</span>}
+            </p>
+            {item.priceNote && <small className="lc-note"><Fx>{item.priceNote}</Fx></small>}
+          </>
+        )}
+        {item.rating && <p className="lc-rating"><Star size={12} fill="currentColor" /> {item.rating.average.toFixed(1)} <span>{L.reviews(item.rating.count)}{comparison && ` · ${comparison.ratingContext}`}</span></p>}
+        {comparison && <span className="lc-action">{comparison.action}</span>}
       </div>
     </article>
   );
