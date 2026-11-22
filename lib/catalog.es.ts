@@ -573,7 +573,7 @@ export const experiencesEs: Experience[] = [
       { icon: "photo", title: "Familias bienvenidas", body: "Sin límite de edad; los menores vienen acompañados de un adulto. Puedes salir en cualquier momento." },
     ],
     included: ["Entrada a una función nocturna (zona estándar; zona frontal con la entrada frontal)", "Una entrada digital a tu nombre, enviada antes del día y mostrada en la puerta", "Nuestras indicaciones sobre la sala, el desarrollo y qué esperar", "Impuestos incluidos"],
-    notIncluded: ["El cargo por bebida de ¥700 por persona, pagado en efectivo en la puerta (habitual en los live houses japoneses)", "El transporte hasta la sala (se acude directamente a la sala confirmada)", "Guía o intérprete: no hay asistencia en inglés en la sala"],
+    notIncluded: ["El cargo por bebida de ¥700 por persona, pagado en la puerta (habitual en los live houses japoneses)", "El transporte hasta la sala (se acude directamente a la sala confirmada)", "Guía o intérprete: no hay asistencia en inglés en la sala"],
     schedule: [
       { time: "18:30", title: "Apertura de puertas", body: "Muestra tu entrada digital en la entrada y paga el cargo por bebida de ¥700. Ocupa tu sitio en la pista: la parte trasera con entrada estándar, la zona delantera con entrada frontal." },
       { time: "19:00", title: "Empieza el concierto", body: "La hora exacta figura en tu entrada; la mayoría de las noches empiezan en la media hora siguiente a la apertura. El grupo abre con sus canciones más conocidas y la sala responde.", img: "/images/idol-live-group.webp" },
@@ -583,7 +583,7 @@ export const experiencesEs: Experience[] = [
     ],
     scheduleNote: "Una noche típica con apertura a las 18:30. El orden varía según la fecha; la hora de inicio confirmada llega con tu entrada.",
     venue: {
-      known: ["Un pequeño live house de Tokio, en la zona de Shinjuku, Shibuya o Ikebukuro; la sala se fija para cada fecha y su dirección llega con tu confirmación", "Pista de pie con escenario bajo; el concierto dura unas dos horas", "Un cargo por bebida de ¥700 por persona se paga en efectivo en la puerta", "La actuación es en japonés; no hay asistencia en inglés en la sala"],
+      known: ["Un pequeño live house de Tokio, en la zona de Shinjuku, Shibuya o Ikebukuro; la sala se fija para cada fecha y su dirección llega con tu confirmación", "Pista de pie con escenario bajo; el concierto dura unas dos horas", "Un cargo por bebida de ¥700 por persona se paga en la puerta", "La actuación es en japonés; no hay asistencia en inglés en la sala"],
       afterBooking: ["La dirección de la sala y la estación más cercana", "Tu entrada digital, para mostrar en la puerta", "La hora confirmada de apertura y de inicio para tu fecha"],
       img: "/images/idol-live-venue.webp", alt: "El live house visto desde la pista",
     },
@@ -597,7 +597,7 @@ export const experiencesEs: Experience[] = [
     faq: [
       { q: "¿Qué grupo actúa?", a: "Un grupo idol en activo que actúa con regularidad en las salas de Tokio. El cartel se confirma para cada fecha; la dirección de la sala llega con tu confirmación." },
       { q: "¿Qué diferencia hay entre la entrada estándar y la frontal?", a: "La entrada estándar (¥12,000) es para la parte trasera de la pista; la frontal (¥19,000), para la zona delantera más cercana al escenario. Ambas son de pie. Todo el grupo elige el mismo tipo." },
-      { q: "¿Qué es el cargo por bebida de ¥700?", a: "Los live houses japoneses cobran a cada asistente una tarifa por bebida en la puerta, en efectivo, a cambio de una consumición. No está incluida en el precio de la entrada." },
+      { q: "¿Qué es el cargo por bebida de ¥700?", a: "Los live houses japoneses cobran a cada asistente una tarifa por bebida en la puerta, a cambio de una consumición. No está incluida en el precio de la entrada." },
       { q: "¿Hay algo en inglés en la sala?", a: "No. La actuación y los anuncios son en japonés y es posible que el personal no hable inglés. Te explicamos antes del día adónde ir y qué esperar; una vez dentro, sigues a la sala." },
       { q: "¿Pueden venir niños?", a: "Sí, acompañados de un adulto; no hay límite de edad. Hay mucho volumen y todo el mundo está de pie, así que lleva protección auditiva para los más pequeños." },
       { q: "¿Tengo que saberme las consignas?", a: "No. Da palmas y agita un penlight si quieres; los habituales te enseñarán el resto. A veces se venden penlights en la sala, pero no son necesarios." },
@@ -608,7 +608,7 @@ export const experiencesEs: Experience[] = [
     ],
     whatYoullDo: ["Estar en la pista de un live house de Tokio con los fans locales", "Ver a un grupo idol en activo cantar, bailar y cambiarse de vestuario", "Elegir la parte trasera de la pista o la zona más cercana al escenario", "Llevarte un lado de Tokio del que la mayoría solo lee"],
     itinerary: ["18:30 — Apertura de puertas", "19:00 — Empieza el concierto", "19:45 — Cambios de vestuario, consignas y penlights", "20:30 — Final", "21:00 — Fin"],
-    goodToKnow: ["De pie todo el tiempo; lleva calzado cómodo.", "Mucho volumen: la protección auditiva es buena idea para los niños pequeños.", "El cargo por bebida de ¥700 por persona se paga en efectivo en la puerta.", "Actuación en japonés; sin asistencia en inglés en la sala."],
+    goodToKnow: ["De pie todo el tiempo; lleva calzado cómodo.", "Mucho volumen: la protección auditiva es buena idea para los niños pequeños.", "El cargo por bebida de ¥700 por persona se paga en la puerta.", "Actuación en japonés; sin asistencia en inglés en la sala."],
     story: { heading: "Por qué un live house y no un estadio", body: "Los grupos idol de Japón crecen en salas como esta, tocando para unos cientos de personas que vuelven semana tras semana. Los grandes escenarios llegan después, si llegan. Una noche en la pista de un live house es la escena tal cual: el grupo a pocos metros, los fans que se saben cada canción y la energía que los estadios intentan reproducir." },
   },
   {

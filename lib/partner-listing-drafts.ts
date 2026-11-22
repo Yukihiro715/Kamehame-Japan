@@ -10,7 +10,10 @@ export interface ListingDraftCopy {
 }
 export interface ListingDraft {
   slug: string;
-  /** "photo": event photography shown edge to edge, the first one large; default "artwork": whole images on a plain ground. */
+  city?: "tokyo" | "kyoto";
+  priceOnRequest?: boolean;
+  prices?: { name: { ja: string; en: string }; perGuest: number; solo?: number }[];
+  /** Event photography uses the standard photo grid. Artwork is shown in full. */
   gallery?: "artwork" | "photo";
   images?: { src: string; en: string; ja: string; width: number; height: number }[];
   mediaNote?: { en: string; ja: string };
@@ -22,7 +25,7 @@ export const sumiEPreviewSlug = "sumi-e-ink-painting";
 export const sumiEPreviewTitle = { en: "Sumi-e Japanese Ink Painting in Ginza", ja: "銀座・水墨画体験" };
 
 /** Proposed retail prices including tax for sessions from 1 January 2027. */
-export const sumiEProposedPrices = [
+const sumiEProposedPrices = [
   { name: { ja: "色紙", en: "Shikishi art board" }, solo: 38_000, perGuest: 22_000 },
   { name: { ja: "コースター3枚", en: "Three coasters" }, solo: 38_000, perGuest: 22_000 },
   { name: { ja: "ランプシェード", en: "Lampshade" }, solo: 30_500, perGuest: 30_500 },
@@ -32,6 +35,7 @@ export const sumiEProposedPrices = [
 export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "tokyo-ninja-zen-night-walk",
+    city: "tokyo",
     en: {
       title: "Ninja Zen Night Walk in Tokyo", area: "Tokyo · Azabudai / Tokyo Tower area",
       lead: "Explore Tokyo after dark through mindful walking, breathing and meditation. Practise ninja-inspired movement and hand gestures while paying attention to the city around you.",
@@ -49,6 +53,8 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: "mukojima-geisha-evening",
+    city: "tokyo",
+    priceOnRequest: true,
     en: {
       title: "Geisha Hospitality in Mukojima", area: "Tokyo · Mukojima",
       lead: "An evening of Japanese cuisine, geisha performance and traditional parlour games in one of Tokyo's historic entertainment districts. A guided walk introduces the neighbourhood before dinner.",
@@ -83,6 +89,7 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: "tokyo-matcha-cultural-experience",
+    city: "tokyo",
     en: {
       title: "Matcha Culture Experience in Tokyo", area: "Tokyo",
       lead: "An introduction to Japanese matcha culture. The exact lesson, setting and inclusions for this proposed experience are being confirmed.",
@@ -100,6 +107,8 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: "arashiyama-private-terrace-gathering",
+    city: "kyoto",
+    priceOnRequest: true,
     en: {
       title: "A Private Terrace Gathering in Arashiyama", area: "Kyoto · Arashiyama",
       lead: "Bring your group together on a terrace in Arashiyama. Receptions, welcome gatherings and a place to pause between activities can be arranged around your plans.",
@@ -117,6 +126,8 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: sumiEPreviewSlug,
+    city: "tokyo",
+    prices: sumiEProposedPrices,
     images: [
       { src: "/images/partner-listings/sumi-e/rensui-koi.webp", en: "Koi painted in ink by Rensui", ja: "蓮水講師が墨で描いた鯉", width: 681, height: 960 },
       { src: "/images/partner-listings/sumi-e/rensui-plum.webp", en: "Plum blossoms painted by Rensui", ja: "蓮水講師が描いた梅の花", width: 878, height: 960 },

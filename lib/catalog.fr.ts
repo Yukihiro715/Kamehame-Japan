@@ -572,7 +572,7 @@ export const experiencesFr: Experience[] = [
       { icon: "photo", title: "Familles bienvenues", body: "Aucune limite d’âge ; les enfants viennent accompagnés d’un adulte. Vous pouvez partir à tout moment." },
     ],
     included: ["Entrée pour une représentation du soir (zone standard ; zone avant avec le billet avant)", "Un billet numérique à votre nom, envoyé avant le jour J et présenté à l’entrée", "Nos indications sur la salle, le déroulé et ce à quoi vous attendre", "Taxes comprises"],
-    notIncluded: ["Le drink charge de ¥700 par personne, réglé en espèces à l’entrée (l’usage dans les live houses japonais)", "Le transport jusqu’à la salle (rendez-vous directement à la salle confirmée)", "Guide ou interprète : aucune assistance en anglais sur place"],
+    notIncluded: ["Le drink charge de ¥700 par personne, réglé à l’entrée (l’usage dans les live houses japonais)", "Le transport jusqu’à la salle (rendez-vous directement à la salle confirmée)", "Guide ou interprète : aucune assistance en anglais sur place"],
     schedule: [
       { time: "18:30", title: "Ouverture des portes", body: "Présentez votre billet numérique à l’entrée et réglez le drink charge de ¥700. Prenez place dans la fosse : à l’arrière avec un billet standard, dans la zone avant avec un billet avant." },
       { time: "19:00", title: "Début du concert", body: "L’heure exacte figure sur votre billet ; la plupart des soirées commencent dans la demi-heure qui suit l’ouverture. Le groupe ouvre avec ses titres les plus connus et la salle répond.", img: "/images/idol-live-group.webp" },
@@ -582,7 +582,7 @@ export const experiencesFr: Experience[] = [
     ],
     scheduleNote: "Une soirée type avec ouverture à 18:30. Le déroulé varie selon la date ; l’heure de début confirmée arrive avec votre billet.",
     venue: {
-      known: ["Un petit live house de Tokyo, dans le secteur de Shinjuku, Shibuya ou Ikebukuro ; la salle est fixée pour chaque date et son adresse arrive avec votre confirmation", "Fosse debout avec une scène basse ; le concert dure environ deux heures", "Un drink charge de ¥700 par personne se règle en espèces à l’entrée", "Le spectacle est en japonais ; aucune assistance en anglais sur place"],
+      known: ["Un petit live house de Tokyo, dans le secteur de Shinjuku, Shibuya ou Ikebukuro ; la salle est fixée pour chaque date et son adresse arrive avec votre confirmation", "Fosse debout avec une scène basse ; le concert dure environ deux heures", "Un drink charge de ¥700 par personne se règle à l’entrée", "Le spectacle est en japonais ; aucune assistance en anglais sur place"],
       afterBooking: ["L’adresse de la salle et la gare la plus proche", "Votre billet numérique, à présenter à l’entrée", "Les heures d’ouverture et de début confirmées pour votre date"],
       img: "/images/idol-live-venue.webp", alt: "Le live house vu depuis la fosse",
     },
@@ -596,7 +596,7 @@ export const experiencesFr: Experience[] = [
     faq: [
       { q: "Quel groupe se produit ?", a: "Un groupe d’idoles en activité qui joue régulièrement dans les salles de Tokyo. L’affiche est confirmée pour chaque date ; l’adresse de la salle arrive avec votre confirmation." },
       { q: "Quelle différence entre le billet standard et le billet avant ?", a: "Le billet standard (¥12,000) donne accès à l’arrière de la fosse ; le billet avant (¥19,000), à la zone la plus proche de la scène. Les deux sont debout. Tout le groupe prend le même type." },
-      { q: "Qu’est-ce que le drink charge de ¥700 ?", a: "Les live houses japonais demandent à chaque spectateur un forfait boisson à l’entrée, en espèces, contre une consommation. Il n’est pas compris dans le prix du billet." },
+      { q: "Qu’est-ce que le drink charge de ¥700 ?", a: "Les live houses japonais demandent à chaque spectateur un forfait boisson à l’entrée, contre une consommation. Il n’est pas compris dans le prix du billet." },
       { q: "Y a-t-il de l’anglais sur place ?", a: "Non. Le spectacle et les annonces sont en japonais et le personnel ne parle pas forcément anglais. Nous vous expliquons avant le jour J où aller et à quoi vous attendre ; une fois à l’intérieur, vous suivez la salle." },
       { q: "Les enfants peuvent-ils venir ?", a: "Oui, accompagnés d’un adulte ; il n’y a pas de limite d’âge. Le son est fort et tout le monde est debout : prévoyez des protections auditives pour les jeunes enfants." },
       { q: "Dois-je connaître les appels ?", a: "Non. Tapez dans les mains et agitez un penlight si vous voulez ; les habitués vous montreront le reste. Des penlights sont parfois vendus sur place, mais ils ne sont pas obligatoires." },
@@ -607,7 +607,7 @@ export const experiencesFr: Experience[] = [
     ],
     whatYoullDo: ["Vous tenir dans la fosse d’un live house de Tokyo avec les fans locaux", "Voir un groupe d’idoles en activité chanter, danser et changer de costume", "Choisir l’arrière de la fosse ou la zone la plus proche de la scène", "Repartir avec une facette de Tokyo que la plupart des visiteurs ne font que lire"],
     itinerary: ["18:30 — Ouverture des portes", "19:00 — Début du concert", "19:45 — Changements de costumes, appels et penlights", "20:30 — Final", "21:00 — Fin"],
-    goodToKnow: ["Debout du début à la fin ; prévoyez des chaussures confortables.", "Son fort : des protections auditives sont conseillées pour les jeunes enfants.", "Le drink charge de ¥700 par personne se règle en espèces à l’entrée.", "Spectacle en japonais ; aucune assistance en anglais sur place."],
+    goodToKnow: ["Debout du début à la fin ; prévoyez des chaussures confortables.", "Son fort : des protections auditives sont conseillées pour les jeunes enfants.", "Le drink charge de ¥700 par personne se règle à l’entrée.", "Spectacle en japonais ; aucune assistance en anglais sur place."],
     story: { heading: "Pourquoi un live house et pas une arène", body: "Au Japon, les groupes d’idoles grandissent dans des salles comme celle-ci, devant quelques centaines de personnes qui reviennent semaine après semaine. Les grandes scènes viennent ensuite, ou jamais. Une soirée dans la fosse d’un live house, c’est la scène telle qu’elle est : le groupe à quelques mètres, les fans qui connaissent chaque chanson, et l’énergie que les arènes essaient de reproduire." },
   },
   {
