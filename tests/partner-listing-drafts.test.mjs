@@ -117,7 +117,8 @@ test('confirmed partner answers replace pending questions without publishing sup
 
 test('Sumi-e preview retains reference prices but does not accept enquiries or bookings', async () => {
   for (const lang of ['en', 'ja']) {
-    const html = await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text();
+    // React's SSR may place a `<!-- -->` text separator inside a cell; it is invisible and not part of the content.
+    const html = (await (await render('/previews/partner-listings/sumi-e-ink-painting/?lang=' + lang)).text()).replace(/<!-- -->/g, '');
     assert.match(html, /class="site-header solid"/);
     assert.match(html, /class="subpage detail-page xp xp2"/);
     assert.match(html, /class="gallery" id="photos"/);

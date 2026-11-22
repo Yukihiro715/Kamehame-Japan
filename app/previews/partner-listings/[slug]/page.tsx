@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { Clock3, Languages, MapPin, Users } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
@@ -47,6 +48,15 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
   const bookingStatus = isSumiE
     ? (ja ? "お問い合わせ・予約受付停止中" : "Closed to enquiries and bookings")
     : (ja ? "予約受付前" : "Not open for booking");
+  // The condition chips under the photos, as on a product page, read from the
+  // confirmed details: length, party and language, with the area first.
+  const detail = (re: RegExp) => copy.details.find(([label]) => re.test(label))?.[1];
+  const chips = [
+    { Icon: MapPin, text: copy.area },
+    { Icon: Clock3, text: detail(/所要時間|Duration/i) },
+    { Icon: Users, text: detail(/参加条件|参加人数|人数|Participants|Capacity/i) },
+    { Icon: Languages, text: detail(/対応言語|Language/i) },
+  ].filter((c): c is { Icon: typeof MapPin; text: string } => !!c.text);
   const priceStatus = draft.priceOnRequest
     ? (ja ? "個別見積もり" : "Price on request")
     : (ja ? "販売価格を確認中" : "Pricing is being confirmed");
@@ -61,15 +71,23 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
       ]} />
       <p className="xp-preview-banner" role="status">{ja ? "掲載内容の確認用プレビュー" : "Listing review preview"} · {bookingStatus}</p>
       <header className="xp-head">
-        <p className="eyebrow">{copy.area}</p>
         <h1>{copy.title}</h1>
       </header>
-      {photos.length > 0 && (
-        <section className={`xp-mv${draft.gallery === "photo" ? "" : " listing-artwork-gallery"}`} aria-label={T.detail.gallery}>
-          <div className="xp-hero-photo"><HeroCarousel photos={photos} lang={locale} /></div>
-          <Gallery photos={photos} lang={locale} note={draft.mediaNote?.[locale]} />
-        </section>
-      )}
+      <section className={`xp-mv${draft.gallery === "photo" || photos.length === 0 ? "" : " listing-artwork-gallery"}`} aria-label={T.detail.gallery}>
+        {photos.length > 0 ? (
+          <>
+            <div className="xp-hero-photo"><HeroCarousel photos={photos} lang={locale} /></div>
+            <Gallery photos={photos} lang={locale} note={draft.mediaNote?.[locale]} />
+          </>
+        ) : (
+          /* No licensed photos yet: the photo grid keeps its place so the page reads like the product page it will become. */
+          <div className="listing-photo-pending" role="img" aria-label={ja ? "掲載写真を準備中" : "Photos to follow"}>
+            <div className="listing-photo-pending-main"><b>{ja ? "掲載写真を準備中" : "Photos to follow"}</b><small>{ja ? "主催者から写真が届き次第、ここに掲載します" : "Added as soon as the organiser's photos arrive"}</small></div>
+            <div /><div /><div /><div />
+          </div>
+        )}
+        {chips.length > 0 && <ul className="xp-conditions">{chips.map(({ Icon, text }) => <li key={text}><Icon size={14} /> {text}</li>)}</ul>}
+      </section>
       <div className="xp-cols">
         <aside className="xp-side" aria-labelledby="preview-price-label">
           <div className="bk-card" id="booking">
@@ -91,6 +109,10 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
             <p className="xp-note">{isSumiE
               ? (ja ? "表示は参考価格案です。現在お申し込みいただけません。" : "These proposed prices are for reference only. This experience is unavailable.")
               : bookingStatus}</p>
+          </div>
+          <div className="bk-card listing-pending-card">
+            <strong className="bk-quote-heading">{ja ? "確認中の内容" : "Details being confirmed"}</strong>
+            <ul className="check-list muted">{copy.pending.map(item => <li key={item}><span className="tick" aria-hidden="true">—</span><span>{item}</span></li>)}</ul>
           </div>
         </aside>
         <div className="xp-main">
@@ -132,12 +154,6 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
             <dl>{copy.details.map(([label, value]) => (
               <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
             ))}</dl>
-          </section>
-          <section className="xp-section faq-list">
-            <details>
-              <summary>{ja ? "確認中の内容" : "Details being confirmed"}</summary>
-              <ul className="check-list">{copy.pending.map(item => <li key={item}>{item}</li>)}</ul>
-            </details>
           </section>
         </div>
       </div>
