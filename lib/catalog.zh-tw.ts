@@ -547,9 +547,9 @@ export const experiencesZh: Experience[] = [
       "由 KAMEHAME JAPAN 為您安排一場晚間公演的門票，並以電子票形式寄送。您可選擇站在場地後方、能縱覽全場的一般票，或最靠近舞台的前方區域票。現場沒有導遊，也沒有英語服務；我們會在行前說明注意事項與流程，當天您就和場內其他觀眾一樣盡情享受。",
     ],
     duration: "約 2 小時", price: "¥12,000", group: "1 至 8 人・與一般觀眾同場", ages: "不限年齡（兒童須由成人陪同）", area: "東京（新宿／澀谷／池袋一帶）",
-    img: "/images/idol-live-venue.webp", alt: "從觀眾席望向東京 Live House 的舞台，藍色燈光下高舉的螢光棒",
+    img: "/images/idol-live-group.webp", alt: "六位成員穿著同款荷葉邊服裝指向天空，觀眾歡呼",
     gallery: [
-      { img: "/images/idol-live-group.webp", alt: "六位成員穿著同款荷葉邊服裝指向天空，觀眾歡呼" },
+      { img: "/images/idol-live-venue.webp", alt: "從觀眾席望向東京 Live House 的舞台，藍色燈光下高舉的螢光棒" },
       { img: "/images/idol-live-solo-pink.webp", alt: "成員在粉彩氣球牆旁演唱" },
       { img: "/images/idol-live-solo-blue.webp", alt: "身穿藍色服裝的成員向觀眾伸出手" },
       { img: "/images/idol-live-solo-red.webp", alt: "身穿紅色服裝的成員在動畫螢幕前演唱" },

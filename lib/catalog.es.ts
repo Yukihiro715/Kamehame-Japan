@@ -548,9 +548,9 @@ export const experiencesEs: Experience[] = [
       "Gestionamos tu entrada para una función nocturna y te la enviamos en formato digital. Elige la entrada estándar para la parte trasera de la pista, desde donde ves funcionar toda la sala, o la entrada frontal para la zona delantera más cercana al escenario. No hay guía ni inglés en la sala; te explicamos qué esperar antes de ir y a partir de ahí lo vives como todos los demás.",
     ],
     duration: "Unas 2 horas", price: "¥12,000", group: "1–8 personas · pista compartida", ages: "Todas las edades (menores acompañados de un adulto)", area: "Tokio (zona de Shinjuku / Shibuya / Ikebukuro)",
-    img: "/images/idol-live-venue.webp", alt: "Un live house de Tokio visto desde la pista: penlights alzados hacia un escenario iluminado en azul",
+    img: "/images/idol-live-group.webp", alt: "Seis integrantes con vestidos de volantes a juego señalando al cielo mientras el público anima",
     gallery: [
-      { img: "/images/idol-live-group.webp", alt: "Seis integrantes con vestidos de volantes a juego señalando al cielo mientras el público anima" },
+      { img: "/images/idol-live-venue.webp", alt: "Un live house de Tokio visto desde la pista: penlights alzados hacia un escenario iluminado en azul" },
       { img: "/images/idol-live-solo-pink.webp", alt: "Una integrante cantando junto a una pared de globos pastel" },
       { img: "/images/idol-live-solo-blue.webp", alt: "Una integrante de azul tendiendo la mano al público" },
       { img: "/images/idol-live-solo-red.webp", alt: "Una integrante de rojo cantando ante una pantalla animada" },

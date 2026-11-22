@@ -726,9 +726,9 @@ export const experiencesJa: Experience[] = [
       "KAMEHAME JAPANが夜公演1回分のチケットを手配し、デジタルチケットをお送りします。フロア全体を見渡せる後方の通常チケットか、ステージに最も近い前方チケットをお選びください。ガイドは同行せず、会場での英語対応もありません。事前に会場の様子と流れをご案内し、当日は他の観客と同じように公演を楽しんでいただきます。",
     ],
     duration: "約2時間", price: "¥12,000", group: "1〜8名・一般のお客様と同じフロア", ages: "年齢制限なし(お子さまは大人同伴)", area: "東京(新宿・渋谷・池袋エリア)",
-    img: "/images/idol-live-venue.webp", alt: "フロアから見た東京のライブハウス。青い照明のステージに向けて掲げられたペンライト",
+    img: "/images/idol-live-group.webp", alt: "揃いのフリル衣装で空を指す6人のメンバーと、声援を送る客席",
     gallery: [
-      { img: "/images/idol-live-group.webp", alt: "揃いのフリル衣装で空を指す6人のメンバーと、声援を送る客席" },
+      { img: "/images/idol-live-venue.webp", alt: "フロアから見た東京のライブハウス。青い照明のステージに向けて掲げられたペンライト" },
       { img: "/images/idol-live-solo-pink.webp", alt: "パステルカラーの風船の横で歌うメンバー" },
       { img: "/images/idol-live-solo-blue.webp", alt: "青い衣装で客席に手を伸ばすメンバー" },
       { img: "/images/idol-live-solo-red.webp", alt: "赤い衣装でアニメーション映像を背に歌うメンバー" },

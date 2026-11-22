@@ -547,9 +547,9 @@ export const experiencesFr: Experience[] = [
       "Nous réservons votre billet pour une représentation du soir et vous l’envoyons au format numérique. Choisissez le billet standard pour l’arrière de la fosse, d’où l’on voit toute la salle fonctionner, ou le billet avant pour la zone la plus proche de la scène. Pas de guide ni d’anglais sur place ; nous vous expliquons à quoi vous attendre avant d’y aller, et ensuite vous vivez la soirée comme tout le monde.",
     ],
     duration: "Environ 2 heures", price: "¥12,000", group: "1 à 8 personnes · fosse partagée", ages: "Tous âges (enfants accompagnés d’un adulte)", area: "Tokyo (secteur Shinjuku / Shibuya / Ikebukuro)",
-    img: "/images/idol-live-venue.webp", alt: "Un live house de Tokyo vu depuis la fosse : des penlights levés vers une scène éclairée en bleu",
+    img: "/images/idol-live-group.webp", alt: "Six membres en costumes à volants assortis pointant le ciel tandis que le public acclame",
     gallery: [
-      { img: "/images/idol-live-group.webp", alt: "Six membres en costumes à volants assortis pointant le ciel tandis que le public acclame" },
+      { img: "/images/idol-live-venue.webp", alt: "Un live house de Tokyo vu depuis la fosse : des penlights levés vers une scène éclairée en bleu" },
       { img: "/images/idol-live-solo-pink.webp", alt: "Une membre chantant près d’un mur de ballons pastel" },
       { img: "/images/idol-live-solo-blue.webp", alt: "Une membre en bleu tendant la main vers le public" },
       { img: "/images/idol-live-solo-red.webp", alt: "Une membre en rouge chantant devant un écran animé" },

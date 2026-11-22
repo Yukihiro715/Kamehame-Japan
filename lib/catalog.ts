@@ -1238,7 +1238,7 @@ export const experiences: Experience[] = [
     // the copy until the organiser confirms. Selling prices: standard
     // ¥12,000, front ¥19,000 per person, tax included; the ¥700 drink charge
     // is paid at the door. Cost prices stay out of the repository.
-    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "live",
+    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "preview",
     title: "An Evening at a Tokyo Idol Live",
     tagline: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for visitors; this is the local scene as it is, and you stand in it.",
     overview: [
@@ -1246,9 +1246,9 @@ export const experiences: Experience[] = [
       "We arrange your ticket for one evening performance and send it to you digitally. Choose a standard ticket for the rear of the floor, where you can watch the whole room work, or a front ticket for the forward area closest to the stage. There is no guide and no English at the venue; we tell you what to expect before you go, and you take it from there like everyone else in the room.",
     ],
     duration: "About 2 hours", price: "¥12,000", priceUnit: "person", group: "1–8 guests · shared floor", ages: "All ages (children with an adult)", area: "Tokyo (Shinjuku / Shibuya / Ikebukuro area)",
-    img: "/images/idol-live-venue.webp", alt: "A Tokyo live house seen from the floor: penlights raised towards a stage lit in blue",
+    img: "/images/idol-live-group.webp", alt: "Six members in matching frilled costumes pointing skyward as the crowd cheers",
     gallery: [
-      { img: "/images/idol-live-group.webp", alt: "Six members in matching frilled costumes pointing skyward as the crowd cheers" },
+      { img: "/images/idol-live-venue.webp", alt: "A Tokyo live house seen from the floor: penlights raised towards a stage lit in blue" },
       { img: "/images/idol-live-solo-pink.webp", alt: "A member singing beside a wall of pastel balloons" },
       { img: "/images/idol-live-solo-blue.webp", alt: "A member in a blue costume reaching out to the audience" },
       { img: "/images/idol-live-solo-red.webp", alt: "A member in red singing in front of an animated screen" },
