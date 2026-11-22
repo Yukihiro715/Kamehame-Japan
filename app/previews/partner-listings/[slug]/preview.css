@@ -50,3 +50,17 @@
     font-size: 14px;
   }
 }
+
+/* Photo grid placeholder while no licensed photos exist: the product page's grid shape. */
+.listing-photo-pending { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; height:clamp(360px,38vw,520px); border-radius:16px; overflow:hidden; }
+.listing-photo-pending > div { background:#ece6d9; border:1px dashed #cfc6b3; border-radius:6px; }
+.listing-photo-pending-main { grid-row:1 / 3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; color:#4a463e; padding:20px; }
+.listing-photo-pending-main b { font-family:var(--font-display); font-weight:400; font-size:clamp(20px,2.2vw,28px); letter-spacing:.04em; }
+.listing-photo-pending-main small { font-size:13px; line-height:1.6; color:var(--muted); }
+.listing-pending-card { margin-top:16px; }
+.listing-pending-card .check-list { margin:12px 0 0; }
+@media (max-width: 760px) {
+  .listing-photo-pending { grid-template-columns:1fr 1fr; grid-template-rows:auto; height:auto; margin:0 22px; }
+  .listing-photo-pending-main { grid-column:1 / -1; grid-row:auto; min-height:220px; }
+  .listing-photo-pending > div:not(.listing-photo-pending-main) { height:110px; }
+}
