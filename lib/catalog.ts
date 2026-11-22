@@ -1238,7 +1238,7 @@ export const experiences: Experience[] = [
     // the copy until the organiser confirms. Selling prices: standard
     // ¥12,000, front ¥19,000 per person, tax included; the ¥700 drink charge
     // is paid at the door. Cost prices stay out of the repository.
-    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "live",
+    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "preview",
     title: "An Evening at a Tokyo Idol Live",
     tagline: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for visitors; this is the local scene as it is, and you stand in it.",
     overview: [
@@ -1246,9 +1246,9 @@ export const experiences: Experience[] = [
       "We arrange your ticket for one evening performance and send it to you digitally. Choose a standard ticket for the rear of the floor, where you can watch the whole room work, or a front ticket for the forward area closest to the stage. There is no guide and no English at the venue; we tell you what to expect before you go, and you take it from there like everyone else in the room.",
     ],
     duration: "About 2 hours", price: "¥12,000", priceUnit: "person", group: "1–8 guests · shared floor", ages: "All ages (children with an adult)", area: "Tokyo (Shinjuku / Shibuya / Ikebukuro area)",
-    img: "/images/idol-live-venue.webp", alt: "A Tokyo live house seen from the floor: penlights raised towards a stage lit in blue",
+    img: "/images/idol-live-group.webp", alt: "Six members in matching frilled costumes pointing skyward as the crowd cheers",
     gallery: [
-      { img: "/images/idol-live-group.webp", alt: "Six members in matching frilled costumes pointing skyward as the crowd cheers" },
+      { img: "/images/idol-live-venue.webp", alt: "A Tokyo live house seen from the floor: penlights raised towards a stage lit in blue" },
       { img: "/images/idol-live-solo-pink.webp", alt: "A member singing beside a wall of pastel balloons" },
       { img: "/images/idol-live-solo-blue.webp", alt: "A member in a blue costume reaching out to the audience" },
       { img: "/images/idol-live-solo-red.webp", alt: "A member in red singing in front of an animated screen" },
@@ -1285,7 +1285,7 @@ export const experiences: Experience[] = [
       "Tax included",
     ],
     notIncluded: [
-      "The drink charge of ¥700 per person, paid in cash at the door (standard at Japanese live houses)",
+      "The drink charge of ¥700 per person, paid at the door (standard at Japanese live houses)",
       "Transport to the venue (go straight to the confirmed venue)",
       "A guide or interpreter: there is no English support at the venue",
     ],
@@ -1298,7 +1298,7 @@ export const experiences: Experience[] = [
     ],
     scheduleNote: "A typical evening with doors at 18:30. The running order varies by date; the confirmed start time comes with your ticket.",
     venue: {
-      known: ["A small live house in Tokyo, in the Shinjuku, Shibuya or Ikebukuro area; the venue is fixed for each date and its address comes with your confirmation", "A standing floor with a low stage; the show runs about two hours", "A drink charge of ¥700 per person is paid in cash at the door", "The performance is in Japanese; there is no English support at the venue"],
+      known: ["A small live house in Tokyo, in the Shinjuku, Shibuya or Ikebukuro area; the venue is fixed for each date and its address comes with your confirmation", "A standing floor with a low stage; the show runs about two hours", "A drink charge of ¥700 per person is paid at the door", "The performance is in Japanese; there is no English support at the venue"],
       afterBooking: ["The venue's address and nearest station", "Your digital ticket, to show at the door", "The confirmed doors and start time for your date"],
       img: "/images/idol-live-venue.webp", alt: "The live house seen from the floor",
     },
@@ -1312,7 +1312,7 @@ export const experiences: Experience[] = [
     faq: [
       { q: "Which group performs?", a: "A working idol group that plays Tokyo's live houses regularly. The line-up is confirmed for each date; the venue's address comes with your confirmation." },
       { q: "What is the difference between a standard and a front ticket?", a: "A standard ticket (¥12,000) is for the rear of the floor; a front ticket (¥19,000) is for the forward area closest to the stage. Both are standing. Everyone in your party takes the same type." },
-      { q: "What is the ¥700 drink charge?", a: "Japanese live houses charge every guest a drink fee at the door, paid in cash, in exchange for one drink. It is not included in the ticket price." },
+      { q: "What is the ¥700 drink charge?", a: "Japanese live houses charge every guest a drink fee at the door, in exchange for one drink. It is not included in the ticket price." },
       { q: "Is there any English at the venue?", a: "No. The performance and the announcements are in Japanese and the staff may not speak English. We brief you before the day on where to go and what to expect; once inside, you follow the room." },
       { q: "Can children come?", a: "Yes, with an adult; there is no age restriction. It is loud and everyone stands, so bring ear protection for young children." },
       { q: "Do I need to know the calls?", a: "No. Clap and wave a penlight if you like; the regulars will show you the rest. Penlights are sometimes sold at the venue, but they are not required." },
@@ -1323,7 +1323,7 @@ export const experiences: Experience[] = [
     ],
     whatYoullDo: ["Stand on the floor of a Tokyo live house with the local fans", "Watch a working idol group sing, dance and change costume", "Choose the rear of the floor or the area closest to the stage", "Leave with a side of Tokyo most visitors only read about"],
     itinerary: ["18:30 — Doors open", "19:00 — The show begins", "19:45 — Costume changes, calls and penlights", "20:30 — Finale", "21:00 — End"],
-    goodToKnow: ["Standing throughout; wear comfortable shoes.", "Loud: ear protection is a good idea for young children.", "The drink charge of ¥700 per person is paid in cash at the door.", "Performed in Japanese; no English support at the venue."],
+    goodToKnow: ["Standing throughout; wear comfortable shoes.", "Loud: ear protection is a good idea for young children.", "The drink charge of ¥700 per person is paid at the door.", "Performed in Japanese; no English support at the venue."],
     story: { heading: "Why a live house, not an arena", body: "Idol groups in Japan grow up in rooms like this one, playing to a few hundred people who come back week after week. The big stages come later, if at all. An evening on the floor of a live house is the scene as it really is: the group a few metres away, the fans who know every song, and the energy that the arenas try to reproduce." },
   },
   {

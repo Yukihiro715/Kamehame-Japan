@@ -30,6 +30,11 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
+  assert.match(html, /class="subpage detail-page xp xp2"/, slug);
+  assert.match(html, /class="site-header solid"/, slug);
+  assert.match(html, /id="overview"/, slug);
+  assert.match(html, /id="booking-facts"/, slug);
+  assert.match(html, /class="bk-card" id="booking"/, slug);
   assert.match(html,/noindex/);
   assert.ok(!html.includes('<form'),slug);
   assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/, slug);
@@ -123,7 +128,7 @@ test('Sumi-e preview retains reference prices but does not accept enquiries or b
     assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
     assert.match(html, lang === 'ja' ? /前日の20:00まで/ : /20:00 the day before/);
     assert.match(html, lang === 'ja' ? /2027年1月1日以降を想定した税込価格案/ : /Proposed prices for sessions from 1 January 2027. Tax included/);
-    const priceTable = html.match(/<table class="xp-pricing compact sumi-e-pricing".*?<\/table>/s)?.[0];
+    const priceTable = html.match(/<table class="xp-pricing compact preview-pricing".*?<\/table>/s)?.[0];
     assert.ok(priceTable);
     const courses = [...priceTable.matchAll(/<tr><th scope="row">([^<]+)<\/th><td class="total">([^<]+)<\/td><td class="total">([^<]+)<\/td><\/tr>/g)]
       .map(row => row.slice(1));
