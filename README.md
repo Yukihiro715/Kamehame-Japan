@@ -4,6 +4,9 @@ A clean full-stack starter running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
 Drizzle support.
 
+Read the [KAMEHAME JAPAN UI/UX guide](docs/DESIGN_RULES.md) before creating or
+changing a page. Repository-wide development instructions are in [AGENTS.md](AGENTS.md).
+
 ## Prerequisites
 
 - Node.js `>=22.13.0`
