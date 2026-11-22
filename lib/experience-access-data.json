@@ -1206,6 +1206,59 @@
           "source": "https://www.hyatt.com/hyatt-regency/en-US/okarn-hyatt-regency-naha-okinawa/"
         }
       ]
+    },
+    "tokyoLiveHouseVariable": {
+      "destination": null,
+      "scope": "variable",
+      "stations": [
+        {
+          "place": {
+            "en": "Shinjuku Station, Tokyo",
+            "ja": "新宿駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shibuya Station, Tokyo",
+            "ja": "渋谷駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Ikebukuro Station, Tokyo",
+            "ja": "池袋駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Keio Plaza Hotel Tokyo",
+            "ja": "京王プラザホテル"
+          },
+          "mode": "transit",
+          "source": "https://www.keioplaza.co.jp/access/index.html"
+        },
+        {
+          "place": {
+            "en": "Hilton Tokyo",
+            "ja": "ヒルトン東京"
+          },
+          "mode": "transit",
+          "source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        },
+        {
+          "place": {
+            "en": "Cerulean Tower Tokyu Hotel",
+            "ja": "セルリアンタワー東急ホテル"
+          },
+          "mode": "transit",
+          "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html"
+        }
+      ]
     }
   },
   "experiences": {
@@ -1243,6 +1296,7 @@
     "setagaya-omotesenke-tea-ceremony": "setagaya",
     "asakusa-soba-making-class": "kappabashi",
     "asakusa-ramen-making-class": "kappabashi",
-    "evening-with-geiko": "gion"
+    "evening-with-geiko": "gion",
+    "tokyo-idol-live-night": "tokyoLiveHouseVariable"
   }
 }

@@ -452,6 +452,8 @@ export const categories: Category[] = [
     lead: "The Japanese sword is a thousand years of metallurgy in a single curve. Visit a working forge, watch a licensed swordsmith fold steel the traditional way, and hold history — guided and translated throughout." },
   { slug: "anime-nail-art", title: "Anime nail art", tag: "Pop culture", mark: "爪", img: "/images/cat-nail.jpg",
     lead: "Tokyo's nail artists treat a fingernail like a canvas. Bring your favourite character or design and leave with wearable fan art by an artist who does this every day — a lighter, playful side of Japanese craft." },
+  { slug: "idol", title: "Idol live", tag: "Pop culture", mark: "推", img: "/images/idol-live-venue.webp",
+    lead: "Idol groups in Japan grow up in live houses: a few hundred fans, a low stage, penlights and calls. A ticket to a real evening performance in Tokyo, standing on the same floor as the regulars." },
   { slug: "calligraphy", title: "Calligraphy", tag: "Arts & crafts", mark: "書", img: "/images/kanji-works-table.jpg",
     lead: "A brush, black ink and one character. Learn the strokes from a teacher, choose kanji that carry your name's meaning, and take home a piece you made yourself." },
   { slug: "ramen", title: "Ramen", tag: "Food", mark: "麺", img: "/images/ramen-noodle-machine.jpg",
@@ -1229,6 +1231,98 @@ export const experiences: Experience[] = [
     itinerary: ["0:00 — Welcome and aprons on", "0:10 — The dough", "0:30 — Roll and cut", "0:50 — Chashu and toppings", "1:05 — Three bowls", "1:15 — Eat", "1:30 — End of the class"],
     goodToKnow: ["About 90 minutes; every day at 11:00, 13:30, 16:00 and 18:30; arrive 15 minutes early.", "From about age 6; younger children may watch with a parent. Children pay the adult price.", "Not recommended for coeliac disease or a severe wheat or gluten allergy.", "Taught in English.", "For parties of 17 or more, ask us for a quote; groups of approximately 40 can be considered subject to confirmation."],
     story: { heading: "Three broths, one bowl at a time", body: "Tonkotsu, shoyu and miso are the three words every ramen menu in Japan turns on. Making the noodles yourself and tasting the three side by side is the fastest way to know which one is yours." },
+  },
+  {
+    // Evening idol live in a small Tokyo live house, sold as a KAMEHAME ticket
+    // (organiser's terms, 2026-11). The group and the venue are not named in
+    // the copy until the organiser confirms. Selling prices: standard
+    // ¥12,000, front ¥19,000 per person, tax included; the ¥700 drink charge
+    // is paid at the door. Cost prices stay out of the repository.
+    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "live",
+    title: "An Evening at a Tokyo Idol Live",
+    tagline: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for visitors; this is the local scene as it is, and you stand in it.",
+    overview: [
+      "Idol culture is one of the things Tokyo does that nowhere else quite does, and the place to see it is not an arena but a live house: a few hundred people, a low stage, lights two metres above your head. The group sings and dances through a set of about two hours, changes costume more than once, and the crowd answers with calls and penlights in the group's colours.",
+      "We arrange your ticket for one evening performance and send it to you digitally. Choose a standard ticket for the rear of the floor, where you can watch the whole room work, or a front ticket for the forward area closest to the stage. There is no guide and no English at the venue; we tell you what to expect before you go, and you take it from there like everyone else in the room.",
+    ],
+    duration: "About 2 hours", price: "¥12,000", priceUnit: "person", group: "1–8 guests · shared floor", ages: "All ages (children with an adult)", area: "Tokyo (Shinjuku / Shibuya / Ikebukuro area)",
+    img: "/images/idol-live-venue.webp", alt: "A Tokyo live house seen from the floor: penlights raised towards a stage lit in blue",
+    gallery: [
+      { img: "/images/idol-live-group.webp", alt: "Six members in matching frilled costumes pointing skyward as the crowd cheers" },
+      { img: "/images/idol-live-solo-pink.webp", alt: "A member singing beside a wall of pastel balloons" },
+      { img: "/images/idol-live-solo-blue.webp", alt: "A member in a blue costume reaching out to the audience" },
+      { img: "/images/idol-live-solo-red.webp", alt: "A member in red singing in front of an animated screen" },
+      { img: "/images/idol-live-group-2.webp", alt: "The whole group on stage, penlights glowing in the front rows" },
+    ],
+    galleryNote: "Photos supplied by the organiser. The group, the venue and the set list vary by date.",
+    partySize: { min: 1, max: 8 },
+    // Organiser's calendar; we check whether there is a performance on the
+    // requested date. Three days' notice so the ticket can be issued.
+    availability: { daily: false, startTimes: ["18:30"], cutoffDays: 3, cutoffTime: "18:00" },
+    availabilityNote: "On the organiser's performance dates. We confirm whether there is a show on your date.",
+    timeLabel: "Doors open",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "Performed in Japanese",
+    skipSiteFaq: true,
+    includedShort: "Admission for one evening · Digital ticket · Standard or front area",
+    cancellation: "Tickets are issued for a specific date, so a confirmed booking cannot be cancelled, changed or refunded. If the organiser cancels the performance, you receive a full refund.",
+    addOns: [
+      { id: "front", name: "Front area ticket: ¥19,000 per person", description: "The forward area closest to the stage, instead of the rear of the floor. ¥7,000 per guest more than the standard ticket; everyone in your party takes the same ticket type.", price: 7000, perGuest: true },
+    ],
+    highlights: [
+      { icon: "dance", title: "A working idol group, up close", body: "Singing, choreographed dance and costume changes from a group that plays Tokyo's live houses every week, on a stage a few metres from you." },
+      { icon: "group", title: "The same floor as the fans", body: "No tourist section. You stand among the regulars, learn the calls as you go, and see how an idol live actually works." },
+      { icon: "spark", title: "Standard or front", body: "A standard ticket for the rear of the floor at ¥12,000, or a front ticket for the area closest to the stage at ¥19,000, per person, tax included." },
+      { icon: "photo", title: "Families welcome", body: "No age restriction; children come with an adult. You may leave at any point in the evening." },
+    ],
+    included: [
+      "Admission to one evening performance (standard area; front area with the front ticket)",
+      "A digital ticket in your name, sent before the day and shown at the door",
+      "Our briefing on the venue, the running order and what to expect",
+      "Tax included",
+    ],
+    notIncluded: [
+      "The drink charge of ¥700 per person, paid in cash at the door (standard at Japanese live houses)",
+      "Transport to the venue (go straight to the confirmed venue)",
+      "A guide or interpreter: there is no English support at the venue",
+    ],
+    schedule: [
+      { time: "18:30", title: "Doors open", body: "Show your digital ticket at the entrance and pay the ¥700 drink charge. Take your place on the floor: the rear with a standard ticket, the forward area with a front ticket." },
+      { time: "19:00", title: "The show begins", body: "The exact start time is on your ticket; most evenings start within half an hour of doors. The group opens with its best-known songs and the room answers.", img: "/images/idol-live-group.webp" },
+      { time: "19:45", title: "Costume changes, calls and penlights", body: "Solo and unit numbers, a costume change or two, and the calls the regulars know by heart. Clap along; nobody minds if you miss one.", img: "/images/idol-live-solo-pink.webp" },
+      { time: "20:30", title: "Finale", body: "The whole group back on stage for the closing songs.", img: "/images/idol-live-group-2.webp" },
+      { time: "21:00", title: "End", body: "About two hours in all. Leave earlier whenever you like." },
+    ],
+    scheduleNote: "A typical evening with doors at 18:30. The running order varies by date; the confirmed start time comes with your ticket.",
+    venue: {
+      known: ["A small live house in Tokyo, in the Shinjuku, Shibuya or Ikebukuro area; the venue is fixed for each date and named in your confirmation", "A standing floor with a low stage; the show runs about two hours", "A drink charge of ¥700 per person is paid in cash at the door", "The performance is in Japanese; there is no English support at the venue"],
+      afterBooking: ["The venue's name, address and nearest station", "Your digital ticket, to show at the door", "The confirmed doors and start time for your date"],
+      img: "/images/idol-live-venue.webp", alt: "The live house seen from the floor",
+    },
+    notesLabel: "Anything we should know (optional)",
+    notesHint: "e.g. first time at a Japanese live house; two children aged 8 and 11…",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick the date, your party size and the ticket type. Sending the request costs nothing." },
+      { title: "We confirm the performance within 24 hours", body: "We check that there is a show on your date and that tickets are available, and reply with the total and the venue area." },
+      { title: "Pay to confirm; your ticket follows", body: "Your booking is confirmed when your payment arrives. Your digital ticket, the venue's name and address and the start time come before the day." },
+    ],
+    faq: [
+      { q: "Which group performs?", a: "A working idol group that plays Tokyo's live houses regularly. The line-up is confirmed for each date, and we name the group and the venue in your confirmation." },
+      { q: "What is the difference between a standard and a front ticket?", a: "A standard ticket (¥12,000) is for the rear of the floor; a front ticket (¥19,000) is for the forward area closest to the stage. Both are standing. Everyone in your party takes the same type." },
+      { q: "What is the ¥700 drink charge?", a: "Japanese live houses charge every guest a drink fee at the door, paid in cash, in exchange for one drink. It is not included in the ticket price." },
+      { q: "Is there any English at the venue?", a: "No. The performance and the announcements are in Japanese and the staff may not speak English. We brief you before the day on where to go and what to expect; once inside, you follow the room." },
+      { q: "Can children come?", a: "Yes, with an adult; there is no age restriction. It is loud and everyone stands, so bring ear protection for young children." },
+      { q: "Do I need to know the calls?", a: "No. Clap and wave a penlight if you like; the regulars will show you the rest. Penlights are sometimes sold at the venue, but they are not required." },
+      { q: "Can I take photos?", a: "Rules differ by group and by date and are announced at the venue. Assume no photos or video during the performance unless staff say otherwise." },
+      { q: "Can I book for one person?", a: "Yes. Tickets are sold per person, from one guest up to eight; for a larger group, send the request and we check with the organiser." },
+      { q: "Can we book at short notice?", a: "Requests close at 6:00 pm Japan time three days before the date, so the ticket can be issued. For an earlier date, send the request anyway and we tell you whether it is still possible." },
+      { q: "What if I cancel?", a: "Tickets are issued for a specific date, so once your booking is confirmed it cannot be cancelled, changed or refunded. If the organiser cancels the performance, you receive a full refund." },
+    ],
+    whatYoullDo: ["Stand on the floor of a Tokyo live house with the local fans", "Watch a working idol group sing, dance and change costume", "Choose the rear of the floor or the area closest to the stage", "Leave with a side of Tokyo most visitors only read about"],
+    itinerary: ["18:30 — Doors open", "19:00 — The show begins", "19:45 — Costume changes, calls and penlights", "20:30 — Finale", "21:00 — End"],
+    goodToKnow: ["Standing throughout; wear comfortable shoes.", "Loud: ear protection is a good idea for young children.", "The drink charge of ¥700 per person is paid in cash at the door.", "Performed in Japanese; no English support at the venue."],
+    story: { heading: "Why a live house, not an arena", body: "Idol groups in Japan grow up in rooms like this one, playing to a few hundred people who come back week after week. The big stages come later, if at all. An evening on the floor of a live house is the scene as it really is: the group a few metres away, the fans who know every song, and the energy that the arenas try to reproduce." },
   },
   {
     // Kendo Spirit (Nihonbashi dojo), from its public pages and PR photos.

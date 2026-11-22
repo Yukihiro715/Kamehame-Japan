@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { Gallery } from "@/components/site/gallery";
 import { HeroCarousel } from "@/components/site/hero-carousel";
@@ -27,6 +27,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 export default async function PartnerListingPreview({ params, searchParams }: Props) {
   const { slug } = await params;
   const { lang } = await searchParams;
+  // The idol live became a catalog product (lib/catalog.ts tokyo-idol-live-night); the review link keeps working.
+  if (slug === "tokyo-underground-idol-live") redirect(`/${lang === "ja" ? "ja" : "en"}/tokyo/tokyo-idol-live-night/`);
   const draft = partnerListingDrafts.find((d) => d.slug === slug);
   if (!draft) notFound();
   const ja = lang === "ja";
