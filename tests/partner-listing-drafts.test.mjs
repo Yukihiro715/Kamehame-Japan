@@ -30,6 +30,11 @@ test('partner listing drafts stay unlisted and cannot accept reservations',async
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
+  assert.match(html, /class="subpage detail-page xp xp2"/, slug);
+  assert.match(html, /class="site-header solid"/, slug);
+  assert.match(html, /id="overview"/, slug);
+  assert.match(html, /id="booking-facts"/, slug);
+  assert.match(html, /class="bk-card" id="booking"/, slug);
   assert.match(html,/noindex/);
   assert.ok(!html.includes('<form'),slug);
   assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/, slug);
@@ -98,7 +103,7 @@ test("Bamboo Sky Terrace is listed in Kyoto and accepts venue-specific enquiries
 
 test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
  const cases = {
-  'tokyo-underground-idol-live': ['700', '約2時間', '年齢制限なし', '12,000円', '19,000円'],
+  'tokyo-underground-idol-live': ['700', '約2時間', '年齢制限なし', '¥12,000', '¥19,000'],
   'tokyo-ninja-zen-night-walk': ['開始1日前まで全額返金', '原則雨天決行', '18歳以上'],
   'arashiyama-private-terrace-gathering': ['最低保証額なし', '利用日時・利用時間・人数'],
   'sumi-e-ink-painting': ['材料費を含む', '英語対応費を含む', '体験日の3日前', '同伴・見学不可', '別々のコースは選べません'],
@@ -109,6 +114,20 @@ test('confirmed partner answers replace pending questions without publishing sup
   assert.match(html,/noindex/);
   assert.doesNotMatch(html,/(?<![0-9])(11,500|17,500|18,500|23,000|5,000|8,000)(?![0-9])/);
  }
+});
+
+test("Idol live preview shows organiser photos, tax-inclusive ticket prices and the separate venue charge", async () => {
+  for (const lang of ["ja", "en"]) {
+    const html = await (await render(`/previews/partner-listings/tokyo-underground-idol-live/?lang=${lang}`)).text();
+    assert.match(html, /class="gallery" id="photos"/);
+    const photos = new Set(html.match(/\/images\/partner-listings\/idol\/[a-z0-9-]+\.webp/g));
+    assert.equal(photos.size, 6);
+    assert.match(html, /id="pricing".*?¥12,000.*?¥19,000/s);
+    assert.match(html, lang === "ja"
+      ? /ドリンク代は1人700円です。会場で別途お支払いください/
+      : /A separate drink charge of ¥700 per person is payable at the venue/);
+    assert.doesNotMatch(html, /in cash|現金のみ/);
+  }
 });
 
 test('Sumi-e preview retains reference prices but does not accept enquiries or bookings', async () => {
@@ -124,7 +143,7 @@ test('Sumi-e preview retains reference prices but does not accept enquiries or b
     assert.match(html, lang === 'ja' ? /3日前23:59まで/ : /23:59 three days before/);
     assert.match(html, lang === 'ja' ? /前日の20:00まで/ : /20:00 the day before/);
     assert.match(html, lang === 'ja' ? /2027年1月1日以降を想定した税込価格案/ : /Proposed prices for sessions from 1 January 2027. Tax included/);
-    const priceTable = html.match(/<table class="xp-pricing compact sumi-e-pricing".*?<\/table>/s)?.[0];
+    const priceTable = html.match(/<table class="xp-pricing compact preview-pricing".*?<\/table>/s)?.[0];
     assert.ok(priceTable);
     const courses = [...priceTable.matchAll(/<tr><th scope="row">([^<]+)<\/th><td class="total">([^<]+)<\/td><td class="total">([^<]+)<\/td><\/tr>/g)]
       .map(row => row.slice(1));
