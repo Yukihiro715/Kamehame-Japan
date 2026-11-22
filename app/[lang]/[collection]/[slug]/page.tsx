@@ -27,6 +27,7 @@ import { VariantDetail } from "@/components/site/variant-detail";
 import { ClubRentalProvider } from "@/components/site/club-rental-context";
 import { GOLF_CLUB_RENTAL_LIVE } from "@/lib/golf-club-rental";
 import { golfpaqEnabled } from "@/lib/golfpaq-env";
+import { PRIVATE_GOLF_EXPERIENCE, verifiedPrivateGolfReviews } from "@/lib/site-golf-reviews-context";
 import { isArrangement } from "@/lib/golf-prices";
 import { ReviewList } from "@/components/site/review-list";
 import { CONTACT_EMAIL } from "@/lib/contact";
@@ -135,7 +136,8 @@ export default async function DetailPage({ params }: Props) {
     const clubRental = GOLF_CLUB_RENTAL_LIVE && isArrangement() && exp!.slug === "mt-fuji-golf-day";
     // The custom golf page points back to the shared-bus tours and the landing that compares the two, once those are live.
     const golfWays = exp!.slug === "mt-fuji-golf-day" && (await golfpaqEnabled());
-    return <ClubRentalProvider enabled={clubRental}><VariantDetail exp={exp!} lang={lang} clubRental={clubRental} golfWays={golfWays} /></ClubRentalProvider>;
+    const golfReviews = exp!.slug === PRIVATE_GOLF_EXPERIENCE ? await verifiedPrivateGolfReviews() : undefined;
+    return <ClubRentalProvider enabled={clubRental}><VariantDetail exp={exp!} lang={lang} clubRental={clubRental} golfWays={golfWays} golfReviews={golfReviews} /></ClubRentalProvider>;
   }
   return <ExperienceDetail exp={exp!} lang={lang} />;
 }

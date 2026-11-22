@@ -1,4 +1,4 @@
-/** Review copy only. Commercial terms and source messages stay in the private
+/** Partner listing previews. Supplier terms and source messages stay in the private
  * listing ledger. These drafts never enter the public catalog or checkout. */
 export interface ListingDraftCopy {
   title: string;
@@ -10,28 +10,53 @@ export interface ListingDraftCopy {
 }
 export interface ListingDraft {
   slug: string;
-  images?: { src: string; en: string; ja: string }[];
+  /** "photo": event photography shown edge to edge, the first one large; default "artwork": whole images on a plain ground. */
+  gallery?: "artwork" | "photo";
+  images?: { src: string; en: string; ja: string; width: number; height: number }[];
   mediaNote?: { en: string; ja: string };
   en: ListingDraftCopy;
   ja: ListingDraftCopy;
 }
+
+export const sumiEPreviewSlug = "sumi-e-ink-painting";
+export const sumiEPreviewTitle = { en: "Sumi-e Japanese Ink Painting in Ginza", ja: "銀座・水墨画体験" };
+
+/** Proposed retail prices including tax for sessions from 1 January 2027. */
+export const sumiEProposedPrices = [
+  { name: { ja: "色紙", en: "Shikishi art board" }, solo: 38_000, perGuest: 22_000 },
+  { name: { ja: "コースター3枚", en: "Three coasters" }, solo: 38_000, perGuest: 22_000 },
+  { name: { ja: "ランプシェード", en: "Lampshade" }, solo: 30_500, perGuest: 30_500 },
+  { name: { ja: "掛軸", en: "Hanging scroll" }, solo: 32_000, perGuest: 32_000 },
+];
+
 export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "tokyo-underground-idol-live",
-    mediaNote: { en: "Performance media is being reviewed; a video link has already been supplied.", ja: "動画リンクは共有済みです。掲載に使用できる写真・動画を確認しています。" },
+    // Photos supplied by the organiser 2026-11 (Drive folder "BBP紹介素材"); the
+    // group and the venue are not named in the copy until the organiser confirms.
+    gallery: "photo",
+    images: [
+      { src: "/images/partner-listings/idol/venue.webp", en: "A live house seen from the floor: penlights raised towards the stage under blue beams", ja: "フロアから見たライブハウス。青いライトの下、ステージに向けて掲げられたペンライト", width: 1600, height: 1067 },
+      { src: "/images/partner-listings/idol/group.webp", en: "Six members in matching frilled costumes pointing skyward as the crowd cheers", ja: "揃いのフリル衣装で空を指す6人のメンバーと、声援を送る客席", width: 1600, height: 1067 },
+      { src: "/images/partner-listings/idol/solo-pink.webp", en: "A member singing beside a wall of pastel balloons", ja: "パステルの風船の横で歌うメンバー", width: 1600, height: 1067 },
+      { src: "/images/partner-listings/idol/solo-blue.webp", en: "A member in blue reaching out to the audience", ja: "青い衣装で客席に手を伸ばすメンバー", width: 1600, height: 1067 },
+      { src: "/images/partner-listings/idol/solo-red.webp", en: "A member in red against an animated screen", ja: "赤い衣装でアニメーションの映像を背に歌うメンバー", width: 1600, height: 1067 },
+      { src: "/images/partner-listings/idol/group-2.webp", en: "The whole group on stage with penlights in the front rows", ja: "最前列のペンライトとステージ上のメンバー全員", width: 1600, height: 1067 },
+    ],
+    mediaNote: { en: "Photos supplied by the organiser. The performing group, the venue and the set list vary by date.", ja: "写真は主催者提供。出演グループ・会場・セットリストは日程により異なります。" },
     en: {
-      title: "An Evening of Underground Idol Music in Tokyo", area: "Tokyo · Shinjuku / Shibuya / Ikebukuro",
-      lead: "Step into a local live venue for Japanese idol songs, dance and the energy of the audience. This experience is admission to a performance, with two viewing areas to choose from.",
-      details: [["Experience", "Live performance admission only"], ["Start", "18:30; venue and performance confirmed for each date"], ["Tickets", "Standard: rear viewing area. Front: forward viewing area."], ["Arrival", "A digital ticket is provided after confirmation. Go directly to the confirmed venue."], ["Duration", "Approximately 2 hours; leaving early is allowed"], ["Age", "No age restriction"], ["Venue payment", "A separate drink charge of ¥700 is payable at the venue"], ["Language", "No English-language support"], ["Cancellation", "Non-refundable once booked"]],
-      highlights: ["Discover Tokyo's local idol scene", "Watch singing and dance in a live venue", "Choose standard or front-area admission"],
-      pending: ["Selling prices and availability", "Other admission conditions", "Usable performance photos and video selection"],
+      title: "An Evening at a Tokyo Idol Live", area: "Tokyo · Shinjuku / Shibuya / Ikebukuro",
+      lead: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for tourists; this is the local scene as it is, and you stand in it.",
+      details: [["What it is", "Admission to one evening performance; no tour or guide"], ["Start", "Doors from 18:30; the venue and the line-up are confirmed for each date"], ["Tickets", "Standard: the rear of the floor. Front: the forward area closest to the stage."], ["Getting in", "A digital ticket arrives after confirmation. Go straight to the confirmed venue and show it at the door."], ["Duration", "About 2 hours; you may leave early"], ["Age", "No age restriction; children are welcome with an adult"], ["At the venue", "A drink charge of ¥700 per person is paid at the door (standard at Japanese live houses)"], ["Language", "Performances are in Japanese; no English support at the venue"], ["Cancellation", "Non-refundable once booked"]],
+      highlights: ["Stand in a Tokyo live house with local fans, not in a tourist show", "Singing, dance and costume changes from a working idol group", "Choose the rear of the floor or the front area by the stage", "No age limit: families are welcome"],
+      pending: ["Selling prices and availability by date", "Any further admission conditions", "Whether the group and venue may be named on the page"],
     },
     ja: {
-      title: "東京・地下アイドルライブ体験", area: "東京 · 新宿／渋谷／池袋",
-      lead: "歌やダンス、ファンの声援が広がるライブ会場で、日本の地下アイドル文化に触れる体験です。通常・前方の2種類から観覧エリアを選びます。",
-      details: [["体験内容", "地下アイドルのライブ観覧のみ"], ["開始時刻", "18:30〜。開催会場・公演は日程ごとに確定"], ["チケット", "通常：後方エリア／前方：前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しし、指定会場へ直接入場"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし"], ["会場での支払い", "ドリンク代700円が別途必要です"], ["対応言語", "英語対応なし"], ["キャンセル", "予約確定後のキャンセル不可"]],
-      highlights: ["東京の地下アイドル文化に触れる", "歌・ダンスと会場の熱気を楽しむ", "通常・前方の観覧エリアから選ぶ"],
-      pending: ["販売価格・日程ごとの空き状況", "その他の入場条件", "公演写真・共有済み動画の使用素材選定"],
+      title: "東京・アイドルライブの夜", area: "東京 · 新宿／渋谷／池袋",
+      lead: "東京の小さなライブハウスで行われる本物のアイドル公演のチケットです。6人のハーモニー、振り付け、衣装替え、そしてコールを知り尽くしたファンのペンライト。観光客向けの演出ではなく、地元のシーンそのものの中に立ちます。",
+      details: [["体験内容", "夜公演1回の観覧チケット。ツアー・ガイドはありません"], ["開始時刻", "18:30開場。会場・出演は日程ごとに確定"], ["チケット", "通常：フロア後方／前方：ステージに近い前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しします。指定会場へ直接お越しいただき、入口でご提示ください"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし。お子さまは大人同伴で"], ["会場での支払い", "ドリンク代700円（1人）を入口でお支払い。日本のライブハウスの通例です"], ["対応言語", "公演は日本語。会場での英語対応はありません"], ["キャンセル", "予約確定後のキャンセル不可"]],
+      highlights: ["観光向けショーではなく、地元ファンと同じフロアに立つ", "現役アイドルグループの歌・ダンス・衣装替え", "フロア後方か、ステージ近くの前方エリアかを選ぶ", "年齢制限なし。家族でも"],
+      pending: ["販売価格・日程ごとの空き状況", "その他の入場条件", "グループ名・会場名をページに出してよいか"],
     },
   },
   {
@@ -120,26 +145,25 @@ export const partnerListingDrafts: ListingDraft[] = [
     },
   },
   {
-    slug: "sumi-e-ink-painting",
+    slug: sumiEPreviewSlug,
     images: [
-      { src: "/images/partner-listings/sumi-e/scroll.webp", en: "Ink painting of plum blossoms on a hanging scroll", ja: "梅の枝を描いた水墨画の掛軸" },
-      { src: "/images/partner-listings/sumi-e/fuji.webp", en: "Ink painting of Mt. Fuji above clouds", ja: "雲の上の富士山を描いた水墨画" },
-      { src: "/images/partner-listings/sumi-e/landscape.webp", en: "Mountain landscape in Japanese ink painting", ja: "山と木を描いた山水画" },
+      { src: "/images/partner-listings/sumi-e/rensui-koi.webp", en: "Koi painted in ink by Rensui", ja: "蓮水講師が墨で描いた鯉", width: 681, height: 960 },
+      { src: "/images/partner-listings/sumi-e/rensui-plum.webp", en: "Plum blossoms painted by Rensui", ja: "蓮水講師が描いた梅の花", width: 878, height: 960 },
     ],
-    mediaNote: { en: "Artwork examples supplied by the provider. These are not a guarantee of the artwork you will create during the lesson.", ja: "提供者から共有された作品例です。体験で制作する作品や仕上がりを保証するものではありません。" },
+    mediaNote: { en: "Examples painted by the instructor, Rensui.", ja: "講師の蓮水さんによるお手本です。" },
     en: {
-      title: "Sumi-e Japanese Ink Painting in Ginza", area: "Tokyo · Ginza",
+      title: sumiEPreviewTitle.en, area: "Tokyo · Ginza",
       lead: "Explore Japanese ink painting in Ginza and create a piece to take home. Choose from four formats: a shikishi art board, a set of three coasters, a lampshade or a hanging scroll. English support and private arrangements are available.",
-      details: [["Venue", "SPACE KONA, 3rd floor, 保立ビル, 3-12-16 Ginza, Tokyo"], ["Duration", "80 minutes"], ["Participants", "Ages 4 and over; up to 6 guests"], ["Start times", "Weekdays: 10:00, 11:30 or 13:00. Weekends and Japanese public holidays: 17:00. Subject to availability."], ["Formats", "Shikishi art board / three coasters / lampshade / hanging scroll"], ["Language", "English support included"], ["Materials", "Materials included"], ["Booking deadline", "Three days before the experience date; exact cutoff time to be confirmed"], ["Children and observers", "No separate child rate. Non-participating companions and observers are not allowed"], ["Group format", "All participants in the same group must choose the same format"], ["Demonstration", "An optional demonstration can be arranged separately; it is not included in the standard lesson"], ["2027 prices (tax included)", "For experiences from 1 January 2027. Shikishi art board or three coasters: ¥38,000 total for one guest; ¥22,000 per person for 2–6 guests. Lampshade: ¥30,500 per person. Hanging scroll: ¥32,000 per person."], ["Booking status", "Preview only; not open for booking. Private arrangements and demonstrations are quoted separately."]],
+      details: [["Venue", "SPACE KONA, 3rd floor, 保立ビル, 3-12-16 Ginza, Tokyo"], ["Duration", "80 minutes"], ["Participants", "Ages 4 and over; up to 6 guests"], ["Start times", "Weekdays: 10:00, 11:30 or 13:00. Weekends and Japanese public holidays: 18:00 only. Subject to availability."], ["Formats", "Shikishi art board / three coasters / lampshade / hanging scroll"], ["Language", "English support included"], ["Materials", "Materials included"], ["Booking deadline", "23:59 three days before the experience (Japan time)"], ["Cancellation deadline", "20:00 the day before the experience (Japan time)"], ["Children and observers", "No separate child rate. Non-participating companions and observers are not allowed"], ["Group format", "All participants in the same group must choose the same format"], ["Demonstration", "An optional demonstration can be arranged separately; it is not included in the standard lesson"], ["Booking status", "Preview only; not open for booking. Private arrangements and demonstrations are quoted separately."]],
       highlights: ["Choose motifs such as cherry blossoms, Mt. Fuji, samurai, koi, dragons, bamboo or plum blossoms", "Create your own work and take it home", "Four creative formats in an 80-minute session", "English support and private arrangements available"],
-      pending: ["Available dates", "Tool provision and the exact booking cutoff time", "Cancellation conditions", "Whether the confirmed terms also apply to experiences held in 2026"],
+      pending: ["Available dates", "Tool provision", "Pricing and cancellation fees, if applicable", "Whether the confirmed terms also apply to experiences held in 2026"],
     },
     ja: {
-      title: "銀座・水墨画体験", area: "東京 · 銀座",
+      title: sumiEPreviewTitle.ja, area: "東京 · 銀座",
       lead: "銀座で墨の表現に触れ、自分の作品を持ち帰る水墨画体験です。色紙、コースター3枚、ランプシェード、掛軸の4種類から制作内容を選びます。英語対応・貸切の相談も可能です。",
-      details: [["会場", "東京都中央区銀座3-12-16 保立ビル SPACE KONA 3階"], ["所要時間", "80分"], ["参加条件", "4歳以上・最大6名"], ["開始時刻", "平日10:00／11:30／13:00、土日祝17:00。空き状況は要確認"], ["制作内容", "色紙／コースター3枚／ランプシェード／掛軸"], ["対応言語", "英語対応費を含む"], ["材料", "材料費を含む"], ["予約締切", "体験日の3日前。具体的な締切時刻は確認中"], ["子ども・見学", "子ども料金の設定なし。参加しない方の同伴・見学不可"], ["グループの制作内容", "同じグループでは同一コースを選択。別々のコースは選べません"], ["実演", "別途オプションとして相談可能。基本の体験料金には含まれません"], ["2027年料金（税込）", "2027年1月1日以降の体験が対象。色紙またはコースター3枚：1名参加は総額38,000円、2〜6名参加は1名22,000円。ランプシェード：1名30,500円。掛軸：1名32,000円。"], ["受付状況", "確認用プレビュー・予約受付前。貸切・実演は別途見積です。"]],
+      details: [["会場", "東京都中央区銀座3-12-16 保立ビル SPACE KONA 3階"], ["所要時間", "80分"], ["参加条件", "4歳以上・最大6名"], ["開始時刻", "平日10:00／11:30／13:00、土日祝は18:00のみ。空き状況は要確認"], ["制作内容", "色紙／コースター3枚／ランプシェード／掛軸"], ["対応言語", "英語対応費を含む"], ["材料", "材料費を含む"], ["予約締切", "体験日の3日前23:59まで（日本時間）"], ["キャンセル締切", "体験日前日の20:00まで（日本時間）"], ["子ども・見学", "子ども料金の設定なし。参加しない方の同伴・見学不可"], ["グループの制作内容", "同じグループでは同一コースを選択。別々のコースは選べません"], ["実演", "別途オプションとして相談可能。基本の体験料金には含まれません"], ["受付状況", "確認用プレビュー・予約受付前。貸切・実演は別途見積です。"]],
       highlights: ["桜・富士山・侍・鯉・龍・竹・梅などのモチーフを描く", "制作した作品を持ち帰れる", "80分で楽しむ4種類の制作体験", "英語対応・貸切で相談可能"],
-      pending: ["開催日ごとの空き状況", "道具の提供範囲・予約締切の具体時刻", "取消条件", "2026年実施分にも同じ条件が適用されるか"],
+      pending: ["開催日ごとの空き状況", "道具の提供範囲", "販売価格・キャンセル料の有無と条件", "2026年実施分にも同じ条件が適用されるか"],
     },
   },
 ];

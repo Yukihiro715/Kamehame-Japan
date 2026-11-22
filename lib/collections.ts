@@ -29,6 +29,7 @@ export interface ListingItem {
   price: string;
   /** Under the price: the party size and group total the figure is based on. */
   priceNote?: string;
+  comparison?: { action: string; ratingContext: string };
   // ---- for the card and the in-place filters (components/site/listing-grid.tsx)
   /** Up to five photos the card can swipe through; the first is `img`. */
   photos: string[];
@@ -413,7 +414,7 @@ export function getCollection(slug: string, lang: Lang = "en"): Collection | und
       .map((th) => ({ label: th.copy[lang].title, href: p(`/${th.slug}/`) }));
     return {
       slug, crumb: copy.title, h1: copy.h1,
-      heroImg: theme.img, heroAlt: copy.heroAlt, lead: copy.lead,
+      heroImg: copy.heroImg ?? theme.img, heroAlt: copy.heroAlt, lead: copy.lead,
       items: (theme.slug === "food" ? withCampaign : (x: ListingItem[]) => x)(exps.map(expItem)),
       refine: [...catLinks, ...cityLinks],
       about: { heading: S.catAboutH(copy.title), body: S.catAbout },

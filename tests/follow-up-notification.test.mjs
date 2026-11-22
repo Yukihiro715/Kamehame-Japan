@@ -171,6 +171,23 @@ test("as shipped, the follow-up is paused: no scheduling call, and the team noti
 });
 
 const { ledgerRecord } = await vite.ssrLoadModule("/lib/ledger.ts");
+test("Closed Sumi-e preview rejects stale enquiries in both languages without delivery", async (t) => {
+  const delivery = t.mock.method(globalThis, "fetch", () => {
+    throw Error("closed experience enquiries must not reach any delivery service");
+  });
+  for (const lang of ["en", "ja"]) {
+    for (const experience of ["sumi-e-ink-painting", " sumi-e-ink-painting "]) {
+      const response = await POST(new Request("https://kamehame-japan.com/api/contact", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...enquiry, lang, experience }),
+      }));
+      assert.equal(response.status, 410);
+      assert.deepEqual(await response.json(), { ok: false, error: "experience_closed" });
+    }
+  }
+  assert.equal(delivery.mock.callCount(), 0);
+});
+
 test("internal mail and legacy ledger retain the same inquiry and source", () => {
   const touch={landing:"https://example.com/golf",referrer:"",at:Date.now(),utm_source:"meta",utm_medium:"paid_social"};
   const e={...enquiry,requestId:"12345678-1234-1234-1234-123456789abc",attribution:{version:1,first:touch,last:touch}};

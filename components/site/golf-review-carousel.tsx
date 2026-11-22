@@ -26,7 +26,7 @@ export function GolfReviewCarousel({ lang, slides }: { lang: Lang; slides: GolfR
     if (root && card) root.scrollTo({ left: card.offsetLeft - (root.children[0] as HTMLElement).offsetLeft, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   };
   return <section className={styles.section} aria-labelledby="golf-reviews-heading" aria-roledescription="carousel">
-    <header className={styles.header}><div><h2 id="golf-reviews-heading">{c.heading}</h2><p>{c.hint}</p></div><div className={styles.controls}>
+    <header className={styles.header}><div><h2 id="golf-reviews-heading">{c.heading} ({slides.length})</h2><p>{c.hint}</p></div><div className={styles.controls}>
       <button type="button" aria-label={c.previous} disabled={active === 0} onClick={() => move(active - 1)}><ArrowLeft size={19} /></button>
       <span aria-live="polite">{active + 1} / {slides.length}</span>
       <button type="button" aria-label={c.next} disabled={active === slides.length - 1} onClick={() => move(active + 1)}><ArrowRight size={19} /></button>

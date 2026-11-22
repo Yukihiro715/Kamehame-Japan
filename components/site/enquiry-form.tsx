@@ -35,7 +35,7 @@ const fmtDate = (iso: string, lang: Lang) =>
  *  see golf-request-form.tsx.) */
 export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "page" }: {
   kind: EnquiryKind; lang: Lang; fallbackEmail: string;
-  experience?: { slug: string; title: string };
+  experience?: { slug: string; title: string; href?: string };
   variant?: "page" | "card";
 }) {
   const T = t(lang);
@@ -148,7 +148,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           kind: kind === "trade" ? "trade" : "guest",
           email: data.email?.trim() || undefined,
           experienceTitle: experience?.title,
-          experienceUrl: experience ? window.location.pathname : undefined,
+          experienceUrl: experience ? experience.href ?? window.location.pathname : undefined,
           // Readable dates for the page ("15 Oct 10:30"), not the raw ISO sent to the mailbox.
           dates: b ? (b.date ? `${fmtDate(b.date, lang)} ${b.time}` : undefined) : data.dates || undefined,
           guests: b ? D.estimateFor(b.guestsNumber) : undefined,

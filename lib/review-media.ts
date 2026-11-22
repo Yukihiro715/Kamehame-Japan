@@ -5,7 +5,7 @@
  *  permissions the guest gave. /ops/reviews/ lists those and streams the
  *  files to staff. Nothing here is public: the bucket has no public URL. */
 
-export interface R2ObjectLike { key: string; size: number; uploaded?: Date | string; httpMetadata?: { contentType?: string }; customMetadata?: Record<string, string> }
+export interface R2ObjectLike { key: string; size: number; etag?: string; uploaded?: Date | string; httpMetadata?: { contentType?: string }; customMetadata?: Record<string, string> }
 export interface R2BodyLike extends R2ObjectLike { body: ReadableStream | null; text(): Promise<string> }
 export interface R2Like {
   put(key: string, value: ReadableStream | ArrayBuffer | string | null, options?: { httpMetadata?: { contentType?: string }; customMetadata?: Record<string, string> }): Promise<unknown>;

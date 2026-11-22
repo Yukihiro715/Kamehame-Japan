@@ -1,6 +1,7 @@
 import { cancellationFor, isLive, isPreview, SITE_ORIGIN, type Experience } from "@/lib/catalog";
 import { type Lang, t } from "@/lib/i18n";
 import { listPrice, pricingFor, yen } from "@/lib/pricing";
+import type { Aggregate } from "@/lib/reviews";
 import { productJsonLd } from "@/lib/seo";
 
 export const FACT_COPY = {
@@ -37,7 +38,7 @@ export function faqJsonLd(faq: { q: string; a: string }[], url: string, lang: La
     mainEntity: faq.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
 }
 
-export function experienceJsonLd(exp: Experience, lang: Lang, faq: { q: string; a: string }[] = []) {
+export function experienceJsonLd(exp: Experience, lang: Lang, faq: { q: string; a: string }[] = [], aggregate?: Aggregate | null) {
   if (isPreview(exp)) return null;
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
   const priced = isLive(exp) && !exp.consultationOnly && !exp.pricePending && !exp.bookingPaused;
@@ -45,7 +46,7 @@ export function experienceJsonLd(exp: Experience, lang: Lang, faq: { q: string; 
   const amounts = exp.variants?.flatMap(v => v.tiers.map(t => t.total));
   const first = pricing.rows[0];
   const amount = amounts?.length ? Math.min(...amounts) : exp.priceUnit === "group" ? first?.total : Number(exp.price.replace(/[^\d]/g, ""));
-  const product = productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, yen(amount || 0), exp.slug);
+  const product = productJsonLd(exp.title, exp.metaDescription ?? exp.tagline, exp.img, url, yen(amount || 0), exp.slug, undefined, undefined, aggregate);
   const unit = exp.priceUnit === "group" ? `${t(lang).perGroupShort} · ${t(lang).detail.estimateFor(exp.partySize?.min ?? first?.party ?? 1)}` : t(lang).perPerson;
   // Booking requests are open, with availability confirmed for the requested date.
   const availability = "https://schema.org/LimitedAvailability";

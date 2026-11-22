@@ -10,6 +10,7 @@ import { useCurrency } from "@/components/site/currency-context";
 import { Fx, FxNote, JpyRef, Yen } from "@/components/site/money";
 import { RatingSummary } from "@/components/site/reviews";
 import { countOf, fromPrice, golfFeeBreakdown, perPersonOf, perPersonRefText, tierTotal, yen } from "@/lib/pricing";
+import type { Aggregate } from "@/lib/reviews";
 import type { Lang } from "@/lib/i18n";
 import type { ExperienceVariant, VariantPageCopy } from "@/lib/catalog";
 
@@ -75,8 +76,8 @@ export function golfPriceParts(copy: OptionsCopy, total: number | null, n: numbe
  *  chosen (beside the photos on wide screens, under them on phones). Every
  *  other display — the sticky bar, the request form — reads the same state;
  *  nothing else on the page asks for these two choices again. */
-export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary }: {
-  variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[]; summary?: VariantPageCopy["summary"];
+export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary, reviewAggregate }: {
+  variants: ExperienceVariant[]; copy: OptionsCopy; lang: Lang; ctaLabel: string; parties: number[]; summary?: VariantPageCopy["summary"]; reviewAggregate?: Aggregate | null;
 }) {
   const b = useBooking();
   const { usdActive } = useCurrency();
@@ -111,7 +112,7 @@ export function GolfOptions({ variants, copy, lang, ctaLabel, parties, summary }
     )}
     <section className={`bk-card go-card${isArrangement() && summary ? " go-wide" : ""}`} aria-labelledby="go-heading">
       <h2 id="go-heading" className="go-h">{copy.heading}</h2>
-      <RatingSummary experience={b.experience.slug} lang={lang} href="#reviews" size={13} />
+      <RatingSummary experience={b.experience.slug} lang={lang} href="#reviews" size={13} aggregate={reviewAggregate} />
 
       <fieldset className="go-size">
         <legend>{copy.golfersLegend}</legend>
