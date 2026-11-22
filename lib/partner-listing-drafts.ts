@@ -10,6 +10,8 @@ export interface ListingDraftCopy {
 }
 export interface ListingDraft {
   slug: string;
+  /** "photo": event photography shown edge to edge, the first one large; default "artwork": whole images on a plain ground. */
+  gallery?: "artwork" | "photo";
   images?: { src: string; en: string; ja: string }[];
   mediaNote?: { en: string; ja: string };
   en: ListingDraftCopy;
@@ -18,20 +20,31 @@ export interface ListingDraft {
 export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "tokyo-underground-idol-live",
-    mediaNote: { en: "Performance media is being reviewed; a video link has already been supplied.", ja: "動画リンクは共有済みです。掲載に使用できる写真・動画を確認しています。" },
+    // Photos supplied by the organiser 2026-11 (Drive folder "BBP紹介素材"); the
+    // group and the venue are not named in the copy until the organiser confirms.
+    gallery: "photo",
+    images: [
+      { src: "/images/partner-listings/idol/venue.webp", en: "A live house seen from the floor: penlights raised towards the stage under blue beams", ja: "フロアから見たライブハウス。青いライトの下、ステージに向けて掲げられたペンライト" },
+      { src: "/images/partner-listings/idol/group.webp", en: "Six members in matching frilled costumes pointing skyward as the crowd cheers", ja: "揃いのフリル衣装で空を指す6人のメンバーと、声援を送る客席" },
+      { src: "/images/partner-listings/idol/solo-pink.webp", en: "A member singing beside a wall of pastel balloons", ja: "パステルの風船の横で歌うメンバー" },
+      { src: "/images/partner-listings/idol/solo-blue.webp", en: "A member in blue reaching out to the audience", ja: "青い衣装で客席に手を伸ばすメンバー" },
+      { src: "/images/partner-listings/idol/solo-red.webp", en: "A member in red against an animated screen", ja: "赤い衣装でアニメーションの映像を背に歌うメンバー" },
+      { src: "/images/partner-listings/idol/group-2.webp", en: "The whole group on stage with penlights in the front rows", ja: "最前列のペンライトとステージ上のメンバー全員" },
+    ],
+    mediaNote: { en: "Photos supplied by the organiser. The performing group, the venue and the set list vary by date.", ja: "写真は主催者提供。出演グループ・会場・セットリストは日程により異なります。" },
     en: {
-      title: "An Evening of Underground Idol Music in Tokyo", area: "Tokyo · Shinjuku / Shibuya / Ikebukuro",
-      lead: "Step into a local live venue for Japanese idol songs, dance and the energy of the audience. This experience is admission to a performance, with two viewing areas to choose from.",
-      details: [["Experience", "Live performance admission only"], ["Start", "18:30; venue and performance confirmed for each date"], ["Tickets", "Standard: rear viewing area. Front: forward viewing area."], ["Arrival", "A digital ticket is provided after confirmation. Go directly to the confirmed venue."], ["Duration", "Approximately 2 hours; leaving early is allowed"], ["Age", "No age restriction"], ["Venue payment", "A separate drink charge of ¥700 is payable at the venue"], ["Language", "No English-language support"], ["Cancellation", "Non-refundable once booked"]],
-      highlights: ["Discover Tokyo's local idol scene", "Watch singing and dance in a live venue", "Choose standard or front-area admission"],
-      pending: ["Selling prices and availability", "Other admission conditions", "Usable performance photos and video selection"],
+      title: "An Evening at a Tokyo Idol Live", area: "Tokyo · Shinjuku / Shibuya / Ikebukuro",
+      lead: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for tourists; this is the local scene as it is, and you stand in it.",
+      details: [["What it is", "Admission to one evening performance; no tour or guide"], ["Start", "Doors from 18:30; the venue and the line-up are confirmed for each date"], ["Tickets", "Standard: the rear of the floor. Front: the forward area closest to the stage."], ["Getting in", "A digital ticket arrives after confirmation. Go straight to the confirmed venue and show it at the door."], ["Duration", "About 2 hours; you may leave early"], ["Age", "No age restriction; children are welcome with an adult"], ["At the venue", "A drink charge of ¥700 per person is paid at the door (standard at Japanese live houses)"], ["Language", "Performances are in Japanese; no English support at the venue"], ["Cancellation", "Non-refundable once booked"]],
+      highlights: ["Stand in a Tokyo live house with local fans, not in a tourist show", "Singing, dance and costume changes from a working idol group", "Choose the rear of the floor or the front area by the stage", "No age limit: families are welcome"],
+      pending: ["Selling prices and availability by date", "Any further admission conditions", "Whether the group and venue may be named on the page"],
     },
     ja: {
-      title: "東京・地下アイドルライブ体験", area: "東京 · 新宿／渋谷／池袋",
-      lead: "歌やダンス、ファンの声援が広がるライブ会場で、日本の地下アイドル文化に触れる体験です。通常・前方の2種類から観覧エリアを選びます。",
-      details: [["体験内容", "地下アイドルのライブ観覧のみ"], ["開始時刻", "18:30〜。開催会場・公演は日程ごとに確定"], ["チケット", "通常：後方エリア／前方：前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しし、指定会場へ直接入場"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし"], ["会場での支払い", "ドリンク代700円が別途必要です"], ["対応言語", "英語対応なし"], ["キャンセル", "予約確定後のキャンセル不可"]],
-      highlights: ["東京の地下アイドル文化に触れる", "歌・ダンスと会場の熱気を楽しむ", "通常・前方の観覧エリアから選ぶ"],
-      pending: ["販売価格・日程ごとの空き状況", "その他の入場条件", "公演写真・共有済み動画の使用素材選定"],
+      title: "東京・アイドルライブの夜", area: "東京 · 新宿／渋谷／池袋",
+      lead: "東京の小さなライブハウスで行われる本物のアイドル公演のチケットです。6人のハーモニー、振り付け、衣装替え、そしてコールを知り尽くしたファンのペンライト。観光客向けの演出ではなく、地元のシーンそのものの中に立ちます。",
+      details: [["体験内容", "夜公演1回の観覧チケット。ツアー・ガイドはありません"], ["開始時刻", "18:30開場。会場・出演は日程ごとに確定"], ["チケット", "通常：フロア後方／前方：ステージに近い前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しします。指定会場へ直接お越しいただき、入口でご提示ください"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし。お子さまは大人同伴で"], ["会場での支払い", "ドリンク代700円（1人）を入口でお支払い。日本のライブハウスの通例です"], ["対応言語", "公演は日本語。会場での英語対応はありません"], ["キャンセル", "予約確定後のキャンセル不可"]],
+      highlights: ["観光向けショーではなく、地元ファンと同じフロアに立つ", "現役アイドルグループの歌・ダンス・衣装替え", "フロア後方か、ステージ近くの前方エリアかを選ぶ", "年齢制限なし。家族でも"],
+      pending: ["販売価格・日程ごとの空き状況", "その他の入場条件", "グループ名・会場名をページに出してよいか"],
     },
   },
   {
