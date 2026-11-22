@@ -10,7 +10,10 @@ export interface ListingDraftCopy {
 }
 export interface ListingDraft {
   slug: string;
-  /** "photo": event photography shown edge to edge, the first one large; default "artwork": whole images on a plain ground. */
+  city?: "tokyo" | "kyoto";
+  priceOnRequest?: boolean;
+  prices?: { name: { ja: string; en: string }; perGuest: number; solo?: number }[];
+  /** Event photography uses the standard photo grid. Artwork is shown in full. */
   gallery?: "artwork" | "photo";
   images?: { src: string; en: string; ja: string; width: number; height: number }[];
   mediaNote?: { en: string; ja: string };
@@ -22,7 +25,7 @@ export const sumiEPreviewSlug = "sumi-e-ink-painting";
 export const sumiEPreviewTitle = { en: "Sumi-e Japanese Ink Painting in Ginza", ja: "銀座・水墨画体験" };
 
 /** Proposed retail prices including tax for sessions from 1 January 2027. */
-export const sumiEProposedPrices = [
+const sumiEProposedPrices = [
   { name: { ja: "色紙", en: "Shikishi art board" }, solo: 38_000, perGuest: 22_000 },
   { name: { ja: "コースター3枚", en: "Three coasters" }, solo: 38_000, perGuest: 22_000 },
   { name: { ja: "ランプシェード", en: "Lampshade" }, solo: 30_500, perGuest: 30_500 },
@@ -32,6 +35,11 @@ export const sumiEProposedPrices = [
 export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "tokyo-underground-idol-live",
+    city: "tokyo",
+    prices: [
+      { name: { ja: "通常チケット", en: "Standard ticket" }, perGuest: 12_000 },
+      { name: { ja: "前方チケット", en: "Front ticket" }, perGuest: 19_000 },
+    ],
     // Photos supplied by the organiser 2026-11 (Drive folder "BBP紹介素材"); the
     // group and the venue are not named in the copy until the organiser confirms.
     gallery: "photo",
@@ -47,20 +55,21 @@ export const partnerListingDrafts: ListingDraft[] = [
     en: {
       title: "An Evening at a Tokyo Idol Live", area: "Tokyo · Shinjuku / Shibuya / Ikebukuro",
       lead: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for tourists; this is the local scene as it is, and you stand in it.",
-      details: [["What it is", "Admission to one evening performance; no tour or guide"], ["Start", "Doors from 18:30; the venue and the line-up are confirmed for each date"], ["Tickets", "Standard ¥12,000 per person (the rear of the floor). Front ¥19,000 per person (the forward area closest to the stage). Prices include tax."], ["Getting in", "A digital ticket arrives after confirmation. Go straight to the confirmed venue and show it at the door."], ["Duration", "About 2 hours; you may leave early"], ["Age", "No age restriction; children are welcome with an adult"], ["At the venue", "A drink charge of ¥700 per person is paid at the door in cash; it is not included in the ticket price (standard at Japanese live houses)"], ["Language", "Performances are in Japanese; no English support at the venue"], ["Cancellation", "Non-refundable once booked"]],
+      details: [["What it is", "Admission to one evening performance; no tour or guide"], ["Start", "Doors from 18:30; the venue and the line-up are confirmed for each date"], ["Tickets", "Standard: rear of the floor. Front: the forward area closest to the stage."], ["Getting in", "A digital ticket arrives after confirmation. Go straight to the confirmed venue and show it at the door."], ["Duration", "About 2 hours; you may leave early"], ["Age", "No age restriction; children are welcome with an adult"], ["At the venue", "A separate drink charge of ¥700 per person is payable at the venue."], ["Language", "Performances are in Japanese; no English support at the venue"], ["Cancellation", "Non-refundable once booked"]],
       highlights: ["Stand in a Tokyo live house with local fans, not in a tourist show", "Singing, dance and costume changes from a working idol group", "Choose the rear of the floor or the front area by the stage", "No age limit: families are welcome"],
       pending: ["Availability by date", "Whether the group and venue may be named on the page"],
     },
     ja: {
       title: "東京・アイドルライブの夜", area: "東京 · 新宿／渋谷／池袋",
       lead: "東京の小さなライブハウスで行われる本物のアイドル公演のチケットです。6人のハーモニー、振り付け、衣装替え、そしてコールを知り尽くしたファンのペンライト。観光客向けの演出ではなく、地元のシーンそのものの中に立ちます。",
-      details: [["体験内容", "夜公演1回の観覧チケット。ツアー・ガイドはありません"], ["開始時刻", "18:30開場。会場・出演は日程ごとに確定"], ["チケット", "通常チケット 12,000円（1人・税込）：フロア後方／前方チケット 19,000円（1人・税込）：ステージに近い前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しします。指定会場へ直接お越しいただき、入口でご提示ください"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし。お子さまは大人同伴で"], ["会場での支払い", "ドリンク代700円（1人）を入口で現地払い。チケット代には含まれません。日本のライブハウスの通例です"], ["対応言語", "公演は日本語。会場での英語対応はありません"], ["キャンセル", "予約確定後のキャンセル不可"]],
+      details: [["体験内容", "夜公演1回の観覧チケット。ツアー・ガイドはありません"], ["開始時刻", "18:30開場。会場・出演は日程ごとに確定"], ["チケット", "通常チケットはフロア後方、前方チケットはステージに近いエリアで観覧できます。"], ["参加方法", "確定後にデジタルチケットをお渡しします。指定会場へ直接お越しいただき、入口でご提示ください"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし。お子さまは大人同伴で"], ["会場での支払い", "ドリンク代は1人700円です。会場で別途お支払いください。"], ["対応言語", "公演は日本語。会場での英語対応はありません"], ["キャンセル", "予約確定後のキャンセル不可"]],
       highlights: ["観光向けショーではなく、地元ファンと同じフロアに立つ", "現役アイドルグループの歌・ダンス・衣装替え", "フロア後方か、ステージ近くの前方エリアかを選ぶ", "年齢制限なし。家族でも"],
       pending: ["日程ごとの空き状況", "グループ名・会場名をページに出してよいか"],
     },
   },
   {
     slug: "tokyo-ninja-zen-night-walk",
+    city: "tokyo",
     en: {
       title: "Ninja Zen Night Walk in Tokyo", area: "Tokyo · Azabudai / Tokyo Tower area",
       lead: "Explore Tokyo after dark through mindful walking, breathing and meditation. Practise ninja-inspired movement and hand gestures while paying attention to the city around you.",
@@ -78,6 +87,8 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: "mukojima-geisha-evening",
+    city: "tokyo",
+    priceOnRequest: true,
     en: {
       title: "Geisha Hospitality in Mukojima", area: "Tokyo · Mukojima",
       lead: "An evening of Japanese cuisine, geisha performance and traditional parlour games in one of Tokyo's historic entertainment districts. A guided walk introduces the neighbourhood before dinner.",
@@ -112,6 +123,7 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: "tokyo-matcha-cultural-experience",
+    city: "tokyo",
     en: {
       title: "Matcha Culture Experience in Tokyo", area: "Tokyo",
       lead: "An introduction to Japanese matcha culture. The exact lesson, setting and inclusions for this proposed experience are being confirmed.",
@@ -129,6 +141,8 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: "arashiyama-private-terrace-gathering",
+    city: "kyoto",
+    priceOnRequest: true,
     en: {
       title: "A Private Terrace Gathering in Arashiyama", area: "Kyoto · Arashiyama",
       lead: "Bring your group together on a terrace in Arashiyama. Receptions, welcome gatherings and a place to pause between activities can be arranged around your plans.",
@@ -146,6 +160,8 @@ export const partnerListingDrafts: ListingDraft[] = [
   },
   {
     slug: sumiEPreviewSlug,
+    city: "tokyo",
+    prices: sumiEProposedPrices,
     images: [
       { src: "/images/partner-listings/sumi-e/rensui-koi.webp", en: "Koi painted in ink by Rensui", ja: "蓮水講師が墨で描いた鯉", width: 681, height: 960 },
       { src: "/images/partner-listings/sumi-e/rensui-plum.webp", en: "Plum blossoms painted by Rensui", ja: "蓮水講師が描いた梅の花", width: 878, height: 960 },
