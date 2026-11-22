@@ -47,16 +47,16 @@ export const partnerListingDrafts: ListingDraft[] = [
     en: {
       title: "An Evening at a Tokyo Idol Live", area: "Tokyo · Shinjuku / Shibuya / Ikebukuro",
       lead: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for tourists; this is the local scene as it is, and you stand in it.",
-      details: [["What it is", "Admission to one evening performance; no tour or guide"], ["Start", "Doors from 18:30; the venue and the line-up are confirmed for each date"], ["Tickets", "Standard: the rear of the floor. Front: the forward area closest to the stage."], ["Getting in", "A digital ticket arrives after confirmation. Go straight to the confirmed venue and show it at the door."], ["Duration", "About 2 hours; you may leave early"], ["Age", "No age restriction; children are welcome with an adult"], ["At the venue", "A drink charge of ¥700 per person is paid at the door (standard at Japanese live houses)"], ["Language", "Performances are in Japanese; no English support at the venue"], ["Cancellation", "Non-refundable once booked"]],
+      details: [["What it is", "Admission to one evening performance; no tour or guide"], ["Start", "Doors from 18:30; the venue and the line-up are confirmed for each date"], ["Tickets", "Standard ¥12,000 per person (the rear of the floor). Front ¥19,000 per person (the forward area closest to the stage). Prices include tax."], ["Getting in", "A digital ticket arrives after confirmation. Go straight to the confirmed venue and show it at the door."], ["Duration", "About 2 hours; you may leave early"], ["Age", "No age restriction; children are welcome with an adult"], ["At the venue", "A drink charge of ¥700 per person is paid at the door in cash; it is not included in the ticket price (standard at Japanese live houses)"], ["Language", "Performances are in Japanese; no English support at the venue"], ["Cancellation", "Non-refundable once booked"]],
       highlights: ["Stand in a Tokyo live house with local fans, not in a tourist show", "Singing, dance and costume changes from a working idol group", "Choose the rear of the floor or the front area by the stage", "No age limit: families are welcome"],
-      pending: ["Selling prices and availability by date", "Any further admission conditions", "Whether the group and venue may be named on the page"],
+      pending: ["Availability by date", "Whether the group and venue may be named on the page"],
     },
     ja: {
       title: "東京・アイドルライブの夜", area: "東京 · 新宿／渋谷／池袋",
       lead: "東京の小さなライブハウスで行われる本物のアイドル公演のチケットです。6人のハーモニー、振り付け、衣装替え、そしてコールを知り尽くしたファンのペンライト。観光客向けの演出ではなく、地元のシーンそのものの中に立ちます。",
-      details: [["体験内容", "夜公演1回の観覧チケット。ツアー・ガイドはありません"], ["開始時刻", "18:30開場。会場・出演は日程ごとに確定"], ["チケット", "通常：フロア後方／前方：ステージに近い前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しします。指定会場へ直接お越しいただき、入口でご提示ください"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし。お子さまは大人同伴で"], ["会場での支払い", "ドリンク代700円（1人）を入口でお支払い。日本のライブハウスの通例です"], ["対応言語", "公演は日本語。会場での英語対応はありません"], ["キャンセル", "予約確定後のキャンセル不可"]],
+      details: [["体験内容", "夜公演1回の観覧チケット。ツアー・ガイドはありません"], ["開始時刻", "18:30開場。会場・出演は日程ごとに確定"], ["チケット", "通常チケット 12,000円（1人・税込）：フロア後方／前方チケット 19,000円（1人・税込）：ステージに近い前方エリア"], ["参加方法", "確定後にデジタルチケットをお渡しします。指定会場へ直接お越しいただき、入口でご提示ください"], ["所要時間", "約2時間。途中退出可"], ["年齢", "年齢制限なし。お子さまは大人同伴で"], ["会場での支払い", "ドリンク代700円（1人）を入口で現地払い。チケット代には含まれません。日本のライブハウスの通例です"], ["対応言語", "公演は日本語。会場での英語対応はありません"], ["キャンセル", "予約確定後のキャンセル不可"]],
       highlights: ["観光向けショーではなく、地元ファンと同じフロアに立つ", "現役アイドルグループの歌・ダンス・衣装替え", "フロア後方か、ステージ近くの前方エリアかを選ぶ", "年齢制限なし。家族でも"],
-      pending: ["販売価格・日程ごとの空き状況", "その他の入場条件", "グループ名・会場名をページに出してよいか"],
+      pending: ["日程ごとの空き状況", "グループ名・会場名をページに出してよいか"],
     },
   },
   {
