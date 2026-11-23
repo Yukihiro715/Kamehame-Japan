@@ -10,7 +10,7 @@ import { BusTours } from "@/components/site/bus-tours";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { busCopy } from "@/lib/golfpaq-copy";
-import { golfpaqVisible, publicToursFrom, readGolfpaqSnapshot } from "@/lib/golfpaq";
+import { golfpaqVisible, publicToursFrom, readGolfpaqSnapshot, yen } from "@/lib/golfpaq";
 import { displayCourseName, loadCourseNames } from "@/lib/golf-courses-db";
 import { d1Db, isD1Like } from "@/lib/referral/db";
 import { isLang, LANGS } from "@/lib/i18n";
@@ -46,6 +46,8 @@ export default async function GolfBusPage({ params }: Props) {
   // courseEn carries the name for the page's language (the component shows the Japanese name on /ja/).
   const tours = rawTours.map((t) => ({ ...t, courseEn: displayCourseName(t.course, lang, names) }));
   const C = busCopy(lang);
+  const openPrices = tours.filter((tour) => !tour.soldOut && tour.perPersonYen > 0).map((tour) => tour.perPersonYen);
+  const startingPrice = openPrices.length ? yen(Math.min(...openPrices)) : null;
   const stepIcons = [Search, Send, Mail, CreditCard, BadgeCheck];
   const featureIcons = [Bus, UserRound, Flag, CheckCircle2];
   const glanceIcons = [MapPin, Flag, JapaneseYen, ShieldCheck];
@@ -62,11 +64,16 @@ export default async function GolfBusPage({ params }: Props) {
             <p className="gb-eyebrow">KAMEHAME JAPAN · GOLF · SHARED BUS TOURS</p>
             <h1>{C.heroTitle}</h1>
             <div className="gb-hero-reviews"><RatingSummary experience="golf-bus" lang={lang} href="#reviews" size={17} /></div>
-            <p className="gb-hero-lede">{C.heroLede}</p>
+            <p className="gb-hero-lede">{lang === "en" ? (
+              <>Depart from Shinjuku or Oimachi for 18 holes and a round-trip bus ride.
+                {startingPrice && <> <strong>From {startingPrice} per person</strong>, including tax and booking fee.</>}
+              </>
+            ) : C.heroLede}</p>
+            {lang === "en" && <a className="gb-btn gb-btn-big gb-hero-cta" href={tours.length ? "#bus-dates" : "#tours"}>Check availability for your date</a>}
             <ul className="gb-features">
               {C.features.map((f, i) => { const Icon = featureIcons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
             </ul>
-            <a className="gb-btn gb-btn-big gb-hero-cta" href="#tours">{C.heroCta}</a>
+            {lang !== "en" && <a className="gb-btn gb-btn-big gb-hero-cta" href="#tours">{C.heroCta}</a>}
           </div>
         </section>
 
