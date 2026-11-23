@@ -1962,6 +1962,7 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-features { list-style:none; margin:4px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
 .gb-features li { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:13px; backdrop-filter:blur(4px); background:rgba(0,0,0,.2); }
 .gb-hero-cta { width:auto; margin-top:6px; }
+.gb-mobile-booking { display:none; }
 /* two ways */
 .gb-two { padding:48px 0 8px; }
 .gb-two-grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
@@ -2053,6 +2054,22 @@ body[data-kh-modal] .sticky-request { display:none; }
   .gb-hero { min-height:72vh; }
   .gb-hero-text { padding:110px 20px 32px; }
   .gb-hero-cta { width:100%; }
+  body:has(.gb-has-mobile-booking) { padding-bottom:calc(110px + env(safe-area-inset-bottom,0px)); background:var(--ink); }
+  .gb-has-mobile-booking .gb-hero-price,
+  .gb-has-mobile-booking .gb-hero-cta,
+  .gb-has-mobile-booking .gb-fab { display:none; }
+  .gb-mobile-booking {
+    position:fixed; z-index:40; inset:auto 0 0; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px)); background:var(--white); color:var(--ink);
+    border-top:1px solid var(--ink);
+  }
+  .gb-mobile-fare { margin:0; line-height:1.2; font-size:13px; }
+  .gb-mobile-fare span { white-space:nowrap; }
+  .gb-mobile-fare strong { font-size:30px; font-weight:800; }
+  .gb-mobile-fare small { display:block; margin-top:3px; font-size:12px; }
+  .gb-mobile-booking .gb-btn { flex:none; width:auto; min-height:44px; padding:10px 14px; }
+  body[data-kh-modal] .gb-mobile-booking,
+  body:has(.consent) .gb-mobile-booking { display:none; }
   .gb-choice { grid-template-columns:110px 1fr; } .gb-choice img { width:110px; }
   .gb-summary { grid-template-columns:1fr; gap:2px; } .gb-summary dt { margin-top:6px; }
   .gb-form { padding:16px; }
