@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
+import { ChevronRight } from 'lucide-react';
 import { api, errorText, jst } from '../client';
 import { Button, Card, Field, Loading, Notice } from '../ui';
 import { usePortal } from '../shell';
@@ -55,10 +56,23 @@ function valueText(value:unknown,field:string):string{
 export function LedgerReviewPanel({onUpdated}:{onUpdated:()=>Promise<void>}){
   const {state,error,setError,load}=useLedger();const [busy,setBusy]=useState('');
   const decide=async(c:Conflict,action:'keep'|'apply')=>{setBusy(c.sourceKey);setError('');try{await api('POST','ops/business/ledger-review',{sourceKey:c.sourceKey,hash:c.hash,revision:c.revision,action});await onUpdated();await load();}catch(e){setError(errorText(e));}finally{setBusy('')}};
-  if(!state?.conflictRecords.length&&!state?.reviews?.length)return error?<div className="notice error">{error}</div>:null;
-  return <section className="panel ledger-review-panel"><div className="panel-head"><div><h2>原価連携の確認待ち</h2><p>手入力との違いと、原典の確認が必要な費用です。</p></div></div>{error&&<div className="notice error">{error}</div>}
-    {state.conflictRecords.map(c=><details key={c.sourceKey}><summary>{c.current.name??c.current.id}：{c.fields.map(f=>fieldLabels[f]??f).join('・')}</summary><div className="table-scroll"><table><thead><tr><th>項目</th><th>現在の入力</th><th>台帳の確認値</th></tr></thead><tbody>{c.fields.map(f=><tr key={f}><th>{fieldLabels[f]??f}</th><td style={{whiteSpace:'pre-wrap'}}>{valueText(c.current[f],f)}</td><td style={{whiteSpace:'pre-wrap'}}>{valueText(c.proposed[f],f)}</td></tr>)}</tbody></table></div><div className="pt-row"><button className="secondary" disabled={!!busy} onClick={()=>void decide(c,'keep')}>現在の入力を保持</button><button className="primary" disabled={!!busy} onClick={()=>void decide(c,'apply')}>台帳の確認値を反映</button></div></details>)}
-    {state.reviews?.map(r=><div className="ledger-source-review" key={r.id}><strong>{r.title}</strong><p>{r.question}</p>{/^https:\/\//.test(r.evidence)&&<a href={r.evidence} target="_blank" rel="noreferrer">根拠を確認 ↗</a>}</div>)}
-    {state.sheetId&&<p><a href={`https://docs.google.com/spreadsheets/d/${state.sheetId}/edit`} target="_blank" rel="noreferrer">原価連携台帳を開く ↗</a></p>}
-  </section>;
+  const count=(state?.conflictRecords.length??0)+(state?.reviews?.length??0);
+  if(!state||!count)return error?<div className="notice error">{error}</div>:null;
+  return <details className="panel ledger-review-panel">
+    <summary className="panel-head">
+      <h2>原価連携の確認待ち</h2>
+      <span className="ledger-review-count"><span className="tag amber">{count}件</span><ChevronRight size={16} aria-hidden="true"/></span>
+    </summary>
+    <div className="ledger-review-list">
+      <p className="small muted">手入力との違いと、原典の確認が必要な費用です。</p>
+      {error&&<div className="notice error" role="alert">{error}</div>}
+      {state.conflictRecords.map(c=><details key={c.sourceKey}><summary>{c.current.name??c.current.id}：{c.fields.map(f=>fieldLabels[f]??f).join('・')}</summary><div className="table-scroll"><table><thead><tr><th>項目</th><th>現在の入力</th><th>台帳の確認値</th></tr></thead><tbody>{c.fields.map(f=><tr key={f}><th>{fieldLabels[f]??f}</th><td style={{whiteSpace:'pre-wrap'}}>{valueText(c.current[f],f)}</td><td style={{whiteSpace:'pre-wrap'}}>{valueText(c.proposed[f],f)}</td></tr>)}</tbody></table></div><div className="pt-row"><button className="secondary" disabled={!!busy} onClick={()=>void decide(c,'keep')}>現在の入力を保持</button><button className="primary" disabled={!!busy} onClick={()=>void decide(c,'apply')}>台帳の確認値を反映</button></div></details>)}
+      {state.reviews?.map(r=><details key={r.id}>
+        <summary>{r.title}</summary>
+        <p>{r.question}</p>
+        {/^https:\/\//.test(r.evidence)&&<a className="source-link" href={r.evidence} target="_blank" rel="noreferrer">根拠を確認 ↗</a>}
+      </details>)}
+      {state.sheetId&&<p className="ledger-review-sheet"><a className="source-link" href={`https://docs.google.com/spreadsheets/d/${state.sheetId}/edit`} target="_blank" rel="noreferrer">原価連携台帳を開く ↗</a></p>}
+    </div>
+  </details>;
 }
