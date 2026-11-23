@@ -34,7 +34,7 @@ function Lunch({ t, C }: { t: PublicTour; C: BusCopy }) {
 }
 
 /** The calendar, the filters, the catalogue, the enquiry form and the thank-you screen. */
-export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; updatedAt: string | null; lang: Lang; C: BusCopy }) {
+export function BusTours({ tours, updatedAt, lang, C, mobileFare }: { tours: PublicTour[]; updatedAt: string | null; lang: Lang; C: BusCopy; mobileFare?: string | null }) {
   const [day, setDay] = useState(""), [people, setPeople] = useState(1), [area, setArea] = useState("");
   const [chosen, setChosen] = useState<PublicTour | null>(null);
   const [open, setOpen] = useState<PublicTour | null>(null);
@@ -93,7 +93,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
         <h2 id="gb-tours-h">{C.toursH}</h2>
         <p className="gb-lede">{C.toursLede}</p>
         {fromFuji && <p className="gb-note"><Link href={golfReturnHref(lang, people, day || requestedDate, returnTransfer)}>{travelCopy.returnCta} →</Link></p>}
-        <div className="gb-pick" ref={pickRef}>
+        <div className="gb-pick" id="bus-dates" ref={pickRef}>
         {tours.length > 0 && <Calendar tours={tours} months={months} day={day} people={people} area={area} onPick={pick} lang={lang} C={C} />}
         <div className="gb-filters">
           <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: Math.max(maxSeats, people) }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
@@ -147,6 +147,15 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
           {chosen && <Enquiry key={chosen.id} tour={chosen} initialPeople={people} lang={lang} C={C} onBack={() => setChosen(null)} />}
         </div>
       </div>
+      {mobileFare && !chosen && !open && (
+        <div className="gb-mobile-booking">
+          <p className="gb-mobile-fare">
+            <span>From <strong>{mobileFare}</strong></span>
+            <small>Per person · tax and booking fee included</small>
+          </p>
+          <a className="gb-btn" href="#bus-dates" aria-label="Check dates and availability">Check dates</a>
+        </div>
+      )}
       {open && <TourSheet tour={open} lang={lang} C={C} onClose={() => setOpen(null)} onEnquire={(t) => { setOpen(null); setChosen(t); track("bus_tour_select", { tour_id: t.id, date: t.date }); }} />}
     </section>
   );
