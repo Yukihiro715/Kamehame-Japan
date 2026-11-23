@@ -64,3 +64,15 @@ test('The golf-tours carousel presents the new private review first; the separat
   assert.notEqual(slides[0].service, slides[3].service);
   assert.match(slides[3].href, /golf-bus\/#reviews$/);
 });
+
+test('Neil’s shared bus review follows the golf landing page language', () => {
+  const [review] = ownReviewsFor('golf-bus');
+  for (const lang of ['en', 'ja', 'es', 'fr', 'zh-tw']) {
+    const [slide] = golfLandingSlides(lang, []);
+    assert.equal(slide.author, 'Neil');
+    assert.equal(slide.language, lang);
+    assert.equal(slide.translated, lang !== 'en');
+    assert.equal(slide.excerpt, lang === 'en' ? review.body : review.i18n[lang].body);
+    assert.equal(slide.href, `/${lang}/golf-bus/#reviews`);
+  }
+});
