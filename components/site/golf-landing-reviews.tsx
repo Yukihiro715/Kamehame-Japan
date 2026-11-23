@@ -14,8 +14,9 @@ const services = {
 export function golfLandingSlides(lang: Lang, privateReviews: Review[]): GolfReviewSlide[] {
   return [privateReviews, ownReviewsFor("golf-bus")].flatMap((reviews, group) => reviews.map(review => {
     const translation = golfReviewTranslationFor(review, lang);
-    const originalExcerpt = review.id === "tyler-takane-2026-11" ? "the booking process was quick, easy, informative, and they got me on an awesome course!" : review.id === SITE_GOLF_REVIEW_ID ? review.body.split("\n\n")[0] : review.body;
-    return { id:review.id, author:review.author, date:review.date ? reviewDate(review.date,lang) : "", rating:review.rating, service:services[lang][group], excerpt:translation?.excerpt ?? originalExcerpt, language:translation ? lang : "en", translated:!!translation, photo:review.photos?.[0]?.replace(/\.webp$/, "-600.webp"), href:group === 0 ? `/${lang}/tokyo/mt-fuji-golf-day/#${review.id === SITE_GOLF_REVIEW_ID ? review.id : "reviews"}` : `/${lang}/golf-bus/#reviews` };
+    const linkToReview = review.id === SITE_GOLF_REVIEW_ID || review.id === "suan-golf-2026-11";
+    const originalExcerpt = review.id === "tyler-takane-2026-11" ? "the booking process was quick, easy, informative, and they got me on an awesome course!" : linkToReview ? review.body.split("\n\n")[0] : review.body;
+    return { id:review.id, author:review.author, date:review.date ? reviewDate(review.date,lang) : "", rating:review.rating, service:services[lang][group], excerpt:translation?.excerpt ?? originalExcerpt, language:translation ? lang : "en", translated:!!translation, photo:review.photos?.[0]?.replace(/\.webp$/, "-600.webp"), href:group === 0 ? `/${lang}/tokyo/mt-fuji-golf-day/#${linkToReview ? review.id : "reviews"}` : `/${lang}/golf-bus/#reviews` };
   }));
 }
 
