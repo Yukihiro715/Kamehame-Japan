@@ -48,13 +48,14 @@ export default async function GolfBusPage({ params }: Props) {
   const C = busCopy(lang);
   const openPrices = tours.filter((tour) => !tour.soldOut && tour.perPersonYen > 0).map((tour) => tour.perPersonYen);
   const startingPrice = openPrices.length ? yen(Math.min(...openPrices)) : null;
+  const mobileFare = lang === "en" ? startingPrice : null;
   const stepIcons = [Search, Send, Mail, CreditCard, BadgeCheck];
   const featureIcons = [Bus, UserRound, Flag, CheckCircle2];
   const glanceIcons = [MapPin, Flag, JapaneseYen, ShieldCheck];
   return (
     <>
       <SiteHeader variant="overlay" lang={lang} />
-      <main className="gb" lang={lang}>
+      <main className={mobileFare ? "gb gb-has-mobile-booking" : "gb"} lang={lang}>
         <section className="gb-hero gb-hero-bus">
           <picture>
             <source media="(max-width: 700px)" srcSet="/images/golf-bus/hero-phone.webp" />
@@ -64,11 +65,13 @@ export default async function GolfBusPage({ params }: Props) {
             <p className="gb-eyebrow">KAMEHAME JAPAN · GOLF · SHARED BUS TOURS</p>
             <h1>{C.heroTitle}</h1>
             <div className="gb-hero-reviews"><RatingSummary experience="golf-bus" lang={lang} href="#reviews" size={17} /></div>
-            <p className="gb-hero-lede">{lang === "en" ? (
-              <>Depart from Shinjuku or Oimachi for 18 holes and a round-trip bus ride.
-                {startingPrice && <> <strong>From {startingPrice} per person</strong>, including tax and booking fee.</>}
-              </>
-            ) : C.heroLede}</p>
+            <p className="gb-hero-lede">{lang === "en" ? "Depart from Shinjuku or Oimachi for 18 holes and a round-trip bus ride." : C.heroLede}</p>
+            {lang === "en" && startingPrice && (
+              <p className="gb-hero-price">
+                <span>From <strong>{startingPrice}</strong> per person</span>
+                <small>Includes tax and booking fee</small>
+              </p>
+            )}
             {lang === "en" && <a className="gb-btn gb-btn-big gb-hero-cta" href={tours.length ? "#bus-dates" : "#tours"}>Check availability for your date</a>}
             <ul className="gb-features">
               {C.features.map((f, i) => { const Icon = featureIcons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
@@ -88,7 +91,7 @@ export default async function GolfBusPage({ params }: Props) {
 
         <div className="gb-wrap"><BusGuestReview lang={lang} /></div>
 
-        <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} />
+        <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} mobileFare={mobileFare} />
 
         <section className="gb-about" id="details" aria-labelledby="gb-about-h">
           <div className="gb-wrap">
