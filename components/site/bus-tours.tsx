@@ -93,7 +93,7 @@ export function BusTours({ tours, updatedAt, lang, C }: { tours: PublicTour[]; u
         <h2 id="gb-tours-h">{C.toursH}</h2>
         <p className="gb-lede">{C.toursLede}</p>
         {fromFuji && <p className="gb-note"><Link href={golfReturnHref(lang, people, day || requestedDate, returnTransfer)}>{travelCopy.returnCta} →</Link></p>}
-        <div className="gb-pick" ref={pickRef}>
+        <div className="gb-pick" id="bus-dates" ref={pickRef}>
         {tours.length > 0 && <Calendar tours={tours} months={months} day={day} people={people} area={area} onPick={pick} lang={lang} C={C} />}
         <div className="gb-filters">
           <label><span>{C.filterGolfers}</span><select value={people} onChange={(e) => setPeople(Number(e.target.value))}>{Array.from({ length: Math.max(maxSeats, people) }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
