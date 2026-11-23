@@ -24,6 +24,12 @@ const DIRECT_REVIEWS: Review[] = [
     id: "neil-golf-2026-11", experience: "golf-bus", rating: 5,
     author: "Neil", country: "", source: "direct", verified: true, date: "2026-11-10",
     body: "Wasn't sure what to expect from the day after booking a few days before the round. Toshi our driver and guide was extremely helpful and helped me navigate golf etiquette in Japan and the different style of play I'm accustomed to in America. It was a long day but Toshi kept us on schedule and allowed time for breaks during the bus ride. The course was in excellent condition even though it rained the night before. I would highly recommend this trip for anyone wanting to experience golf in Japan.",
+    i18n: {
+      ja: { body: "ラウンドの数日前に予約したので、どんな一日になるのか想像がつきませんでした。運転手兼ガイドのToshiさんがとても親切で、日本のゴルフのマナーや、アメリカで慣れ親しんだプレースタイルとの違いを教えてくれました。長い一日でしたが、Toshiさんは予定どおりに進めながら、バスでの移動中に休憩時間も取ってくれました。前夜に雨が降ったにもかかわらず、コースのコンディションは素晴らしかったです。日本でゴルフを体験したい方に、このツアーをぜひおすすめします。" },
+      es: { body: "Reservé unos días antes de la ronda y no sabía muy bien qué esperar. Toshi, nuestro conductor y guía, fue de gran ayuda. Me orientó sobre la etiqueta del golf en Japón y sobre las diferencias con la forma de jugar a la que estoy acostumbrado en Estados Unidos. Fue un día largo, pero Toshi mantuvo el horario y dejó tiempo para hacer pausas durante el trayecto en autobús. El campo estaba en excelentes condiciones a pesar de que había llovido la noche anterior. Recomiendo mucho esta excursión a cualquiera que quiera jugar al golf en Japón." },
+      fr: { body: "J’avais réservé quelques jours avant la partie et je ne savais pas trop à quoi m’attendre. Toshi, notre chauffeur et guide, a été d’une grande aide. Il m’a expliqué l’étiquette du golf au Japon et les différences avec la façon de jouer à laquelle je suis habitué aux États-Unis. La journée a été longue, mais Toshi a respecté le programme tout en prévoyant des pauses pendant le trajet en bus. Le parcours était en excellent état malgré la pluie de la veille au soir. Je recommande vivement cette excursion à quiconque souhaite découvrir le golf au Japon." },
+      "zh-tw": { body: "我在開打前幾天才預訂，不太確定這一天會是什麼樣子。司機兼導遊 Toshi 非常熱心，幫我了解日本的高爾夫禮儀，以及這裡的打球方式和我在美國習慣的方式有什麼不同。雖然行程很長，Toshi 還是讓我們按時走完全程，也在搭巴士途中安排了休息時間。儘管前一晚下了雨，球場的狀況仍然非常好。我很推薦想在日本體驗高爾夫的人參加這個行程。" },
+    },
   },
   // Direct submission on 13 Nov, matched to the confirmed 12 Nov kendo booking.
   // Original English text preserved; first name only, no uploaded media.
