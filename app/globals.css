@@ -1953,6 +1953,9 @@ body[data-kh-modal] .sticky-request { display:none; }
 .gb-hero-text { position:relative; z-index:1; max-width:1180px; width:100%; margin:0 auto; padding:120px clamp(20px,5vw,48px) 48px; display:grid; gap:14px; }
 .gb-hero h1 { margin:0; font-family:var(--font-display); font-weight:400; font-size:clamp(40px,7vw,80px); line-height:1; letter-spacing:.02em; text-wrap:balance; }
 .gb-hero-lede { margin:0; max-width:620px; font-size:clamp(16px,2vw,20px); line-height:1.5; }
+.gb-hero-price { margin:0; line-height:1.25; font-size:16px; }
+.gb-hero-price strong { font-size:clamp(36px,5vw,44px); font-weight:800; }
+.gb-hero-price small { display:block; margin-top:4px; font-size:14px; }
 .gb-hero-reviews .rating-summary { margin:0; min-height:44px; padding:8px 12px; border-radius:8px; color:#fff; background:rgba(0,0,0,.55); font-size:14px; }
 .gb-hero-reviews .rating-summary b { color:#fff; font-size:15px; }
 .gb-hero-reviews .rating-summary:focus-visible { outline:3px solid var(--kame); outline-offset:4px; }

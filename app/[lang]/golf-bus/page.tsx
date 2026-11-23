@@ -64,11 +64,13 @@ export default async function GolfBusPage({ params }: Props) {
             <p className="gb-eyebrow">KAMEHAME JAPAN · GOLF · SHARED BUS TOURS</p>
             <h1>{C.heroTitle}</h1>
             <div className="gb-hero-reviews"><RatingSummary experience="golf-bus" lang={lang} href="#reviews" size={17} /></div>
-            <p className="gb-hero-lede">{lang === "en" ? (
-              <>Depart from Shinjuku or Oimachi for 18 holes and a round-trip bus ride.
-                {startingPrice && <> <strong>From {startingPrice} per person</strong>, including tax and booking fee.</>}
-              </>
-            ) : C.heroLede}</p>
+            <p className="gb-hero-lede">{lang === "en" ? "Depart from Shinjuku or Oimachi for 18 holes and a round-trip bus ride." : C.heroLede}</p>
+            {lang === "en" && startingPrice && (
+              <p className="gb-hero-price">
+                <span>From <strong>{startingPrice}</strong> per person</span>
+                <small>Includes tax and booking fee</small>
+              </p>
+            )}
             {lang === "en" && <a className="gb-btn gb-btn-big gb-hero-cta" href={tours.length ? "#bus-dates" : "#tours"}>Check availability for your date</a>}
             <ul className="gb-features">
               {C.features.map((f, i) => { const Icon = featureIcons[i]; return <li key={f}><Icon size={16} /> {f}</li>; })}
