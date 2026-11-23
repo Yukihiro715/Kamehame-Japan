@@ -37,14 +37,26 @@
 .ops-workspace .pt-kv{display:grid;grid-template-columns:minmax(110px,auto) minmax(0,1fr);gap:12px 24px;margin:0}
 .ops-workspace .pt-kv dd{margin:0;overflow-wrap:anywhere}
 @media(max-width:760px){.ops-workspace .pt-grid-2,.ops-workspace .pt-grid-3,.ops-workspace .ops-settings-form{grid-template-columns:minmax(0,1fr)}.ops-workspace .pt-card{padding:20px}.ops-workspace .ops-page-stack{gap:20px}.ops-workspace input,.ops-workspace select,.ops-workspace textarea{font-size:16px}.ops-workspace .pt-kv{grid-template-columns:minmax(0,1fr);gap:5px}.ops-workspace .pt-kv dd{margin-bottom:12px}}
-.ops-workspace .business-import{padding:20px 24px}
+.ops-workspace .business-import{padding:20px 24px;margin-top:16px}
 .ops-workspace .business-import summary{cursor:pointer;font-weight:600}
 .ops-workspace .business-import[open]>*+*{margin-top:16px}
 .ops-workspace .drawer input[type=checkbox]{width:auto}
 
-.ops-workspace .ledger-review-panel>details,.ops-workspace .ledger-source-review{margin:20px 24px;padding-bottom:20px;border-bottom:1px solid var(--line)}
-.ops-workspace .ledger-review-panel summary{cursor:pointer;font-weight:600;margin-bottom:14px}
-.ops-workspace .ledger-review-panel .pt-row{margin-top:16px}
-.ops-workspace .ledger-review-panel>p{padding:0 24px 20px}
+.ops-workspace .ledger-review-panel>summary{cursor:pointer;padding-block:12px;min-height:52px;list-style:none}
+.ops-workspace .ledger-review-panel>summary::-webkit-details-marker{display:none}
+.ops-workspace .ledger-review-panel>summary:focus-visible{outline:2px solid var(--green);outline-offset:-4px}
+.ops-workspace .ledger-review-count{display:flex;align-items:center;gap:8px;flex:none}
+.ops-workspace .ledger-review-panel[open]>summary svg{transform:rotate(90deg)}
+.ops-workspace .ledger-review-list{padding:0 23px 14px}
+.ops-workspace .ledger-review-list>details{border-top:1px solid var(--line);overflow-wrap:anywhere}
+.ops-workspace .ledger-review-list>details:first-of-type{margin-top:8px}
+.ops-workspace .ledger-review-list summary{cursor:pointer;font-weight:600;min-height:44px;padding:11px 0}
+.ops-workspace .ledger-review-list>details[open]{padding-bottom:12px}
+.ops-workspace .ledger-review-list .source-link{display:inline-flex;align-items:center;min-height:44px}
+.ops-workspace .ledger-review-list .pt-row{margin-top:12px;flex-wrap:wrap}
+.ops-workspace .ledger-review-sheet{border-top:1px solid var(--line)}
+.ops-workspace .booking-payment-tabs{width:fit-content;max-width:100%;flex-wrap:wrap;margin-bottom:16px}
+.ops-workspace .booking-payment-tabs button{flex:1 0 auto;min-height:44px;font-size:12px;font-weight:550;color:var(--ink);padding-inline:10px}
+.ops-workspace .booking-payment-tabs button span{font-size:10px}
 .ops-workspace .pt-row input[type=checkbox]{width:18px;height:18px;flex:none}
 .ops-workspace .pt-card details p{margin-top:12px;overflow-wrap:anywhere}

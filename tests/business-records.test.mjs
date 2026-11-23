@@ -32,6 +32,34 @@ test('uncertain, expired, overlapping and cancelled costs are never auto-filled'
  assert.equal(knownCosts({...base,status:'キャンセル'},slug,[master]).costs.length,0);
  assert.equal(knownCosts({...base,people:null},slug,[master]).costs.length,0);
 });
+test('payment grouping follows live Stripe payments, recorded receipts and exact historical Stripe references',async()=>{
+ const db=openTestDb();
+ const cases=[
+  {...base,id:'saved-before-payment',requestId:'later-stripe',stripeSource:'',received:null,paymentDate:''},
+  {...base,id:'checkout-only',stripeSource:'cs_live_pending',received:null,paymentDate:''},
+  {...base,id:'historical',stripeSource:'ch_historical',received:null,paymentDate:''},
+  {...base,id:'legacy-refunded',stripeSource:'ch_legacy',received:0},
+  {...base,id:'manual-receipt',stripeSource:''},
+  {...base,id:'same-quote',stripeSource:'',received:null,paymentDate:''},
+ ];
+ for(const b of cases)await saveRecord(db,'booking',b,0,'operator');
+ await saveRecord(db,'snapshot',{id:'stripe-history',source:'stripe',start:'2026-09-01',end:'2026-09-30',data:{payments:[{source:'ch_historical',amount:40000}]}},0,'operator');
+ const create=requestId=>createReservation(db,{requestId,flow:'experience',experienceSlug:master.autoCost.slug,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
+ const [stripe,manual,sandbox]=await Promise.all(['later-stripe','manual-native','test-mode'].map(create));
+ const facts={amountTotal:40000,paymentStatus:'paid',occurredAt:'2026-11-16T10:00:00Z'};
+ await applyPayment(db,stripe.id,{...facts,eventId:'stripe-paid',paymentIntent:'pi_later'});
+ await applyRefund(db,stripe.id,{eventId:'stripe-refunded',paymentIntent:'pi_later',chargeId:'ch_later',amountRefundedTotal:40000,occurredAt:'2026-11-16T11:00:00Z'});
+ await applyPayment(db,manual.id,{...facts,eventId:'manual-paid'});
+ await applyPayment(db,sandbox.id,{...facts,eventId:'test-paid',paymentIntent:'pi_sandbox',livemode:false});
+ const {bookings}=await allData(db);
+ const groups=Object.fromEntries(bookings.map(b=>[b.id,b.paymentGroup]));
+ assert.deepEqual(groups,{
+  'saved-before-payment':'stripe','checkout-only':'unpaid','historical':'stripe',
+  'legacy-refunded':'stripe','manual-receipt':'other','same-quote':'unpaid',
+  ['reservation:'+manual.id]:'other',['reservation:'+sandbox.id]:'unpaid',
+ });
+ assert.equal(bookings.find(b=>b.id==='saved-before-payment').received,null);
+});
 test('charge-only saved cases use Stripe-verified intent identities and never duplicate supplier costs',async(t)=>{
  const db=openTestDb();await saveRecord(db,'master',master,0,'test');
  const r=await createReservation(db,{requestId:'charge-request',flow:'experience',experienceSlug:master.autoCost.slug,experienceDate:base.date,guests:2,lines:[{kind:'base',description:'Spa',commissionable:true,grossJpy:40000}]},null);
