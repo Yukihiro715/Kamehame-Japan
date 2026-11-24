@@ -2249,8 +2249,8 @@ export const experiences: Experience[] = [
     // Trip in real Japan (TRJK), Tokyo: samurai street walk in Kitasenju plus
     // a sword workshop. Built 2026-10-14 from the operator's public page; the
     // operator's name, the venue name and the instructor's name stay off the
-    // page. Public price ¥40,000 per person (2–5), solo ¥55,000; our sale price
-    // and wholesale are not agreed, so the page stays in "preview".
+    // page. Partner requested preview prices: ¥40,000 per person for 2–5,
+    // or ¥55,000 for one. Keep in preview until final approval.
     slug: "samurai-street-walk-kitasenju", city: "tokyo", category: "samurai", bookingType: "request", status: "preview",
     title: "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo",
     tagline: "Dress in samurai attire, walk the old post-town streets of Kitasenju for an hour, then train with a sword-fighting instructor and learn what bushido asked of the people who lived by it. About two and a half hours, finished with Japanese tea.",
@@ -2258,15 +2258,15 @@ export const experiences: Experience[] = [
       "Kitasenju was the first post town on the road north out of Edo, and its back streets still keep the scale of that time. This experience puts you in samurai dress and walks you through them with a professional samurai performer, past the old gateway of Senju-juku, local shops and a temple, before returning to the venue for the hands-on part.",
       "Back inside, the instructor, trained in Yagyu Shinkage-ryu swordsmanship, teaches the posture, the grip and the basic cuts, and talks about the code behind them. The session ends with commemorative photos in costume and a cup of Japanese tea. It runs for one to five guests, so it is always your own group.",
     ],
-    duration: "About 2.5 hours", price: "¥56,500", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
+    duration: "About 2.5 hours", price: "¥40,000", priceUnit: "person", group: "Private · 1–5 guests", ages: "Ages 6+ (children with an adult; solo guests 18+)", area: "Tokyo (Kitasenju, Adachi)",
     img: "/images/samurai-walk-pair.jpg", alt: "A guest in a black kimono and the samurai master in hakama walking down a Kitasenju shopping street",
     gallery: [
       { img: "/images/samurai-walk-master.jpg", alt: "The samurai master in a black kimono holding a sword in front of a calligraphy scroll" },
-      { img: "/images/tate-swords-window.jpg", alt: "Two guests in kimono crossing swords in a tatami room" },
+      { img: "/images/samurai-walk-senju-gateway.jpg", alt: "Two people in samurai attire beneath the Senju-juku sign in Kitasenju" },
     ],
     galleryNote: "Photos from the operator's own pages.",
     partySize: { min: 1, max: 5 },
-    pricing: { soloSupplement: 18500 },
+    pricing: { soloSupplement: 15000 },
     availability: { daily: false, startTimes: ["16:00"], cutoffDays: 7, cutoffTime: "18:00" },
     availabilityNote: "Runs on selected dates from August to December 2026; tell us your preferred date and we confirm the nearest one.",
     scheduleNote: "Timings counted from the 4:00 pm start; the walk is about an hour.",
@@ -2303,7 +2303,7 @@ export const experiences: Experience[] = [
       { time: "2:30", title: "Change and finish" },
     ],
     venue: {
-      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥75,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
+      known: ["A traditional-style venue in Kitasenju, Adachi, Tokyo — the exact address and meeting point come with your confirmation", "The walk is on public streets: wear shoes you can walk in for an hour", "Solo guests pay the single-participant rate (¥55,000); children aged 6 to 11 join with an adult aged 18 or over; under 6 cannot take part"],
       afterBooking: ["The venue's name and address", "Directions from Kitasenju station", "A phone number for the day"],
       img: "/images/samurai-walk-master.jpg", alt: "The samurai master with a sword before a calligraphy scroll",
     },
@@ -2318,7 +2318,7 @@ export const experiences: Experience[] = [
       { q: "What do we actually do?", a: "You dress in samurai attire, walk Kitasenju's old streets with a samurai performer for about an hour, then take a sword workshop with a bushido talk back at the venue. Photos in costume and Japanese tea close the session." },
       { q: "Is it taught in English?", a: "The experience is run for international guests with English guidance. Tell us your language when you request and we will confirm what is available for your date." },
       { q: "Can children join?", a: "From age 6, accompanied by an adult aged 18 or over. Children pay the same price as adults. Under 6 cannot take part." },
-      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥75,000; groups of two to five pay ¥56,500 per person." },
+      { q: "I'm travelling alone. Can I book?", a: "Yes, from age 18. A single participant pays ¥55,000; groups of two to five pay ¥40,000 per person." },
       { q: "When does it run?", a: "On selected dates from August to December 2026, from 4:00 pm to about 6:30 pm. Tell us your preferred date and we confirm the nearest one that runs." },
       { q: "What should I wear?", a: "Comfortable clothes you can change out of easily, and shoes you can walk in: the samurai attire goes on at the venue and the walk lasts about an hour." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
@@ -2327,7 +2327,7 @@ export const experiences: Experience[] = [
     whatYoullDo: ["Dress in samurai attire", "Walk Kitasenju's old post-town streets for an hour", "Train with a sword-fighting instructor and hear about bushido", "Photos in costume and Japanese tea"],
     master: { title: "Your instructor", bio: "A samurai performer and sword-fighting instructor trained in Yagyu Shinkage-ryu swordsmanship, who has guided international guests through Kitasenju for years.", quote: "" },
     itinerary: ["0:00 — Dress as a samurai", "0:20 — Street walk through Kitasenju", "1:20 — Back at the venue", "1:30 — Samurai workshop and bushido", "2:20 — Photos and tea", "2:30 — Change and finish"],
-    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥75,000; two to five pay ¥56,500 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
+    goodToKnow: ["About 2.5 hours, 4:00 pm to 6:30 pm, on selected dates from August to December 2026.", "Private, 1–5 guests. Solo guests pay ¥55,000; two to five pay ¥40,000 each.", "Children from 6 with an adult; under 6 cannot take part.", "English guidance."],
     story: { heading: "The first town on the road north", body: "Travellers leaving Edo for the north spent their first night at Senju-juku. The poet Basho set off from here on his Narrow Road. Walking it in samurai dress, with someone who can read the street for you, puts you inside that story rather than in front of it." },
   },
   {
@@ -2341,7 +2341,7 @@ export const experiences: Experience[] = [
     tagline: "Learn tate, the choreographed sword combat of Japanese stage and film, from a professional performer: costume, posture, timing and a partner duel you perform at the end. With a master's sword-dance performance, a short calligraphy session and matcha with sweets. About 90 minutes, private; the exact finish time is confirmed for your session.",
     overview: [
       "Tate is the art behind every sword fight you have seen in a Japanese film: not real combat, but precision, rhythm, posture and trust between partners. In this private session a performer from a classical sword-performance school dresses you in samurai costume, gives a short introduction to bushido, and teaches the movements and timing of a fight scene step by step.",
-      "You rehearse with a partner, then perform a short duel together. The master then performs kenbu, the sword dance, for you; you try a few characters with a brush and keep the sheet; and the session closes with matcha and traditional sweets. Groups are private, two to six guests, on Mondays, Tuesdays, Thursdays and Saturdays from September to November 2026.",
+      "You rehearse with a partner, then perform a short duel together. The master then performs kenbu, the sword dance, for you; you try a few characters with a brush and keep the sheet; and the session closes with matcha and traditional sweets. Groups are private, two to six guests, with two sessions on each confirmed date, at 13:00 and 15:00.",
     ],
     duration: "About 90 minutes", price: "¥47,500", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (younger children on request)", area: "Tokyo (Adachi, Tobu Skytree Line)",
     img: "/images/tate-swords-window.jpg", alt: "Two guests in kimono crossing swords by the shoji window of a tatami room",
@@ -2408,7 +2408,7 @@ export const experiences: Experience[] = [
       { date: "2026-11-28", times: ["13:00", "15:00"] },
       { date: "2026-11-30", times: ["13:00", "15:00"] }
     ] },
-    availabilityNote: "Mondays, Tuesdays, Thursdays and Saturdays from 1 September to 30 November 2026. Request a 13:00 or 15:00 start at least seven days ahead; the exact finish time is confirmed separately.",
+    availabilityNote: "Sessions start at 13:00 and 15:00 on confirmed dates. Dates from December 2026 onward are being confirmed.",
     scheduleNote: "The sequence below is a guide. Allow about 90 minutes for the experience; we confirm the meeting and finish times before payment.",
     taxIncluded: true,
     interpreter: false,
@@ -2453,7 +2453,7 @@ export const experiences: Experience[] = [
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. heights for costume sizes; a child in the group; whether you would like a professional interpreter",
     flow: [
-      { title: "Choose a date and send your request", body: "Choose an offered Monday, Tuesday, Thursday or Saturday, at least seven days ahead. Request 13:00 or 15:00 and tell us your group size." },
+      { title: "Choose a date and send your request", body: "Choose a confirmed date at least seven days ahead, select 13:00 or 15:00, and tell us your group size." },
       { title: "We reply within 24 hours", body: "With the venue, the price for your group and the conditions." },
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The meeting station and directions come with your confirmation." },
     ],
@@ -2463,14 +2463,14 @@ export const experiences: Experience[] = [
       { q: "Is it taught in English?", a: "Basic English guidance is provided, with translation tools where needed. A professional English interpreter can be added for a fee; ask when you request." },
       { q: "Can children join?", a: "Guests under 18 must be accompanied by an adult. Children under six may join by prior arrangement; tell us all ages when you request." },
       { q: "How many of us can come?", a: "Two to six guests, as a private group. Larger groups are quoted individually." },
-      { q: "When does it run?", a: "On Mondays, Tuesdays, Thursdays and Saturdays from September to November 2026. Request 13:00 or 15:00 at least seven days ahead. We confirm your meeting and finish times before payment." },
+      { q: "When does it run?", a: "Two sessions on confirmed dates, starting at 13:00 and 15:00. Dates from December 2026 onward are being confirmed. We confirm your meeting and finish times before payment." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the venue, the price and the conditions. Your booking is confirmed when you pay through the link we send." },
     ],
     whatYoullDo: ["Dress in samurai costume", "Learn the movements and timing of a sword fight scene", "Perform a duel with your partner", "Watch a kenbu sword-dance performance", "Try calligraphy, then matcha and sweets"],
     master: { title: "Your instructor", bio: "A professional performer and instructor of tate with a classical sword-performance school, who specialises in authentic samurai sword choreography and has taught many guests from abroad.", quote: "" },
     itinerary: ["Meet at the station", "Costume", "Bushido in five minutes", "Tate workshop", "The duel", "Kenbu performance", "Calligraphy, matcha and sweets", "End of the session"],
-    goodToKnow: ["About 90 minutes; the exact meeting and finish times are confirmed before payment.", "Mondays, Tuesdays, Thursdays and Saturdays from September to November 2026, with 13:00 and 15:00 requests.", "Private, 2–6 guests. Under-18s must be accompanied by an adult; under-sixes by prior arrangement.", "Basic English guidance; a professional interpreter can be added for a fee."],
+    goodToKnow: ["About 90 minutes; the exact meeting and finish times are confirmed before payment.", "Two sessions at 13:00 and 15:00. Dates from December 2026 onward are being confirmed.", "Private, 2–6 guests. Under-18s must be accompanied by an adult; under-sixes by prior arrangement.", "Basic English guidance; a professional interpreter can be added for a fee."],
     story: { heading: "Every sword fight you have ever seen", body: "The duels in Japanese film and on the kabuki stage are tate, and the people who perform them train for years. Learning one scene, slowly, with one of them, shows you how much of a fight is really a conversation." },
   },
   {
@@ -2485,9 +2485,9 @@ export const experiences: Experience[] = [
     tagline: "A two-hour seminar with a chef who has cooked Japanese food on both sides of the Pacific: sushi rice from scratch, rolls and nigiri, a dish built on fermented seasonings, a wagyu roast-beef roll, then a meal of chef-made chirashi sushi. In a cooking studio five minutes from Kichijoji station.",
     overview: [
       "This is a small cooking seminar, not a show: a professional chef demonstrates, then you cook. You start with sushi rice — washing, cooking and seasoning it properly — and go on to a dish using shibazuke pickles and crunchy soy-sauce almonds, a roll with Japanese wagyu roast beef, and nigiri with a chef's demonstration alongside.",
-      "Then you sit down to eat: premium chirashi sushi with seasonal fish prepared by the chef, and a soft-serve dessert made with moromi, the soy-sauce mash. The chef began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills before coming home to teach. The seminar is designed for international visitors and runs for eight guests on announced dates.",
+      "Then you sit down to eat: premium chirashi sushi with seasonal fish prepared by the chef, and a soft-serve dessert made with moromi, the soy-sauce mash. The chef began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills before coming home to teach. This trial seminar is open only to international guests. Requests are accepted for two or more people, up to eight, and the class goes ahead once eight people have signed up across all groups.",
     ],
-    duration: "2 hours", price: "¥29,500", priceUnit: "person", group: "Seminar · 8 guests", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
+    duration: "2 hours", price: "¥29,500", priceUnit: "person", group: "2–8 per request · 8 to run", ages: "Ages 10+", area: "Tokyo (Kichijoji, 5 minutes from the station)",
     img: "/images/kichijoji-chef-counter.jpg", alt: "The chef in whites at the kitchen counter, preparing sushi rolls",
     gallery: [
       { img: "/images/kichijoji-rolls.jpg", alt: "A row of salmon-topped sushi rolls on a slate board" },
@@ -2496,11 +2496,11 @@ export const experiences: Experience[] = [
       { img: "/images/kichijoji-chef-talk.jpg", alt: "The chef explaining a step to the class from behind the counter" },
     ],
     galleryNote: "Photos from the operator's own pages.",
-    partySize: { min: 1, max: 8 },
+    partySize: { min: 2, max: 8 },
     availability: { daily: false, startTimes: ["13:00"], cutoffDays: 14, cutoffTime: "18:00", dates: [
-      { date: "2026-11-21", times: ["13:00"] }, { date: "2026-12-10", times: ["13:00"] }, { date: "2027-01-14", times: ["13:00"] }, { date: "2027-02-14", times: ["13:00"] },
+      { date: "2027-01-14", times: ["13:00"] }, { date: "2027-02-14", times: ["13:00"] },
     ] },
-    availabilityNote: "Announced dates only; meet at 12:30 pm for a 1:00 pm start.",
+    availabilityNote: "No sessions in December 2026. The trial is scheduled for January and February 2027. Dates from March onward are being confirmed. Meet at 12:30 pm for a 1:00 pm start.",
     scheduleNote: "Timings counted from the 1:00 pm start; meet at 12:30 pm.",
     taxIncluded: true,
     interpreter: false,
@@ -2536,47 +2536,47 @@ export const experiences: Experience[] = [
       { time: "2:00", title: "End of the seminar" },
     ],
     venue: {
-      known: ["A cooking studio in Kichijoji, about five minutes on foot from Kichijoji station (JR Chuo Line and Keio Inokashira Line) — the exact address comes with your confirmation", "Knives and cooking equipment are used: guests follow the chef's safety instructions", "Food allergies: tell us when you request; some cannot be accommodated. Halal menus are not available"],
+      known: ["A cooking studio in Kichijoji, about five minutes on foot from Kichijoji station (JR Chuo Line and Keio Inokashira Line) — the exact address comes with your confirmation", "Knives and cooking equipment are used: guests follow the chef's safety instructions", "Food allergies: tell us when you request; some cannot be accommodated. Halal, vegetarian and vegan dietary requirements cannot be accommodated"],
       afterBooking: ["The studio's name and address", "Directions from Kichijoji station", "A phone number for the day"],
       img: "/images/kichijoji-chef-counter.jpg", alt: "The kitchen counter where the class is held",
     },
     notesLabel: "Allergies and requests (optional)",
-    notesHint: "e.g. a shellfish allergy; vegetarian in the group",
+    notesHint: "e.g. a shellfish allergy",
     flow: [
-      { title: "Choose a date and send your request", body: "Pick one of the announced dates and tell us how many of you there are and any allergies." },
+      { title: "Choose a date and send your request", body: "Choose a scheduled date and tell us your group size (at least two guests) and any allergies." },
       { title: "We reply within 24 hours", body: "With the price for your group and the conditions." },
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The studio's address comes with your confirmation." },
     ],
     faq: [
       { q: "What do we cook?", a: "Sushi rice from scratch, a dish with shibazuke pickles and crunchy soy-sauce almonds, roll sushi including a wagyu roast-beef roll, and nigiri. The chef then serves premium chirashi sushi with seasonal fish and a moromi soft-serve dessert." },
-      { q: "Is it in English?", a: "The seminar is designed for international visitors and foreign residents. Tell us your language when you request and we will confirm what is available for your date." },
+      { q: "Is it in English?", a: "This trial is open only to international guests. Tell us your language when you request and we will confirm what is available for your date." },
       { q: "Can children join?", a: "From age 10." },
-      { q: "I have a food allergy.", a: "Tell us when you request. Some allergies can be accommodated and some cannot; we confirm before you pay. Halal menus are not available." },
-      { q: "How many people take part?", a: "The seminar runs for eight guests. If fewer than eight have booked 14 days before the date, it is cancelled with a full refund." },
-      { q: "When does it run?", a: "On announced dates: 21 November and 10 December 2026, 14 January and 14 February 2027. Meet at 12:30 pm; the seminar runs from 1:00 pm to 3:00 pm." },
+      { q: "I have a food allergy.", a: "Tell us when you request. Some allergies can be accommodated and some cannot; we confirm before you pay. Halal, vegetarian and vegan dietary requirements cannot be accommodated." },
+      { q: "How many people take part?", a: "Groups of two or more may request places. The seminar goes ahead only when eight guests in total have signed up. If fewer than eight have booked 14 days before the date, it is cancelled with a full refund." },
+      { q: "When does it run?", a: "The trial is scheduled for 14 January and 14 February 2027. There is no December 2026 session. Dates from March onward are being confirmed. Meet at 12:30 pm; the seminar runs from 1:00 pm to 3:00 pm." },
       { q: "What is the cancellation policy?", a: "Free cancellation ends 10 days before the seminar; from 9 days before, the full price is charged." },
       { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We reply within 24 hours with the price and the conditions. Your booking is confirmed when you pay through the link we send." },
     ],
     whatYoullDo: ["Wash, cook and season sushi rice", "Make a dish with fermented Japanese seasonings", "Roll sushi, including a wagyu roast-beef roll, and press nigiri", "Eat chef-made chirashi sushi and a moromi soft-serve"],
     master: { title: "Your chef", bio: "Born in Tokyo, he began his career running a Japanese restaurant in Los Angeles, cooked across the United States and launched a hotel sushi bar in Beverly Hills. He now teaches sushi and Japanese cuisine in Tokyo and around the country.", quote: "" },
     itinerary: ["12:30 — Meet at the studio", "13:00 — Sushi rice", "13:25 — A fermented-seasoning dish", "13:45 — Rolls", "14:10 — Nigiri", "14:30 — The meal", "15:00 — End of the seminar"],
-    goodToKnow: ["2 hours, 1:00 pm to 3:00 pm, on announced dates; meet at 12:30 pm.", "A seminar of 8 guests; cancelled with a full refund if the minimum is not reached 14 days before.", "From age 10. Tell us about allergies when you request; no halal menu.", "For international guests."],
+    goodToKnow: ["2 hours, 1:00 pm to 3:00 pm, on announced dates; meet at 12:30 pm.", "Requests from 2 guests. The class is capped at 8 and cancelled with a full refund if fewer than 8 sign up by 14 days before.", "From age 10. Tell us about allergies when you request. Halal, vegetarian and vegan dietary requirements cannot be accommodated.", "Trial class for international guests only."],
     story: { heading: "The rice first", body: "Ask any sushi chef and the answer is the same: the rice matters more than the fish. Two hours with someone who has cooked it for American diners and Japanese ones alike is the fastest way to find out why." },
   },
   {
     // Trip in real Japan (TRJK) with the English Rakugo Association, Tokyo:
     // an English rakugo performance in Asakusa plus a guided walk. Built
     // 2026-10-14 from the public page; operator and performer names stay off
-    // the page. Public price ¥12,000; second and fourth Sundays, Oct–Dec 2026.
+    // the page. Public price ¥12,000. Preview schedule updated November 2026.
     // Wholesale not agreed. Preview until then.
     slug: "asakusa-english-rakugo-walk", city: "tokyo", category: "rakugo", bookingType: "request", status: "preview",
     title: "English Rakugo & Asakusa Cultural Walk, Tokyo",
-    tagline: "A live rakugo performance in English — Japan's comic storytelling, one performer and a whole cast of characters — with traditional variety acts, followed by an hour's guided walk through Asakusa. About four hours on a Sunday afternoon.",
+    tagline: "A live rakugo performance in English — Japan's comic storytelling, one performer and a whole cast of characters — with traditional variety acts, followed by an hour's guided walk through Asakusa. About four hours on selected afternoons.",
     overview: [
-      "Rakugo is one of Japan's oldest living performing arts: a storyteller on a cushion, a fan and a hand towel for props, and every character played by the same voice. In Asakusa, the district where Tokyo's popular entertainment grew up, an association of performers presents it entirely in English, together with traditional variety entertainment, at a public venue a few steps from the Kaminarimon gate.",
-      "After the performance, an English-speaking guide walks you through Asakusa for an hour: the well-known landmarks, and the streets linked to the theatres and entertainers of old Tokyo. The afternoon ends near the stations. It runs on the second and fourth Sundays from October to December 2026, for two to ten guests.",
+      "Rakugo is one of Japan's oldest living performing arts: a storyteller on a cushion, a fan and a hand towel for props, and every character played by the same voice. In Asakusa, the district where Tokyo's popular entertainment grew up, an association of performers presents it entirely in English, together with traditional variety entertainment, at one of three public venues in Asakusa.",
+      "After the performance, an English-speaking guide walks you through Asakusa for an hour: the well-known landmarks, and the streets linked to the theatres and entertainers of old Tokyo. The afternoon ends near the stations. From December 2026 to March 2027, the experience runs on selected dates for one to ten guests, with the same price and walking route across all three venues.",
     ],
-    duration: "About 4 hours", price: "¥21,500", priceUnit: "person", group: "2–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
+    duration: "About 4 hours", price: "¥21,500", priceUnit: "person", group: "1–10 guests", ages: "Ages 6+", area: "Tokyo (Asakusa)",
     img: "/images/rakugo-performer.jpg", alt: "A rakugo performer in a grey kimono kneeling on a red cushion, telling a story in English",
     gallery: [
       { img: "/images/rakugo-audience.jpg", alt: "The audience seated in the small hall before the performance" },
@@ -2586,12 +2586,19 @@ export const experiences: Experience[] = [
       { img: "/images/asakusa-pagoda.jpg", alt: "The five-storey pagoda of Senso-ji" },
     ],
     galleryNote: "Photos from the operator's own pages.",
-    partySize: { min: 2, max: 10 },
-    availability: { daily: false, startTimes: ["13:30"], cutoffDays: 7, cutoffTime: "18:00", dates: [
-      { date: "2026-10-25", times: ["13:30"] }, { date: "2026-11-08", times: ["13:30"] }, { date: "2026-11-22", times: ["13:30"] }, { date: "2026-12-13", times: ["13:30"] }, { date: "2026-12-27", times: ["13:30"] },
+    partySize: { min: 1, max: 10 },
+    availability: { daily: false, startTimes: ["12:30", "13:30"], cutoffDays: 7, cutoffTime: "18:00", dates: [
+      { date: "2026-12-13", times: ["13:30"] },
+      { date: "2026-12-27", times: ["13:30"] },
+      { date: "2027-01-10", times: ["13:30"] },
+      { date: "2027-01-24", times: ["13:30"] },
+      { date: "2027-01-30", times: ["12:30"] },
+      { date: "2027-02-14", times: ["13:30"] },
+      { date: "2027-02-28", times: ["13:30"] },
+      { date: "2027-03-14", times: ["13:30"] },
     ] },
-    availabilityNote: "Second and fourth Sundays, October to December 2026; meet at 1:30 pm.",
-    scheduleNote: "Timings for the 1:30 pm meeting; the performance begins at 2:00 pm.",
+    availabilityNote: "Asakusa Culture Tourist Information Center, 13:30: 13 and 27 December 2026, 24 January, 14 and 28 February, and 14 March 2027. Taito Kumin Kaikan, 13:30: 10 January 2027. Asakusa Public Hall, 12:30: 30 January 2027.",
+    scheduleNote: "Times below are relative to the meeting time for your date.",
     taxIncluded: true,
     interpreter: false,
     langTag: "Performed and guided in English",
@@ -2602,7 +2609,7 @@ export const experiences: Experience[] = [
     highlights: [
       { icon: "chat", title: "Rakugo you can actually follow", body: "A regular public performance by an association of rakugo performers who work in English, with traditional variety acts between the stories." },
       { icon: "flag", title: "Asakusa with a guide", body: "An hour on foot through the landmarks and the back streets where Tokyo's theatres and entertainers made their living." },
-      { icon: "group", title: "Small and easy", body: "Two to ten guests, from age 6, on Sunday afternoons. Comfortable shoes are the only equipment." },
+      { icon: "group", title: "Small and easy", body: "One to ten guests, from age 6, on selected afternoons. Comfortable shoes are the only equipment." },
     ],
     included: [
       "Admission (unreserved seating) to the association's regular English rakugo performance",
@@ -2615,21 +2622,21 @@ export const experiences: Experience[] = [
       "Shopping and personal expenses",
     ],
     schedule: [
-      { time: "0:00", title: "Meet in Asakusa", body: "Check in at the tourist information centre's ground-floor lobby, opposite the Kaminarimon gate." },
+      { time: "0:00", title: "Meet in Asakusa", body: "Check in at the meeting point for your date." },
       { time: "0:30", title: "English rakugo", body: "Two hours of stories and traditional variety entertainment, performed entirely in English.", img: "/images/rakugo-performer.jpg" },
       { time: "2:30", title: "Break", body: "Half an hour before the walk." },
       { time: "3:00", title: "Asakusa walk", body: "An hour with your guide: the famous sights and the streets of old Tokyo's entertainment district." },
       { time: "4:00", title: "End near the stations" },
     ],
     venue: {
-      known: ["The performance is at the Asakusa Culture Tourist Information Center, across from the Kaminarimon gate; the walk is on public streets nearby", "Late arrivals may not be admitted to the performance: please be at the meeting point by 1:30 pm", "The walk goes ahead in light rain; the route may change with the weather or local conditions"],
+      known: ["The venue varies by date. The guided walk follows the same route from each venue", "Late arrivals may not be admitted to the performance: please be at the meeting point at the listed time", "The walk goes ahead in light rain; the route may change with the weather or local conditions"],
       afterBooking: ["Exactly where to meet in the lobby", "A phone number for the day"],
-      img: "/images/asakusa-kaminarimon-day.jpg", alt: "The Kaminarimon gate, across from the meeting point",
+      img: "/images/asakusa-kaminarimon-day.jpg", alt: "The Kaminarimon gate on the Asakusa walk",
     },
     notesLabel: "Anything we should know (optional)",
     notesHint: "e.g. children in the group; mobility needs for the walk",
     flow: [
-      { title: "Choose a date and send your request", body: "Pick one of the Sunday dates and tell us how many of you there are." },
+      { title: "Choose a date and send your request", body: "Pick an announced date and tell us how many of you there are." },
       { title: "We reply within 24 hours", body: "With the price for your group and the conditions." },
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The meeting details come with your confirmation." },
     ],
@@ -2637,7 +2644,7 @@ export const experiences: Experience[] = [
       { q: "What is rakugo?", a: "Comic storytelling, performed solo: the storyteller kneels on a cushion and plays every character with voice, a fan and a hand towel. It has been performed for more than three hundred years." },
       { q: "Will I understand it?", a: "Yes: the whole performance is in English, by performers who specialise in English rakugo. Performers vary from one date to another." },
       { q: "Can children join?", a: "From age 6. Under 6 cannot take part." },
-      { q: "When does it run?", a: "Second and fourth Sundays from October to December 2026, meeting at 1:30 pm and ending around 5:30 pm." },
+      { q: "When does it run?", a: "Selected dates from December 2026 to March 2027. Meet at 13:30 on most dates and at 12:30 on 30 January. See the schedule for the venue." },
       { q: "What should I bring?", a: "Comfortable walking shoes; the walk lasts about an hour." },
       { q: "What if it rains?", a: "The walk goes ahead in light rain. In severe weather it may be changed or cancelled; the performance is indoors." },
       { q: "What is the cancellation policy?", a: "Free until 7 days before the date; from 6 days before, including no-shows, the full price. Days are counted in Japan time." },
@@ -2645,8 +2652,8 @@ export const experiences: Experience[] = [
     ],
     whatYoullDo: ["Watch a two-hour rakugo performance in English, with variety acts", "Walk Asakusa for an hour with an English-speaking guide", "See the Kaminarimon gate, the five-storey pagoda and Denboin-dori"],
     master: { title: "The performers", bio: "An association of rakugo performers who present the art entirely in English at regular public performances in Asakusa, joined by performers of traditional variety entertainment. The line-up changes from date to date.", quote: "" },
-    itinerary: ["13:30 — Meet in Asakusa", "14:00 — English rakugo and variety acts", "16:00 — Break", "16:30 — Asakusa walk", "17:30 — End near the stations"],
-    goodToKnow: ["About 4 hours, 1:30 pm to 5:30 pm, on the second and fourth Sundays from October to December 2026.", "2–10 guests, from age 6.", "Comfortable walking shoes. Light rain does not stop the walk.", "Performed and guided in English."],
+    itinerary: ["0:00 — Meet in Asakusa", "0:30 — English rakugo and variety acts", "2:30 — Break", "3:00 — Asakusa walk", "4:00 — End near the stations"],
+    goodToKnow: ["About 4 hours. Check the meeting time and venue for your date.", "1–10 guests, from age 6.", "Comfortable walking shoes. Light rain does not stop the walk.", "Performed and guided in English."],
     story: { heading: "One voice, a whole town", body: "A rakugo story has no set, no costume change and no second actor. A fan becomes chopsticks, a towel a purse, and the same voice plays the merchant, his wife and the fool who outwits them both. Hearing it in English, in the district that made it popular, is the easiest way into the form." },
   },
   {
