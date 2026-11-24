@@ -396,7 +396,7 @@ test("approved kendo tours and Yotsuya tea remain published", async () => {
 
 test("workshop previews and approved salons preserve publication status and partner privacy", async () => {
   const pages = [
-    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥56,500"],
+    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥40,000"],
     ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥47,500"],
     ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥29,500"],
     ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥21,500"],
@@ -726,13 +726,13 @@ test('additional advertising-inclusive prices render with the existing publicati
     assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
   }
   for(const lang of ['en','ja'])for(const [slug,price] of [
-    ['samurai-street-walk-kitasenju','¥56,500'],['tokyo-tate-samurai-sword-experience','¥47,500'],
+    ['samurai-street-walk-kitasenju','¥40,000'],['tokyo-tate-samurai-sword-experience','¥47,500'],
     ['kichijoji-japanese-cuisine-class','¥29,500'],['asakusa-english-rakugo-walk','¥21,500'],['tokyo-ninja-zen-meditation','¥44,000'],
   ]){
     const path=`/${lang}/tokyo/${slug}/`;
     const response=await render(path);assert.equal(response.status,200,path);
     const html=await response.text();assert.ok(html.includes(price),path);assert.match(html, /noindex/);
-    if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥75,000'));assert.ok(html.includes('¥113,000'));}
+    if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥55,000'));assert.ok(html.includes('¥80,000'));}
   }
 });
 
@@ -759,9 +759,9 @@ test("street walk per-person headline and solo supplement agree across all local
     const html = await response.text();
     const text = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ");
     // The first price is the booking headline, not a later FAQ or pricing table.
-    assert.equal(text.match(/¥[\d,]+/)?.[0], "¥56,500", `${lang} advertised rate`);
-    assert.ok(text.includes("¥75,000"), `${lang} solo rate`);
-    assert.ok(text.includes("¥113,000"), `${lang} two-guest quote`);
+    assert.equal(text.match(/¥[\d,]+/)?.[0], "¥40,000", `${lang} advertised rate`);
+    assert.ok(text.includes("¥55,000"), `${lang} solo rate`);
+    assert.ok(text.includes("¥80,000"), `${lang} two-guest quote`);
     assert.match(html, /noindex/, `${lang} remains unlisted`);
   }
 });

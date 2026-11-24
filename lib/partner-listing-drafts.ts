@@ -1,3 +1,5 @@
+import { yakushimaListingDrafts } from "./yakushima-listing-drafts";
+
 /** Partner listing previews. Supplier terms and source messages stay in the private
  * listing ledger. These drafts never enter the public catalog or checkout. */
 export interface ListingDraftCopy {
@@ -33,6 +35,7 @@ const sumiEProposedPrices = [
 ];
 
 export const partnerListingDrafts: ListingDraft[] = [
+  ...yakushimaListingDrafts,
   {
     slug: "tokyo-ninja-zen-night-walk",
     city: "tokyo",
@@ -55,19 +58,37 @@ export const partnerListingDrafts: ListingDraft[] = [
     slug: "mukojima-geisha-evening",
     city: "tokyo",
     priceOnRequest: true,
+    gallery: "photo",
+    images: [
+      { src: "/images/mukojima-geisha-hero.jpg", en: "A geisha performing in a traditional room", ja: "座敷で舞を披露する芸者", width: 800, height: 400 },
+      { src: "/images/mukojima-geisha-dance.jpg", en: "Three performers dancing with fans in a tatami room", ja: "座敷で扇を手に舞う3人", width: 500, height: 500 },
+      { src: "/images/mukojima-geisha-games.jpg", en: "Two participants seated across from each other for a parlour game", ja: "座敷で向かい合いお座敷遊びをする2人", width: 500, height: 500 },
+    ],
     en: {
       title: "Geisha Hospitality in Mukojima", area: "Tokyo · Mukojima",
-      lead: "An evening of Japanese cuisine, geisha performance and traditional parlour games in one of Tokyo's historic entertainment districts. A guided walk introduces the neighbourhood before dinner.",
-      details: [["Proposed schedule", "16:00 neighbourhood walk; 18:00 dinner and performances; around 21:00 finish"], ["Format", "Tailor-made arrangements, subject to confirmation"], ["Price", "Individual quotation; not yet available for booking"]],
+      lead: "Explore Mukojima and the Sumida River with a guide before an evening of Japanese cuisine, dance, music and traditional parlour games.",
+      details: [
+        ["Proposed schedule", "16:00 neighbourhood walk; 18:00 dinner and performances; around 21:00 finish"],
+        ["Date request", "Send your first, second and third choices. We arrange one date based on availability."],
+        ["Participants", "For 5–10 guests, at least four performers across dance and music, including an apprentice geisha. Groups of fewer than five are arranged separately."],
+        ["Language", "An English-speaking guide joins the riverside walk. At dinner, accompanying staff can help using a translation app. Request a professional interpreter in advance if needed."],
+        ["Interpreter option", "Reference price shared for the interpreter-accompanied option: ¥75,000 per person. The final price and what it includes are being confirmed."],
+      ],
       highlights: ["Explore the Sumida River neighbourhood", "Enjoy seasonal Japanese cuisine", "Discover geisha performance and parlour games"],
-      pending: ["Final terms for the proposed itinerary, party size and language support", "Selling price and included food and drinks", "Booking conditions and approved photos"],
+      pending: ["Final itinerary and booking terms", "Selling price, interpreter pricing and inclusions"],
     },
     ja: {
       title: "向島・芸者のおもてなし体験", area: "東京 · 向島",
-      lead: "向島の街歩きとともに、日本料理、芸者の演舞、お座敷遊びに触れる体験案です。希望日程・人数に合わせて内容を調整します。",
-      details: [["行程案", "16:00街歩き／18:00食事・演舞・お座敷遊び／21:00頃終了"], ["開催形式", "日程・人数に応じた個別手配。確定前の内容です"], ["料金", "個別見積・予約受付前"]],
+      lead: "ガイドと向島・隅田川沿いを散策したあと、日本料理を味わいながら芸者の舞や演奏、お座敷遊びを楽しみます。",
+      details: [
+        ["行程案", "16:00街歩き／18:00食事・演舞・お座敷遊び／21:00頃終了"],
+        ["希望日", "第1〜第3希望日をお知らせください。手配可能な日を1日調整します。"],
+        ["参加人数", "参加者5〜10名の場合、半玉を含め、立方・地方合わせて4名以上。参加者5名未満の場合は個別にご案内します。"],
+        ["対応言語", "墨堤散策には英語ガイドが同行します。料亭では同行スタッフが必要に応じて翻訳アプリでサポートします。通訳の同席を希望する場合は事前にお知らせください。"],
+        ["通訳同席プラン", "共有された参考額は1名75,000円。最終料金と料金に含まれる範囲は確認中です。"],
+      ],
       highlights: ["隅田川周辺の街を歩く", "季節の日本料理を味わう", "演舞やお座敷遊びに触れる"],
-      pending: ["企画中の最終行程・人数条件・言語対応", "販売価格・飲食の含有範囲", "予約条件・掲載写真"],
+      pending: ["最終行程・予約条件", "販売価格・通訳料金の内訳・含まれる内容"],
     },
   },
   {
