@@ -21,7 +21,7 @@ interface Reservation {id:string;request_id:string;external_ref:string|null;expe
 interface Payment {reservation_id:string;id:string;stripe_payment_intent:string|null;stripe_session_id:string|null;amount_total_jpy:number;occurred_at:string}
 /** Project the actual booking ledger, then let an existing operator record win.
  * Linking uses stable request/reservation/Stripe identities, never name or amount. */
-export async function reservationBookings(db:SqlDb,saved:Booking[],masters:Master[],env:StripeIdentityEnv,paidStripeSources:ReadonlySet<string>):Promise<BookingListItem[]> {
+export async function reservationBookings(db:SqlDb,saved:Booking[],masters:Master[],env:StripeIdentityEnv,paidStripeDates:ReadonlyMap<string,string>):Promise<BookingListItem[]> {
  const [reservations,payments,refunds,bus,identities]=await Promise.all([
   db.all<Reservation>(`SELECT r.*, c.customer_name FROM reservations r LEFT JOIN business_booking_context c ON c.reservation_id=r.id ORDER BY r.created_at DESC`),
   db.all<Payment>(`SELECT * FROM payments WHERE payment_status='paid' AND livemode=1 ORDER BY occurred_at DESC`),
@@ -51,34 +51,46 @@ export async function reservationBookings(db:SqlDb,saved:Booking[],masters:Maste
   for(const identity of await verifyStripeIdentities(db,env,missing))stripeIds.set(identity.source_id,identity.payment_intent);
  }
  const titles=new Map(catalogFor('ja').experiences.map(e=>[e.slug,e.title]));
- const paidStripeIntents=new Set<string>();
+ const paidStripeIntents=new Map<string,string>();
  for(const [source,intent] of stripeIds){
-  if(intent&&paidStripeSources.has(source))paidStripeIntents.add(intent);
+  const date=paidStripeDates.get(source);
+  if(!intent||date===undefined)continue;
+  const prior=paidStripeIntents.get(intent);
+  if(prior===undefined||date>prior)paidStripeIntents.set(intent,date);
  }
  const operatorBookings:BookingListItem[]=saved.map(b=>{
   const hasRecordedPayment=b.received!==null&&(b.received>0||!!b.paymentDate);
   const source=b.stripeSource.trim();
-  const hasStripePayment=paidStripeSources.has(source)||paidStripeIntents.has(source)
+  const sourceDate=paidStripeDates.get(source),intentDate=paidStripeIntents.get(source);
+  const hasStripePayment=sourceDate!==undefined||intentDate!==undefined
    ||hasRecordedPayment&&(isChargeSource(source)||/^(pi_|cs_live_)[A-Za-z0-9]+$/.test(source));
-  return {...b,paymentGroup:hasStripePayment?'stripe':hasRecordedPayment?'other':'unpaid'};
+  const paymentGroup=hasStripePayment?'stripe':hasRecordedPayment?'other':'unpaid';
+  // Fill missing dates for the list without changing the editable accounting date.
+  const listPaymentDate=paymentGroup==='unpaid'?'':b.paymentDate||sourceDate||intentDate||'';
+  return {...b,paymentGroup,listPaymentDate};
  });
  const result=[...operatorBookings];
  for(const r of reservations){
   const recorded=paymentsByReservation.get(r.id)??[];
-  const paymentGroup:BookingPaymentGroup=recorded.some(p=>p.amount_total_jpy>0&&(p.stripe_payment_intent||p.stripe_session_id))
-   ?'stripe':recorded.some(p=>p.amount_total_jpy>0)?'other':'unpaid';
+  const stripePayment=recorded.find(p=>p.amount_total_jpy>0&&(p.stripe_payment_intent||p.stripe_session_id));
+  const payment=stripePayment??recorded.find(p=>p.amount_total_jpy>0);
+  const paymentGroup:BookingPaymentGroup=stripePayment?'stripe':payment?'other':'unpaid';
+  const listPaymentDate=payment?jstDate(payment.occurred_at):'';
   const paid=new Map<string,Payment>();for(const p of recorded){const key=p.stripe_payment_intent||p.stripe_session_id||p.id;if(!paid.has(key))paid.set(key,p)}
   const list=[...paid.values()];
   const operators=operatorBookings.filter(b=>matches(b,r,list));
   if(operators.length){
    for(const b of operators){
-    if(paymentGroup==='stripe'||paymentGroup==='other'&&b.paymentGroup==='unpaid')b.paymentGroup=paymentGroup;
+    if(paymentGroup==='unpaid'||paymentGroup==='other'&&b.paymentGroup==='stripe')continue;
+    if(b.paymentDate)b.listPaymentDate=b.paymentDate;
+    else if(b.paymentGroup!==paymentGroup||listPaymentDate>b.listPaymentDate)b.listPaymentDate=listPaymentDate;
+    b.paymentGroup=paymentGroup;
    }
    continue;
   }
   const gross=list.reduce((s,p)=>s+p.amount_total_jpy,0),refund=refunds.find(x=>x.reservation_id===r.id)?.amount??0;
   const b:Booking={id:'reservation:'+r.id,reservationId:r.id,requestId:r.request_id,name:r.customer_name||r.external_ref||'予約 '+r.request_id.slice(0,8),product:titles.get(r.experience_slug)||r.experience_slug,date:r.experience_date??'',people:r.guests,status:r.status==='cancelled'?'キャンセル':r.status==='completed'?'実施済':list.length?'予約確定':'問い合わせ',sales:list.length?gross:null,received:list.length?Math.max(0,gross-refund):null,fee:null,paymentDate:list[0]?jstDate(list[0].occurred_at):'',stripeSource:list[0]?.stripe_payment_intent??'',costs:[],complete:false,note:'予約台帳から自動表示。未確認の原価・決済手数料は確認が必要です。'+(r.payment_status==='refunded'?' 全額返金済み。予約状況とは別に管理しています。':''),revision:0};
-  result.push({...knownCosts(b,r.experience_slug,masters),paymentGroup});
+  result.push({...knownCosts(b,r.experience_slug,masters),paymentGroup,listPaymentDate});
  }
  for(const r of bus){
   if(result.some(b=>b.id==='bus:'+r.id||b.id===r.reference||b.externalRef===r.reference||b.requestId===r.request_id))continue;
@@ -88,7 +100,7 @@ export async function reservationBookings(db:SqlDb,saved:Booking[],masters:Maste
    if(r.renters){const standard=golfersOf(r).length===r.people&&golfersOf(r).filter(g=>g.clubs).length===r.renters&&golfersOf(r).filter(g=>g.clubs).every(g=>g.hand==='right');const rate=masters.find(m=>m.id==='golfpaq-club'&&m.status==='confirmed'&&m.price!==null);costs.push({id:'bus-club-cost',label:'クラブレンタル',supplier:'GOLFPAQ',unit:standard&&rate?rate.price:null,qty:r.renters,status:standard&&rate?'confirmed':'unknown',payer:'company',paid:false,source:standard&&rate?rate.source:'/ops/bus-tours/'+r.id+'/',note:'通常右用セット以外は個別確認。お客様向け販売額を仕入原価に転用しない。'})}
    if(r.shoe_renters)costs.push({id:'bus-shoes-cost',label:'シューズレンタル',supplier:'GOLFPAQ',unit:null,qty:r.shoe_renters,status:'unknown',payer:'company',paid:false,source:'/ops/bus-tours/'+r.id+'/',note:'仕入単価は未確認。'});
   }
-  result.push({id:'bus:'+r.id,requestId:r.request_id,externalRef:r.reference,name:r.name,product:r.course+'／乗合ゴルフ',date:r.tour_date,people:r.people,status:r.status==='cancelled'||r.status==='unavailable'?'キャンセル':r.status==='confirmed'?'予約確定':'確認中',sales:r.total_yen,received:null,fee:null,paymentDate:'',stripeSource:'',costs,complete:false,note:'乗合ゴルフ申込台帳から自動表示。入金・追加費用・最終精算は別途照合。',revision:0,paymentGroup:'unpaid'});
+  result.push({id:'bus:'+r.id,requestId:r.request_id,externalRef:r.reference,name:r.name,product:r.course+'／乗合ゴルフ',date:r.tour_date,people:r.people,status:r.status==='cancelled'||r.status==='unavailable'?'キャンセル':r.status==='confirmed'?'予約確定':'確認中',sales:r.total_yen,received:null,fee:null,paymentDate:'',stripeSource:'',costs,complete:false,note:'乗合ゴルフ申込台帳から自動表示。入金・追加費用・最終精算は別途照合。',revision:0,paymentGroup:'unpaid',listPaymentDate:''});
  }
  return result;
 }

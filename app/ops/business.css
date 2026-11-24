@@ -58,5 +58,14 @@
 .ops-workspace .booking-payment-tabs{width:fit-content;max-width:100%;flex-wrap:wrap;margin-bottom:16px}
 .ops-workspace .booking-payment-tabs button{flex:1 0 auto;min-height:44px;font-size:12px;font-weight:550;color:var(--ink);padding-inline:10px}
 .ops-workspace .booking-payment-tabs button span{font-size:10px}
+.ops-workspace .booking-toolbar>select,.ops-workspace .booking-toolbar>.secondary{min-height:44px}
+.ops-workspace .booking-dates{display:grid;grid-template-columns:max-content max-content;align-items:baseline;gap:2px 8px;margin:0;font-variant-numeric:tabular-nums}
+.ops-workspace .booking-dates dt{font-size:10px;color:var(--muted)}
+.ops-workspace .booking-dates dd{margin:0}
+@media(max-width:760px){
+  .ops-workspace .booking-toolbar .search-input{flex:1 1 65%}
+  .ops-workspace .booking-toolbar>select{flex:1 1 135px}
+  .ops-workspace .booking-toolbar>select:last-of-type{flex-basis:185px}
+}
 .ops-workspace .pt-row input[type=checkbox]{width:18px;height:18px;flex:none}
 .ops-workspace .pt-card details p{margin-top:12px;overflow-wrap:anywhere}
