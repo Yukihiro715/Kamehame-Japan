@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {useEffect,useEffectEvent,useRef,useState} from 'react';
 import {LayoutDashboard,BriefcaseBusiness,Tags,Megaphone,Search,Package,History,ArrowUpRight,RefreshCw,Plus,ChevronRight,Check,AlertCircle,X,Download,ExternalLink,Save,Trash2,Sparkles,TrendingUp,Settings2} from 'lucide-react';
 import {sumMetric,previousMonth} from '@/lib/business/metrics.mjs';
-import {type Booking,type BookingListItem,type BookingPaymentGroup,type Master,type Cost,costTotal,uncertain,yen,statusLabel} from '@/lib/business/model';
+import {type Booking,type BookingDateOrder,type BookingListItem,type BookingPaymentGroup,type Master,type Cost,costTotal,sortBookingsByDate,uncertain,yen,statusLabel} from '@/lib/business/model';
 type AdRow={id:string;name:string;spend:number;clicks:number;impressions:number;conversions:number|null;purchases?:number|null};
 type Payment={id:string;source:string;amount:number;fee:number;date:string};
 type Traffic={key:string;sessions:number;keyEvents:number};
@@ -32,6 +32,7 @@ export default function Dashboard(){
 const [tab,setTab]=useState('overview'),[data,setData]=useState<Data>(empty),[loading,setLoading]=useState(true),[error,setError]=useState(''),[login,setLogin]=useState(''),[toast,setToast]=useState(''),[query,setQuery]=useState(''),[filter,setFilter]=useState('all'),[busy,setBusy]=useState<Record<string,boolean>>({}),[errors,setErrors]=useState<Record<string,string>>({}),[reconnect,setReconnect]=useState(''),[edit,setEdit]=useState<Booking|null>(null),[editMaster,setEditMaster]=useState<Master|null>(null),[saving,setSaving]=useState(false),[period,setPeriod]=useState('month'),[start,setStart]=useState(dateOffset(0).slice(0,7)+'-01'),[end,setEnd]=useState(dateOffset(0)),[catalog,setCatalog]=useState<Catalog|null>(null),[catError,setCatError]=useState('');
 const [identityStatus,setIdentityStatus]=useState('');
 const [paymentView,setPaymentView]=useState<BookingPaymentGroup>('stripe');
+const [dateOrder,setDateOrder]=useState<BookingDateOrder>('payment-newest');
 const active=useRef(true),readRetry=useRef<ReturnType<typeof setTimeout>|null>(null);
 async function read(){
  if(readRetry.current){clearTimeout(readRetry.current);readRetry.current=null;}
@@ -72,7 +73,7 @@ const inPeriod=data.bookings.filter(b=>b.paymentDate>=start&&b.paymentDate<=end&
 const incomplete=data.bookings.filter(uncertain);const undated=data.bookings.filter(b=>!b.paymentDate&&costTotal(b)>0);const unlinked=(stripe?.data?.payments??[]).filter((p:Payment)=>!data.bookings.some(b=>b.stripeSource===p.source));const paymentCounts:Record<BookingPaymentGroup,number>={stripe:0,unpaid:0,other:0};
 for(const b of data.bookings)paymentCounts[b.paymentGroup]++;
 const visibleBookings=data.bookings.filter(b=>b.paymentGroup===paymentView);
-const shown=visibleBookings.filter(b=>(b.name+' '+b.product+' '+b.id).toLowerCase().includes(query.toLowerCase())&&(filter==='all'||filter==='incomplete'&&uncertain(b)||filter==='upcoming'&&b.date>=dateOffset(0)));
+const shown=sortBookingsByDate(visibleBookings.filter(b=>(b.name+' '+b.product+' '+b.id).toLowerCase().includes(query.toLowerCase())&&(filter==='all'||filter==='incomplete'&&uncertain(b)||filter==='upcoming'&&b.date>=dateOffset(0))),dateOrder);
 async function sync(source:string){const key=source+':'+rangeKey;if(inflight.current.has(key))return;inflight.current.add(key);setBusy(b=>({...b,[key]:true}));setErrors(e=>({...e,[key]:''}));try{const r=await fetch('/api/portal/ops/business/sync',{method:'POST',headers:{'Content-Type':'application/json','x-kh-portal':'1'},body:JSON.stringify({source,start,end})});const j:Snapshot & Failure=await r.json();if(!r.ok||!j.ok){if(j.status==='reauthentication_required')setReconnect(j.signInPath??'');throw new Error(j.message??j.error??'更新に失敗しました')}setData(d=>({...d,snapshots:[...d.snapshots.filter(s=>!(s.source===source&&s.start===start&&s.end===end)),j]}));}catch(e:unknown){setErrors(o=>({...o,[key]:message(e)}))}finally{inflight.current.delete(key);setBusy(b=>({...b,[key]:false}))}}
 async function syncAll(){await Promise.allSettled((data.syncSources??[]).map(sync));await read()}
 async function save(kind:'booking'|'master',payload:Booking|Master){setSaving(true);try{const r=await fetch('/api/portal/ops/business/record',{method:'POST',headers:{'Content-Type':'application/json','x-kh-portal':'1'},body:JSON.stringify({kind,payload,revision:payload.revision??0})});const d:Failure=await r.json();if(!r.ok)throw new Error(d.error);await read();setEdit(null);setEditMaster(null);setToast('保存しました。共有画面に反映されています。')}catch(e:unknown){setToast(message(e))}finally{setSaving(false)}}
@@ -105,14 +106,20 @@ return <div className="business-content"><div className="page-heading"><div><div
     <span>今後の体験 <b>{visibleBookings.filter(b=>b.date>=dateOffset(0)&&b.status!=='キャンセル').length}</b></span>
     <span>通貨 <b>JPY</b></span>
   </div>
-  <div className="toolbar">
-    <div className="search-input"><Search size={17}/><input aria-label="顧客名・体験・案件番号で検索" placeholder="顧客名・体験・案件番号で検索" value={query} onChange={e=>setQuery(e.target.value)}/></div>
+  <div className="toolbar booking-toolbar">
+    <div className="search-input"><Search size={17}/><input aria-label="顧客名・体験・案件番号で検索" placeholder="顧客名・体験・案件番号" value={query} onChange={e=>setQuery(e.target.value)}/></div>
+    <button className="secondary" onClick={exportCsv}><Download size={15}/>CSV</button>
     <select value={filter} onChange={e=>setFilter(e.target.value)} aria-label="案件絞り込み">
       <option value="all">絞り込みなし</option><option value="incomplete">未確定原価あり</option><option value="upcoming">今後の体験</option>
     </select>
-    <button className="secondary" onClick={exportCsv}><Download size={15}/>CSV</button>
+    <select value={dateOrder} onChange={e=>setDateOrder(e.target.value as BookingDateOrder)} aria-label="案件の並び順">
+      <option value="payment-newest">決済日が新しい順</option>
+      <option value="payment-oldest">決済日が古い順</option>
+      <option value="experience-earliest">体験実施日が早い順</option>
+      <option value="experience-latest">体験実施日が遅い順</option>
+    </select>
   </div>
-  <section className="panel"><BookingTable bookings={shown} onEdit={setEdit}/></section>
+  <section className="panel"><BookingTable bookings={shown} onEdit={setEdit} showPaymentDate/></section>
   <p className="muted small">現地でお客様が直接払う費用は、自社の売上・原価から除外。未確認は0円として確定扱いしません。案件利益は売上から登録原価・決済手数料を差し引いた金額です（広告費・固定費別）。案件をクリックして内訳を編集できます。</p>
   <BusinessImport enabled={!!data.user?.owner} onDone={read}/>
  </>}
@@ -128,7 +135,32 @@ return <div className="business-content"><div className="page-heading"><div><div
 {editMaster&&<MasterEditor master={editMaster} saving={saving} onClose={()=>setEditMaster(null)} onSave={m=>save('master',m)} products={catalog?.products??[]}/>}
 </div>}
 function Empty({text}:{text:string}){return <div className="empty"><div className="empty-symbol"><TrendingUp size={26}/></div><p>{text}</p></div>}
-function BookingTable({bookings,onEdit}:{bookings:Booking[];onEdit:(b:Booking)=>void}){return <div className="table-scroll"><table><thead><tr><th>案件 / 体験</th><th>実施日</th><th className="right">売上</th><th className="right">登録原価</th><th className="right">案件利益</th><th>原価状態</th><th/></tr></thead><tbody>{bookings.map(b=>{const profit=b.received==null||b.fee==null?null:b.received-costTotal(b)-b.fee;return <tr key={b.id} onClick={()=>onEdit(structuredClone(b))} className="clickable" tabIndex={0} onKeyDown={e=>{if(e.key==='Enter')onEdit(structuredClone(b))}}><td><strong>{b.name}</strong><small className="subcell">{b.product} · {b.people??'未確認'}名</small></td><td>{b.date||'実施日未確認'}<small className="subcell">{b.status}</small></td><td className="right">{yen(b.received)}</td><td className="right">{!b.costs.length&&!b.complete?'未登録':yen(costTotal(b))}</td><td className={'right bold '+(profit!==null&&profit<0?'negative':'')}>{yen(profit)}{uncertain(b)&&profit!==null&&<small className="subcell">暫定</small>}</td><td><Tag tone={uncertain(b)?'amber':'green'}>{uncertain(b)?'確認が必要':'登録済'}</Tag></td><td><ChevronRight size={16}/></td></tr>})}</tbody></table>{!bookings.length&&<Empty text="該当する案件はありません。"/>}</div>}
+function BookingTable({bookings,onEdit,showPaymentDate=false}:{bookings:BookingListItem[];onEdit:(b:Booking)=>void;showPaymentDate?:boolean}){
+  return <div className="table-scroll">
+    <table>
+      <thead><tr><th>案件 / 体験</th><th>{showPaymentDate?'日付':'実施日'}</th><th className="right">売上</th><th className="right">登録原価</th><th className="right">案件利益</th><th>原価状態</th><th/></tr></thead>
+      <tbody>{bookings.map(b=>{
+        const profit=b.received==null||b.fee==null?null:b.received-costTotal(b)-b.fee;
+        return <tr key={b.id} onClick={()=>onEdit(structuredClone(b))} className="clickable" tabIndex={0} onKeyDown={e=>{if(e.key==='Enter')onEdit(structuredClone(b))}}>
+          <td><strong>{b.name}</strong><small className="subcell">{b.product} · {b.people??'未確認'}名</small></td>
+          <td>
+            {showPaymentDate?<dl className="booking-dates">
+              <dt>決済日</dt><dd>{b.listPaymentDate||'—'}</dd>
+              <dt>体験実施日</dt><dd>{b.date||'—'}</dd>
+            </dl>:b.date||'実施日未確認'}
+            <small className="subcell">{b.status}</small>
+          </td>
+          <td className="right">{yen(b.received)}</td>
+          <td className="right">{!b.costs.length&&!b.complete?'未登録':yen(costTotal(b))}</td>
+          <td className={'right bold '+(profit!==null&&profit<0?'negative':'')}>{yen(profit)}{uncertain(b)&&profit!==null&&<small className="subcell">暫定</small>}</td>
+          <td><Tag tone={uncertain(b)?'amber':'green'}>{uncertain(b)?'確認が必要':'登録済'}</Tag></td>
+          <td><ChevronRight size={16}/></td>
+        </tr>;
+      })}</tbody>
+    </table>
+    {!bookings.length&&<Empty text="該当する案件はありません。"/>}
+  </div>;
+}
 function BookingEditor({booking,masters,saving,onClose,onSave}:{booking:Booking;masters:Master[];saving:boolean;onClose:()=>void;onSave:(b:Booking)=>void}){const [b,setB]=useState(structuredClone(booking));const [masterId,setMasterId]=useState('');function field<K extends keyof Booking>(k:K,v:Booking[K]){setB(o=>({...o,[k]:v}))}function cost<K extends keyof Cost>(id:string,k:K,v:Cost[K]){setB(o=>({...o,costs:o.costs.map(c=>c.id===id?{...c,[k]:v}:c)}))}const total=costTotal(b);return <div className="modal-backdrop"><section className="drawer" role="dialog" aria-modal="true" aria-label="案件・原価を編集"><div className="drawer-head"><div><div className="business-eyebrow">BOOKING & COSTS</div><h2>{b.name||'新規案件'}</h2></div><button className="icon-button" onClick={onClose} aria-label="閉じる"><X/></button></div><form onSubmit={e=>{e.preventDefault();onSave(b)}}><div className="drawer-body"><div className="form-grid"><label>顧客名<input required value={b.name} onChange={e=>field('name',e.target.value)}/></label><label>体験・商品<input required value={b.product} onChange={e=>field('product',e.target.value)}/></label><label>実施日<input type="date" required value={b.date} onChange={e=>field('date',e.target.value)}/></label><label>人数<input type="number" min="1" value={b.people??''} onChange={e=>field('people',e.target.value===''?null:Number(e.target.value))}/></label><label>案件状況<select value={b.status} onChange={e=>field('status',e.target.value as Master['status'])}>{['問い合わせ','提案中','決済待ち','予約確定','実施済','実施確認待ち','キャンセル','確認中'].map(x=><option key={x}>{x}</option>)}</select></label><label>入金日<input type="date" value={b.paymentDate} onChange={e=>field('paymentDate',e.target.value)}/></label><label>販売価格（円）<input type="number" min="0" step="1" value={b.sales??''} onChange={e=>field('sales',e.target.value===''?null:Number(e.target.value))}/></label><label>売上（円）<input type="number" min="0" step="1" value={b.received??''} onChange={e=>field('received',e.target.value===''?null:Number(e.target.value))}/></label><label>決済手数料（円）<input type="number" min="0" step="1" placeholder="未確認は空欄" value={b.fee??''} onChange={e=>field('fee',e.target.value===''?null:Number(e.target.value))}/></label><label>Stripe照合ID（任意）<input value={b.stripeSource} onChange={e=>field('stripeSource',e.target.value)}/></label></div>
 <div className="section-title"><h3>原価の内訳</h3><span>税込 / JPY</span></div><div className="master-apply"><select value={masterId} onChange={e=>setMasterId(e.target.value)} aria-label="原価マスターを選択"><option value="">卸値マスターから追加</option>{masters.map(m=><option key={m.id} value={m.id}>{m.name} · {yen(m.price)}/{m.unit}</option>)}</select><button type="button" className="secondary" disabled={!masterId} onClick={()=>{const m=masters.find(x=>x.id===masterId)!;field('costs',[...b.costs,{...newCost(),label:m.name,supplier:m.supplier,unit:m.price,qty:m.unit==='人'?(b.people??1):1,status:m.status,source:m.source,note:m.note}]);setMasterId('')}}><Plus size={15}/>追加</button></div>
 {b.costs.map((c,i)=><div className="cost-entry" key={c.id}><div className="cost-head"><b>原価 {String(i+1).padStart(2,'0')}</b><button type="button" className="icon-button" aria-label="この原価を削除" onClick={()=>field('costs',b.costs.filter(x=>x.id!==c.id))}><Trash2 size={15}/></button></div><div className="form-grid"><label>項目<input required value={c.label} onChange={e=>cost(c.id,'label',e.target.value)} placeholder="プレー・往復バス"/></label><label>仕入先<input value={c.supplier} onChange={e=>cost(c.id,'supplier',e.target.value)}/></label></div><div className="cost-numbers"><label>単価（円）<input type="number" min="0" step="1" placeholder="未確認" value={c.unit??''} onChange={e=>cost(c.id,'unit',e.target.value===''?null:Number(e.target.value))}/></label><span>×</span><label>数量<input type="number" min="0" step="0.1" value={c.qty} onChange={e=>cost(c.id,'qty',Number(e.target.value))}/></label><span>=</span><strong>{c.unit===null?'未確認':yen(c.unit*c.qty)}</strong></div><div className="form-grid"><label>金額の確度<select value={c.status} onChange={e=>cost(c.id,'status',e.target.value as Cost['status'])}><option value="confirmed">確定</option><option value="estimate">見込</option><option value="unknown">未確認</option></select></label><label>支払者<select value={c.payer} onChange={e=>cost(c.id,'payer',e.target.value as Cost['payer'])}><option value="company">自社負担（原価に含める）</option><option value="customer">顧客現地払い（集計対象外）</option></select></label><label className="full">根拠URL・資料名<input value={c.source} onChange={e=>cost(c.id,'source',e.target.value)}/></label><label className="full">条件・メモ<input value={c.note} onChange={e=>cost(c.id,'note',e.target.value)}/></label></div><label className="checkbox"><input type="checkbox" checked={c.paid} onChange={e=>cost(c.id,'paid',e.target.checked)}/>仕入先への支払済みを確認</label></div>)}<button type="button" className="add-line" onClick={()=>field('costs',[...b.costs,newCost()])}><Plus size={16}/>原価項目を追加</button><label className="checkbox completeness"><input type="checkbox" checked={b.complete} onChange={e=>field('complete',e.target.checked)}/>この案件に必要な原価はすべて登録済み</label><label>案件メモ<textarea value={b.note} onChange={e=>field('note',e.target.value)} rows={3}/></label><div className="calc-summary"><div><span>自社負担の登録原価</span><strong>{yen(total)}</strong></div><div><span>売上 − 原価 − 決済手数料</span><strong>{b.received!=null&&b.fee!=null?yen(b.received-total-b.fee):'未確定'}</strong></div><small>{uncertain(b)?'未確認・見込があるため暫定です。':'登録原価に基づく残額です。'} 広告費・固定費は含みません。</small></div></div><div className="drawer-footer"><button type="button" className="secondary" onClick={onClose}>キャンセル</button><button type="submit" className="primary" disabled={saving}><Save size={16}/>{saving?'保存中…':'変更を保存'}</button></div></form></section></div>}

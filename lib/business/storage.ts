@@ -16,15 +16,19 @@ export async function allData(db:SqlDb,env:StripeIdentityEnv={}){
  const rows=await db.all<{kind:string;payload:string;revision:number;updated_at:string}>(`SELECT kind,payload,revision,updated_at FROM business_records`);
  const items=(kind:string)=>rows.filter(r=>r.kind===kind).map(r=>{const p=JSON.parse(r.payload);return {...p,revision:r.revision,updatedAt:kind==='snapshot'?(p.updatedAt??r.updated_at):r.updated_at}});
  const snapshots=items('snapshot') as Array<z.infer<typeof snapshot>>;
- const paidStripeSources=new Set<string>();
+ const paidStripeDates=new Map<string,string>();
  for(const s of snapshots){
   if(s.source!=='stripe'||!Array.isArray(s.data.payments))continue;
   for(const p of s.data.payments){
-   if(typeof p?.source==='string'&&p.source&&typeof p.amount==='number'&&p.amount>0)paidStripeSources.add(p.source);
+   if(typeof p?.source!=='string'||!p.source||typeof p.amount!=='number'||p.amount<=0)continue;
+   const parsedDate=date.safeParse(p.date);
+   const paymentDate=parsedDate.success?parsedDate.data:'';
+   const prior=paidStripeDates.get(p.source);
+   if(prior===undefined||paymentDate>prior)paidStripeDates.set(p.source,paymentDate);
   }
  }
  const masters=items('master') as Master[];
- return {bookings:await reservationBookings(db,items('booking') as Booking[],masters,env,paidStripeSources),masters,snapshots,audit:await db.all(`SELECT * FROM business_audit ORDER BY created_at DESC LIMIT 50`)};
+ return {bookings:await reservationBookings(db,items('booking') as Booking[],masters,env,paidStripeDates),masters,snapshots,audit:await db.all(`SELECT * FROM business_audit ORDER BY created_at DESC LIMIT 50`)};
 }
 export async function saveRecord(db:SqlDb,kind:'booking'|'master'|'snapshot',payload:unknown,revision:unknown,actor:string){
  const parsed=(kind==='booking'?booking:kind==='master'?master:snapshot).safeParse(payload);
