@@ -39,3 +39,20 @@ test('shared Bamboo Sky Terrace copy contributes to each locale’s sitemap key'
     : read(file);
   assert.notEqual(hashOf(terraceKey(read)), hashOf(terraceKey(updated)));
 });
+
+test('the production golf pages advertise only their localized editions when enabled', () => {
+  const golfEntries = ({ entries }) => entries.filter(e => /\/(golf-bus|golf-tours)\/$/.test(e.path));
+
+  assert.deepEqual(golfEntries(buildEntries(read)), []);
+  const live = golfEntries(buildEntries(read, { golfpaqLive: true }));
+  assert.deepEqual(live.map(e => e.path), [
+    '/en/golf-bus/', '/ja/golf-bus/', '/en/golf-tours/', '/ja/golf-tours/',
+  ]);
+  for (const page of ['golf-bus', 'golf-tours']) {
+    for (const lang of ['en', 'ja']) {
+      const entry = live.find(e => e.path === `/${lang}/${page}/`);
+      assert.deepEqual(entry.alternates, { en: `/en/${page}/`, ja: `/ja/${page}/` });
+      assert.equal(typeof entry.key, 'string');
+    }
+  }
+});

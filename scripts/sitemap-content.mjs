@@ -71,7 +71,7 @@ const join = (...parts) => (parts.some((p) => p == null) ? null : parts.join("\n
  * page inherits when they are newer: a city page is as new as its newest
  * experience.
  */
-export function buildEntries(read) {
+export function buildEntries(read, { golfpaqLive = false } = {}) {
   const src = (f) => read(f) ?? "";
   const catalog = src("lib/catalog.ts");
   const cat = Object.fromEntries(LANGS.map((l) => [l, src(CATALOG[l])]));
@@ -205,6 +205,24 @@ export function buildEntries(read) {
       else if (page === "privacy") opts.date = privacyDate;
       else opts.date = legalDate; // legal, terms
       add(`/${lang}/${page}/`, opts);
+    }
+  }
+
+  if (golfpaqLive) {
+    // The bus copy currently has English and Japanese editions.
+    const golfLocales = ["en", "ja"];
+    const golfCopy = src("lib/golfpaq-copy.ts");
+    for (const page of ["golf-bus", "golf-tours"]) {
+      const pagePath = (lang) => `/${lang}/${page}/`;
+      const key = join(src(`app/[lang]/${page}/page.tsx`), golfCopy);
+      for (const lang of golfLocales) {
+        add(pagePath(lang), {
+          priority: "0.7",
+          changefreq: "weekly",
+          alternates: siblings(pagePath, golfLocales),
+          key,
+        });
+      }
     }
   }
 

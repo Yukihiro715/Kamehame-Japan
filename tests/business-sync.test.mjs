@@ -247,7 +247,16 @@ test('Search Console uses fixed domain and separate totals, converts CTR, retain
  const r=await sync(db,env,{source:'seo',...period},'test');
  assert.equal(r.data.current.ctr,10);assert.equal(r.data.current.avgPosition,4.5);assert.equal(r.data.settledThrough,'2026-11-14');assert.equal(r.data.dailyRows[0].date,'2026-11-01');
 });
-function ga(dimensions,rows,count=rows.length,metadata={}){return {dimensionHeaders:dimensions.map(name=>({name})),metricHeaders:[{name:'sessions'},{name:'keyEvents'}],rows:rows.map(([key,sessions,keyEvents])=>({dimensionValues:dimensions.length?[{value:key}]:[],metricValues:[{value:String(sessions)},{value:String(keyEvents)}]})),rowCount:count,metadata:{timeZone:'Asia/Tokyo',...metadata}}}
+function ga(dimensions,rows,count=rows.length,metadata={},metrics=['sessions','keyEvents']){
+ return {
+  dimensionHeaders:dimensions.map(name=>({name})),metricHeaders:metrics.map(name=>({name})),
+  rows:rows.map(([key,...values])=>({
+   dimensionValues:dimensions.length?[{value:key}]:[],
+   metricValues:metrics.map((_,index)=>({value:String(values[index]??0)})),
+  })),
+  rowCount:count,metadata:{timeZone:'Asia/Tokyo',...metadata},
+ };
+}
 test('GA4 filters organic by session channel, reads key events and never substitutes revenue',async(t)=>{
  const db=openTestDb();
  t.mock.method(globalThis,'fetch',async(url,init)=>{
@@ -258,19 +267,51 @@ test('GA4 filters organic by session channel, reads key events and never substit
  });
  const r=await sync(db,env,{source:'organic',...period},'test');assert.equal(r.data.sessions,50);assert.equal(r.data.conversions,3);
 });
-test('GA4 AI uses exact domains, independent totals, and all landing-page pages',async(t)=>{
+test('GA4 separates ChatGPT ads, paginates AI landing pages and tracks purchases',async(t)=>{
  const db=openTestDb();
  t.mock.method(globalThis,'fetch',async(url,init)=>{
   if(url.includes('/token'))return json({access_token:'test-access'});
-  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name);
+  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name),metrics=b.metrics.map(m=>m.name);
   if(!b.dimensionFilter)return json(ga([],[['',100,10]]));
-  const f=b.dimensionFilter.filter;assert.equal(f.fieldName,'sessionSource');
-  const regex=new RegExp('^(?:'+f.stringFilter.value+')$','i');assert.ok(regex.test('chatgpt.com'));assert.ok(regex.test('www.perplexity.ai'));assert.ok(!regex.test('evilchatgpt.com'));assert.ok(!regex.test('google'));assert.ok(!regex.test('chatgpt.com.evil.example'));
-  if(!dims.length)return json(ga([],[['',10,2]]));
-  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,2]]));
-  return json(ga(dims,[[b.offset?'/en/golf/':'/en/',5,1]],2));
+  const event=b.dimensionFilter.andGroup.expressions[2]?.filter;
+  if(event){
+   assert.deepEqual(metrics,['eventCount']);
+   assert.deepEqual(event,{fieldName:'eventName',stringFilter:{matchType:'EXACT',value:'generate_lead',caseSensitive:true}});
+   const paid=!!b.dimensionFilter.andGroup.expressions[1].filter;
+   return json(ga(dims,[[paid?'/en/ads/':'/en/',paid?1:2]],1,{},metrics));
+  }
+  assert.deepEqual(metrics,['sessions','keyEvents','ecommercePurchases','purchaseRevenue']);
+  assert.equal(b.currencyCode,'JPY');
+  const [source,medium]=b.dimensionFilter.andGroup.expressions;
+  assert.equal(source.filter.fieldName,'sessionSource');
+  const matches=(filter,input)=>new RegExp('^(?:'+filter.stringFilter.value+')$','i').test(input);
+  assert.ok(matches(source.filter,'chatgpt.com'));
+  assert.ok(!matches(source.filter,'evilchatgpt.com'));
+  assert.ok(!matches(source.filter,'chatgpt.com.evil.example'));
+  if(medium.filter){
+   assert.ok(matches(source.filter,'chatgpt'));
+   assert.ok(!matches(source.filter,'perplexity.ai'));
+   assert.equal(medium.filter.fieldName,'sessionMedium');
+   assert.ok(matches(medium.filter,'cpc'));
+   assert.ok(!matches(medium.filter,'ai-assistant'));
+   return json(ga(dims,[[dims.length?'/en/ads/':'',5,1,0,0]],1,{},metrics));
+  }
+  assert.ok(matches(source.filter,'www.perplexity.ai'));
+  assert.ok(!matches(source.filter,'google'));
+  assert.ok(matches(medium.notExpression.filter,'paid_social'));
+  if(!dims.length)return json(ga([],[['',10,2,1,33000]],1,{},metrics));
+  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,2,1,33000]],1,{},metrics));
+  return json(ga(dims,[b.offset?['/en/golf/',6,0,0,0]:['/en/',4,2,1,33000]],2,{},metrics));
  });
- const r=await sync(db,env,{source:'aio',...period},'test');assert.equal(r.data.llmShareOfSessions,0.1);assert.equal(r.data.summary.keyEvents,2);assert.equal(r.data.landingPages.length,2);
+ const {data}=await sync(db,env,{source:'aio',...period},'test');
+ assert.equal(data.llmShareOfSessions,0.1);
+ assert.deepEqual(data.summary,{sessions:10,keyEvents:2,purchases:1,purchaseRevenue:33000,enquiries:2});
+ assert.deepEqual(data.landingPages.map(row=>row.key),['/en/golf/','/en/']);
+ assert.equal(data.landingPages[1].purchaseRevenue,33000);
+ assert.equal(data.landingPages[1].enquiries,2);
+ assert.equal(data.chatGptPaid.summary.sessions,5);
+ assert.equal(data.chatGptPaid.summary.enquiries,1);
+ assert.equal(data.chatGptPaid.landingPages[0].key,'/en/ads/');
 });
 test('incomplete GA4 or failed later page preserves the previous snapshot',async(t)=>{
  const db=openTestDb();
@@ -283,10 +324,10 @@ test('incomplete GA4 or failed later page preserves the previous snapshot',async
  await assert.rejects(sync(db,env,{source:'organic',...period},'test'),e=>e.code==='analytics_timezone_mismatch');
  t.mock.method(globalThis,'fetch',async(url,init)=>{
   if(url.includes('/token'))return json({access_token:'test-access'});
-  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name);
-  if(!dims.length)return json(ga([],[['',10,1]]));
-  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,1]]));
-  return b.offset?json({error:{message:'secret'}},403):json(ga(dims,[['/en/',5,1]],2));
+  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name),metrics=b.metrics.map(m=>m.name);
+  if(!dims.length)return json(ga([],[['',10,1]],1,{},metrics));
+  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,1]],1,{},metrics));
+  return b.offset?json({error:{message:'secret'}},403):json(ga(dims,[['/en/',5,1]],2,{},metrics));
  });
  await assert.rejects(sync(db,env,{source:'aio',...period},'test'));
  assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,1);
