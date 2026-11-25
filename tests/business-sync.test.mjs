@@ -10,6 +10,55 @@ const {sync,syncSources}=await vite.ssrLoadModule('/lib/business/sync.ts');
 const env={GOOGLE_ADS_CLIENT_ID:'test-client',GOOGLE_ADS_CLIENT_SECRET:'test-secret',GOOGLE_ADS_REFRESH_TOKEN:'test-refresh'};
 const period={start:'2026-11-01',end:'2026-11-16'};
 const json=(d,status=200)=>new Response(JSON.stringify(d),{status});
+const openAiKey={OPENAI_ADS_API_KEY:'test-advertiser-key'};
+const openAiAccount={id:'adacct_fixture',url:'https://kamehame-japan.com/en/golf-tours/',currency_code:'JPY',timezone:'Asia/Tokyo'};
+const reportStart=Date.parse('2026-11-01T00:00:00+09:00')/1000;
+const reportEnd=Date.parse('2026-11-17T00:00:00+09:00')/1000;
+const accountSpend={ad_account_id:openAiAccount.id,start_time:reportStart+86400,end_time:reportEnd,spend:1000.42};
+const insights=data=>({object:'list',has_more:false,data});
+test('ChatGPT Ads sync uses the verified account and an exclusive JST end, storing reported spend in JPY',async(t)=>{
+ const db=openTestDb();const calls=[];
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  calls.push(url);
+  assert.equal(init.headers.Authorization,'Bearer test-advertiser-key');
+  assert.equal(init.redirect,'manual');
+  if(calls.length===1){
+   assert.equal(url,'https://api.ads.openai.com/v1/ad_account');
+   return json(openAiAccount);
+  }
+  const request=new URL(url);
+  assert.equal(request.origin+request.pathname,'https://api.ads.openai.com/v1/ad_account/insights');
+  assert.equal(request.searchParams.get('time_granularity'),'none');
+  assert.equal(request.searchParams.get('aggregation_level'),'ad_account');
+  assert.deepEqual(JSON.parse(request.searchParams.get('time_ranges[]')),{type:'unix_range',start:reportStart,end:reportEnd});
+  return json(insights([accountSpend]));
+ });
+ assert.ok(syncSources(openAiKey).includes('openai_ads'));
+ assert.ok(!syncSources({BUSINESS_METRICS_URL:'https://example.invalid',BUSINESS_METRICS_TOKEN:'fixture'}).includes('openai_ads'));
+ const r=await sync(db,openAiKey,{source:'openai_ads',...period},'test');
+ assert.deepEqual(r.data,{currency:'JPY',spend:1000.42});
+ assert.equal(calls.length,2);
+ const stored=JSON.parse((await db.first('SELECT payload FROM business_records')).payload);
+ assert.deepEqual(stored.data,r.data);
+});
+test('ChatGPT Ads preserves measured zero and missing spend and keeps the previous snapshot after a failed refresh',async(t)=>{
+ const db=openTestDb();let account=openAiAccount;let report=insights([]);
+ t.mock.method(globalThis,'fetch',async url=>json(url.endsWith('/ad_account')?account:report));
+ const run=()=>sync(db,openAiKey,{source:'openai_ads',...period},'test');
+ assert.equal((await run()).data.spend,null);
+ report=insights([{...accountSpend,spend:0}]);
+ assert.equal((await run()).data.spend,0);
+ const previous=await db.first('SELECT payload,revision FROM business_records');
+ report={...insights([accountSpend]),has_more:true};
+ await assert.rejects(run(),e=>e.code==='invalid_report');
+ report=insights([{...accountSpend,ad_account_id:'adacct_unrelated'}]);
+ await assert.rejects(run(),e=>e.code==='invalid_report');
+ account={...openAiAccount,currency_code:'USD'};
+ await assert.rejects(run(),e=>e.code==='account_settings_mismatch');
+ account={...openAiAccount,url:'https://different.example/kamehame-japan.com'};
+ await assert.rejects(run(),e=>e.code==='wrong_account');
+ assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+});
 test('Google refresh exchanges server credentials, validates account and consumes all pages',async(t)=>{
  const db=openTestDb();let pages=0;
  t.mock.method(globalThis,'fetch',async(url,init)=>{
