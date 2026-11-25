@@ -3,6 +3,10 @@ import { googleAccessToken, read, type AdsEnv } from './ad-sources';
 import { metricNumber } from './metrics.mjs';
 
 const number=(v:unknown)=>{const n=metricNumber(v);if(n===null)throw new ApiError(502,'invalid_report','Googleから数値を取得できませんでした。');return n;};
+const revenueNumber=(value:string|undefined)=>{
+ if(!value?.trim()||!Number.isFinite(Number(value)))throw new ApiError(502,'invalid_report');
+ return Number(value);
+};
 const headers=(token:string)=>({Authorization:'Bearer '+token,'Content-Type':'application/json'});
 type SearchRow={keys?:string[];clicks:number;impressions:number;ctr:number;position:number};
 type SearchReport={rows?:SearchRow[];metadata?:{first_incomplete_date?:string}};
@@ -58,9 +62,15 @@ export async function analytics(env:AdsEnv,source:'aio'|'organic',start:string,e
    const page=d.rows??[];
    for(const r of page){
     if(r.metricValues?.length!==metrics.length||(r.dimensionValues??[]).length!==dimensions.length)throw new ApiError(502,'invalid_report');
-    const [sessions,keyEvents,purchases,purchaseRevenue]=r.metricValues.map(m=>number(m.value));
+    const [first,second,third,fourth]=r.metricValues;
     const key=r.dimensionValues?.[0]?.value??'';
-    rows.push(metrics===enquiryMetrics?{key,sessions:0,keyEvents:0,enquiries:sessions}:{key,sessions,keyEvents,...(includePurchases?{purchases,purchaseRevenue}:{})});
+    if(metrics===enquiryMetrics){
+     rows.push({key,sessions:0,keyEvents:0,enquiries:number(first.value)});
+    }else{
+     rows.push({key,sessions:number(first.value),keyEvents:number(second.value),...(includePurchases?{
+      purchases:number(third.value),purchaseRevenue:revenueNumber(fourth.value),
+     }:{})});
+    }
    }
    const count=number(d.rowCount??0);
    if(rows.length===count)return rows;

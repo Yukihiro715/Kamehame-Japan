@@ -294,7 +294,7 @@ test('GA4 separates ChatGPT ads, paginates AI landing pages and tracks purchases
    assert.equal(medium.filter.fieldName,'sessionMedium');
    assert.ok(matches(medium.filter,'cpc'));
    assert.ok(!matches(medium.filter,'ai-assistant'));
-   return json(ga(dims,[[dims.length?'/en/ads/':'',5,1,0,0]],1,{},metrics));
+   return json(ga(dims,[[dims.length?'/en/ads/':'',5,1,0,-1000]],1,{},metrics));
   }
   assert.ok(matches(source.filter,'www.perplexity.ai'));
   assert.ok(!matches(source.filter,'google'));
@@ -311,6 +311,7 @@ test('GA4 separates ChatGPT ads, paginates AI landing pages and tracks purchases
  assert.equal(data.landingPages[1].enquiries,2);
  assert.equal(data.chatGptPaid.summary.sessions,5);
  assert.equal(data.chatGptPaid.summary.enquiries,1);
+ assert.equal(data.chatGptPaid.summary.purchaseRevenue,-1000);
  assert.equal(data.chatGptPaid.landingPages[0].key,'/en/ads/');
 });
 test('incomplete GA4 or failed later page preserves the previous snapshot',async(t)=>{
