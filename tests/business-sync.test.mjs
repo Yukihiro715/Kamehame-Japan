@@ -14,7 +14,7 @@ const openAiKey={OPENAI_ADS_API_KEY:'test-advertiser-key'};
 const openAiAccount={id:'adacct_fixture',url:'https://kamehame-japan.com/en/golf-tours/',currency_code:'JPY',timezone:'Asia/Tokyo'};
 const reportStart=Date.parse('2026-11-01T00:00:00+09:00')/1000;
 const reportEnd=Date.parse('2026-11-17T00:00:00+09:00')/1000;
-const accountSpend={ad_account_id:openAiAccount.id,start_time:reportStart+86400,end_time:reportEnd,spend:1000.42};
+const accountSpend={ad_account_id:openAiAccount.id,start_time:reportStart,end_time:reportEnd,spend:1000.42};
 const insights=data=>({object:'list',has_more:false,data});
 test('ChatGPT Ads sync uses the verified account and an exclusive JST end, storing reported spend in JPY',async(t)=>{
  const db=openTestDb();const calls=[];
@@ -58,6 +58,29 @@ test('ChatGPT Ads preserves measured zero and missing spend and keeps the previo
  account={...openAiAccount,url:'https://different.example/kamehame-japan.com'};
  await assert.rejects(run(),e=>e.code==='wrong_account');
  assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+});
+test('ChatGPT Ads does not replace the saved snapshot with a report covering only part of the requested period',async(t)=>{
+ const db=openTestDb();let row=accountSpend;
+ t.mock.method(globalThis,'fetch',async url=>json(url.endsWith('/ad_account')?openAiAccount:insights([row])));
+ const run=()=>sync(db,openAiKey,{source:'openai_ads',...period},'test');
+ await run();
+ const previous=await db.first('SELECT payload,revision FROM business_records');
+ for(const bounds of [{start_time:reportStart+86400},{end_time:reportEnd-3600}]){
+  row={...accountSpend,...bounds,spend:1};
+  await assert.rejects(run(),e=>e.code==='invalid_report');
+  assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+ }
+});
+test('ChatGPT Ads matches the actual current-hour cutoff when the requested period includes today',async(t)=>{
+ const db=openTestDb();
+ t.mock.method(Date,'now',()=>Date.parse('2026-11-16T13:47:00+09:00'));
+ const cutoff=Date.parse('2026-11-16T13:00:00+09:00')/1000;
+ t.mock.method(globalThis,'fetch',async url=>{
+  if(url.endsWith('/ad_account'))return json(openAiAccount);
+  assert.deepEqual(JSON.parse(new URL(url).searchParams.get('time_ranges[]')),{type:'unix_range',start:reportStart,end:cutoff});
+  return json(insights([{...accountSpend,end_time:cutoff}]));
+ });
+ assert.deepEqual((await sync(db,openAiKey,{source:'openai_ads',...period},'test')).data,{currency:'JPY',spend:1000.42});
 });
 test('Google refresh exchanges server credentials, validates account and consumes all pages',async(t)=>{
  const db=openTestDb();let pages=0;
