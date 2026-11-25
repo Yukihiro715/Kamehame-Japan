@@ -110,7 +110,7 @@ export default async function ArticlePage({ params }: Props) {
                 ? <h2 id={headingId(i)} key={i}>{block.slice(3)}</h2>
                 : <p key={i}>{block}</p>;
               if (block.type === "link") return <p key={i} className="article-inline-link">{block.text} <a href={block.href}>{block.label}</a></p>;
-              const rowLinks = "rowLinks" in block ? block.rowLinks : undefined;
+              const rowLinks = "rowLinks" in block && Array.isArray(block.rowLinks) ? block.rowLinks : undefined;
               return <div key={i} className="article-table-scroll" role="region" aria-label={block.caption} tabIndex={0}><table className="article-table"><caption>{block.caption}</caption><thead><tr>{block.headings.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, col) => col === 0 ? <th scope="row" key={col}>{rowLinks?.[rowIndex] ? <Link href={rowLinks[rowIndex]}>{cell}</Link> : cell}</th> : <td key={col}>{cell}</td>)}</tr>)}</tbody></table></div>;
             })}
           </div>
