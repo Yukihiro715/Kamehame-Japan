@@ -3,6 +3,7 @@ import { Stars, RatingSummary } from "@/components/site/reviews";
 import { ownReviewsFor, reviewDate } from "@/lib/published-reviews";
 import { golfReviewTranslationFor } from "@/lib/review-translations";
 import { t, type Lang } from "@/lib/i18n";
+import { enquiryTotal, yen } from "@/lib/golfpaq";
 import styles from "./golf-guest-review.module.css";
 
 const copy = {
@@ -13,7 +14,15 @@ const copy = {
   "zh-tw": { title: "高爾夫共乘巴士行程評價", trip: "新宿出發的共乘巴士行程・栃木", course: "太平洋俱樂部益子PGA球場", original: "查看英文原文", translated: "由英文翻譯" },
 } satisfies Record<Lang, { title: string; trip: string; course: string; original: string; translated: string }>;
 
-export function BusGuestReview({ lang }: { lang: Lang }) {
+const rentalExample = {
+  en: (base: string, total: string) => `Current price example for one golfer with rental clubs and shoes: ${base} tour fare, ${total} total. Lunch depends on the departure.`,
+  ja: (base: string, total: string) => `現在の料金例（1名、クラブ・シューズのレンタル付き）は、ツアー代${base}、合計${total}です。昼食の有無は出発便によって異なります。`,
+  es: (base: string, total: string) => `Ejemplo de precio actual para una persona con palos y zapatos de alquiler: ${base} por el tour, ${total} en total. El almuerzo depende de la salida.`,
+  fr: (base: string, total: string) => `Exemple de prix actuel pour une personne avec location des clubs et chaussures : ${base} pour le circuit, ${total} au total. Le déjeuner dépend du départ.`,
+  "zh-tw": (base: string, total: string) => `目前一人租借球桿及球鞋的價格範例為行程費 ${base}、合計 ${total}。午餐是否包含依出發班次而定。`,
+} satisfies Record<Lang, (base: string, total: string) => string>;
+
+export function BusGuestReview({ lang, tourFare }: { lang: Lang; tourFare: number | null }) {
   const reviews = ownReviewsFor("golf-bus");
   if (!reviews.length) return null;
   const c = copy[lang];
@@ -44,6 +53,7 @@ export function BusGuestReview({ lang }: { lang: Lang }) {
           </article>
         );
       })}
+      {tourFare !== null && <p>{rentalExample[lang](yen(tourFare), yen(enquiryTotal(tourFare, 1, 1, 1).total))}</p>}
     </section>
   );
 }

@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { articleBySlug, articleDate, articlesFor } from "@/lib/articles";
+import { higashiyamaTeaComparison, TEA_COMPARISON_SLUG } from "@/lib/tea-journal-comparison";
 import { catalogFor, SITE_ORIGIN } from "@/lib/catalog";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { JOURNAL_COPY } from "@/lib/journal-copy";
@@ -49,7 +50,12 @@ export default async function ArticlePage({ params }: Props) {
   const T = t(lang);
   const J = JOURNAL_COPY[lang];
   const relatedReading = (article.relatedArticles ?? []).map((s) => articleBySlug(s, lang)).filter((a): a is NonNullable<typeof a> => Boolean(a));
-  const headings = c.body.flatMap((block, index) => typeof block === "string" && block.startsWith("## ") ? [{ title: block.slice(3), id: headingId(index) }] : []);
+  const teaGuide = article.slug === TEA_COMPARISON_SLUG;
+  const rest = teaGuide && lang === "en"
+    ? c.body.slice(c.body.findIndex((item) => item === "## Decide what the visit should include"))
+    : c.body;
+  const body = teaGuide ? [...higashiyamaTeaComparison(lang), ...rest] : rest;
+  const headings = body.flatMap((block, index) => typeof block === "string" && block.startsWith("## ") ? [{ title: block.slice(3), id: headingId(index) }] : []);
 
   const { experiences } = catalogFor(lang);
   const related = article.experiences
@@ -67,7 +73,8 @@ export default async function ArticlePage({ params }: Props) {
     description: c.standfirst,
     image: absolute(article.img),
     datePublished: article.date,
-    ...(article.editorial ? { author: { "@type": "Organization", name: article.editorial.author, url: absolute(`/${lang}/about/`) }, dateModified: article.date } : {}),
+    ...(article.editorial ? { author: { "@type": "Organization", name: article.editorial.author, url: absolute(`/${lang}/about/`) } } : {}),
+    dateModified: teaGuide ? "2026-11-25" : article.date,
     inLanguage: lang,
     publisher: { "@id": `${SITE_ORIGIN}/#organization` },
     about: related.map(e => ({ "@id": `${absolute(`/${lang}/${e.city}/${e.slug}/`)}#experience` })),
@@ -98,12 +105,13 @@ export default async function ArticlePage({ params }: Props) {
           {article.editorial && <nav className="article-toc" aria-label={J.contents}><b>{J.contents}</b><ul>{headings.map((heading) => <li key={heading.id}><a href={`#${heading.id}`}>{heading.title}</a></li>)}</ul></nav>}
 
           <div className="article-body">
-            {c.body.map((block, i) => {
+            {body.map((block, i) => {
               if (typeof block === "string") return block.startsWith("## ")
                 ? <h2 id={headingId(i)} key={i}>{block.slice(3)}</h2>
                 : <p key={i}>{block}</p>;
               if (block.type === "link") return <p key={i} className="article-inline-link">{block.text} <a href={block.href}>{block.label}</a></p>;
-              return <div key={i} className="article-table-scroll" role="region" aria-label={block.caption} tabIndex={0}><table className="article-table"><caption>{block.caption}</caption><thead><tr>{block.headings.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, col) => col === 0 ? <th scope="row" key={col}>{cell}</th> : <td key={col}>{cell}</td>)}</tr>)}</tbody></table></div>;
+              const rowLinks = "rowLinks" in block ? block.rowLinks : undefined;
+              return <div key={i} className="article-table-scroll" role="region" aria-label={block.caption} tabIndex={0}><table className="article-table"><caption>{block.caption}</caption><thead><tr>{block.headings.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, col) => col === 0 ? <th scope="row" key={col}>{rowLinks?.[rowIndex] ? <Link href={rowLinks[rowIndex]}>{cell}</Link> : cell}</th> : <td key={col}>{cell}</td>)}</tr>)}</tbody></table></div>;
             })}
           </div>
 
