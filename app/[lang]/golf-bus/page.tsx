@@ -47,7 +47,8 @@ export default async function GolfBusPage({ params }: Props) {
   const tours = rawTours.map((t) => ({ ...t, courseEn: displayCourseName(t.course, lang, names) }));
   const C = busCopy(lang);
   const openPrices = tours.filter((tour) => !tour.soldOut && tour.perPersonYen > 0).map((tour) => tour.perPersonYen);
-  const startingPrice = openPrices.length ? yen(Math.min(...openPrices)) : null;
+  const lowestOpenFare = openPrices.length ? Math.min(...openPrices) : null;
+  const startingPrice = lowestOpenFare === null ? null : yen(lowestOpenFare);
   const mobileFare = lang === "en" ? startingPrice : null;
   const stepIcons = [Search, Send, Mail, CreditCard, BadgeCheck];
   const featureIcons = [Bus, UserRound, Flag, CheckCircle2];
@@ -89,7 +90,7 @@ export default async function GolfBusPage({ params }: Props) {
           </div>
         </section>
 
-        <div className="gb-wrap"><BusGuestReview lang={lang} /></div>
+        <div className="gb-wrap"><BusGuestReview lang={lang} tourFare={lowestOpenFare} /></div>
 
         <BusTours tours={tours} updatedAt={updatedAt} lang={lang} C={C} mobileFare={mobileFare} />
 

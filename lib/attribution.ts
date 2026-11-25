@@ -35,10 +35,34 @@ export function channel(t: Touch): string {
   if(t.gclid||t.gbraid||t.wbraid) return 'google / paid';
   if(/^(meta|facebook|fb|instagram|ig)([-_].*)?$/.test(s)) return /paid|cpc|cpm/.test(m)?'meta / paid_social':'meta / unspecified';
   if(s==='google')return 'google / '+(m||'unspecified');
+  const hostname = t.referrer ? new URL(t.referrer).hostname : '';
+  const isChatGptHost = (host: string) => /(?:^|\.)(?:chatgpt\.com|chat\.openai\.com)$/.test(host);
+  if (isChatGptHost(s) || /^(chatgpt|openai|chatgpt_ads)$/.test(s) || (!s && isChatGptHost(hostname))) {
+    if (/^(cpc|ppc|cpm|cpv|cpa|paid.*)$/.test(m)) return 'ChatGPT広告';
+    return s === 'chatgpt_ads' ? 'ChatGPT（種別未確認）' : 'ChatGPT検索・参照';
+  }
   if(s)return s+' / '+(m||'unspecified');
   if(t.fbclid)return 'meta / unspecified'; // fbclid alone also occurs on organic links.
-  if(t.referrer)return new URL(t.referrer).hostname+' / referral';
+  if(hostname)return hostname+' / referral';
   return 'unknown / direct';
+}
+
+export type StoredBookingAcquisition = { firstChannel: string; lastChannel: string; firstLanding: string };
+
+export function storedBookingAcquisition(raw: string | null | undefined): StoredBookingAcquisition | undefined {
+  if (!raw) return;
+  try {
+    const stored = JSON.parse(raw) as Attribution | null;
+    const attribution = sanitizeAttribution(stored, stored?.last?.at);
+    if (!attribution) return;
+    return {
+      firstChannel: channel(attribution.first),
+      lastChannel: channel(attribution.last),
+      firstLanding: new URL(attribution.first.landing).pathname,
+    };
+  } catch {
+    return;
+  }
 }
 export function attributionNote(a?: Attribution): string {
   if(!a)return '流入情報: 未取得（同意なし・旧データ等。広告なしを意味しない）';

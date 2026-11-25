@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Breadcrumbs } from "@/components/site/breadcrumb";
 import { LEGAL_UPDATED, termsFor } from "@/lib/legal";
+import { paymentDisclosure } from "@/lib/booking-legal-display";
 import { isLang, langHome, LANGS, t } from "@/lib/i18n";
 import { socialMeta, withAlternates } from "@/lib/seo";
 
@@ -28,6 +29,7 @@ export default async function TermsPage({ params }: Props) {
   if (!isLang(lang)) notFound();
   const copy = termsFor(lang);
   const T = t(lang);
+  const disclosure = paymentDisclosure(lang);
 
   return (
     <main className="subpage detail-page" lang={lang}>
@@ -38,12 +40,18 @@ export default async function TermsPage({ params }: Props) {
           <h1>{copy.title}</h1>
           <p className="detail-tagline">{copy.lead}</p>
           <p className="privacy-updated">{copy.updated}: {LEGAL_UPDATED}</p>
-          {copy.sections.map((s) => (
-            <section key={s.heading}>
-              <h2>{s.heading}</h2>
-              {s.body.map((para, i) => <p key={i}>{para}</p>)}
-            </section>
-          ))}
+          {copy.sections.map((section) => {
+            const paid = section.body.some((paragraph) => paragraph.startsWith(disclosure.priorIntro));
+            const paragraphs = section.body.filter((paragraph) => !paragraph.startsWith(disclosure.priorIntro));
+            return <section key={section.heading}>
+              <h2>{section.heading}</h2>
+              {paid && <>
+                <p><strong>{disclosure.paidTitle}</strong><br />{disclosure.paid}</p>
+                <p><strong>{disclosure.enquiryTitle}</strong></p>
+              </>}
+              {paragraphs.map((paragraph, i) => <p key={i}>{paragraph}</p>)}
+            </section>;
+          })}
         </article>
       </div>
       <SiteFooter lang={lang} />

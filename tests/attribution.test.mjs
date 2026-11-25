@@ -3,7 +3,7 @@ import test, { after } from 'node:test';
 import { createServer } from 'vite';
 const vite=await createServer({configFile:false,server:{middlewareMode:true}});
 after(()=>vite.close());
-const {captureTouch,sanitizeAttribution,channel,ATTRIBUTION_TTL,ATTRIBUTION_KEY}=await vite.ssrLoadModule('/lib/attribution.ts');
+const {captureTouch,sanitizeAttribution,channel,storedBookingAcquisition,ATTRIBUTION_TTL,ATTRIBUTION_KEY}=await vite.ssrLoadModule('/lib/attribution.ts');
 test('only allowlisted campaign data survives; unrelated queries and referrer paths do not',()=>{
  const t=captureTouch('https://example.com/golf?utm_source=meta&utm_medium=paid_social&email=private&fbclid=abc','https://facebook.com/private?q=secret');
  assert.equal(t.landing,'https://example.com/golf');assert.equal(t.referrer,'https://facebook.com');assert.equal(t.email,undefined);assert.equal(channel(t),'meta / paid_social');
@@ -26,4 +26,17 @@ test('consent, internal navigation, return campaign and revocation',async()=>{
  location.href='https://example.com/golf?utm_source=meta&utm_medium=paid_social&fbclid=two';const c=readAttribution();assert.equal(c.first.gclid,'one');assert.equal(c.last.fbclid,'two');
  db.set('kh-consent-2','denied');assert.equal(readAttribution(),undefined);assert.equal(db.has(ATTRIBUTION_KEY),false);
  delete globalThis.window;delete globalThis.document;delete globalThis.location;delete globalThis.localStorage;
+});
+
+
+test('stored acquisition keeps the initial landing and classifies paid and referred ChatGPT visits',()=>{
+ const old=Date.UTC(2026,8,1);
+ const first=captureTouch('https://example.com/tea/?utm_source=chatgpt.com&name=private','',old);
+ const last=captureTouch('https://example.com/golf/?utm_source=chatgpt&utm_medium=cpc','',old+1000);
+ assert.deepEqual(storedBookingAcquisition(JSON.stringify({version:1,first,last})),{
+  firstChannel:'ChatGPT検索・参照',lastChannel:'ChatGPT広告',firstLanding:'/tea/',
+ });
+ assert.equal(channel(captureTouch('https://example.com/tea/','https://chatgpt.com/')),'ChatGPT検索・参照');
+ assert.equal(channel(captureTouch('https://example.com/tea/','https://notchatgpt.com/')),'notchatgpt.com / referral');
+ assert.equal(storedBookingAcquisition('legacy'),undefined);
 });
