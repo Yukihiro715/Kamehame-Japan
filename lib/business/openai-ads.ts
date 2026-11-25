@@ -44,7 +44,8 @@ export async function openAiAds(env: AdsEnv, start: string, end: string) {
   const report = insightsResponse.safeParse(await read<unknown>(base + '/insights?' + params, { headers }, label));
   if (!report.success) throw invalidReport();
   const row = report.data.data[0];
-  if (row && (row.ad_account_id !== account.data.id || row.start_time < from || row.end_time > to || row.end_time <= row.start_time)) {
+  // A partial bucket would understate spend when saved for the full request.
+  if (row && (row.ad_account_id !== account.data.id || row.start_time !== from || row.end_time !== to)) {
     throw invalidReport();
   }
   return { currency: 'JPY', spend: row?.spend ?? null };
