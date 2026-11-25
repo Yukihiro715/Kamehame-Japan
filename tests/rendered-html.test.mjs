@@ -595,7 +595,7 @@ test("sitemap dates follow the content, not the build", async () => {
   const { readFileSync } = await import("node:fs");
   const { buildEntries } = await import("../scripts/sitemap-content.mjs");
   const read = (f) => { try { return readFileSync(new URL(`../${f}`, import.meta.url), "utf8"); } catch { return null; } };
-  const { entries } = buildEntries(read);
+  const { entries } = buildEntries(read, { golfpaqLive: process.env.GOLFPAQ_LIVE === "true" });
   const undated = entries.filter((e) => e.key == null && e.date == null);
   assert.deepEqual(undated.map((e) => e.path), [], "every page has a content key or a declared date");
   const xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");

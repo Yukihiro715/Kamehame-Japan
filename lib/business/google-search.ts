@@ -3,6 +3,10 @@ import { googleAccessToken, read, type AdsEnv } from './ad-sources';
 import { metricNumber } from './metrics.mjs';
 
 const number=(v:unknown)=>{const n=metricNumber(v);if(n===null)throw new ApiError(502,'invalid_report','Googleから数値を取得できませんでした。');return n;};
+const revenueNumber=(value:string|undefined)=>{
+ if(!value?.trim()||!Number.isFinite(Number(value)))throw new ApiError(502,'invalid_report');
+ return Number(value);
+};
 const headers=(token:string)=>({Authorization:'Bearer '+token,'Content-Type':'application/json'});
 type SearchRow={keys?:string[];clicks:number;impressions:number;ctr:number;position:number};
 type SearchReport={rows?:SearchRow[];metadata?:{first_incomplete_date?:string}};
@@ -26,21 +30,48 @@ export async function searchConsole(env:AdsEnv,start:string,end:string){
 
 type GaReport={dimensionHeaders?:{name:string}[];metricHeaders?:{name:string}[];rows?:{dimensionValues?:{value:string}[];metricValues?:{value:string}[]}[];rowCount?:number;metadata?:{timeZone?:string;dataLossFromOtherRow?:boolean;subjectToThresholding?:boolean;samplingMetadatas?:unknown[];dataTruncationReasons?:unknown[]}};
 const aiDomains=['chatgpt.com','chat.openai.com','perplexity.ai','claude.ai','gemini.google.com','copilot.microsoft.com','meta.ai','grok.com','deepseek.com','phind.com','you.com'];
-const aiFilter={filter:{fieldName:'sessionSource',stringFilter:{matchType:'FULL_REGEXP',value:'([a-z0-9-]+\\.)*('+aiDomains.map(d=>d.replaceAll('.','\\.')).join('|')+')',caseSensitive:false}}};
+const domainPattern=(domains:string[])=>'([a-z0-9-]+\\.)*('+domains.map(d=>d.replaceAll('.','\\.')).join('|')+')';
+const paidMedium={filter:{fieldName:'sessionMedium',stringFilter:{matchType:'FULL_REGEXP',value:'(cpc|ppc|cpm|cpv|cpa|paid.*)',caseSensitive:false}}};
+const sourcePattern=(value:string)=>({filter:{fieldName:'sessionSource',stringFilter:{matchType:'FULL_REGEXP',value,caseSensitive:false}}});
+const aiReferral={andGroup:{expressions:[sourcePattern(domainPattern(aiDomains)),{notExpression:paidMedium}]}};
+const chatGptAds={andGroup:{expressions:[sourcePattern('(chatgpt|openai|chatgpt_ads|'+domainPattern(['chatgpt.com','chat.openai.com'])+')'),paidMedium]}};
+const trafficMetrics=['sessions','keyEvents'];
+const enquiryMetrics=['eventCount'];
+const ecommerceMetrics=[...trafficMetrics,'ecommercePurchases','purchaseRevenue'];
+const enquiryEvent={filter:{fieldName:'eventName',stringFilter:{matchType:'EXACT',value:'generate_lead',caseSensitive:true}}};
+const enquiryReports=(segment:typeof aiReferral|typeof chatGptAds)=>({andGroup:{expressions:[...segment.andGroup.expressions,enquiryEvent]}});
+type GaRow={key:string;sessions:number;keyEvents:number;purchases?:number;purchaseRevenue?:number;enquiries?:number};
+const withTotals=(row:GaRow|undefined)=>({
+ sessions:row?.sessions??0,keyEvents:row?.keyEvents??0,
+ purchases:row?.purchases??0,purchaseRevenue:row?.purchaseRevenue??0,
+});
+const bySessions=(a:GaRow,b:GaRow)=>b.sessions-a.sessions||a.key.localeCompare(b.key);
 
 export async function analytics(env:AdsEnv,source:'aio'|'organic',start:string,end:string){
  const token=await googleAccessToken(env);
- async function report(dimensions:string[],dimensionFilter?:unknown){
-  const rows:Array<{key:string;sessions:number;keyEvents:number}>=[];
+ async function report(dimensions:string[],dimensionFilter?:unknown,metrics=trafficMetrics){
+  const includePurchases=metrics===ecommerceMetrics;
+  const rows:GaRow[]=[];
   for(let i=0;i<20;i++){
    const d=await read<GaReport>('https://analyticsdata.googleapis.com/v1beta/properties/554299976:runReport',{
-    method:'POST',headers:headers(token),body:JSON.stringify({dateRanges:[{startDate:start,endDate:end}],dimensions:dimensions.map(name=>({name})),metrics:[{name:'sessions'},{name:'keyEvents'}],...(dimensionFilter?{dimensionFilter}:{}),limit:10000,offset:rows.length,...(dimensions.length?{orderBys:dimensions.map(dimensionName=>({dimension:{dimensionName}}))}:{})})
+    method:'POST',headers:headers(token),body:JSON.stringify({dateRanges:[{startDate:start,endDate:end}],dimensions:dimensions.map(name=>({name})),metrics:metrics.map(name=>({name})),...(includePurchases?{currencyCode:'JPY'}:{}),...(dimensionFilter?{dimensionFilter}:{}),limit:10000,offset:rows.length,...(dimensions.length?{orderBys:dimensions.map(dimensionName=>({dimension:{dimensionName}}))}:{})})
    },'GA4');
    if(d.metadata?.timeZone!=='Asia/Tokyo')throw new ApiError(422,'analytics_timezone_mismatch','GA4のタイムゾーンがAsia/Tokyoと一致しません。');
    if(d.metadata.dataLossFromOtherRow||d.metadata.subjectToThresholding||d.metadata.samplingMetadatas?.length||d.metadata.dataTruncationReasons?.length)throw new ApiError(502,'analytics_incomplete','GA4のデータにしきい値・サンプリング等の制限があります。期間を変更して再取得してください。');
-   if(d.metricHeaders?.map(h=>h.name).join(',')!=='sessions,keyEvents'||(d.dimensionHeaders??[]).map(h=>h.name).join(',')!==dimensions.join(',')||(d.rows!==undefined&&!Array.isArray(d.rows)))throw new ApiError(502,'invalid_report');
+   if(d.metricHeaders?.map(h=>h.name).join(',')!==metrics.join(',')||(d.dimensionHeaders??[]).map(h=>h.name).join(',')!==dimensions.join(',')||(d.rows!==undefined&&!Array.isArray(d.rows)))throw new ApiError(502,'invalid_report');
    const page=d.rows??[];
-   for(const r of page){if(r.metricValues?.length!==2||(r.dimensionValues??[]).length!==dimensions.length)throw new ApiError(502,'invalid_report');rows.push({key:r.dimensionValues?.[0]?.value??'',sessions:number(r.metricValues[0].value),keyEvents:number(r.metricValues[1].value)});}
+   for(const r of page){
+    if(r.metricValues?.length!==metrics.length||(r.dimensionValues??[]).length!==dimensions.length)throw new ApiError(502,'invalid_report');
+    const [first,second,third,fourth]=r.metricValues;
+    const key=r.dimensionValues?.[0]?.value??'';
+    if(metrics===enquiryMetrics){
+     rows.push({key,sessions:0,keyEvents:0,enquiries:number(first.value)});
+    }else{
+     rows.push({key,sessions:number(first.value),keyEvents:number(second.value),...(includePurchases?{
+      purchases:number(third.value),purchaseRevenue:revenueNumber(fourth.value),
+     }:{})});
+    }
+   }
    const count=number(d.rowCount??0);
    if(rows.length===count)return rows;
    if(rows.length>count||!page.length)throw new ApiError(502,'invalid_pagination');
@@ -52,8 +83,28 @@ export async function analytics(env:AdsEnv,source:'aio'|'organic',start:string,e
   if(rows.length>1)throw new ApiError(502,'invalid_report');
   return {sessions:rows[0]?.sessions??0,conversions:rows[0]?.keyEvents??0,definition:'GA4 / Organic Search / キーイベント',timeZone:'Asia/Tokyo',propertyId:'554299976'};
  }
- const [all,summary,assistants,landingPages]=await Promise.all([report([]),report([],aiFilter),report(['sessionSource'],aiFilter),report(['landingPage'],aiFilter)]);
- if(all.length>1||summary.length>1)throw new ApiError(502,'invalid_report');
- const sessions=summary[0]?.sessions??0,total=all[0]?.sessions??0;
- return {summary:{sessions,keyEvents:summary[0]?.keyEvents??0},assistants,landingPages,llmShareOfSessions:total?sessions/total:0,timeZone:'Asia/Tokyo',propertyId:'554299976'};
+ const [all,summary,assistants,landingPages,paid,paidLandingPages,referralEnquiries,paidEnquiries]=await Promise.all([
+  report([]),
+  report([],aiReferral,ecommerceMetrics),
+  report(['sessionSource'],aiReferral,ecommerceMetrics),
+  report(['landingPage'],aiReferral,ecommerceMetrics),
+  report([],chatGptAds,ecommerceMetrics),
+  report(['landingPage'],chatGptAds,ecommerceMetrics),
+  report(['landingPage'],enquiryReports(aiReferral),enquiryMetrics),
+  report(['landingPage'],enquiryReports(chatGptAds),enquiryMetrics),
+ ]);
+ if([all,summary,paid].some(rows=>rows.length>1))throw new ApiError(502,'invalid_report');
+ const combine=(totals:GaRow|undefined,traffic:GaRow[],enquiries:GaRow[])=>{
+  const counts=new Map(enquiries.map(row=>[row.key,row.enquiries??0]));
+  return {
+   summary:{...withTotals(totals),enquiries:enquiries.reduce((sum,row)=>sum+(row.enquiries??0),0)},
+   landingPages:traffic.map(row=>({...row,enquiries:counts.get(row.key)??0})).sort(bySessions),
+  };
+ };
+ const referral=combine(summary[0],landingPages,referralEnquiries),total=all[0]?.sessions??0;
+ return {
+  ...referral,assistants:assistants.sort(bySessions),
+  chatGptPaid:combine(paid[0],paidLandingPages,paidEnquiries),
+  llmShareOfSessions:total?referral.summary.sessions/total:0,timeZone:'Asia/Tokyo',propertyId:'554299976',
+ };
 }

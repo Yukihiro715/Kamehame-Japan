@@ -60,6 +60,13 @@ export const GOLF_ARTICLES: Article[] = ([
         title: "What does a golf day from Tokyo really cost?",
         standfirst: "Green fees are only the start. See how transport, group size and rentals change the total, with worked budgets and lessons from our booking enquiries.",
         body: [
+          "## Shared bus or a custom tee time from Tokyo?",
+          { type: "table", caption: "What to compare before sending a golf enquiry", headings: ["Option", "What you pay for", "Where you start", "Club rental"], rows: [
+            ["Shared bus tour", "The displayed fare for each date covers round-trip bus travel, 18 holes and a cart. Add any rentals and excluded meals.", "Shinjuku or Oimachi, depending on the departure", "Request clubs and shoes when you enquire"],
+            ["Custom tee-time booking", "Add the group booking fee, the course's green and cart fees, your transport and any rentals.", "Meet at the course. Arrive by train, car or a separately arranged transfer.", "Request rental availability for each golfer"],
+          ] },
+          { type: "link", text: "Check departure fares and meeting points for your date:", label: "Shared golf bus dates and prices", href: "/en/golf-bus/" },
+          { type: "link", text: "For a course or date of your choice, check the booking fee and separate costs:", label: "Tokyo and Mt. Fuji golf booking service", href: "/en/tokyo/mt-fuji-golf-day/" },
           "The most useful number in a golf proposal is the amount you will spend by the time you are back at your hotel. A low green fee is not much help if you discover later that the transfer costs more than the golf, or that the payment you just made covered only the booking service.",
           "We have had guests ask for the full cost after receiving payment information. That is a problem the proposal should solve earlier. When comparing options, ask for three figures: the whole-day estimate, what you pay now, and what remains payable elsewhere. They are not always the same.",
           "## What belongs in the total",
