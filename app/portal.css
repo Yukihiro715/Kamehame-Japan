@@ -568,3 +568,5 @@
 .pt-brochure-check input[type="checkbox"] { width: 18px; height: 18px; min-height: 18px; flex: 0 0 18px; accent-color: var(--pt-accent, #b74908); }
 .pt-brochure-qr-fields { border-inline-start: 2px solid #e6ddd3; padding-inline-start: 16px; }
 .pt-brochure-destination { overflow-wrap: anywhere; }
+
+dialog.pt-case-modal { width: min(52rem, 95vw); max-height: 90dvh; overflow: auto; }

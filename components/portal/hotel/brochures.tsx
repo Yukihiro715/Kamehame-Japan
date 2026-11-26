@@ -84,7 +84,7 @@ function BrochureLibrary({hotelId,en,canBook}:{hotelId:string;en:boolean;canBook
         <Field label={en?'Download PDF in':'ダウンロードするPDFの言語'}><select value={pdfLang} onChange={e=>setPdfLang(e.target.value as 'ja'|'en')}><option value="ja">日本語</option><option value="en">English</option></select></Field>
         {(search||filter!=='all')&&<Button kind="link" onClick={()=>{setSearch('');setFilter('all');}}>{en?'Clear filters':'条件を消す'}</Button>}
       </div>
-      <p className="pt-small pt-muted">{en?'Prices are for sales materials only, separate from KAMEHAME booking, payment and commission amounts. Blank prices cannot be downloaded; select “Enquire” when you intentionally omit a price.':'案内価格は紹介資料用です。KAMEHAMEへの予約・決済額や紹介料とは別に保存します。入力忘れを防ぐため、価格を載せない場合は「お問い合わせ」を選択してください。'}</p>
+      <p className="pt-small pt-muted">{en?'Prices are for sales materials only, separate from KAMEHAME booking, payment and commission amounts. Blank prices cannot be downloaded; select “Enquire” when you intentionally omit a price.':'案内価格は紹介資料用です。KAMEHAMEへの予約・決済額やコミッションとは別に保存します。入力忘れを防ぐため、価格を載せない場合は「お問い合わせ」を選択してください。'}</p>
       <p className="pt-small" role="status">{filtered.length}{en?' experiences':'件'} · {en?'PDF language':'PDF出力言語'}：{pdfLang==='ja'?'日本語':'English'}</p>
       <div className="pt-brochure-table-wrap" role="region" aria-label={en?'Experience brochure settings':'体験別の紹介資料設定'} tabIndex={0}>
         <table className="pt-table pt-brochure-table"><thead><tr><th>{en?'Experience':'体験'}</th><th>{en?'Your price (tax incl.)':'案内価格（税込）'}</th><th>{en?'Unit':'単位'}</th><th>{en?'Status':'設定状態'}</th><th>{en?'PDF & details':'資料・補足'}</th><th>{en?'Booking':'予約'}</th></tr></thead><tbody>

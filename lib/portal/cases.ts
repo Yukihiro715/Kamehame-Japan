@@ -58,7 +58,12 @@ export const GOLF_EXTRA_FIELDS: ExtraField[] = [
   { key: "budget", label: "予算（1人あたり・総額など）", type: "text" },
   { key: "join_others", label: "他のプレーヤーとの組合せ", type: "select", options: [{ value: "ok", label: "可" }, { value: "no", label: "不可（貸切希望）" }, { value: "undecided", label: "未定" }] },
 ];
-export const extraFieldsFor = (slug: string | null | undefined): ExtraField[] => (slug && GOLF_SLUGS.includes(slug) ? GOLF_EXTRA_FIELDS : []);
+export function extraFieldsFor(slug: string | null | undefined): ExtraField[] {
+  if (slug && GOLF_SLUGS.includes(slug)) return GOLF_EXTRA_FIELDS;
+  const product = catalogFor("en").experiences.find(x => x.slug === slug);
+  if (!product || product.interpreter === false) return [];
+  return [{key:"interpreter",label:"通訳ガイドの希望",type:"select",options:[{value:"needed",label:"希望する"},{value:"not_needed",label:"不要"}]}];
+}
 
 /** How a partner books an experience (要件 8): straight away, on request, or by asking for a quote. */
 export type BookingMode = "instant" | "request" | "quote";
@@ -67,11 +72,11 @@ export function bookingModeOf(x: Experience): BookingMode {
   if (x.pricePending || x.variants?.length) return "quote";
   return x.bookingType === "instant" ? "instant" : "request";
 }
-export interface ExperienceOption { slug: string; title: string; titleEn: string; city: string | null; area: string | null; duration: string | null; group: string | null; price: string | null; bookingMode: BookingMode; extraFields: ExtraField[] }
+export interface ExperienceOption { dates?:{date:string;times:string[]}[]; startTimes?: string[]; slug: string; title: string; titleEn: string; city: string | null; area: string | null; duration: string | null; group: string | null; price: string | null; bookingMode: BookingMode; extraFields: ExtraField[] }
 /** What a partner may open a case for: the live catalog (in Japanese, for the portal) plus the shared-bus golf day. */
 export function experienceOptions(lang: Lang = "ja"): ExperienceOption[] {
   const live: ExperienceOption[] = catalogFor(lang).experiences.filter((x) => x.status === "live").map((x) => ({
-    slug: x.slug, title: x.title, titleEn: experienceTitle(x.slug, "en"), city: x.city, area: x.area, duration: x.duration, group: x.group, price: x.pricePending ? null : x.price, bookingMode: bookingModeOf(x), extraFields: extraFieldsFor(x.slug),
+    slug: x.slug, title: x.title, titleEn: experienceTitle(x.slug, "en"), city: x.city, area: x.area, duration: x.duration, group: x.group, price: x.pricePending ? null : x.price, dates:x.availability?.dates, startTimes: x.availability?.startTimes, bookingMode: bookingModeOf(x), extraFields: extraFieldsFor(x.slug),
   }));
   live.push({ slug: BUS_GOLF_SLUG, title: BUS_GOLF_TITLE[lang], titleEn: BUS_GOLF_TITLE.en, city: "tokyo", area: "Tokyo → Mt. Fuji area", duration: null, group: null, price: null, bookingMode: "request", extraFields: GOLF_EXTRA_FIELDS });
   return partnerExperienceOrder(live);
@@ -85,6 +90,7 @@ export function experienceTitle(slug: string | null, lang: Lang = "ja"): string 
 // ---- rows ------------------------------------------------------------------
 
 export interface CaseRow {
+  agency_pays: number; customer_group:string|null;
   id: string; public_ref: string; legal_entity_id: string; site_id: string; created_by_user_id: string; assignee_user_id: string | null; partner_ref: string | null;
   kind: "experience" | "free"; experience_slug: string | null; preferred_date: string | null; alt_dates_json: string | null; time_pref: string | null; guests: number | null; lang: string | null; requirements: string | null;
   customer_name: string; customer_email: string | null; customer_phone: string | null; customer_country: string | null; extra_json: string | null;
@@ -142,6 +148,7 @@ export async function caseForPartner(db: SqlDb, p: Principal, id: string): Promi
 // ---- create / update -------------------------------------------------------
 
 export interface NewCaseInput {
+  customerGroup?:string;
   kind: unknown; experience?: unknown; preferredDate?: unknown; altDates?: unknown; timePref?: unknown; guests?: unknown; lang?: unknown; requirements?: unknown;
   customerName: unknown; customerEmail?: unknown; customerPhone?: unknown; customerCountry?: unknown; partnerRef?: unknown; extra?: unknown; assigneeUserId?: unknown;
 }
@@ -167,7 +174,7 @@ function altDatesOf(v: unknown): string | null {
 
 /** A partner registers a case (要件 5-1). Only the customer's name is required at this stage. */
 export async function createCase(db: SqlDb, input: NewCaseInput & { siteId: string; userId: string; by: string }, now = Date.now()) {
-  const site = await db.first<{ id: string; legal_entity_id: string; status: string }>(`SELECT id, legal_entity_id, status FROM hotels WHERE id = ?`, [input.siteId]);
+  const site = await db.first<{ id: string; legal_entity_id: string; status: string; partner_type: string }>(`SELECT h.id, h.legal_entity_id, h.status, le.partner_type FROM hotels h JOIN partner_legal_entities le ON le.id=h.legal_entity_id WHERE h.id = ?`, [input.siteId]);
   if (!site) throw notFound();
   if (site.status !== "active") throw bad("site_inactive");
   const kind = input.kind === "free" ? "free" : "experience";
@@ -185,10 +192,10 @@ export async function createCase(db: SqlDb, input: NewCaseInput & { siteId: stri
   }
   const id = randomId(), at = now_(now), ref = await nextPublicRef(db, now);
   await db.batch([
-    { sql: `INSERT INTO partner_cases (id, public_ref, legal_entity_id, site_id, created_by_user_id, assignee_user_id, partner_ref, kind, experience_slug, preferred_date, alt_dates_json, time_pref, guests, lang, requirements, customer_name, customer_email, customer_phone, customer_country, extra_json, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?)`,
+    { sql: `INSERT INTO partner_cases (id, public_ref, legal_entity_id, site_id, created_by_user_id, assignee_user_id, partner_ref, kind, experience_slug, preferred_date, alt_dates_json, time_pref, guests, lang, requirements, customer_name, customer_email, customer_phone, customer_country, extra_json, status, created_at, updated_at, agency_pays, customer_group)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'received', ?, ?, ?, ?)`,
       params: [id, ref, site.legal_entity_id, site.id, input.userId, assignee, str(input.partnerRef, 60) || null, kind, slug || null, isoDate(input.preferredDate), altDatesOf(input.altDates), str(input.timePref, 120) || null, guests, lang && isLang(lang) ? lang : null, str(input.requirements, 4000) || null,
-        customerName, email(input.customerEmail), str(input.customerPhone, 40) || null, str(input.customerCountry, 60) || null, extraOf(slug || null, input.extra), at, at] },
+        customerName, email(input.customerEmail), str(input.customerPhone, 40) || null, str(input.customerCountry, 60) || null, extraOf(slug || null, input.extra), at, at, site.partner_type==="agency" ? 1 : 0, input.customerGroup ?? null] },
     audit(input.by, "case.create", id, null, { ref, kind, slug: slug || null, site: site.id }, at),
   ]);
   return { id, publicRef: ref };
@@ -338,8 +345,10 @@ export async function createQuote(db: SqlDb, caseId: string, input: QuoteInput &
   const slug = str(input.experience, 80) || c.experience_slug;
   if (!slug || !experienceOptions().some((x) => x.slug === slug)) throw bad("experience_required", "見積もりには対象の体験が必要です");
   const lines = parseQuoteLines(input.lines);
+  if (c.agency_pays) for (const line of lines) line.commissionable = false;
   const mode = str(input.paymentMode, 10) as PaymentMode;
   const paymentMode: PaymentMode = ["stripe", "external", "none"].includes(mode) ? mode : chargedTotal(lines) > 0 ? "stripe" : "none";
+  if (c.agency_pays && chargedTotal(lines)>0 && paymentMode!=="stripe") throw bad("card_required");
   if (paymentMode === "stripe" && chargedTotal(lines) <= 0) throw bad("bad_total", "オンライン決済には決済対象の金額が必要です");
   const validUntil = isoDate(input.validUntil) ?? jstDate(now + DEFAULT_QUOTE_DAYS * 86400000);
   if (validUntil < jstDate(now)) throw bad("bad_valid_until");
@@ -478,11 +487,12 @@ export interface CustomerQuoteView {
   newerToken: string | null;
 }
 /** What the customer sees (要件 6): never the commission, the partner, internal notes or the case reference (T-N05/T-N07). */
-export async function quoteByToken(db: SqlDb, token: string, now = Date.now()): Promise<CustomerQuoteView | null> {
+export async function quoteByToken(db: SqlDb, token: string, now = Date.now(), wholesaleCaseId?:string): Promise<CustomerQuoteView | null> {
   if (!/^[A-Za-z0-9_-]{20,64}$/.test(token)) return null;
   const q = await db.first<QuoteRow>(`SELECT * FROM case_quotes WHERE share_token = ?`, [token]);
   if (!q) return null;
   const c = await getCase(db, q.case_id);
+  if (c.agency_pays && wholesaleCaseId!==c.id) return null;
   const lang: Lang = c.lang && isLang(c.lang) ? c.lang : "en";
   const lines = parseLines(q.lines_json);
   const expired = q.status === "expired" || (q.status === "shared" && !!q.valid_until && q.valid_until < jstDate(now));
@@ -499,8 +509,8 @@ export async function quoteByToken(db: SqlDb, token: string, now = Date.now()): 
 }
 
 /** The customer presses "pay": a Checkout session for this version, reused while it is still open (Stripe closes them after 24 hours). */
-export async function openQuoteCheckout(db: SqlDb, env: StripeEnv, token: string, origin: string, now = Date.now(), fetchImpl: typeof fetch = fetch): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
-  const view = await quoteByToken(db, token, now);
+export async function openQuoteCheckout(db: SqlDb, env: StripeEnv, token: string, origin: string, now = Date.now(), fetchImpl: typeof fetch = fetch, agency?:{caseId:string; email:string}): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  const view = await quoteByToken(db, token, now, agency?.caseId);
   if (!view) return { ok: false, error: "not_found" };
   if (!view.canPay) return { ok: false, error: view.state === "open" ? "not_payable" : view.state };
   if (!stripeConfigured(env)) return { ok: false, error: "checkout_unavailable" };
@@ -510,13 +520,13 @@ export async function openQuoteCheckout(db: SqlDb, env: StripeEnv, token: string
   const lines = parseLines(q.lines_json).filter((l) => l.kind !== "onsite" && l.grossJpy > 0);
   const params = new URLSearchParams({
     mode: "payment", client_reference_id: quoteReference(q.id),
-    success_url: `${origin}/${view.lang}/quote/${token}/?paid=1`, cancel_url: `${origin}/${view.lang}/quote/${token}/`,
+    success_url: agency ? `${origin}/partner/cases/${agency.caseId}/` : `${origin}/${view.lang}/quote/${token}/?paid=1`, cancel_url: agency ? `${origin}/partner/cases/${agency.caseId}/` : `${origin}/${view.lang}/quote/${token}/`,
     // Never past the quote's own date; Stripe allows at most 24 hours.
     expires_at: String(Math.min(Math.floor(now / 1000) + 24 * 3600 - 60, Math.floor(new Date(`${q.valid_until}T23:59:59+09:00`).getTime() / 1000))),
     "metadata[booking_flow]": "partner_case", "metadata[case_id]": c.id, "metadata[quote_id]": q.id, "metadata[quote_version]": String(q.version), "metadata[reservation_id]": c.reservation_id ?? "", "metadata[experience_slug]": c.experience_slug ?? "",
     "payment_intent_data[metadata][booking_flow]": "partner_case", "payment_intent_data[metadata][booking_reference]": quoteReference(q.id),
     "adaptive_pricing[enabled]": "false",
-    ...(c.customer_email ? { customer_email: c.customer_email } : {}),
+    ...(agency ? {customer_email:agency.email} : c.customer_email ? { customer_email: c.customer_email } : {}),
   });
   lines.forEach((l, i) => {
     params.set(`line_items[${i}][price_data][currency]`, "jpy");
@@ -625,14 +635,14 @@ export async function listCases(db: SqlDb, f: { siteIds?: string[]; userId?: str
               q.status AS q_status, q.payment_mode AS q_mode, q.version AS q_version, q.total_jpy AS q_total
          FROM partner_cases c JOIN hotels h ON h.id = c.site_id LEFT JOIN users u ON u.id = c.assignee_user_id LEFT JOIN reservations r ON r.id = c.reservation_id
          LEFT JOIN case_quotes q ON q.id = (SELECT id FROM case_quotes x WHERE x.case_id = c.id AND x.status IN ('shared','paid') ORDER BY x.version DESC LIMIT 1)
-         ${w} ORDER BY c.updated_at DESC LIMIT ? OFFSET ?`, [...params, limit, offset]),
+         ${w} ORDER BY c.updated_at DESC,c.id ASC LIMIT ? OFFSET ?`, [...params, limit, offset]),
     db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM partner_cases c ${w}`, params),
   ]);
   return {
     total: total?.n ?? 0,
     rows: rows.map((c) => {
       const st = displayStatus(c, c.r_status ? { id: c.reservation_id!, hotel_ref: c.r_ref, status: c.r_status, payment_status: c.r_payment!, amount_status: c.r_amount!, experience_date: null } : null, c.q_status ? { status: c.q_status, payment_mode: c.q_mode! } : null);
-      return { id: c.id, publicRef: c.public_ref, partnerRef: c.partner_ref, siteId: c.site_id, siteName: c.site_name, kind: c.kind, experienceSlug: c.experience_slug, experienceTitle: experienceTitle(c.experience_slug), experienceTitleEn: experienceTitle(c.experience_slug, "en"), preferredDate: c.preferred_date, guests: c.guests, customerName: c.customer_name, status: st, statusJa: CASE_STATUS_JA[st], assignee: c.assignee_email, assignedOps: c.assigned_ops, createdAt: c.created_at, updatedAt: c.updated_at, quoteVersion: c.q_version, totalJpy: c.q_total };
+      return { id: c.id, customerGroup:c.customer_group, customerContact: c.customer_email?.trim().toLowerCase() || c.customer_phone?.trim() || "", hotelRef:c.r_ref, paymentStatus:c.r_payment ?? (c.q_status==="paid"?"paid":"unpaid"), publicRef: c.public_ref, partnerRef: c.partner_ref, siteId: c.site_id, siteName: c.site_name, kind: c.kind, experienceSlug: c.experience_slug, experienceTitle: experienceTitle(c.experience_slug), experienceTitleEn: experienceTitle(c.experience_slug, "en"), preferredDate: c.preferred_date, guests: c.guests, customerName: c.customer_name, status: st, statusJa: CASE_STATUS_JA[st], assignee: c.assignee_email, assignedOps: c.assigned_ops, createdAt: c.created_at, updatedAt: c.updated_at, quoteVersion: c.q_version, totalJpy: c.q_total };
     }),
   };
 }
@@ -680,7 +690,7 @@ export async function caseDetail(db: SqlDb, id: string, viewer: "ops" | "partner
       return {
         id: q.id, version: q.version, status: q.status, statusJa: QUOTE_STATUS_JA[q.status], title: q.title, lines, totalJpy: q.total_jpy, onsiteJpy: q.onsite_jpy,
         includes: q.includes, excludes: q.excludes, onsiteNote: q.onsite_note, cancelTerms: q.cancel_terms, confirmationNote: q.confirmation_note, validUntil: q.valid_until, paymentMode: q.payment_mode, paymentModeJa: PAYMENT_MODE_JA[q.payment_mode],
-        shareUrl: q.share_token && ["shared", "paid"].includes(q.status) ? `${origin}/${c.lang && isLang(c.lang) ? c.lang : "en"}/quote/${q.share_token}/` : null,
+        shareUrl: !c.agency_pays && q.share_token && ["shared", "paid"].includes(q.status) ? `${origin}/${c.lang && isLang(c.lang) ? c.lang : "en"}/quote/${q.share_token}/` : null,
         createdBy: q.created_by, createdAt: q.created_at, sharedAt: q.shared_at, paidAt: q.paid_at, stripeSessionId: viewer === "ops" ? q.stripe_session_id : null,
         commission: { baseNetJpy: base, rateBp: policy?.rate_bp ?? null, estimateNetJpy: policy ? commissionNet([{ netJpy: base, rateBp: policy.rate_bp }]) : null, policyMissing: !policy },
       };

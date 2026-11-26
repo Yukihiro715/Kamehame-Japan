@@ -156,7 +156,23 @@ export async function hotelDetail(db: SqlDb, hotelId: string) {
   ]);
   const accessCounts = await db.all<{ link_id: string; n: number }>(`SELECT link_id, COUNT(*) AS n FROM referral_events WHERE hotel_id = ? AND excluded = 0 GROUP BY link_id`, [hotelId]);
   const byLink = new Map(accessCounts.map((c) => [c.link_id, Number(c.n)]));
-  return { hotel: { ...hotel, features: parseFeatures(hotel.features_json) }, entity, members, links: links.map((l) => ({ ...l, accesses: byLink.get(l.id) ?? 0 })), profiles };
+  const yearStart = jstDate().slice(0,4)+"-01-01";
+  const gross = await db.first<{n:number}>(`SELECT COALESCE(SUM(MAX(0,l.gross_jpy-l.discount_jpy-l.refunded_gross_jpy)),0) n
+    FROM reservations r JOIN reservation_referrals rr ON rr.reservation_id=r.id JOIN reservation_lines l ON l.reservation_id=r.id
+    WHERE rr.hotel_id=? AND rr.status!='removed' AND r.payment_status IN ('paid','partially_refunded')
+      AND r.status NOT IN ('cancelled','no_show') AND l.kind!='onsite' AND r.created_at BETWEEN ? AND ?
+      AND NOT EXISTS (SELECT 1 FROM partner_cases c WHERE c.reservation_id=r.id AND c.agency_pays=1)`,
+    [hotelId, periodBounds(yearStart,yearStart).start, new Date().toISOString()]);
+  const wholesale=await db.first<{paid:number;cancelled:number;refunds:number;knownFees:number;unknownFees:number}>(`
+    WITH paid AS (SELECT r.id, r.request_id, r.external_ref, CASE WHEN c.status='cancelled' OR r.status='cancelled' THEN 1 ELSE 0 END cancelled
+      FROM partner_cases c JOIN reservations r ON r.id=c.reservation_id WHERE c.site_id=? AND c.agency_pays=1 AND r.payment_status IN ('paid','partially_refunded','refunded','disputed')),
+    costs AS (SELECT paid.*, (SELECT CASE WHEN COUNT(*)=1 THEN MAX(json_extract(b.payload,'$.fee')) END FROM business_records b
+      WHERE b.kind='booking' AND (json_extract(b.payload,'$.reservationId')=paid.id OR json_extract(b.payload,'$.requestId')=paid.request_id
+      OR json_extract(b.payload,'$.id')='reservation:'||paid.id OR json_extract(b.payload,'$.externalRef')=paid.external_ref)) fee FROM paid)
+    SELECT COUNT(*) paid, COALESCE(SUM(cancelled),0) cancelled,
+      COALESCE((SELECT SUM(amount_delta_jpy) FROM refunds WHERE reservation_id IN (SELECT id FROM paid)),0) refunds,
+      COALESCE(SUM(CASE WHEN cancelled THEN fee END),0) knownFees, COUNT(CASE WHEN cancelled AND fee IS NULL THEN 1 END) unknownFees FROM costs`,[hotelId]);
+  return { annualGross:gross?.n??0, wholesale, hotel: { ...hotel, features: parseFeatures(hotel.features_json) }, entity, members, links: links.map((l) => ({ ...l, accesses: byLink.get(l.id) ?? 0 })), profiles };
 }
 
 // ---- policies --------------------------------------------------------------

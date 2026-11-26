@@ -27,14 +27,14 @@ after(() => mock.timers.reset());
 const ORIGIN = "https://staging.example";
 const SECRET = "whsec_test_secret";
 
-async function seed(db) {
+async function seed(db, type="guide") {
   const at = iso(T);
   const user = (id, email, name) => ({ sql: `INSERT INTO users (id, email, name, status, created_at) VALUES (?, ?, ?, 'active', ?)`, params: [id, email, name, at] });
   const member = (id, user, role, scope) => ({ sql: `INSERT INTO memberships (id, user_id, role, scope_type, scope_id, created_at) VALUES (?, ?, ?, ?, ?, ?)`, params: [id, user, role, scope ? "hotel" : "ops", scope, at] });
   await db.batch([
     user("u-ops", "ops@example.com", "Ops"), member("m-ops", "u-ops", "ops_booking", null),
     user("u-fin", "fin@example.com", "Fin"), member("m-fin", "u-fin", "ops_finance", null),
-    { sql: `INSERT INTO partner_legal_entities (id, name, partner_type, contact_email, created_at, updated_at) VALUES ('le1', 'Example Travel', 'agency', 'office@agency.example', ?, ?)`, params: [at, at] },
+    { sql: `INSERT INTO partner_legal_entities (id, name, partner_type, contact_email, created_at, updated_at) VALUES ('le1', 'Example Travel', ?, 'office@agency.example', ?, ?)`, params: [type, at, at] },
     { sql: `INSERT INTO hotels (id, legal_entity_id, public_id, name, site_kind, features_json, created_at, updated_at) VALUES ('sA', 'le1', 'HP-0001', 'Agency Tokyo', 'branch', '{"refer":true,"cases":true,"settlement":true,"members":false}', ?, ?)`, params: [at, at] },
     { sql: `INSERT INTO settlement_profiles (id, legal_entity_id, name, payee_name, min_payout_jpy, fee_borne_by, valid_from, created_at, updated_at) VALUES ('spA', 'le1', 'A payout', 'EXAMPLE TRAVEL', 3000, 'hotel', '2026-01-01', ?, ?)`, params: [at, at] },
     { sql: `INSERT INTO settlement_profile_hotels (profile_id, hotel_id, valid_from) VALUES ('spA', 'sA', '2026-01-01')` },
@@ -309,4 +309,24 @@ test("expiry: shared quotes past their date close on the cron; the customer page
     assert.equal((await ops.call("GET", `ops/cases/${c.body.id}`)).body.quotes[0].status, "expired");
     assert.equal((await ops.call("POST", `ops/quotes/${q.body.id}/share`, {})).body.error, "not_draft");
   } finally { agent.restore(); }
+});
+
+test("agency wholesale quote is payable only through its partner case and earns no referral commission",async()=>{
+  const db=openTestDb();await seed(db,"agency");
+  const agent=client(db);await signIn(agent,"agent@agency.example","hotel");
+  const ops=client(db,new Map(),agent.mails,agent.stripe);await signIn(ops,"ops@example.com","ops");
+  try{
+    const created=await agent.call("POST","hotel/cases",{hotel:"sA",kind:"experience",experience:"kanji-name-calligraphy",customerName:"Guest",customerEmail:"guest@customer.example"});
+    const id=created.body.id;
+    const quote=await ops.call("POST",`ops/cases/${id}/quote`,{lines:LINES});
+    const shared=await ops.call("POST",`ops/quotes/${quote.body.id}/share`,{notifyCustomer:true});
+    assert.equal(shared.status,200,JSON.stringify(shared.body));
+    assert.equal(shared.body.shareUrl,null);
+    assert.equal(await C.quoteByToken(db,shared.body.token,T),null);
+    assert.equal(shared.body.quotes[0].commission.estimateNetJpy,0);
+    assert.ok(!agent.mails.some(m=>m.to.includes("guest@customer.example")));
+    const pay=await agent.call("POST",`hotel/cases/${id}/pay-wholesale`,{quoteId:quote.body.id});
+    assert.equal(pay.status,200,JSON.stringify(pay.body));
+    assert.match(pay.body.url,/checkout.stripe.com/);
+  }finally{ops.restore();agent.restore();}
 });

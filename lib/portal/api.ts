@@ -157,7 +157,7 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
   const [head, sub] = path;
   if (head === "me" && ctx.method === "GET") {
     const ids = hotelIdsOf(p);
-    const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT id, name, public_id, status, brochure_url, site_kind, features_json FROM hotels WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`, ids) : [];
+    const hotels = ids.length ? await ctx.db.all<{ id: string; name: string; public_id: string; status: string; brochure_url: string | null; site_kind: string; features_json: string | null }>(`SELECT h.id, h.name, public_id, h.status, brochure_url, site_kind, features_json, le.partner_type FROM hotels h JOIN partner_legal_entities le ON le.id=h.legal_entity_id WHERE h.id IN (${ids.map(() => "?").join(",")}) ORDER BY h.name`, ids) : [];
     return json({ ok: true, user: { email: p.email, name: p.name, lang: p.lang }, demo: p.demo === true, memberships: p.memberships, hotels: hotels.map(({ features_json, ...h }) => ({ ...h, features: parseFeatures(features_json) })) });
   }
   if (head === "lang" && ctx.method === "POST") {
@@ -172,6 +172,8 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     const hotelId = hotelScope(ctx, p, body);
     const features = parseFeatures((await ctx.db.first<{ features_json: string | null }>(`SELECT features_json FROM hotels WHERE id=?`,[hotelId]))?.features_json);
     if (!features.refer && !features.cases) throw forbidden();
+    const agency = await ctx.db.first("SELECT 1 FROM hotels h JOIN partner_legal_entities le ON le.id=h.legal_entity_id WHERE h.id=? AND le.partner_type='agency'", [hotelId]);
+    if (!agency && !p.demo) throw forbidden();
     const canManage = hasSiteRole(p,hotelId,"partner_manager"), canPrice = hasSiteRole(p,hotelId,...CASE_ROLES);
     if (ctx.method === "GET" && !sub) {
       const config = await readBrochureConfig(ctx.db,hotelId);
@@ -287,6 +289,16 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     if (action === "acknowledge" && ctx.method === "POST") { await settle.acknowledgeStatement(ctx.db, id, p.email); return json({ ok: true }); }
     if (action === "dispute" && ctx.method === "POST") { const b = await readJson(ctx.request); return json({ ok: true, ...(await settle.raiseDispute(ctx.db, id, { reason: b.reason, itemId: b.itemId, by: p.email })) }); }
   }
+  if(head==="staff" && ctx.method==="POST"){
+    const b=await readJson(ctx.request), site=hotelScope(ctx,p,b);
+    await requireFeature(ctx.db,site,"members");
+    await requireFeature(ctx.db,site,"cases");
+    if(!hasSiteRole(p,site,"partner_manager")) throw forbidden();
+    const email=str(b.email,254).toLowerCase().trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw bad("bad_email");
+    const r=await inviteMember(ctx.db,ctx.env,{email,name:b.name,role:"partner_agent",scopeType:"hotel",scopeId:site,by:p.email,loginOrigin:await publicOrigin(ctx),scopeLabel:(await ctx.db.first<{name:string}>("SELECT name FROM hotels WHERE id=?",[site]))!.name,lang:b.lang,allowReactivation:false});
+    return json({ok:true,mail:r.mail});
+  }
   if (head === "case-options" && ctx.method === "GET") {
     const hotelId = hotelScope(ctx, p);
     await requireCaseRole(ctx, p, hotelId);
@@ -304,7 +316,15 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
       const b = await readJson(ctx.request);
       const hotelId = hotelScope(ctx, p, b);
       await requireCaseRole(ctx, p, hotelId);
-      const r = await cases.createCase(ctx.db, { ...(b as unknown as cases.NewCaseInput), siteId: hotelId, userId: p.userId, by: p.email });
+      let customerGroup:string|undefined;
+      if(b.previousCase){
+        const previous=await cases.caseForPartner(ctx.db,p,str(b.previousCase,100));
+        if(previous.site_id!==hotelId) throw notFound();
+        b.customerName=previous.customer_name;
+        const contact=previous.customer_email?.trim().toLowerCase() || previous.customer_phone?.trim();
+        customerGroup=previous.customer_group ?? (contact?JSON.stringify([previous.customer_name.trim().toLowerCase(),contact]):previous.id);
+      }
+      const r = await cases.createCase(ctx.db, { ...(b as unknown as cases.NewCaseInput), customerGroup, siteId: hotelId, userId: p.userId, by: p.email });
       const mails = await notifyCase(ctx.db, ctx.env, r.id, await publicOrigin(ctx), { kind: "created" });
       return json({ ok: true, ...r, mails });
     }
@@ -323,6 +343,14 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     if (!action && ctx.method === "GET") return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) });
     if (ctx.method !== "POST") throw notFound();
     const b = await readJson(ctx.request);
+    if(action==="pay-wholesale"){
+      if(!c.agency_pays) throw forbidden();
+      const quote=await ctx.db.first<{share_token:string}>("SELECT share_token FROM case_quotes WHERE case_id=? AND id=? AND status='shared'",[id,str(b.quoteId,100)]);
+      if(!quote) throw notFound();
+      const result=await cases.openQuoteCheckout(ctx.db,ctx.env,quote.share_token,origin,Date.now(),fetch,{caseId:id,email:p.email});
+      if(!result.ok) throw bad(result.error);
+      return json(result);
+    }
     if (action === "update") { await cases.updateCase(ctx.db, id, { ...(b as Partial<cases.NewCaseInput>), by: p.email, actor: "partner" }); return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) }); }
     if (action === "cancel") { await cases.setCaseStatus(ctx.db, id, { status: "cancelled", reason: b.reason, by: p.email, actor: "partner" }); return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) }); }
     if (action === "message") {
@@ -526,7 +554,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       const r = await cases.shareQuote(ctx.db, ctx.env, id, { by: p.email });
       const d = await cases.caseDetail(ctx.db, q0.case_id, "ops", origin);
       const shared = d.quotes.find((x) => x.id === id)!;
-      const mails = await notifyCase(ctx.db, ctx.env, q0.case_id, origin, { kind: "quote_shared", totalJpy: shared.totalJpy, validUntil: shared.validUntil, paymentModeJa: shared.paymentModeJa, paymentModeEn: cases.PAYMENT_MODE_EN[shared.paymentMode], shareUrl: shared.shareUrl ?? "", toCustomer: b.notifyCustomer === true });
+      const mails = await notifyCase(ctx.db, ctx.env, q0.case_id, origin, { kind: "quote_shared", totalJpy: shared.totalJpy, validUntil: shared.validUntil, paymentModeJa: shared.paymentModeJa, paymentModeEn: cases.PAYMENT_MODE_EN[shared.paymentMode], shareUrl: shared.shareUrl ?? "", toCustomer: !d.case.agency_pays && b.notifyCustomer === true });
       return json({ ok: true, ...r, shareUrl: shared.shareUrl, mails, ...d });
     }
     if (action === "void") { const r = await cases.voidQuote(ctx.db, ctx.env, id, { reason: b.reason, by: p.email }); return json({ ok: true, ...r, ...(await cases.caseDetail(ctx.db, q0.case_id, "ops", origin)) }); }

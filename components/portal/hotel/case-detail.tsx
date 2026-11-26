@@ -1,5 +1,7 @@
 "use client";
 
+import { usePortal } from "../shell";
+import { AgencyProposal } from "./proposal";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst } from "../client";
@@ -8,6 +10,8 @@ import { Button, Card, CopyLink, Field, Loading, Notice, ReasonAction } from "..
 import { CaseFacts, CaseLedger, CaseMessages, QuoteCard, StatusBadge, caseTitle, type CaseDetail } from "../case-common";
 
 export function HotelCaseDetail({ id }: { id: string }) {
+  const {lang}=usePortal();
+  const [paying,setPaying]=useState(false);
   const K = t().cases, C = t().common;
   const [d, setD] = useState<CaseDetail | null>(null), [err, setErr] = useState<string | null>(null), [msg, setMsg] = useState<string | null>(null);
   const [edit, setEdit] = useState(false), [f, setF] = useState({ customerName: "", customerEmail: "", customerPhone: "", customerCountry: "", requirements: "", preferredDate: "", guests: "" });
@@ -24,6 +28,11 @@ export function HotelCaseDetail({ id }: { id: string }) {
       {msg && <Notice tone="ok">{msg}</Notice>}
       <Card title={<span>{c.public_ref} · {caseTitle(c)} <StatusBadge status={c.displayStatus} /></span>} actions={<Link className="pt-btn pt-btn-link pt-btn-small" href="/partner/cases/">{C.back}</Link>}>
         <p className="pt-note-box">{label(K.next, c.displayStatus, "")}</p>
+        {!!c.agency_pays && current?.status==="shared" && current.paymentMode==="stripe" && open && <Button disabled={paying} onClick={async()=>{
+          setPaying(true);setErr(null);
+          try{const result=await api<{url:string}>("POST",`hotel/cases/${id}/pay-wholesale`,{quoteId:current.id});window.location.assign(result.url);}
+          catch(e){setErr(errorText(e));setPaying(false);}
+        }}>{lang==="en"?"Pay wholesale amount":"卸値をカードで支払う"}</Button>}
         {current?.shareUrl && <div className="pt-generated-link"><span className="pt-small">{K.customerUrl}</span><a href={current.shareUrl} target="_blank" rel="noreferrer">{current.shareUrl}</a><CopyLink url={current.shareUrl}/></div>}
         {!edit ? <CaseFacts c={c} /> : (
           <div className="pt-form">
@@ -40,6 +49,7 @@ export function HotelCaseDetail({ id }: { id: string }) {
         <p className="pt-small pt-muted">{K.meta(jst(c.created_at), jst(c.updated_at), c.createdBy ?? "—")}</p>
         {open && !edit && <div className="pt-row"><Button kind="secondary" small onClick={() => setEdit(true)}>{K.edit}</Button><ReasonAction label={K.withdraw} kind="danger" confirmLabel={K.withdrawConfirm} placeholder={K.withdrawPh} onConfirm={(reason) => run(() => api("POST", `hotel/cases/${id}/cancel`, { reason }), K.withdrawn)} /></div>}
       </Card>
+      {!!c.agency_pays && current && <AgencyProposal c={c} q={current} en={lang==="en"}/>}
       <Card title={K.quotes}>
         {d.quotes.length === 0 ? <p className="pt-small pt-muted">{K.noQuotes}</p> : d.quotes.map((q) => <QuoteCard key={q.id} q={q} kind="hotel" />)}
       </Card>
