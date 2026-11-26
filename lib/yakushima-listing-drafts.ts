@@ -80,15 +80,15 @@ const photosBySlug: Record<string, ListingDraft["images"]> = {
     photo(`${Y}/yakushima-sea/dive-clownfish.webp`, "A diver watching clownfish over the reef", "岩礁の上でクマノミを見るダイバー", 670, 447),
   ],
   "yakushima-discover-scuba-two-dives": [
-    // Same operator and sites as the one-dive course.
+    // Photos from the operator's Viator listing of the two-dive course, supplied by the owner (2026-11-27).
+    photo(`${Y}/yakushima-sea/dive-trio-turtle.webp`, "Three divers gathered around a sea turtle on the reef", "岩礁のウミガメを囲む3人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-anemone.webp`, "Two divers face to face with clownfish over an anemone", "イソギンチャクのクマノミと向かい合う2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-trio-anemone.webp`, "Three divers watching clownfish in an anemone", "イソギンチャクのクマノミを見る3人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-turtle-reef.webp`, "Two divers behind a turtle resting on the rocks", "岩場で休むウミガメの後ろの2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-shore-walk.webp`, "Divers walking down to the entry point from the van", "車から海へ向かって歩くダイバーたち", 670, 447),
     photo(`${Y}/yakushima-sea/dive-pair-from-below.webp`, "Two divers seen from below against the bright surface", "明るい水面を背に下から見上げた2人のダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-pair-kneeling.webp`, "Two beginner divers kneeling on the sandy bottom with their instructor's guidance", "インストラクターの指導のもと砂地に膝をつく初心者ダイバー2人", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-clownfish.webp`, "A diver watching clownfish over the reef", "岩礁の上でクマノミを見るダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-anemone.webp`, "A diver looking closely at an anemone and its clownfish", "イソギンチャクとクマノミをのぞき込むダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-instructor-slate.webp`, "The instructor explaining with a slate to two divers on the sand", "砂地で2人のダイバーにスレートで説明するインストラクター", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-sergeant-fish.webp`, "A diver surrounded by a school of sergeant major fish", "オヤビッチャの群れに囲まれたダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-wetsuits-van.webp`, "Getting into wetsuits beside the van at the shore", "海辺の車のそばでウェットスーツに着替える", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-guide-pointing.webp`, "The guide pointing out the dive site from the shore", "浜からポイントを指差して説明するガイド", 670, 447),
   ],
 };
 
