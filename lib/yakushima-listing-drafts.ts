@@ -14,10 +14,6 @@ type Course = {
 
 const Y = "/images/partner-listings";
 const photo = (src: string, en: string, ja: string, width = 940, height = 474) => ({ src, en, ja, width, height });
-const seaPhotos = [
-  photo(`${Y}/yakushima-sea/turtle.webp`, "A snorkeller face to face with a sea turtle in clear water", "透明な海でウミガメと向かい合うシュノーケラー", 1600, 900),
-  photo(`${Y}/yakushima-sea/photos-phone.webp`, "Underwater photos of the tour delivered to your phone", "ツアー中の水中写真をスマートフォンで受け取る", 1600, 900),
-];
 const photosBySlug: Record<string, ListingDraft["images"]> = {
   "yakushima-jomonsugi-trekking": [
     photo(`${Y}/yakushima-jomonsugi/jomon-sugi.webp`, "The vast trunk of Jomon Sugi", "縄文杉の巨大な幹"),
@@ -62,9 +58,38 @@ const photosBySlug: Record<string, ListingDraft["images"]> = {
     photo(`${Y}/yakushima-sea/snorkel-turtle-below.webp`, "Two snorkellers looking down at a large turtle", "大きなウミガメを見下ろす2人のシュノーケラー", 1100, 800),
     photo(`${Y}/yakushima-sea/snorkel-group-surface.webp`, "A group of snorkellers at the surface with the green hills of Yakushima behind", "屋久島の緑の山を背に水面に並ぶ参加者", 700, 500),
   ],
-  "yakushima-discover-scuba-one-dive": seaPhotos,
-  "yakushima-discover-scuba-extended-dive": seaPhotos,
-  "yakushima-discover-scuba-two-dives": seaPhotos,
+  "yakushima-discover-scuba-one-dive": [
+    // Photos from the operator's Viator listing of the one-dive course, supplied by the owner (2026-11-27).
+    photo(`${Y}/yakushima-sea/dive-instructor-slate.webp`, "The instructor explaining with a slate to two divers on the sand", "砂地で2人のダイバーにスレートで説明するインストラクター", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-sand.webp`, "Two divers waving on the sandy bottom in clear blue water", "澄んだ青い海の砂地で手を振る2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-sergeant-fish.webp`, "A diver surrounded by a school of sergeant major fish", "オヤビッチャの群れに囲まれたダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-wetsuits-van.webp`, "Getting into wetsuits beside the van at the shore", "海辺の車のそばでウェットスーツに着替える", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-surface-hills.webp`, "A diver at the surface before the dive, the green hills of Yakushima behind", "潜る前に水面で合図を送るダイバー。背後に屋久島の緑の山", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-clownfish.webp`, "A diver watching clownfish over the reef", "岩礁の上でクマノミを見るダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-from-below.webp`, "Two divers seen from below against the bright surface", "明るい水面を背に下から見上げた2人のダイバー", 670, 447),
+  ],
+  "yakushima-discover-scuba-extended-dive": [
+    // Same operator and sites as the one-dive course; the turtle leads because the longer dive is about meeting one.
+    photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-from-below.webp`, "Two divers seen from below against the bright surface", "明るい水面を背に下から見上げた2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-anemone.webp`, "A diver looking closely at an anemone and its clownfish", "イソギンチャクとクマノミをのぞき込むダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-kneeling.webp`, "Two beginner divers kneeling on the sandy bottom with their instructor's guidance", "インストラクターの指導のもと砂地に膝をつく初心者ダイバー2人", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-sergeant-fish.webp`, "A diver surrounded by a school of sergeant major fish", "オヤビッチャの群れに囲まれたダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-guide-pointing.webp`, "The guide pointing out the dive site from the shore", "浜からポイントを指差して説明するガイド", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-clownfish.webp`, "A diver watching clownfish over the reef", "岩礁の上でクマノミを見るダイバー", 670, 447),
+  ],
+  "yakushima-discover-scuba-two-dives": [
+    // Same operator and sites as the one-dive course.
+    photo(`${Y}/yakushima-sea/dive-pair-from-below.webp`, "Two divers seen from below against the bright surface", "明るい水面を背に下から見上げた2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-pair-kneeling.webp`, "Two beginner divers kneeling on the sandy bottom with their instructor's guidance", "インストラクターの指導のもと砂地に膝をつく初心者ダイバー2人", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-clownfish.webp`, "A diver watching clownfish over the reef", "岩礁の上でクマノミを見るダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-anemone.webp`, "A diver looking closely at an anemone and its clownfish", "イソギンチャクとクマノミをのぞき込むダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-instructor-slate.webp`, "The instructor explaining with a slate to two divers on the sand", "砂地で2人のダイバーにスレートで説明するインストラクター", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-wetsuits-van.webp`, "Getting into wetsuits beside the van at the shore", "海辺の車のそばでウェットスーツに着替える", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-guide-pointing.webp`, "The guide pointing out the dive site from the shore", "浜からポイントを指差して説明するガイド", 670, 447),
+  ],
 };
 
 const shirataniCosts = {
