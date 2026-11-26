@@ -330,3 +330,38 @@ test("agency wholesale quote is payable only through its partner case and earns 
     assert.match(pay.body.url,/checkout.stripe.com/);
   }finally{ops.restore();agent.restore();}
 });
+
+test("guest guide requires payment and confirmation, supports overrides, and sends only once", async () => {
+  const db = openTestDb(); await seed(db,"agency");
+  const agent=client(db); await signIn(agent,"agent@agency.example","hotel");
+  const ops=client(db,new Map(),agent.mails,agent.stripe); await signIn(ops,"ops@example.com","ops");
+  const manager=client(db,new Map(),agent.mails,agent.stripe); await signIn(manager,"manager@agency.example","hotel");
+  const {publicGuide}=await vite.ssrLoadModule("/lib/portal/guest-guide.ts");
+  try {
+    const reg=await agent.call("POST","hotel/cases",{hotel:"sA",experience:"kanji-name-calligraphy",customerName:"Guide sample",customerEmail:"guide@customer.example"});
+    assert.equal(reg.status,200,JSON.stringify(reg.body));
+    const id=reg.body.id, op=`ops/cases/${id}`, hotel=`hotel/cases/${id}`;
+    assert.equal((await agent.call("POST","hotel/guest-guide-settings",{hotel:"sA",enabled:true})).status,403);
+    assert.equal((await manager.call("POST","hotel/guest-guide-settings",{hotel:"sA",enabled:true})).status,200);
+    assert.equal((await ops.call("POST",op+"/guest-guide",{instructions:"Meet at the north entrance",mode:"default"})).status,200);
+    await agent.call("POST",hotel+"/guest-guide",{mode:"manual",instructions:"Untrusted replacement"});
+    const quote=await ops.call("POST",op+"/quote",{lines:LINES});
+    const shared=await ops.call("POST",`ops/quotes/${quote.body.id}/share`,{});
+    assert.equal((await ops.call("POST",op+"/confirm",{})).status,200);
+    assert.equal((await agent.call("GET",hotel+"/guest-guide")).body.url,null);
+    assert.equal(agent.mails.filter(m=>m.to.includes("guide@customer.example")).length,0);
+    await db.run("UPDATE reservations SET payment_status='paid' WHERE id=?",[shared.body.reservation.id]);
+    assert.equal((await ops.call("POST",op+"/confirm",{})).status,200);
+    const details=(await agent.call("GET",hotel+"/guest-guide")).body;
+    assert.match(details.url,/\/api\/guest-guide\//);
+    assert.equal(details.instructions,"Meet at the north entrance");
+    assert.equal(agent.mails.filter(m=>m.to.includes("guide@customer.example")).length,0);
+    const token=details.url.split("/").at(-1);
+    assert.equal((await publicGuide(db,token)).instructions,"Meet at the north entrance");
+    await agent.call("POST",hotel+"/guest-guide",{mode:"auto"});
+    await ops.call("POST",op+"/guest-guide",{send:true});
+    assert.equal(agent.mails.filter(m=>m.to.includes("guide@customer.example")).length,1);
+    await db.run("UPDATE reservations SET status='cancelled' WHERE id=?",[shared.body.reservation.id]);
+    assert.equal(await publicGuide(db,token),null);
+  } finally { manager.restore();ops.restore();agent.restore(); }
+});

@@ -6,7 +6,7 @@ import { Info, X } from "lucide-react";
 import { t } from "./i18n";
 
 /** Native modal: focus containment, inert background and mobile tap support. */
-export function PortalDialog({ title, children, onClose, className = "" }: { title: string; children: ReactNode; onClose: () => void; className?: string }) {
+export function PortalDialog({ title, children, onClose, className = "", closeInFooter = true, subtitle }: { title: string; children: ReactNode; onClose: () => void; className?: string; closeInFooter?: boolean; subtitle?: string }) {
   const dialog = useRef<HTMLDialogElement>(null), id = useId(), C = t().common;
   useEffect(() => {
     const el = dialog.current, previous = document.activeElement as HTMLElement | null, overflow = document.body.style.overflow;
@@ -15,7 +15,7 @@ export function PortalDialog({ title, children, onClose, className = "" }: { tit
     return () => { el.close(); document.body.style.overflow = overflow; if(previous?.isConnected) previous.focus(); };
   }, []);
   return createPortal(<dialog ref={dialog} className={`pt-help-dialog ${className}`} aria-labelledby={`${id}-title`} aria-describedby={`${id}-body`} onCancel={e => { e.preventDefault(); onClose(); }} onClick={e => { if(e.target===e.currentTarget) onClose(); }}>
-    <div className="pt-help-content"><header><h2 id={`${id}-title`}>{title}</h2><button type="button" className="pt-info-button" aria-label={C.close} onClick={onClose}><X size={22} aria-hidden="true"/></button></header><div id={`${id}-body`}>{children}</div><button type="button" className="pt-btn pt-btn-primary" onClick={onClose}>{C.close}</button></div>
+    <div className="pt-help-content"><header><div><h2 id={`${id}-title`}>{title}</h2>{subtitle&&<small>{subtitle}</small>}</div><button type="button" className="pt-info-button" aria-label={C.close} onClick={onClose}><X size={22} aria-hidden="true"/></button></header><div id={`${id}-body`}>{children}</div>{closeInFooter && <button type="button" className="pt-btn pt-btn-primary" onClick={onClose}>{C.close}</button>}</div>
   </dialog>, document.body);
 }
 

@@ -52,7 +52,7 @@ export function validatePrice(input: Record<string, unknown>): { slug: string; v
   if (input.priceJpy !== null && (typeof input.priceJpy !== 'number' || !Number.isSafeInteger(input.priceJpy) || input.priceJpy < 1 || input.priceJpy > 100000000)) throw bad('brochure_price', '案内価格は1〜100,000,000円の整数で入力してください / Enter a whole-yen price from 1 to 100,000,000.');
   if (input.priceUnit !== 'person' && input.priceUnit !== 'group') throw bad('brochure_unit');
   const priceMode = input.priceMode ?? (input.priceJpy === null ? 'inquiry' : 'fixed');
-  if (!['fixed','inquiry','unset'].includes(String(priceMode)) || (priceMode === 'fixed' ? input.priceJpy === null : input.priceJpy !== null)) throw bad('brochure_price', '金額を入力するか「お問い合わせ」を選択してください / Enter a price or choose Enquire.');
+  if (!['fixed','inquiry','unset'].includes(String(priceMode)) || (priceMode === 'fixed' ? input.priceJpy === null : input.priceJpy !== null)) throw bad('brochure_price', '金額を入力するか「料金を非表示」を選択してください / Enter a price or choose Hide price.');
   return { slug, value: { priceJpy: input.priceJpy as number | null, priceUnit: input.priceUnit, priceMode: priceMode as BrochurePrice['priceMode'], priceNote: text(input.priceNote, 180), priceNoteEn: text(input.priceNoteEn ?? input.priceNote, 180) } };
 }
 export async function readBrochureConfig(db: SqlDb, hotelId: string) {

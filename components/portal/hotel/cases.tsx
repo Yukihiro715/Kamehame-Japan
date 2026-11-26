@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { PortalDialog } from "../help";
+import { HotelCaseDetail } from "./case-detail";
+import { localDemoCases, type LocalDemoCase } from "./demo-cases";
 import Link from "next/link";
 import { api, errorText, yen } from "../client";
 import { label, t } from "../i18n";
@@ -11,6 +15,7 @@ import type { HotelReservationRow } from "@/lib/portal/metrics";
 
 type Case = {
   id: string;
+  experienceSlug?: string;
   publicRef: string;
   partnerRef: string | null;
   customerName: string;
@@ -29,6 +34,9 @@ type Case = {
 type Tab = "all" | "open" | "paid";
 type Item = {
   group: string;
+  slug?: string;
+  caseId?: string;
+  sample?: LocalDemoCase;
   customer: string;
   ref: string;
   title: string;
@@ -69,11 +77,32 @@ export function HotelCases() {
     cases: Case[];
     reservations: HotelReservationRow[];
   } | null>(null);
+  const [catalog, setCatalog] = useState<
+    Record<string, { img: string; city: string }>
+  >({});
+  const [demoRows, setDemoRows] = useState<LocalDemoCase[]>([]);
+  const [selected, setSelected] = useState<Item | null>(null);
+  const [demoId, setDemoId] = useState("");
   const [err, setErr] = useState(""),
     [retry, setRetry] = useState(0);
   useEffect(() => {
     if (!hotel) return;
     let live = true;
+    if (me.demo) {
+      setDemoRows(localDemoCases());
+      setDemoId(new URLSearchParams(window.location.search).get("demo") ?? "");
+    }
+    api<{ experiences: { slug: string; img: string; city: string }[] }>(
+      "GET",
+      "hotel/experiences?hotel=" + hotel.id,
+    )
+      .then((r) => {
+        if (live)
+          setCatalog(Object.fromEntries(r.experiences.map((x) => [x.slug, x])));
+      })
+      .catch(() => {
+        if (live) setCatalog({});
+      });
     Promise.all([
       access.cases
         ? pages<Case>("hotel/cases?hotel=" + hotel.id)
@@ -92,7 +121,7 @@ export function HotelCases() {
     return () => {
       live = false;
     };
-  }, [hotel, access.cases, retry]);
+  }, [hotel, access.cases, me.demo, retry]);
   if (err)
     return (
       <>
@@ -115,6 +144,8 @@ export function HotelCases() {
               c.customerContact,
             ])
           : c.id),
+      slug: c.experienceSlug,
+      caseId: c.id,
       customer: c.customerName,
       ref: c.publicRef,
       title: en ? c.experienceTitleEn : c.experienceTitle,
@@ -142,6 +173,7 @@ export function HotelCases() {
   for (const r of resByRef.values())
     items.push({
       group: r.hotelRef,
+      slug: r.experienceSlug,
       customer: r.hotelRef,
       ref: r.hotelRef,
       title: r.experience,
@@ -156,6 +188,32 @@ export function HotelCases() {
       amount: r.bookingGross,
       commission: r.commissionNet,
     });
+  for (const sample of demoRows)
+    items.push({
+      group: sample.id,
+      customer: sample.customerName,
+      ref: sample.publicRef,
+      title: en ? sample.experienceTitleEn : sample.experienceTitle,
+      day: sample.preferredDate,
+      status: label(t().status.kase, "received"),
+      payment: label(t().status.payment, "unpaid"),
+      paid: false,
+      open: true,
+      href: "#" + sample.id,
+      source: en ? "Demo case" : "デモ案件",
+      updated: sample.updatedAt,
+      amount: null,
+      commission: null,
+      slug: sample.experienceSlug,
+      sample,
+    });
+  const detail = selected ?? items.find((item) => item.sample?.id === demoId);
+  function hideDetail() {
+    setSelected(null);
+    setDemoId("");
+    if (new URLSearchParams(window.location.search).has("demo"))
+      window.history.replaceState(null, "", window.location.pathname);
+  }
   const groups = new Map<string, Item[]>();
   for (const item of items.sort((a, b) => b.updated.localeCompare(a.updated))) {
     if ((tab === "open" && !item.open) || (tab === "paid" && !item.paid))
@@ -178,7 +236,8 @@ export function HotelCases() {
   };
   return (
     <>
-      <div className="pt-list-heading">
+      <label className="pt-search pt-case-searchbox">
+        <Search aria-hidden="true" size={18} />
         <input
           type="search"
           aria-label={en ? "Search cases" : "案件を検索"}
@@ -193,12 +252,7 @@ export function HotelCases() {
             setPage(0);
           }}
         />
-        {access.cases && (
-          <Link className="pt-btn pt-btn-primary" href="/partner/cases/new/">
-            {t().cases.newCase}
-          </Link>
-        )}
-      </div>
+      </label>
       <div className="pt-segments">
         {(["all", "open", "paid"] as const).map((k) => (
           <button
@@ -229,27 +283,109 @@ export function HotelCases() {
                 : "このお客様に体験を追加"}
             </Link>
           )}
-          {rows.map((r) => (
-            <article className="pt-case-row" key={r.href}>
-              <small>
-                {r.source} · {r.ref} {r.partnerRef} · {r.day ?? "—"}{" "}
-                {r.assignee}
-              </small>
-              <h3>
-                <Link href={r.href}>{r.title}</Link>
-              </h3>
-              <p>
-                {r.status} · {r.payment}
-              </p>
-              <span>
-                {en ? "Amount" : "金額"} {yen(r.amount)} ·{" "}
-                {en ? "Commission (excl. tax)" : "コミッション（税抜）"}{" "}
-                {yen(r.commission)}
-              </span>
-            </article>
-          ))}
+          {rows.map((r) => {
+            const product =
+              r.slug === "golf-bus"
+                ? { img: "/images/golf-bus/hero-wide.webp", city: "" }
+                : r.slug
+                  ? catalog[r.slug]
+                  : null;
+            const productUrl = product
+              ? `/${en ? "en" : "ja"}/${product.city ? product.city + "/" : ""}${encodeURIComponent(r.slug!)}/`
+              : null;
+            return (
+              <article className="pt-case-tile" key={r.href}>
+                <button
+                  type="button"
+                  className="pt-case-tile-main"
+                  onClick={() => {
+                    setDemoId("");
+                    setSelected(r);
+                  }}
+                >
+                  {product?.img && (
+                    <img
+                      src={product.img}
+                      alt=""
+                      width={76}
+                      height={58}
+                      loading="lazy"
+                    />
+                  )}
+                  <span>
+                    <small>
+                      {r.source} · {r.ref} {r.partnerRef}
+                    </small>
+                    <strong>{r.title}</strong>
+                    <small>
+                      {r.day ?? "—"} {r.assignee}
+                    </small>
+                  </span>
+                  <span className="pt-case-tile-state">
+                    <b>{r.status}</b>
+                    <small>{r.payment}</small>
+                  </span>
+                  <span className="pt-case-tile-amount">
+                    <strong>{yen(r.amount)}</strong>
+                    {r.commission !== null && (
+                      <small>
+                        {en ? "Commission" : "コミッション"} {yen(r.commission)}
+                      </small>
+                    )}
+                  </span>
+                </button>
+                {productUrl && (
+                  <a
+                    className="pt-inline-link"
+                    href={productUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {en ? "View experience" : "体験ページを見る"} ↗
+                  </a>
+                )}
+              </article>
+            );
+          })}
         </section>
       ))}
+      {detail && (
+        <PortalDialog
+          className="pt-case-modal pt-case-details"
+          closeInFooter={false}
+          title={detail.title}
+          subtitle={detail.ref}
+          onClose={hideDetail}
+        >
+          {detail.caseId ? (
+            <HotelCaseDetail id={detail.caseId} inModal />
+          ) : (
+            <div className="pt-card">
+              <p>
+                {detail.customer} · {detail.day || "—"}
+                {detail.sample?.timePref ? " " + detail.sample.timePref : ""}
+              </p>
+              <p>
+                {detail.status} · {detail.payment}
+              </p>
+              <p>
+                {en ? "Amount" : "金額"} {yen(detail.amount)}
+              </p>
+              {detail.sample ? (
+                <Notice>
+                  {en
+                    ? "Demo case registered in this tab."
+                    : "このタブ内にデモ案件を登録しました。"}
+                </Notice>
+              ) : (
+                <Link href={detail.href}>
+                  {en ? "Full booking record" : "予約明細を確認する"}
+                </Link>
+              )}
+            </div>
+          )}
+        </PortalDialog>
+      )}
       {!groups.size && <p>{t().common.empty}</p>}
       {groups.size > 20 && (
         <div className="pt-pagination">

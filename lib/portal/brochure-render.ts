@@ -66,6 +66,7 @@ export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInp
   if(hasDetail)photo(detail!,489,701,296,214);
   rect(42,940,743,1,accent);
   // Price and contacts use equal baselines. QR consumes space only when enabled.
+  if(p.priceMode==='fixed'){
   text(en?'EXPERIENCE PRICE':'ご案内価格',42,960,284,10,1,14,accent,600);
   const amount=p.priceJpy===null?(en?'Please enquire':'お問い合わせ'):new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',maximumFractionDigits:0}).format(p.priceJpy);
   if(p.priceJpy===null) fitted(amount,42,984,280,47,34,23,ink,400,true);
@@ -80,7 +81,8 @@ export function renderBrochure(ctx: CanvasRenderingContext2D, input: BrochureInp
   text(en?'Tax included':'消費税込み',42,1036,280,11,1,14,muted);
   fitted((en?p.priceNoteEn:p.priceNote)||'',42,1060,280,65,11,8,muted);
   rect(343,960,1,164,accent);
-  const qrUrl=brochureQrUrl(b),cx=365,cw=qrUrl?280:420;
+  }
+  const qrUrl=brochureQrUrl(b),cx=p.priceMode==="fixed"?365:42,cw=p.priceMode==="fixed"?(qrUrl?280:420):(qrUrl?580:743);
   text(en?'BOOKINGS & ENQUIRIES':'ご予約・お問い合わせ',cx,960,cw,11,1,15,accent,600);
   const contacts=visibleBrochureContacts(b);
   // Allocate more space to long URLs; labels never stand in for a truncated address.

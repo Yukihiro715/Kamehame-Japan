@@ -38,7 +38,7 @@ export function Table({ head, rows, empty, compact }: { head: ReactNode[]; rows:
   );
 }
 
-export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: ReactNode }) {
+export function Field({ label, children, hint }: { label: ReactNode; children: ReactNode; hint?: ReactNode }) {
   return <label className="pt-field"><span className="pt-field-l">{label}</span>{children}{hint && <small className="pt-field-hint">{hint}</small>}</label>;
 }
 

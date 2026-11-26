@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst, yen } from "../client";
 import { Button, Card, Field, Loading, Notice, ReasonAction } from "../ui";
+import { GuestGuide } from "../guest-guide";
 import { CaseFacts, CaseLedger, CaseMessages, LANG_JA, LINE_KIND_JA, QuoteCard, StatusBadge, type CaseDetail, type ExtraField, type QuoteLine } from "../case-common";
 
 interface Options { experiences: { slug: string; title: string; price: string | null; extraFields: ExtraField[] }[]; statuses: { value: string; label: string }[] }
@@ -131,6 +132,7 @@ export function OpsCaseDetail({ id }: { id: string }) {
         {draft && !composer && <p className="pt-small pt-muted">下書きは共有するまでパートナーに見えません。</p>}
       </Card>
       <Card title="予約台帳・紹介料"><CaseLedger d={d} kind="ops" /></Card>
+      <GuestGuide path={`ops/cases/${id}/guest-guide`} operator messages={d.messages}/>
       <Card title="連絡・資料"><CaseMessages kind="ops" caseId={id} messages={d.messages} onPosted={load} /></Card>
     </>
   );

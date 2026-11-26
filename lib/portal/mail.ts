@@ -16,13 +16,13 @@ export function recipientAllowed(env: PortalMailEnv, to: string): boolean {
   return list.some((entry) => (entry.startsWith("@") ? email.endsWith(entry) : entry === email));
 }
 
-export async function sendPortalMail(env: PortalMailEnv, mail: { to: string; subject: string; text: string }, fetchImpl: typeof fetch = fetch): Promise<MailOutcome> {
+export async function sendPortalMail(env: PortalMailEnv, mail: { to: string; subject: string; text: string; idempotencyKey?:string }, fetchImpl: typeof fetch = fetch): Promise<MailOutcome> {
   if (!env.RESEND_API_KEY) return "unconfigured";
   if (!recipientAllowed(env, mail.to)) return "blocked";
   try {
     const res = await fetchImpl("https://api.resend.com/emails", {
       method: "POST",
-      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json", ...(mail.idempotencyKey?{"Idempotency-Key":mail.idempotencyKey}:{}) },
       signal: AbortSignal.timeout(10000),
       body: JSON.stringify({ from: PORTAL_MAIL_FROM, to: [mail.to], subject: mail.subject, text: mail.text, tags: [{ name: "kind", value: "portal" }] }),
     });

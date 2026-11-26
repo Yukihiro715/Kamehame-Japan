@@ -1,3 +1,4 @@
+import { validNewPassword } from "./password-policy";
 import { randomId, type SqlDb } from "@/lib/referral/db";
 import { normalizeEmail, validEmail, sha256Hex, SESSION_TTL_MS, bootstrapAdmin, type PortalKind, type Principal, type VerifyResult } from "./auth";
 import { DEMO_EMAIL } from "./demo-config";
@@ -37,7 +38,7 @@ export async function requestPassword(db: SqlDb, env: PortalMailEnv, input: { em
 export async function setPassword(db: SqlDb, input: { token: unknown; password: unknown; ip: string; kind?: PortalKind }, now = Date.now()) {
   const kind = input.kind ?? "hotel", prefix = kind === "ops" ? "ops" : "partner";
   if (!await allowed(db, "set", input.ip, 10, now)) return false;
-  if (typeof input.token !== "string" || !/^[A-Za-z0-9_-]{44}$/.test(input.token) || typeof input.password !== "string" || input.password.length < 12 || input.password.length > 128) return false;
+  if (typeof input.token !== "string" || !/^[A-Za-z0-9_-]{44}$/.test(input.token) || !validNewPassword(input.password)) return false;
   const hash = await sha256Hex(input.token), at = new Date(now).toISOString();
   const row = await db.first<{ user_id: string; email: string }>(`SELECT t.user_id,u.email FROM ${prefix}_password_tokens t JOIN users u ON u.id=t.user_id WHERE token_hash=? AND consumed_by IS NULL AND expires_at>?`, [hash, at]);
   if (!row || !await eligible(db, row.email, kind)) return false;
@@ -94,7 +95,7 @@ export async function provisionPassword(db: SqlDb, userId: string, now = Date.no
 }
 export async function changeInitialPassword(db: SqlDb, p: Principal, input: {password:unknown; currentPassword:unknown}, ip: string, now = Date.now()) {
   if (!await allowed(db,"initial-change",ip,10,now)) return false;
-  if(typeof input.password!=="string" || input.password.length<12 || input.password.length>128 || typeof input.currentPassword!=="string" || input.currentPassword.length>128 || input.password===input.currentPassword) return false;
+  if(!validNewPassword(input.password) || typeof input.currentPassword!=="string" || input.currentPassword.length>128 || input.password===input.currentPassword) return false;
   const row=await db.first<{salt:string;password_hash:string}>(`SELECT c.salt,c.password_hash FROM ops_passwords c JOIN ops_password_changes f ON f.user_id=c.user_id WHERE c.user_id=? AND f.expires_at>?`,[p.userId,new Date(now).toISOString()]);
   if(!row || await passwordHash(input.currentPassword,row.salt)!==row.password_hash) return false;
   const salt=hex(crypto.getRandomValues(new Uint8Array(32))), verifier=await passwordHash(input.password,salt),at=new Date(now).toISOString();
