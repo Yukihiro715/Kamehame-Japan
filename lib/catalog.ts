@@ -2913,10 +2913,10 @@ export const experiences: Experience[] = [
       "You learn the nine seals of the kuji in order, from preparing to face yourself to finding a wider awareness; practise yin and yang breathing and the ninja's silent footwork; and sit — on a cushion or a chair — through a meditation on the elements. Sessions run from 1:30 pm to 4:30 pm for up to fifteen guests aged sixteen and over, in Japanese with English interpretation.",
     ],
     duration: "3 hours", price: "¥44,000", priceUnit: "person", group: "Up to 15 guests", ages: "Ages 16+", area: "Tokyo (near Tokyo Tower, Minato)",
-    img: "/images/ninja-zen-meditation/tower-silhouettes.webp", alt: "Silhouettes of the group beneath Tokyo Tower at night",
+    img: "/images/ninja-zen-meditation/tower-walk.webp", alt: "Walking toward Tokyo Tower after dark",
     gallery: [
       { img: "/images/ninja-zen-meditation/tower-up.webp", alt: "Tokyo Tower lit orange, seen from directly below" },
-      { img: "/images/ninja-zen-meditation/tower-walk.webp", alt: "Walking toward Tokyo Tower after dark" },
+      { img: "/images/ninja-zen-meditation/tower-silhouettes.webp", alt: "Silhouettes of the group beneath Tokyo Tower at night" },
       { img: "/images/ninja-zen-meditation/temple-steps.webp", alt: "Climbing the temple steps at night" },
       { img: "/images/ninja-zen-meditation/tower-dusk.webp", alt: "Tokyo Tower at dusk" },
       { img: "/images/ninja-zen-meditation/hand-seal.webp", alt: "Learning a ninja hand seal" },

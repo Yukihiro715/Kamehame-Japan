@@ -2126,10 +2126,10 @@ export const experiencesJa: Experience[] = [
       "九字の印を順に学び(自分に向き合う準備から、より広い意識へ)、陰と陽の呼吸と忍び足を練習し、座布団か椅子に座って五大の瞑想を行います。13:30〜16:30、16歳以上、最大15名。日本語で進め、英語の通訳がつきます。",
     ],
     duration: "3時間", price: "¥44,000", group: "最大15名", ages: "16歳以上", area: "東京(港区・東京タワー周辺)",
-    img: "/images/ninja-zen-meditation/tower-silhouettes.webp", alt: "夜の東京タワーの足元に並ぶ参加者のシルエット",
+    img: "/images/ninja-zen-meditation/tower-walk.webp", alt: "日没後に東京タワーへ向かって歩く",
     gallery: [
       { img: "/images/ninja-zen-meditation/tower-up.webp", alt: "真下から見上げるオレンジ色の東京タワー" },
-      { img: "/images/ninja-zen-meditation/tower-walk.webp", alt: "日没後に東京タワーへ向かって歩く" },
+      { img: "/images/ninja-zen-meditation/tower-silhouettes.webp", alt: "夜の東京タワーの足元に並ぶ参加者のシルエット" },
       { img: "/images/ninja-zen-meditation/temple-steps.webp", alt: "夜の寺の石段を上る" },
       { img: "/images/ninja-zen-meditation/tower-dusk.webp", alt: "夕暮れの東京タワー" },
       { img: "/images/ninja-zen-meditation/hand-seal.webp", alt: "忍者の印を習う手元" },
