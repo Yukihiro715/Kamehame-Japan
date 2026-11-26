@@ -7,9 +7,105 @@ const root=fileURLToPath(new URL('..',import.meta.url));
 const vite=await createServer({appType:'custom',configFile:false,root,resolve:{alias:{'@':root}},server:{middlewareMode:true},logLevel:'silent'});
 after(()=>vite.close());
 const {sync,syncSources}=await vite.ssrLoadModule('/lib/business/sync.ts');
+const {openAiSpendForTotals,openAiReportPeriod}=await vite.ssrLoadModule('/lib/business/openai-ads-report.ts');
 const env={GOOGLE_ADS_CLIENT_ID:'test-client',GOOGLE_ADS_CLIENT_SECRET:'test-secret',GOOGLE_ADS_REFRESH_TOKEN:'test-refresh'};
 const period={start:'2026-11-01',end:'2026-11-16'};
 const json=(d,status=200)=>new Response(JSON.stringify(d),{status});
+const openAiKey={OPENAI_ADS_API_KEY:'test-advertiser-key'};
+const openAiAccount={id:'adacct_fixture',url:'https://kamehame-japan.com/en/golf-tours/',currency_code:'JPY',timezone:'Asia/Tokyo'};
+const reportStart=Date.parse('2026-11-01T00:00:00+09:00')/1000;
+const reportEnd=Date.parse('2026-11-17T00:00:00+09:00')/1000;
+const accountSpend={ad_account_id:openAiAccount.id,start_time:reportStart,end_time:reportEnd,spend:1000.42};
+const insights=data=>({object:'list',has_more:false,data});
+test('ChatGPT Ads sync uses the verified account and an exclusive JST end, storing reported spend in JPY',async(t)=>{
+ const db=openTestDb();const calls=[];
+ t.mock.method(globalThis,'fetch',async(url,init)=>{
+  calls.push(url);
+  assert.equal(init.headers.Authorization,'Bearer test-advertiser-key');
+  assert.equal(init.redirect,'manual');
+  if(calls.length===1){
+   assert.equal(url,'https://api.ads.openai.com/v1/ad_account');
+   return json(openAiAccount);
+  }
+  const request=new URL(url);
+  assert.equal(request.origin+request.pathname,'https://api.ads.openai.com/v1/ad_account/insights');
+  assert.equal(request.searchParams.get('time_granularity'),'none');
+  assert.equal(request.searchParams.get('aggregation_level'),'ad_account');
+  assert.deepEqual(JSON.parse(request.searchParams.get('time_ranges[]')),{type:'unix_range',start:reportStart,end:reportEnd});
+  return json(insights([accountSpend]));
+ });
+ assert.ok(syncSources(openAiKey).includes('openai_ads'));
+ assert.ok(!syncSources({BUSINESS_METRICS_URL:'https://example.invalid',BUSINESS_METRICS_TOKEN:'fixture'}).includes('openai_ads'));
+ const r=await sync(db,openAiKey,{source:'openai_ads',...period},'test');
+ assert.deepEqual(r.data,{currency:'JPY',spend:1000.42,coverage:'complete',from:reportStart,to:reportEnd});
+ assert.equal(calls.length,2);
+ const stored=JSON.parse((await db.first('SELECT payload FROM business_records')).payload);
+ assert.deepEqual(stored.data,r.data);
+});
+test('ChatGPT Ads preserves measured zero and missing spend and keeps the previous snapshot after a failed refresh',async(t)=>{
+ const db=openTestDb();let account=openAiAccount;let report=insights([]);
+ t.mock.method(globalThis,'fetch',async url=>json(url.endsWith('/ad_account')?account:report));
+ const run=()=>sync(db,openAiKey,{source:'openai_ads',...period},'test');
+ assert.deepEqual(await run(),{ok:true,source:'openai_ads',...period,saved:false,data:{currency:'JPY',spend:null,coverage:'unavailable'}});
+ assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,0);
+ report=insights([{...accountSpend,spend:0}]);
+ assert.equal((await run()).data.spend,0);
+ const previous=await db.first('SELECT payload,revision FROM business_records');
+ for(const rows of [[],[{...accountSpend,spend:null}]]){
+  report=insights(rows);
+  assert.equal((await run()).saved,false);
+  assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+ }
+ report={...insights([accountSpend]),has_more:true};
+ await assert.rejects(run(),e=>e.code==='invalid_report');
+ report=insights([{...accountSpend,ad_account_id:'adacct_unrelated'}]);
+ await assert.rejects(run(),e=>e.code==='invalid_report');
+ account={...openAiAccount,currency_code:'USD'};
+ await assert.rejects(run(),e=>e.code==='account_settings_mismatch');
+ account={...openAiAccount,url:'https://different.example/kamehame-japan.com'};
+ await assert.rejects(run(),e=>e.code==='wrong_account');
+ assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+});
+test('ChatGPT Ads does not replace the saved snapshot with a report covering only part of the requested period',async(t)=>{
+ const db=openTestDb();let row=accountSpend;
+ t.mock.method(globalThis,'fetch',async url=>json(url.endsWith('/ad_account')?openAiAccount:insights([row])));
+ const run=()=>sync(db,openAiKey,{source:'openai_ads',...period},'test');
+ await run();
+ const previous=await db.first('SELECT payload,revision FROM business_records');
+ for(const bounds of [{start_time:reportStart+86400},{end_time:reportEnd-3600}]){
+  row={...accountSpend,...bounds,spend:1};
+  const result=await run();
+  assert.equal(result.saved,false);
+  assert.deepEqual(result.data,{currency:'JPY',spend:1,coverage:'partial',from:row.start_time,to:row.end_time});
+  assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+ }
+ for (const bounds of [{start_time:reportStart-1},{end_time:reportEnd+1},{start_time:reportEnd}]){
+  row={...accountSpend,...bounds};
+  await assert.rejects(run(),e=>e.code==='invalid_report');
+ }
+});
+test('ChatGPT Ads totals exclude reference-only periods and unverified legacy values',()=>{
+ const verified={currency:'JPY',spend:1000.42,coverage:'complete'};
+ assert.equal(openAiSpendForTotals(verified),1000.42);
+ assert.equal(openAiSpendForTotals({...verified,spend:0}),0);
+ assert.equal(openAiSpendForTotals({currency:'JPY',spend:900}),null);
+ assert.equal(openAiSpendForTotals(verified,{currency:'JPY',coverage:'partial',spend:800,from:reportStart,to:reportEnd-86400}),null);
+ assert.equal(openAiSpendForTotals(verified,{currency:'JPY',coverage:'unavailable',spend:null}),null);
+ assert.equal(openAiReportPeriod(reportStart,reportEnd),'2026-11-01〜2026-11-16（日本時間）');
+ assert.equal(openAiReportPeriod(reportStart,reportStart+86400),'2026-11-01（日本時間）');
+ assert.equal(openAiReportPeriod(reportStart,reportEnd-3600),'2026-11-01〜2026-11-16 23:00（日本時間）');
+});
+test('ChatGPT Ads matches the actual current-hour cutoff when the requested period includes today',async(t)=>{
+ const db=openTestDb();
+ t.mock.method(Date,'now',()=>Date.parse('2026-11-16T13:47:00+09:00'));
+ const cutoff=Date.parse('2026-11-16T13:00:00+09:00')/1000;
+ t.mock.method(globalThis,'fetch',async url=>{
+  if(url.endsWith('/ad_account'))return json(openAiAccount);
+  assert.deepEqual(JSON.parse(new URL(url).searchParams.get('time_ranges[]')),{type:'unix_range',start:reportStart,end:cutoff});
+  return json(insights([{...accountSpend,end_time:cutoff}]));
+ });
+ assert.deepEqual((await sync(db,openAiKey,{source:'openai_ads',...period},'test')).data,{currency:'JPY',spend:1000.42,coverage:'complete',from:reportStart,to:cutoff});
+});
 test('Google refresh exchanges server credentials, validates account and consumes all pages',async(t)=>{
  const db=openTestDb();let pages=0;
  t.mock.method(globalThis,'fetch',async(url,init)=>{
@@ -175,7 +271,16 @@ test('Search Console uses fixed domain and separate totals, converts CTR, retain
  const r=await sync(db,env,{source:'seo',...period},'test');
  assert.equal(r.data.current.ctr,10);assert.equal(r.data.current.avgPosition,4.5);assert.equal(r.data.settledThrough,'2026-11-14');assert.equal(r.data.dailyRows[0].date,'2026-11-01');
 });
-function ga(dimensions,rows,count=rows.length,metadata={}){return {dimensionHeaders:dimensions.map(name=>({name})),metricHeaders:[{name:'sessions'},{name:'keyEvents'}],rows:rows.map(([key,sessions,keyEvents])=>({dimensionValues:dimensions.length?[{value:key}]:[],metricValues:[{value:String(sessions)},{value:String(keyEvents)}]})),rowCount:count,metadata:{timeZone:'Asia/Tokyo',...metadata}}}
+function ga(dimensions,rows,count=rows.length,metadata={},metrics=['sessions','keyEvents']){
+ return {
+  dimensionHeaders:dimensions.map(name=>({name})),metricHeaders:metrics.map(name=>({name})),
+  rows:rows.map(([key,...values])=>({
+   dimensionValues:dimensions.length?[{value:key}]:[],
+   metricValues:metrics.map((_,index)=>({value:String(values[index]??0)})),
+  })),
+  rowCount:count,metadata:{timeZone:'Asia/Tokyo',...metadata},
+ };
+}
 test('GA4 filters organic by session channel, reads key events and never substitutes revenue',async(t)=>{
  const db=openTestDb();
  t.mock.method(globalThis,'fetch',async(url,init)=>{
@@ -186,19 +291,52 @@ test('GA4 filters organic by session channel, reads key events and never substit
  });
  const r=await sync(db,env,{source:'organic',...period},'test');assert.equal(r.data.sessions,50);assert.equal(r.data.conversions,3);
 });
-test('GA4 AI uses exact domains, independent totals, and all landing-page pages',async(t)=>{
+test('GA4 separates ChatGPT ads, paginates AI landing pages and tracks purchases',async(t)=>{
  const db=openTestDb();
  t.mock.method(globalThis,'fetch',async(url,init)=>{
   if(url.includes('/token'))return json({access_token:'test-access'});
-  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name);
+  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name),metrics=b.metrics.map(m=>m.name);
   if(!b.dimensionFilter)return json(ga([],[['',100,10]]));
-  const f=b.dimensionFilter.filter;assert.equal(f.fieldName,'sessionSource');
-  const regex=new RegExp('^(?:'+f.stringFilter.value+')$','i');assert.ok(regex.test('chatgpt.com'));assert.ok(regex.test('www.perplexity.ai'));assert.ok(!regex.test('evilchatgpt.com'));assert.ok(!regex.test('google'));assert.ok(!regex.test('chatgpt.com.evil.example'));
-  if(!dims.length)return json(ga([],[['',10,2]]));
-  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,2]]));
-  return json(ga(dims,[[b.offset?'/en/golf/':'/en/',5,1]],2));
+  const event=b.dimensionFilter.andGroup.expressions[2]?.filter;
+  if(event){
+   assert.deepEqual(metrics,['eventCount']);
+   assert.deepEqual(event,{fieldName:'eventName',stringFilter:{matchType:'EXACT',value:'generate_lead',caseSensitive:true}});
+   const paid=!!b.dimensionFilter.andGroup.expressions[1].filter;
+   return json(ga(dims,[[paid?'/en/ads/':'/en/',paid?1:2]],1,{},metrics));
+  }
+  assert.deepEqual(metrics,['sessions','keyEvents','ecommercePurchases','purchaseRevenue']);
+  assert.equal(b.currencyCode,'JPY');
+  const [source,medium]=b.dimensionFilter.andGroup.expressions;
+  assert.equal(source.filter.fieldName,'sessionSource');
+  const matches=(filter,input)=>new RegExp('^(?:'+filter.stringFilter.value+')$','i').test(input);
+  assert.ok(matches(source.filter,'chatgpt.com'));
+  assert.ok(!matches(source.filter,'evilchatgpt.com'));
+  assert.ok(!matches(source.filter,'chatgpt.com.evil.example'));
+  if(medium.filter){
+   assert.ok(matches(source.filter,'chatgpt'));
+   assert.ok(!matches(source.filter,'perplexity.ai'));
+   assert.equal(medium.filter.fieldName,'sessionMedium');
+   assert.ok(matches(medium.filter,'cpc'));
+   assert.ok(!matches(medium.filter,'ai-assistant'));
+   return json(ga(dims,[[dims.length?'/en/ads/':'',5,1,0,-1000]],1,{},metrics));
+  }
+  assert.ok(matches(source.filter,'www.perplexity.ai'));
+  assert.ok(!matches(source.filter,'google'));
+  assert.ok(matches(medium.notExpression.filter,'paid_social'));
+  if(!dims.length)return json(ga([],[['',10,2,1,33000]],1,{},metrics));
+  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,2,1,33000]],1,{},metrics));
+  return json(ga(dims,[b.offset?['/en/golf/',6,0,0,0]:['/en/',4,2,1,33000]],2,{},metrics));
  });
- const r=await sync(db,env,{source:'aio',...period},'test');assert.equal(r.data.llmShareOfSessions,0.1);assert.equal(r.data.summary.keyEvents,2);assert.equal(r.data.landingPages.length,2);
+ const {data}=await sync(db,env,{source:'aio',...period},'test');
+ assert.equal(data.llmShareOfSessions,0.1);
+ assert.deepEqual(data.summary,{sessions:10,keyEvents:2,purchases:1,purchaseRevenue:33000,enquiries:2});
+ assert.deepEqual(data.landingPages.map(row=>row.key),['/en/golf/','/en/']);
+ assert.equal(data.landingPages[1].purchaseRevenue,33000);
+ assert.equal(data.landingPages[1].enquiries,2);
+ assert.equal(data.chatGptPaid.summary.sessions,5);
+ assert.equal(data.chatGptPaid.summary.enquiries,1);
+ assert.equal(data.chatGptPaid.summary.purchaseRevenue,-1000);
+ assert.equal(data.chatGptPaid.landingPages[0].key,'/en/ads/');
 });
 test('incomplete GA4 or failed later page preserves the previous snapshot',async(t)=>{
  const db=openTestDb();
@@ -211,10 +349,10 @@ test('incomplete GA4 or failed later page preserves the previous snapshot',async
  await assert.rejects(sync(db,env,{source:'organic',...period},'test'),e=>e.code==='analytics_timezone_mismatch');
  t.mock.method(globalThis,'fetch',async(url,init)=>{
   if(url.includes('/token'))return json({access_token:'test-access'});
-  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name);
-  if(!dims.length)return json(ga([],[['',10,1]]));
-  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,1]]));
-  return b.offset?json({error:{message:'secret'}},403):json(ga(dims,[['/en/',5,1]],2));
+  const b=JSON.parse(init.body),dims=b.dimensions.map(d=>d.name),metrics=b.metrics.map(m=>m.name);
+  if(!dims.length)return json(ga([],[['',10,1]],1,{},metrics));
+  if(dims[0]==='sessionSource')return json(ga(dims,[['chatgpt.com',10,1]],1,{},metrics));
+  return b.offset?json({error:{message:'secret'}},403):json(ga(dims,[['/en/',5,1]],2,{},metrics));
  });
  await assert.rejects(sync(db,env,{source:'aio',...period},'test'));
  assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,1);

@@ -85,7 +85,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       image: `/og/${slug}.jpg`,
       type: "article",
     }),
-    Object.fromEntries(LANGS.map((l) => [l, `/${l}/${collection}/${slug}/`])),
+    Object.fromEntries(LANGS.flatMap((l) => {
+      const alternate = resolve(l, collection, slug);
+      return alternate.tour || (alternate.exp && !isPreview(alternate.exp))
+        ? [[l, `/${l}/${collection}/${slug}/`]]
+        : [];
+    })),
   );
 }
 
@@ -179,6 +184,12 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
   const reading = articlesForExperience(exp.slug, lang);
   const moreInCity = experiences.filter((e) => e.city === exp.city && e.slug !== exp.slug).slice(0, 4);
 
+  const venueImage = exp.venue?.img;
+  const venueCaption = venueImage === "/images/ramen-osaka-group.jpg"
+    ? D.venueActualNote
+    : venueImage === "/images/tea-kyoto-flower-pagoda.jpg" || venueImage === "/images/tea-kyoto-private-street.jpg"
+      ? D.venueAreaNote
+      : D.venueExampleNote;
   const photos = [{ img: exp.img, alt: exp.alt }, ...exp.gallery];
   const reviews = reviewsFor(exp.slug);
   const hasReviews = REVIEWS_PUBLISHED && reviews.length > 0;
@@ -548,7 +559,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
                 {(exp.venue?.img ?? photos[1]?.img) && (
                   <figure className="xp-venue-photo">
                     <img src={exp.venue?.img ?? photos[1].img} alt={exp.venue?.alt ?? photos[1]?.alt ?? ""} loading="lazy" />
-                    <figcaption>{D.venueExampleNote}</figcaption>
+                    <figcaption>{venueCaption}</figcaption>
                   </figure>
                 )}
               </div>

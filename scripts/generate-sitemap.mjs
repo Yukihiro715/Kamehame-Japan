@@ -21,7 +21,7 @@ const ORIGIN = "https://kamehame-japan.com";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (f) => (existsSync(join(root, f)) ? readFileSync(join(root, f), "utf8") : null);
 
-const { entries, stats } = buildEntries(read);
+const { entries, stats } = buildEntries(read, { golfpaqLive: process.env.GOLFPAQ_LIVE === "true" });
 
 const datesFile = join(root, "scripts/sitemap-dates.json");
 const stored = existsSync(datesFile) ? JSON.parse(readFileSync(datesFile, "utf8")) : {};

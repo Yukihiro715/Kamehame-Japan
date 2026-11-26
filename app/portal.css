@@ -568,3 +568,54 @@
 .pt-brochure-check input[type="checkbox"] { width: 18px; height: 18px; min-height: 18px; flex: 0 0 18px; accent-color: var(--pt-accent, #b74908); }
 .pt-brochure-qr-fields { border-inline-start: 2px solid #e6ddd3; padding-inline-start: 16px; }
 .pt-brochure-destination { overflow-wrap: anywhere; }
+
+dialog.pt-case-modal { width: min(52rem, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; overscroll-behavior: contain; }
+.pt-case-modal .pt-help-content { padding: 0; gap: 0; }
+.pt-case-modal .pt-help-content > header { position: sticky; top: 0; z-index: 2; padding: 14px 20px; border-bottom: 1px solid #e6dfd7; background: #fff; }
+.pt-case-modal .pt-help-content > header small { color: var(--muted,#716256); }
+.pt-case-modal .pt-help-content > div { min-width: 0; padding: 16px 20px; }
+.pt-request-form { display: grid; gap: 18px; }
+.pt-request-form .pt-form { align-items: start; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.pt-request-form .pt-field, .pt-date-field, .pt-guest-field { min-width: 0; }
+.pt-request-form .pt-field :is(input,select,textarea) { width: 100%; min-width: 0; }
+.pt-case-submit { display: flex; justify-content: flex-end; gap: 12px; }
+.pt-required { margin-inline-start: 8px; padding: 2px 5px; border-radius: 4px; color: #a83d00; background: #fff2e8; font-size: .86em; }
+.pt-date-field, .pt-guest-field { display: grid; gap: 7px; }
+.pt-date-field > button { min-height: 44px; justify-content: start; text-align: start; white-space: normal; }
+.pt-case-calendar { padding: 10px; border: 1px solid #e6dfd7; border-radius: 8px; background: white; }
+.pt-case-calendar .rdp-month { position: relative; max-width: 100%; }
+.pt-case-calendar .rdp-month_caption { padding: 6px 64px 8px 4px; font-weight: 700; }
+.pt-case-calendar .rdp-nav { display: flex; justify-content: flex-end; gap: 4px; }
+.pt-case-calendar .rdp-month_grid { width: 100%; table-layout: fixed; text-align: center; }
+.pt-case-calendar :is(.rdp-day_button,.rdp-button_next,.rdp-button_previous) { width: 100%; min-height: 36px; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
+.pt-case-calendar :is(.rdp-button_next,.rdp-button_previous) { width: 36px; border-color: #e6dfd7; display: grid; place-items: center; }
+.pt-case-calendar .rdp-selected .rdp-day_button { background: #b74908; color: #fff; }
+.pt-case-calendar .rdp-day_button:hover:not(:disabled) { border-color: #b74908; }
+.pt-case-calendar button:disabled { opacity: .4; cursor: default; }
+.pt-guest-stepper { display: grid; grid-template-columns: 44px minmax(48px,84px) 44px; gap: 8px; }
+.pt-guest-stepper :is(button,input) { min-height: 44px; text-align: center; }
+.pt-guest-stepper input { width: 100%; min-width: 0; padding: 4px; border: 1px solid #e6dfd7; border-radius: 7px; background: white; appearance: textfield; }
+.pt-guest-stepper input::-webkit-inner-spin-button { appearance: none; }
+.pt-case-searchbox { width: min(100%, 30rem); margin-bottom: 14px; }
+.pt-case-searchbox input { width: 100%; min-width: 0; }
+.pt-case-tile { border-top: 1px solid #e6dfd7; padding: 12px 0; min-width: 0; }
+.pt-case-tile-main { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; text-align: start; cursor: pointer; padding: 8px; border-radius: 6px; }
+.pt-case-tile-main:hover { background: #faf6f0; }
+.pt-case-tile-main img { flex: none; border-radius: 5px; object-fit: cover; }
+.pt-case-tile-main > span { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.pt-case-tile-main > span:first-of-type { flex: 1 1 145px; }
+.pt-case-tile-main small { color: var(--muted,#716256); line-height: 1.4; }
+.pt-case-tile-state b { padding: 3px 7px; border-radius: 4px; background: #faf1e8; color: #93400e; font-size: 12px; }
+.pt-case-tile-amount { margin-inline-start: auto; text-align: end; }
+.pt-case-tile > a { margin-inline: 8px; }
+.pt-case-details .pt-card { margin-bottom: 12px; }
+.pt-password-input { position: relative; display: block; }
+.pt-password-input input { padding-inline-end: 48px !important; }
+.pt-password-input > button { position: absolute; inset-inline-end: 5px; top: 50%; transform: translateY(-50%); min-width: 36px; min-height: 36px; }
+@media (max-width: 580px) {
+  .pt-request-form .pt-form { grid-template-columns: minmax(0,1fr); }
+  .pt-case-modal .pt-help-content > :is(header,div) { padding-inline: 12px; }
+  .pt-case-tile-amount { margin-inline-start: 0; }
+}
+
+.pt-guest-instructions { white-space: pre-wrap; overflow-wrap: anywhere; }

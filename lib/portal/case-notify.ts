@@ -3,6 +3,7 @@
  *  the `ops_notify_email` setting, else CONTACT_TO. Everything goes through
  *  sendPortalMail, so staging never reaches an address off the allow-list. */
 import type { SqlDb } from "@/lib/referral/db";
+import { sendGuide } from "./guest-guide";
 import { experienceTitle, getCase, type CaseRow } from "./cases";
 import { caseConfirmedMail, caseCreatedMail, caseMessageMail, casePaidMail, mailLangOf, quoteCustomerMail, quoteSharedMail, sendPortalMail, type MailLang, type MailOutcome, type PortalMailEnv } from "./mail";
 
@@ -55,6 +56,10 @@ export async function notifyCase(db: SqlDb, env: NotifyEnv, caseId: string, orig
       if (ev.from === "ops") for (const { to, lang } of partners) await send(to, caseMessageMail({ publicRef: c.public_ref, from: "ops", excerpt: ev.excerpt, attachmentName: ev.attachmentName, url: partnerUrl(origin, c.id), lang }));
       else await send(ops, caseMessageMail({ publicRef: c.public_ref, from: "partner", excerpt: ev.excerpt, attachmentName: ev.attachmentName, url: opsUrl(origin, c.id) }));
       break;
+  }
+  if ((ev.kind==="confirmed"||ev.kind==="paid") && c.customer_email) {
+    const outcome=await sendGuide(db,env,caseId,origin);
+    if(outcome)out.push({to:c.customer_email,outcome});
   }
   return out;
 }

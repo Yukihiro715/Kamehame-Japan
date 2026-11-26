@@ -322,11 +322,11 @@ test('partner password setup mail, login, reset revocation, token replay and OTP
   assert.deepEqual((await request('password@example.com')).body, { ok: true });
   const token = mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
   assert.ok(!JSON.stringify(await db.all('SELECT * FROM partner_password_tokens')).includes(token));
-  const password = 'new-test-password-123';
+  const password = 'Test-123';
   const set = (token, password) => c.call('POST', 'auth/password-set', { kind: 'hotel', token, password });
-  assert.equal((await set(token, 'short')).status, 400);
+  for (const invalid of ['short', 'all-lowercase!', 'ALL-UPPERCASE!', 'NoSymbol123']) assert.equal((await set(token, invalid)).status, 400);
   assert.equal((await set(token, password)).status, 200);
-  assert.equal((await set(token, 'other-test-password')).status, 400);
+  assert.equal((await set(token, 'Other-test-password')).status, 400);
   assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password: 'wrong' })).status, 401);
   assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password })).status, 200);
   assert.equal((await c.call('GET', 'hotel/me')).status, 200);
@@ -336,7 +336,7 @@ test('partner password setup mail, login, reset revocation, token replay and OTP
   assert.equal((await c.call('POST', 'auth/request-code', { kind: 'hotel', email: 'password@example.com' })).body.devCode, undefined);
   await request('password@example.com');
   const token2 = mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
-  const results = await Promise.all([set(token2, 'reset-password-one'), set(token2, 'reset-password-two')]);
+  const results = await Promise.all([set(token2, 'Reset-password-one'), set(token2, 'Reset-password-two')]);
   assert.deepEqual(results.map(r => r.status).sort(), [200,400]);
   assert.equal((await c.call('GET', 'hotel/me')).status, 401);
   assert.equal((await c.call('POST', 'auth/password-login', { kind: 'hotel', email: 'password@example.com', password })).status, 401);
@@ -555,6 +555,7 @@ test('expanded demo rows paginate without gaps and keep completed dates in the p
 
 test('partner brochure settings: role and site isolation, safe values, no booking or commission changes', async () => {
   const db=openTestDb();await seed(db);
+  await db.run("UPDATE partner_legal_entities SET partner_type='agency' WHERE id='le1'");
   await db.run(`INSERT INTO users(id,email,name,status,created_at) VALUES ('u-brand','brand@example.com','Brand manager','active','2026-01-01')`);
   await db.run(`INSERT INTO memberships(id,user_id,role,scope_type,scope_id,created_at) VALUES ('m-brand','u-brand','partner_manager','hotel','hA','2026-01-01')`);
   const c=client(db);await signIn(c,'brand@example.com','hotel');
@@ -680,6 +681,7 @@ test('official brochures use public prices and stable hotel/language referral QR
 
 test('agency QR preferences persist per partner, validate destinations and preserve old-client writes', async()=>{
   const db=openTestDb();await seed(db);
+  await db.run("UPDATE partner_legal_entities SET partner_type='agency' WHERE id='le1'");
   await db.run(`INSERT INTO users(id,email,name,status,created_at) VALUES ('qr-user','qr@example.com','Guide','active','2026-01-01')`);
   await db.run(`INSERT INTO memberships(id,user_id,role,scope_type,scope_id,created_at) VALUES ('qr-member','qr-user','partner_manager','hotel','hA','2026-01-01')`);
   const c=client(db);await signIn(c,'qr@example.com','hotel');
@@ -721,19 +723,19 @@ test('ops password setup: bootstrap, portal isolation, expiry, replay and sessio
  assert.match(mails.at(-1).text,/\/ops\/login\/#password-token=/);
  const token=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
  const set=(kind,token,password)=>c.call('POST','auth/password-set',{kind,token,password});
- assert.equal((await set('hotel',token,'long-test-password')).status,400);
+ assert.equal((await set('hotel',token,'Long-test-password')).status,400);
  assert.equal((await set('ops',token,'short')).status,400);
- assert.equal((await set('ops',token,'long-test-password')).status,200);
- assert.equal((await set('ops',token,'replayed-password')).status,400);
- assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'yukihiro_ito@prosent.co.jp',password:'long-test-password'})).status,200);
+ assert.equal((await set('ops',token,'Long-test-password')).status,200);
+ assert.equal((await set('ops',token,'Replayed-password')).status,400);
+ assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'yukihiro_ito@prosent.co.jp',password:'Long-test-password'})).status,200);
  assert.equal((await c.call('GET','ops/me')).status,200);
  await request();const token2=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
- assert.equal((await set('ops',token2,'changed-test-password')).status,200);
+ assert.equal((await set('ops',token2,'Changed-test-password')).status,200);
  assert.equal((await c.call('GET','ops/me')).status,401);
- assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'yukihiro_ito@prosent.co.jp',password:'long-test-password'})).status,401);
+ assert.equal((await c.call('POST','auth/password-login',{kind:'ops',email:'yukihiro_ito@prosent.co.jp',password:'Long-test-password'})).status,401);
  await request();const token3=mails.at(-1).text.match(/password-token=([A-Za-z0-9_-]+)/)[1];
  await db.run(`UPDATE ops_password_tokens SET expires_at='2000-01-01' WHERE consumed_by IS NULL`);
- assert.equal((await set('ops',token3,'expired-test-password')).status,400);
+ assert.equal((await set('ops',token3,'Expired-test-password')).status,400);
 });
 
 test('business data is private, validation and optimistic writes preserve concurrent edits, import is repeatable',async()=>{
@@ -777,12 +779,12 @@ test('master-only provisioning, first-login gate, password change, revocation an
  for(const route of ['ops/business/data','ops/reservations','ops/settings','ops/overview','ops/export.csv']) assert.equal((await member.call('GET',route)).status,403,route);
  const change=(currentPassword,password)=>member.call('POST','auth/password-change-initial',{currentPassword,password});
  assert.equal((await change(temp,temp)).status,400);
- assert.equal((await change('wrong-password','member-final-password')).status,400);
+ assert.equal((await change('wrong-password','Member-final-password')).status,400);
  assert.equal((await change(temp,'short')).status,400);
- assert.equal((await change(temp,'member-final-password')).status,200);
+ assert.equal((await change(temp,'Member-final-password')).status,200);
  assert.equal((await member.call('GET','ops/me')).status,401);
  assert.equal((await login(temp)).status,401);
- assert.equal((await login('member-final-password')).status,200);
+ assert.equal((await login('Member-final-password')).status,200);
  assert.equal((await member.call('GET','ops/business/data')).status,200);
  assert.equal((await member.call('GET','ops/me')).body.mustChangePassword,false);
  assert.equal((await member.call('GET','ops/ops-members')).status,403);
@@ -793,7 +795,7 @@ test('master-only provisioning, first-login gate, password change, revocation an
  assert.equal((await admin.call('POST',`ops/members/${issue.body.membershipId}/revoke`,{})).status,403);
  const reissue=await master.call('POST','ops/ops-members',{email:'provisional@example.com',role:'ops_finance'});
  assert.equal((await member.call('GET','ops/me')).status,401);
- assert.equal((await login('member-final-password')).status,401);
+ assert.equal((await login('Member-final-password')).status,401);
  await db.run(`UPDATE ops_password_changes SET expires_at='2000-01-01' WHERE user_id=?`,[issue.body.userId]);
  assert.equal((await login(reissue.body.temporaryPassword)).status,401);
  assert.equal((await master.call('POST',`ops/members/${issue.body.membershipId}/revoke`,{})).status,200);

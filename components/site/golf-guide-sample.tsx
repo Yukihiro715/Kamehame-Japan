@@ -10,7 +10,7 @@ const copy = {
     pages: ["Your day at a glance", "Step-by-step directions", "Costs & essentials"],
     button: "View the sample guide",
     meta: "English PDF · 3 pages · opens in a new tab",
-    note: "An anonymised example based on a real booking. Prices and times are illustrative, not a current offer or travel timetable. Cover artwork is an illustration.",
+    note: "An anonymised example based on a real booking. The route is illustrative. Your booking guide confirms the schedule and costs. Cover artwork is an illustration.",
     alt: "Preview of sample golf guide page",
   },
   ja: {
@@ -20,7 +20,7 @@ const copy = {
     pages: ["当日の概要", "詳しいアクセス案内", "費用と持ち物"],
     button: "ガイドのサンプルを見る",
     meta: "英語PDF・全3ページ・別タブで開きます",
-    note: "実際の手配をもとに個人情報を削除したサンプルです。料金・時刻は参考例で、現在の販売条件や運行時刻ではありません。表紙はイラストです。",
+    note: "実際の手配をもとに個人情報を削除したサンプルです。掲載ルートは参考例です。当日の時刻・費用はご予約後のガイドでご案内します。表紙はイラストです。",
     alt: "ゴルフガイドのサンプルページ",
   },
   es: {
@@ -30,7 +30,7 @@ const copy = {
     pages: ["Su día de un vistazo", "Cómo llegar, paso a paso", "Costes y preparativos"],
     button: "Ver la guía de ejemplo",
     meta: "PDF en inglés · 3 páginas · se abre en otra pestaña",
-    note: "Ejemplo anonimizado basado en una reserva real. Los precios y horarios son ilustrativos; no constituyen una oferta vigente ni un horario de transporte actual. La portada es una ilustración.",
+    note: "Ejemplo anonimizado basado en una reserva real. El itinerario es orientativo. La guía de su reserva confirma los horarios y los costes. La portada es una ilustración.",
     alt: "Vista previa de una página de la guía de golf",
   },
   fr: {
@@ -40,7 +40,7 @@ const copy = {
     pages: ["Votre journée en un coup d’œil", "Votre trajet, étape par étape", "Budget et préparatifs"],
     button: "Voir le guide d’exemple",
     meta: "PDF en anglais · 3 pages · nouvel onglet",
-    note: "Exemple anonymisé tiré d’une réservation réelle. Les tarifs et horaires sont indicatifs et ne constituent ni une offre actuelle ni des horaires de transport à jour. La couverture est une illustration.",
+    note: "Exemple anonymisé tiré d’une réservation réelle. Le trajet est indicatif. Votre guide de réservation confirme les horaires et les frais. La couverture est une illustration.",
     alt: "Aperçu d’une page du guide de golf",
   },
   "zh-tw": {
@@ -50,12 +50,16 @@ const copy = {
     pages: ["當日行程概覽", "詳細交通指引", "費用與行前準備"],
     button: "查看指南範例",
     meta: "英文PDF・共3頁・於新分頁開啟",
-    note: "此範例根據實際預訂製作，已移除個人資料。價格及時間僅供示意，並非目前報價或最新交通時刻。封面為插畫。",
+    note: "此範例根據實際預訂製作，已移除個人資料。所列路線僅供參考。實際時刻與費用會在您的預訂指南中確認。封面為插畫。",
     alt: "高爾夫指南範例頁面預覽",
   },
 } satisfies Record<Lang, { eyebrow: string; title: string; body: string; pages: string[]; button: string; meta: string; note: string; alt: string }>;
 
 const pdf = "/guides/kamehame-golf-day-sample.pdf";
+
+export function GolfGuideSampleLink({ lang, href }: { lang: Lang; href: string }) {
+  return <a className={styles.button} href={href}><FileText size={18} aria-hidden="true" />{copy[lang].button}<ArrowUpRight size={17} aria-hidden="true" /></a>;
+}
 
 export function GolfGuideSample({ lang }: { lang: Lang }) {
   const c = copy[lang];

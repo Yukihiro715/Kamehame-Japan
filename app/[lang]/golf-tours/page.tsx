@@ -7,6 +7,7 @@ import { Bus, CheckCircle2, Flag, UserRound, Languages, ArrowRight, Circle, Plus
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { GolfLandingReviews } from "@/components/site/golf-landing-reviews";
+import { GolfGuideSampleLink } from "@/components/site/golf-guide-sample";
 import journalStyles from "@/components/site/golf-journal-links.module.css";
 import { GolfTravelComparison } from "@/components/site/golf-travel-choice";
 import { busCopy, type BusCopy } from "@/lib/golfpaq-copy";
@@ -92,6 +93,7 @@ export default async function GolfToursPage({ params }: Props) {
             </div>
             <p className="gl-options-note">{C.heroCardsNote}</p>
             <GolfLandingReviews lang={lang} />
+            <p className="gl-options-note"><GolfGuideSampleLink lang={lang} href={`${customHref}#sample-guide`} /></p>
           </div>
         </section>
 

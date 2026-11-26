@@ -1,11 +1,14 @@
 "use client";
 
+import { GuestGuideDefault } from "../guest-guide";
+import { CommissionPlan } from "./commission-plan";
 import { useCallback, useEffect, useState } from "react";
-import { api, errorText, jst } from "../client";
+import { api, errorText, jst, yen } from "../client";
 import { Badge, Button, Card, Field, Loading, Notice, ReasonAction, Table } from "../ui";
 import { ENTITY_KIND_JA, FEATURE_JA, FEATURE_KEYS, PARTNER_TYPE_JA, SITE_KIND_JA, type Features } from "@/lib/portal/partner";
 
 interface Detail {
+  annualGross:number; wholesale:{paid:number;cancelled:number;refunds:number;knownFees:number;unknownFees:number};
   hotel: { id: string; public_id: string; name: string; status: string; brochure_url: string | null; notes: string | null; created_at: string; site_kind: string; features: Features };
   entity: { id: string; name: string; registration_status: string; registration_number: string | null; address: string | null; partner_type: string; entity_kind: string; contact_email: string | null } | null;
   members: { membership_id: string; user_id: string; email: string; name: string | null; role: string; user_status: string; last_login_at: string | null }[];
@@ -31,6 +34,9 @@ export function OpsHotelDetail({ id }: { id: string }) {
     <>
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
+      {d.hotel.features.cases&&<GuestGuideDefault path={`ops/hotels/${id}/guest-guide-settings`}/>}
+      <CommissionPlan annualGross={d.annualGross}/>
+      {d.entity?.partner_type==="agency" && <Card title="卸販売の決済後キャンセル"><p>累計決済 {d.wholesale.paid} 件のうち、キャンセル {d.wholesale.cancelled} 件（{d.wholesale.paid?Math.round(d.wholesale.cancelled/d.wholesale.paid*100):0}%）</p><p>返金累計 {yen(d.wholesale.refunds)} · キャンセル案件の台帳登録済み決済手数料 {yen(d.wholesale.knownFees)}（手数料未確認 {d.wholesale.unknownFees} 件）</p></Card>}
       <Card title={`${d.hotel.name}（${d.hotel.public_id}）`}>
         <dl className="pt-kv">
           <dt>状態</dt><dd><Badge tone={st[1]}>{st[0]}</Badge></dd>

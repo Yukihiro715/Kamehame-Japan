@@ -92,7 +92,7 @@ const ARTICLES: Article[] = [
     slug: "choosing-tea-ceremony-kyoto",
     date: "2026-11-17",
     minutes: 3,
-    experiences: ["kyoto-higashiyama-private-tea-ceremony", "kyoto-higashiyama-annex-tea-ceremony"],
+    experiences: ["kyoto-higashiyama-private-tea-ceremony", "kyoto-higashiyama-shared-tea-ceremony", "kyoto-higashiyama-annex-tea-ceremony"],
     img: "/images/tea-kyoto-annex-hero.jpg",
     alt: "Tea ceremony in Kyoto",
     comparison: {"category": "tea-ceremony", "city": "kyoto"},
@@ -100,7 +100,16 @@ const ARTICLES: Article[] = [
       en: {
         title: "Choosing a tea ceremony in Kyoto: compare the session before the price",
         standfirst: "Compare the current Kyoto tea ceremony options, then check group size, language, clothing and access before you book.",
-        body: ["## Decide what the visit should include", "Check the selected page for the tea session, clothing options and any other included activities. Do not assume that kimono rental or dressing is included because it appears in a photograph.", "## Match the session to your party", "Check age requirements, group size and language support. If sitting on the floor is difficult, tell us in advance so we can confirm the arrangement with the venue.", "## Check the location and final conditions", "Use the access section on each page to plan from your hotel or station. Some routes end at an area landmark; follow your booking confirmation for the actual meeting point. The table below reflects our current listings, and each page explains pricing and cancellation."],
+        body: [
+          "## Private or shared tea ceremony in Higashiyama?",
+          { type: "table", caption: "Two English-language tea ceremonies near Yasaka Pagoda", headings: ["Session", "Group", "Children", "What you do"], rows: [
+            ["Private", "Your own group of 1–5", "Ages 4+", "45 minutes with the host, a seasonal sweet and two bowls of matcha"],
+            ["Shared", "Up to 8 guests in the room", "Ages 6+", "45 minutes with other guests, a seasonal sweet and two bowls of matcha"],
+          ] },
+          "Both sessions offer optional kimono rental and dressing by arrangement. Check the price for your date and group size, as peak-season rates can apply.",
+          { type: "link", text: "For a family with a four- or five-year-old, check the private session:", label: "Private tea ceremony prices and dates", href: "/en/kyoto/kyoto-higashiyama-private-tea-ceremony/" },
+          { type: "link", text: "If you are comfortable joining other visitors, check the shared session:", label: "Shared tea ceremony prices and dates", href: "/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/" },
+          "## Decide what the visit should include", "Check the selected page for the tea session, clothing options and any other included activities. Do not assume that kimono rental or dressing is included because it appears in a photograph.", "## Match the session to your party", "Check age requirements, group size and language support. If sitting on the floor is difficult, tell us in advance so we can confirm the arrangement with the venue.", "## Check the location and final conditions", "Use the access section on each page to plan from your hotel or station. Some routes end at an area landmark; follow your booking confirmation for the actual meeting point. The table below reflects our current listings, and each page explains pricing and cancellation."],
       },
       ja: {
         title: "京都の茶道体験の選び方：料金の前に内容を比較",
@@ -138,6 +147,10 @@ const ARTICLES: Article[] = [
         standfirst:
           "Kyoto's teahouses do not take walk-ins, and the reason is older and more practical than mystique.",
         body: [
+          "## What does a private maiko or geiko dinner cost for two?",
+          "The Evening plan for two guests is ¥161,000 in the regular season or ¥179,000 in peak season, including tax, as published in November 2026. These are totals for the pair. The two-hour private experience includes a seasonal Kyoto meal, a geiko or maiko, dance, parlour games and an interpreter. Live shamisen or a second performer is available on the higher-priced plans.",
+          "Send your date and party size to check availability. We confirm the price and booking terms before sending a payment link. The date is booked once you pay through that link.",
+          { type: "link", text: "Check the current rates, seasonal dates and options before requesting your evening:", label: "Private geiko or maiko dinner in Kyoto", href: "/en/kyoto/evening-with-geiko/" },
           "The phrase you will read online is ichigen-san okotowari — no first-time guests. It gets translated as exclusivity, which makes it sound like a velvet rope. It is closer to a credit system.",
           "## Why introduction came first",
           "A teahouse in Kyoto's hanamachi does not present a bill at the end of the evening. It bills later, having also paid the geiko, the maiko, the kitchen and the musicians on your behalf. That only works if the house knows who is good for it. For three centuries the answer was introduction: someone the house already trusted vouched for you, and their trust extended to cover you.",

@@ -396,7 +396,7 @@ test("approved kendo tours and Yotsuya tea remain published", async () => {
 
 test("workshop previews and approved salons preserve publication status and partner privacy", async () => {
   const pages = [
-    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥56,500"],
+    ["/en/tokyo/samurai-street-walk-kitasenju/", "Samurai Street Walk & Bushido Experience in Kitasenju, Tokyo", "¥40,000"],
     ["/en/tokyo/tokyo-tate-samurai-sword-experience/", "Private Samurai Experience in Tokyo: Authentic Tate Sword Choreography", "¥47,500"],
     ["/en/tokyo/kichijoji-japanese-cuisine-class/", "Learn Japanese Cuisine from a Professional Chef in Kichijoji, Tokyo", "¥29,500"],
     ["/en/tokyo/asakusa-english-rakugo-walk/", "English Rakugo & Asakusa Cultural Walk, Tokyo", "¥21,500"],
@@ -421,7 +421,8 @@ test("workshop previews and approved salons preserve publication status and part
       assert.ok(text.includes("Bookings are currently paused"), `paused booking notice on ${path}`);
       assert.ok(!html.includes('<form'), `paused booking has no form on ${path}`);
     } else assert.ok(text.includes(price), `price on ${path}`);
-    const published = path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/");
+    const published = (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/"))
+      || (path.includes("/kyoto/arashiyama-") && !paused);
     assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
     if (published) assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
     // 90de9eb explicitly introduced these rakugo artists; the operator and
@@ -446,7 +447,7 @@ test("workshop previews and approved salons preserve publication status and part
       assert.doesNotMatch(text, /Free cancellation up to 7 days|arrive 15 minutes|Arrive 15 minutes|more than 5 minutes late/i, `no stale promises on ${path}`);
       assert.ok(text.includes("the start time is arranged around your day"), `start time wording on ${path}`);
     }
-    // the Japanese page is written; the other locales fall back to the English text so the URL resolves
+    // The remaining previews may use fallback copy. The approved Arashiyama pages are fully localized.
     for (const lang of ["ja", "es", "fr", "zh-tw"]) {
       const alt = await render(path.replace("/en/", `/${lang}/`));
       assert.equal(alt.status, 200, `${lang} ${path}`);
@@ -454,10 +455,17 @@ test("workshop previews and approved salons preserve publication status and part
       assert.doesNotMatch(altHtml, privatePartners, `operator names stay private on ${lang} ${path}`);
       if (lang === "ja") { assert.equal(altHtml.includes("プレビュー — このページはまだ公開していません"), !published, `Japanese publication status on ${path}`); assert.ok(!altHtml.includes(title), `Japanese text on ${path}`); }
       if (lang === "ja" && arashiyama) assert.ok(altHtml.includes("開催30日前まで") && altHtml.includes("貸切または20名以上") && !altHtml.includes("15分前にお越しください"), `Japanese cancellation terms on ${path}`);
+      if (arashiyama && published) {
+        assert.doesNotMatch(altHtml, /<meta name="robots" content="noindex/);
+        assert.ok(!altHtml.includes(title), `localized listing on ${lang} ${path}`);
+        assert.ok(altHtml.includes('id="request-form"'), `booking request on ${lang} ${path}`);
+      }
     }
   }
   const home = await (await render("/en/")).text();
-  assert.ok(!home.includes('href="/en/samurai/"') && !home.includes('href="/en/ninja/"'), "the new themes are not listed while in preview");
+  assert.ok(!home.includes('href="/en/samurai/"'), "the unpublished samurai theme is hidden");
+  assert.ok(home.includes('href="/en/ninja/"'), "the ninja category is listed");
+  assert.equal((await render("/en/ninja/")).status, 200, "published ninja category");
   assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
 });
 
@@ -595,7 +603,7 @@ test("sitemap dates follow the content, not the build", async () => {
   const { readFileSync } = await import("node:fs");
   const { buildEntries } = await import("../scripts/sitemap-content.mjs");
   const read = (f) => { try { return readFileSync(new URL(`../${f}`, import.meta.url), "utf8"); } catch { return null; } };
-  const { entries } = buildEntries(read);
+  const { entries } = buildEntries(read, { golfpaqLive: process.env.GOLFPAQ_LIVE === "true" });
   const undated = entries.filter((e) => e.key == null && e.date == null);
   assert.deepEqual(undated.map((e) => e.path), [], "every page has a content key or a declared date");
   const xml = readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
@@ -726,13 +734,13 @@ test('additional advertising-inclusive prices render with the existing publicati
     assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
   }
   for(const lang of ['en','ja'])for(const [slug,price] of [
-    ['samurai-street-walk-kitasenju','¥56,500'],['tokyo-tate-samurai-sword-experience','¥47,500'],
+    ['samurai-street-walk-kitasenju','¥40,000'],['tokyo-tate-samurai-sword-experience','¥47,500'],
     ['kichijoji-japanese-cuisine-class','¥29,500'],['asakusa-english-rakugo-walk','¥21,500'],['tokyo-ninja-zen-meditation','¥44,000'],
   ]){
     const path=`/${lang}/tokyo/${slug}/`;
     const response=await render(path);assert.equal(response.status,200,path);
     const html=await response.text();assert.ok(html.includes(price),path);assert.match(html, /noindex/);
-    if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥75,000'));assert.ok(html.includes('¥113,000'));}
+    if(slug==='samurai-street-walk-kitasenju'){assert.ok(html.includes('¥55,000'));assert.ok(html.includes('¥80,000'));}
   }
 });
 
@@ -759,9 +767,9 @@ test("street walk per-person headline and solo supplement agree across all local
     const html = await response.text();
     const text = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ");
     // The first price is the booking headline, not a later FAQ or pricing table.
-    assert.equal(text.match(/¥[\d,]+/)?.[0], "¥56,500", `${lang} advertised rate`);
-    assert.ok(text.includes("¥75,000"), `${lang} solo rate`);
-    assert.ok(text.includes("¥113,000"), `${lang} two-guest quote`);
+    assert.equal(text.match(/¥[\d,]+/)?.[0], "¥40,000", `${lang} advertised rate`);
+    assert.ok(text.includes("¥55,000"), `${lang} solo rate`);
+    assert.ok(text.includes("¥80,000"), `${lang} two-guest quote`);
     assert.match(html, /noindex/, `${lang} remains unlisted`);
   }
 });

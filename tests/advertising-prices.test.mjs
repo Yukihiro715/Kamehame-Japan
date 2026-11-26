@@ -11,7 +11,7 @@ const {EXPERIENCE_PRODUCTS}=await vite.ssrLoadModule('/lib/provisional-booking.t
 const {parseExperienceOrder,checkoutParameters}=await vite.ssrLoadModule('/lib/experience-checkout.ts');
 const langs=['en','ja','es','fr','zh-tw'];
 const cities=['tokyo','osaka','kyoto','nagoya','okinawa','kanazawa','himeji'];
-const expectedPreviews={'samurai-street-walk-kitasenju':56500,'tokyo-tate-samurai-sword-experience':47500,'kichijoji-japanese-cuisine-class':29500,'asakusa-english-rakugo-walk':21500,'tokyo-ninja-zen-meditation':44000};
+const expectedPreviews={'samurai-street-walk-kitasenju':40000,'tokyo-tate-samurai-sword-experience':47500,'kichijoji-japanese-cuisine-class':29500,'asakusa-english-rakugo-walk':21500,'tokyo-ninja-zen-meditation':44000};
 test('Samurai Trip display, quote, server amount and Stripe selection agree across seven cities',()=>{
  for(const lang of langs)for(const city of cities){
   const slug=`${city}-kendo-experience-tour`,x=catalogFor(lang).experiences.find(e=>e.slug===slug);
@@ -30,7 +30,7 @@ test('five repriced previews stay unpublished and street walk quotes the solo su
   const x=previewsFor(lang).experiences.find(e=>e.slug===slug);assert.ok(x,lang+' '+slug);
   assert.equal(x.price,'¥'+amount.toLocaleString('en-US'));assert.equal(x.status,'preview');
   assert.ok(!catalogFor(lang).experiences.some(e=>e.slug===slug));assert.equal(EXPERIENCE_PRODUCTS[slug],undefined);
-  if(slug==='samurai-street-walk-kitasenju')for(let guests=1;guests<=5;guests++)assert.equal(quote(pricingFor(x,lang),'select',guests,'2026-12-01').total,guests===1?75000:56500*guests);
+  if(slug==='samurai-street-walk-kitasenju')for(let guests=1;guests<=5;guests++)assert.equal(quote(pricingFor(x,lang),'select',guests,'2026-12-01').total,guests===1?55000:40000*guests);
  }
 });
 
@@ -64,13 +64,13 @@ test('street walk advertises the per-person rate without losing the solo supplem
  for(const lang of langs){
   const x=previewsFor(lang).experiences.find(e=>e.slug==='samurai-street-walk-kitasenju');
   assert.equal(x.priceUnit,'person');
-  assert.deepEqual(listPrice(x,lang),{price:'¥56,500',unit:'person'});
+  assert.deepEqual(listPrice(x,lang),{price:'¥40,000',unit:'person'});
   const view=pricingFor(x,lang);
   assert.equal(view.unit,'person');
-  assert.equal(view.perPerson,56500);
+  assert.equal(view.perPerson,40000);
   assert.deepEqual(view.rows.map(row=>row.party),[1,2,3,4,5]);
-  for(const row of view.rows)assert.equal(row.total,row.party===1?75000:56500*row.party);
-  for(let guests=1;guests<=5;guests++)assert.equal(quote(view,'',guests).total,guests===1?75000:56500*guests);
+  for(const row of view.rows)assert.equal(row.total,row.party===1?55000:40000*row.party);
+  for(let guests=1;guests<=5;guests++)assert.equal(quote(view,'',guests).total,guests===1?55000:40000*guests);
   assert.equal(quote(view,'',6),null);
  }
 });

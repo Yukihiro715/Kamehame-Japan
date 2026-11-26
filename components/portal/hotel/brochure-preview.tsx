@@ -13,7 +13,7 @@ export function BrochurePreview({input,canDownload,en,onClose}:{input:BrochureIn
     {!canDownload&&<Notice>{en?'Draft preview. Save the price and company settings before downloading.':'未保存のプレビューです。価格・会社設定を保存してからダウンロードしてください。'}</Notice>}
     {error?<><Notice tone="bad">{error}</Notice><Button onClick={()=>setRetry(v=>v+1)}>{en?'Retry':'再試行'}</Button></>:!url?<Loading/>:<>
       <Button disabled={!canDownload} onClick={()=>{try{if(canvas.current)downloadBrochure(canvas.current,input);}catch(e){setError(e instanceof Error?e.message:String(e));}}}>{en?'Download PDF':'PDFをダウンロード'}</Button>
-      <div className="pt-brochure-preview"><img src={url} alt={`${input.experience.title} / ${input.brand.companyName} / ${input.price.priceJpy??(en?'Enquire':'お問い合わせ')}`}/></div>
+      <div className="pt-brochure-preview"><img src={url} alt={`${input.experience.title} / ${input.brand.companyName} / ${input.price.priceJpy??(en?'Price hidden':'料金非表示')}`}/></div>
     </>}
   </PortalDialog>;
 }

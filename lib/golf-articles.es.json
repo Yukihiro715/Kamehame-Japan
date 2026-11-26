@@ -68,6 +68,43 @@
     "standfirst": "El green fee es solo el principio. Descubre cómo cambian el total el transporte, el tamaño del grupo y los alquileres, con ejemplos de presupuestos y casos de nuestras consultas de reserva.",
     "alt": "Golfistas recorriendo el campo en un carrito",
     "body": [
+      "## ¿Autobús compartido o reserva de una salida de golf desde Tokio?",
+      {
+        "type": "table",
+        "caption": "Qué comparar antes de solicitar una salida de golf",
+        "headings": [
+          "Opción",
+          "Qué se paga",
+          "Punto de encuentro",
+          "Alquiler de palos"
+        ],
+        "rows": [
+          [
+            "Autobús compartido",
+            "La tarifa de cada fecha incluye el autobús de ida y vuelta, 18 hoyos y el carrito. Añada el alquiler y las comidas que se cobren aparte.",
+            "Shinjuku u Oimachi, según la salida",
+            "Solicite palos y calzado al enviar la consulta."
+          ],
+          [
+            "Reserva individual de un horario de salida",
+            "Sume la tarifa de reserva del grupo, el green fee y el carrito, el transporte y el alquiler.",
+            "En el campo. Llegue en tren, coche o traslado contratado por separado.",
+            "Consulte la disponibilidad de material para cada jugador."
+          ]
+        ]
+      },
+      {
+        "type": "link",
+        "text": "Consulte el precio y el punto de encuentro de su fecha:",
+        "label": "Fechas y precios del autobús de golf compartido",
+        "href": "/es/golf-bus/"
+      },
+      {
+        "type": "link",
+        "text": "Para elegir campo y fecha, consulte la tarifa de reserva y los costes adicionales:",
+        "label": "Servicio de reserva de golf en Tokio y el monte Fuji",
+        "href": "/es/tokyo/mt-fuji-golf-day/"
+      },
       "La cifra más útil de una propuesta de golf es lo que habrás gastado al regresar al hotel. Un green fee bajo sirve de poco si después descubres que el traslado cuesta más que el golf o que el pago que acabas de hacer cubría únicamente el servicio de reserva.",
       "Algunos clientes nos han preguntado por el coste completo después de recibir las instrucciones de pago. Es una duda que la propuesta debería resolver antes. Al comparar opciones, pide tres cifras: la estimación del día completo, lo que pagas ahora y lo que tendrás que pagar por separado. No siempre coinciden.",
       "## Qué debe incluir el total",

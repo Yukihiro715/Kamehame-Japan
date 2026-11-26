@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst, yen } from "../client";
 import { Button, Card, Field, Loading, Notice, ReasonAction } from "../ui";
+import { GuestGuide } from "../guest-guide";
 import { CaseFacts, CaseLedger, CaseMessages, LANG_JA, LINE_KIND_JA, QuoteCard, StatusBadge, type CaseDetail, type ExtraField, type QuoteLine } from "../case-common";
 
 interface Options { experiences: { slug: string; title: string; price: string | null; extraFields: ExtraField[] }[]; statuses: { value: string; label: string }[] }
@@ -74,13 +75,13 @@ export function OpsCaseDetail({ id }: { id: string }) {
         )}
       </Card>
 
-      <Card title="見積もり" actions={!closed && !["paid", "confirmed"].includes(c.displayStatus) && !composer ? <Button small onClick={() => { if (current) prefill(current.lines); else setComposer(true); }}>{d.quotes.length ? "新しい版を作る" : "見積もりを作る"}</Button> : undefined}>
+      <Card title={c.agency_pays?"旅行代理店への卸見積":"見積もり"} actions={!closed && !["paid", "confirmed"].includes(c.displayStatus) && !composer ? <Button small onClick={() => { if (current) prefill(current.lines); else setComposer(true); }}>{d.quotes.length ? "新しい版を作る" : "見積もりを作る"}</Button> : undefined}>
         {composer && (
           <div className="pt-quote pt-quote-edit">
             <div className="pt-form">
               <Field label="件名（お客様に表示）" hint="空欄なら体験名をお客様の言語で表示します"><input value={qf.title} onChange={(e) => setQf({ ...qf, title: e.target.value })} placeholder={c.experienceTitle} /></Field>
               <Field label="対象の体験"><select value={qf.experience} onChange={(e) => setQf({ ...qf, experience: e.target.value })}><option value="">—</option>{opt?.experiences.map((x) => <option key={x.slug} value={x.slug}>{x.title}</option>)}</select></Field>
-              <Field label="お支払い方法"><select value={qf.paymentMode} onChange={(e) => setQf({ ...qf, paymentMode: e.target.value })}><option value="stripe">オンライン決済（カード）</option><option value="external">提携先への支払い（乗合バスなど、運営が決済済みを登録）</option><option value="none">決済なし（現地払いのみ）</option></select></Field>
+              <Field label="お支払い方法"><select value={qf.paymentMode} onChange={(e) => setQf({ ...qf, paymentMode: e.target.value })}><option value="stripe">オンライン決済（カード）</option><option disabled={!!c.agency_pays} value="external">提携先への支払い（乗合バスなど、運営が決済済みを登録）</option><option value="none">決済なし（現地払いのみ）</option></select></Field>
               <Field label="有効期限"><input type="date" value={qf.validUntil} onChange={(e) => setQf({ ...qf, validUntil: e.target.value })} /></Field>
             </div>
             <table className="pt-table pt-table-compact">
@@ -93,7 +94,7 @@ export function OpsCaseDetail({ id }: { id: string }) {
                     <td><input type="number" min={0} value={l.unitJpy} onChange={(e) => setLines(lines.map((x, j) => j === i ? { ...x, unitJpy: Number(e.target.value) } : x))} style={{ width: 110 }} /></td>
                     <td><input type="number" min={1} max={99} value={l.quantity} onChange={(e) => setLines(lines.map((x, j) => j === i ? { ...x, quantity: Number(e.target.value) } : x))} style={{ width: 64 }} /></td>
                     <td><select value={l.taxRateBp} onChange={(e) => setLines(lines.map((x, j) => j === i ? { ...x, taxRateBp: Number(e.target.value) } : x))}><option value={1000}>10%</option><option value={800}>8%</option><option value={0}>0%</option></select></td>
-                    <td><input type="checkbox" checked={l.commissionable} disabled={l.kind === "onsite"} onChange={(e) => setLines(lines.map((x, j) => j === i ? { ...x, commissionable: e.target.checked } : x))} /></td>
+                    <td><input type="checkbox" checked={!c.agency_pays && l.commissionable} disabled={!!c.agency_pays || l.kind === "onsite"} onChange={(e) => setLines(lines.map((x, j) => j === i ? { ...x, commissionable: e.target.checked } : x))} /></td>
                     <td><Button kind="link" small onClick={() => setLines(lines.filter((_, j) => j !== i))}>削除</Button></td>
                   </tr>
                 ))}
@@ -107,7 +108,7 @@ export function OpsCaseDetail({ id }: { id: string }) {
               <Field label="キャンセル条件"><textarea value={qf.cancelTerms} onChange={(e) => setQf({ ...qf, cancelTerms: e.target.value })} /></Field>
               <Field label="空き枠・予約確定の条件"><textarea value={qf.confirmationNote} onChange={(e) => setQf({ ...qf, confirmationNote: e.target.value })} placeholder="決済後に会場の空きを確保して確定します、など" /></Field>
             </div>
-            <p className="pt-note-box">お客様向けページには件名・明細・総額・含む/含まない・現地払い・キャンセル条件・有効期限・確定条件だけが載ります。紹介料・パートナー名・内部メモは表示されません。</p>
+            {c.agency_pays ? <p className="pt-note-box">卸値を代理店に提示します。代理店が管理画面でカード決済し、お客様への販売総額は代理店が設定します。</p> : <p className="pt-note-box">お客様向けページには件名・明細・総額・含む/含まない・現地払い・キャンセル条件・有効期限・確定条件だけが載ります。紹介料・パートナー名・内部メモは表示されません。</p>}
             <div className="pt-row">
               <Button disabled={!lines.length || lines.some((l) => !l.description.trim())} onClick={() => run(async () => { await api("POST", `ops/cases/${id}/quote`, { ...qf, lines }); setComposer(false); }, "下書きを作成しました。内容を確認して共有してください。")}>下書きとして保存</Button>
               <Button kind="link" onClick={() => setComposer(false)}>やめる</Button>
@@ -119,7 +120,7 @@ export function OpsCaseDetail({ id }: { id: string }) {
           <QuoteCard key={q.id} q={q} kind="ops" actions={
             q.status === "draft" ? (
               <>
-                <label className="pt-small"><input type="checkbox" checked={notifyCustomer} onChange={(e) => setNotifyCustomer(e.target.checked)} /> お客様にもメールで送る{c.customer_email ? `（${c.customer_email}）` : "（メール未登録）"}</label>
+                {!c.agency_pays && <label className="pt-small"><input type="checkbox" checked={notifyCustomer} onChange={(e) => setNotifyCustomer(e.target.checked)} /> お客様にもメールで送る{c.customer_email ? `（${c.customer_email}）` : "（メール未登録）"}</label>}
                 <Button small onClick={() => run(async () => { const r = await api<{ expire: string; superseded: number }>("POST", `ops/quotes/${q.id}/share`, { notifyCustomer: notifyCustomer && !!c.customer_email }); if (r.expire === "failed") setErr("共有しましたが、旧版の Stripe セッションを失効できませんでした。Stripe ダッシュボードで確認してください。"); }, "共有しました。パートナーに通知済みです。")}>共有する</Button>
                 <ReasonAction label="下書きを破棄" kind="danger" confirmLabel="破棄" placeholder="理由（任意）" onConfirm={(reason) => run(() => api("POST", `ops/quotes/${q.id}/void`, { reason }), "破棄しました。")} />
               </>
@@ -131,6 +132,7 @@ export function OpsCaseDetail({ id }: { id: string }) {
         {draft && !composer && <p className="pt-small pt-muted">下書きは共有するまでパートナーに見えません。</p>}
       </Card>
       <Card title="予約台帳・紹介料"><CaseLedger d={d} kind="ops" /></Card>
+      <GuestGuide path={`ops/cases/${id}/guest-guide`} operator messages={d.messages}/>
       <Card title="連絡・資料"><CaseMessages kind="ops" caseId={id} messages={d.messages} onPosted={load} /></Card>
     </>
   );

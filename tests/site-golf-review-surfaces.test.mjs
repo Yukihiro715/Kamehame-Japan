@@ -33,8 +33,8 @@ test('Sports & Outdoors and every Explore listing with this private product use 
     for (const c of relevant) assert.equal(isSiteGolfReviewPage(host, `/${lang}/${c}/`), true);
   }
   const item = getCollection('sports', locale).items.find(i => i.slug === slug);
-  assert.deepEqual(withPrivateGolfRating(item, aggregate).rating, { average: 5, count: 2 });
-  assert.deepEqual(withPrivateGolfRating(item, verifiedGolfAggregate(existing)).rating, { average: 5, count: 1 });
+  assert.deepEqual(withPrivateGolfRating(item, aggregate).rating, { average: 5, count: 3 });
+  assert.deepEqual(withPrivateGolfRating(item, verifiedGolfAggregate(existing)).rating, { average: 5, count: 2 });
   assert.strictEqual(withPrivateGolfRating({ slug: 'golf-bus', rating: { average: 5, count: 1 } }, aggregate).rating.count, 1);
   assert.equal(isSiteGolfReviewPage(host, '/en/sports/', 'staging'), false);
   assert.equal(isSiteGolfReviewPage('preview.example', '/en/sports/'), false);
@@ -42,22 +42,37 @@ test('Sports & Outdoors and every Explore listing with this private product use 
 
 test('Private-product JSON-LD uses the visible count from verified reviews only', () => {
   const mixed = [reviewed, ...existing, ...ownReviewsFor('golf-bus'), { ...reviewed, source: 'partner' }];
-  assert.deepEqual(verifiedGolfAggregate(mixed), { average: 5, count: 2 });
+  assert.deepEqual(verifiedGolfAggregate(mixed), { average: 5, count: 3 });
   const exp = catalogFor(locale).experiences.find(e => e.slug === slug);
   const [entity] = experienceJsonLd(exp, locale, [], aggregate)['@graph'];
-  assert.equal(entity.aggregateRating.reviewCount, 2);
+  assert.equal(entity.aggregateRating.reviewCount, 3);
   assert.equal(entity.aggregateRating.ratingValue, 5);
 });
 
 test('The golf-tours carousel presents the new private review first; the separate bus review stays last', () => {
   assert.equal(isSiteGolfReviewPage(host, '/en/golf-tours/'), true);
   const slides = golfLandingSlides(locale, [reviewed, ...existing]);
-  assert.equal(slides.length, 3);
+  assert.equal(slides.length, 4);
   assert.equal(slides[0].author, reviewed.author);
   assert.equal(slides[0].photo, '/media/example/1-600.webp');
   assert.equal(slides[0].excerpt, 'Exact first paragraph.');
   assert.match(slides[0].href, /mt-fuji-golf-day\/#verified-round-/);
   assert.equal(slides[0].service, slides[1].service);
-  assert.notEqual(slides[0].service, slides[2].service);
-  assert.match(slides[2].href, /golf-bus\/#reviews$/);
+  assert.equal(slides[1].author, 'Suan');
+  assert.equal(slides[1].photo, undefined);
+  assert.match(slides[1].href, /mt-fuji-golf-day\/#suan-golf-2026-11$/);
+  assert.notEqual(slides[0].service, slides[3].service);
+  assert.match(slides[3].href, /golf-bus\/#reviews$/);
+});
+
+test('Neil’s shared bus review follows the golf landing page language', () => {
+  const [review] = ownReviewsFor('golf-bus');
+  for (const lang of ['en', 'ja', 'es', 'fr', 'zh-tw']) {
+    const [slide] = golfLandingSlides(lang, []);
+    assert.equal(slide.author, 'Neil');
+    assert.equal(slide.language, lang);
+    assert.equal(slide.translated, lang !== 'en');
+    assert.equal(slide.excerpt, lang === 'en' ? review.body : review.i18n[lang].body);
+    assert.equal(slide.href, `/${lang}/golf-bus/#reviews`);
+  }
 });

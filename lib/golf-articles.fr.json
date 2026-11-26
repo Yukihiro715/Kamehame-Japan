@@ -73,6 +73,43 @@
       "text": "Comparez une sortie en groupe publiée avec une partie sur mesure et ses frais de transport distincts."
     },
     "body": [
+      "## Depuis Tokyo, bus partagé ou départ de golf sur mesure ?",
+      {
+        "type": "table",
+        "caption": "Les points à comparer avant de demander une partie",
+        "headings": [
+          "Option",
+          "Coût",
+          "Rendez-vous",
+          "Location de clubs"
+        ],
+        "rows": [
+          [
+            "Excursion en bus partagé",
+            "Le tarif de la date couvre le bus aller-retour, 18 trous et la voiturette. Ajoutez la location et les repas facturés séparément.",
+            "Shinjuku ou Oimachi, selon le départ",
+            "Demandez les clubs et les chaussures lors de votre demande."
+          ],
+          [
+            "Réservation d’un départ sur mesure",
+            "Additionnez les frais de réservation du groupe, le green fee et la voiturette, vos transports et les locations.",
+            "Au golf, accessible en train, en voiture ou par un transfert réservé séparément.",
+            "Vérifiez la disponibilité du matériel pour chaque joueur."
+          ]
+        ]
+      },
+      {
+        "type": "link",
+        "text": "Consultez le tarif et le lieu de rendez-vous pour votre date :",
+        "label": "Dates et tarifs du bus de golf partagé",
+        "href": "/fr/golf-bus/"
+      },
+      {
+        "type": "link",
+        "text": "Pour choisir votre parcours et votre date, consultez les frais de réservation et les coûts annexes :",
+        "label": "Réservation de golf à Tokyo et près du mont Fuji",
+        "href": "/fr/tokyo/mt-fuji-golf-day/"
+      },
       "Le chiffre le plus utile dans une proposition de golf est celui que vous aurez dépensé une fois de retour à l’hôtel. Un green fee peu élevé perd de son intérêt si vous découvrez ensuite que le transfert coûte plus cher que le golf, ou que le paiement effectué ne couvrait que le service de réservation.",
       "Certains clients nous ont demandé le coût complet après avoir reçu les instructions de paiement. La proposition devrait répondre à cette question plus tôt. Pour comparer les options, demandez trois chiffres : l’estimation de la journée entière, la somme à régler maintenant et ce qui restera à payer ailleurs. Ces montants ne sont pas toujours identiques.",
       "## Ce qui doit entrer dans le total",

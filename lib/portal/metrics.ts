@@ -25,7 +25,7 @@ export interface Period { from: string; to: string }
 export interface HotelDashboard {
   period: Period;
   updatedAt: string;
-  visitorCountPartial: boolean;
+  upcoming: number; performed: number; visitorCountPartial: boolean;
   funnel: { accesses: number; visits: number | null; provisional: number; confirmed: number; paid: number; fullyRefunded: number; cancelled: number; estimatedCommissionNet: number };
   confirmed: { count: number; baseNet: number; commissionNet: number; commissionTaxRef: number };
   balance: { unpaidNet: number; unpaidTaxRef: number; paid: number };
@@ -35,7 +35,7 @@ const n = (v: { n: number | null } | null) => Number(v?.n ?? 0);
 
 export async function hotelDashboard(db: SqlDb, hotelId: string, period: Period, now = Date.now()): Promise<HotelDashboard> {
   const { start, end } = periodBounds(period.from, period.to);
-  const [accesses, visits, provisional, confirmed, paid, refunded, cancelled, estimated, done, unpaid] = await Promise.all([
+  const [accesses, visits, provisional, confirmed, paid, refunded, cancelled, estimated, done, unpaid, upcoming, performed] = await Promise.all([
     db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM referral_events WHERE hotel_id = ? AND excluded = 0 AND at >= ? AND at < ?`, [hotelId, start, end]),
     db.first<{ n: number; legacy: number }>(`SELECT COUNT(DISTINCT visitor_window_id) AS n, SUM(CASE WHEN visitor_window_id IS NULL THEN 1 ELSE 0 END) AS legacy FROM referral_events WHERE hotel_id = ? AND excluded = 0 AND at >= ? AND at < ?`, [hotelId, start, end]),
     db.first<{ n: number }>(`SELECT COUNT(*) AS n FROM reservations r JOIN reservation_referrals rr ON rr.reservation_id = r.id WHERE rr.hotel_id = ? AND rr.status != 'removed' AND r.status IN ('provisional','arranging') AND r.created_at >= ? AND r.created_at < ?`, [hotelId, start, end]),
@@ -46,10 +46,12 @@ export async function hotelDashboard(db: SqlDb, hotelId: string, period: Period,
     db.first<{ n: number }>(`SELECT SUM(e.commission_net_jpy) AS n FROM commission_entries e JOIN reservations r ON r.id = e.reservation_id JOIN reservation_referrals rr ON rr.reservation_id = r.id WHERE e.hotel_id = ? AND rr.status != 'removed' AND e.status = 'estimated' AND e.performed_on_jst IS NULL AND r.status IN ('provisional','arranging','confirmed') AND r.created_at >= ? AND r.created_at < ?`, [hotelId, start, end]),
     db.first<{ c: number; base: number | null; net: number | null }>(`SELECT COUNT(*) AS c, SUM(base_net_jpy) AS base, SUM(commission_net_jpy) AS net FROM commission_entries WHERE hotel_id = ? AND status IN ('confirmed','adjusted') AND performed_on_jst >= ? AND performed_on_jst <= ?`, [hotelId, period.from, period.to]),
     db.first<{ n: number }>(`SELECT SUM(commission_net_jpy) AS n FROM commission_entries WHERE hotel_id = ? AND status IN ('confirmed','adjusted') AND statement_id IS NULL`, [hotelId]),
+    db.first<{n:number}>(`SELECT COUNT(*) n FROM reservations r JOIN reservation_referrals rr ON rr.reservation_id=r.id WHERE rr.hotel_id=? AND rr.status!='removed' AND r.status='confirmed' AND r.experience_date BETWEEN date(?, '+9 hours') AND date(?, '+9 hours','start of month','+1 month','-1 day')`, [hotelId, new Date(now).toISOString(), new Date(now).toISOString()]),
+    db.first<{n:number}>(`SELECT COUNT(*) n FROM attendances a JOIN reservation_referrals rr ON rr.reservation_id=a.reservation_id WHERE rr.hotel_id=? AND rr.status!='removed' AND a.revoked_at IS NULL AND a.performed_on_jst BETWEEN ? AND ?`, [hotelId, period.from, period.to]),
   ]);
   const confirmedNet = Number(done?.net ?? 0), unpaidNet = n(unpaid);
   return {
-    period, updatedAt: new Date(now).toISOString(), visitorCountPartial: (visits?.legacy ?? 0) > 0,
+    period, upcoming:n(upcoming), performed:n(performed), updatedAt: new Date(now).toISOString(), visitorCountPartial: (visits?.legacy ?? 0) > 0,
     funnel: { accesses: n(accesses), visits: n(visits) === 0 && (visits?.legacy ?? 0) > 0 ? null : n(visits), provisional: n(provisional), confirmed: n(confirmed), paid: n(paid), fullyRefunded: n(refunded), cancelled: n(cancelled), estimatedCommissionNet: n(estimated) },
     confirmed: { count: Number(done?.c ?? 0), baseNet: Number(done?.base ?? 0), commissionNet: confirmedNet, commissionTaxRef: taxOnTotal(confirmedNet, 1000) },
     balance: { unpaidNet, unpaidTaxRef: taxOnTotal(unpaidNet, 1000), paid: await paidTotalForHotel(db, hotelId) },

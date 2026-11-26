@@ -5,9 +5,10 @@ export interface AdsEnv {
  GOOGLE_ADS_CLIENT_ID?:string; GOOGLE_ADS_CLIENT_SECRET?:string; GOOGLE_ADS_REFRESH_TOKEN?:string;
  GOOGLE_ADS_LOGIN_CUSTOMER_ID?:string;
  META_ADS_ACCESS_TOKEN?:string;
+ OPENAI_ADS_API_KEY?:string;
 }
 export function directAdsSources(e:AdsEnv) {
- return [...(googleConfigured(e)?['google']:[]),...(e.META_ADS_ACCESS_TOKEN?['meta']:[])];
+ return [...(googleConfigured(e)?['google']:[]),...(e.META_ADS_ACCESS_TOKEN?['meta']:[]),...(e.OPENAI_ADS_API_KEY?['openai_ads']:[])];
 }
 type ProviderError = (body:unknown)=>ApiError|undefined;
 export async function read<T>(url:string,init:RequestInit,source:string,providerError?:ProviderError):Promise<T> {

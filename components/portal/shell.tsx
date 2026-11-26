@@ -1,5 +1,7 @@
 "use client";
 
+import { PasswordInput } from "./password-input";
+import { passwordRules, validNewPassword } from "@/lib/portal/password-policy";
 import Link from "next/link";
 import { OpsFrame } from "./ops/frame";
 import { Fragment, createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
@@ -11,7 +13,7 @@ import { DEMO_EMAIL } from "@/lib/portal/demo-config";
 import { Button, Loading, Notice } from "./ui";
 
 export type Kind = "hotel" | "ops";
-export interface HotelInfo extends PartnerSite { id: string; name: string; public_id: string; status: string; brochure_url: string | null }
+export interface HotelInfo extends PartnerSite { partner_type?: string; id: string; name: string; public_id: string; status: string; brochure_url: string | null }
 export interface Me { mustChangePassword?: boolean; isMaster?: boolean; demo?: boolean; user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
 
 interface PortalState { kind: Kind; me: Me; hotel: HotelInfo | null; setHotel: (id: string) => void; refresh: () => void; lang: PortalLang; setLang: (l: PortalLang) => void }
@@ -19,8 +21,8 @@ const Ctx = createContext<PortalState | null>(null);
 export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Error("usePortal outside PortalShell"); return c; };
 
 /** Partner navigation is labelled from the dictionary; operations stay Japanese. */
-const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/reservations/", "reservations"], ["/partner/materials/", "materials"], ["/partner/brochures/", "brochures"], ["/partner/settlement/", "settlement"], ["/partner/guide/", "guide"]];
-const NAV_ICONS = { dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, brochures: FileText, settlement: Wallet, guide: BookOpen };
+const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/materials/", "materials"], ["/partner/settlement/", "settlement"], ["/partner/account/", "account"], ["/partner/guide/", "guide"]];
+const NAV_ICONS = { account: FileText, dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, brochures: FileText, settlement: Wallet, guide: BookOpen };
 const HOTEL_KEY = "kh-portal-hotel";
 const LANG_KEY = "kh-portal-lang";
 
@@ -98,8 +100,14 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
   const setLang = (l: PortalLang) => { applyLang(l); if (kind === "hotel" && !me.demo) void api("POST", "hotel/lang", { lang: l }).catch(() => {}); };
   const T = DICT[lang];
   const access = partnerAccess(hotel, me.memberships);
-  const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "brochures" ? (access.refer || hotel?.features?.cases === true) : key === "settlement" ? access.settlement : true);
-  const active = (href: string) => path.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind === "hotel" ? "partner" : "ops"}/` && path.startsWith(href));
+  const hotelNav = HOTEL_NAV.filter(([, key]) => {
+    if (key === "account") return !!hotel && access.cases && me.memberships?.some(m => m.role === "partner_manager" && m.scopeId === hotel.id && m.scopeType === "hotel");
+    if (key === "materials") return access.refer || (hotel?.partner_type === "agency" && hotel?.features?.cases);
+    if (key === "settlement") return access.settlement;
+    return true;
+  });
+  const menuPath = path.replace(/^\/partner\/brochures\//, "/partner/materials/").replace(/^\/partner\/reservations\//, "/partner/cases/");
+  const active = (href: string) => menuPath.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind === "hotel" ? "partner" : "ops"}/` && menuPath.startsWith(href));
   const pageTitle = titleKey ? titleKey.split(".").reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), T) as string | undefined : title;
   if (kind === "ops") return <Ctx.Provider value={{kind, me, hotel, setHotel, refresh:load, lang, setLang}}><OpsFrame me={me} title={pageTitle}>{children}</OpsFrame></Ctx.Provider>;
   return (
@@ -131,7 +139,7 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
           </div>
         </header>
         <main className="pt-main" id="partner-main" tabIndex={-1} inert={kind === "hotel" && menuOpen}>
-          {me.demo && <Notice tone="info">{lang === "en" ? "Demo · All figures and bookings are fictional samples. Read only." : "デモ画面：実績・予約情報は架空のサンプルです。閲覧専用で、実際の予約・精算には反映されません。"}</Notice>}
+          {me.demo && <Notice tone="info">{lang === "en" ? "Demo · Sample bookings and results. You can try creating a case in this tab." : "デモ画面：実績・予約情報はサンプルです。案件登録はこのタブ内で試せます。"}</Notice>}
           {pageTitle && (kind === "hotel" ? <div className="pt-page-heading"><div><p className="pt-eyebrow">{hotel?.name ?? "PARTNER PORTAL"}</p><h1 className="pt-h1">{pageTitle}</h1></div><span className="pt-site-id">{hotel?.public_id}</span></div> : <h1 className="pt-h1">{pageTitle}</h1>)}
           {kind === "hotel" && !hotel ? <Notice tone="warn">{T.shell.noSite}</Notice> : <Fragment key={hotel?.id ?? kind}>{children}</Fragment>}
         </main>
@@ -147,10 +155,10 @@ function LangSwitch({ lang, onChange }: { lang: PortalLang; onChange: (l: Portal
 
 function InitialPassword({onDone}:{onDone:()=>void}) {
   const [currentPassword,setCurrent]=useState(""),[password,setPassword]=useState(""),[confirm,setConfirm]=useState(""),[error,setError]=useState(""),[busy,setBusy]=useState(false);
-  return <div className="pt-login"><div className="pt-login-box"><h1>初回パスワード変更</h1><p>業務画面を開く前に、ご自身のパスワードを設定してください。</p>{error&&<Notice tone="bad">{error}</Notice>}<form className="pt-form" onSubmit={async e=>{e.preventDefault();if(password!==confirm){setError("確認用パスワードが一致しません。");return}setBusy(true);setError("");try{await api("POST","auth/password-change-initial",{currentPassword,password});onDone()}catch(e){setError(errorText(e))}finally{setBusy(false)}}}>
-    <label className="pt-field">仮パスワード<input type="password" autoComplete="current-password" required maxLength={128} value={currentPassword} onChange={e=>setCurrent(e.target.value)}/></label>
-    <label className="pt-field">新しいパスワード（12〜128文字）<input type="password" autoComplete="new-password" required minLength={12} maxLength={128} value={password} onChange={e=>setPassword(e.target.value)}/></label>
-    <label className="pt-field">新しいパスワード（確認）<input type="password" autoComplete="new-password" required minLength={12} maxLength={128} value={confirm} onChange={e=>setConfirm(e.target.value)}/></label>
+  return <div className="pt-login"><div className="pt-login-box"><h1>初回パスワード変更</h1><p>{passwordRules(false)}</p>{error&&<Notice tone="bad">{error}</Notice>}<form className="pt-form" onSubmit={async e=>{e.preventDefault();if(!validNewPassword(password)){setError(passwordRules(false));return}if(password!==confirm){setError("確認用パスワードが一致しません。");return}setBusy(true);setError("");try{await api("POST","auth/password-change-initial",{currentPassword,password});onDone()}catch(e){setError(errorText(e))}finally{setBusy(false)}}}>
+    <label className="pt-field">仮パスワード<PasswordInput autoComplete="current-password" required maxLength={128} value={currentPassword} onChange={e=>setCurrent(e.target.value)}/></label>
+    <label className="pt-field">新しいパスワード<PasswordInput autoComplete="new-password" required minLength={8} maxLength={128} value={password} onChange={e=>setPassword(e.target.value)}/></label>
+    <label className="pt-field">新しいパスワード（確認）<PasswordInput autoComplete="new-password" required minLength={8} maxLength={128} value={confirm} onChange={e=>setConfirm(e.target.value)}/></label>
     <Button type="submit" disabled={busy}>変更してログインに戻る</Button><Button kind="link" onClick={async()=>{await api("POST","auth/signout",{kind:"ops"});onDone()}}>ログアウト</Button>
   </form></div></div>;
 }
@@ -178,6 +186,7 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
       }
       {
         if (resetToken) {
+          if (!validNewPassword(password)) { setErr(passwordRules(lang === "en")); return; }
           if (password !== confirmPassword) { setErr(lang === "en" ? "Passwords do not match." : "確認用パスワードが一致しません。"); return; }
           await api("POST", "auth/password-set", { kind, token: resetToken, password });
           setResetToken(""); setPassword(""); setConfirmPassword("");
@@ -202,9 +211,9 @@ function Login({ kind, onDone, lang, onLang }: { kind: Kind; onDone: () => void;
         {(
           <form onSubmit={(e) => { e.preventDefault(); void request(); }}>
             {!resetToken && <label className="pt-field"><span className="pt-field-l">{L.email}</span><input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus /></label>}
-            {!resetMode && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Password" : "パスワード"}</span><input type="password" autoComplete={resetToken ? "new-password" : "current-password"} minLength={resetToken ? 12 : undefined} required maxLength={128} value={password} onChange={e => setPassword(e.target.value)} /></label>}
-            {resetToken && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Confirm password" : "パスワード（確認）"}</span><input type="password" autoComplete="new-password" minLength={12} maxLength={128} required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} /></label>}
-            <p className="pt-login-note">{(lang === "en" ? (resetToken ? "Use 12–128 characters." : "Use your personal email address and password.") : (resetToken ? "12〜128文字で設定してください。" : "管理者が発行したアカウントでログインしてください。"))}</p>
+            {!resetMode && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Password" : "パスワード"}</span><PasswordInput autoComplete={resetToken ? "new-password" : "current-password"} minLength={resetToken ? 8 : undefined} required maxLength={128} value={password} onChange={e => setPassword(e.target.value)} /></label>}
+            {resetToken && <label className="pt-field"><span className="pt-field-l">{lang === "en" ? "Confirm password" : "パスワード（確認）"}</span><PasswordInput autoComplete="new-password" minLength={8} maxLength={128} required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} /></label>}
+            <p className="pt-login-note">{(lang === "en" ? (resetToken ? passwordRules(true) : "Use your personal email address and password.") : (resetToken ? passwordRules(false) : "管理者が発行したアカウントでログインしてください。"))}</p>
             <Button type="submit" disabled={busy}>{(resetToken ? (lang === "en" ? "Save password" : "パスワードを設定") : resetMode ? (lang === "en" ? "Send setup link" : "設定用リンクを送る") : L.signIn)}</Button>
             {<Button kind="link" onClick={() => { setResetMode(!resetMode && !resetToken); setResetToken(""); setEmail(""); setPassword(""); setErr(null); setMsg(null); }}>{resetMode || resetToken ? (lang === "en" ? "Back to sign-in" : "ログインに戻る") : (lang === "en" ? "Forgot password" : "パスワードを忘れた方")}</Button>}
           </form>
