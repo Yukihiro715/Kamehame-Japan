@@ -49,8 +49,8 @@ const photosBySlug: Record<string, ListingDraft["images"]> = {
   ],
   "yakushima-sea-turtle-snorkeling": [
     // Photos from the operator's Viator listing of this tour, supplied by the owner (2026-11-27).
-    photo(`${Y}/yakushima-sea/snorkel-turtle-close.webp`, "A green sea turtle swimming straight toward the camera, a snorkeller behind it", "カメラに向かって泳いでくるアオウミガメと、その後ろのシュノーケラー", 1200, 800),
     photo(`${Y}/yakushima-sea/snorkel-turtle-snorkeller.webp`, "A snorkeller swimming beside a sea turtle over the reef", "岩礁の上でウミガメと並んで泳ぐシュノーケラー", 1000, 666),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-close.webp`, "A green sea turtle swimming straight toward the camera, a snorkeller behind it", "カメラに向かって泳いでくるアオウミガメと、その後ろのシュノーケラー", 1200, 800),
     photo(`${Y}/yakushima-sea/snorkel-turtle-pair.webp`, "Two snorkellers watching a sea turtle pass in front of them", "目の前を通るウミガメを見つめる2人のシュノーケラー", 1100, 800),
     photo(`${Y}/yakushima-sea/snorkel-turtle-reef.webp`, "A sea turtle resting on the coral with a snorkeller above", "サンゴの上で休むウミガメと、その上のシュノーケラー", 1100, 800),
     photo(`${Y}/yakushima-sea/snorkel-turtle-deep.webp`, "A snorkeller diving down toward a turtle in deep blue water", "青い海でウミガメに向かって潜るシュノーケラー", 949, 633),
@@ -60,10 +60,10 @@ const photosBySlug: Record<string, ListingDraft["images"]> = {
   ],
   "yakushima-discover-scuba-one-dive": [
     // Photos from the operator's Viator listing of the one-dive course, supplied by the owner (2026-11-27).
+    photo(`${Y}/yakushima-sea/dive-sergeant-fish.webp`, "A diver surrounded by a school of sergeant major fish", "オヤビッチャの群れに囲まれたダイバー", 670, 447),
+    photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-instructor-slate.webp`, "The instructor explaining with a slate to two divers on the sand", "砂地で2人のダイバーにスレートで説明するインストラクター", 670, 447),
     photo(`${Y}/yakushima-sea/dive-pair-sand.webp`, "Two divers waving on the sandy bottom in clear blue water", "澄んだ青い海の砂地で手を振る2人のダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-sergeant-fish.webp`, "A diver surrounded by a school of sergeant major fish", "オヤビッチャの群れに囲まれたダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-wetsuits-van.webp`, "Getting into wetsuits beside the van at the shore", "海辺の車のそばでウェットスーツに着替える", 670, 447),
     photo(`${Y}/yakushima-sea/dive-surface-hills.webp`, "A diver at the surface before the dive, the green hills of Yakushima behind", "潜る前に水面で合図を送るダイバー。背後に屋久島の緑の山", 670, 447),
     photo(`${Y}/yakushima-sea/dive-clownfish.webp`, "A diver watching clownfish over the reef", "岩礁の上でクマノミを見るダイバー", 670, 447),
@@ -71,9 +71,9 @@ const photosBySlug: Record<string, ListingDraft["images"]> = {
   ],
   "yakushima-discover-scuba-extended-dive": [
     // Same operator and sites as the one-dive course; the turtle leads because the longer dive is about meeting one.
+    photo(`${Y}/yakushima-sea/dive-anemone.webp`, "A diver looking closely at an anemone and its clownfish", "イソギンチャクとクマノミをのぞき込むダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-turtle-divers.webp`, "Two divers behind a sea turtle resting on the reef", "岩礁で休むウミガメの後ろにいる2人のダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-pair-from-below.webp`, "Two divers seen from below against the bright surface", "明るい水面を背に下から見上げた2人のダイバー", 670, 447),
-    photo(`${Y}/yakushima-sea/dive-anemone.webp`, "A diver looking closely at an anemone and its clownfish", "イソギンチャクとクマノミをのぞき込むダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-pair-kneeling.webp`, "Two beginner divers kneeling on the sandy bottom with their instructor's guidance", "インストラクターの指導のもと砂地に膝をつく初心者ダイバー2人", 670, 447),
     photo(`${Y}/yakushima-sea/dive-sergeant-fish.webp`, "A diver surrounded by a school of sergeant major fish", "オヤビッチャの群れに囲まれたダイバー", 670, 447),
     photo(`${Y}/yakushima-sea/dive-guide-pointing.webp`, "The guide pointing out the dive site from the shore", "浜からポイントを指差して説明するガイド", 670, 447),
