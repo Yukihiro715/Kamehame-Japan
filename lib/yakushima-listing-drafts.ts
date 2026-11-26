@@ -51,7 +51,17 @@ const photosBySlug: Record<string, ListingDraft["images"]> = {
     photo(`${Y}/yakushima-taikoiwa-old-growth/creek.webp`, "A clear creek through the moss forest", "苔の森を流れる澄んだ小川"),
     photo(`${Y}/yakushima-taikoiwa-old-growth/ridge-view.webp`, "Mountain ridges seen from the trail", "歩道から見える山の稜線"),
   ],
-  "yakushima-sea-turtle-snorkeling": seaPhotos,
+  "yakushima-sea-turtle-snorkeling": [
+    // Photos from the operator's Viator listing of this tour, supplied by the owner (2026-11-27).
+    photo(`${Y}/yakushima-sea/snorkel-turtle-close.webp`, "A green sea turtle swimming straight toward the camera, a snorkeller behind it", "カメラに向かって泳いでくるアオウミガメと、その後ろのシュノーケラー", 1200, 800),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-snorkeller.webp`, "A snorkeller swimming beside a sea turtle over the reef", "岩礁の上でウミガメと並んで泳ぐシュノーケラー", 1000, 666),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-pair.webp`, "Two snorkellers watching a sea turtle pass in front of them", "目の前を通るウミガメを見つめる2人のシュノーケラー", 1100, 800),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-reef.webp`, "A sea turtle resting on the coral with a snorkeller above", "サンゴの上で休むウミガメと、その上のシュノーケラー", 1100, 800),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-deep.webp`, "A snorkeller diving down toward a turtle in deep blue water", "青い海でウミガメに向かって潜るシュノーケラー", 949, 633),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-dive.webp`, "A sea turtle diving away from the surface", "水面から潜っていくウミガメ", 1000, 666),
+    photo(`${Y}/yakushima-sea/snorkel-turtle-below.webp`, "Two snorkellers looking down at a large turtle", "大きなウミガメを見下ろす2人のシュノーケラー", 1100, 800),
+    photo(`${Y}/yakushima-sea/snorkel-group-surface.webp`, "A group of snorkellers at the surface with the green hills of Yakushima behind", "屋久島の緑の山を背に水面に並ぶ参加者", 700, 500),
+  ],
   "yakushima-discover-scuba-one-dive": seaPhotos,
   "yakushima-discover-scuba-extended-dive": seaPhotos,
   "yakushima-discover-scuba-two-dives": seaPhotos,
