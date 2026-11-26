@@ -1,4 +1,5 @@
 "use client";
+import { GuestGuideDefault } from "../guest-guide";
 import { useState, useEffect } from "react";
 import { usePortal } from "../shell";
 import { Button, Card, Field, Notice } from "../ui";
@@ -16,16 +17,16 @@ export function PartnerAccount() {
     { userId: string; name: string | null; email: string }[]
   >([]);
   const manage =
-    hotel?.features?.members &&
-    hotel.features.cases &&
+    hotel?.features?.cases &&
     me.memberships?.some(
       (m) =>
         m.role === "partner_manager" &&
         m.scopeId === hotel.id &&
         m.scopeType === "hotel",
     );
+  const staff=manage&&hotel?.features?.members;
   useEffect(() => {
-    if (!manage || !hotel) return;
+    if (!staff || !hotel) return;
     let live = true;
     api<{ members: typeof members }>(
       "GET",
@@ -40,7 +41,7 @@ export function PartnerAccount() {
     return () => {
       live = false;
     };
-  }, [manage, hotel, version]);
+  }, [staff, hotel, version]);
   if (!manage)
     return (
       <Notice>
@@ -49,8 +50,9 @@ export function PartnerAccount() {
           : "担当者登録は権限を持つ管理者が利用できます。"}
       </Notice>
     );
-  return (
-    <Card title={en ? "Team members" : "担当者登録"}>
+  return (<>
+    {!me.demo&&hotel&&<GuestGuideDefault path="hotel/guest-guide-settings" site={hotel.id} en={en}/>}
+    {staff&&<Card title={en ? "Team members" : "担当者登録"}>
       <ul>
         {members.map((m) => (
           <li key={m.userId}>
@@ -109,6 +111,6 @@ export function PartnerAccount() {
       </form>
       {message && <Notice>{message}</Notice>}
       {error && <Notice tone="bad">{error}</Notice>}
-    </Card>
-  );
+    </Card>}
+  </>);
 }

@@ -69,6 +69,6 @@ export function HotelExperiences() {
         {access.refer && links[x.slug] && <div className="pt-generated-link"><a href={links[x.slug].url} target="_blank" rel="noreferrer">{links[x.slug].url}</a><CopyLink url={links[x.slug].url}/><img className="pt-qr" src={`/api/portal/hotel/qr?link=${links[x.slug].qrId}`} alt={en ? "Referral QR code" : "紹介用QRコード"}/><a className="pt-btn pt-btn-secondary" href={`/api/portal/hotel/qr?link=${links[x.slug].qrId}&format=png`} download>{en ? "Download QR" : "QR画像を保存"}</a></div>}
       </div>
     </article>)}</div>}
-    {selected && <PortalDialog title={en ? selected.titleEn : selected.title} onClose={() => setSelected(null)} className="pt-case-modal"><HotelCaseNew experience={selected.slug} onClose={() => setSelected(null)}/></PortalDialog>}
+    {selected && <PortalDialog title={en ? selected.titleEn : selected.title} onClose={() => setSelected(null)} className="pt-case-modal" closeInFooter={false} subtitle={[en?selected.areaEn:selected.area,en?selected.durationEn:selected.duration,selected.basePrice].join(" · ")}><HotelCaseNew experience={selected.slug}/></PortalDialog>}
   </>;
 }

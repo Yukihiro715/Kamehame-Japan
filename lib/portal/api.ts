@@ -5,6 +5,7 @@ import { productProvider } from "@/lib/business/providers";
 import { catalogFor, previewsFor } from "@/lib/catalog";
 import { officialBrochureCatalog, officialBrochureInput, officialBrochureLanguage } from "./official-brochures";
 import { brochureExperiences, readBrochureConfig, saveBrochureBrand, saveBrochurePrice } from "./brochures";
+import { guideSettings,saveGuide,sendGuide } from "./guest-guide";
 import { saveBank, readBank } from "./bank";
 import { demoDashboard, demoPopularity, demoReservations, demoBalance, demoQuarters, demoCases, demoCase } from "./demo-data";
 import { passwordLogin, requestPassword, setPassword, provisionPassword, changeInitialPassword } from "./password-auth";
@@ -87,7 +88,7 @@ async function auth(ctx: Ctx, path: string[]): Promise<Response> {
     const p = await principalFromRequest(ctx.db, ctx.request, "ops");
     if (!p) throw new ApiError(401,"unauthenticated");
     const ok = await changeInitialPassword(ctx.db,p,{password:body.password,currentPassword:body.currentPassword},ip);
-    return json({ok,...(ok?{}:{error:"password_change_invalid",message:"仮パスワードを確認し、異なる12〜128文字のパスワードを設定してください。"})},ok?200:400);
+    return json({ok,...(ok?{}:{error:"password_change_invalid",message:"仮パスワードを確認し、異なる8〜128文字（大文字・小文字・記号を含む）のパスワードを設定してください。"})},ok?200:400);
   }
   if (["password-login", "password-request", "password-set"].includes(path[0])) {
     if (body.kind !== "hotel" && body.kind !== "ops") throw forbidden();
@@ -289,6 +290,18 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     if (action === "acknowledge" && ctx.method === "POST") { await settle.acknowledgeStatement(ctx.db, id, p.email); return json({ ok: true }); }
     if (action === "dispute" && ctx.method === "POST") { const b = await readJson(ctx.request); return json({ ok: true, ...(await settle.raiseDispute(ctx.db, id, { reason: b.reason, itemId: b.itemId, by: p.email })) }); }
   }
+  if(head==="guest-guide-settings"){
+    const body=ctx.method==="POST"?await readJson(ctx.request):undefined;
+    const site=hotelScope(ctx,p,body);
+    await requireCaseRole(ctx,p,site);
+    if(!hasSiteRole(p,site,"partner_manager"))throw forbidden();
+    if(body){
+      if(typeof body.enabled!=="boolean")throw bad("bad_guide_mode");
+      await ctx.db.run("UPDATE hotels SET auto_guest_guide=? WHERE id=?",[body.enabled?1:0,site]);
+    }
+    const h=await ctx.db.first<{auto_guest_guide:number}>("SELECT auto_guest_guide FROM hotels WHERE id=?",[site]);
+    return json({ok:true,enabled:!!h?.auto_guest_guide});
+  }
   if(head==="staff" && ctx.method==="POST"){
     const b=await readJson(ctx.request), site=hotelScope(ctx,p,b);
     await requireFeature(ctx.db,site,"members");
@@ -341,8 +354,14 @@ async function hotel(ctx: Ctx, path: string[]): Promise<Response> {
     await requireFeature(ctx.db, c.site_id, "cases");
     const origin = await publicOrigin(ctx);
     if (!action && ctx.method === "GET") return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "partner", origin)) });
+    if(action==="guest-guide"&&ctx.method==="GET")return json({ok:true,...await guideSettings(ctx.db,id,origin)});
     if (ctx.method !== "POST") throw notFound();
     const b = await readJson(ctx.request);
+    if(action==="guest-guide"){
+      await saveGuide(ctx.db,id,{mode:b.mode},false);
+      await sendGuide(ctx.db,ctx.env,id,origin);
+      return json({ok:true,...await guideSettings(ctx.db,id,origin)});
+    }
     if(action==="pay-wholesale"){
       if(!c.agency_pays) throw forbidden();
       const quote=await ctx.db.first<{share_token:string}>("SELECT share_token FROM case_quotes WHERE case_id=? AND id=? AND status='shared'",[id,str(b.quoteId,100)]);
@@ -523,6 +542,7 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     // The booking relay (lib/portal/cases.ts): every partner's cases, the quotes and the customer's page.
     if (!id && get) { await requireOps(ctx); return json({ ok: true, counts: await cases.opsCaseCounts(ctx.db), ...(await cases.listCases(ctx.db, { siteIds: q(ctx, "site") ? [q(ctx, "site")!] : undefined, status: q(ctx, "status"), q: q(ctx, "q"), open: q(ctx, "open") === "1", limit: int(q(ctx, "limit")) ?? undefined, offset: int(q(ctx, "offset")) ?? undefined })) }); }
     if (id && !action && get) { await requireOps(ctx); const origin = await publicOrigin(ctx); return json({ ok: true, ...(await cases.caseDetail(ctx.db, id, "ops", origin)) }); }
+    if(id&&action==="guest-guide"&&get){await requireOps(ctx);return json({ok:true,...await guideSettings(ctx.db,id,await publicOrigin(ctx))});}
     if (id && action && post) {
       // Money is a finance action; everything else on a case is booking operations.
       const p = await requireOps(ctx, ...(action === "payment" ? FINANCE : BOOKING));
@@ -531,6 +551,11 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
       if (action === "upload") return json({ ok: true, file: await cases.putCaseFile(isBucket(ctx.env.MEDIA) ? ctx.env.MEDIA : null, id, ctx.request) });
       const b = await readJson(ctx.request);
       switch (action) {
+        case "guest-guide": {
+          if(b.send!==true)await saveGuide(ctx.db,id,b,true);
+          const outcome=await sendGuide(ctx.db,ctx.env,id,origin,b.send===true);
+          return json({ok:true,...await guideSettings(ctx.db,id,origin),attemptOutcome:outcome});
+        }
         case "update": await cases.updateCase(ctx.db, id, { ...(b as Partial<cases.NewCaseInput>), assignedOps: b.assignedOps, by: p.email, actor: "ops" }); return json({ ok: true, ...(await detail()) });
         case "status": await cases.setCaseStatus(ctx.db, id, { status: b.status, reason: b.reason, by: p.email, actor: "ops" }); return json({ ok: true, ...(await detail()) });
         case "quote": { const r = await cases.createQuote(ctx.db, id, { ...(b as unknown as cases.QuoteInput), by: p.email }); return json({ ok: true, ...r, ...(await detail()) }); }
@@ -621,6 +646,13 @@ async function opsApi(ctx: Ctx, path: string[]): Promise<Response> {
     if (!id && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); return json({ ok: true, ...(await ops.createHotel(ctx.db, { legalEntityId: b.legalEntityId, name: b.name, publicId: b.publicId, siteKind: b.siteKind, features: b.features, withProfile: b.withProfile !== false, by: p.email })) }); }
     if (id && !action && get) { await requireOps(ctx); const d = await ops.hotelDetail(ctx.db, id); const origin = await publicOrigin(ctx); return json({ ok: true, ...d, links: d.links.map((l) => ({ ...l, url: publicLinkUrl(origin, l.token) })) }); }
     if (id && !action && post) { const p = await requireOps(ctx, ...BOOKING); const b = await readJson(ctx.request); await ops.updateHotel(ctx.db, id, { status: b.status, brochureUrl: b.brochureUrl, notes: b.notes, name: b.name, siteKind: b.siteKind, features: b.features, reason: b.reason, by: p.email }); return json({ ok: true }); }
+    if(id&&action==="guest-guide-settings"&&(get||post)){
+      await requireOps(ctx,...(post?BOOKING:[]));
+      if(post){const b=await readJson(ctx.request);if(typeof b.enabled!=="boolean")throw bad("bad_guide_mode");await ctx.db.run("UPDATE hotels SET auto_guest_guide=? WHERE id=?",[b.enabled?1:0,id]);}
+      const h=await ctx.db.first<{auto_guest_guide:number}>("SELECT auto_guest_guide FROM hotels WHERE id=?",[id]);
+      if(!h)throw notFound();
+      return json({ok:true,enabled:!!h.auto_guest_guide});
+    }
     if (id && action === "members" && post) {
       const p = await requireOps(ctx, ...ADMIN);
       const b = await readJson(ctx.request);

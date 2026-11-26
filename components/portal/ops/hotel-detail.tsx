@@ -1,5 +1,6 @@
 "use client";
 
+import { GuestGuideDefault } from "../guest-guide";
 import { CommissionPlan } from "./commission-plan";
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText, jst, yen } from "../client";
@@ -33,6 +34,7 @@ export function OpsHotelDetail({ id }: { id: string }) {
     <>
       {err && <Notice tone="bad">{err}</Notice>}
       {msg && <Notice tone="ok">{msg}</Notice>}
+      {d.hotel.features.cases&&<GuestGuideDefault path={`ops/hotels/${id}/guest-guide-settings`}/>}
       <CommissionPlan annualGross={d.annualGross}/>
       {d.entity?.partner_type==="agency" && <Card title="卸販売の決済後キャンセル"><p>累計決済 {d.wholesale.paid} 件のうち、キャンセル {d.wholesale.cancelled} 件（{d.wholesale.paid?Math.round(d.wholesale.cancelled/d.wholesale.paid*100):0}%）</p><p>返金累計 {yen(d.wholesale.refunds)} · キャンセル案件の台帳登録済み決済手数料 {yen(d.wholesale.knownFees)}（手数料未確認 {d.wholesale.unknownFees} 件）</p></Card>}
       <Card title={`${d.hotel.name}（${d.hotel.public_id}）`}>
