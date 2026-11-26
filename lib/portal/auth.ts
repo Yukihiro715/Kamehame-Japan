@@ -159,7 +159,7 @@ export async function canSeeProfile(db: SqlDb, p: Principal, profileId: string):
 
 // ---- invitations and membership management --------------------------------
 
-export interface InviteInput { email: unknown; name?: unknown; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null; by: string; loginOrigin: string; scopeLabel: string; lang?: unknown; skipMail?: boolean }
+export interface InviteInput { allowReactivation?:boolean; email: unknown; name?: unknown; role: Role; scopeType: "ops" | "hotel"; scopeId: string | null; by: string; loginOrigin: string; scopeLabel: string; lang?: unknown; skipMail?: boolean }
 
 /** Create (or reuse) the user, add the membership and mail the sign-in steps. */
 export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteInput, now = Date.now()): Promise<{ userId: string; membershipId: string; mail: string }> {
@@ -176,6 +176,7 @@ export async function inviteMember(db: SqlDb, env: PortalMailEnv, input: InviteI
     await db.run(`INSERT INTO users (id, email, name, status, lang, created_at, created_by) VALUES (?, ?, ?, 'invited', ?, ?, ?)`, [id, email, name, lang, at, input.by]);
     user = { id, status: "invited" };
   } else if (user.status === "disabled") {
+    if(input.allowReactivation===false) throw new Error("account_disabled");
     await db.run(`UPDATE users SET status = 'invited' WHERE id = ?`, [user.id]);
   }
   const existing = await db.first<{ id: string }>(`SELECT id FROM memberships WHERE user_id = ? AND role = ? AND scope_type = ? AND scope_id IS ? AND revoked_at IS NULL`, [user.id, input.role, input.scopeType, input.scopeId]);

@@ -11,7 +11,7 @@ import { DEMO_EMAIL } from "@/lib/portal/demo-config";
 import { Button, Loading, Notice } from "./ui";
 
 export type Kind = "hotel" | "ops";
-export interface HotelInfo extends PartnerSite { id: string; name: string; public_id: string; status: string; brochure_url: string | null }
+export interface HotelInfo extends PartnerSite { partner_type?: string; id: string; name: string; public_id: string; status: string; brochure_url: string | null }
 export interface Me { mustChangePassword?: boolean; isMaster?: boolean; demo?: boolean; user: { email: string; name: string | null; lang?: string }; memberships?: { role: string; scopeType: string; scopeId: string | null }[]; hotels?: HotelInfo[]; roles?: string[] }
 
 interface PortalState { kind: Kind; me: Me; hotel: HotelInfo | null; setHotel: (id: string) => void; refresh: () => void; lang: PortalLang; setLang: (l: PortalLang) => void }
@@ -19,8 +19,8 @@ const Ctx = createContext<PortalState | null>(null);
 export const usePortal = () => { const c = useContext(Ctx); if (!c) throw new Error("usePortal outside PortalShell"); return c; };
 
 /** Partner navigation is labelled from the dictionary; operations stay Japanese. */
-const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/reservations/", "reservations"], ["/partner/materials/", "materials"], ["/partner/brochures/", "brochures"], ["/partner/settlement/", "settlement"], ["/partner/guide/", "guide"]];
-const NAV_ICONS = { dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, brochures: FileText, settlement: Wallet, guide: BookOpen };
+const HOTEL_NAV: [string, keyof typeof DICT.ja.nav][] = [["/partner/", "dashboard"], ["/partner/experiences/", "experiences"], ["/partner/cases/", "cases"], ["/partner/materials/", "materials"], ["/partner/settlement/", "settlement"], ["/partner/account/", "account"], ["/partner/guide/", "guide"]];
+const NAV_ICONS = { account: FileText, dashboard: LayoutDashboard, experiences: MapPin, cases: ClipboardList, reservations: CalendarDays, materials: QrCode, brochures: FileText, settlement: Wallet, guide: BookOpen };
 const HOTEL_KEY = "kh-portal-hotel";
 const LANG_KEY = "kh-portal-lang";
 
@@ -98,8 +98,14 @@ export function PortalShell({ kind, children, title, titleKey }: { kind: Kind; c
   const setLang = (l: PortalLang) => { applyLang(l); if (kind === "hotel" && !me.demo) void api("POST", "hotel/lang", { lang: l }).catch(() => {}); };
   const T = DICT[lang];
   const access = partnerAccess(hotel, me.memberships);
-  const hotelNav = HOTEL_NAV.filter(([, key]) => key === "cases" ? access.cases : key === "materials" ? access.refer : key === "brochures" ? (access.refer || hotel?.features?.cases === true) : key === "settlement" ? access.settlement : true);
-  const active = (href: string) => path.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind === "hotel" ? "partner" : "ops"}/` && path.startsWith(href));
+  const hotelNav = HOTEL_NAV.filter(([, key]) => {
+    if (key === "account") return hotel?.features?.members && access.cases && me.memberships?.some(m => m.role === "partner_manager" && m.scopeId === hotel.id && m.scopeType === "hotel");
+    if (key === "materials") return access.refer || (hotel?.partner_type === "agency" && hotel?.features?.cases);
+    if (key === "settlement") return access.settlement;
+    return true;
+  });
+  const menuPath = path.replace(/^\/partner\/brochures\//, "/partner/materials/").replace(/^\/partner\/reservations\//, "/partner/cases/");
+  const active = (href: string) => menuPath.replace(/\/$/, "") === href.replace(/\/$/, "") || (href !== `/${kind === "hotel" ? "partner" : "ops"}/` && menuPath.startsWith(href));
   const pageTitle = titleKey ? titleKey.split(".").reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), T) as string | undefined : title;
   if (kind === "ops") return <Ctx.Provider value={{kind, me, hotel, setHotel, refresh:load, lang, setLang}}><OpsFrame me={me} title={pageTitle}>{children}</OpsFrame></Ctx.Provider>;
   return (

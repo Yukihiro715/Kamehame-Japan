@@ -555,6 +555,7 @@ test('expanded demo rows paginate without gaps and keep completed dates in the p
 
 test('partner brochure settings: role and site isolation, safe values, no booking or commission changes', async () => {
   const db=openTestDb();await seed(db);
+  await db.run("UPDATE partner_legal_entities SET partner_type='agency' WHERE id='le1'");
   await db.run(`INSERT INTO users(id,email,name,status,created_at) VALUES ('u-brand','brand@example.com','Brand manager','active','2026-01-01')`);
   await db.run(`INSERT INTO memberships(id,user_id,role,scope_type,scope_id,created_at) VALUES ('m-brand','u-brand','partner_manager','hotel','hA','2026-01-01')`);
   const c=client(db);await signIn(c,'brand@example.com','hotel');
@@ -680,6 +681,7 @@ test('official brochures use public prices and stable hotel/language referral QR
 
 test('agency QR preferences persist per partner, validate destinations and preserve old-client writes', async()=>{
   const db=openTestDb();await seed(db);
+  await db.run("UPDATE partner_legal_entities SET partner_type='agency' WHERE id='le1'");
   await db.run(`INSERT INTO users(id,email,name,status,created_at) VALUES ('qr-user','qr@example.com','Guide','active','2026-01-01')`);
   await db.run(`INSERT INTO memberships(id,user_id,role,scope_type,scope_id,created_at) VALUES ('qr-member','qr-user','partner_manager','hotel','hA','2026-01-01')`);
   const c=client(db);await signIn(c,'qr@example.com','hotel');
