@@ -169,10 +169,10 @@ export const experiencesFr: Experience[] = [
     img: "/images/partner-arashiyama/kyoto-shuriken-800.jpg",
     alt: "Un participant tient son shuriken fini",
     gallery: [
-      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Un shuriken en forme d’étoile" },
-      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "Le poste de moulage de l’instructeur" },
-      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "Un participant travaille sur la pièce avec l’instructeur" },
-      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "Intérieur du studio d’Arashiyama" },
+      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Un shuriken à quatre pointes terminé, frappé JAPAN 2026, sur l’enclume" },
+      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "Le métal en fusion versé à la louche dans le moule" },
+      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "L’étoile fraîchement coulée refroidit dans un seau d’eau en bois" },
+      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "La salle de l’atelier et sa rangée de cibles" },
     ],
     galleryNote: "Photos de l’atelier",
     langTag: "Anglais ou japonais",
@@ -692,7 +692,7 @@ export const experiencesFr: Experience[] = [
     notIncluded: ["Le drink charge de ¥700 par personne, réglé à l’entrée (l’usage dans les live houses japonais)", "Le transport jusqu’à la salle (rendez-vous directement à la salle confirmée)", "Guide ou interprète : aucune assistance en anglais sur place"],
     schedule: [
       { time: "18:30", title: "Ouverture des portes", body: "Présentez votre billet numérique à l’entrée et réglez le drink charge de ¥700. Prenez place dans la fosse : à l’arrière avec un billet standard, dans la zone avant avec un billet avant." },
-      { time: "19:00", title: "Début du concert", body: "L’heure exacte figure sur votre billet ; la plupart des soirées commencent dans la demi-heure qui suit l’ouverture. Le groupe ouvre avec ses titres les plus connus et la salle répond.", img: "/images/idol-live-group.webp" },
+      { time: "19:00", title: "Début du concert", body: "L’heure exacte figure sur votre billet ; la plupart des soirées commencent dans la demi-heure qui suit l’ouverture. Le groupe ouvre avec ses titres les plus connus et la salle répond.", img: "/images/idol-live-solo-blue.webp" },
       { time: "19:45", title: "Changements de costumes, appels et penlights", body: "Numéros solo et en sous-groupes, un ou deux changements de costumes et les appels que les habitués connaissent par cœur. Tapez dans les mains ; personne ne vous en voudra d’en rater un.", img: "/images/idol-live-solo-pink.webp" },
       { time: "20:30", title: "Final", body: "Tout le groupe revient sur scène pour les dernières chansons.", img: "/images/idol-live-group-2.webp" },
       { time: "21:00", title: "Fin", body: "Environ deux heures au total. Partez plus tôt si vous le souhaitez." },

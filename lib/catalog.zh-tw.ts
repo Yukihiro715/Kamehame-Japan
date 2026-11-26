@@ -169,10 +169,10 @@ export const experiencesZh: Experience[] = [
     img: "/images/partner-arashiyama/kyoto-shuriken-800.jpg",
     alt: "參加者手持完成的手裏劍",
     gallery: [
-      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "星形金屬手裏劍" },
-      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "講師的鑄造工作台" },
-      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "參加者在講師指導下處理作品" },
-      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "嵐山工作室內部" },
+      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "鐵砧上完成的四角手裏劍，刻有 JAPAN 2026" },
+      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "以長勺將熔化的金屬倒入模具" },
+      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "剛鑄好的手裏劍在木桶中以水冷卻" },
+      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "工房內排列著投擲靶的房間" },
     ],
     galleryNote: "工坊提供的照片",
     langTag: "英語或日語",
@@ -692,7 +692,7 @@ export const experiencesZh: Experience[] = [
     notIncluded: ["每人 ¥700 的飲料費，於入口支付（日本 Live House 的慣例）", "前往場地的交通（請直接前往確認的場地）", "導遊或口譯：現場沒有英語服務"],
     schedule: [
       { time: "18:30", title: "開場", body: "在入口出示電子票並支付 ¥700 飲料費。一般票請站在場地後方，前方區域票請前往前方區。" },
-      { time: "19:00", title: "開演", body: "確切開演時間以票面為準；多數場次在開場後半小時內開始。團體以代表曲開場，全場隨之回應。", img: "/images/idol-live-group.webp" },
+      { time: "19:00", title: "開演", body: "確切開演時間以票面為準；多數場次在開場後半小時內開始。團體以代表曲開場，全場隨之回應。", img: "/images/idol-live-solo-blue.webp" },
       { time: "19:45", title: "換裝、應援與螢光棒", body: "個人與小組曲目、一至兩次換裝，以及常客倒背如流的應援口號。跟著拍手就好，漏掉幾句也沒有人在意。", img: "/images/idol-live-solo-pink.webp" },
       { time: "20:30", title: "尾聲", body: "全體成員回到舞台，演唱最後幾首歌。", img: "/images/idol-live-group-2.webp" },
       { time: "21:00", title: "散場", body: "全程約兩小時。想提早離開隨時都可以。" },
