@@ -39,19 +39,30 @@ export const partnerListingDrafts: ListingDraft[] = [
   {
     slug: "tokyo-ninja-zen-night-walk",
     city: "tokyo",
+    // Photos from the organiser's listing of this walk (Airbnb experience 7063214), used at the owner's instruction (2026-11-27).
+    gallery: "photo",
+    images: [
+      { src: "/images/partner-listings/ninja-zen-night-walk/tower-group.webp", en: "The group gathered beneath Tokyo Tower at night", ja: "夜の東京タワーの足元に集まった参加者", width: 1440, height: 960 },
+      { src: "/images/partner-listings/ninja-zen-night-walk/temple-gate.webp", en: "A red temple gate lit at night", ja: "夜に照らされた赤い寺の門", width: 1440, height: 960 },
+      { src: "/images/partner-listings/ninja-zen-night-walk/street-walk.webp", en: "Walking the night streets near Tokyo Tower", ja: "東京タワー近くの夜の通りを歩く", width: 1440, height: 960 },
+      { src: "/images/partner-listings/ninja-zen-night-walk/hand-seal.webp", en: "Learning a ninja hand seal", ja: "忍者の印を習う手元", width: 1440, height: 960 },
+      { src: "/images/partner-listings/ninja-zen-night-walk/crossing.webp", en: "The group crossing a quiet street after dark", ja: "暗くなった静かな通りを渡る参加者", width: 1440, height: 960 },
+      { src: "/images/partner-listings/ninja-zen-night-walk/temple-talk.webp", en: "The guide explaining the practice in front of the temple", ja: "寺の前で説明をするガイド", width: 1440, height: 960 },
+    ],
+    mediaNote: { en: "Photos from the organiser's listing of this walk.", ja: "写真は主催者の掲載ページのものです。" },
     en: {
       title: "Ninja Zen Night Walk in Tokyo", area: "Tokyo · Azabudai / Tokyo Tower area",
       lead: "Explore Tokyo after dark through mindful walking, breathing and meditation. Practise ninja-inspired movement and hand gestures while paying attention to the city around you.",
       details: [["Duration", "Approximately 2 hours 15 minutes"], ["Language", "English / Japanese"], ["Participants", "Adults aged 18 and over; up to 10 guests"], ["Meeting", "Azabudai area; final meeting instructions to be confirmed"], ["Cancellation", "Full refund for cancellations up to one day before the start; exact cutoff and later cancellation conditions to be confirmed"], ["Weather", "Normally runs in the rain"], ["Availability", "Checked directly with the operator"]],
       highlights: ["An introduction to ninja-inspired movement", "Mindful walking near Tokyo Tower", "Breathing practice and seated meditation"],
-      pending: ["Selling price, dates and start time", "Inclusions and booking deadline", "Exact cancellation cutoff, later cancellation conditions and photos"],
+      pending: ["Selling price, dates and start time", "Inclusions and booking deadline", "Exact cancellation cutoff and later cancellation conditions"],
     },
     ja: {
       title: "忍者禅ナイトウォーク", area: "東京 · 麻布台／東京タワー周辺",
       lead: "夜の東京を歩きながら、忍者の歩法や印、呼吸、瞑想に触れる体験です。周囲の音や光に意識を向け、普段とは違う街の表情を感じます。",
       details: [["所要時間", "約2時間15分"], ["対応言語", "日本語・英語"], ["参加条件", "18歳以上・最大10名"], ["集合", "麻布台周辺。最終の集合案内は確認中"], ["キャンセル", "開始1日前まで全額返金。具体的な締切時刻・以降の取消条件は確認中"], ["雨天", "原則雨天決行"], ["空き状況", "主催者への問い合わせで確認"]],
       highlights: ["忍者の歩き方や動きを学ぶ", "東京タワー周辺の夜を歩く", "呼吸法と坐禅に触れる"],
-      pending: ["販売価格・開催日・開始時刻", "含まれる内容・予約締切", "取消の具体的な締切時刻・以降の条件・写真"],
+      pending: ["販売価格・開催日・開始時刻", "含まれる内容・予約締切", "取消の具体的な締切時刻・以降の条件"],
     },
   },
   {

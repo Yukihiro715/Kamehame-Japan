@@ -8,6 +8,53 @@ type Course = {
   duration: Copy;
   price: number;
   details: { en: ListingDraftCopy["details"]; ja: ListingDraftCopy["details"] };
+  /** Photos from the operator's own tour page (used at the owner's instruction, 2026-11-27). */
+  images?: ListingDraft["images"];
+};
+
+const Y = "/images/partner-listings";
+const photo = (src: string, en: string, ja: string, width = 940, height = 474) => ({ src, en, ja, width, height });
+const seaPhotos = [
+  photo(`${Y}/yakushima-sea/turtle.webp`, "A snorkeller face to face with a sea turtle in clear water", "透明な海でウミガメと向かい合うシュノーケラー", 1600, 900),
+  photo(`${Y}/yakushima-sea/photos-phone.webp`, "Underwater photos of the tour delivered to your phone", "ツアー中の水中写真をスマートフォンで受け取る", 1600, 900),
+];
+const photosBySlug: Record<string, ListingDraft["images"]> = {
+  "yakushima-jomonsugi-trekking": [
+    photo(`${Y}/yakushima-jomonsugi/jomon-sugi.webp`, "The vast trunk of Jomon Sugi", "縄文杉の巨大な幹"),
+    photo(`${Y}/yakushima-jomonsugi/railway-light.webp`, "Morning light on the old logging railway", "朝日が差し込むトロッコ道"),
+    photo(`${Y}/yakushima-jomonsugi/trail-bridge.webp`, "A bridge on the railway trail through the forest", "森を抜けるトロッコ道の橋"),
+    photo(`${Y}/yakushima-jomonsugi/deer.webp`, "Yakushima deer beside the trail", "登山道のそばのヤクシカ"),
+    photo(`${Y}/yakushima-jomonsugi/stump.webp`, "A giant moss-covered stump in the forest", "苔むした巨大な切り株"),
+    photo(`${Y}/yakushima-jomonsugi/waterfall.webp`, "A mountain stream and waterfall along the way", "途中で出会う渓流と滝"),
+  ],
+  "yakushima-shiratani-moss-forest": [
+    photo(`${Y}/yakushima-moss-forest/moss-forest.webp`, "Moss-covered boulders and trees in Shiratani Unsuikyo", "白谷雲水峡の苔むした岩と木々", 1600, 1000),
+    photo(`${Y}/yakushima-moss-forest/old-trees.webp`, "Old cedars and twisted trunks in the moss forest", "苔の森の古い杉と曲がった幹"),
+    photo(`${Y}/yakushima-moss-forest/stream-rocks.webp`, "A clear stream running over mossy rocks", "苔の岩の上を流れる澄んだ沢"),
+    photo(`${Y}/yakushima-moss-forest/giant-cedar.webp`, "A hiker beneath a giant cedar", "巨大な杉の下に立つハイカー"),
+    photo(`${Y}/yakushima-moss-forest/moss-creek.webp`, "Moss-covered banks of a forest creek", "苔に覆われた森の小川の岸"),
+    photo(`${Y}/yakushima-moss-forest/monkeys.webp`, "Yakushima macaques grooming by the trail", "登山道のそばで毛づくろいするヤクザル"),
+  ],
+  "yakushima-shiratani-taikoiwa": [
+    photo(`${Y}/yakushima-taikoiwa/taiko-rock.webp`, "The view over the mountains from Taiko-iwa rock", "太鼓岩から見渡す山並み", 1600, 1067),
+    photo(`${Y}/yakushima-taikoiwa/forest.webp`, "Moss-covered boulders and trees in Shiratani Unsuikyo", "白谷雲水峡の苔むした岩と木々", 1600, 1000),
+    photo(`${Y}/yakushima-taikoiwa/waterfall.webp`, "A waterfall in the ravine", "渓谷の滝"),
+    photo(`${Y}/yakushima-taikoiwa/moss-tree-stream.webp`, "A mossy tree leaning over a stream", "沢に張り出した苔むした木"),
+    photo(`${Y}/yakushima-taikoiwa/autumn-view.webp`, "Autumn colour on the slopes seen from the rock", "岩の上から見る紅葉の斜面"),
+    photo(`${Y}/yakushima-taikoiwa/cedar.webp`, "A hiker beside an ancient cedar", "古い杉のそばに立つハイカー"),
+  ],
+  "yakushima-shiratani-taikoiwa-old-growth": [
+    photo(`${Y}/yakushima-taikoiwa-old-growth/big-cedar.webp`, "An ancient cedar on the old-growth trail", "原生林歩道の古い杉", 1600, 1000),
+    photo(`${Y}/yakushima-taikoiwa-old-growth/taiko-rock.webp`, "The view over the mountains from Taiko-iwa rock", "太鼓岩から見渡す山並み", 1600, 1067),
+    photo(`${Y}/yakushima-taikoiwa-old-growth/old-growth.webp`, "Twisted trunks in the old-growth forest", "原生林の曲がりくねった幹"),
+    photo(`${Y}/yakushima-taikoiwa-old-growth/moss-tree-stream.webp`, "A mossy tree leaning over a stream", "沢に張り出した苔むした木"),
+    photo(`${Y}/yakushima-taikoiwa-old-growth/creek.webp`, "A clear creek through the moss forest", "苔の森を流れる澄んだ小川"),
+    photo(`${Y}/yakushima-taikoiwa-old-growth/ridge-view.webp`, "Mountain ridges seen from the trail", "歩道から見える山の稜線"),
+  ],
+  "yakushima-sea-turtle-snorkeling": seaPhotos,
+  "yakushima-discover-scuba-one-dive": seaPhotos,
+  "yakushima-discover-scuba-extended-dive": seaPhotos,
+  "yakushima-discover-scuba-two-dives": seaPhotos,
 };
 
 const shirataniCosts = {
@@ -116,6 +163,9 @@ export const yakushimaListingDrafts: ListingDraft[] = courses.map(course => {
   const amount = course.price.toLocaleString("en-US");
   return {
     slug: course.slug,
+    gallery: "photo",
+    images: course.images ?? photosBySlug[course.slug],
+    mediaNote: { en: "Photos from the operator's own tour pages.", ja: "写真はツアー運営会社の公式ページのものです。" },
     en: {
       title: course.title.en, area: "Yakushima, Kagoshima", lead: course.lead.en,
       details: [
