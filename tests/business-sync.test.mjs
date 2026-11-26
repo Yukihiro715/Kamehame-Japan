@@ -7,6 +7,7 @@ const root=fileURLToPath(new URL('..',import.meta.url));
 const vite=await createServer({appType:'custom',configFile:false,root,resolve:{alias:{'@':root}},server:{middlewareMode:true},logLevel:'silent'});
 after(()=>vite.close());
 const {sync,syncSources}=await vite.ssrLoadModule('/lib/business/sync.ts');
+const {openAiSpendForTotals,openAiReportPeriod}=await vite.ssrLoadModule('/lib/business/openai-ads-report.ts');
 const env={GOOGLE_ADS_CLIENT_ID:'test-client',GOOGLE_ADS_CLIENT_SECRET:'test-secret',GOOGLE_ADS_REFRESH_TOKEN:'test-refresh'};
 const period={start:'2026-11-01',end:'2026-11-16'};
 const json=(d,status=200)=>new Response(JSON.stringify(d),{status});
@@ -36,7 +37,7 @@ test('ChatGPT Ads sync uses the verified account and an exclusive JST end, stori
  assert.ok(syncSources(openAiKey).includes('openai_ads'));
  assert.ok(!syncSources({BUSINESS_METRICS_URL:'https://example.invalid',BUSINESS_METRICS_TOKEN:'fixture'}).includes('openai_ads'));
  const r=await sync(db,openAiKey,{source:'openai_ads',...period},'test');
- assert.deepEqual(r.data,{currency:'JPY',spend:1000.42});
+ assert.deepEqual(r.data,{currency:'JPY',spend:1000.42,coverage:'complete',from:reportStart,to:reportEnd});
  assert.equal(calls.length,2);
  const stored=JSON.parse((await db.first('SELECT payload FROM business_records')).payload);
  assert.deepEqual(stored.data,r.data);
@@ -45,10 +46,16 @@ test('ChatGPT Ads preserves measured zero and missing spend and keeps the previo
  const db=openTestDb();let account=openAiAccount;let report=insights([]);
  t.mock.method(globalThis,'fetch',async url=>json(url.endsWith('/ad_account')?account:report));
  const run=()=>sync(db,openAiKey,{source:'openai_ads',...period},'test');
- assert.equal((await run()).data.spend,null);
+ assert.deepEqual(await run(),{ok:true,source:'openai_ads',...period,saved:false,data:{currency:'JPY',spend:null,coverage:'unavailable'}});
+ assert.equal((await db.first('SELECT count(*) n FROM business_records')).n,0);
  report=insights([{...accountSpend,spend:0}]);
  assert.equal((await run()).data.spend,0);
  const previous=await db.first('SELECT payload,revision FROM business_records');
+ for(const rows of [[],[{...accountSpend,spend:null}]]){
+  report=insights(rows);
+  assert.equal((await run()).saved,false);
+  assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
+ }
  report={...insights([accountSpend]),has_more:true};
  await assert.rejects(run(),e=>e.code==='invalid_report');
  report=insights([{...accountSpend,ad_account_id:'adacct_unrelated'}]);
@@ -67,9 +74,26 @@ test('ChatGPT Ads does not replace the saved snapshot with a report covering onl
  const previous=await db.first('SELECT payload,revision FROM business_records');
  for(const bounds of [{start_time:reportStart+86400},{end_time:reportEnd-3600}]){
   row={...accountSpend,...bounds,spend:1};
-  await assert.rejects(run(),e=>e.code==='invalid_report');
+  const result=await run();
+  assert.equal(result.saved,false);
+  assert.deepEqual(result.data,{currency:'JPY',spend:1,coverage:'partial',from:row.start_time,to:row.end_time});
   assert.deepEqual(await db.first('SELECT payload,revision FROM business_records'),previous);
  }
+ for (const bounds of [{start_time:reportStart-1},{end_time:reportEnd+1},{start_time:reportEnd}]){
+  row={...accountSpend,...bounds};
+  await assert.rejects(run(),e=>e.code==='invalid_report');
+ }
+});
+test('ChatGPT Ads totals exclude reference-only periods and unverified legacy values',()=>{
+ const verified={currency:'JPY',spend:1000.42,coverage:'complete'};
+ assert.equal(openAiSpendForTotals(verified),1000.42);
+ assert.equal(openAiSpendForTotals({...verified,spend:0}),0);
+ assert.equal(openAiSpendForTotals({currency:'JPY',spend:900}),null);
+ assert.equal(openAiSpendForTotals(verified,{currency:'JPY',coverage:'partial',spend:800,from:reportStart,to:reportEnd-86400}),null);
+ assert.equal(openAiSpendForTotals(verified,{currency:'JPY',coverage:'unavailable',spend:null}),null);
+ assert.equal(openAiReportPeriod(reportStart,reportEnd),'2026-11-01〜2026-11-16（日本時間）');
+ assert.equal(openAiReportPeriod(reportStart,reportStart+86400),'2026-11-01（日本時間）');
+ assert.equal(openAiReportPeriod(reportStart,reportEnd-3600),'2026-11-01〜2026-11-16 23:00（日本時間）');
 });
 test('ChatGPT Ads matches the actual current-hour cutoff when the requested period includes today',async(t)=>{
  const db=openTestDb();
@@ -80,7 +104,7 @@ test('ChatGPT Ads matches the actual current-hour cutoff when the requested peri
   assert.deepEqual(JSON.parse(new URL(url).searchParams.get('time_ranges[]')),{type:'unix_range',start:reportStart,end:cutoff});
   return json(insights([{...accountSpend,end_time:cutoff}]));
  });
- assert.deepEqual((await sync(db,openAiKey,{source:'openai_ads',...period},'test')).data,{currency:'JPY',spend:1000.42});
+ assert.deepEqual((await sync(db,openAiKey,{source:'openai_ads',...period},'test')).data,{currency:'JPY',spend:1000.42,coverage:'complete',from:reportStart,to:cutoff});
 });
 test('Google refresh exchanges server credentials, validates account and consumes all pages',async(t)=>{
  const db=openTestDb();let pages=0;

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ApiError } from '@/lib/portal/util';
 import { read, type AdsEnv } from './ad-sources';
+import type { OpenAiAdsReport } from './openai-ads-report';
 
 const base = 'https://api.ads.openai.com/v1/ad_account';
 const label = 'ChatGPT広告';
@@ -21,7 +22,7 @@ const insightsResponse = z.object({
   })).max(1),
 });
 
-export async function openAiAds(env: AdsEnv, start: string, end: string) {
+export async function openAiAds(env: AdsEnv, start: string, end: string): Promise<OpenAiAdsReport> {
   const headers = { Authorization: 'Bearer ' + env.OPENAI_ADS_API_KEY };
   const account = accountResponse.safeParse(await read<unknown>(base, { headers }, label));
   if (!account.success) throw new ApiError(502, 'invalid_report', 'ChatGPT広告アカウントの情報を取得できませんでした。');
@@ -35,7 +36,7 @@ export async function openAiAds(env: AdsEnv, start: string, end: string) {
   const from = Date.parse(start + 'T00:00:00+09:00') / 1000;
   const endExclusive = Date.parse(end + 'T00:00:00+09:00') / 1000 + 86400;
   const to = Math.min(endExclusive, Math.floor(Date.now() / 3600000) * 3600);
-  if (to <= from) return { currency: 'JPY', spend: null };
+  if (to <= from) return { currency: 'JPY', spend: null, coverage: 'unavailable' };
 
   const params = new URLSearchParams({ aggregation_level: 'ad_account', time_granularity: 'none' });
   params.append('fields[]', 'ad_account.id');
@@ -44,11 +45,17 @@ export async function openAiAds(env: AdsEnv, start: string, end: string) {
   const report = insightsResponse.safeParse(await read<unknown>(base + '/insights?' + params, { headers }, label));
   if (!report.success) throw invalidReport();
   const row = report.data.data[0];
-  // A partial bucket would understate spend when saved for the full request.
-  if (row && (row.ad_account_id !== account.data.id || row.start_time !== from || row.end_time !== to)) {
+  if (!row) return { currency: 'JPY', spend: null, coverage: 'unavailable' };
+  if (row.ad_account_id !== account.data.id || row.start_time < from || row.end_time > to || row.end_time <= row.start_time) {
     throw invalidReport();
   }
-  return { currency: 'JPY', spend: row?.spend ?? null };
+  if (row.spend == null) return { currency: 'JPY', spend: null, coverage: 'unavailable' };
+  // A clipped response is reference-only, not the selected period's spend.
+  return {
+    currency: 'JPY', spend: row.spend,
+    coverage: row.start_time === from && row.end_time === to ? 'complete' : 'partial',
+    from: row.start_time, to: row.end_time,
+  };
 }
 
 function invalidReport() {
