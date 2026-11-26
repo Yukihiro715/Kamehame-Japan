@@ -421,7 +421,8 @@ test("workshop previews and approved salons preserve publication status and part
       assert.ok(text.includes("Bookings are currently paused"), `paused booking notice on ${path}`);
       assert.ok(!html.includes('<form'), `paused booking has no form on ${path}`);
     } else assert.ok(text.includes(price), `price on ${path}`);
-    const published = path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/");
+    const published = (path.includes("/tokyo/nihonbashi-") && path.endsWith("-salon/"))
+      || (path.includes("/kyoto/arashiyama-") && !paused);
     assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
     if (published) assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
     // 90de9eb explicitly introduced these rakugo artists; the operator and
@@ -446,7 +447,7 @@ test("workshop previews and approved salons preserve publication status and part
       assert.doesNotMatch(text, /Free cancellation up to 7 days|arrive 15 minutes|Arrive 15 minutes|more than 5 minutes late/i, `no stale promises on ${path}`);
       assert.ok(text.includes("the start time is arranged around your day"), `start time wording on ${path}`);
     }
-    // the Japanese page is written; the other locales fall back to the English text so the URL resolves
+    // The remaining previews may use fallback copy. The approved Arashiyama pages are fully localized.
     for (const lang of ["ja", "es", "fr", "zh-tw"]) {
       const alt = await render(path.replace("/en/", `/${lang}/`));
       assert.equal(alt.status, 200, `${lang} ${path}`);
@@ -454,10 +455,17 @@ test("workshop previews and approved salons preserve publication status and part
       assert.doesNotMatch(altHtml, privatePartners, `operator names stay private on ${lang} ${path}`);
       if (lang === "ja") { assert.equal(altHtml.includes("プレビュー — このページはまだ公開していません"), !published, `Japanese publication status on ${path}`); assert.ok(!altHtml.includes(title), `Japanese text on ${path}`); }
       if (lang === "ja" && arashiyama) assert.ok(altHtml.includes("開催30日前まで") && altHtml.includes("貸切または20名以上") && !altHtml.includes("15分前にお越しください"), `Japanese cancellation terms on ${path}`);
+      if (arashiyama && published) {
+        assert.doesNotMatch(altHtml, /<meta name="robots" content="noindex/);
+        assert.ok(!altHtml.includes(title), `localized listing on ${lang} ${path}`);
+        assert.ok(altHtml.includes('id="request-form"'), `booking request on ${lang} ${path}`);
+      }
     }
   }
   const home = await (await render("/en/")).text();
-  assert.ok(!home.includes('href="/en/samurai/"') && !home.includes('href="/en/ninja/"'), "the new themes are not listed while in preview");
+  assert.ok(!home.includes('href="/en/samurai/"'), "the unpublished samurai theme is hidden");
+  assert.ok(home.includes('href="/en/ninja/"'), "the ninja category is listed");
+  assert.equal((await render("/en/ninja/")).status, 200, "published ninja category");
   assert.equal((await render("/en/samurai/")).status, 404, "no samurai theme page without a live experience");
 });
 
