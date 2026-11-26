@@ -20,8 +20,8 @@
     "lastmod": "2026-09-17"
   },
   "/en/experiences/": {
-    "hash": "45d2a69a04bc",
-    "lastmod": "2026-11-22"
+    "hash": "19499c6ea898",
+    "lastmod": "2026-11-26"
   },
   "/en/faq/": {
     "hash": "5a97714a78fb",
@@ -55,6 +55,10 @@
     "hash": "5d407c4d5c0e",
     "lastmod": "2026-11-22"
   },
+  "/en/idol/": {
+    "hash": "0bf652c38991",
+    "lastmod": "2026-11-26"
+  },
   "/en/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
@@ -68,12 +72,12 @@
     "lastmod": "2026-11-17"
   },
   "/en/journal/choosing-kendo-experience-japan/": {
-    "hash": "8d6fb5ed34cc",
-    "lastmod": "2026-11-25"
+    "hash": "91b4c3caa640",
+    "lastmod": "2026-11-26"
   },
   "/en/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "059dc7f01554",
-    "lastmod": "2026-11-25"
+    "hash": "240f703f614d",
+    "lastmod": "2026-11-26"
   },
   "/en/journal/first-golf-round-in-japan/": {
     "hash": "4e4064262796",
@@ -123,9 +127,25 @@
     "hash": "fdd07da7dbb6",
     "lastmod": "2026-10-26"
   },
+  "/en/knife-making/": {
+    "hash": "e29a4b961489",
+    "lastmod": "2026-11-26"
+  },
   "/en/kyoto/": {
-    "hash": "af1d24079f0b",
-    "lastmod": "2026-11-13"
+    "hash": "617cef30ca83",
+    "lastmod": "2026-11-26"
+  },
+  "/en/kyoto/arashiyama-japanese-knife-workshop/": {
+    "hash": "bd6bf6c66fa0",
+    "lastmod": "2026-11-26"
+  },
+  "/en/kyoto/arashiyama-ninja-experience/": {
+    "hash": "5713f46f62a7",
+    "lastmod": "2026-11-26"
+  },
+  "/en/kyoto/arashiyama-shuriken-casting/": {
+    "hash": "1b34fc028e83",
+    "lastmod": "2026-11-26"
   },
   "/en/kyoto/bamboo-sky-terrace/": {
     "hash": "6bf5b940f992",
@@ -166,6 +186,10 @@
   "/en/nagoya/nagoya-kendo-experience-tour/": {
     "hash": "760b0121119f",
     "lastmod": "2026-11-22"
+  },
+  "/en/ninja/": {
+    "hash": "0355509b08e1",
+    "lastmod": "2026-11-26"
   },
   "/en/okinawa/": {
     "hash": "8f516d1d90e7",
@@ -216,8 +240,8 @@
     "lastmod": "2026-11-07"
   },
   "/en/tokyo/": {
-    "hash": "03a7ee1523d1",
-    "lastmod": "2026-11-22"
+    "hash": "1e8b5d6b61d3",
+    "lastmod": "2026-11-26"
   },
   "/en/tokyo/kanji-name-calligraphy/": {
     "hash": "ca317d8717f9",
@@ -254,6 +278,10 @@
   "/en/tokyo/shibuya-ramen-class/": {
     "hash": "b38d161dc717",
     "lastmod": "2026-11-22"
+  },
+  "/en/tokyo/tokyo-idol-live-night/": {
+    "hash": "f419bafc4dcf",
+    "lastmod": "2026-11-26"
   },
   "/en/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "a13301b723b4",
@@ -300,8 +328,8 @@
     "lastmod": "2026-09-17"
   },
   "/es/experiences/": {
-    "hash": "e4c903b674a0",
-    "lastmod": "2026-11-22"
+    "hash": "c4180f105c51",
+    "lastmod": "2026-11-26"
   },
   "/es/faq/": {
     "hash": "91def1d8de77",
@@ -327,6 +355,10 @@
     "hash": "0488aae1ed83",
     "lastmod": "2026-11-22"
   },
+  "/es/idol/": {
+    "hash": "23f07dda7b48",
+    "lastmod": "2026-11-26"
+  },
   "/es/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
@@ -336,12 +368,12 @@
     "lastmod": "2026-11-17"
   },
   "/es/journal/choosing-kendo-experience-japan/": {
-    "hash": "e5ee6a4a2ad1",
-    "lastmod": "2026-11-25"
+    "hash": "913f6bf82cbf",
+    "lastmod": "2026-11-26"
   },
   "/es/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "af2a652c0450",
-    "lastmod": "2026-11-25"
+    "hash": "d3f22feaa194",
+    "lastmod": "2026-11-26"
   },
   "/es/journal/first-golf-round-in-japan/": {
     "hash": "b7b6ff55f588",
@@ -383,9 +415,25 @@
     "hash": "c7bd0e6a38e1",
     "lastmod": "2026-10-26"
   },
+  "/es/knife-making/": {
+    "hash": "a3a9ecba978e",
+    "lastmod": "2026-11-26"
+  },
   "/es/kyoto/": {
-    "hash": "608f24c9822f",
-    "lastmod": "2026-11-13"
+    "hash": "be6f8ecde3cb",
+    "lastmod": "2026-11-26"
+  },
+  "/es/kyoto/arashiyama-japanese-knife-workshop/": {
+    "hash": "bf101ef5dc88",
+    "lastmod": "2026-11-26"
+  },
+  "/es/kyoto/arashiyama-ninja-experience/": {
+    "hash": "078a939644ec",
+    "lastmod": "2026-11-26"
+  },
+  "/es/kyoto/arashiyama-shuriken-casting/": {
+    "hash": "50675cdba004",
+    "lastmod": "2026-11-26"
   },
   "/es/kyoto/bamboo-sky-terrace/": {
     "hash": "ef12ead17038",
@@ -414,6 +462,10 @@
   "/es/nagoya/nagoya-kendo-experience-tour/": {
     "hash": "c419c0445445",
     "lastmod": "2026-11-22"
+  },
+  "/es/ninja/": {
+    "hash": "030cc963fa95",
+    "lastmod": "2026-11-26"
   },
   "/es/okinawa/": {
     "hash": "655fada9fc9e",
@@ -464,8 +516,8 @@
     "lastmod": "2026-11-07"
   },
   "/es/tokyo/": {
-    "hash": "48801e576643",
-    "lastmod": "2026-11-22"
+    "hash": "6a1c49bd74cb",
+    "lastmod": "2026-11-26"
   },
   "/es/tokyo/kanji-name-calligraphy/": {
     "hash": "27b01ed151fe",
@@ -502,6 +554,10 @@
   "/es/tokyo/shibuya-ramen-class/": {
     "hash": "411a4ba27383",
     "lastmod": "2026-11-22"
+  },
+  "/es/tokyo/tokyo-idol-live-night/": {
+    "hash": "305fcb3319df",
+    "lastmod": "2026-11-26"
   },
   "/es/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "0106f180b0a0",
@@ -548,8 +604,8 @@
     "lastmod": "2026-09-17"
   },
   "/fr/experiences/": {
-    "hash": "ad53bbeb731f",
-    "lastmod": "2026-11-22"
+    "hash": "f517b6adfe74",
+    "lastmod": "2026-11-26"
   },
   "/fr/faq/": {
     "hash": "bb182291c938",
@@ -575,6 +631,10 @@
     "hash": "a16e33140dd1",
     "lastmod": "2026-11-22"
   },
+  "/fr/idol/": {
+    "hash": "fcf2f010bc6d",
+    "lastmod": "2026-11-26"
+  },
   "/fr/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
@@ -584,12 +644,12 @@
     "lastmod": "2026-11-17"
   },
   "/fr/journal/choosing-kendo-experience-japan/": {
-    "hash": "5192e2bd0c86",
-    "lastmod": "2026-11-25"
+    "hash": "1a7071a0cad6",
+    "lastmod": "2026-11-26"
   },
   "/fr/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "f6b8af391c9c",
-    "lastmod": "2026-11-25"
+    "hash": "b7d24f43caa8",
+    "lastmod": "2026-11-26"
   },
   "/fr/journal/first-golf-round-in-japan/": {
     "hash": "4be0b99d82b7",
@@ -631,9 +691,25 @@
     "hash": "61cf5324f031",
     "lastmod": "2026-10-26"
   },
+  "/fr/knife-making/": {
+    "hash": "7bfaaae50855",
+    "lastmod": "2026-11-26"
+  },
   "/fr/kyoto/": {
-    "hash": "ccb0473c1850",
-    "lastmod": "2026-11-13"
+    "hash": "5eb632769c30",
+    "lastmod": "2026-11-26"
+  },
+  "/fr/kyoto/arashiyama-japanese-knife-workshop/": {
+    "hash": "3af3f0327279",
+    "lastmod": "2026-11-26"
+  },
+  "/fr/kyoto/arashiyama-ninja-experience/": {
+    "hash": "02364b8bdb02",
+    "lastmod": "2026-11-26"
+  },
+  "/fr/kyoto/arashiyama-shuriken-casting/": {
+    "hash": "7e568a6e94fa",
+    "lastmod": "2026-11-26"
   },
   "/fr/kyoto/bamboo-sky-terrace/": {
     "hash": "26b3d36734f5",
@@ -662,6 +738,10 @@
   "/fr/nagoya/nagoya-kendo-experience-tour/": {
     "hash": "d866da60aa75",
     "lastmod": "2026-11-22"
+  },
+  "/fr/ninja/": {
+    "hash": "377dc80c8da1",
+    "lastmod": "2026-11-26"
   },
   "/fr/okinawa/": {
     "hash": "c61e544d3446",
@@ -712,8 +792,8 @@
     "lastmod": "2026-11-07"
   },
   "/fr/tokyo/": {
-    "hash": "dd90642bdc60",
-    "lastmod": "2026-11-22"
+    "hash": "e606dc2a1945",
+    "lastmod": "2026-11-26"
   },
   "/fr/tokyo/kanji-name-calligraphy/": {
     "hash": "1c1fac15a9d3",
@@ -750,6 +830,10 @@
   "/fr/tokyo/shibuya-ramen-class/": {
     "hash": "a1cb9e709883",
     "lastmod": "2026-11-22"
+  },
+  "/fr/tokyo/tokyo-idol-live-night/": {
+    "hash": "7211d1d5a529",
+    "lastmod": "2026-11-26"
   },
   "/fr/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "12d4a98666aa",
@@ -796,8 +880,8 @@
     "lastmod": "2026-09-17"
   },
   "/ja/experiences/": {
-    "hash": "1cb99cc19c6f",
-    "lastmod": "2026-11-22"
+    "hash": "9c93d0e74de7",
+    "lastmod": "2026-11-26"
   },
   "/ja/faq/": {
     "hash": "fa966303cfee",
@@ -831,6 +915,10 @@
     "hash": "6490ff2dcf05",
     "lastmod": "2026-11-22"
   },
+  "/ja/idol/": {
+    "hash": "c884b318f457",
+    "lastmod": "2026-11-26"
+  },
   "/ja/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
@@ -844,12 +932,12 @@
     "lastmod": "2026-11-17"
   },
   "/ja/journal/choosing-kendo-experience-japan/": {
-    "hash": "40c51630a141",
-    "lastmod": "2026-11-25"
+    "hash": "8d8c9f60d3c0",
+    "lastmod": "2026-11-26"
   },
   "/ja/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "048dde106cf3",
-    "lastmod": "2026-11-25"
+    "hash": "451b1f4466d5",
+    "lastmod": "2026-11-26"
   },
   "/ja/journal/first-golf-round-in-japan/": {
     "hash": "a6b71f2b7e1b",
@@ -899,9 +987,25 @@
     "hash": "7147c52605e4",
     "lastmod": "2026-10-26"
   },
+  "/ja/knife-making/": {
+    "hash": "749f631faed8",
+    "lastmod": "2026-11-26"
+  },
   "/ja/kyoto/": {
-    "hash": "3e4eb74dac54",
-    "lastmod": "2026-11-13"
+    "hash": "faad709d0ff3",
+    "lastmod": "2026-11-26"
+  },
+  "/ja/kyoto/arashiyama-japanese-knife-workshop/": {
+    "hash": "efcff88916c7",
+    "lastmod": "2026-11-26"
+  },
+  "/ja/kyoto/arashiyama-ninja-experience/": {
+    "hash": "160bfb20dc89",
+    "lastmod": "2026-11-26"
+  },
+  "/ja/kyoto/arashiyama-shuriken-casting/": {
+    "hash": "8d3e7fd50ea7",
+    "lastmod": "2026-11-26"
   },
   "/ja/kyoto/bamboo-sky-terrace/": {
     "hash": "cac9cb0aabbd",
@@ -930,6 +1034,10 @@
   "/ja/nagoya/nagoya-kendo-experience-tour/": {
     "hash": "65f12cc96bff",
     "lastmod": "2026-11-22"
+  },
+  "/ja/ninja/": {
+    "hash": "49cefded4a9f",
+    "lastmod": "2026-11-26"
   },
   "/ja/okinawa/": {
     "hash": "aa594aede755",
@@ -980,8 +1088,8 @@
     "lastmod": "2026-11-07"
   },
   "/ja/tokyo/": {
-    "hash": "4472ac71caff",
-    "lastmod": "2026-11-22"
+    "hash": "83fc0c9030e6",
+    "lastmod": "2026-11-26"
   },
   "/ja/tokyo/kanji-name-calligraphy/": {
     "hash": "682d8afe0eee",
@@ -1018,6 +1126,10 @@
   "/ja/tokyo/shibuya-ramen-class/": {
     "hash": "e3d91bde79d0",
     "lastmod": "2026-11-22"
+  },
+  "/ja/tokyo/tokyo-idol-live-night/": {
+    "hash": "52cd2d471521",
+    "lastmod": "2026-11-26"
   },
   "/ja/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "d1d32f17223b",
@@ -1076,8 +1188,8 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/experiences/": {
-    "hash": "5333fe6362f3",
-    "lastmod": "2026-11-22"
+    "hash": "d2422bd4a931",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/faq/": {
     "hash": "a80e686cb530",
@@ -1103,6 +1215,10 @@
     "hash": "ccd27b6b8576",
     "lastmod": "2026-11-22"
   },
+  "/zh-tw/idol/": {
+    "hash": "99dc0de1c677",
+    "lastmod": "2026-11-26"
+  },
   "/zh-tw/journal/": {
     "hash": "4954ccf587d7",
     "lastmod": "2026-09-17"
@@ -1112,12 +1228,12 @@
     "lastmod": "2026-11-17"
   },
   "/zh-tw/journal/choosing-kendo-experience-japan/": {
-    "hash": "a6b1754864eb",
-    "lastmod": "2026-11-25"
+    "hash": "a16ca7952649",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "8be5996448b6",
-    "lastmod": "2026-11-25"
+    "hash": "d10a4d668a77",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/journal/first-golf-round-in-japan/": {
     "hash": "a96bdb4db06f",
@@ -1159,9 +1275,25 @@
     "hash": "64d80e25491f",
     "lastmod": "2026-10-26"
   },
+  "/zh-tw/knife-making/": {
+    "hash": "03d288a46a7e",
+    "lastmod": "2026-11-26"
+  },
   "/zh-tw/kyoto/": {
-    "hash": "a96791e3292d",
-    "lastmod": "2026-11-13"
+    "hash": "0fb0bd364b17",
+    "lastmod": "2026-11-26"
+  },
+  "/zh-tw/kyoto/arashiyama-japanese-knife-workshop/": {
+    "hash": "4d492a1a5fbf",
+    "lastmod": "2026-11-26"
+  },
+  "/zh-tw/kyoto/arashiyama-ninja-experience/": {
+    "hash": "7efc7455bb76",
+    "lastmod": "2026-11-26"
+  },
+  "/zh-tw/kyoto/arashiyama-shuriken-casting/": {
+    "hash": "d51240e7a03d",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/kyoto/bamboo-sky-terrace/": {
     "hash": "a3cf87964813",
@@ -1190,6 +1322,10 @@
   "/zh-tw/nagoya/nagoya-kendo-experience-tour/": {
     "hash": "2860ae125fe0",
     "lastmod": "2026-11-22"
+  },
+  "/zh-tw/ninja/": {
+    "hash": "3e2522a03960",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/okinawa/": {
     "hash": "956930597ecd",
@@ -1240,8 +1376,8 @@
     "lastmod": "2026-11-07"
   },
   "/zh-tw/tokyo/": {
-    "hash": "88fdbe719ce2",
-    "lastmod": "2026-11-22"
+    "hash": "f4b9b765b3be",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/tokyo/kanji-name-calligraphy/": {
     "hash": "da936ca2464f",
@@ -1278,6 +1414,10 @@
   "/zh-tw/tokyo/shibuya-ramen-class/": {
     "hash": "105076e3fc87",
     "lastmod": "2026-11-22"
+  },
+  "/zh-tw/tokyo/tokyo-idol-live-night/": {
+    "hash": "6a35f03c74cf",
+    "lastmod": "2026-11-26"
   },
   "/zh-tw/tokyo/tokyo-kendo-experience-tour/": {
     "hash": "d5fcd1faf2e3",

@@ -1234,11 +1234,10 @@ export const experiences: Experience[] = [
   },
   {
     // Evening idol live in a small Tokyo live house, sold as a KAMEHAME ticket
-    // (organiser's terms, 2026-11). The group and the venue are not named in
-    // the copy until the organiser confirms. Selling prices: standard
+    // (organiser's terms, 2026-11). The public copy leaves the group and venue unnamed. Selling prices: standard
     // ¥12,000, front ¥19,000 per person, tax included; the ¥700 drink charge
     // is paid at the door. Cost prices stay out of the repository.
-    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "preview",
+    slug: "tokyo-idol-live-night", city: "tokyo", category: "idol", bookingType: "request", status: "live",
     title: "An Evening at a Tokyo Idol Live",
     tagline: "A ticket to a real idol concert in a small Tokyo live house: six-piece harmonies, choreographed dance, costume changes and a floor of fans with penlights who know every call. Not a show staged for visitors; this is the local scene as it is, and you stand in it.",
     overview: [
@@ -1259,7 +1258,7 @@ export const experiences: Experience[] = [
     // Organiser's calendar; we check whether there is a performance on the
     // requested date. Three days' notice so the ticket can be issued.
     availability: { daily: false, startTimes: ["18:30"], cutoffDays: 3, cutoffTime: "18:00" },
-    availabilityNote: "On the organiser's performance dates. We confirm whether there is a show on your date.",
+    availabilityNote: "Requests are accepted for any day. We check whether a show is running and tickets are available before sending a payment link.",
     timeLabel: "Doors open",
     taxIncluded: true,
     interpreter: false,
@@ -2992,9 +2991,8 @@ export const experiences: Experience[] = [
     // all ages, 1–12 per regular session / up to 16 private, daily, requests
     // close the day before, start time arranged around the group's day) and
     // the partner's cancellation scale (regular vs private/20+). The sheet's
-    // "costume included" answer against the basic/costume plans is still
-    // unconfirmed, so both plans stay. Preview.
-    slug: "arashiyama-ninja-experience", city: "kyoto", category: "ninja", bookingType: "request", status: "preview",
+    // costume is available on the separate costume plan.
+    slug: "arashiyama-ninja-experience", city: "kyoto", category: "ninja", bookingType: "request", status: "live",
     title: "Ninja Experience in Arashiyama, Kyoto: Blowpipe, Shuriken and Hand Seals",
     tagline: "Forty-five to sixty minutes in a ninja training room in Arashiyama: the blowpipe, throwing stars at the targets, and the hand seals of the ninja, taught by an instructor in English or Japanese. Change into a ninja costume for the photos if you like.",
     overview: [
@@ -3173,15 +3171,14 @@ export const experiences: Experience[] = [
     // 2026-10-16: facts aligned with the partner's condition sheet (about 60
     // min, ages 6+, 1–40, daily, requests close the day before, start time
     // arranged around the group's day, finished knife taken home the same
-    // day, not in cabin baggage) and the partner's cancellation scale. How the
-    // custom/beginner plans and engraving map to the sheet is unconfirmed, so
-    // the existing wording stays. Venue name off the page. Preview.
-    slug: "arashiyama-japanese-knife-workshop", city: "kyoto", category: "knife-making", bookingType: "request", status: "preview",
+    // day, not in cabin baggage) and the partner's cancellation scale.
+    // Both plans offer optional free initial engraving.
+    slug: "arashiyama-japanese-knife-workshop", city: "kyoto", category: "knife-making", bookingType: "request", status: "live",
     title: "Japanese Knife Making & Sharpening Workshop in Arashiyama, Kyoto",
     tagline: "Choose a blade, sharpen it on a whetstone and fit its handle, then take home a Japanese kitchen knife you finished yourself. Or learn to sharpen properly on a knife that is already handled. An hour in a workshop in Arashiyama, in English or Japanese.",
     overview: [
       "A Japanese kitchen knife is made in stages by different hands, and the last of them — sharpening and fitting the handle — is the one you can do yourself. In a workshop in Arashiyama you choose from several blades, learn the angle and the rhythm on the whetstone, attach a prepared handle and leave with the knife.",
-      "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Engraving can be added on the custom plan for a fee.",
+      "If you would rather learn the skill than build the knife, the beginner plan teaches sharpening on a knife that already has its handle, and you take that knife home instead. Both plans take about an hour, in English or Japanese, with no experience needed. Optional initial engraving is free with either plan.",
     ],
     duration: "About 60 minutes", price: "¥27,000", priceUnit: "person", group: "1 to 40 guests · private sessions on request", ages: "Ages 6+", area: "Kyoto (Arashiyama)",
     img: "/images/partner-arashiyama/kyoto-knife-800.jpg", alt: "Partner-provided experience photo",
@@ -3213,11 +3210,11 @@ export const experiences: Experience[] = [
       "The 60-minute workshop with instruction",
       "Use of whetstones and tools",
       "The knife: your chosen blade with a prepared handle (custom plan) or the handled knife you sharpened (beginner plan)",
+      "Optional initial engraving with either plan",
       "Tax included",
     ],
     notIncluded: [
       "Transport to the workshop (meet on site)",
-      "Engraving (custom plan only; a paid option)",
       "Choice of handle (handles are prepared in advance)",
     ],
     schedule: [
@@ -3241,9 +3238,9 @@ export const experiences: Experience[] = [
       { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
     ],
     faq: [
-      { q: "What is the difference between the two plans?", a: "Custom knife making: choose a blade from several, sharpen it and fit a prepared handle; you take that knife home. Beginner sharpening: learn to sharpen on a knife that already has its handle; you take that knife home. Blade and handle choice, handle replacement and engraving are not part of the beginner plan." },
+      { q: "What is the difference between the two plans?", a: "Custom knife making: choose a blade from several, sharpen it and fit a prepared handle; you take that knife home. Beginner sharpening: learn to sharpen on a knife that already has its handle; you take that knife home. Blade and handle choice and handle replacement are not part of the beginner plan. Both plans offer free initial engraving." },
       { q: "Can I choose the handle?", a: "No: handles are prepared in advance. The blade is your choice on the custom plan." },
-      { q: "Can I have it engraved?", a: "On the custom plan, as a paid option; ask when you request." },
+      { q: "Can I have it engraved?", a: "Yes. Optional initial engraving is free with either plan. Tell us when you send your request." },
       { q: "Can I take the knife on the plane?", a: "Not in cabin baggage: pack it in your checked luggage. We send packing advice with your confirmation. Rules on bringing a knife into your home country are yours to check." },
       { q: "Can children join?", a: "From age 6, following the instructor's safety instructions." },
       { q: "Which language is it in?", a: "English or Japanese." },
@@ -3270,7 +3267,7 @@ export const experiences: Experience[] = [
     // taken home the same day) and the partner's cancellation scale. How the
     // standard/mini plans map to the sheet, and how the piece travels, are
     // unconfirmed. Venue name off the page. Preview.
-    slug: "arashiyama-shuriken-casting", city: "kyoto", category: "ninja", bookingType: "request", status: "preview",
+    slug: "arashiyama-shuriken-casting", city: "kyoto", category: "ninja", bookingType: "request", status: "live",
     title: "Cast Your Own Metal Shuriken in Arashiyama, Kyoto",
     tagline: "Design the shape, prepare the mould, pour the metal and polish the result: a throwing star you made yourself, standard size or a mini version to carry. An hour in a ninja studio in Arashiyama, in English or Japanese.",
     overview: [
