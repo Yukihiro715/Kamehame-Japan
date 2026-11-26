@@ -56,6 +56,7 @@ ChatGPT / Claude / Codex など、どの開発担当がどのセッションで�
 | 本文の最大幅 | セクション内の要素は `max-width: 880px`（`.xp-section > *`）。リード文は 520px |
 | 2カラム（本文＋サイドカード） | `.xp-cols { grid-template-columns: minmax(0,1fr) 400px; gap: clamp(32px,4.5vw,72px) }`、サイドは `position:sticky; top:96px` |
 | セクション間 | `.xp-section { padding-top: 56px }`、h2 の下 22px |
+| 旅行サポートの帯（`SupportBanner`） | 上下とも 40px 以上の余白。直前の本文に密着させない（スマホは 32px） |
 | ヘッダー高さ | 88px（`.site-header`）、サブページは `variant="solid"` で黒背景固定 |
 | ブレークポイント | **980px**（2カラム→1カラム）、**700px**（スマホ。写真グリッド→横スクロール、3列→1列）、必要に応じて 650 / 520 |
 
@@ -116,7 +117,7 @@ ChatGPT / Claude / Codex など、どの開発担当がどのセッションで�
 |---|---|---|
 | ヘッダー／フッター | `<SiteHeader variant="solid" lang />`、`<SiteFooter lang />` | トップ以外は solid。言語切替はヘッダーとフッターに既存 |
 | パンくず | `<Breadcrumbs trail />` | ホーム → 都市/セクション → 現在地 |
-| 写真 | `<HeroCarousel>` + `<Gallery>` | 1枚目が大、残りが 2×2。6枚以上で「すべての写真を見る」。写真が無い間は `.listing-photo-pending`（プレビューページ参照）を置く |
+| 写真 | `<HeroCarousel>` + `<Gallery>` | PC はグリッド（1枚目が大、残りが 2×2）＋「すべての写真を見る」。スマホはカルーセル＋右下の「写真N枚」ボタンだけ（「すべての写真を見る」は非表示。同じ機能を2か所に出さない）。写真が無い間は `.listing-photo-pending`（プレビューページ参照）を置く |
 | 条件チップ | `<ul className="xp-conditions"><li><Icon size={14}/> 文言</li>` | アイコンは `lucide-react`（MapPin / Clock3 / Users / Languages）。最大4つ |
 | 価格・予約カード | `<BookingCard>`（予約可）、`.bk-card` に `.soon-flag` + `.xp-note`（準備中・相談のみ） | 価格は `.bk-price b`（Anton）、単位は `.bk-unit`。USD 表示は `<Fx>` `<Yen>` `<JpyRef>`（`components/site/money.tsx`）を通す。**金額を素の文字列で書かない** |
 | CTA ボタン | `.bk-cta`（予約カード）、`.contact-cta`（フォーム送信）、`.sb-cta` 等の既存 | オレンジ地・黒文字・Anton・角丸なし。ホバーで `--gold`。**青や緑のボタン、角丸ボタン、グラデーションは禁止** |
@@ -148,6 +149,8 @@ shadcn の `components/ui/*`（`Button` など）は Tailwind ベースで角丸
 - レビュー・評価・体験談・写真の「お客様の声」を**創作しない**。`REVIEWS_PUBLISHED` と実データのみ。
 - 医療（クリニック）は医療広告ガイドライン：体験談・ビフォーアフター・最上級・キャンペーン表現なし、自由診療・費用・リスクを明記。
 - 「毎日開催」「空きあり」など運営上の断定は、カタログの `availability` に根拠がある場合のみ表示する。
+- 予約締切は `availability.cutoffDays` / `cutoffTime` に持たせる。表示文（「前々日の18:00まで」等）・フォームの最短日・カレンダーの選択不可日はここから自動で揃う。本文や FAQ に締切日を手書きするときは同じ値にする。
+- 中止時の連絡手段は「メール」のみと書く（電話は書かない）。
 
 ---
 
