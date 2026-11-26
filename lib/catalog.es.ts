@@ -170,10 +170,10 @@ export const experiencesEs: Experience[] = [
     img: "/images/partner-arashiyama/kyoto-shuriken-800.jpg",
     alt: "Un participante sostiene su shuriken terminado",
     gallery: [
-      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Un shuriken con forma de estrella" },
-      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "El puesto de fundición del instructor" },
-      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "Un participante trabaja en la pieza con el instructor" },
-      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "Interior del estudio de Arashiyama" },
+      { img: "/images/partner-arashiyama/experience-1212731-11-480.jpg", alt: "Un shuriken de cuatro puntas terminado, con la marca JAPAN 2026, sobre el yunque" },
+      { img: "/images/partner-arashiyama/experience-1212731-2-800.jpg", alt: "Metal fundido vertido con un cazo en el molde" },
+      { img: "/images/partner-arashiyama/experience-1212731-4-800.jpg", alt: "La estrella recién fundida se enfría en un cubo de madera con agua" },
+      { img: "/images/partner-arashiyama/experience-1212731-7-480.jpg", alt: "La sala del taller con su fila de dianas" },
     ],
     galleryNote: "Fotografías del taller",
     langTag: "Inglés o japonés",
@@ -693,7 +693,7 @@ export const experiencesEs: Experience[] = [
     notIncluded: ["El cargo por bebida de ¥700 por persona, pagado en la puerta (habitual en los live houses japoneses)", "El transporte hasta la sala (se acude directamente a la sala confirmada)", "Guía o intérprete: no hay asistencia en inglés en la sala"],
     schedule: [
       { time: "18:30", title: "Apertura de puertas", body: "Muestra tu entrada digital en la entrada y paga el cargo por bebida de ¥700. Ocupa tu sitio en la pista: la parte trasera con entrada estándar, la zona delantera con entrada frontal." },
-      { time: "19:00", title: "Empieza el concierto", body: "La hora exacta figura en tu entrada; la mayoría de las noches empiezan en la media hora siguiente a la apertura. El grupo abre con sus canciones más conocidas y la sala responde.", img: "/images/idol-live-group.webp" },
+      { time: "19:00", title: "Empieza el concierto", body: "La hora exacta figura en tu entrada; la mayoría de las noches empiezan en la media hora siguiente a la apertura. El grupo abre con sus canciones más conocidas y la sala responde.", img: "/images/idol-live-solo-blue.webp" },
       { time: "19:45", title: "Cambios de vestuario, consignas y penlights", body: "Números en solitario y por unidades, uno o dos cambios de vestuario y las consignas que los habituales se saben de memoria. Da palmas; a nadie le importa si te pierdes alguna.", img: "/images/idol-live-solo-pink.webp" },
       { time: "20:30", title: "Final", body: "Todo el grupo de vuelta al escenario para las últimas canciones.", img: "/images/idol-live-group-2.webp" },
       { time: "21:00", title: "Fin", body: "Unas dos horas en total. Puedes irte antes cuando quieras." },
