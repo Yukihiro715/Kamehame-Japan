@@ -29,7 +29,10 @@ export async function sync(db:SqlDb,env:BusinessEnv,input:unknown,actor:string){
   data={gross,refund,net:gross-refund,fees,payments,currency:'JPY'};
  }else if(source==='google'&&directAdsSources(env).includes('google')) {data=await googleAds(env,start,end);
  }else if(source==='meta'&&directAdsSources(env).includes('meta')) {data=await metaAds(env,start,end);
- }else if(source==='openai_ads') {data=await openAiAds(env,start,end);
+ }else if(source==='openai_ads') {
+  const report=await openAiAds(env,start,end);
+  if(report.coverage!=='complete')return {ok:true,source,start,end,data:report,saved:false};
+  data=report;
  }else if(source==='seo'&&googleConfigured(env)){data=await searchConsole(env,start,end);
  }else if((source==='aio'||source==='organic')&&googleConfigured(env)){data=await analytics(env,source,start,end);
  }else{
