@@ -20,7 +20,7 @@
     "lastmod": "2026-09-17"
   },
   "/en/experiences/": {
-    "hash": "f7bd78725238",
+    "hash": "d4e340326c97",
     "lastmod": "2026-11-27"
   },
   "/en/faq/": {
@@ -39,13 +39,17 @@
     "hash": "ec6ec4d057df",
     "lastmod": "2026-11-13"
   },
+  "/en/hiking/": {
+    "hash": "d69211f739bb",
+    "lastmod": "2026-11-27"
+  },
   "/en/himeji/": {
     "hash": "f0ecb8eabb41",
     "lastmod": "2026-10-21"
   },
   "/en/himeji/himeji-kendo-experience-tour/": {
-    "hash": "5d407c4d5c0e",
-    "lastmod": "2026-11-22"
+    "hash": "b0cadc5b3d7b",
+    "lastmod": "2026-11-27"
   },
   "/en/idol/": {
     "hash": "0bf652c38991",
@@ -64,11 +68,11 @@
     "lastmod": "2026-11-17"
   },
   "/en/journal/choosing-kendo-experience-japan/": {
-    "hash": "e3cb45d20c63",
+    "hash": "918c24e64deb",
     "lastmod": "2026-11-27"
   },
   "/en/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "6f9a9ea5db91",
+    "hash": "d858c2c889a7",
     "lastmod": "2026-11-27"
   },
   "/en/journal/first-golf-round-in-japan/": {
@@ -112,8 +116,8 @@
     "lastmod": "2026-10-21"
   },
   "/en/kanazawa/kanazawa-kendo-experience-tour/": {
-    "hash": "e9e536c6277a",
-    "lastmod": "2026-11-22"
+    "hash": "16bf254dd2e2",
+    "lastmod": "2026-11-27"
   },
   "/en/kendo/": {
     "hash": "fdd07da7dbb6",
@@ -128,84 +132,96 @@
     "lastmod": "2026-11-26"
   },
   "/en/kyoto/arashiyama-japanese-knife-workshop/": {
-    "hash": "03c5674beec0",
+    "hash": "be0d76221351",
     "lastmod": "2026-11-27"
   },
   "/en/kyoto/arashiyama-ninja-experience/": {
-    "hash": "7b0161629e91",
+    "hash": "6e0e5aaea5f5",
     "lastmod": "2026-11-27"
   },
   "/en/kyoto/arashiyama-shuriken-casting/": {
-    "hash": "a375c9a7de22",
+    "hash": "b9b3a4bdd5b6",
     "lastmod": "2026-11-27"
   },
   "/en/kyoto/bamboo-sky-terrace/": {
-    "hash": "6bf5b940f992",
-    "lastmod": "2026-11-20"
+    "hash": "989fd926e5bc",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/evening-with-geiko/": {
-    "hash": "b8a4381b613b",
-    "lastmod": "2026-11-22"
+    "hash": "1b79a66d8822",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/kyoto-garden-teahouse-tea-ceremony/": {
-    "hash": "e7ffac316f31",
-    "lastmod": "2026-11-22"
+    "hash": "1b7571c02e6a",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/kyoto-higashiyama-annex-tea-ceremony/": {
-    "hash": "30bdffba852f",
-    "lastmod": "2026-11-22"
+    "hash": "5c02a52d5526",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/kyoto-higashiyama-private-tea-ceremony/": {
-    "hash": "c8ecceaf3aa6",
-    "lastmod": "2026-11-22"
+    "hash": "5f6ccb2a6052",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/kyoto-higashiyama-shared-tea-ceremony/": {
-    "hash": "bcdfa37494ef",
-    "lastmod": "2026-11-22"
+    "hash": "4bf28f160b98",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/kyoto-kendo-experience-tour/": {
-    "hash": "be967a6d9c9f",
-    "lastmod": "2026-11-22"
+    "hash": "0c6b3d3378f4",
+    "lastmod": "2026-11-27"
   },
   "/en/kyoto/kyoto-ryokan-beauty-clinic/": {
-    "hash": "5121b77e9713",
-    "lastmod": "2026-11-22"
+    "hash": "4172647effa6",
+    "lastmod": "2026-11-27"
+  },
+  "/en/matsuyama/": {
+    "hash": "d516f684edfb",
+    "lastmod": "2026-11-27"
+  },
+  "/en/matsuyama/matsuyama-tobe-pottery-full-course/": {
+    "hash": "9b595cf01cc7",
+    "lastmod": "2026-11-27"
   },
   "/en/nagoya/": {
     "hash": "767c6f40738c",
     "lastmod": "2026-10-21"
   },
   "/en/nagoya/nagoya-kendo-experience-tour/": {
-    "hash": "760b0121119f",
-    "lastmod": "2026-11-22"
+    "hash": "ae9cda0ceac6",
+    "lastmod": "2026-11-27"
   },
   "/en/ninja/": {
-    "hash": "0355509b08e1",
-    "lastmod": "2026-11-26"
+    "hash": "82b5fdafc865",
+    "lastmod": "2026-11-27"
   },
   "/en/okinawa/": {
     "hash": "8f516d1d90e7",
     "lastmod": "2026-10-21"
   },
   "/en/okinawa/okinawa-kendo-experience-tour/": {
-    "hash": "41d292e186b4",
-    "lastmod": "2026-11-22"
+    "hash": "c04b722c5e5f",
+    "lastmod": "2026-11-27"
   },
   "/en/osaka/": {
     "hash": "c6d12d18e9aa",
     "lastmod": "2026-10-21"
   },
   "/en/osaka/dotonbori-ramen-class/": {
-    "hash": "65fb6217a531",
-    "lastmod": "2026-11-22"
+    "hash": "054c03b0fc7f",
+    "lastmod": "2026-11-27"
   },
   "/en/osaka/osaka-kendo-experience-tour/": {
-    "hash": "a321ab65f155",
-    "lastmod": "2026-11-22"
+    "hash": "dfbc6b6de9ca",
+    "lastmod": "2026-11-27"
   },
   "/en/performing-arts/": {
     "hash": "29d8c7bb6aef",
     "lastmod": "2026-11-07"
+  },
+  "/en/pottery/": {
+    "hash": "1c3a3f6a9fd9",
+    "lastmod": "2026-11-27"
   },
   "/en/rakugo/": {
     "hash": "d9ec1970bab7",
@@ -214,6 +230,10 @@
   "/en/ramen/": {
     "hash": "326c6b1d8336",
     "lastmod": "2026-10-16"
+  },
+  "/en/sea/": {
+    "hash": "1842614ffa83",
+    "lastmod": "2026-11-27"
   },
   "/en/sports/": {
     "hash": "bf67d561242c",
@@ -228,64 +248,72 @@
     "lastmod": "2026-11-20"
   },
   "/en/tea-ceremony/": {
-    "hash": "60a7d0fc2504",
+    "hash": "40b1aad0b545",
     "lastmod": "2026-11-27"
   },
   "/en/tokyo/": {
-    "hash": "aa7705bab987",
+    "hash": "725f3a30ddcc",
     "lastmod": "2026-11-27"
   },
   "/en/tokyo/kanji-name-calligraphy/": {
-    "hash": "ca317d8717f9",
-    "lastmod": "2026-11-22"
+    "hash": "6d2116848abd",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/mt-fuji-golf-day/": {
-    "hash": "c8d292ca94d1",
-    "lastmod": "2026-11-22"
+    "hash": "4ab72d92c97f",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "ed8e525113a6",
-    "lastmod": "2026-11-22"
+    "hash": "9f94e3d8da45",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/nihonbashi-bushido-experience/": {
-    "hash": "94fd4ef1661c",
-    "lastmod": "2026-11-22"
+    "hash": "a2900eba3900",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/nihonbashi-english-rakugo-salon/": {
-    "hash": "60fc22d7af61",
-    "lastmod": "2026-11-22"
+    "hash": "68efc48e754f",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/nihonbashi-japanese-dance-salon/": {
-    "hash": "76893826ad18",
-    "lastmod": "2026-11-22"
+    "hash": "daeee22d3f77",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "bc7c3dccb33b",
-    "lastmod": "2026-11-22"
+    "hash": "26589197b5ea",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/nihonbashi-shamisen-salon/": {
-    "hash": "2a01c7260e72",
-    "lastmod": "2026-11-22"
+    "hash": "7451fef7d440",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/setagaya-omotesenke-tea-ceremony/": {
-    "hash": "82b8d0ac6fd6",
+    "hash": "a3710242fbf9",
     "lastmod": "2026-11-27"
   },
   "/en/tokyo/shibuya-ramen-class/": {
-    "hash": "b38d161dc717",
-    "lastmod": "2026-11-22"
+    "hash": "f0b9d99ddea8",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/tokyo-idol-live-night/": {
-    "hash": "d1664cef340b",
+    "hash": "f05df72a6ce8",
     "lastmod": "2026-11-27"
   },
   "/en/tokyo/tokyo-kendo-experience-tour/": {
-    "hash": "a13301b723b4",
-    "lastmod": "2026-11-22"
+    "hash": "fa10aeee4b9a",
+    "lastmod": "2026-11-27"
+  },
+  "/en/tokyo/tokyo-matcha-cultural-experience/": {
+    "hash": "5e20a39c801a",
+    "lastmod": "2026-11-27"
+  },
+  "/en/tokyo/tokyo-ninja-zen-night-walk/": {
+    "hash": "18b0cfe41d42",
+    "lastmod": "2026-11-27"
   },
   "/en/tokyo/yotsuya-tea-ceremony/": {
-    "hash": "69bb5db55d16",
-    "lastmod": "2026-11-22"
+    "hash": "d21a7ec6d4d1",
+    "lastmod": "2026-11-27"
   },
   "/en/trade/": {
     "hash": "bca33d71434d",
@@ -302,6 +330,42 @@
   "/en/wellness/": {
     "hash": "112a106872cd",
     "lastmod": "2026-11-13"
+  },
+  "/en/yakushima/": {
+    "hash": "681c1188d435",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-discover-scuba-extended-dive/": {
+    "hash": "11c08ea8bd86",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-discover-scuba-one-dive/": {
+    "hash": "6f6951c5318c",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-discover-scuba-two-dives/": {
+    "hash": "5d15c472b05d",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-jomonsugi-trekking/": {
+    "hash": "b5a81addd48f",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-sea-turtle-snorkeling/": {
+    "hash": "2addc65aab60",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-shiratani-moss-forest/": {
+    "hash": "4a35a7f5a5e6",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-shiratani-taikoiwa-old-growth/": {
+    "hash": "5d26d0bdfafe",
+    "lastmod": "2026-11-27"
+  },
+  "/en/yakushima/yakushima-shiratani-taikoiwa/": {
+    "hash": "b807899a75d0",
+    "lastmod": "2026-11-27"
   },
   "/es/": {
     "hash": "e83249bd3ba7",
@@ -324,7 +388,7 @@
     "lastmod": "2026-09-17"
   },
   "/es/experiences/": {
-    "hash": "88f9547e3bf6",
+    "hash": "a12517ba6d2e",
     "lastmod": "2026-11-27"
   },
   "/es/faq/": {
@@ -343,13 +407,17 @@
     "hash": "c19561b2f068",
     "lastmod": "2026-11-13"
   },
+  "/es/hiking/": {
+    "hash": "8317180213a2",
+    "lastmod": "2026-11-27"
+  },
   "/es/himeji/": {
     "hash": "aa1d0fd3147c",
     "lastmod": "2026-10-21"
   },
   "/es/himeji/himeji-kendo-experience-tour/": {
-    "hash": "0488aae1ed83",
-    "lastmod": "2026-11-22"
+    "hash": "d39034bfa710",
+    "lastmod": "2026-11-27"
   },
   "/es/idol/": {
     "hash": "23f07dda7b48",
@@ -364,11 +432,11 @@
     "lastmod": "2026-11-17"
   },
   "/es/journal/choosing-kendo-experience-japan/": {
-    "hash": "2a834d432a46",
+    "hash": "46666dfaf274",
     "lastmod": "2026-11-27"
   },
   "/es/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "5bff2c44c07a",
+    "hash": "2a08e078b80d",
     "lastmod": "2026-11-27"
   },
   "/es/journal/first-golf-round-in-japan/": {
@@ -404,8 +472,8 @@
     "lastmod": "2026-10-21"
   },
   "/es/kanazawa/kanazawa-kendo-experience-tour/": {
-    "hash": "1d0a27c9ad74",
-    "lastmod": "2026-11-22"
+    "hash": "d0f75eb51aac",
+    "lastmod": "2026-11-27"
   },
   "/es/kendo/": {
     "hash": "c7bd0e6a38e1",
@@ -420,72 +488,84 @@
     "lastmod": "2026-11-26"
   },
   "/es/kyoto/arashiyama-japanese-knife-workshop/": {
-    "hash": "342478d1af36",
+    "hash": "73d8e4c99f2f",
     "lastmod": "2026-11-27"
   },
   "/es/kyoto/arashiyama-ninja-experience/": {
-    "hash": "03f5389c0be6",
+    "hash": "d0ef1b209589",
     "lastmod": "2026-11-27"
   },
   "/es/kyoto/arashiyama-shuriken-casting/": {
-    "hash": "311e634724a8",
+    "hash": "7866a23e7548",
     "lastmod": "2026-11-27"
   },
   "/es/kyoto/bamboo-sky-terrace/": {
-    "hash": "ef12ead17038",
-    "lastmod": "2026-11-20"
+    "hash": "4cde246ac4f9",
+    "lastmod": "2026-11-27"
   },
   "/es/kyoto/evening-with-geiko/": {
-    "hash": "985b5c3cf772",
-    "lastmod": "2026-11-22"
+    "hash": "5e55276d5ba6",
+    "lastmod": "2026-11-27"
   },
   "/es/kyoto/kyoto-higashiyama-private-tea-ceremony/": {
-    "hash": "c8ecceaf3aa6",
-    "lastmod": "2026-11-22"
+    "hash": "5f6ccb2a6052",
+    "lastmod": "2026-11-27"
   },
   "/es/kyoto/kyoto-kendo-experience-tour/": {
-    "hash": "c1c8aee575d4",
-    "lastmod": "2026-11-22"
+    "hash": "f8da9030801e",
+    "lastmod": "2026-11-27"
   },
   "/es/kyoto/kyoto-ryokan-beauty-clinic/": {
-    "hash": "5121b77e9713",
-    "lastmod": "2026-11-22"
+    "hash": "4172647effa6",
+    "lastmod": "2026-11-27"
+  },
+  "/es/matsuyama/": {
+    "hash": "3e6d4ad40973",
+    "lastmod": "2026-11-27"
+  },
+  "/es/matsuyama/matsuyama-tobe-pottery-full-course/": {
+    "hash": "7c308ac4e3e8",
+    "lastmod": "2026-11-27"
   },
   "/es/nagoya/": {
     "hash": "1a76c24820d8",
     "lastmod": "2026-10-21"
   },
   "/es/nagoya/nagoya-kendo-experience-tour/": {
-    "hash": "c419c0445445",
-    "lastmod": "2026-11-22"
+    "hash": "e1d01a7da829",
+    "lastmod": "2026-11-27"
   },
   "/es/ninja/": {
-    "hash": "030cc963fa95",
-    "lastmod": "2026-11-26"
+    "hash": "e7c2bad8ed24",
+    "lastmod": "2026-11-27"
   },
   "/es/okinawa/": {
     "hash": "655fada9fc9e",
     "lastmod": "2026-10-21"
   },
   "/es/okinawa/okinawa-kendo-experience-tour/": {
-    "hash": "4617225a84eb",
-    "lastmod": "2026-11-22"
+    "hash": "f63f62c3a410",
+    "lastmod": "2026-11-27"
   },
   "/es/osaka/": {
     "hash": "320ba0df6ff7",
     "lastmod": "2026-10-21"
   },
   "/es/osaka/dotonbori-ramen-class/": {
-    "hash": "31671d7b9ada",
-    "lastmod": "2026-11-22"
+    "hash": "d757be9a33a5",
+    "lastmod": "2026-11-27"
   },
   "/es/osaka/osaka-kendo-experience-tour/": {
-    "hash": "9eb85aa9e3ed",
-    "lastmod": "2026-11-22"
+    "hash": "5921a4af11d6",
+    "lastmod": "2026-11-27"
   },
   "/es/performing-arts/": {
     "hash": "ed29e332e724",
     "lastmod": "2026-11-07"
+  },
+  "/es/pottery/": {
+    "hash": "8ea1a8749971",
+    "lastmod": "2026-11-27"
   },
   "/es/rakugo/": {
     "hash": "c91c1c35dca7",
@@ -494,6 +574,10 @@
   "/es/ramen/": {
     "hash": "2c2328c5ade6",
     "lastmod": "2026-10-16"
+  },
+  "/es/sea/": {
+    "hash": "ca39b62f3eb4",
+    "lastmod": "2026-11-27"
   },
   "/es/sports/": {
     "hash": "0124d928e73f",
@@ -508,64 +592,72 @@
     "lastmod": "2026-11-20"
   },
   "/es/tea-ceremony/": {
-    "hash": "d10eb9580365",
+    "hash": "c864d9af5d49",
     "lastmod": "2026-11-27"
   },
   "/es/tokyo/": {
-    "hash": "c3f7f3eb67fd",
+    "hash": "7657f0afde76",
     "lastmod": "2026-11-27"
   },
   "/es/tokyo/kanji-name-calligraphy/": {
-    "hash": "27b01ed151fe",
-    "lastmod": "2026-11-22"
+    "hash": "849fd62d918b",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/mt-fuji-golf-day/": {
-    "hash": "acc0434a3886",
-    "lastmod": "2026-11-22"
+    "hash": "81068ef17492",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "ed8e525113a6",
-    "lastmod": "2026-11-22"
+    "hash": "9f94e3d8da45",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/nihonbashi-bushido-experience/": {
-    "hash": "6bfbbbd49a10",
-    "lastmod": "2026-11-22"
+    "hash": "698619291473",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/nihonbashi-english-rakugo-salon/": {
-    "hash": "60fc22d7af61",
-    "lastmod": "2026-11-22"
+    "hash": "68efc48e754f",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/nihonbashi-japanese-dance-salon/": {
-    "hash": "76893826ad18",
-    "lastmod": "2026-11-22"
+    "hash": "daeee22d3f77",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "b39421541bfc",
-    "lastmod": "2026-11-22"
+    "hash": "aa78ffab1ff4",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/nihonbashi-shamisen-salon/": {
-    "hash": "2a01c7260e72",
-    "lastmod": "2026-11-22"
+    "hash": "7451fef7d440",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/setagaya-omotesenke-tea-ceremony/": {
-    "hash": "63680d7f16b5",
+    "hash": "56eaa43c1199",
     "lastmod": "2026-11-27"
   },
   "/es/tokyo/shibuya-ramen-class/": {
-    "hash": "411a4ba27383",
-    "lastmod": "2026-11-22"
+    "hash": "2a8e661e7900",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/tokyo-idol-live-night/": {
-    "hash": "45db7ef01fbf",
+    "hash": "fa046e66a465",
     "lastmod": "2026-11-27"
   },
   "/es/tokyo/tokyo-kendo-experience-tour/": {
-    "hash": "0106f180b0a0",
-    "lastmod": "2026-11-22"
+    "hash": "b6583d73f592",
+    "lastmod": "2026-11-27"
+  },
+  "/es/tokyo/tokyo-matcha-cultural-experience/": {
+    "hash": "5e20a39c801a",
+    "lastmod": "2026-11-27"
+  },
+  "/es/tokyo/tokyo-ninja-zen-night-walk/": {
+    "hash": "18b0cfe41d42",
+    "lastmod": "2026-11-27"
   },
   "/es/tokyo/yotsuya-tea-ceremony/": {
-    "hash": "8472dd6f55bc",
-    "lastmod": "2026-11-22"
+    "hash": "5aae56115c47",
+    "lastmod": "2026-11-27"
   },
   "/es/trade/": {
     "hash": "59ca02ce7072",
@@ -582,6 +674,42 @@
   "/es/wellness/": {
     "hash": "d06223df9505",
     "lastmod": "2026-11-13"
+  },
+  "/es/yakushima/": {
+    "hash": "e3ada67fc0c8",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-discover-scuba-extended-dive/": {
+    "hash": "11c08ea8bd86",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-discover-scuba-one-dive/": {
+    "hash": "6f6951c5318c",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-discover-scuba-two-dives/": {
+    "hash": "5d15c472b05d",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-jomonsugi-trekking/": {
+    "hash": "b5a81addd48f",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-sea-turtle-snorkeling/": {
+    "hash": "2addc65aab60",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-shiratani-moss-forest/": {
+    "hash": "4a35a7f5a5e6",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-shiratani-taikoiwa-old-growth/": {
+    "hash": "5d26d0bdfafe",
+    "lastmod": "2026-11-27"
+  },
+  "/es/yakushima/yakushima-shiratani-taikoiwa/": {
+    "hash": "b807899a75d0",
+    "lastmod": "2026-11-27"
   },
   "/fr/": {
     "hash": "e83249bd3ba7",
@@ -604,7 +732,7 @@
     "lastmod": "2026-09-17"
   },
   "/fr/experiences/": {
-    "hash": "494663c8bb6b",
+    "hash": "6f55966c4246",
     "lastmod": "2026-11-27"
   },
   "/fr/faq/": {
@@ -623,13 +751,17 @@
     "hash": "1ef75295daed",
     "lastmod": "2026-11-13"
   },
+  "/fr/hiking/": {
+    "hash": "b27e063ad14b",
+    "lastmod": "2026-11-27"
+  },
   "/fr/himeji/": {
     "hash": "e2ebe5e71bb9",
     "lastmod": "2026-10-21"
   },
   "/fr/himeji/himeji-kendo-experience-tour/": {
-    "hash": "a16e33140dd1",
-    "lastmod": "2026-11-22"
+    "hash": "61698bcb572d",
+    "lastmod": "2026-11-27"
   },
   "/fr/idol/": {
     "hash": "fcf2f010bc6d",
@@ -644,11 +776,11 @@
     "lastmod": "2026-11-17"
   },
   "/fr/journal/choosing-kendo-experience-japan/": {
-    "hash": "9a00447dabfa",
+    "hash": "90fb49dd8009",
     "lastmod": "2026-11-27"
   },
   "/fr/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "cc76f1b94e35",
+    "hash": "45897c0507e2",
     "lastmod": "2026-11-27"
   },
   "/fr/journal/first-golf-round-in-japan/": {
@@ -684,8 +816,8 @@
     "lastmod": "2026-10-21"
   },
   "/fr/kanazawa/kanazawa-kendo-experience-tour/": {
-    "hash": "9a2e77d586c5",
-    "lastmod": "2026-11-22"
+    "hash": "10863c702b83",
+    "lastmod": "2026-11-27"
   },
   "/fr/kendo/": {
     "hash": "61cf5324f031",
@@ -700,72 +832,84 @@
     "lastmod": "2026-11-26"
   },
   "/fr/kyoto/arashiyama-japanese-knife-workshop/": {
-    "hash": "a88f7b8990c8",
+    "hash": "944e53d85021",
     "lastmod": "2026-11-27"
   },
   "/fr/kyoto/arashiyama-ninja-experience/": {
-    "hash": "feb2875d8b21",
+    "hash": "ae074bb38d04",
     "lastmod": "2026-11-27"
   },
   "/fr/kyoto/arashiyama-shuriken-casting/": {
-    "hash": "a658b2af6375",
+    "hash": "38642b1cef4c",
     "lastmod": "2026-11-27"
   },
   "/fr/kyoto/bamboo-sky-terrace/": {
-    "hash": "26b3d36734f5",
-    "lastmod": "2026-11-20"
+    "hash": "b71788881ced",
+    "lastmod": "2026-11-27"
   },
   "/fr/kyoto/evening-with-geiko/": {
-    "hash": "ef75d5e38070",
-    "lastmod": "2026-11-22"
+    "hash": "541581cfebd6",
+    "lastmod": "2026-11-27"
   },
   "/fr/kyoto/kyoto-higashiyama-private-tea-ceremony/": {
-    "hash": "c8ecceaf3aa6",
-    "lastmod": "2026-11-22"
+    "hash": "5f6ccb2a6052",
+    "lastmod": "2026-11-27"
   },
   "/fr/kyoto/kyoto-kendo-experience-tour/": {
-    "hash": "a3da58d0177e",
-    "lastmod": "2026-11-22"
+    "hash": "c0332f31aaa0",
+    "lastmod": "2026-11-27"
   },
   "/fr/kyoto/kyoto-ryokan-beauty-clinic/": {
-    "hash": "5121b77e9713",
-    "lastmod": "2026-11-22"
+    "hash": "4172647effa6",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/matsuyama/": {
+    "hash": "9cf6b112f517",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/matsuyama/matsuyama-tobe-pottery-full-course/": {
+    "hash": "c6b6a86acdad",
+    "lastmod": "2026-11-27"
   },
   "/fr/nagoya/": {
     "hash": "34084dd6fc9f",
     "lastmod": "2026-10-21"
   },
   "/fr/nagoya/nagoya-kendo-experience-tour/": {
-    "hash": "d866da60aa75",
-    "lastmod": "2026-11-22"
+    "hash": "1da3126d94bf",
+    "lastmod": "2026-11-27"
   },
   "/fr/ninja/": {
-    "hash": "377dc80c8da1",
-    "lastmod": "2026-11-26"
+    "hash": "593aeadc930b",
+    "lastmod": "2026-11-27"
   },
   "/fr/okinawa/": {
     "hash": "c61e544d3446",
     "lastmod": "2026-10-21"
   },
   "/fr/okinawa/okinawa-kendo-experience-tour/": {
-    "hash": "c507896dd345",
-    "lastmod": "2026-11-22"
+    "hash": "7a468b3c397c",
+    "lastmod": "2026-11-27"
   },
   "/fr/osaka/": {
     "hash": "deaa6bdd7f16",
     "lastmod": "2026-10-21"
   },
   "/fr/osaka/dotonbori-ramen-class/": {
-    "hash": "799dd5ea2b8c",
-    "lastmod": "2026-11-22"
+    "hash": "9bda6ac8765e",
+    "lastmod": "2026-11-27"
   },
   "/fr/osaka/osaka-kendo-experience-tour/": {
-    "hash": "b210d539c3c7",
-    "lastmod": "2026-11-22"
+    "hash": "c2c6f220901c",
+    "lastmod": "2026-11-27"
   },
   "/fr/performing-arts/": {
     "hash": "49e8b97122f4",
     "lastmod": "2026-11-07"
+  },
+  "/fr/pottery/": {
+    "hash": "724fef006fb0",
+    "lastmod": "2026-11-27"
   },
   "/fr/rakugo/": {
     "hash": "8683d0f093b5",
@@ -774,6 +918,10 @@
   "/fr/ramen/": {
     "hash": "26dc2bd16b82",
     "lastmod": "2026-10-16"
+  },
+  "/fr/sea/": {
+    "hash": "070d8e2ba251",
+    "lastmod": "2026-11-27"
   },
   "/fr/sports/": {
     "hash": "8870bed7d442",
@@ -788,64 +936,72 @@
     "lastmod": "2026-11-20"
   },
   "/fr/tea-ceremony/": {
-    "hash": "ae81b23f0640",
+    "hash": "a728fcba5211",
     "lastmod": "2026-11-27"
   },
   "/fr/tokyo/": {
-    "hash": "fbc9bc6b620e",
+    "hash": "f5973b37d187",
     "lastmod": "2026-11-27"
   },
   "/fr/tokyo/kanji-name-calligraphy/": {
-    "hash": "1c1fac15a9d3",
-    "lastmod": "2026-11-22"
+    "hash": "bc39d90563af",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/mt-fuji-golf-day/": {
-    "hash": "933882b57afb",
-    "lastmod": "2026-11-22"
+    "hash": "b1d52272f2d9",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "ed8e525113a6",
-    "lastmod": "2026-11-22"
+    "hash": "9f94e3d8da45",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/nihonbashi-bushido-experience/": {
-    "hash": "84a75cf35a8f",
-    "lastmod": "2026-11-22"
+    "hash": "bb47e556842d",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/nihonbashi-english-rakugo-salon/": {
-    "hash": "60fc22d7af61",
-    "lastmod": "2026-11-22"
+    "hash": "68efc48e754f",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/nihonbashi-japanese-dance-salon/": {
-    "hash": "76893826ad18",
-    "lastmod": "2026-11-22"
+    "hash": "daeee22d3f77",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "99c517a692af",
-    "lastmod": "2026-11-22"
+    "hash": "f0ef91d1f006",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/nihonbashi-shamisen-salon/": {
-    "hash": "2a01c7260e72",
-    "lastmod": "2026-11-22"
+    "hash": "7451fef7d440",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/setagaya-omotesenke-tea-ceremony/": {
-    "hash": "f3ed4ae68e4d",
+    "hash": "b3bd29adb59c",
     "lastmod": "2026-11-27"
   },
   "/fr/tokyo/shibuya-ramen-class/": {
-    "hash": "a1cb9e709883",
-    "lastmod": "2026-11-22"
+    "hash": "d5741ea811c2",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/tokyo-idol-live-night/": {
-    "hash": "62b88d7dc4da",
+    "hash": "c53257f737bc",
     "lastmod": "2026-11-27"
   },
   "/fr/tokyo/tokyo-kendo-experience-tour/": {
-    "hash": "12d4a98666aa",
-    "lastmod": "2026-11-22"
+    "hash": "7c8e5de7c4e7",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/tokyo/tokyo-matcha-cultural-experience/": {
+    "hash": "5e20a39c801a",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/tokyo/tokyo-ninja-zen-night-walk/": {
+    "hash": "18b0cfe41d42",
+    "lastmod": "2026-11-27"
   },
   "/fr/tokyo/yotsuya-tea-ceremony/": {
-    "hash": "e353a5ea8e39",
-    "lastmod": "2026-11-22"
+    "hash": "1353a59a8718",
+    "lastmod": "2026-11-27"
   },
   "/fr/trade/": {
     "hash": "49a39b3d05ef",
@@ -862,6 +1018,42 @@
   "/fr/wellness/": {
     "hash": "25835b07c401",
     "lastmod": "2026-11-13"
+  },
+  "/fr/yakushima/": {
+    "hash": "f18a71b8ebef",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-discover-scuba-extended-dive/": {
+    "hash": "11c08ea8bd86",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-discover-scuba-one-dive/": {
+    "hash": "6f6951c5318c",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-discover-scuba-two-dives/": {
+    "hash": "5d15c472b05d",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-jomonsugi-trekking/": {
+    "hash": "b5a81addd48f",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-sea-turtle-snorkeling/": {
+    "hash": "2addc65aab60",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-shiratani-moss-forest/": {
+    "hash": "4a35a7f5a5e6",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-shiratani-taikoiwa-old-growth/": {
+    "hash": "5d26d0bdfafe",
+    "lastmod": "2026-11-27"
+  },
+  "/fr/yakushima/yakushima-shiratani-taikoiwa/": {
+    "hash": "b807899a75d0",
+    "lastmod": "2026-11-27"
   },
   "/ja/": {
     "hash": "e83249bd3ba7",
@@ -884,7 +1076,7 @@
     "lastmod": "2026-09-17"
   },
   "/ja/experiences/": {
-    "hash": "1492ab28299b",
+    "hash": "7fba9e96bf60",
     "lastmod": "2026-11-27"
   },
   "/ja/faq/": {
@@ -903,13 +1095,17 @@
     "hash": "254ae4cf5edd",
     "lastmod": "2026-11-13"
   },
+  "/ja/hiking/": {
+    "hash": "992dff3b2bab",
+    "lastmod": "2026-11-27"
+  },
   "/ja/himeji/": {
     "hash": "9d55864464f6",
     "lastmod": "2026-10-21"
   },
   "/ja/himeji/himeji-kendo-experience-tour/": {
-    "hash": "6490ff2dcf05",
-    "lastmod": "2026-11-22"
+    "hash": "71a7fbe4879b",
+    "lastmod": "2026-11-27"
   },
   "/ja/idol/": {
     "hash": "c884b318f457",
@@ -928,11 +1124,11 @@
     "lastmod": "2026-11-17"
   },
   "/ja/journal/choosing-kendo-experience-japan/": {
-    "hash": "7ed03bd6f2f0",
+    "hash": "b6af9a5bfd3d",
     "lastmod": "2026-11-27"
   },
   "/ja/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "313713c48472",
+    "hash": "f933e293f1b0",
     "lastmod": "2026-11-27"
   },
   "/ja/journal/first-golf-round-in-japan/": {
@@ -976,8 +1172,8 @@
     "lastmod": "2026-10-21"
   },
   "/ja/kanazawa/kanazawa-kendo-experience-tour/": {
-    "hash": "363efef12c0e",
-    "lastmod": "2026-11-22"
+    "hash": "f890e22aa9b0",
+    "lastmod": "2026-11-27"
   },
   "/ja/kendo/": {
     "hash": "7147c52605e4",
@@ -992,72 +1188,84 @@
     "lastmod": "2026-11-26"
   },
   "/ja/kyoto/arashiyama-japanese-knife-workshop/": {
-    "hash": "a307e76d0e19",
+    "hash": "77b5d49f2bf4",
     "lastmod": "2026-11-27"
   },
   "/ja/kyoto/arashiyama-ninja-experience/": {
-    "hash": "cbbdabb62dbc",
+    "hash": "3bafb6eb12b4",
     "lastmod": "2026-11-27"
   },
   "/ja/kyoto/arashiyama-shuriken-casting/": {
-    "hash": "b29746e50940",
+    "hash": "e503e654d278",
     "lastmod": "2026-11-27"
   },
   "/ja/kyoto/bamboo-sky-terrace/": {
-    "hash": "cac9cb0aabbd",
-    "lastmod": "2026-11-20"
+    "hash": "c59279d24232",
+    "lastmod": "2026-11-27"
   },
   "/ja/kyoto/evening-with-geiko/": {
-    "hash": "3bf94d52e822",
-    "lastmod": "2026-11-22"
+    "hash": "5e8e77d475a3",
+    "lastmod": "2026-11-27"
   },
   "/ja/kyoto/kyoto-higashiyama-private-tea-ceremony/": {
-    "hash": "c8ecceaf3aa6",
-    "lastmod": "2026-11-22"
+    "hash": "5f6ccb2a6052",
+    "lastmod": "2026-11-27"
   },
   "/ja/kyoto/kyoto-kendo-experience-tour/": {
-    "hash": "ddcaf4023610",
-    "lastmod": "2026-11-22"
+    "hash": "c75e7db07771",
+    "lastmod": "2026-11-27"
   },
   "/ja/kyoto/kyoto-ryokan-beauty-clinic/": {
-    "hash": "cc484313f92e",
-    "lastmod": "2026-11-22"
+    "hash": "73620e5bc2f5",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/matsuyama/": {
+    "hash": "bb39b1e9e2c7",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/matsuyama/matsuyama-tobe-pottery-full-course/": {
+    "hash": "627bd8ef31c0",
+    "lastmod": "2026-11-27"
   },
   "/ja/nagoya/": {
     "hash": "c89050aabda0",
     "lastmod": "2026-10-21"
   },
   "/ja/nagoya/nagoya-kendo-experience-tour/": {
-    "hash": "65f12cc96bff",
-    "lastmod": "2026-11-22"
+    "hash": "6ff4d1d2b180",
+    "lastmod": "2026-11-27"
   },
   "/ja/ninja/": {
-    "hash": "49cefded4a9f",
-    "lastmod": "2026-11-26"
+    "hash": "991219ca71fa",
+    "lastmod": "2026-11-27"
   },
   "/ja/okinawa/": {
     "hash": "aa594aede755",
     "lastmod": "2026-10-21"
   },
   "/ja/okinawa/okinawa-kendo-experience-tour/": {
-    "hash": "a8ff91e11aa8",
-    "lastmod": "2026-11-22"
+    "hash": "5ccb2e2fb70c",
+    "lastmod": "2026-11-27"
   },
   "/ja/osaka/": {
     "hash": "7c5c6c623485",
     "lastmod": "2026-10-21"
   },
   "/ja/osaka/dotonbori-ramen-class/": {
-    "hash": "d41cfc4e787b",
-    "lastmod": "2026-11-22"
+    "hash": "56bbdac49391",
+    "lastmod": "2026-11-27"
   },
   "/ja/osaka/osaka-kendo-experience-tour/": {
-    "hash": "5177bbeb4b23",
-    "lastmod": "2026-11-22"
+    "hash": "b5f9fd1a6a39",
+    "lastmod": "2026-11-27"
   },
   "/ja/performing-arts/": {
     "hash": "37071c15ee56",
     "lastmod": "2026-11-07"
+  },
+  "/ja/pottery/": {
+    "hash": "6066b5800a85",
+    "lastmod": "2026-11-27"
   },
   "/ja/rakugo/": {
     "hash": "aa17e87c2619",
@@ -1066,6 +1274,10 @@
   "/ja/ramen/": {
     "hash": "b5e227ee1cd9",
     "lastmod": "2026-10-16"
+  },
+  "/ja/sea/": {
+    "hash": "a6b6c5ff8fd3",
+    "lastmod": "2026-11-27"
   },
   "/ja/sports/": {
     "hash": "6e9001827318",
@@ -1080,64 +1292,72 @@
     "lastmod": "2026-11-20"
   },
   "/ja/tea-ceremony/": {
-    "hash": "bc86392864a2",
+    "hash": "c83fd1d4cfaa",
     "lastmod": "2026-11-27"
   },
   "/ja/tokyo/": {
-    "hash": "2d347ac87cc5",
+    "hash": "70a155e843c2",
     "lastmod": "2026-11-27"
   },
   "/ja/tokyo/kanji-name-calligraphy/": {
-    "hash": "682d8afe0eee",
-    "lastmod": "2026-11-22"
+    "hash": "7523c7ca1dba",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/mt-fuji-golf-day/": {
-    "hash": "74390d7653bb",
-    "lastmod": "2026-11-22"
+    "hash": "8de50b03685e",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "5acfe05ea639",
-    "lastmod": "2026-11-22"
+    "hash": "fd49e283cc72",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/nihonbashi-bushido-experience/": {
-    "hash": "5eea65eebcae",
-    "lastmod": "2026-11-22"
+    "hash": "fd570790a24a",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/nihonbashi-english-rakugo-salon/": {
-    "hash": "4b848137b38c",
-    "lastmod": "2026-11-22"
+    "hash": "2748c964faa0",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/nihonbashi-japanese-dance-salon/": {
-    "hash": "848ba47e3b33",
-    "lastmod": "2026-11-22"
+    "hash": "a08accd1a032",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "501d97c79684",
-    "lastmod": "2026-11-22"
+    "hash": "c555f3bcdf8a",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/nihonbashi-shamisen-salon/": {
-    "hash": "fbbd9e833137",
-    "lastmod": "2026-11-22"
+    "hash": "a8bef7f33478",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/setagaya-omotesenke-tea-ceremony/": {
-    "hash": "9fe8e882b619",
+    "hash": "39ba4ef2faa3",
     "lastmod": "2026-11-27"
   },
   "/ja/tokyo/shibuya-ramen-class/": {
-    "hash": "e3d91bde79d0",
-    "lastmod": "2026-11-22"
+    "hash": "9422879ba704",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/tokyo-idol-live-night/": {
-    "hash": "8eff22296dd2",
+    "hash": "2787f52e6752",
     "lastmod": "2026-11-27"
   },
   "/ja/tokyo/tokyo-kendo-experience-tour/": {
-    "hash": "d1d32f17223b",
-    "lastmod": "2026-11-22"
+    "hash": "87b526ec1f68",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/tokyo/tokyo-matcha-cultural-experience/": {
+    "hash": "e5f018599866",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/tokyo/tokyo-ninja-zen-night-walk/": {
+    "hash": "53173a793d31",
+    "lastmod": "2026-11-27"
   },
   "/ja/tokyo/yotsuya-tea-ceremony/": {
-    "hash": "df246c44e4b8",
-    "lastmod": "2026-11-22"
+    "hash": "4df43343fb70",
+    "lastmod": "2026-11-27"
   },
   "/ja/trade/": {
     "hash": "201367b89425",
@@ -1154,6 +1374,42 @@
   "/ja/wellness/": {
     "hash": "d5abaab14f0e",
     "lastmod": "2026-11-13"
+  },
+  "/ja/yakushima/": {
+    "hash": "6371828e0ce5",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-discover-scuba-extended-dive/": {
+    "hash": "2349e0eab407",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-discover-scuba-one-dive/": {
+    "hash": "6b0f407f17f7",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-discover-scuba-two-dives/": {
+    "hash": "3d4da2a914ae",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-jomonsugi-trekking/": {
+    "hash": "7010703923e5",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-sea-turtle-snorkeling/": {
+    "hash": "9f8ad29c312b",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-shiratani-moss-forest/": {
+    "hash": "c9c3f8811531",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-shiratani-taikoiwa-old-growth/": {
+    "hash": "7d86e25db7dc",
+    "lastmod": "2026-11-27"
+  },
+  "/ja/yakushima/yakushima-shiratani-taikoiwa/": {
+    "hash": "3b1ec5340cc7",
+    "lastmod": "2026-11-27"
   },
   "/ofukuro-dinner/": {
     "hash": "85943877e2e7",
@@ -1188,7 +1444,7 @@
     "lastmod": "2026-09-17"
   },
   "/zh-tw/experiences/": {
-    "hash": "eaf4f93c1d31",
+    "hash": "1c8cddc3b97c",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/faq/": {
@@ -1207,13 +1463,17 @@
     "hash": "a63d25886bf2",
     "lastmod": "2026-11-13"
   },
+  "/zh-tw/hiking/": {
+    "hash": "994d66a5c04b",
+    "lastmod": "2026-11-27"
+  },
   "/zh-tw/himeji/": {
     "hash": "0b0dcdbaf423",
     "lastmod": "2026-10-21"
   },
   "/zh-tw/himeji/himeji-kendo-experience-tour/": {
-    "hash": "ccd27b6b8576",
-    "lastmod": "2026-11-22"
+    "hash": "d0ba45fbaaa8",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/idol/": {
     "hash": "99dc0de1c677",
@@ -1228,11 +1488,11 @@
     "lastmod": "2026-11-17"
   },
   "/zh-tw/journal/choosing-kendo-experience-japan/": {
-    "hash": "8e6c1d5d88ad",
+    "hash": "8f1a8a3a3964",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/journal/choosing-tea-ceremony-kyoto/": {
-    "hash": "2a7dca7ed026",
+    "hash": "3a8ea90d42eb",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/journal/first-golf-round-in-japan/": {
@@ -1268,8 +1528,8 @@
     "lastmod": "2026-10-21"
   },
   "/zh-tw/kanazawa/kanazawa-kendo-experience-tour/": {
-    "hash": "eab222ca9521",
-    "lastmod": "2026-11-22"
+    "hash": "72b6f9fba98b",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/kendo/": {
     "hash": "64d80e25491f",
@@ -1284,72 +1544,84 @@
     "lastmod": "2026-11-26"
   },
   "/zh-tw/kyoto/arashiyama-japanese-knife-workshop/": {
-    "hash": "3abe93cc111a",
+    "hash": "659e41d6f5a6",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/arashiyama-ninja-experience/": {
-    "hash": "a13d5cfac482",
+    "hash": "9bde86036a79",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/arashiyama-shuriken-casting/": {
-    "hash": "5ec704cbb8e6",
+    "hash": "d42fbd173390",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/bamboo-sky-terrace/": {
-    "hash": "a3cf87964813",
-    "lastmod": "2026-11-20"
+    "hash": "83cbb0c081f6",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/evening-with-geiko/": {
-    "hash": "d93587e24804",
-    "lastmod": "2026-11-22"
+    "hash": "7c04b6fe6b9e",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/kyoto-higashiyama-private-tea-ceremony/": {
-    "hash": "c8ecceaf3aa6",
-    "lastmod": "2026-11-22"
+    "hash": "5f6ccb2a6052",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/kyoto-kendo-experience-tour/": {
-    "hash": "f1d927e13297",
-    "lastmod": "2026-11-22"
+    "hash": "9c1dccf6577a",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/kyoto/kyoto-ryokan-beauty-clinic/": {
-    "hash": "5121b77e9713",
-    "lastmod": "2026-11-22"
+    "hash": "4172647effa6",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/matsuyama/": {
+    "hash": "34c529e6b15f",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/matsuyama/matsuyama-tobe-pottery-full-course/": {
+    "hash": "233149eb1d1c",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/nagoya/": {
     "hash": "5fa6242f9a39",
     "lastmod": "2026-10-21"
   },
   "/zh-tw/nagoya/nagoya-kendo-experience-tour/": {
-    "hash": "2860ae125fe0",
-    "lastmod": "2026-11-22"
+    "hash": "444cd0a900f6",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/ninja/": {
-    "hash": "3e2522a03960",
-    "lastmod": "2026-11-26"
+    "hash": "efdf5616bae9",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/okinawa/": {
     "hash": "956930597ecd",
     "lastmod": "2026-10-21"
   },
   "/zh-tw/okinawa/okinawa-kendo-experience-tour/": {
-    "hash": "94f912f85482",
-    "lastmod": "2026-11-22"
+    "hash": "993a49ce5e16",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/osaka/": {
     "hash": "e225322bf2fb",
     "lastmod": "2026-10-21"
   },
   "/zh-tw/osaka/dotonbori-ramen-class/": {
-    "hash": "3ab1ad4eb932",
-    "lastmod": "2026-11-22"
+    "hash": "dac1d9fcf5bc",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/osaka/osaka-kendo-experience-tour/": {
-    "hash": "6ef679d0dff4",
-    "lastmod": "2026-11-22"
+    "hash": "e2269a395052",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/performing-arts/": {
     "hash": "d3c28a825bf7",
     "lastmod": "2026-11-07"
+  },
+  "/zh-tw/pottery/": {
+    "hash": "47f19bd496ee",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/rakugo/": {
     "hash": "4e1cd0dc9270",
@@ -1358,6 +1630,10 @@
   "/zh-tw/ramen/": {
     "hash": "bcb45959e0cd",
     "lastmod": "2026-10-16"
+  },
+  "/zh-tw/sea/": {
+    "hash": "19f0590d7702",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/sports/": {
     "hash": "e9def8b1e2f0",
@@ -1372,64 +1648,72 @@
     "lastmod": "2026-11-20"
   },
   "/zh-tw/tea-ceremony/": {
-    "hash": "aaf5e0743c57",
+    "hash": "9b35485f0bc6",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/": {
-    "hash": "0750613cef44",
+    "hash": "0eb1d367d8bb",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/kanji-name-calligraphy/": {
-    "hash": "da936ca2464f",
-    "lastmod": "2026-11-22"
+    "hash": "89f5093fbf38",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/mt-fuji-golf-day/": {
-    "hash": "c595c1514e72",
-    "lastmod": "2026-11-22"
+    "hash": "211dab7b82e8",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/nerima-herbal-bath-private-spa/": {
-    "hash": "ed8e525113a6",
-    "lastmod": "2026-11-22"
+    "hash": "9f94e3d8da45",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/nihonbashi-bushido-experience/": {
-    "hash": "d8f832fb5933",
-    "lastmod": "2026-11-22"
+    "hash": "e36fe4c26414",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/nihonbashi-english-rakugo-salon/": {
-    "hash": "60fc22d7af61",
-    "lastmod": "2026-11-22"
+    "hash": "68efc48e754f",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/nihonbashi-japanese-dance-salon/": {
-    "hash": "76893826ad18",
-    "lastmod": "2026-11-22"
+    "hash": "daeee22d3f77",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/nihonbashi-kendo-experience/": {
-    "hash": "930b0609704e",
-    "lastmod": "2026-11-22"
+    "hash": "35a810c7f0e2",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/nihonbashi-shamisen-salon/": {
-    "hash": "2a01c7260e72",
-    "lastmod": "2026-11-22"
+    "hash": "7451fef7d440",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/setagaya-omotesenke-tea-ceremony/": {
-    "hash": "e71da92174e1",
+    "hash": "d29273881ef5",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/shibuya-ramen-class/": {
-    "hash": "105076e3fc87",
-    "lastmod": "2026-11-22"
+    "hash": "2ae45e60e7f5",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/tokyo-idol-live-night/": {
-    "hash": "f8d67b3be9a8",
+    "hash": "ce2bbbcaeb97",
     "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/tokyo-kendo-experience-tour/": {
-    "hash": "d5fcd1faf2e3",
-    "lastmod": "2026-11-22"
+    "hash": "76b3f453985d",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/tokyo/tokyo-matcha-cultural-experience/": {
+    "hash": "5e20a39c801a",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/tokyo/tokyo-ninja-zen-night-walk/": {
+    "hash": "18b0cfe41d42",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/tokyo/yotsuya-tea-ceremony/": {
-    "hash": "164a19b5f87a",
-    "lastmod": "2026-11-22"
+    "hash": "b88217f0abf1",
+    "lastmod": "2026-11-27"
   },
   "/zh-tw/trade/": {
     "hash": "240733d0c108",
@@ -1446,5 +1730,41 @@
   "/zh-tw/wellness/": {
     "hash": "b28c87a12340",
     "lastmod": "2026-11-13"
+  },
+  "/zh-tw/yakushima/": {
+    "hash": "d27fd237b479",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-discover-scuba-extended-dive/": {
+    "hash": "11c08ea8bd86",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-discover-scuba-one-dive/": {
+    "hash": "6f6951c5318c",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-discover-scuba-two-dives/": {
+    "hash": "5d15c472b05d",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-jomonsugi-trekking/": {
+    "hash": "b5a81addd48f",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-sea-turtle-snorkeling/": {
+    "hash": "2addc65aab60",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-shiratani-moss-forest/": {
+    "hash": "4a35a7f5a5e6",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-shiratani-taikoiwa-old-growth/": {
+    "hash": "5d26d0bdfafe",
+    "lastmod": "2026-11-27"
+  },
+  "/zh-tw/yakushima/yakushima-shiratani-taikoiwa/": {
+    "hash": "b807899a75d0",
+    "lastmod": "2026-11-27"
   }
 }
