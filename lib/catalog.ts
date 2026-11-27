@@ -4367,13 +4367,13 @@ export const experiences: Experience[] = [
     story: {"heading":"Paying attention, after dark","body":"The ninja's art began with noticing: footsteps, wind, a light far off. At the foot of Tokyo Tower at night, you take that first step."},
   },
   {
-    // Yotsuya matcha academy (not named). Public price ¥9,000; price ¥16,500 set by the owner on 2026-11-27 assuming the partner's 10% commission offer (wholesale ¥8,100), not yet agreed. Conditions from the academy's website and booking page. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
+    // Yotsuya matcha academy (not named). Wholesale ¥16,500 per person, tax included (Richard, 2026-11-27); owner's rule (net + ¥4,500 ad cost, 20% margin, rounded up to ¥500) → ¥27,000. Conditions from the academy's website and booking page. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
     slug: "tokyo-matcha-cultural-experience", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
     title: "Matcha and Tea Ceremony in Kimono, Yotsuya, Tokyo",
     tagline: "About ninety minutes in a tatami room in Yotsuya with an English-speaking instructor. Dress in an easy-to-wear kimono, hear how the tea ceremony came about and how matcha is made and graded, taste the difference between matcha from five countries, and whisk your own bowl of first-flush matcha, served with a Japanese sweet. The kimono and the tea utensils are included.",
     overview: ["One stop from Shinjuku, in a quiet tea room in Yotsuya, kimono, matcha and the tea ceremony come together in one session. You begin by choosing an easy-to-wear kimono from the collection and learning to put it on, with time for photos in the tea room. Then a short talk: where the tea ceremony came from, how matcha is produced, and a tasting of matcha from five countries that shows why labels like ceremonial and premium mean little and what real grading looks like.","With that in hand you whisk your own bowl of first-flush matcha, with tips from the instructor, and take it with a Japanese sweet. The matcha comes from a cellar of more than 400 kinds, seven of them on offer including one decaffeinated. The session ends with guest etiquette condensed to five essential rules. The instructor teaches in English and can also lead in Japanese."],
     duration: "About 1.5 hours",
-    price: "¥16,500",
+    price: "¥27,000",
     priceUnit: "person",
     group: "From 1 guest (private sessions on request)",
     ages: "All ages (infants cannot sit on laps)",

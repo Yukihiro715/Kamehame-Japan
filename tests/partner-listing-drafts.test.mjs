@@ -182,7 +182,7 @@ test('Matsuyama pottery course: review link redirects, product page previews in 
 });
 
 test('Yakushima tours, the night walk and the matcha session are product pages in preview; their review links redirect', async () => {
-  const products = [["yakushima-jomonsugi-trekking","yakushima","¥18,000"],["yakushima-shiratani-moss-forest","yakushima","¥15,000"],["yakushima-shiratani-taikoiwa","yakushima","¥19,000"],["yakushima-shiratani-taikoiwa-old-growth","yakushima","¥20,000"],["yakushima-sea-turtle-snorkeling","yakushima","¥12,000"],["yakushima-discover-scuba-one-dive","yakushima","¥14,500"],["yakushima-discover-scuba-extended-dive","yakushima","¥19,000"],["yakushima-discover-scuba-two-dives","yakushima","¥22,000"],["tokyo-ninja-zen-night-walk","tokyo","¥23,500"],["tokyo-matcha-cultural-experience","tokyo","¥16,500"]];
+  const products = [["yakushima-jomonsugi-trekking","yakushima","¥18,000"],["yakushima-shiratani-moss-forest","yakushima","¥15,000"],["yakushima-shiratani-taikoiwa","yakushima","¥19,000"],["yakushima-shiratani-taikoiwa-old-growth","yakushima","¥20,000"],["yakushima-sea-turtle-snorkeling","yakushima","¥12,000"],["yakushima-discover-scuba-one-dive","yakushima","¥14,500"],["yakushima-discover-scuba-extended-dive","yakushima","¥19,000"],["yakushima-discover-scuba-two-dives","yakushima","¥22,000"],["tokyo-ninja-zen-night-walk","tokyo","¥23,500"],["tokyo-matcha-cultural-experience","tokyo","¥27,000"]];
   const partners = /屋久島自然案内|yakushima-nature|原崎|高田|0997-49|090-7718|080-6405|Matcha Academy|matchajaponica|Japonica|ninja-idea|シーズ|Origami Concierge/i;
   for (const [slug, city, price] of products) {
     for (const lang of ['en', 'ja']) {
