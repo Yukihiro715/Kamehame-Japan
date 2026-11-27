@@ -3760,8 +3760,9 @@ export const experiences: Experience[] = [
     // cost, 20% margin, rounded up to ¥500) and is provisional. Guests from
     // mid-January 2027, weekends only. The school's name and the teacher's
     // name may be published per the sheet but stay off the page until the
-    // owner decides. Placeholder photos.
-    slug: "setagaya-omotesenke-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
+    // owner decides. Photos are the tearoom's own (received 2026-11-27);
+    // published the same day on the owner's instruction.
+    slug: "setagaya-omotesenke-tea-ceremony", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Omotesenke Tea Ceremony in a Setagaya Tearoom, Tokyo",
     tagline: "Ninety minutes in a private tearoom in residential Setagaya with a teacher of the Omotesenke school: an introduction, entering the room the traditional way, and a full tea ceremony with two sweets. For your group of two to six, on weekends; from age six.",
     overview: [
@@ -3769,11 +3770,18 @@ export const experiences: Experience[] = [
       "The session begins with an explanation of the ceremony and the etiquette of a guest, then the entry into the tearoom and the ceremony itself: two kinds of sweets, matcha prepared for each of you, and the small gestures that make a guest at a tea gathering. Kaishi paper, a fan and a sweet pick are provided for the ceremony. Sessions are on Saturdays and Sundays, starting at 11:00 or 15:00, and the tearoom takes guests from mid-January 2027.",
     ],
     duration: "About 1.5 hours", price: "¥25,000", priceUnit: "person", group: "Private · 2–6 guests", ages: "Ages 6+ (children 6–17 at a reduced price)", area: "Tokyo (Kyodo, Setagaya-ku)",
-    img: "/images/craft-hands.jpg", alt: "A tea ceremony host placing a tea bowl on the tatami before seated guests",
+    img: "/images/setagaya-tea-host.webp", alt: "The host at the sunken hearth, placing a tea bowl on the tatami",
     gallery: [
-      { img: "/images/cat-tea.jpg", alt: "Matcha being prepared at a tea gathering" },
+      { img: "/images/setagaya-tea-bowl-hands.webp", alt: "A bowl of matcha held in both hands" },
+      { img: "/images/setagaya-tea-pouring.webp", alt: "Hot water ladled into a tea bowl, with the whisk beside it" },
+      { img: "/images/setagaya-tea-sweets.webp", alt: "A pink plum-blossom sweet on a black lacquer tray on the tatami" },
+      { img: "/images/setagaya-tea-alcove.webp", alt: "The tearoom's alcove with a hanging scroll" },
+      { img: "/images/setagaya-tea-kettle.webp", alt: "Steam rising from the iron kettle at the hearth" },
+      { img: "/images/setagaya-tea-water-basin.webp", alt: "Water running from a bamboo spout into the stone basin in the garden" },
+      { img: "/images/setagaya-tea-moss-path.webp", alt: "Stepping stones across moss in the tearoom garden" },
+      { img: "/images/setagaya-tea-flower.webp", alt: "A camellia bud in a bamboo vase on an ochre wall" },
     ],
-    galleryNote: "Placeholder photos. The tearoom's own photos replace them before this page is published.",
+    galleryNote: "Photos from the tearoom.",
     partySize: { min: 2, max: 6, default: 2 },
     availability: { daily: false, startTimes: ["11:00", "15:00"], defaultTime: "11:00", cutoffDays: 5, cutoffTime: "17:00", weekendsOnly: true, openFrom: "2027-01-16", closed: [{ from: "12-28", to: "01-05" }] },
     timeLabel: "Preferred start time",
@@ -3804,15 +3812,15 @@ export const experiences: Experience[] = [
     ],
     schedule: [
       { time: "0:00", title: "Introduction", body: "How a tea gathering works and how a guest behaves." },
-      { time: "0:20", title: "Entering the tearoom", body: "Through the entrance the traditional way, taking in the alcove and the kettle." },
-      { time: "0:30", title: "The ceremony", body: "Sweets, then matcha prepared for each guest, with the gestures explained.", img: "/images/craft-hands.jpg" },
+      { time: "0:20", title: "Entering the tearoom", body: "Through the entrance the traditional way, taking in the alcove and the kettle.", img: "/images/setagaya-tea-alcove.webp" },
+      { time: "0:30", title: "The ceremony", body: "Sweets, then matcha prepared for each guest, with the gestures explained.", img: "/images/setagaya-tea-pouring.webp" },
       { time: "1:15", title: "Questions", body: "Time for anything you want to ask about tea." },
       { time: "1:30", title: "End of the session" },
     ],
     venue: {
       known: ["A tearoom in Kyodo, Setagaya-ku, about five minutes on foot from Chitose-Funabashi station on the Odakyu line — the exact address comes with your confirmation", "Sitting is on tatami. Socks are required (white is customary but any colour is fine); bare feet are not", "Light activity, beginner level; from age 6", "Your group only; two to six guests"],
       afterBooking: ["The tearoom's address", "Directions from Chitose-Funabashi station", "A phone number for the day"],
-      img: "/images/cat-tea.jpg", alt: "Matcha at a tea gathering",
+      img: "/images/setagaya-tea-water-basin.webp", alt: "The stone water basin in the tearoom garden",
     },
     replyNote: "We reply after the teacher checks your date; host response target: next day, 17:00 JST",
     notesLabel: "Children's ages, dietary needs and anything the teacher should know (optional)",

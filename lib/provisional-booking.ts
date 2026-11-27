@@ -2,7 +2,17 @@ import type { Lang } from "@/lib/i18n";
 import { privateTeaCheckoutConfigured } from "@/lib/private-tea-checkout-prices";
 
 export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
-export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean; privateTeaPricing?: boolean }> = {
+export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean; privateTeaPricing?: boolean; ticketPrices?: Record<string, { price: string; amount: number }> }> = {
+  "arashiyama-ninja-experience": { price: "price_1UgCZvDpZ5Y8WoJ2XYwldRuM", amount: 17500, min: 1, max: 12, minCharge: 1 },
+  "arashiyama-japanese-knife-workshop": { price: "price_1UgCZqDpZ5Y8WoJ2ihYXKRqe", amount: 27000, min: 1, max: 19, minCharge: 1, eligibilityRequired: true },
+  "arashiyama-shuriken-casting": { price: "price_1UgCr9DpZ5Y8WoJ2LZlJ5yQw", amount: 20000, min: 1, max: 12, minCharge: 1, eligibilityRequired: true },
+  "tokyo-idol-live-night": {
+    price: "price_1UgCa0DpZ5Y8WoJ2bS41kTPt", amount: 12000, min: 1, max: 8, minCharge: 1,
+    ticketPrices: {
+      standard: { price: "price_1UgCa0DpZ5Y8WoJ2bS41kTPt", amount: 12000 },
+      front: { price: "price_1UgCa6DpZ5Y8WoJ2cjI7cedy", amount: 19000 },
+    },
+  },
   "kyoto-higashiyama-private-tea-ceremony": { price: "", amount: 16500, min: 1, max: 5, minCharge: 1, eligibilityRequired: true, privateTeaPricing: true },
   "osaka-kendo-experience-tour": { price: "price_1UbZ5JDpZ5Y8WoJ2MzJXExjV", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
   "kyoto-kendo-experience-tour": { price: "price_1UbZ5QDpZ5Y8WoJ2sAFlZBh4", amount: 27500, min: 2, max: 13, minCharge: 2, adultOnly: true },
@@ -121,5 +131,33 @@ const privateTeaCopy: Record<Lang, { eligibility: string; standard: string }> = 
   fr: { eligibility: "Tous les participants ont au moins 4 ans. Le tarif enfant est identique au tarif adulte.", standard: "Ce paiement couvre uniquement la cérémonie privée du thé. La location de kimono et les prestations particulières nécessitent un devis avant le paiement." },
   "zh-tw": { eligibility: "所有參加者皆年滿4歲。兒童與成人同價。", standard: "此費用僅包含私人茶道體驗。和服租借與特殊安排請先取得個別報價再付款。" },
 };
-export const checkoutStandardCopy = (lang: Lang, slug: string) => EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].standard : copy[lang].standard;
-export const checkoutAdultCopy = (lang: Lang, slug: string) => EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
+const workshopCopy: Record<Lang, { ninja: string; knife: string; age: string }> = {
+  en: { ninja: "This payment covers the regular session. For costumes or a private session, request a quote before paying.", knife: "This payment covers the regular workshop. For private groups or special arrangements, request a quote before paying.", age: "All participants are aged 6 or over." },
+  ja: { ninja: "通常体験の料金です。衣装や貸切をご希望の場合は、決済前に個別見積もりをご依頼ください。", knife: "通常体験の料金です。貸切や特別手配をご希望の場合は、決済前に個別見積もりをご依頼ください。", age: "参加者全員が6歳以上です。" },
+  es: { ninja: "El pago cubre la sesión regular. Si deseas un traje o una sesión privada, solicita un presupuesto antes de pagar.", knife: "El pago cubre el taller regular. Para grupos privados o peticiones especiales, solicita un presupuesto antes de pagar.", age: "Todos los participantes tienen al menos 6 años." },
+  fr: { ninja: "Le paiement couvre la séance standard. Pour un costume ou une séance privée, demandez un devis avant de payer.", knife: "Le paiement couvre l’atelier standard. Pour un groupe privé ou une demande particulière, demandez un devis avant de payer.", age: "Tous les participants ont au moins 6 ans." },
+  "zh-tw": { ninja: "此費用適用於一般場次。如需忍者服裝或包場，請先詢價再付款。", knife: "此費用適用於一般工作坊。如需包場或特別安排，請先詢價再付款。", age: "所有參加者皆年滿6歲。" },
+};
+const decorativeCastingCopy: Record<Lang, string> = {
+  en: "This payment covers the regular workshop for a decorative piece, in standard or mini size. Enter your preferred sizes in the notes. Private sessions require a separate quote.",
+  ja: "装飾用の作品を作る通常体験の料金です。標準・ミニの希望は備考欄にご記入ください。貸切は個別見積もりです。",
+  es: "Este pago cubre el taller regular de una pieza decorativa en tamaño estándar o mini. Indica los tamaños que prefieres en las notas. Las sesiones privadas requieren un presupuesto aparte.",
+  fr: "Ce paiement couvre l’atelier standard pour une pièce décorative, en taille standard ou mini. Indiquez vos tailles préférées dans les remarques. Les séances privées font l’objet d’un devis.",
+  "zh-tw": "此費用適用於製作裝飾品的一般場次，可選標準或迷你尺寸。請在備註中填寫希望的尺寸。包場另行報價。",
+};
+const idolCopy: Record<Lang, { standard: string; cancellation: string }> = {
+  en: { standard: "This payment covers the selected ticket type. Each guest pays the ¥700 drink charge at the venue.", cancellation: "Once the booking is confirmed, tickets cannot be changed, cancelled or refunded. If the organiser cancels the performance, you receive a full refund." },
+  ja: { standard: "選択した券種のチケット代です。ドリンク代700円／人は会場でお支払いください。", cancellation: "予約確定後は変更・キャンセル・返金ができません。主催者が公演を中止した場合は全額返金します。" },
+  es: { standard: "El pago cubre la entrada seleccionada. Cada persona paga ¥700 por la bebida en la sala.", cancellation: "Tras confirmarse la reserva, las entradas no admiten cambios, cancelaciones ni reembolsos. Si la organización cancela la función, se reembolsa el importe íntegro." },
+  fr: { standard: "Le paiement couvre le billet sélectionné. Chaque personne règle la boisson de 700 ¥ à la salle.", cancellation: "Une fois la réservation confirmée, les billets ne peuvent être ni modifiés, ni annulés, ni remboursés. Si l’organisateur annule le spectacle, vous recevez un remboursement intégral." },
+  "zh-tw": { standard: "此費用是所選票種的票價。每位參加者須在現場另付700日圓飲品費。", cancellation: "預訂確認後，門票無法變更、取消或退款。主辦方取消演出時將全額退款。" },
+};
+export function checkoutStandardCopy(lang: Lang, slug: string) {
+  if (slug === "tokyo-idol-live-night") return idolCopy[lang].standard;
+  if (slug === "arashiyama-ninja-experience") return workshopCopy[lang].ninja;
+  if (slug === "arashiyama-shuriken-casting") return decorativeCastingCopy[lang];
+  if (slug === "arashiyama-japanese-knife-workshop") return workshopCopy[lang].knife;
+  return EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].standard : copy[lang].standard;
+}
+export const checkoutCancellationCopy = (lang: Lang, slug: string) => slug === "tokyo-idol-live-night" ? idolCopy[lang].cancellation : copy[lang].cancellation;
+export const checkoutAdultCopy = (lang: Lang, slug: string) => (slug === "arashiyama-japanese-knife-workshop" || slug === "arashiyama-shuriken-casting") ? workshopCopy[lang].age : EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
