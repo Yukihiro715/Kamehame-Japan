@@ -5,6 +5,7 @@ export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
 export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean; privateTeaPricing?: boolean; ticketPrices?: Record<string, { price: string; amount: number }> }> = {
   "arashiyama-ninja-experience": { price: "price_1UgCZvDpZ5Y8WoJ2XYwldRuM", amount: 17500, min: 1, max: 12, minCharge: 1 },
   "arashiyama-japanese-knife-workshop": { price: "price_1UgCZqDpZ5Y8WoJ2ihYXKRqe", amount: 27000, min: 1, max: 19, minCharge: 1, eligibilityRequired: true },
+  "arashiyama-shuriken-casting": { price: "price_1UgCr9DpZ5Y8WoJ2LZlJ5yQw", amount: 20000, min: 1, max: 12, minCharge: 1, eligibilityRequired: true },
   "tokyo-idol-live-night": {
     price: "price_1UgCa0DpZ5Y8WoJ2bS41kTPt", amount: 12000, min: 1, max: 8, minCharge: 1,
     ticketPrices: {
@@ -137,6 +138,13 @@ const workshopCopy: Record<Lang, { ninja: string; knife: string; age: string }> 
   fr: { ninja: "Le paiement couvre la séance standard. Pour un costume ou une séance privée, demandez un devis avant de payer.", knife: "Le paiement couvre l’atelier standard. Pour un groupe privé ou une demande particulière, demandez un devis avant de payer.", age: "Tous les participants ont au moins 6 ans." },
   "zh-tw": { ninja: "此費用適用於一般場次。如需忍者服裝或包場，請先詢價再付款。", knife: "此費用適用於一般工作坊。如需包場或特別安排，請先詢價再付款。", age: "所有參加者皆年滿6歲。" },
 };
+const decorativeCastingCopy: Record<Lang, string> = {
+  en: "This payment covers the regular workshop for a decorative piece, in standard or mini size. Enter your preferred sizes in the notes. Private sessions require a separate quote.",
+  ja: "装飾用の作品を作る通常体験の料金です。標準・ミニの希望は備考欄にご記入ください。貸切は個別見積もりです。",
+  es: "Este pago cubre el taller regular de una pieza decorativa en tamaño estándar o mini. Indica los tamaños que prefieres en las notas. Las sesiones privadas requieren un presupuesto aparte.",
+  fr: "Ce paiement couvre l’atelier standard pour une pièce décorative, en taille standard ou mini. Indiquez vos tailles préférées dans les remarques. Les séances privées font l’objet d’un devis.",
+  "zh-tw": "此費用適用於製作裝飾品的一般場次，可選標準或迷你尺寸。請在備註中填寫希望的尺寸。包場另行報價。",
+};
 const idolCopy: Record<Lang, { standard: string; cancellation: string }> = {
   en: { standard: "This payment covers the selected ticket type. Each guest pays the ¥700 drink charge at the venue.", cancellation: "Once the booking is confirmed, tickets cannot be changed, cancelled or refunded. If the organiser cancels the performance, you receive a full refund." },
   ja: { standard: "選択した券種のチケット代です。ドリンク代700円／人は会場でお支払いください。", cancellation: "予約確定後は変更・キャンセル・返金ができません。主催者が公演を中止した場合は全額返金します。" },
@@ -147,8 +155,9 @@ const idolCopy: Record<Lang, { standard: string; cancellation: string }> = {
 export function checkoutStandardCopy(lang: Lang, slug: string) {
   if (slug === "tokyo-idol-live-night") return idolCopy[lang].standard;
   if (slug === "arashiyama-ninja-experience") return workshopCopy[lang].ninja;
+  if (slug === "arashiyama-shuriken-casting") return decorativeCastingCopy[lang];
   if (slug === "arashiyama-japanese-knife-workshop") return workshopCopy[lang].knife;
   return EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].standard : copy[lang].standard;
 }
 export const checkoutCancellationCopy = (lang: Lang, slug: string) => slug === "tokyo-idol-live-night" ? idolCopy[lang].cancellation : copy[lang].cancellation;
-export const checkoutAdultCopy = (lang: Lang, slug: string) => slug === "arashiyama-japanese-knife-workshop" ? workshopCopy[lang].age : EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
+export const checkoutAdultCopy = (lang: Lang, slug: string) => (slug === "arashiyama-japanese-knife-workshop" || slug === "arashiyama-shuriken-casting") ? workshopCopy[lang].age : EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;

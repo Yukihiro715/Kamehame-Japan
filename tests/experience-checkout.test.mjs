@@ -51,7 +51,7 @@ test('enabled non-golf experiences support their priced party range and correct 
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:2,time:'10:00',adultOnly:true},now),null);
   }
   const products=published.filter(x=>!enquiryOnly.has(x.slug));
-  assert.equal(products.length,16);
+  assert.equal(products.length,17);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
     const product=EXPERIENCE_PRODUCTS[x.slug];
@@ -72,6 +72,7 @@ test('Arashiyama checkout enforces the JST deadline and usual-session party limi
   const offers=[
     {slug:'arashiyama-ninja-experience',amount:17500,max:12},
     {slug:'arashiyama-japanese-knife-workshop',amount:27000,max:19},
+    {slug:'arashiyama-shuriken-casting',amount:20000,max:12},
   ];
   for(const {slug,amount,max} of offers) {
     const params={...base,experience:slug,lang:'ja',date:'2026-12-10',time:'11:30',guests:max,adultOnly:true};
@@ -82,6 +83,13 @@ test('Arashiyama checkout enforces the JST deadline and usual-session party limi
   }
   const withChild={...base,experience:'arashiyama-japanese-knife-workshop',date:'2026-12-10',time:'11:30',guests:1};
   assert.equal(m.parseExperienceOrder(withChild,cutoff-1),null);
+  const casting={...withChild,experience:'arashiyama-shuriken-casting',message:'Two standard, one mini',guests:3};
+  assert.equal(m.parseExperienceOrder(casting,cutoff-1),null);
+  const order=m.parseExperienceOrder({...casting,adultOnly:true,price:'price_client_supplied',amount:1},cutoff-1);
+  assert.equal(order?.amount,60000);
+  assert.equal(order?.message,casting.message);
+  assert.equal(order?.price,EXPERIENCE_PRODUCTS[casting.experience].price);
+  assert.equal(m.parseExperienceOrder({...casting,adultOnly:true,addOns:['extra']},cutoff-1),null);
 });
 
 test('idol checkout charges the selected ticket and excludes the venue drink fee',()=>{
