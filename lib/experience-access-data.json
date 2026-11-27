@@ -1259,6 +1259,63 @@
           "source": "https://www.tokyuhotels.co.jp/en/cerulean-h/access/index.html"
         }
       ]
+    },
+    "hiraiMatsuyama": {
+      "destination": {
+        "en": "Hirai Station, Matsuyama",
+        "ja": "平井駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Matsuyama Station, Matsuyama",
+            "ja": "松山駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Dogo Onsen Station, Matsuyama",
+            "ja": "道後温泉駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Matsuyama Airport",
+            "ja": "松山空港"
+          },
+          "mode": "driving"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Dogo Onsen Funaya, Matsuyama",
+            "ja": "道後温泉 ふなや"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Dogo Prince Hotel, Matsuyama",
+            "ja": "道後プリンスホテル"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "ANA Crowne Plaza Matsuyama",
+            "ja": "ANAクラウンプラザホテル松山"
+          },
+          "mode": "driving"
+        }
+      ],
+      "nearby": {
+        "en": "Dogo Onsen",
+        "ja": "道後温泉"
+      }
     }
   },
   "experiences": {
@@ -1297,6 +1354,7 @@
     "asakusa-soba-making-class": "kappabashi",
     "asakusa-ramen-making-class": "kappabashi",
     "evening-with-geiko": "gion",
-    "tokyo-idol-live-night": "tokyoLiveHouseVariable"
+    "tokyo-idol-live-night": "tokyoLiveHouseVariable",
+    "matsuyama-tobe-pottery-full-course": "hiraiMatsuyama"
   }
 }

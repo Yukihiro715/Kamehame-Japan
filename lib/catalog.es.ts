@@ -36,6 +36,10 @@ export const citiesEs: City[] = [
     slug: "himeji", title: "Himeji", jp: "姫路", img: "/images/city-himeji.jpg",
     lead: "Himeji es el castillo blanco, el mejor que sigue en pie en Japón, y una ciudad que vive a su sombra. Empezamos con el tour de kendo, por la mañana entre semana en un dojo reservado para tu fecha. Pronto habrá más experiencias en Himeji.",
   },
+  {
+    slug: "matsuyama", title: "Matsuyama", jp: "松山", img: "/images/city-matsuyama.jpg",
+    lead: "Matsuyama es Dogo Onsen, uno de los baños termales más antiguos de Japón, un castillo sobre la colina y la cuna de la cerámica Tobe, la porcelana azul y blanca de la región. Empezamos en un horno de Tobe en activo a las afueras de la ciudad, con torno, modelado a mano y pintura en una sola sesión. Pronto habrá más experiencias en Matsuyama.",
+  },
 ];
 
 export const categoriesEs: Category[] = [
@@ -76,6 +80,8 @@ export const categoriesEs: Category[] = [
     lead: "Los ninja eran exploradores y supervivientes, y sus habilidades iban de la cerbatana y la estrella arrojadiza a la respiración y la quietud. Prueba las herramientas en un estudio de Kioto, funde tu propio shuriken o siéntate a meditar en Tokio." },
   { slug: "knife-making", title: "Cuchillos", tag: "Artesanía", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
     lead: "El cuchillo de cocina japonés es el descendiente silencioso de la espada. En un taller de Arashiyama, afila una hoja en la piedra, coloca su mango y llévate a casa un cuchillo acabado por ti." },
+  { slug: "pottery", title: "Cerámica", tag: "Arte y artesanía", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
+    lead: "Cada horno de Japón tiene su propia arcilla, su esmalte y su azul. Siéntate al torno junto a un ceramista en activo, modela y pinta a mano, y recibe en casa lo que hiciste, cocido en ese mismo horno." },
 ];
 
 export const experiencesEs: Experience[] = [
@@ -797,6 +803,82 @@ export const experiencesEs: Experience[] = [
     itinerary: ["0:00 — Introducción", "0:20 — Entrada a la sala", "0:30 — La ceremonia", "1:15 — Preguntas", "1:30 — Fin de la sesión"],
     goodToKnow: ["Unos 90 minutos, privado. Sábados y domingos a las 11:00 o 15:00, desde mediados de enero de 2027.", "A partir de 6 años; de 6 a 17, tarifa reducida. De dos a seis personas.", "Se sienta sobre tatami; calcetines obligatorios.", "En inglés."],
     story: { heading: "La sala propia de la escuela", body: "La mayoría de las ceremonias del té que se ofrecen a los visitantes están montadas para visitantes. Esta es la sala de té de una escuela un fin de semana, con el maestro que la dirige. Los dulces, la tetera y el ritmo son los que reciben sus alumnos." },
+  },
+  {
+    slug: "matsuyama-tobe-pottery-full-course", city: "matsuyama", category: "pottery",
+    title: "Curso completo de cerámica en un horno de Tobe, Matsuyama",
+    tagline: "Unas dos horas en un horno de cerámica Tobe en activo, en las colinas a las afueras de Matsuyama: torno eléctrico, modelado a mano y pintura en una sola sesión, con el ceramista que dirige el horno a su lado. Haga tantas piezas como permita el tiempo; se esmaltan, se cuecen y se le envían. Hasta cuatro personas.",
+    overview: [
+      "La cerámica Tobe es la porcelana de las colinas al sur de Matsuyama: arcilla blanca, paredes gruesas y el azul cobalto pintado a mano desde hace doscientos años. Este horno, abierto en 1990, está a veinte minutos de Dogo Onsen y sigue siendo un taller en activo, con salas de torno separadas para gres y porcelana, dos tornos eléctricos en cada una, y el horno que cuece todo lo que se hace aquí.",
+      "El curso completo reúne las tres técnicas en una sesión. Trabaja al torno con el ceramista a su lado, modela una segunda pieza a mano y pinta con el cobalto del horno. No hay límite de piezas en el tiempo disponible; la mayoría dedica dos horas, algunos casi tres. Sus piezas se secan, se esmaltan y se cuecen después de su visita, y las terminadas se le envían.",
+    ],
+    duration: "Aprox. 2 horas", price: "¥12,500", group: "Privado · 1–4 personas", ages: "Niños acompañados de un adulto (consúltenos para los más pequeños)", area: "Matsuyama, Ehime (20 min en coche desde Dogo Onsen)",
+    img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp", alt: "El ceramista guiando las manos de un participante en el torno eléctrico",
+    gallery: [
+      { img: "/images/partner-listings/matsuyama-pottery/wheel-station.webp", alt: "Un puesto de torno en el taller revestido de madera" },
+      { img: "/images/partner-listings/matsuyama-pottery/drying-shelves.webp", alt: "Estantes con piezas recién torneadas secándose en el taller" },
+      { img: "/images/partner-listings/matsuyama-pottery/studio-table.webp", alt: "La mesa de trabajo del taller con un cuenco azul y blanco" },
+      { img: "/images/partner-listings/matsuyama-pottery/kiln-door.webp", alt: "La puerta del horno eléctrico donde se cuecen las piezas" },
+      { img: "/images/partner-listings/matsuyama-pottery/kiln.webp", alt: "La sala del horno" },
+    ],
+    galleryNote: "Fotos del horno.",
+    availabilityNote: "El horno abre de 10:00 a 17:00, con días de cierre irregulares; las sesiones empiezan por la mañana o a primera hora de la tarde y la hora exacta se confirma en nuestra respuesta. Las solicitudes se cierran tres días antes de la fecha.",
+    timeLabel: "Hora de inicio preferida",
+    scheduleNote: "Tiempos contados desde el inicio de la sesión; la mayoría dedica unas dos horas, algunos casi tres.",
+    langTag: "En japonés (apoyo en inglés en preparación)",
+    mapNote: "El marcador señala la estación de Hirai (línea Iyotetsu Yokogawara); el horno está a unos quince minutos a pie, o a veinte minutos en coche desde Dogo Onsen. La dirección exacta llega con la confirmación. Aparcamiento para cinco coches.",
+    cancellation: "Los días se cuentan hasta la fecha de la sesión, hora de Japón. Cancelación gratuita hasta 4 días antes; 3 y 2 días antes, el 50% del precio; el día anterior, el 70%; el mismo día, incluidas las ausencias, el precio completo. Si el horno tiene que cancelar, recibe el reembolso íntegro por el medio de pago original.",
+    includedShort: "Torno, modelado y pintura · Arcilla, esmalte y cocción · Piezas terminadas enviadas a su casa",
+    highlights: [
+      { icon: "brush", title: "Las tres técnicas", body: "Torno eléctrico, modelado a mano y pintura en una sesión, sin límite de piezas en el tiempo disponible." },
+      { icon: "group", title: "El ceramista al torno con usted", body: "El dueño del horno enseña el torno en persona: artesano certificado de primera clase y Maestro Monozukuri reconocido por el ministerio de trabajo." },
+      { icon: "spark", title: "Cocido aquí, enviado a usted", body: "Sus piezas se esmaltan y se cuecen en el horno y se le envían después. Los participantes compran además las obras del horno con un 40% de descuento." },
+    ],
+    included: [
+      "Una sesión de cerámica de unas dos horas solo para su grupo, hasta cuatro personas",
+      "Torno eléctrico, modelado a mano y pintura; arcilla, cobalto y esmalte",
+      "Secado, esmaltado y cocción de todo lo que haga",
+      "Impuestos incluidos",
+    ],
+    notIncluded: [
+      "Envío de las piezas terminadas (se presupuesta con la reserva; entrega internacional bajo petición)",
+      "Transporte hasta el horno (encuentro en el lugar; la dirección llega con la confirmación)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Bienvenida", body: "Un vistazo al taller y al horno, y a la cerámica Tobe en manos del ceramista." },
+      { time: "0:10", title: "El torno", body: "Centre la arcilla y tornee un cuenco o una taza con el ceramista a su lado. En la sala de porcelana se pueden hacer platos grandes.", img: "/images/partner-listings/matsuyama-pottery/wheel-station.webp" },
+      { time: "1:00", title: "Modelado a mano", body: "Una segunda pieza hecha a mano: un plato, un cuenco pequeño o lo que tenga en mente." },
+      { time: "1:30", title: "Pintura", body: "Pinte una pieza bizcochada con el azul cobalto del horno.", img: "/images/partner-listings/matsuyama-pottery/studio-table.webp" },
+      { time: "2:00", title: "Fin de la sesión", body: "Sus piezas se quedan para secarse, esmaltarse y cocerse; después se le envían. Muchos participantes se quedan casi tres horas." },
+    ],
+    venue: {
+      known: ["Un horno de cerámica Tobe en activo en Hirai, Matsuyama, a unos quince minutos a pie de la estación de Hirai (línea Iyotetsu Yokogawara) y veinte minutos en coche desde Dogo Onsen; la dirección exacta llega con la confirmación", "Salas de torno separadas para gres y porcelana, con dos tornos eléctricos cada una; hasta cuatro personas a la vez", "Ropa que pueda mancharse de arcilla; se facilitan delantales", "Aparcamiento para cinco coches"],
+      afterBooking: ["La dirección del horno", "Cómo llegar desde la estación de Hirai y desde Dogo Onsen", "Un número de teléfono para ese día"],
+      img: "/images/partner-listings/matsuyama-pottery/kiln-door.webp", alt: "La puerta del horno donde se cuecen las piezas",
+    },
+    replyNote: "Respondemos cuando el horno confirma su fecha; normalmente en 24 horas",
+    notesLabel: "Qué le gustaría hacer, edades de los niños, país de envío de las piezas y cualquier otra cosa (opcional)",
+    notesHint: "p. ej. dos de nosotros queremos probar un plato grande; viene un niño de nueve años; las piezas deben enviarse a Australia",
+    flow: [
+      { title: "Elija una fecha y envíe su solicitud", body: "Elija una fecha con al menos tres días de antelación, una hora de inicio preferida y cuántos son, con las edades de los niños." },
+      { title: "Consultamos con el horno", body: "Confirmamos la fecha y la hora con el ceramista y respondemos, normalmente en 24 horas, con el precio para su grupo y las opciones de envío." },
+      { title: "Pague para confirmar", body: "La reserva queda confirmada al recibir el pago; desde entonces se aplican las condiciones de cancelación. La dirección llega con la confirmación." },
+    ],
+    faq: [
+      { q: "¿Cuánto cuesta?", a: "¥12,500 por persona, impuestos incluidos, por el curso completo de torno, modelado y pintura. El envío de las piezas terminadas se presupuesta con la reserva." },
+      { q: "¿En qué idioma es la sesión?", a: "El ceramista enseña en japonés. Estamos preparando apoyo en inglés (una aplicación de traducción y una guía de los pasos en inglés) y confirmamos lo disponible con la reserva." },
+      { q: "¿Cuántas piezas puedo hacer?", a: "Tantas como permita el tiempo. La mayoría hace dos o tres piezas en unas dos horas; algunos se quedan casi tres." },
+      { q: "¿Cuándo recibo mis piezas?", a: "Tras la sesión se secan, se esmaltan y se cuecen en el horno, lo que lleva varias semanas, y después se le envían. El envío dentro de Japón y la entrega internacional se presupuestan con la reserva." },
+      { q: "¿Pueden participar niños?", a: "Sí, acompañados de un adulto. Indíquenos sus edades al solicitar y lo confirmamos con el horno." },
+      { q: "¿Puedo comprar obras del ceramista?", a: "Sí. Los participantes compran las obras del horno con un 40% de descuento ese día." },
+      { q: "¿Cuál es la política de cancelación?", a: "Gratuita hasta 4 días antes de la fecha; 3 y 2 días antes, el 50%; el día anterior, el 70%; el mismo día, incluidas las ausencias, el precio completo. Los días se cuentan en hora de Japón." },
+      { q: "¿Cómo funciona la reserva?", a: "Elija una fecha y envíe una solicitud; no cuesta nada. Confirmamos con el horno y respondemos, normalmente en 24 horas, con la hora de inicio, el precio y las condiciones. La reserva se confirma al pagar por el enlace que le enviamos, y desde entonces se aplican las condiciones de cancelación." },
+    ],
+    whatYoullDo: ["Tornear un cuenco o una taza en el torno eléctrico con el ceramista a su lado", "Modelar una segunda pieza a mano", "Pintar con el azul cobalto de la cerámica Tobe", "Recibir sus piezas cocidas en el horno"],
+    master: { title: "Su maestro", bio: "El ceramista abrió el horno en 1990 tras una carrera como interiorista y tiene certificaciones de artesano de primera clase en cerámica y en diseño de exposición; el ministerio de trabajo lo reconoce como Maestro Monozukuri. Se formó en la línea de un Tesoro Nacional Viviente de la porcelana y enseña el torno en persona.", quote: "" },
+    itinerary: ["0:00 — Bienvenida", "0:10 — El torno", "1:00 — Modelado a mano", "1:30 — Pintura", "2:00 — Fin de la sesión"],
+    goodToKnow: ["Unas 2 horas, a menudo casi 3. Solo su grupo, hasta cuatro personas.", "Las sesiones empiezan por la mañana o a primera hora de la tarde; el horno cierra algunos días sin horario fijo.", "Lleve ropa que pueda mancharse de arcilla. Se facilitan delantales.", "En japonés; apoyo en inglés en preparación."],
+    story: { heading: "Un horno en activo, no un aula", body: "Las clases de cerámica para visitantes suelen darse en talleres construidos para dar clases. Este es el horno propio de un ceramista, en las colinas, con los tornos en los que trabaja, el cobalto con el que pinta y el horno en el que cuece su obra. Lo que usted haga se cuece junto a ella." },
   },
   {
     slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo",

@@ -97,3 +97,12 @@ not under a Creative Commons license.
 
 The samurai, rakugo, cooking-class and ninja-meditation pages use the Wikimedia Commons photographs listed above as
 placeholders while in preview; the partners' own photographs replace them before publication.
+
+`public/images/city-matsuyama.jpg` (2026-11-27) is "Dōgo Onsen Honkan by night" by Maarten Heerlien, Wikimedia Commons,
+CC BY 2.0 (https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen_Honkan_by_night_(6454031643).jpg), cropped to the city-card
+size; credited in the site footer.
+
+`public/images/partner-listings/matsuyama-pottery/*.webp` (6 files, 2026-11-27) are the Matsuyama pottery partner's own
+photographs from the lesson page of its public website, used for the Tobe-ware pottery course page while it is in preview; the
+partner's review of the selection and its permission for use on kamehame-japan.com are still to be confirmed before publication,
+and they are not under a Creative Commons license.

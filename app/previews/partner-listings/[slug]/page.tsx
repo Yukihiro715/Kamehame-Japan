@@ -30,6 +30,8 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
   const { lang } = await searchParams;
   // The idol live became a catalog product (lib/catalog.ts tokyo-idol-live-night); the review link keeps working.
   if (slug === "tokyo-underground-idol-live") redirect(`/${lang === "ja" ? "ja" : "en"}/tokyo/tokyo-idol-live-night/`);
+  // The pottery course became a catalog product (lib/catalog.ts matsuyama-tobe-pottery-full-course); the review link keeps working.
+  if (slug === "matsuyama-tobe-pottery-full-course") redirect(`/${lang === "ja" ? "ja" : "en"}/matsuyama/matsuyama-tobe-pottery-full-course/`);
   const draft = partnerListingDrafts.find((d) => d.slug === slug);
   if (!draft) notFound();
   const locale = lang === "ja" ? "ja" : "en";

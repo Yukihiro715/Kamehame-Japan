@@ -4,7 +4,7 @@ import type { ScheduleSeason } from "@/lib/booking-window";
 // confirmation with each partner venue (see CLAUDE_HANDOFF.md). Venue
 // names and exact addresses stay private until a booking is confirmed.
 
-export type CitySlug = "tokyo" | "kyoto" | "osaka" | "nagoya" | "okinawa" | "kanazawa" | "himeji";
+export type CitySlug = "tokyo" | "kyoto" | "osaka" | "nagoya" | "okinawa" | "kanazawa" | "himeji" | "matsuyama";
 
 /** How a booking is confirmed. Instant products are bookable straight from the
  *  calendar; request products are held until the venue confirms the date. */
@@ -435,6 +435,10 @@ export const cities: City[] = [
     slug: "himeji", title: "Himeji", jp: "姫路", img: "/images/city-himeji.jpg",
     lead: "Himeji is the white castle, the finest left standing in Japan, and a city that lives in its shadow. We begin with the kendo tour, run on weekday mornings in a dojo arranged for your date. More Himeji experiences are on the way.",
   },
+  {
+    slug: "matsuyama", title: "Matsuyama", jp: "松山", img: "/images/city-matsuyama.jpg",
+    lead: "Matsuyama is Dogo Onsen, one of Japan's oldest hot springs, a castle on a hill and the home of Tobe ware, the region's blue-and-white porcelain. We begin at a working Tobe-ware kiln in the hills outside the city, with the wheel, hand-building and painting in one session. More Matsuyama experiences are on the way.",
+  },
 ];
 
 export const categories: Category[] = [
@@ -475,6 +479,8 @@ export const categories: Category[] = [
     lead: "The ninja were scouts and survivors, and their skills ran from the blowpipe and the throwing star to breathing and stillness. Try the tools in a Kyoto studio, cast your own shuriken, or sit down to the meditation practice behind the legend in Tokyo." },
   { slug: "knife-making", title: "Knife making", tag: "Arts & crafts", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
     lead: "The Japanese kitchen knife is the sword's quieter descendant. In a workshop in Arashiyama, sharpen a blade on a whetstone, fit its handle and take home a knife you finished yourself." },
+  { slug: "pottery", title: "Pottery", tag: "Arts & crafts", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
+    lead: "Every kiln in Japan has its own clay, its own glaze and its own blue. Sit at the wheel beside a working potter, build and paint by hand, and have what you made fired in that kiln and sent on to you." },
 ];
 
 export const experiences: Experience[] = [
@@ -3851,6 +3857,101 @@ export const experiences: Experience[] = [
     itinerary: ["0:00 — Introduction", "0:20 — Entering the tearoom", "0:30 — The ceremony", "1:15 — Questions", "1:30 — End of the session"],
     goodToKnow: ["About 90 minutes, private. Saturdays and Sundays at 11:00 or 15:00, from mid-January 2027.", "From age 6; children 6–17 at a reduced price. Two to six guests.", "Sitting on tatami; socks required.", "In English."],
     story: { heading: "The school's own room", body: "Most tea ceremonies offered to visitors are staged for visitors. This one is a school's tearoom on a weekend, with the teacher who runs it. The sweets, the kettle and the pace are what the students get." },
+  },
+  {
+    // Tobe-ware kiln in the hills of Matsuyama, Ehime (Richard's brief,
+    // 2026-11-27): full course (electric wheel + hand-building + painting),
+    // about 2 hours, up to 4 guests, cutoff 3 days before, cancellation
+    // 4 days free / 3–2 days 50% / day before 70% / day 100%. Supplier cost
+    // ¥5,000 per person (tax status and final figure still being negotiated);
+    // the selling price ¥12,500 follows the owner's rule (tax-inclusive cost
+    // → net + ¥4,500 ad cost, 20% margin, rounded up to ¥500) and was
+    // approved by the owner on 2026-11-27. Japanese only on site; English
+    // support is being arranged. The kiln's name, the potter's name, the
+    // address and the phone number stay off the page. Photos from the
+    // kiln's website, pending the kiln's review. Start times, shipping terms
+    // and the minimum age are assumptions to confirm before going live.
+    slug: "matsuyama-tobe-pottery-full-course", city: "matsuyama", category: "pottery", bookingType: "request", status: "preview",
+    title: "Pottery Full Course at a Tobe-ware Kiln, Matsuyama",
+    tagline: "About two hours at a working Tobe-ware kiln in the hills outside Matsuyama: the electric wheel, hand-building and painting, all in one session, with the potter who runs the kiln at your side. Make as many pieces as the time allows; they are glazed, fired and sent on to you. Up to four guests.",
+    overview: [
+      "Tobe ware is the porcelain of the hills south of Matsuyama: white clay, thick walls and the cobalt blue painted on by hand for two hundred years. This kiln, opened in 1990, is twenty minutes from Dogo Onsen and still a working studio, with separate wheel rooms for stoneware and porcelain, two electric wheels in each, and the kiln that fires everything made here.",
+      "The full course puts all three techniques into one session. You throw on the wheel with the potter beside you, build a second piece by hand, and paint with the kiln's cobalt. There is no limit on how many pieces you make in the time; most guests take two hours, some closer to three. Your work is dried, glazed and fired after you leave, and the finished pieces are shipped to you.",
+    ],
+    duration: "About 2 hours", price: "¥12,500", priceUnit: "person", group: "Private · 1–4 guests", ages: "Children welcome with an adult (ask us about younger children)", area: "Matsuyama, Ehime (20 min by car from Dogo Onsen)",
+    img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp", alt: "The potter guiding a guest's hands on the electric wheel",
+    gallery: [
+      { img: "/images/partner-listings/matsuyama-pottery/wheel-station.webp", alt: "A wheel station in the wood-panelled studio" },
+      { img: "/images/partner-listings/matsuyama-pottery/drying-shelves.webp", alt: "Shelves of freshly thrown pieces drying in the studio" },
+      { img: "/images/partner-listings/matsuyama-pottery/studio-table.webp", alt: "The studio work table with a blue-and-white bowl" },
+      { img: "/images/partner-listings/matsuyama-pottery/kiln-door.webp", alt: "The door of the electric kiln where the pieces are fired" },
+      { img: "/images/partner-listings/matsuyama-pottery/kiln.webp", alt: "The kiln room" },
+    ],
+    galleryNote: "Photos from the kiln.",
+    partySize: { min: 1, max: 4, default: 2 },
+    availability: { daily: true, startTimes: ["10:00", "13:00"], defaultTime: "10:00", cutoffDays: 3, cutoffTime: "18:00" },
+    timeLabel: "Preferred start time",
+    availabilityNote: "The kiln is open from 10:00 to 17:00 with irregular closing days; sessions start in the morning or early afternoon and the exact time is confirmed in our reply. Requests close three days before the date.",
+    scheduleNote: "Timings counted from the start of your session; most guests take about two hours, some closer to three.",
+    taxIncluded: true,
+    interpreter: false,
+    langTag: "In Japanese (English support being arranged)",
+    skipSiteFaq: true,
+    map: { lat: 33.8197, lng: 132.8267, zoom: 14 },
+    mapNote: "The pin marks Hirai station (Iyotetsu Yokogawara line); the kiln is about fifteen minutes on foot, or twenty minutes by car from Dogo Onsen. The exact address comes with your confirmation. Parking for five cars.",
+    cancellation: "Days are counted to the date of your session, Japan time. Free cancellation until 4 days before; 3 and 2 days before, 50% of the price; the day before, 70%; on the day, including no-shows, the full price. If the kiln has to cancel, you receive a full refund to your original payment method.",
+    cancellationTiers: [{ until: 4, rate: 0 }, { until: 2, rate: 50 }, { until: 1, rate: 70 }, { until: 0, rate: 100 }],
+    includedShort: "Wheel, hand-building and painting · Clay, glaze and firing · Finished pieces sent on to you",
+    highlights: [
+      { icon: "brush", title: "All three techniques", body: "The electric wheel, hand-building and painting in one session, with no limit on how many pieces you make in the time." },
+      { icon: "group", title: "The potter at the wheel with you", body: "The kiln's owner teaches the wheel himself: a first-class certified craftsman recognised by the labour ministry as a Monozukuri Meister." },
+      { icon: "spark", title: "Fired here, sent to you", body: "Your pieces are glazed and fired at the kiln and shipped to you afterwards. Participants also buy the kiln's own works at 40% off." },
+    ],
+    included: [
+      "A pottery session of about two hours for your group only, up to four guests",
+      "Electric wheel, hand-building and painting; clay, cobalt and glaze",
+      "Drying, glazing and firing of everything you make",
+      "Tax included",
+    ],
+    notIncluded: [
+      "Shipping of the finished pieces (quoted with your booking; overseas delivery on request)",
+      "Transport to the kiln (meet on site; the address comes with your confirmation)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Welcome", body: "A look at the studio and the kiln, and at Tobe ware in the potter's hands." },
+      { time: "0:10", title: "The wheel", body: "Centre the clay and throw a bowl or a cup with the potter beside you. Large plates are possible in the porcelain room.", img: "/images/partner-listings/matsuyama-pottery/wheel-station.webp" },
+      { time: "1:00", title: "Hand-building", body: "A second piece built by hand: a plate, a small dish or whatever you have in mind." },
+      { time: "1:30", title: "Painting", body: "Paint a bisque-fired piece with the kiln's cobalt blue.", img: "/images/partner-listings/matsuyama-pottery/studio-table.webp" },
+      { time: "2:00", title: "End of the session", body: "Your pieces stay to dry, be glazed and fired; they are shipped to you afterwards. Many guests stay closer to three hours." },
+    ],
+    venue: {
+      known: ["A working Tobe-ware kiln in Hirai, Matsuyama, about fifteen minutes on foot from Hirai station (Iyotetsu Yokogawara line) and twenty minutes by car from Dogo Onsen — the exact address comes with your confirmation", "Separate wheel rooms for stoneware and porcelain, two electric wheels in each; up to four guests at a time", "Clothes that can take clay; aprons are provided", "Parking for five cars"],
+      afterBooking: ["The kiln's address", "Directions from Hirai station and Dogo Onsen", "A phone number for the day"],
+      img: "/images/partner-listings/matsuyama-pottery/kiln-door.webp", alt: "The door of the kiln where the pieces are fired",
+    },
+    replyNote: "We reply after the kiln confirms your date; usually within 24 hours",
+    notesLabel: "What you would like to make, children's ages, shipping address country and anything else (optional)",
+    notesHint: "e.g. two of us want to try a large plate; a child of nine joins; the pieces should be shipped to Australia",
+    flow: [
+      { title: "Choose a date and send your request", body: "Pick a date at least three days ahead, a preferred start time and how many of you there are, with children's ages." },
+      { title: "We check with the kiln", body: "We confirm the date and start time with the potter and reply, usually within 24 hours, with the price for your group and the shipping options." },
+      { title: "Pay to confirm", body: "Your booking is confirmed when your payment arrives; cancellation terms start then. The address comes with your confirmation." },
+    ],
+    faq: [
+      { q: "How much is it?", a: "¥12,500 per person, tax included, for the full course of wheel, hand-building and painting. Shipping of the finished pieces is quoted with your booking." },
+      { q: "Which language is the session in?", a: "The potter teaches in Japanese. We are arranging English support (a translation app and an English guide to the steps) and confirm what is available with your booking." },
+      { q: "How many pieces can I make?", a: "As many as the time allows. Most guests make two or three pieces in about two hours; some stay closer to three." },
+      { q: "When do I get my pieces?", a: "After the session they are dried, glazed and fired at the kiln, which takes several weeks, and then shipped to you. Shipping within Japan and overseas delivery are quoted with your booking." },
+      { q: "Can children join?", a: "Yes, with an adult. Tell us their ages when you request and we confirm with the kiln." },
+      { q: "Can I buy the potter's work?", a: "Yes. Participants buy the kiln's own works at 40% off on the day." },
+      { q: "What is the cancellation policy?", a: "Free until 4 days before the date; 3 and 2 days before, 50%; the day before, 70%; on the day, including no-shows, the full price. Days are counted in Japan time." },
+      { q: "How does booking work?", a: "Choose a date and send a request; it costs nothing. We confirm with the kiln and reply, usually within 24 hours, with the start time, the price and the conditions. Your booking is confirmed when you pay through the link we send, and cancellation terms start then." },
+    ],
+    whatYoullDo: ["Throw a bowl or cup on the electric wheel with the potter beside you", "Build a second piece by hand", "Paint with Tobe ware's cobalt blue", "Have your pieces fired at the kiln and shipped to you"],
+    master: { title: "Your teacher", bio: "The potter opened the kiln in 1990 after a career in interior design and holds first-class craftsman certifications in both pottery and display design; the labour ministry recognises him as a Monozukuri Meister. He trained in the line of a Living National Treasure of porcelain and teaches the wheel himself.", quote: "" },
+    itinerary: ["0:00 — Welcome", "0:10 — The wheel", "1:00 — Hand-building", "1:30 — Painting", "2:00 — End of the session"],
+    goodToKnow: ["About 2 hours, often closer to 3. Your group only, up to four guests.", "Sessions start in the morning or early afternoon; the kiln has irregular closing days.", "Wear clothes that can take clay. Aprons are provided.", "In Japanese; English support is being arranged."],
+    story: { heading: "A working kiln, not a classroom", body: "Pottery lessons for visitors are usually run in studios built for lessons. This is a potter's own kiln in the hills, with the wheels he throws on, the cobalt he paints with and the kiln that fires his work. What you make is fired alongside it." },
   },
   {
     // SOBAGIRI RAKUJYO (株式会社RAKUJYO), Matsugaya, Taito-ku: 60-minute
