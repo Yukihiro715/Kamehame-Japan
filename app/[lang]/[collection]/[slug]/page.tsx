@@ -172,12 +172,12 @@ const HIGHLIGHT_ICONS = { group: Users, chat: MessageCircle, interpreter: Langua
 async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) {
   const T = t(lang);
   const D = T.detail;
-  const provisional = checkoutProductConfigured(exp.slug) && await experienceCheckoutEnabled();
+  const preview = isPreview(exp);
+  const provisional = !preview && checkoutProductConfigured(exp.slug) && await experienceCheckoutEnabled();
   const P = provisionalCopy(lang);
   const city = cityBySlug(exp.city, lang) ?? previewsFor(lang).cities.find((c) => c.slug === exp.city)!;
   const { experiences } = catalogFor(lang);
   const url = `/${lang}/${exp.city}/${exp.slug}/`;
-  const preview = isPreview(exp);
   // A page in preview shows the full booking flow so it can be checked end to end.
   const bookingUnavailable = Boolean(exp.pricePending || exp.bookingPaused);
   const live = (isLive(exp) || preview) && !bookingUnavailable;
@@ -232,7 +232,7 @@ async function ExperienceDetail({ exp, lang }: { exp: Experience; lang: Lang }) 
     provisionalCheckout: provisional, consultationOnly: consultOnly || undefined, weekdaysOnly: provisional && !!EXPERIENCE_PRODUCTS[exp.slug].adultOnly,
     weekendsOnly: avail?.weekendsOnly, openFrom: avail?.openFrom, closedWeekdays: avail?.closedWeekdays,
     cancellationText: cancellation, cancellationTiers: exp.cancellationTiers,
-    leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00", cutoffHours: avail?.cutoffHours,
+    leadDays: avail?.cutoffDays ?? 3, cutoffTime: avail?.cutoffTime ?? "17:00", cutoffHours: avail?.cutoffHours, maxAdvanceMonths: avail?.maxAdvanceMonths, scheduleSeason: avail?.scheduleSeason,
     startTimes: provisional && !EXPERIENCE_PRODUCTS[exp.slug].timeOnConfirmation && !avail?.startTimes ? ["10:00"] : avail?.startTimes, defaultTime: avail?.defaultTime, closed: avail?.closed,
     minGuests: exp.partySize?.min ?? 1,
     listedMax: provisional ? EXPERIENCE_PRODUCTS[exp.slug].max : eg?.upTo ?? (perGroup && pricing.rows.length ? Math.max(...pricing.rows.map((r) => r.party)) : Math.min(exp.partySize?.max ?? 12, 12)),

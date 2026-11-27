@@ -16,7 +16,7 @@ import { DatePicker } from "@/components/site/date-picker";
 import { EmailInput } from "@/components/site/email-input";
 import { DEFAULT_MAX_GUESTS, firstOpenDate, isBookable, timesFor, useBooking } from "@/components/site/booking-context";
 import { GuestStepper } from "@/components/site/guest-stepper";
-import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy, checkoutTimeCopy, checkoutStandardCopy, checkoutCancellationCopy } from "@/lib/provisional-booking";
+import { EXPERIENCE_PRODUCTS, provisionalCopy, checkoutAdultCopy, checkoutTimeCopy, checkoutStandardCopy, checkoutCancellationCopy, checkoutRequiresEligibility } from "@/lib/provisional-booking";
 import { CancellationTable } from "@/components/site/cancellation-table";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -207,7 +207,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           {!card && <div className="form-row two">
             <div className="field">
               <label htmlFor="enq-date">{F.preferredDate}</label>
-              <DatePicker id="enq-date" name="date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} required closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
+              <DatePicker id="enq-date" name="date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} max={b.maxDate} required closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
               {firstOpenDate(x, b.minDate) && <small className="form-hint">{x.cutoffHours ? D.availCutoffHours(x.cutoffHours) : F.earliestDate(fmtDate(firstOpenDate(x, b.minDate)!, lang), x.leadDays, x.cutoffTime)}</small>}
             </div>
             {x.startTimes?.length ? (
@@ -310,7 +310,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
       {provisional && x && b && (
         <div className="provisional-consent">
           <p>{P.note}</p>
-          {EXPERIENCE_PRODUCTS[x.slug].timeOnConfirmation && <p>{checkoutTimeCopy(lang)}</p>}
+          {EXPERIENCE_PRODUCTS[x.slug].timeOnConfirmation && <p>{checkoutTimeCopy(lang, x.slug)}</p>}
           <p><strong>{P.refund}</strong></p>
           {b.estimate && <p><b>{D.totalCol}: <Yen n={b.estimate.total} /></b></p>}
           {b.guestsNumber < EXPERIENCE_PRODUCTS[x.slug].minCharge && <p>{D.minChargeNote(EXPERIENCE_PRODUCTS[x.slug].minCharge)}</p>}
@@ -319,7 +319,7 @@ export function EnquiryForm({ kind, lang, fallbackEmail, experience, variant = "
           </details>
           <p>{checkoutCancellationCopy(lang, x.slug)}</p>
           <label className="form-check"><input name="checkout_standard" type="checkbox" required /><span>{checkoutStandardCopy(lang, x.slug)}</span></label>
-          {(EXPERIENCE_PRODUCTS[x.slug].adultOnly || EXPERIENCE_PRODUCTS[x.slug].eligibilityRequired || EXPERIENCE_PRODUCTS[x.slug].groupPricing) && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{checkoutAdultCopy(lang, x.slug)}</span></label>}
+          {checkoutRequiresEligibility(x.slug) && <label className="form-check"><input name="checkout_adult" type="checkbox" required /><span>{checkoutAdultCopy(lang, x.slug)}</span></label>}
           <label className="form-check"><input name="checkout_consent" type="checkbox" required /><span>{P.consent} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{T.footerTerms}</a></span></label>
 
         </div>

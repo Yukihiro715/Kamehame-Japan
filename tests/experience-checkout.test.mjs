@@ -28,6 +28,56 @@ const order=m.parseExperienceOrder(base,now);
 const reference='KJ-E-11111111222243338444555555555555';
 const env={EXPERIENCE_CHECKOUT_ENABLED:'true',STRIPE_CHECKOUT_KEY:'rk_live_example',STRIPE_READ_KEY:'rk_live_read',STRIPE_WEBHOOK_SECRET:'whsec_example',GOLF_AUTOMATION_URL:'https://script.google.com/macros/s/example/exec',GOLF_AUTOMATION_TOKEN:'test-token'};
 
+test('catalog checkout totals and provider dates match regular and high-season prices',()=>{
+  const cases=[
+    ['nerima-herbal-bath-private-spa','2026-11-02','16:30',1,24500,1],
+    ['nerima-herbal-bath-private-spa','2026-11-02','11:00',2,42000,1],
+    ['nerima-herbal-bath-private-spa','2026-11-02','11:00',3,60000,1],
+    ['yotsuya-tea-ceremony','2026-11-02','',3,52500,3],
+    ['yotsuya-tea-ceremony','2026-11-02','',4,64000,4],
+    ['kyoto-garden-teahouse-tea-ceremony','2026-12-05','11:00',1,37500,1],
+    ['kyoto-garden-teahouse-tea-ceremony','2026-12-31','11:00',1,44000,1],
+    ['kyoto-garden-teahouse-tea-ceremony','2026-12-31','11:00',8,232000,8],
+    ['kyoto-higashiyama-shared-tea-ceremony','2026-12-05','17:00',2,23000,2],
+    ['kyoto-higashiyama-shared-tea-ceremony','2026-12-31','17:00',8,100000,8],
+    ['kyoto-higashiyama-annex-tea-ceremony','2026-12-05','15:00',2,38000,2],
+    ['kyoto-higashiyama-annex-tea-ceremony','2026-12-31','15:00',5,107500,5],
+  ];
+  for (const [experience,date,time,guests,amount,quantity] of cases) {
+    const input={...base,experience,date,time,guests,adultOnly:true,amount:1};
+    const order=m.parseExperienceOrder(input,now);
+    assert.ok(order,experience);
+    assert.equal(order.amount,amount);
+    assert.equal(order.quantity,quantity);
+    assert.equal(order.price,EXPERIENCE_PRODUCTS[experience].catalogRates[amount/quantity]);
+    assert.equal(m.parseExperienceOrder({...input,adultOnly:false},now),null);
+  }
+  const spa={...base,experience:'nerima-herbal-bath-private-spa',time:'11:00',adultOnly:true};
+  assert.equal(m.parseExperienceOrder({...spa,date:'2026-11-03'},now),null,'closed on Tuesdays');
+  assert.equal(m.parseExperienceOrder({...spa,date:'2027-01-23'},now),null,'beyond three months');
+  const garden={...base,experience:'kyoto-garden-teahouse-tea-ceremony',time:'11:00',adultOnly:true};
+  assert.equal(m.parseExperienceOrder({...garden,date:'2026-12-06'},now),null,'closed on Sundays in winter');
+  assert.equal(m.parseExperienceOrder({...garden,date:'2026-12-05',time:'10:00'},now),null,'no 10:00 in winter');
+  assert.ok(m.parseExperienceOrder({...garden,date:'2026-11-08',time:'10:00'},now),'extra autumn slot');
+  const annex={...base,experience:'kyoto-higashiyama-annex-tea-ceremony',time:'10:00',adultOnly:true};
+  assert.equal(m.parseExperienceOrder({...annex,guests:6},now),null,'larger parties are individually quoted');
+  assert.equal(m.parseExperienceOrder({...annex,date:'2026-10-23'},now),null,'inside the rolling 24-hour cutoff');
+});
+
+test('Setagaya is purchasable for eligible weekend dates only',()=>{
+  const experience='setagaya-omotesenke-tea-ceremony';
+  assert.ok(catalogFor('en').experiences.some(e=>e.slug===experience));
+  const input={...base,experience,date:'2027-01-16',time:'11:00',adultOnly:true};
+  const order=m.parseExperienceOrder(input,now);
+  assert.ok(order);
+  assert.equal(order.amount,50000);
+  assert.equal(order.quantity,2);
+  assert.equal(m.checkoutParameters(order,reference,now).get('cancel_url'),`https://kamehame-japan.com/en/tokyo/${experience}/?checkout=cancelled#request-form`);
+  for(const patch of [{date:'2027-01-09'},{date:'2027-01-18'},{date:'2027-01-23'},{time:'12:00'},{guests:7},{adultOnly:false}]) {
+    assert.equal(m.parseExperienceOrder({...input,...patch},now),null);
+  }
+});
+
 test('server prices: minimum charge, allowed quantities, adult eligibility and tampered prices',()=>{
   assert.equal(order.amount,43000);assert.equal(order.quantity,2);assert.equal(order.guests,2);
   for(const guests of [2,3,4])assert.equal(m.parseExperienceOrder({...base,guests},now).amount,21500*guests);
@@ -51,16 +101,16 @@ test('enabled non-golf experiences support their priced party range and correct 
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:2,time:'10:00',adultOnly:true},now),null);
   }
   const products=published.filter(x=>!enquiryOnly.has(x.slug));
-  assert.equal(products.length,17);
+  assert.equal(products.length,26);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
     const product=EXPERIENCE_PRODUCTS[x.slug];
     for(let guests=product.min;guests<=product.max;guests++) {
-      const input={...base,experience:x.slug,guests,time:product.timeOnConfirmation?'':x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':product.ticketPrices?'standard':'',interpreter:'fr'};
+      const input={...base,experience:x.slug,guests,date:x.availability?.openFrom??base.date,time:product.timeOnConfirmation?'':x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':product.ticketPrices?'standard':'',interpreter:'fr'};
       const o=m.parseExperienceOrder(input,now);
       assert.ok(o,x.slug+' '+guests);
       assert.equal(o.city,x.city);
-      assert.equal(o.amount,product.privateTeaPricing?quote(pricingFor(x,'en'),'',guests,input.date).total:product.groupPricing?({2:179000,3:209000,4:231000,5:271000})[guests]:product.amount*Math.max(guests,product.minCharge));
+      assert.equal(o.amount,(product.privateTeaPricing||product.catalogRates)?quote(pricingFor(x,'en'),'',guests,input.date).total:product.groupPricing?({2:179000,3:209000,4:231000,5:271000})[guests]:product.amount*Math.max(guests,product.minCharge));
       assert.match(m.checkoutParameters(o,reference,now).get('cancel_url'),new RegExp('/'+x.city+'/'+x.slug+'/'));
     }
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:product.max+1,adultOnly:true},now),null);

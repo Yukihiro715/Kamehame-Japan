@@ -108,7 +108,7 @@ export function BookingCard({ lang, headline }: { lang: Lang; headline: string }
       <div className="bk-grid">
         <div className="field">
           <label htmlFor="bk-date">{F.preferredDate}</label>
-          <DatePicker id="bk-date" name="bk-date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} compact closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
+          <DatePicker id="bk-date" name="bk-date" lang={lang} min={firstOpenDate(x, b.minDate) ?? b.minDate} max={b.maxDate} compact closed={(d) => !isBookable(d, x)} value={b.date} onChange={(d) => b.set({ date: d })} />
         </div>
         {x.startTimes && x.startTimes.length > 0 && (
           <label>
