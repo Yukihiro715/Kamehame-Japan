@@ -6,6 +6,7 @@ type Course = {
   title: Copy;
   lead: Copy;
   duration: Copy;
+  /** Selling price per person, tax included: the owner's rule applied to the confirmed wholesale (see each course). */
   price: number;
   details: { en: ListingDraftCopy["details"]; ja: ListingDraftCopy["details"] };
   /** Photos from the operator's own tour page (used at the owner's instruction, 2026-11-27). */
@@ -118,7 +119,8 @@ const courses: Course[] = [
     title: { en: "Jomon Sugi Trek in Yakushima", ja: "屋久島・縄文杉トレッキング" },
     lead: { en: "Follow an old logging railway and a mountain trail past Wilson's Stump and Daiō Sugi to Jomon Sugi, one of Yakushima's oldest cedars. This is a strenuous full-day hike.", ja: "トロッコ道と山道をたどり、ウィルソン株や大王杉を経て縄文杉を目指します。長距離を歩く、体力が必要な日帰りコースです。" },
     duration: { en: "About 12 hours", ja: "約12時間" },
-    price: 10_500,
+    // Operator list price ¥10,500; wholesale ¥9,450 (10% commission, confirmed 2026-11-27).
+    price: 18_000,
     details: {
       en: [["Participants", "Up to four guests per guide. Ages 12–55 on the standard tour; groups including anyone aged 56–60 require a private tour by request."], ["Included", "Guide, hiking insurance and pickup from covered areas"], ["Additional costs", "Gear rental from an external shop, lunch, ¥1,400 shuttle and ¥1,000 mountain conservation contribution"]],
       ja: [["参加条件", "ガイド1名につき最大4名。通常12〜55歳。56〜60歳の方を含むグループは貸切で要相談。"], ["含まれるもの", "ガイド・登山保険・対象エリア内の送迎"], ["別途費用", "外部店での登山用品レンタル・弁当・シャトルバス1,400円・山岳部環境保全協力金1,000円"]],
@@ -129,7 +131,8 @@ const courses: Course[] = [
     title: { en: "Shiratani Unsuikyo Moss Forest Hike", ja: "屋久島・白谷雲水峡 苔むす森トレッキング" },
     lead: { en: "Spend a morning or afternoon on a guided walk through the moss-covered forest of Shiratani Unsuikyo.", ja: "白谷雲水峡の苔むす森を、ガイドと歩く半日コースです。午前・午後から選べます。" },
     duration: { en: "About 4 hours", ja: "約4時間" },
-    price: 7_500,
+    // Operator list price ¥7,500; wholesale ¥6,750 (10% commission, confirmed 2026-11-27).
+    price: 15_000,
     details: {
       en: [["Participants", "Up to five guests per guide. A private tour is required if the group includes a child below fourth grade or someone aged 61–65."], ...shirataniCosts.en],
       ja: [["参加条件", "ガイド1名につき最大5名。小学4年生未満または61〜65歳の方を含むグループは貸切。"], ...shirataniCosts.ja],
@@ -140,7 +143,8 @@ const courses: Course[] = [
     title: { en: "Shiratani Unsuikyo to Taiko Rock", ja: "屋久島・白谷雲水峡 太鼓岩トレッキング（ノーマルコース）" },
     lead: { en: "Hike through Shiratani Unsuikyo's moss forest to Taiko Rock, a lookout over the island's interior when the weather is clear.", ja: "白谷雲水峡の苔むす森を抜けて太鼓岩へ。天気がよければ、屋久島の山々を見渡せます。" },
     duration: { en: "About 7 hours", ja: "約7時間" },
-    price: 11_000,
+    // Operator list price ¥11,000; wholesale ¥9,900 (10% commission, confirmed 2026-11-27).
+    price: 19_000,
     details: {
       en: [["Participants", "Ages 10–65. Groups including children aged 10–12 or adults aged 61–65 require a private tour."], ...shirataniCosts.en],
       ja: [["参加条件", "10〜65歳。10〜12歳のお子様または61〜65歳の方を含むグループは貸切。"], ...shirataniCosts.ja],
@@ -151,7 +155,8 @@ const courses: Course[] = [
     title: { en: "Shiratani Unsuikyo to Taiko Rock via the Old-Growth Trail", ja: "屋久島・白谷雲水峡 太鼓岩トレッキング（原生林歩道コース）" },
     lead: { en: "Take the longer route to Taiko Rock for more time among the old-growth cedars and moss of Shiratani Unsuikyo.", ja: "白谷雲水峡の原生林歩道を経由して太鼓岩へ。苔に覆われた森や屋久杉をじっくり見ながら歩く、通常より長いルートです。" },
     duration: { en: "About 8½ hours", ja: "約8時間半" },
-    price: 12_000,
+    // Operator list price ¥12,000; wholesale ¥10,800 (10% commission, confirmed 2026-11-27).
+    price: 20_000,
     details: {
       en: [["Participants", "Ages 10–65. Groups including children aged 10–12 or adults aged 61–65 require a private tour."], ...shirataniCosts.en],
       ja: [["参加条件", "10〜65歳。10〜12歳のお子様または61〜65歳の方を含むグループは貸切。"], ...shirataniCosts.ja],
@@ -162,7 +167,8 @@ const courses: Course[] = [
     title: { en: "Sea Turtle Snorkelling in Yakushima", ja: "屋久島・ウミガメシュノーケリング" },
     lead: { en: "Snorkel with a guide in waters frequented by sea turtles. Beginners and non-swimmers can take part. Wildlife sightings vary, and the guide shares photos and video from your tour.", ja: "ウミガメが生息する海でガイドとシュノーケリング。初心者や泳ぎが苦手な方も参加でき、ツアーの写真・動画を受け取れます。ウミガメに出会えるかは当日の状況によります。" },
     duration: { en: "About 2½–3 hours", ja: "約2時間半〜3時間" },
-    price: 5_000,
+    // Operator list price ¥5,000; wholesale ¥4,500 (10% commission, confirmed 2026-11-27).
+    price: 12_000,
     details: {
       en: [["Participants", "Ages 5–69"], ["Meet and start times", "Isso Beach car park; 08:00, 11:00 or 14:00. 10:00 and 15:00 by arrangement. No tours December–February."], ["Language", "The 10–15 minute briefing is normally in Japanese. English support is being confirmed."], ["Included", "Instruction, guide, equipment, shower and changing facilities, photos and video, insurance, parking, one drink and pickup by arrangement"]],
       ja: [["参加条件", "5〜69歳"], ["集合・開始時刻", "一湊海水浴場駐車場に集合。8:00／11:00／14:00。10:00・15:00は要相談。12月〜2月は休止。"], ["対応言語", "10〜15分の講習は通常日本語です。英語対応は確認中です。"], ["含まれるもの", "講習・ガイド・器材・シャワーと更衣室・写真と動画・保険・駐車場・1ドリンク・送迎（要相談）"]],
@@ -173,7 +179,8 @@ const courses: Course[] = [
     title: { en: "Discover Scuba Diving in Yakushima · One Dive", ja: "屋久島・体験ダイビング（1ダイブ）" },
     lead: { en: "An introductory dive with an instructor. Allow about 30 minutes underwater after the briefing and practice.", ja: "インストラクターと潜る入門コースです。説明と練習のあと、約30分のダイビングを体験します。" },
     duration: { en: "About 3 hours", ja: "約3時間" },
-    price: 7_000,
+    // Operator list price ¥7,000; wholesale ¥6,300 (10% commission, confirmed 2026-11-27).
+    price: 14_500,
     details: diveDetails,
   },
   {
@@ -181,7 +188,8 @@ const courses: Course[] = [
     title: { en: "Discover Scuba Diving in Yakushima · Extended Dive", ja: "屋久島・体験ダイビング（スペシャル1ダイブ）" },
     lead: { en: "An extended introductory dive with an instructor. About 60 minutes underwater gives you more time to explore the reef and look for sea turtles.", ja: "約60分潜る体験ダイビングです。インストラクターと海の中をゆっくり観察し、ウミガメを探します。" },
     duration: { en: "About 3½ hours", ja: "約3時間半" },
-    price: 11_000,
+    // Operator list price ¥11,000; wholesale ¥9,900 (10% commission, confirmed 2026-11-27).
+    price: 19_000,
     details: diveDetails,
   },
   {
@@ -189,7 +197,8 @@ const courses: Course[] = [
     title: { en: "Discover Scuba Diving in Yakushima · Two Dives", ja: "屋久島・体験ダイビング（2ダイブ）" },
     lead: { en: "Take two introductory dives of about 30 minutes each with an instructor, with a break ashore between dives.", ja: "インストラクターと約30分ずつ、2回潜る体験です。1本目と2本目の間に陸上で休憩します。" },
     duration: { en: "About 4 hours", ja: "約4時間" },
-    price: 14_000,
+    // Operator list price ¥14,000; wholesale ¥12,600 (10% commission, confirmed 2026-11-27).
+    price: 22_000,
     details: diveDetails,
   },
 ];
@@ -205,25 +214,25 @@ export const yakushimaListingDrafts: ListingDraft[] = courses.map(course => {
       title: course.title.en, area: "Yakushima, Kagoshima", lead: course.lead.en,
       details: [
         ["Duration", course.duration.en],
-        ["Provisional reference price", `From ¥${amount} per person, tax included. Final selling price to be confirmed.`],
+        ["Price", `¥${amount} per person, tax included`],
         ...course.details.en,
         ["Health and safety", "Disclose cardiovascular conditions, high blood pressure, epilepsy, chronic back or knee conditions, major surgery in the past year, fear of heights or panic disorder when requesting a booking. Guests who are pregnant cannot take part. The tour may be called off for bad weather, illness or unsuitable equipment."],
         ["Minors", "Under 13s need an accompanying guardian. Guests under 18 need a guardian's signature."],
       ],
       highlights: [],
-      pending: ["Final selling price and booking terms", "English-language support and approved photos"],
+      pending: ["Booking terms and dates", "English-language support and approved photos"],
     },
     ja: {
       title: course.title.ja, area: "鹿児島・屋久島", lead: course.lead.ja,
       details: [
         ["所要時間", course.duration.ja],
-        ["仮の参考価格", `1名あたり税込${amount}円〜。最終販売価格は確認中です。`],
+        ["料金", `1名あたり¥${amount}(税込)`],
         ...course.details.ja,
         ["健康・安全条件", "心臓・循環器系疾患、高血圧、てんかん、腰や膝の持病、1年以内の大きな手術、高所恐怖症やパニック障害がある場合は申込時にお知らせください。妊娠中は参加できません。悪天候・体調不良・装備不備により中止する場合があります。"],
         ["未成年の参加", "13歳未満は保護者同伴。18歳未満は申込書に保護者の署名が必要です。"],
       ],
       highlights: [],
-      pending: ["最終販売価格・予約条件", "英語対応・掲載用写真"],
+      pending: ["予約条件・開催日", "英語対応・掲載用写真"],
     },
   };
 });

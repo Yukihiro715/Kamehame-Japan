@@ -181,3 +181,24 @@ test('Matsuyama pottery course: review link redirects, product page previews in 
   const home = await (await render('/en/')).text();
   assert.ok(!home.includes('href="/en/matsuyama/"'), 'Matsuyama is not listed yet');
 });
+
+test('Yakushima tours and the ninja night walk show the rule price built on the confirmed wholesale', async () => {
+  const lists = { 'yakushima-jomonsugi-trekking': '10,500', 'yakushima-shiratani-moss-forest': '7,500', 'yakushima-shiratani-taikoiwa': '11,000', 'yakushima-shiratani-taikoiwa-old-growth': '12,000', 'yakushima-sea-turtle-snorkeling': '5,000', 'yakushima-discover-scuba-one-dive': '7,000', 'yakushima-discover-scuba-extended-dive': '11,000', 'yakushima-discover-scuba-two-dives': '14,000', 'tokyo-ninja-zen-night-walk': '15,000' };
+  for (const [slug, price] of [
+  ['yakushima-jomonsugi-trekking', 18000],
+  ['yakushima-shiratani-moss-forest', 15000],
+  ['yakushima-shiratani-taikoiwa', 19000],
+  ['yakushima-shiratani-taikoiwa-old-growth', 20000],
+  ['yakushima-sea-turtle-snorkeling', 12000],
+  ['yakushima-discover-scuba-one-dive', 14500],
+  ['yakushima-discover-scuba-extended-dive', 19000],
+  ['yakushima-discover-scuba-two-dives', 22000],
+  ['tokyo-ninja-zen-night-walk', 23500],
+  ]) for (const lang of ['en', 'ja']) {
+    const html = await (await render(`/previews/partner-listings/${slug}/?lang=${lang}`)).text();
+    const text = html.replace(/<[^>]+>/g, ' ');
+    assert.ok(text.includes(`¥${price.toLocaleString('en-US')}`), `${lang} ${slug} price`);
+    assert.ok(!text.includes(`¥${lists[slug]}`) && !text.includes(`${lists[slug]}円`), `${lang} ${slug} list price stays off the page`);
+    assert.ok(!/仮の参考価格|Provisional reference price/.test(text), `${lang} ${slug} no provisional label`);
+  }
+});
