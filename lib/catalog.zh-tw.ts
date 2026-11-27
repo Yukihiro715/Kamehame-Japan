@@ -39,6 +39,10 @@ export const citiesZh: City[] = [
     slug: "matsuyama", title: "松山", jp: "松山", img: "/images/city-matsuyama.jpg",
     lead: "松山有日本最古老的溫泉之一道後溫泉、山丘上的城，以及青白相間的砥部燒瓷器。我們從市郊一座仍在運作的砥部燒窯元開始：拉坯、手捏與彩繪，一次體驗。更多松山體驗陸續推出。",
   },
+  {
+    slug: "yakushima", title: "屋久島", jp: "屋久島", img: "/images/city-yakushima.jpg",
+    lead: "屋久島有樹齡數千年的杉木、啟發《魔法公主》的苔蘚森林，以及海龜棲息的清澈海水。我們從縄文杉與白谷雲水峽的導覽健行開始，還有島嶼北端的浮潛與體驗潛水。",
+  },
 ];
 
 export const categoriesZh: Category[] = [
@@ -79,6 +83,10 @@ export const categoriesZh: Category[] = [
     lead: "忍者是偵察與求生的專家，技藝從吹箭、手裏劍到呼吸與靜定。在京都的道場試試這些道具、鑄造自己的手裏劍，或在東京坐下來體驗傳說背後的冥想法。" },
   { slug: "knife-making", title: "製作菜刀", tag: "藝術與工藝", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
     lead: "和菜刀是日本刀安靜的後裔。在嵐山的工坊以磨刀石研磨刀刃、裝上刀柄，帶回一把親手完成的菜刀。" },
+  { slug: "hiking", title: "健行", tag: "自然", mark: "山", img: "/images/partner-listings/yakushima-jomonsugi/jomon-sugi.webp",
+    lead: "日本的森林最適合與熟悉它的人一起步行認識。小團導覽健行，從半天穿越苔蘚巨石，到一整天走向千年杉木。" },
+  { slug: "sea", title: "海洋活動", tag: "自然", mark: "海", img: "/images/partner-listings/yakushima-sea/snorkel-turtle-snorkeller.webp",
+    lead: "清澈的海水、礁岩與海龜，嚮導在水中陪伴。適合初學者與不會游泳者的浮潛，以及無需證照的體驗潛水。" },
   { slug: "pottery", title: "陶藝", tag: "藝術與工藝", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
     lead: "日本每座窯元都有自己的土、釉與青。在現役陶藝家身旁坐上轆轤，手捏、彩繪，作品在同一座窯燒成後寄到您手中。" },
 ];

@@ -1,4 +1,3 @@
-import { yakushimaListingDrafts } from "./yakushima-listing-drafts";
 
 /** Partner listing previews. Supplier terms and source messages stay in the private
  * listing ledger. These drafts never enter the public catalog or checkout. */
@@ -35,38 +34,6 @@ const sumiEProposedPrices = [
 ];
 
 export const partnerListingDrafts: ListingDraft[] = [
-  ...yakushimaListingDrafts,
-  {
-    slug: "tokyo-ninja-zen-night-walk",
-    city: "tokyo",
-    // Photos from the organiser's listing of this walk (Airbnb experience 7063214), used at the owner's instruction (2026-11-27).
-    // Wholesale ¥13,500 per person (the listing's ¥15,000 less 10%, confirmed 2026-11-27); the price below is the owner's rule
-    // (net + ¥4,500 ad cost, 20% margin, rounded up to ¥500).
-    gallery: "photo",
-    images: [
-      { src: "/images/partner-listings/ninja-zen-night-walk/tower-group.webp", en: "The group gathered beneath Tokyo Tower at night", ja: "夜の東京タワーの足元に集まった参加者", width: 1440, height: 960 },
-      { src: "/images/partner-listings/ninja-zen-night-walk/temple-gate.webp", en: "A red temple gate lit at night", ja: "夜に照らされた赤い寺の門", width: 1440, height: 960 },
-      { src: "/images/partner-listings/ninja-zen-night-walk/street-walk.webp", en: "Walking the night streets near Tokyo Tower", ja: "東京タワー近くの夜の通りを歩く", width: 1440, height: 960 },
-      { src: "/images/partner-listings/ninja-zen-night-walk/hand-seal.webp", en: "Learning a ninja hand seal", ja: "忍者の印を習う手元", width: 1440, height: 960 },
-      { src: "/images/partner-listings/ninja-zen-night-walk/crossing.webp", en: "The group crossing a quiet street after dark", ja: "暗くなった静かな通りを渡る参加者", width: 1440, height: 960 },
-      { src: "/images/partner-listings/ninja-zen-night-walk/temple-talk.webp", en: "The guide explaining the practice in front of the temple", ja: "寺の前で説明をするガイド", width: 1440, height: 960 },
-    ],
-    mediaNote: { en: "Photos from the organiser's listing of this walk.", ja: "写真は主催者の掲載ページのものです。" },
-    en: {
-      title: "Ninja Zen Night Walk in Tokyo", area: "Tokyo · Azabudai / Tokyo Tower area",
-      lead: "Explore Tokyo after dark through mindful walking, breathing and meditation. Practise ninja-inspired movement and hand gestures while paying attention to the city around you.",
-      details: [["Duration", "Approximately 2 hours 15 minutes"], ["Price", "¥23,500 per person, tax included"], ["Language", "English / Japanese"], ["Participants", "Adults aged 18 and over; up to 10 guests"], ["Meeting", "Azabudai area; final meeting instructions to be confirmed"], ["Cancellation", "Full refund for cancellations up to one day before the start; exact cutoff and later cancellation conditions to be confirmed"], ["Weather", "Normally runs in the rain"], ["Availability", "Checked directly with the operator"]],
-      highlights: ["An introduction to ninja-inspired movement", "Mindful walking near Tokyo Tower", "Breathing practice and seated meditation"],
-      pending: ["Dates and start time", "Inclusions and booking deadline", "Exact cancellation cutoff and later cancellation conditions"],
-    },
-    ja: {
-      title: "忍者禅ナイトウォーク", area: "東京 · 麻布台／東京タワー周辺",
-      lead: "夜の東京を歩きながら、忍者の歩法や印、呼吸、瞑想に触れる体験です。周囲の音や光に意識を向け、普段とは違う街の表情を感じます。",
-      details: [["所要時間", "約2時間15分"], ["料金", "1名あたり¥23,500(税込)"], ["対応言語", "日本語・英語"], ["参加条件", "18歳以上・最大10名"], ["集合", "麻布台周辺。最終の集合案内は確認中"], ["キャンセル", "開始1日前まで全額返金。具体的な締切時刻・以降の取消条件は確認中"], ["雨天", "原則雨天決行"], ["空き状況", "主催者への問い合わせで確認"]],
-      highlights: ["忍者の歩き方や動きを学ぶ", "東京タワー周辺の夜を歩く", "呼吸法と坐禅に触れる"],
-      pending: ["開催日・開始時刻", "含まれる内容・予約締切", "取消の具体的な締切時刻・以降の条件"],
-    },
-  },
   {
     slug: "mukojima-geisha-evening",
     city: "tokyo",
@@ -119,86 +86,6 @@ export const partnerListingDrafts: ListingDraft[] = [
       details: [["テーマ", "日本の家庭料理・食文化"], ["メニュー", "確認中"], ["会場・所要時間", "確認中"]],
       highlights: ["家庭で親しまれる日本料理に触れる", "料理を通じて食文化を知る"],
       pending: ["メニュー・会場・対応言語・所要時間", "定員・年齢条件・食事制限対応", "最終販売価格・日程、提示済みの5日前予約締切と個人・団体の取消条件の適用範囲、写真"],
-    },
-  },
-  {
-    // Built from Richard's brief (2026-11-27) and a full read of the academy's
-    // website and its public booking page the same day: about 1.5 hours,
-    // starts 11:00 and 13:30, all ages, meeting in front of the LUUP stand next
-    // to the ACN Yotsuya Building (6 min from Yotsuya station, one stop from
-    // Shinjuku), English-speaking instructor (Japanese also offered), easy-to-
-    // wear kimono rental, first-flush matcha + sweet + welcome drink + utensils,
-    // free cancellation until 24 hours before, more than 10 minutes late counts
-    // as a cancellation, socks required on the tatami, not wheelchair or
-    // stroller accessible. The programme: kimono, a talk on tea-ceremony
-    // history and matcha production comparing matcha from five countries,
-    // whisking a bowl, five essential guest rules; matcha chosen from a cellar
-    // of 400+ types (seven options, one decaffeinated). Public price ¥9,000
-    // per person; a private-workshop option exists. Price set by the owner on
-    // 2026-11-27 on the assumption of the partner's 10% commission offer
-    // (wholesale ¥8,100 → owner's rule: net + ¥4,500 ad cost, 20% margin,
-    // rounded up to ¥500 = ¥16,500); the commission itself is not yet agreed. The academy's name and its review counts stay off
-    // the page. Photos from its website.
-    slug: "tokyo-matcha-cultural-experience",
-    city: "tokyo",
-    gallery: "photo",
-    images: [
-      { src: "/images/partner-listings/tokyo-matcha/whisking.webp", en: "Whisking a bowl of matcha by a window", ja: "窓辺で抹茶を点てる手元", width: 1440, height: 960 },
-      { src: "/images/partner-listings/tokyo-matcha/tea-tools.webp", en: "Tea utensils laid out: kettle, bowl, whisk, scoop and sieve", ja: "並べられた茶道具。釜、茶碗、茶筅、茶杓、茶こし", width: 1440, height: 960 },
-      { src: "/images/partner-listings/tokyo-matcha/tea-room.webp", en: "The tatami tea room with a hanging scroll and a low table", ja: "掛軸と座卓のある畳の茶室", width: 1440, height: 960 },
-    ],
-    mediaNote: { en: "Photos from the academy's website, pending its review.", ja: "写真は主催者の公式サイトのもの。掲載写真は先方確認待ちです。" },
-    en: {
-      title: "Matcha and Tea Ceremony in Kimono, Yotsuya, Tokyo", area: "Tokyo · Yotsuya",
-      lead: "About ninety minutes in a tatami room in Yotsuya with an English-speaking instructor. Dress in an easy-to-wear kimono, hear how the tea ceremony came about and how matcha is made and graded, taste the difference between matcha from five countries, and whisk your own bowl of first-flush matcha, served with a Japanese sweet. The kimono and the tea utensils are included.",
-      details: [
-        ["Duration", "About 1.5 hours"],
-        ["Start times", "11:00 or 13:30 (as offered on the academy's own booking page; to be confirmed for our bookings)"],
-        ["Meeting point", "Yotsuya: in front of the LUUP scooter stand next to the ACN Yotsuya Building, where the guide waits with a sign. About six minutes on foot from Yotsuya station, one stop from Shinjuku"],
-        ["Language", "English-speaking instructor (Japanese also available)"],
-        ["Participants", "All ages. A private-workshop option exists; its terms are being confirmed"],
-        ["Kimono", "Easy-to-wear kimono rental included: choose one from the collection, learn to put it on, and take photos in the tea room"],
-        ["Included", "First-flush matcha, a Japanese sweet and a welcome drink; tea utensils provided"],
-        ["Not included", "Transport to the meeting point"],
-        ["Cancellation", "Free until 24 hours before the start; later, the full price. Arriving more than 10 minutes late counts as a cancellation with no refund"],
-        ["Good to know", "Socks are required on the tatami (sold at the workshop if you forget). Not wheelchair or stroller accessible. Infants cannot sit on laps"],
-        ["Price", "¥16,500 per person, tax included"],
-      ],
-      highlights: [
-        "Kimono, matcha and the tea ceremony in one ninety-minute session",
-        "Whisk your own bowl of first-flush matcha with tips from the instructor",
-        "A talk on the history of the tea ceremony and how matcha is produced, comparing matcha from five countries",
-        "How matcha is really graded: why 'ceremonial' and 'premium' labels mean little, and what to look for",
-        "Matcha drawn from a cellar of more than 400 kinds, with seven on offer including a decaffeinated one",
-        "Guest etiquette condensed to five essential rules: handling the utensils, greetings and how to drink",
-      ],
-      pending: ["Trading terms with the academy", "Start times and capacity for our bookings, and the private-workshop terms", "Photo approval (current photos from the academy's website)"],
-    },
-    ja: {
-      title: "四ツ谷・着物で抹茶と茶道体験(東京)", area: "東京 · 四ツ谷",
-      lead: "四ツ谷の畳の茶室で、英語インストラクターと過ごす約90分。簡易着物に着替え、茶道の成り立ちと抹茶の製法・等級の話を聞き、5か国の抹茶を飲み比べ、一番茶の抹茶を自分で点てて和菓子とともにいただきます。着物と茶道具は料金に含まれます。",
-      details: [
-        ["所要時間", "約1.5時間"],
-        ["開始時刻", "11:00または13:30(主催者の予約ページの設定。当社予約分の枠は確認中)"],
-        ["集合場所", "四ツ谷。ACN四谷ビル隣のLUUPスタンド前で、ガイドが看板を持って待機。四ツ谷駅から徒歩約6分、新宿駅から電車で1駅"],
-        ["対応言語", "英語インストラクター(日本語も可)"],
-        ["参加条件", "年齢制限なし。貸切プランもあり、条件は確認中"],
-        ["着物", "簡易着物レンタル込み。好みの一着を選んで着方を習い、茶室で写真を撮る時間があります"],
-        ["含まれるもの", "一番茶の抹茶、和菓子とウェルカムドリンク、茶道具レンタル"],
-        ["含まれないもの", "集合場所までの交通費"],
-        ["キャンセル", "開始24時間前まで無料。以降は全額。10分以上の遅刻はキャンセル扱いとなり返金はありません"],
-        ["注意事項", "畳の部屋のため靴下が必要です(忘れた場合は会場で購入)。車椅子・ベビーカーは利用不可。乳児の膝上参加は不可"],
-        ["料金", "1名あたり¥16,500(税込)"],
-      ],
-      highlights: [
-        "着物・抹茶・茶道を90分でまとめて体験",
-        "インストラクターのコツを聞きながら、一番茶の抹茶を自分で点てる",
-        "茶道の歴史と抹茶の製法の講義。5か国の抹茶を飲み比べ",
-        "抹茶の本当の等級の見方。「セレモニアル」「プレミアム」の表示が当てにならない理由",
-        "400種類以上をそろえた抹茶セラーから7種を用意。カフェインレスも",
-        "茶会の客の作法を5つの基本に絞って。道具の扱い、挨拶、飲み方",
-      ],
-      pending: ["主催者との取引条件", "当社予約分の開始時刻・人数条件、貸切プランの条件", "掲載写真の先方承認(現在は公式サイトの写真)"],
     },
   },
   {

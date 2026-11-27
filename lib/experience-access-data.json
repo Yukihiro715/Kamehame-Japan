@@ -1316,6 +1316,177 @@
         "en": "Dogo Onsen",
         "ja": "道後温泉"
       }
+    },
+    "yakushimaAnbo": {
+      "destination": {
+        "en": "Yakusugi Museum, Yakushima",
+        "ja": "屋久杉自然館"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Yakushima Airport",
+            "ja": "屋久島空港"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Anbo Port, Yakushima",
+            "ja": "安房港"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Miyanoura Port, Yakushima",
+            "ja": "宮之浦港"
+          },
+          "mode": "driving"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "sankara hotel & spa Yakushima",
+            "ja": "sankara hotel&spa 屋久島"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Yakushima Iwasaki Hotel",
+            "ja": "屋久島いわさきホテル"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "JR Hotel Yakushima",
+            "ja": "JRホテル屋久島"
+          },
+          "mode": "driving"
+        }
+      ],
+      "nearby": {
+        "en": "Anbo",
+        "ja": "安房"
+      }
+    },
+    "yakushimaShiratani": {
+      "destination": {
+        "en": "Shiratani Unsuikyo, Yakushima",
+        "ja": "白谷雲水峡"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Miyanoura Port, Yakushima",
+            "ja": "宮之浦港"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Yakushima Airport",
+            "ja": "屋久島空港"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Anbo Port, Yakushima",
+            "ja": "安房港"
+          },
+          "mode": "driving"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "sankara hotel & spa Yakushima",
+            "ja": "sankara hotel&spa 屋久島"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Yakushima Iwasaki Hotel",
+            "ja": "屋久島いわさきホテル"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "JR Hotel Yakushima",
+            "ja": "JRホテル屋久島"
+          },
+          "mode": "driving"
+        }
+      ],
+      "nearby": {
+        "en": "Miyanoura",
+        "ja": "宮之浦"
+      }
+    },
+    "yakushimaIsso": {
+      "destination": {
+        "en": "Isso Beach, Yakushima",
+        "ja": "一湊海水浴場"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Miyanoura Port, Yakushima",
+            "ja": "宮之浦港"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Yakushima Airport",
+            "ja": "屋久島空港"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Anbo Port, Yakushima",
+            "ja": "安房港"
+          },
+          "mode": "driving"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "sankara hotel & spa Yakushima",
+            "ja": "sankara hotel&spa 屋久島"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "Yakushima Iwasaki Hotel",
+            "ja": "屋久島いわさきホテル"
+          },
+          "mode": "driving"
+        },
+        {
+          "place": {
+            "en": "JR Hotel Yakushima",
+            "ja": "JRホテル屋久島"
+          },
+          "mode": "driving"
+        }
+      ],
+      "nearby": {
+        "en": "Isso",
+        "ja": "一湊"
+      }
     }
   },
   "experiences": {
@@ -1355,6 +1526,16 @@
     "asakusa-ramen-making-class": "kappabashi",
     "evening-with-geiko": "gion",
     "tokyo-idol-live-night": "tokyoLiveHouseVariable",
-    "matsuyama-tobe-pottery-full-course": "hiraiMatsuyama"
+    "matsuyama-tobe-pottery-full-course": "hiraiMatsuyama",
+    "yakushima-jomonsugi-trekking": "yakushimaAnbo",
+    "yakushima-shiratani-moss-forest": "yakushimaShiratani",
+    "yakushima-shiratani-taikoiwa": "yakushimaShiratani",
+    "yakushima-shiratani-taikoiwa-old-growth": "yakushimaShiratani",
+    "yakushima-sea-turtle-snorkeling": "yakushimaIsso",
+    "yakushima-discover-scuba-one-dive": "yakushimaIsso",
+    "yakushima-discover-scuba-extended-dive": "yakushimaIsso",
+    "yakushima-discover-scuba-two-dives": "yakushimaIsso",
+    "tokyo-ninja-zen-night-walk": "tower",
+    "tokyo-matcha-cultural-experience": "yotsuya"
   }
 }

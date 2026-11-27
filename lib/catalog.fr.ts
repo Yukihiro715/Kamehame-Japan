@@ -39,6 +39,10 @@ export const citiesFr: City[] = [
     slug: "matsuyama", title: "Matsuyama", jp: "松山", img: "/images/city-matsuyama.jpg",
     lead: "Matsuyama, c'est Dōgo Onsen, l'une des plus anciennes sources chaudes du Japon, un château sur sa colline et le berceau de la céramique de Tobe, la porcelaine bleue et blanche de la région. Nous commençons dans un four de Tobe en activité, dans les collines hors de la ville : tour, modelage et peinture en une seule séance. D'autres expériences à Matsuyama arrivent bientôt.",
   },
+  {
+    slug: "yakushima", title: "Yakushima", jp: "屋久島", img: "/images/city-yakushima.jpg",
+    lead: "Yakushima est une île de cèdres millénaires, de forêts de mousse qui ont inspiré Princesse Mononoké et d'eaux claires où vivent les tortues marines. Nous commençons par des randonnées guidées vers Jōmon Sugi et dans Shiratani Unsuikyō, et par du snorkeling et des baptêmes de plongée à la pointe nord de l'île.",
+  },
 ];
 
 export const categoriesFr: Category[] = [
@@ -79,6 +83,10 @@ export const categoriesFr: Category[] = [
     lead: "Les ninjas étaient des éclaireurs et des survivants ; leurs techniques allaient de la sarbacane et de l'étoile de jet à la respiration et à l'immobilité. Essayez les outils dans un studio de Kyoto, coulez votre propre shuriken, ou asseyez-vous pour méditer à Tokyo." },
   { slug: "knife-making", title: "Couteaux", tag: "Arts et artisanat", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
     lead: "Le couteau de cuisine japonais est le descendant discret du sabre. Dans un atelier d'Arashiyama, affûtez une lame sur la pierre, fixez son manche et repartez avec un couteau fini de vos mains." },
+  { slug: "hiking", title: "Randonnée", tag: "Nature", mark: "山", img: "/images/partner-listings/yakushima-jomonsugi/jomon-sugi.webp",
+    lead: "Les forêts du Japon se découvrent à pied, avec quelqu'un qui les connaît. Des randonnées guidées en petits groupes, d'une demi-journée parmi les rochers moussus à une journée entière jusqu'à un cèdre millénaire." },
+  { slug: "sea", title: "Mer", tag: "Nature", mark: "海", img: "/images/partner-listings/yakushima-sea/snorkel-turtle-snorkeller.webp",
+    lead: "Eau claire, récifs et tortues marines, avec un guide dans l'eau à vos côtés. Du snorkeling pour les débutants et les non-nageurs, et des baptêmes de plongée sans brevet." },
   { slug: "pottery", title: "Poterie", tag: "Arts et artisanat", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
     lead: "Chaque four du Japon a sa terre, son émail et son bleu. Installez-vous au tour aux côtés d'un potier en activité, modelez et peignez à la main, puis recevez vos pièces, cuites dans ce même four." },
 ];

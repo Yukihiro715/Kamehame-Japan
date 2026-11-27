@@ -26,7 +26,7 @@ async function render(path = "/") {
 }
 
 test('partner listing drafts stay unlisted and cannot accept reservations',async()=>{
- const slugs=['tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
+ const slugs=['mukojima-geisha-evening','japanese-home-cooking-class','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
@@ -111,7 +111,6 @@ test("Bamboo Sky Terrace is listed in Kyoto and accepts venue-specific enquiries
 
 test('confirmed partner answers replace pending questions without publishing supplier prices', async () => {
  const cases = {
-  'tokyo-ninja-zen-night-walk': ['開始1日前まで全額返金', '原則雨天決行', '18歳以上'],
   'arashiyama-private-terrace-gathering': ['最低保証額なし', '利用日時・利用時間・人数'],
   'sumi-e-ink-painting': ['材料費を含む', '英語対応費を含む', '体験日の3日前', '同伴・見学不可', '別々のコースは選べません'],
  };
@@ -182,36 +181,29 @@ test('Matsuyama pottery course: review link redirects, product page previews in 
   assert.ok(!home.includes('href="/en/matsuyama/"'), 'Matsuyama is not listed yet');
 });
 
-test('Yakushima tours and the ninja night walk show the rule price built on the confirmed wholesale', async () => {
-  const lists = { 'yakushima-jomonsugi-trekking': '10,500', 'yakushima-shiratani-moss-forest': '7,500', 'yakushima-shiratani-taikoiwa': '11,000', 'yakushima-shiratani-taikoiwa-old-growth': '12,000', 'yakushima-sea-turtle-snorkeling': '5,000', 'yakushima-discover-scuba-one-dive': '7,000', 'yakushima-discover-scuba-extended-dive': '11,000', 'yakushima-discover-scuba-two-dives': '14,000', 'tokyo-ninja-zen-night-walk': '15,000' };
-  for (const [slug, price] of [
-  ['yakushima-jomonsugi-trekking', 18000],
-  ['yakushima-shiratani-moss-forest', 15000],
-  ['yakushima-shiratani-taikoiwa', 19000],
-  ['yakushima-shiratani-taikoiwa-old-growth', 20000],
-  ['yakushima-sea-turtle-snorkeling', 12000],
-  ['yakushima-discover-scuba-one-dive', 14500],
-  ['yakushima-discover-scuba-extended-dive', 19000],
-  ['yakushima-discover-scuba-two-dives', 22000],
-  ['tokyo-ninja-zen-night-walk', 23500],
-  ]) for (const lang of ['en', 'ja']) {
-    const html = await (await render(`/previews/partner-listings/${slug}/?lang=${lang}`)).text();
-    const text = html.replace(/<[^>]+>/g, ' ');
-    assert.ok(text.includes(`¥${price.toLocaleString('en-US')}`), `${lang} ${slug} price`);
-    assert.ok(!text.includes(`¥${lists[slug]}`) && !text.includes(`${lists[slug]}円`), `${lang} ${slug} list price stays off the page`);
-    assert.ok(!/仮の参考価格|Provisional reference price/.test(text), `${lang} ${slug} no provisional label`);
-  }
-});
-
-test('Yotsuya matcha preview carries the confirmed brief without naming the academy', async () => {
-  for (const lang of ['en', 'ja']) {
-    const html = await (await render(`/previews/partner-listings/tokyo-matcha-cultural-experience/?lang=${lang}`)).text();
-    const text = html.replace(/<[^>]+>/g, ' ');
-    for (const s of lang === 'ja' ? ['約1.5時間', '11:00または13:30', 'LUUPスタンド前', '英語インストラクター', '簡易着物レンタル込み', '一番茶の抹茶', '開始24時間前まで無料', '10分以上の遅刻', '靴下が必要', '5か国の抹茶', '400種類以上'] : ['About 1.5 hours', '11:00 or 13:30', 'LUUP scooter stand', 'English-speaking instructor', 'kimono rental included', 'First-flush matcha', '24 hours before', '10 minutes late', 'Socks are required', 'five countries', 'more than 400 kinds']) {
-      assert.ok(text.includes(s), `${lang}: ${s}`);
+test('Yakushima tours, the night walk and the matcha session are product pages in preview; their review links redirect', async () => {
+  const products = [["yakushima-jomonsugi-trekking","yakushima","¥18,000"],["yakushima-shiratani-moss-forest","yakushima","¥15,000"],["yakushima-shiratani-taikoiwa","yakushima","¥19,000"],["yakushima-shiratani-taikoiwa-old-growth","yakushima","¥20,000"],["yakushima-sea-turtle-snorkeling","yakushima","¥12,000"],["yakushima-discover-scuba-one-dive","yakushima","¥14,500"],["yakushima-discover-scuba-extended-dive","yakushima","¥19,000"],["yakushima-discover-scuba-two-dives","yakushima","¥22,000"],["tokyo-ninja-zen-night-walk","tokyo","¥23,500"],["tokyo-matcha-cultural-experience","tokyo","¥16,500"]];
+  const partners = /屋久島自然案内|yakushima-nature|原崎|高田|0997-49|090-7718|080-6405|Matcha Academy|matchajaponica|Japonica|ninja-idea|シーズ|Origami Concierge/i;
+  for (const [slug, city, price] of products) {
+    for (const lang of ['en', 'ja']) {
+      const r = await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
+      assert.ok([301, 302, 307, 308].includes(r.status), `${slug} ${lang} redirect ${r.status}`);
+      assert.ok((r.headers.get('location') || '').includes(`/${lang}/${city}/${slug}/`), `${slug} ${lang} redirect target`);
     }
-    assert.ok(html.includes('/images/partner-listings/tokyo-matcha/whisking.webp'), `${lang} photos`);
-    assert.ok(text.includes('¥16,500'), `${lang} price`);
-    assert.doesNotMatch(text, /Matcha Academy|MATCHA ACADEMY|matchajaponica|Japonica|¥9,000|9,000円|Google review|466 reviews|405 Google|5-star/i, `${lang} academy name, public price and review counts stay private`);
+    for (const lang of ['en', 'ja', 'fr']) {
+      const path = `/${lang}/${city}/${slug}/`;
+      const res = await render(path);
+      assert.equal(res.status, 200, path);
+      const html = await res.text();
+      const text = html.replace(/<[^>]+>/g, ' ');
+      assert.match(html, /name="robots" content="noindex/, `${path} stays unlisted until released`);
+      assert.ok(text.includes(price), `${path} price ${price}`);
+      assert.match(html, /class="bk-card" id="booking"/, `${path} booking card`);
+      assert.match(html, /<form[^>]+action="\/api\/contact"/, `${path} request form`);
+      assert.ok(html.includes('id="access"'), `${path} access section`);
+      assert.doesNotMatch(text, partners, `${path} partner identity stays private`);
+    }
   }
+  const home = await (await render('/en/')).text();
+  assert.ok(!home.includes('href="/en/yakushima/"'), 'Yakushima is not listed yet');
 });

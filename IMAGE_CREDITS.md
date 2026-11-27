@@ -106,3 +106,6 @@ size; credited in the site footer.
 photographs from the lesson page of its public website, used for the Tobe-ware pottery course page while it is in preview; the
 partner's review of the selection and its permission for use on kamehame-japan.com are still to be confirmed before publication,
 and they are not under a Creative Commons license.
+
+`public/images/city-yakushima.jpg` (2026-11-27) is "Yaku-Island Shiratani-Unsui-Gorge" by MaedaAkihiko, Wikimedia Commons, CC0
+(https://commons.wikimedia.org/wiki/File:Yaku-Island_Shiratani-Unsui-Gorge.jpg), cropped to the city-card size; credited in the footer.
