@@ -202,3 +202,15 @@ test('Yakushima tours and the ninja night walk show the rule price built on the 
     assert.ok(!/仮の参考価格|Provisional reference price/.test(text), `${lang} ${slug} no provisional label`);
   }
 });
+
+test('Yotsuya matcha preview carries the confirmed brief without naming the academy', async () => {
+  for (const lang of ['en', 'ja']) {
+    const html = await (await render(`/previews/partner-listings/tokyo-matcha-cultural-experience/?lang=${lang}`)).text();
+    const text = html.replace(/<[^>]+>/g, ' ');
+    for (const s of lang === 'ja' ? ['約1.5時間', 'LUUPスタンド前', '英語インストラクター', '簡易着物レンタル込み', '一番茶の抹茶', '開始24時間前まで無料'] : ['About 1.5 hours', 'LUUP stand', 'English-speaking instructor', 'kimono rental included', 'First-flush matcha', '24 hours before']) {
+      assert.ok(text.includes(s), `${lang}: ${s}`);
+    }
+    assert.ok(html.includes('/images/partner-listings/tokyo-matcha/whisking.webp'), `${lang} photos`);
+    assert.doesNotMatch(text, /Matcha Academy|MATCHA ACADEMY|matchajaponica|Japonica/i, `${lang} academy name stays private`);
+  }
+});
