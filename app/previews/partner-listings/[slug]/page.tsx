@@ -62,6 +62,10 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
   const priceStatus = draft.priceOnRequest
     ? (ja ? "個別見積もり" : "Price on request")
     : (ja ? "販売価格を確認中" : "Pricing is being confirmed");
+  // A confirmed per-person price in the details (the "料金" / "Price" row) is shown
+  // in the booking card like a product page, so reviewers see it at a glance.
+  const priceRow = copy.details.find(([label]) => /^(料金|Price)$/.test(label))?.[1] ?? "";
+  const confirmedPrice = !hasPrices && !draft.priceOnRequest ? priceRow.match(/¥([\d,]+)/)?.[1] : undefined;
 
   return (
     <main className="subpage detail-page xp xp2" lang={locale}>
@@ -107,6 +111,11 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
                 </div>
                 <a className="underlined-link" href="#pricing">{ja ? "料金を見る" : "Compare prices"}</a>
               </>
+            ) : confirmedPrice ? (
+              <div className="bk-price">
+                <small id="preview-price-label">{ja ? "料金（税込）" : "Price (tax included)"}</small>
+                <b><Fx>{`¥${confirmedPrice}`}</Fx><span className="bk-unit">{T.perPerson}</span></b>
+              </div>
             ) : <strong className="bk-quote-heading" id="preview-price-label">{priceStatus}</strong>}
             <p className="xp-note">{isSumiE
               ? (ja ? "表示は参考価格案です。現在お申し込みいただけません。" : "These proposed prices are for reference only. This experience is unavailable.")
