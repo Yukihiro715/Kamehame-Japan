@@ -87,6 +87,14 @@ test("Bamboo Sky Terrace is listed in Kyoto and accepts venue-specific enquiries
     assert.equal(response.status, 200, path);
     const html = await response.text();
     assert.match(html, /<h1>Bamboo Sky Terrace<\/h1>/);
+    assert.match(html, /class="subpage detail-page xp xp2"/);
+    assert.match(html, /class="xp-hero-photo"/);
+    assert.match(html, /class="xp-side"/);
+    assert.match(html, /class="bk-cta" href="#request-form"/);
+    assert.match(html, /id="request-form"/);
+    for (const photo of ["terrace", "view", "lounge", "lantern", "entry"]) {
+      assert.ok(html.includes(`/images/bamboo-sky-terrace-${photo}.webp`), `${lang}: ${photo}`);
+    }
     assert.match(html, /<link rel="canonical" href="https:\/\/kamehame-japan\.com\//);
     assert.ok(html.includes(`https://kamehame-japan.com${path}`));
     assert.match(html, /<form[^>]+action="\/api\/contact"/);
