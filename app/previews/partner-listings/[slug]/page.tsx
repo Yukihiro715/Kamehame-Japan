@@ -30,8 +30,9 @@ export default async function PartnerListingPreview({ params, searchParams }: Pr
   const { lang } = await searchParams;
   // The idol live became a catalog product (lib/catalog.ts tokyo-idol-live-night); the review link keeps working.
   if (slug === "tokyo-underground-idol-live") redirect(`/${lang === "ja" ? "ja" : "en"}/tokyo/tokyo-idol-live-night/`);
-  // The pottery course became a catalog product (lib/catalog.ts matsuyama-tobe-pottery-full-course); the review link keeps working.
-  if (slug === "matsuyama-tobe-pottery-full-course") redirect(`/${lang === "ja" ? "ja" : "en"}/matsuyama/matsuyama-tobe-pottery-full-course/`);
+  // These became catalog products (lib/catalog.ts); the review links keep working.
+  const productCity: Record<string, string> = {"matsuyama-tobe-pottery-full-course":"matsuyama","yakushima-jomonsugi-trekking":"yakushima","yakushima-shiratani-moss-forest":"yakushima","yakushima-shiratani-taikoiwa":"yakushima","yakushima-shiratani-taikoiwa-old-growth":"yakushima","yakushima-sea-turtle-snorkeling":"yakushima","yakushima-discover-scuba-one-dive":"yakushima","yakushima-discover-scuba-extended-dive":"yakushima","yakushima-discover-scuba-two-dives":"yakushima","tokyo-ninja-zen-night-walk":"tokyo","tokyo-matcha-cultural-experience":"tokyo"};
+  if (productCity[slug]) redirect(`/${lang === "ja" ? "ja" : "en"}/${productCity[slug]}/${slug}/`);
   const draft = partnerListingDrafts.find((d) => d.slug === slug);
   if (!draft) notFound();
   const locale = lang === "ja" ? "ja" : "en";

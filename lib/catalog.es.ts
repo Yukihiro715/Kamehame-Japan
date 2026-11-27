@@ -40,6 +40,10 @@ export const citiesEs: City[] = [
     slug: "matsuyama", title: "Matsuyama", jp: "松山", img: "/images/city-matsuyama.jpg",
     lead: "Matsuyama es Dogo Onsen, uno de los baños termales más antiguos de Japón, un castillo sobre la colina y la cuna de la cerámica Tobe, la porcelana azul y blanca de la región. Empezamos en un horno de Tobe en activo a las afueras de la ciudad, con torno, modelado a mano y pintura en una sola sesión. Pronto habrá más experiencias en Matsuyama.",
   },
+  {
+    slug: "yakushima", title: "Yakushima", jp: "屋久島", img: "/images/city-yakushima.jpg",
+    lead: "Yakushima es una isla de cedros milenarios, bosques de musgo que inspiraron La princesa Mononoke y aguas claras donde viven las tortugas marinas. Empezamos con caminatas guiadas a Jomon Sugi y por Shiratani Unsuikyo, y con esnórquel y bautismos de buceo en el extremo norte de la isla.",
+  },
 ];
 
 export const categoriesEs: Category[] = [
@@ -80,6 +84,10 @@ export const categoriesEs: Category[] = [
     lead: "Los ninja eran exploradores y supervivientes, y sus habilidades iban de la cerbatana y la estrella arrojadiza a la respiración y la quietud. Prueba las herramientas en un estudio de Kioto, funde tu propio shuriken o siéntate a meditar en Tokio." },
   { slug: "knife-making", title: "Cuchillos", tag: "Artesanía", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
     lead: "El cuchillo de cocina japonés es el descendiente silencioso de la espada. En un taller de Arashiyama, afila una hoja en la piedra, coloca su mango y llévate a casa un cuchillo acabado por ti." },
+  { slug: "hiking", title: "Senderismo", tag: "Naturaleza", mark: "山", img: "/images/partner-listings/yakushima-jomonsugi/jomon-sugi.webp",
+    lead: "Los bosques de Japón se conocen mejor a pie, con alguien que los conozca. Caminatas guiadas en grupos pequeños, desde media jornada entre rocas cubiertas de musgo hasta un día completo hasta un cedro milenario." },
+  { slug: "sea", title: "Mar", tag: "Naturaleza", mark: "海", img: "/images/partner-listings/yakushima-sea/snorkel-turtle-snorkeller.webp",
+    lead: "Agua clara, arrecifes y tortugas marinas, con un guía en el agua a tu lado. Esnórquel para principiantes y no nadadores, y bautismos de buceo sin necesidad de licencia." },
   { slug: "pottery", title: "Cerámica", tag: "Arte y artesanía", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
     lead: "Cada horno de Japón tiene su propia arcilla, su esmalte y su azul. Siéntate al torno junto a un ceramista en activo, modela y pinta a mano, y recibe en casa lo que hiciste, cocido en ese mismo horno." },
 ];
