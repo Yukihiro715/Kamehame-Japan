@@ -145,7 +145,7 @@ export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "w
 }
 
 /** Start times offered on `iso` (all of them when no date is chosen yet). */
-export function timesFor(x: Pick<BookingExperience, "dates" | "startTimes" | "cutoffHours">, iso?: string): string[] {
+export function timesFor(x: Pick<BookingExperience, "dates" | "startTimes" | "cutoffHours" | "scheduleSeason">, iso?: string): string[] {
   const offered = x.dates && iso ? x.dates.find((d) => d.date === iso)?.times ?? [] : (iso ? scheduleSeason(iso, x.scheduleSeason)?.startTimes : undefined) ?? x.startTimes ?? [];
   if (!x.cutoffHours || !iso) return offered;
   const earliest = Date.now() + x.cutoffHours * 60 * 60 * 1000;
