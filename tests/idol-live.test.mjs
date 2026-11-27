@@ -14,7 +14,7 @@ const render = (path) => worker.fetch(new Request(`http://localhost${path}`, { h
 const text = (html) => html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
 const SLUG = "tokyo-idol-live-night";
 
-test("idol live: public request-only product page in five languages with selling prices, no cost prices, no group or venue name", async () => {
+test("idol live: public product page with an enquiry fallback in five languages with selling prices, no cost prices, no group or venue name", async () => {
   for (const lang of ["en", "ja", "es", "fr", "zh-tw"]) {
     const res = await render(`/${lang}/tokyo/${SLUG}/`);
     assert.equal(res.status, 200, `${lang} renders`);
@@ -30,7 +30,7 @@ test("idol live: public request-only product page in five languages with selling
     assert.doesNotMatch(html, /BUZZ|Premium!!/i, `${lang}: group not named`);
     assert.ok(!/会場名|venue's name|nombre de la sala|nom de la salle|場地名稱/.test(body), `${lang}: venue never named`);
     assert.ok(html.includes('id="request-form"') && html.includes('<form'), `${lang}: enquiry form available`);
-    assert.doesNotMatch(html, /\/api\/experience-checkout/, `${lang}: no immediate checkout`);
+    assert.doesNotMatch(html, /\/api\/experience-checkout/, `${lang}: checkout falls back without its production environment`);
     assert.ok(html.includes('id="access"'), `${lang}: access section`);
     assert.ok(html.includes("/images/idol-live-group.webp") && html.includes("/images/idol-live-venue.webp"), `${lang}: organiser photos`);
   }

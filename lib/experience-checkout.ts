@@ -168,7 +168,7 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const slug = typeof body.experience === "string" ? body.experience : "";
   const product = EXPERIENCE_PRODUCTS[slug];
   const x = product && catalogFor("en").experiences.find(x => x.slug === slug && x.status === "live");
-  if (!x || !product || !checkoutProductConfigured(slug) || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
+  if (!x || x.bookingPaused || x.pricePending || !product || !checkoutProductConfigured(slug) || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
   if ((product.adultOnly || product.eligibilityRequired) && body.adultOnly !== true) return null;
   if (product.groupPricing && body.adultOnly !== true) return null;
   if (body.addOns !== undefined && (!Array.isArray(body.addOns) || body.addOns.length)) return null;
@@ -204,6 +204,17 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
     if (!selected || selected.amount !== q?.total) return null;
     price = selected.price; amount = selected.amount;
     title += ` — ${view.plans.find(p => p.id === plan)!.label} (${guests} guests)`;
+  } else if (product.ticketPrices) {
+    const view = pricingFor(x, "en");
+    plan = typeof body.plan === "string" ? body.plan : "";
+    const ticket = view.planMode === "perPerson" && view.plans?.find(p => p.id === plan);
+    if (!ticket) return null;
+    const selected = product.ticketPrices[ticket.id];
+    const q = quote(view, plan, guests, date);
+    if (!selected || !q || q.total !== selected.amount * quantity) return null;
+    price = selected.price;
+    amount = q.total;
+    title += ` — ${ticket.label}`;
   } else {
     if (body.plan || (Array.isArray(body.addOns) && body.addOns.length)) return null;
     if (product.privateTeaPricing) {
