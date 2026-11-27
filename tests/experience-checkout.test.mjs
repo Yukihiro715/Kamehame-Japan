@@ -51,12 +51,12 @@ test('enabled non-golf experiences support their priced party range and correct 
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:2,time:'10:00',adultOnly:true},now),null);
   }
   const products=published.filter(x=>!enquiryOnly.has(x.slug));
-  assert.equal(products.length,13);
+  assert.equal(products.length,16);
   assert.deepEqual(Object.keys(EXPERIENCE_PRODUCTS).sort(),products.map(x=>x.slug).sort());
   for(const x of products) {
     const product=EXPERIENCE_PRODUCTS[x.slug];
     for(let guests=product.min;guests<=product.max;guests++) {
-      const input={...base,experience:x.slug,guests,time:product.timeOnConfirmation?'':x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':'',interpreter:'fr'};
+      const input={...base,experience:x.slug,guests,time:product.timeOnConfirmation?'':x.availability?.startTimes?.[0]??'10:00',adultOnly:true,plan:product.groupPricing?'select':product.ticketPrices?'standard':'',interpreter:'fr'};
       const o=m.parseExperienceOrder(input,now);
       assert.ok(o,x.slug+' '+guests);
       assert.equal(o.city,x.city);
@@ -65,6 +65,40 @@ test('enabled non-golf experiences support their priced party range and correct 
     }
     assert.equal(m.parseExperienceOrder({...base,experience:x.slug,guests:product.max+1,adultOnly:true},now),null);
   }
+});
+
+test('Arashiyama checkout enforces the JST deadline and usual-session party limits',()=>{
+  const cutoff=Date.parse('2026-12-08T09:00:00Z');
+  const offers=[
+    {slug:'arashiyama-ninja-experience',amount:17500,max:12},
+    {slug:'arashiyama-japanese-knife-workshop',amount:27000,max:19},
+  ];
+  for(const {slug,amount,max} of offers) {
+    const params={...base,experience:slug,lang:'ja',date:'2026-12-10',time:'11:30',guests:max,adultOnly:true};
+    assert.equal(m.parseExperienceOrder(params,cutoff-1)?.amount,amount*max);
+    assert.equal(m.parseExperienceOrder(params,cutoff),null);
+    assert.equal(m.parseExperienceOrder({...params,guests:max+1},cutoff-1),null);
+    assert.equal(m.parseExperienceOrder({...params,time:'04:00'},cutoff-1),null);
+  }
+  const withChild={...base,experience:'arashiyama-japanese-knife-workshop',date:'2026-12-10',time:'11:30',guests:1};
+  assert.equal(m.parseExperienceOrder(withChild,cutoff-1),null);
+});
+
+test('idol checkout charges the selected ticket and excludes the venue drink fee',()=>{
+  const input={...base,experience:'tokyo-idol-live-night',time:'18:30',guests:3};
+  for(const [plan,price] of [['standard',12000],['front',19000]]) {
+    const order=m.parseExperienceOrder({...input,plan,amount:1,price:'price_invalid'},now);
+    assert.equal(order?.amount,price*3);
+    assert.equal(order?.quantity,3);
+    assert.equal(order?.plan,plan);
+    assert.equal(order?.price,EXPERIENCE_PRODUCTS[input.experience].ticketPrices[plan].price);
+    const params=m.checkoutParameters(order,reference,now);
+    assert.equal(params.get('metadata[plan]'),plan);
+    assert.equal(params.get('line_items[0][quantity]'),'3');
+    assert.equal(params.get('line_items[0][price]'),order.price);
+  }
+  for(const plan of ['', 'constructor', 'mixed'])assert.equal(m.parseExperienceOrder({...input,plan},now),null);
+  assert.equal(m.parseExperienceOrder({...input,plan:'front',date:'2026-11-02'},Date.parse('2026-10-30T09:00:00Z')),null);
 });
 
 test('geiko stays enquiry-only and cannot create a provisional checkout',()=>{
