@@ -26,7 +26,7 @@ async function render(path = "/") {
 }
 
 test('partner listing drafts stay unlisted and cannot accept reservations',async()=>{
- const slugs=['tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','matsuyama-tobe-pottery-full-course','sumi-e-ink-painting'];
+ const slugs=['tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
@@ -158,14 +158,26 @@ test('Sumi-e preview retains reference prices but does not accept enquiries or b
   }
 });
 
-test('Matsuyama pottery preview shows the brief without naming the kiln or the potter', async () => {
+test('Matsuyama pottery course: review link redirects, product page previews in five languages without naming the kiln', async () => {
   for (const lang of ['en', 'ja']) {
-    const html = await (await render(`/previews/partner-listings/matsuyama-tobe-pottery-full-course/?lang=${lang}`)).text();
-    const text = html.replace(/<[^>]+>/g, ' ');
-    assert.doesNotMatch(text, /玄彩|Gensai|gensaiyo|河野|玄容|Kono|Kōno|089-975|791-0243|平井町|Hirai-cho|jalan|じゃらん|5\.0/i, `${lang} partner identity stays private`);
-    assert.ok(html.includes('/images/partner-listings/matsuyama-pottery/wheel-instruction.webp'), `${lang} photos`);
-    assert.ok(text.includes(lang === 'ja' ? '¥12,500' : '¥12,500'), `${lang} reference price`);
-    assert.ok(text.includes(lang === 'ja' ? '4日前まで無料' : 'Free until 4 days before'), `${lang} cancellation`);
-    assert.ok(text.includes(lang === 'ja' ? '40%引き' : '40% off'), `${lang} perk`);
+    const r = await render(`/previews/partner-listings/matsuyama-tobe-pottery-full-course/?lang=${lang}`);
+    assert.ok([301, 302, 307, 308].includes(r.status), `${lang} redirect status ${r.status}`);
+    assert.ok((r.headers.get('location') || '').includes(`/${lang}/matsuyama/matsuyama-tobe-pottery-full-course/`), `${lang} redirect target`);
   }
+  for (const lang of ['en', 'ja', 'es', 'fr', 'zh-tw']) {
+    const path = `/${lang}/matsuyama/matsuyama-tobe-pottery-full-course/`;
+    const r = await render(path);
+    assert.equal(r.status, 200, path);
+    const html = await r.text();
+    const text = html.replace(/<[^>]+>/g, ' ');
+    assert.match(html, /name="robots" content="noindex/, `${lang} stays unlisted until the owner releases it`);
+    assert.ok(text.includes('¥12,500'), `${lang} price`);
+    assert.ok(html.includes('/images/partner-listings/matsuyama-pottery/wheel-instruction.webp'), `${lang} hero photo`);
+    assert.match(html, /class="bk-card" id="booking"/, `${lang} booking card`);
+    assert.ok(html.includes('id="access"'), `${lang} access section`);
+    assert.doesNotMatch(text, /玄彩|Gensai|gensaiyo|河野|玄容|Kono|Kōno|089-975|791-0243|平井町|Hirai-cho|jalan|じゃらん/i, `${lang} partner identity stays private`);
+  }
+  // The city stays off the home page and listings while its only experience is a preview.
+  const home = await (await render('/en/')).text();
+  assert.ok(!home.includes('href="/en/matsuyama/"'), 'Matsuyama is not listed yet');
 });

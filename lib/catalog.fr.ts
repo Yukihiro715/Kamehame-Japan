@@ -35,6 +35,10 @@ export const citiesFr: City[] = [
     slug: "himeji", title: "Himeji", jp: "姫路", img: "/images/city-himeji.jpg",
     lead: "Himeji, c'est le château blanc, le plus beau encore debout au Japon, et une ville qui vit dans son ombre. Nous commençons par l'initiation au kendo, en semaine le matin dans un dojo réservé pour votre date. D'autres expériences à Himeji arrivent bientôt.",
   },
+  {
+    slug: "matsuyama", title: "Matsuyama", jp: "松山", img: "/images/city-matsuyama.jpg",
+    lead: "Matsuyama, c'est Dōgo Onsen, l'une des plus anciennes sources chaudes du Japon, un château sur sa colline et le berceau de la céramique de Tobe, la porcelaine bleue et blanche de la région. Nous commençons dans un four de Tobe en activité, dans les collines hors de la ville : tour, modelage et peinture en une seule séance. D'autres expériences à Matsuyama arrivent bientôt.",
+  },
 ];
 
 export const categoriesFr: Category[] = [
@@ -75,6 +79,8 @@ export const categoriesFr: Category[] = [
     lead: "Les ninjas étaient des éclaireurs et des survivants ; leurs techniques allaient de la sarbacane et de l'étoile de jet à la respiration et à l'immobilité. Essayez les outils dans un studio de Kyoto, coulez votre propre shuriken, ou asseyez-vous pour méditer à Tokyo." },
   { slug: "knife-making", title: "Couteaux", tag: "Arts et artisanat", mark: "包", img: "/images/knife-arashiyama-hero.jpg",
     lead: "Le couteau de cuisine japonais est le descendant discret du sabre. Dans un atelier d'Arashiyama, affûtez une lame sur la pierre, fixez son manche et repartez avec un couteau fini de vos mains." },
+  { slug: "pottery", title: "Poterie", tag: "Arts et artisanat", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
+    lead: "Chaque four du Japon a sa terre, son émail et son bleu. Installez-vous au tour aux côtés d'un potier en activité, modelez et peignez à la main, puis recevez vos pièces, cuites dans ce même four." },
 ];
 
 export const experiencesFr: Experience[] = [
@@ -796,6 +802,82 @@ export const experiencesFr: Experience[] = [
     itinerary: ["0:00 — Introduction", "0:20 — Entrée dans la salle de thé", "0:30 — La cérémonie", "1:15 — Questions", "1:30 — Fin de la séance"],
     goodToKnow: ["Environ 90 minutes, privé. Samedis et dimanches à 11 h 00 ou 15 h 00, à partir de la mi-janvier 2027.", "Dès 6 ans ; tarif réduit de 6 à 17 ans. De deux à six personnes.", "Assis sur des tatamis ; chaussettes obligatoires.", "En anglais."],
     story: { heading: "La salle de l'école elle-même", body: "La plupart des cérémonies du thé proposées aux visiteurs sont mises en scène pour eux. Celle-ci se tient dans la salle de thé d'une école, un week-end, avec le maître qui la dirige. Les douceurs, la bouilloire et le rythme sont ceux que reçoivent ses élèves." },
+  },
+  {
+    slug: "matsuyama-tobe-pottery-full-course", city: "matsuyama", category: "pottery",
+    title: "Cours complet de poterie dans un four de Tobe, Matsuyama",
+    tagline: "Environ deux heures dans un four de céramique de Tobe en activité, dans les collines hors de Matsuyama : tour électrique, modelage et peinture en une seule séance, avec à vos côtés le potier qui dirige le four. Réalisez autant de pièces que le temps le permet ; elles sont émaillées, cuites et vous sont expédiées. Jusqu'à quatre personnes.",
+    overview: [
+      "La céramique de Tobe est la porcelaine des collines au sud de Matsuyama : terre blanche, parois épaisses et bleu de cobalt peint à la main depuis deux cents ans. Ce four, ouvert en 1990, est à vingt minutes de Dōgo Onsen et reste un atelier en activité, avec des salles de tour séparées pour le grès et la porcelaine, deux tours électriques dans chacune, et le four qui cuit tout ce qui se fait ici.",
+      "Le cours complet réunit les trois techniques en une séance. Vous tournez avec le potier à vos côtés, montez une seconde pièce à la main et peignez avec le cobalt du four. Aucune limite au nombre de pièces dans le temps imparti ; la plupart des participants y passent deux heures, certains près de trois. Vos pièces sèchent, sont émaillées et cuites après votre départ, puis vous sont expédiées.",
+    ],
+    duration: "Environ 2 heures", price: "¥12,500", group: "Privé · 1–4 personnes", ages: "Enfants bienvenus avec un adulte (nous consulter pour les plus jeunes)", area: "Matsuyama, Ehime (20 min en voiture de Dōgo Onsen)",
+    img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp", alt: "Le potier guidant les mains d'un participant sur le tour électrique",
+    gallery: [
+      { img: "/images/partner-listings/matsuyama-pottery/wheel-station.webp", alt: "Un poste de tour dans l'atelier lambrissé" },
+      { img: "/images/partner-listings/matsuyama-pottery/drying-shelves.webp", alt: "Des étagères de pièces fraîchement tournées qui sèchent dans l'atelier" },
+      { img: "/images/partner-listings/matsuyama-pottery/studio-table.webp", alt: "La table de travail de l'atelier avec un bol bleu et blanc" },
+      { img: "/images/partner-listings/matsuyama-pottery/kiln-door.webp", alt: "La porte du four électrique où les pièces sont cuites" },
+      { img: "/images/partner-listings/matsuyama-pottery/kiln.webp", alt: "La salle du four" },
+    ],
+    galleryNote: "Photos du four.",
+    availabilityNote: "Le four est ouvert de 10 h 00 à 17 h 00, avec des jours de fermeture irréguliers ; les séances commencent le matin ou en début d'après-midi et l'heure exacte est confirmée dans notre réponse. Les demandes ferment trois jours avant la date.",
+    timeLabel: "Heure de début souhaitée",
+    scheduleNote: "Durées comptées à partir du début de la séance ; la plupart des participants y passent environ deux heures, certains près de trois.",
+    langTag: "En japonais (accompagnement en anglais en préparation)",
+    mapNote: "Le repère marque la gare de Hirai (ligne Iyotetsu Yokogawara) ; le four est à environ quinze minutes à pied, ou à vingt minutes en voiture de Dōgo Onsen. L'adresse exacte vous parvient avec la confirmation. Parking pour cinq voitures.",
+    cancellation: "Les jours se comptent jusqu'à la date de votre séance, heure du Japon. Annulation gratuite jusqu'à 4 jours avant ; 3 et 2 jours avant, 50 % du prix ; la veille, 70 % ; le jour même, absences comprises, le prix total. Si le four doit annuler, vous êtes intégralement remboursé sur votre moyen de paiement d'origine.",
+    includedShort: "Tour, modelage et peinture · Terre, émail et cuisson · Pièces finies expédiées chez vous",
+    highlights: [
+      { icon: "brush", title: "Les trois techniques", body: "Tour électrique, modelage et peinture en une séance, sans limite de pièces dans le temps imparti." },
+      { icon: "group", title: "Le potier au tour avec vous", body: "Le propriétaire du four enseigne lui-même le tour : artisan certifié de première classe et Maître Monozukuri reconnu par le ministère du Travail." },
+      { icon: "spark", title: "Cuit ici, expédié chez vous", body: "Vos pièces sont émaillées et cuites au four puis vous sont expédiées. Les participants achètent aussi les œuvres du four avec 40 % de remise." },
+    ],
+    included: [
+      "Une séance de poterie d'environ deux heures pour votre groupe seul, jusqu'à quatre personnes",
+      "Tour électrique, modelage et peinture ; terre, cobalt et émail",
+      "Séchage, émaillage et cuisson de tout ce que vous réalisez",
+      "Taxes comprises",
+    ],
+    notIncluded: [
+      "L'expédition des pièces finies (devis avec la réservation ; livraison à l'étranger sur demande)",
+      "Le transport jusqu'au four (rendez-vous sur place ; l'adresse vous parvient avec la confirmation)",
+    ],
+    schedule: [
+      { time: "0:00", title: "Accueil", body: "Un tour de l'atelier et du four, et la céramique de Tobe entre les mains du potier." },
+      { time: "0:10", title: "Le tour", body: "Centrez la terre et tournez un bol ou une tasse avec le potier à vos côtés. De grands plats sont possibles dans la salle de porcelaine.", img: "/images/partner-listings/matsuyama-pottery/wheel-station.webp" },
+      { time: "1:00", title: "Modelage", body: "Une seconde pièce montée à la main : une assiette, une coupelle ou ce que vous avez en tête." },
+      { time: "1:30", title: "Peinture", body: "Peignez une pièce dégourdie avec le bleu de cobalt du four.", img: "/images/partner-listings/matsuyama-pottery/studio-table.webp" },
+      { time: "2:00", title: "Fin de la séance", body: "Vos pièces restent sécher, être émaillées et cuites ; elles vous sont ensuite expédiées. Beaucoup de participants restent près de trois heures." },
+    ],
+    venue: {
+      known: ["Un four de céramique de Tobe en activité à Hirai, Matsuyama, à environ quinze minutes à pied de la gare de Hirai (ligne Iyotetsu Yokogawara) et vingt minutes en voiture de Dōgo Onsen ; l'adresse exacte vous parvient avec la confirmation", "Salles de tour séparées pour le grès et la porcelaine, deux tours électriques chacune ; jusqu'à quatre personnes à la fois", "Des vêtements qui supportent la terre ; tabliers fournis", "Parking pour cinq voitures"],
+      afterBooking: ["L'adresse du four", "L'itinéraire depuis la gare de Hirai et Dōgo Onsen", "Un numéro de téléphone pour le jour même"],
+      img: "/images/partner-listings/matsuyama-pottery/kiln-door.webp", alt: "La porte du four où les pièces sont cuites",
+    },
+    replyNote: "Nous répondons une fois que le four a confirmé votre date ; généralement sous 24 heures",
+    notesLabel: "Ce que vous aimeriez réaliser, l'âge des enfants, le pays d'expédition des pièces et le reste (facultatif)",
+    notesHint: "p. ex. deux d'entre nous veulent essayer un grand plat ; un enfant de neuf ans participe ; les pièces sont à expédier en Australie",
+    flow: [
+      { title: "Choisissez une date et envoyez votre demande", body: "Choisissez une date au moins trois jours à l'avance, une heure de début souhaitée et votre nombre, avec l'âge des enfants." },
+      { title: "Nous consultons le four", body: "Nous confirmons la date et l'heure avec le potier et répondons, généralement sous 24 heures, avec le prix pour votre groupe et les options d'expédition." },
+      { title: "Payez pour confirmer", body: "Votre réservation est confirmée à réception du paiement ; les conditions d'annulation s'appliquent dès lors. L'adresse vous parvient avec la confirmation." },
+    ],
+    faq: [
+      { q: "Combien ça coûte ?", a: "¥12,500 par personne, taxes comprises, pour le cours complet tour, modelage et peinture. L'expédition des pièces finies fait l'objet d'un devis avec la réservation." },
+      { q: "En quelle langue se déroule la séance ?", a: "Le potier enseigne en japonais. Nous préparons un accompagnement en anglais (application de traduction et guide des étapes en anglais) et confirmons ce qui est disponible avec la réservation." },
+      { q: "Combien de pièces puis-je faire ?", a: "Autant que le temps le permet. La plupart des participants font deux ou trois pièces en environ deux heures ; certains restent près de trois." },
+      { q: "Quand est-ce que je reçois mes pièces ?", a: "Après la séance, elles sèchent, sont émaillées et cuites au four, ce qui prend plusieurs semaines, puis vous sont expédiées. L'expédition au Japon et la livraison à l'étranger font l'objet d'un devis avec la réservation." },
+      { q: "Les enfants peuvent-ils participer ?", a: "Oui, accompagnés d'un adulte. Indiquez leur âge dans votre demande et nous confirmons avec le four." },
+      { q: "Puis-je acheter les œuvres du potier ?", a: "Oui. Les participants achètent les œuvres du four avec 40 % de remise le jour même." },
+      { q: "Quelles sont les conditions d'annulation ?", a: "Gratuite jusqu'à 4 jours avant la date ; 3 et 2 jours avant, 50 % ; la veille, 70 % ; le jour même, absences comprises, le prix total. Les jours se comptent en heure du Japon." },
+      { q: "Comment se passe la réservation ?", a: "Choisissez une date et envoyez une demande ; c'est gratuit. Nous confirmons avec le four et répondons, généralement sous 24 heures, avec l'heure de début, le prix et les conditions. Votre réservation est confirmée lorsque vous payez via le lien envoyé, et les conditions d'annulation s'appliquent dès lors." },
+    ],
+    whatYoullDo: ["Tourner un bol ou une tasse sur le tour électrique avec le potier à vos côtés", "Monter une seconde pièce à la main", "Peindre avec le bleu de cobalt de la céramique de Tobe", "Recevoir vos pièces cuites au four"],
+    master: { title: "Votre maître", bio: "Le potier a ouvert le four en 1990 après une carrière d'architecte d'intérieur ; il est artisan certifié de première classe en poterie comme en design d'exposition, et le ministère du Travail le reconnaît comme Maître Monozukuri. Formé dans la lignée d'un Trésor national vivant de la porcelaine, il enseigne lui-même le tour.", quote: "" },
+    itinerary: ["0:00 — Accueil", "0:10 — Le tour", "1:00 — Modelage", "1:30 — Peinture", "2:00 — Fin de la séance"],
+    goodToKnow: ["Environ 2 heures, souvent près de 3. Votre groupe seul, jusqu'à quatre personnes.", "Les séances commencent le matin ou en début d'après-midi ; le four a des jours de fermeture irréguliers.", "Portez des vêtements qui supportent la terre. Tabliers fournis.", "En japonais ; accompagnement en anglais en préparation."],
+    story: { heading: "Un four en activité, pas une salle de classe", body: "Les cours de poterie pour visiteurs se donnent le plus souvent dans des ateliers conçus pour les cours. Ici, c'est le four d'un potier, dans les collines, avec les tours sur lesquels il travaille, le cobalt avec lequel il peint et le four où il cuit ses œuvres. Ce que vous réalisez est cuit à côté d'elles." },
   },
   {
     slug: "nihonbashi-kendo-experience", city: "tokyo", category: "kendo",
