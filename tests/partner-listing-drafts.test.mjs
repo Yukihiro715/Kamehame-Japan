@@ -157,7 +157,7 @@ test('Sumi-e preview retains reference prices but does not accept enquiries or b
   }
 });
 
-test('Matsuyama pottery course: review link redirects, product page previews in five languages without naming the kiln', async () => {
+test('Matsuyama pottery course: review link redirects, product page is published in five languages without naming the kiln', async () => {
   for (const lang of ['en', 'ja']) {
     const r = await render(`/previews/partner-listings/matsuyama-tobe-pottery-full-course/?lang=${lang}`);
     assert.ok([301, 302, 307, 308].includes(r.status), `${lang} redirect status ${r.status}`);
@@ -169,19 +169,19 @@ test('Matsuyama pottery course: review link redirects, product page previews in 
     assert.equal(r.status, 200, path);
     const html = await r.text();
     const text = html.replace(/<[^>]+>/g, ' ');
-    assert.match(html, /name="robots" content="noindex/, `${lang} stays unlisted until the owner releases it`);
+    assert.doesNotMatch(html, /name="robots" content="noindex/, `${lang} is published`);
     assert.ok(text.includes('¥12,500'), `${lang} price`);
     assert.ok(html.includes('/images/partner-listings/matsuyama-pottery/wheel-instruction.webp'), `${lang} hero photo`);
     assert.match(html, /class="bk-card" id="booking"/, `${lang} booking card`);
     assert.ok(html.includes('id="access"'), `${lang} access section`);
     assert.doesNotMatch(text, /玄彩|Gensai|gensaiyo|河野|玄容|Kono|Kōno|089-975|791-0243|平井町|Hirai-cho|jalan|じゃらん/i, `${lang} partner identity stays private`);
   }
-  // The city stays off the home page and listings while its only experience is a preview.
+  // Released 2026-11-27: the city joins the home page and the listings.
   const home = await (await render('/en/')).text();
-  assert.ok(!home.includes('href="/en/matsuyama/"'), 'Matsuyama is not listed yet');
+  assert.ok(home.includes('href="/en/matsuyama/"'), 'Matsuyama is listed');
 });
 
-test('Yakushima tours, the night walk and the matcha session are product pages in preview; their review links redirect', async () => {
+test('Yakushima tours, the night walk and the matcha session are published product pages; their review links redirect', async () => {
   const products = [["yakushima-jomonsugi-trekking","yakushima","¥18,000"],["yakushima-shiratani-moss-forest","yakushima","¥15,000"],["yakushima-shiratani-taikoiwa","yakushima","¥19,000"],["yakushima-shiratani-taikoiwa-old-growth","yakushima","¥20,000"],["yakushima-sea-turtle-snorkeling","yakushima","¥12,000"],["yakushima-discover-scuba-one-dive","yakushima","¥14,500"],["yakushima-discover-scuba-extended-dive","yakushima","¥19,000"],["yakushima-discover-scuba-two-dives","yakushima","¥22,000"],["tokyo-ninja-zen-night-walk","tokyo","¥23,500"],["tokyo-matcha-cultural-experience","tokyo","¥27,000"]];
   const partners = /屋久島自然案内|yakushima-nature|原崎|高田|0997-49|090-7718|080-6405|Matcha Academy|matchajaponica|Japonica|ninja-idea|シーズ|Origami Concierge/i;
   for (const [slug, city, price] of products) {
@@ -196,7 +196,7 @@ test('Yakushima tours, the night walk and the matcha session are product pages i
       assert.equal(res.status, 200, path);
       const html = await res.text();
       const text = html.replace(/<[^>]+>/g, ' ');
-      assert.match(html, /name="robots" content="noindex/, `${path} stays unlisted until released`);
+      assert.doesNotMatch(html, /name="robots" content="noindex/, `${path} is published`);
       assert.ok(text.includes(price), `${path} price ${price}`);
       assert.match(html, /class="bk-card" id="booking"/, `${path} booking card`);
       assert.match(html, /<form[^>]+action="\/api\/contact"/, `${path} request form`);
@@ -205,5 +205,5 @@ test('Yakushima tours, the night walk and the matcha session are product pages i
     }
   }
   const home = await (await render('/en/')).text();
-  assert.ok(!home.includes('href="/en/yakushima/"'), 'Yakushima is not listed yet');
+  assert.ok(home.includes('href="/en/yakushima/"'), 'Yakushima is listed');
 });

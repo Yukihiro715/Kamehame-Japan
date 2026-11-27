@@ -3879,7 +3879,7 @@ export const experiences: Experience[] = [
     // address and the phone number stay off the page. Photos from the
     // kiln's website, pending the kiln's review. Start times, shipping terms
     // and the minimum age are assumptions to confirm before going live.
-    slug: "matsuyama-tobe-pottery-full-course", city: "matsuyama", category: "pottery", bookingType: "request", status: "preview",
+    slug: "matsuyama-tobe-pottery-full-course", city: "matsuyama", category: "pottery", bookingType: "request", status: "live",
     title: "Pottery Full Course at a Tobe-ware Kiln, Matsuyama",
     tagline: "About two hours at a working Tobe-ware kiln in the hills outside Matsuyama: the electric wheel, hand-building and painting, all in one session, with the potter who runs the kiln at your side. Make as many pieces as the time allows; they are glazed, fired and sent on to you. Up to four guests.",
     overview: [
@@ -3962,8 +3962,8 @@ export const experiences: Experience[] = [
     story: { heading: "A working kiln, not a classroom", body: "Pottery lessons for visitors are usually run in studios built for lessons. This is a potter's own kiln in the hills, with the wheels he throws on, the cobalt he paints with and the kiln that fires his work. What you make is fired alongside it." },
   },
   {
-    // Yakushima operator (not named on the page): list ¥10,500, wholesale ¥9,450 (10% commission confirmed 2026-11-27); owner's rule → ¥18,000. Conditions from the operator's public tour page the same day. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-jomonsugi-trekking", city: "yakushima", category: "hiking", bookingType: "request", status: "preview",
+    // Yakushima operator (not named on the page): list ¥10,500, wholesale ¥9,450 (10% commission confirmed 2026-11-27); owner's rule → ¥18,000. Conditions from the operator's public tour page the same day. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-jomonsugi-trekking", city: "yakushima", category: "hiking", bookingType: "request", status: "live",
     title: "Jomon Sugi Trek in Yakushima: A Full Day to the Oldest Cedar",
     tagline: "Set out before dawn along an old logging railway and a mountain trail, past Wilson's Stump and Daio Sugi, to Jomon Sugi, a cedar thousands of years old. About 22 km and twelve hours there and back, in groups of up to four per guide. A demanding day.",
     overview: ["Jomon Sugi is the symbol of Yakushima: the largest old cedar on the island, reported in 1966, with a trunk 16.4 metres around and an age put somewhere between 2,170 and 7,200 years. Reaching it means 8.5 km along the old logging railway, over streams and through tunnels, then 2.5 km of mountain trail over rock and roots: about 22 km there and back with 700 metres of climb.","You meet at 4:30 am at the Yakusugi Museum car park in Anbo and take the shuttle bus to the Arakawa trailhead. One guide leads at most four guests. The trail needs no special technique, but it is long, and you must walk at a pace that makes the last shuttle back at 6 pm. If you do not exercise regularly it is a hard day: train beforehand with hikes twice a month, runs two or three times a week, or two-hour walks."],
@@ -4007,8 +4007,8 @@ export const experiences: Experience[] = [
     story: {"heading":"Ten thousand years, one day","body":"Meeting Jomon Sugi takes real effort, and the guides say that is exactly why arriving feels like nothing else. Go in a small group, at the guide's pace."},
   },
   {
-    // Yakushima operator: list ¥7,500, wholesale ¥6,750 → ¥15,000 under the owner's rule. Conditions from the operator's tour page. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-shiratani-moss-forest", city: "yakushima", category: "hiking", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥7,500, wholesale ¥6,750 → ¥15,000 under the owner's rule. Conditions from the operator's tour page. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-shiratani-moss-forest", city: "yakushima", category: "hiking", bookingType: "request", status: "live",
     title: "Shiratani Unsuikyo Moss Forest Hike, Yakushima (Half Day)",
     tagline: "About four hours with a guide in the moss-and-water forest of Shiratani Unsuikyo, to the grove known as the Moss Forest, said to have inspired the forest in Princess Mononoke. A half day, morning or afternoon, that fits an arrival or departure day. Up to five guests per guide.",
     overview: ["Shiratani Unsuikyo lies up the Shiratani river above Miyanoura. From the entrance at 600 metres the trail climbs gently through boulders and giant trees covered in hundreds of kinds of moss, beside clear streams. The destination, the Moss Forest, is the grove the director Hayao Miyazaki is said to have visited again and again.","At about four hours there and back it is the easiest walk into Yakushima's forest. Start at 8 am or in the afternoon; you may meet the island's macaques and deer on the way. It pairs with a morning or afternoon of snorkelling or diving to make a full day."],
@@ -4052,8 +4052,8 @@ export const experiences: Experience[] = [
     story: {"heading":"Slowly, through water and moss","body":"The forest deepens with every step: giant trees under moss, water running clear, the island's animals appearing between the trunks. In half a day you stand in Yakushima's most famous green."},
   },
   {
-    // Yakushima operator: list ¥11,000, wholesale ¥9,900 → ¥19,000 under the owner's rule. Conditions from the operator's tour page. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-shiratani-taikoiwa", city: "yakushima", category: "hiking", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥11,000, wholesale ¥9,900 → ¥19,000 under the owner's rule. Conditions from the operator's tour page. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-shiratani-taikoiwa", city: "yakushima", category: "hiking", bookingType: "request", status: "live",
     title: "Shiratani Unsuikyo to Taiko Rock, Yakushima (Full Day)",
     tagline: "Through the moss forest of Shiratani Unsuikyo and up to Taiko Rock at 1,050 metres, a granite boulder with a view over the island's mountains on a clear day. About seven hours, in groups of up to five per guide.",
     overview: ["From the Shiratani Unsuikyo entrance at 600 metres, the trail passes through the Moss Forest and on to Taiko Rock at the far end of the ravine. The rock is a granite boulder, and when the weather is clear it looks out over Yakushima's mountains and deep valleys.","About seven hours, with at most five guests per guide. There are no long steep sections, but it is a full day on your feet; if you are out of practice, prepare with runs or stair walking beforehand."],
@@ -4097,8 +4097,8 @@ export const experiences: Experience[] = [
     story: {"heading":"Through the deep forest to the open sky","body":"The hush of the moss forest, then the sky opening above the rock. A full day in Shiratani Unsuikyo shows you both faces of the island."},
   },
   {
-    // Yakushima operator: list ¥12,000, wholesale ¥10,800 → ¥20,000 under the owner's rule. Conditions from the operator's tour page. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-shiratani-taikoiwa-old-growth", city: "yakushima", category: "hiking", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥12,000, wholesale ¥10,800 → ¥20,000 under the owner's rule. Conditions from the operator's tour page. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-shiratani-taikoiwa-old-growth", city: "yakushima", category: "hiking", bookingType: "request", status: "live",
     title: "Shiratani Unsuikyo to Taiko Rock via the Old-Growth Trail, Yakushima",
     tagline: "The longer way to Taiko Rock: up the old-growth trail past named Yakushima cedars, through the Moss Forest and on to the rock at 1,050 metres. About eight and a half hours for more time among the cedars and moss. Up to five guests per guide.",
     overview: ["There are two ways up to Taiko Rock. This one climbs the old-growth trail from the entrance at 600 metres, a slower path where named Yakushima cedars stand one after another, before joining the Moss Forest and continuing to the rock.","At about eight and a half hours it is an hour and a half longer than the normal route, for people who want time with the cedars and the moss. At most five guests per guide; ages 13 to 60, with groups including children aged 10–12 or adults aged 61–65 going as a private tour."],
@@ -4142,8 +4142,8 @@ export const experiences: Experience[] = [
     story: {"heading":"Time with the cedars","body":"The old-growth trail is for people who are not in a hurry: stopping before the named cedars, crossing the moss forest, and ending under the open sky on the rock."},
   },
   {
-    // Yakushima operator: list ¥5,000, wholesale ¥4,500 → ¥12,000 under the owner's rule. Photos supplied by the owner from the operator's listing. English briefing still unconfirmed. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-sea-turtle-snorkeling", city: "yakushima", category: "sea", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥5,000, wholesale ¥4,500 → ¥12,000 under the owner's rule. Photos supplied by the owner from the operator's listing. English briefing still unconfirmed. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-sea-turtle-snorkeling", city: "yakushima", category: "sea", bookingType: "request", status: "live",
     title: "Snorkelling with Sea Turtles in Yakushima (Half Day)",
     tagline: "About two and a half to three hours of guided snorkelling off the island's north tip, in waters where sea turtles live. It starts with a briefing in the shallows, so first-timers, non-swimmers and children can join. The guide's photos and video of your tour are yours to keep.",
     overview: ["Yakushima is known as the turtle island. In the clear water off Isso, this tour is built around meeting and swimming with sea turtles, with fish and other sea life along the way. Sightings depend on the day, though the operator meets turtles on most tours.","You learn to use the mask and snorkel from scratch in the shallows before heading out. About two and a half to three hours, starting at 8:00, 11:00 or 14:00, with 10:00 and 15:00 starts possible around your arrival. Everything the guide photographs and films during the tour is sent to you afterwards at no charge. No tours from December to February."],
@@ -4187,8 +4187,8 @@ export const experiences: Experience[] = [
     story: {"heading":"On the turtle island","body":"Yakushima's clear blue water is a quiet home for turtles and much else. Drifting at the surface, you are let in on their day for a while."},
   },
   {
-    // Yakushima operator: list ¥7,000, wholesale ¥6,300 → ¥14,500 under the owner's rule. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-discover-scuba-one-dive", city: "yakushima", category: "sea", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥7,000, wholesale ¥6,300 → ¥14,500 under the owner's rule. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-discover-scuba-one-dive", city: "yakushima", category: "sea", bookingType: "request", status: "live",
     title: "Discover Scuba Diving in Yakushima: One Dive",
     tagline: "A first dive with no licence or experience needed: a briefing and practice in the shallows, then about 30 minutes under water with an instructor in Yakushima's sea. About three hours in all. Non-swimmers welcome.",
     overview: ["The standard discover dive: a tank on your back and the sea of Isso around you. The instructor briefs you thoroughly first, so complete beginners take part with confidence.","The first ten or fifteen minutes go on breathing and balance; by the second half of the dive most people are relaxed enough to watch the fish and the reef. Everything the instructor photographs and films is yours afterwards."],
@@ -4232,8 +4232,8 @@ export const experiences: Experience[] = [
     story: {"heading":"The dive you always meant to try","body":"Everyone takes a different time to settle, so the briefing is unhurried and the practice thorough. Once it clicks, the instructors say, nothing is more relaxing."},
   },
   {
-    // Yakushima operator: list ¥11,000, wholesale ¥9,900 → ¥19,000 under the owner's rule. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-discover-scuba-extended-dive", city: "yakushima", category: "sea", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥11,000, wholesale ¥9,900 → ¥19,000 under the owner's rule. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-discover-scuba-extended-dive", city: "yakushima", category: "sea", bookingType: "request", status: "live",
     title: "Discover Scuba Diving in Yakushima: Extended Dive (60 Minutes)",
     tagline: "A discover dive with the underwater time doubled to about 60 minutes, so there is time to settle and then look properly for sea turtles. About three and a half hours in all. No licence needed; non-swimmers welcome.",
     overview: ["On a discover dive the first ten or fifteen minutes go on getting used to breathing and balance. This course doubles the time under water to about 60 minutes so that what comes after is long enough to matter: a wildlife dive for people who want to see turtles and look slowly at the reef.","Off Isso, with an instructor beside you. No licence is needed, and complete beginners and non-swimmers take part. The photos and video are yours afterwards."],
@@ -4277,8 +4277,8 @@ export const experiences: Experience[] = [
     story: {"heading":"For the time after you settle","body":"The sea only really opens up once you are comfortable. This course was built for that time, for people who came to meet a turtle."},
   },
   {
-    // Yakushima operator: list ¥14,000, wholesale ¥12,600 → ¥22,000 under the owner's rule. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "yakushima-discover-scuba-two-dives", city: "yakushima", category: "sea", bookingType: "request", status: "preview",
+    // Yakushima operator: list ¥14,000, wholesale ¥12,600 → ¥22,000 under the owner's rule. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "yakushima-discover-scuba-two-dives", city: "yakushima", category: "sea", bookingType: "request", status: "live",
     title: "Discover Scuba Diving in Yakushima: Two Dives",
     tagline: "Two discover dives of about 30 minutes each, with a rest ashore between them. The first dive is for settling in; the second, from the start, is for looking around. About four hours in all. No licence needed; non-swimmers welcome.",
     overview: ["The one-dive course with a second dive added. The first dive is where you get used to breathing and balance; then a rest on shore, and a second dive that is, from its first minute, about the reef and the fish.","Off Isso, with an instructor beside you. No licence is needed, and complete beginners and non-swimmers take part. The photos and video are yours afterwards."],
@@ -4322,8 +4322,8 @@ export const experiences: Experience[] = [
     story: {"heading":"The sea begins on the second dive","body":"The first dive is for getting comfortable. After a rest, the second is when you finally have eyes for the fish and the turtles. That is why there are two."},
   },
   {
-    // Same organiser as the ninja zen meditation (not named). Wholesale ¥13,500 (the listing's ¥15,000 less 10%, confirmed 2026-11-27) → ¥23,500 under the owner's rule. Conditions from the organiser's listing; exact meeting point and cutoff still to confirm. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "tokyo-ninja-zen-night-walk", city: "tokyo", category: "ninja", bookingType: "request", status: "preview",
+    // Same organiser as the ninja zen meditation (not named). Wholesale ¥13,500 (the listing's ¥15,000 less 10%, confirmed 2026-11-27) → ¥23,500 under the owner's rule. Conditions from the organiser's listing; exact meeting point and cutoff still to confirm. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "tokyo-ninja-zen-night-walk", city: "tokyo", category: "ninja", bookingType: "request", status: "live",
     title: "Ninja Zen Night Walk in Tokyo, around Tokyo Tower",
     tagline: "About two hours and a quarter walking Tokyo after dark with ninja-inspired movement, hand seals, breathing and meditation: from the foot of Tokyo Tower to a temple gate and the quiet streets between. You pay attention to the sounds and lights around you and meet a different city. Ages 18 and over, up to ten guests, in English and Japanese.",
     overview: ["Ninja training began with walking quietly, steadying the breath and paying attention. This night walk takes that idea into Tokyo after dark. You meet at the foot of Tokyo Tower and walk with the guide past a temple gate and through quiet streets, trying the ninja's silent step, the nine hand seals and breathing practice as you go.","There are pauses to stand still and a time to sit and meditate. No acrobatics, no fighting. About two hours and a quarter, for adults aged 18 and over, up to ten guests. It normally runs in the rain; bring an umbrella or a rain jacket for drizzle."],
@@ -4367,8 +4367,8 @@ export const experiences: Experience[] = [
     story: {"heading":"Paying attention, after dark","body":"The ninja's art began with noticing: footsteps, wind, a light far off. At the foot of Tokyo Tower at night, you take that first step."},
   },
   {
-    // Yotsuya matcha academy (not named). Wholesale ¥16,500 per person, tax included (Richard, 2026-11-27); owner's rule (net + ¥4,500 ad cost, 20% margin, rounded up to ¥500) → ¥27,000. Conditions from the academy's website and booking page. Preview until the owner releases it; ES/FR/ZH-TW fall back to English until translated.
-    slug: "tokyo-matcha-cultural-experience", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "preview",
+    // Yotsuya matcha academy (not named). Wholesale ¥16,500 per person, tax included (Richard, 2026-11-27); owner's rule (net + ¥4,500 ad cost, 20% margin, rounded up to ¥500) → ¥27,000. Conditions from the academy's website and booking page. Released 2026-11-27 on the owner's instruction; ES/FR/ZH-TW fall back to English until translated.
+    slug: "tokyo-matcha-cultural-experience", city: "tokyo", category: "tea-ceremony", bookingType: "request", status: "live",
     title: "Matcha and Tea Ceremony in Kimono, Yotsuya, Tokyo",
     tagline: "About ninety minutes in a tatami room in Yotsuya with an English-speaking instructor. Dress in an easy-to-wear kimono, hear how the tea ceremony came about and how matcha is made and graded, taste the difference between matcha from five countries, and whisk your own bowl of first-flush matcha, served with a Japanese sweet. The kimono and the tea utensils are included.",
     overview: ["One stop from Shinjuku, in a quiet tea room in Yotsuya, kimono, matcha and the tea ceremony come together in one session. You begin by choosing an easy-to-wear kimono from the collection and learning to put it on, with time for photos in the tea room. Then a short talk: where the tea ceremony came from, how matcha is produced, and a tasting of matcha from five countries that shows why labels like ceremonial and premium mean little and what real grading looks like.","With that in hand you whisk your own bowl of first-flush matcha, with tips from the instructor, and take it with a Japanese sweet. The matcha comes from a cellar of more than 400 kinds, seven of them on offer including one decaffeinated. The session ends with guest etiquette condensed to five essential rules. The instructor teaches in English and can also lead in Japanese."],
@@ -4930,6 +4930,10 @@ const APPROVED_ENGLISH_FALLBACK = new Set([
   "kyoto-higashiyama-private-tea-ceremony",
   "nerima-herbal-bath-private-spa", "yotsuya-tea-ceremony", "kyoto-ryokan-beauty-clinic",
   "nihonbashi-japanese-dance-salon", "nihonbashi-english-rakugo-salon", "nihonbashi-shamisen-salon",
+  // Released 2026-11-27 in English and Japanese; ES/FR/ZH-TW copy to follow.
+  "yakushima-jomonsugi-trekking", "yakushima-shiratani-moss-forest", "yakushima-shiratani-taikoiwa", "yakushima-shiratani-taikoiwa-old-growth",
+  "yakushima-sea-turtle-snorkeling", "yakushima-discover-scuba-one-dive", "yakushima-discover-scuba-extended-dive", "yakushima-discover-scuba-two-dives",
+  "tokyo-ninja-zen-night-walk", "tokyo-matcha-cultural-experience",
 ]);
 
 /** Preview pages and the approved entries above use English only when a
