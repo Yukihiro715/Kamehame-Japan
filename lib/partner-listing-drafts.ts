@@ -161,9 +161,9 @@ export const partnerListingDrafts: ListingDraft[] = [
     // full course (wheel + hand-building + painting), about 2 hours, up to 4
     // guests, cutoff 3 days before, cancellation 4 days free / 3 days 50% /
     // day before 70% / day 100%. Supplier cost ¥5,000 per person is still
-    // being negotiated; the reference price applies the owner's rule to it
-    // (tax-inclusive cost → net + ¥4,500 ad cost, 20% margin, rounded up to
-    // ¥500). Japanese only on site; English support is under review. The
+    // being negotiated; the selling price ¥12,500 (owner's rule on the
+    // tax-inclusive cost: net + ¥4,500 ad cost, 20% margin, rounded up to
+    // ¥500) was approved by the owner on 2026-11-27. Japanese only on site; English support is under review. The
     // kiln's name, the potter's name, address and phone stay off the page.
     // Photos from the kiln's website, pending the kiln's review.
     slug: "matsuyama-tobe-pottery-full-course",
@@ -190,7 +190,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         ["Booking cutoff", "3 days before the date"],
         ["Cancellation", "Free until 4 days before; 3 days before 50%; the day before 70%; on the day 100%. The rate two days before is being confirmed"],
         ["For participants", "The kiln's own works at 40% off"],
-        ["Reference price (provisional)", "¥12,500 per person, tax included. The supplier's cost is still under negotiation, so the final selling price is being confirmed."],
+        ["Price", "¥12,500 per person, tax included"],
       ],
       highlights: [
         "Wheel, hand-building and painting in one session, with no limit on how many pieces you make in the time",
@@ -200,7 +200,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         "Participants can buy the kiln's works at 40% off",
       ],
       pending: [
-        "Supplier cost (under negotiation) and the final selling price",
+        "Supplier cost (under negotiation)",
         "English support: translation app, an English guide sheet or KAMEHAME staff on the day",
         "Shipping cost and overseas delivery of the finished pieces",
         "Cancellation rate two days before, start times and closing days",
@@ -220,7 +220,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         ["予約締切", "3日前まで"],
         ["キャンセル料", "4日前まで無料、3日前50%、前日70%、当日100%。2日前の料率は確認中"],
         ["参加者特典", "窯元の作品を40%引きで購入可"],
-        ["仮の参考価格", "1名あたり税込¥12,500(仮)。原価交渉中のため、最終販売価格は確認中です。"],
+        ["料金", "1名あたり¥12,500(税込)"],
       ],
       highlights: [
         "ロクロ・手びねり・絵付けを1回で。時間内なら作る点数に制限なし",
@@ -230,7 +230,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         "参加者は窯元の作品を40%引きで購入できる",
       ],
       pending: [
-        "原価(交渉中)と最終販売価格",
+        "原価(交渉中)",
         "英語対応の方法(翻訳アプリ、英語の案内PDF、当社スタッフの同行のいずれか)",
         "焼成後の配送料と海外発送の可否",
         "2日前のキャンセル料率、開始時刻、定休日",
