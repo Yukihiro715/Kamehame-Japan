@@ -134,9 +134,10 @@ export const partnerListingDrafts: ListingDraft[] = [
     // history and matcha production comparing matcha from five countries,
     // whisking a bowl, five essential guest rules; matcha chosen from a cellar
     // of 400+ types (seven options, one decaffeinated). Public price ¥9,000
-    // per person; a private-workshop option exists. Our price and trading
-    // terms are open (the partner's 10% commission offer is not an agreement),
-    // so no price is shown. The academy's name and its review counts stay off
+    // per person; a private-workshop option exists. Price set by the owner on
+    // 2026-11-27 on the assumption of the partner's 10% commission offer
+    // (wholesale ¥8,100 → owner's rule: net + ¥4,500 ad cost, 20% margin,
+    // rounded up to ¥500 = ¥16,500); the commission itself is not yet agreed. The academy's name and its review counts stay off
     // the page. Photos from its website.
     slug: "tokyo-matcha-cultural-experience",
     city: "tokyo",
@@ -161,7 +162,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         ["Not included", "Transport to the meeting point"],
         ["Cancellation", "Free until 24 hours before the start; later, the full price. Arriving more than 10 minutes late counts as a cancellation with no refund"],
         ["Good to know", "Socks are required on the tatami (sold at the workshop if you forget). Not wheelchair or stroller accessible. Infants cannot sit on laps"],
-        ["Price", "To be confirmed"],
+        ["Price", "¥16,500 per person, tax included"],
       ],
       highlights: [
         "Kimono, matcha and the tea ceremony in one ninety-minute session",
@@ -171,7 +172,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         "Matcha drawn from a cellar of more than 400 kinds, with seven on offer including a decaffeinated one",
         "Guest etiquette condensed to five essential rules: handling the utensils, greetings and how to drink",
       ],
-      pending: ["Our selling price and trading terms", "Start times and capacity for our bookings, and the private-workshop terms", "Photo approval (current photos from the academy's website)"],
+      pending: ["Trading terms with the academy", "Start times and capacity for our bookings, and the private-workshop terms", "Photo approval (current photos from the academy's website)"],
     },
     ja: {
       title: "四ツ谷・着物で抹茶と茶道体験(東京)", area: "東京 · 四ツ谷",
@@ -187,7 +188,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         ["含まれないもの", "集合場所までの交通費"],
         ["キャンセル", "開始24時間前まで無料。以降は全額。10分以上の遅刻はキャンセル扱いとなり返金はありません"],
         ["注意事項", "畳の部屋のため靴下が必要です(忘れた場合は会場で購入)。車椅子・ベビーカーは利用不可。乳児の膝上参加は不可"],
-        ["料金", "確認中"],
+        ["料金", "1名あたり¥16,500(税込)"],
       ],
       highlights: [
         "着物・抹茶・茶道を90分でまとめて体験",
@@ -197,7 +198,7 @@ export const partnerListingDrafts: ListingDraft[] = [
         "400種類以上をそろえた抹茶セラーから7種を用意。カフェインレスも",
         "茶会の客の作法を5つの基本に絞って。道具の扱い、挨拶、飲み方",
       ],
-      pending: ["当社の販売価格・取引条件", "当社予約分の開始時刻・人数条件、貸切プランの条件", "掲載写真の先方承認(現在は公式サイトの写真)"],
+      pending: ["主催者との取引条件", "当社予約分の開始時刻・人数条件、貸切プランの条件", "掲載写真の先方承認(現在は公式サイトの写真)"],
     },
   },
   {

@@ -211,6 +211,7 @@ test('Yotsuya matcha preview carries the confirmed brief without naming the acad
       assert.ok(text.includes(s), `${lang}: ${s}`);
     }
     assert.ok(html.includes('/images/partner-listings/tokyo-matcha/whisking.webp'), `${lang} photos`);
+    assert.ok(text.includes('¥16,500'), `${lang} price`);
     assert.doesNotMatch(text, /Matcha Academy|MATCHA ACADEMY|matchajaponica|Japonica|¥9,000|9,000円|Google review|466 reviews|405 Google|5-star/i, `${lang} academy name, public price and review counts stay private`);
   }
 });
