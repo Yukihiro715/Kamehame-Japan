@@ -2,7 +2,60 @@ import type { Lang } from "@/lib/i18n";
 import { privateTeaCheckoutConfigured } from "@/lib/private-tea-checkout-prices";
 
 export const EXPERIENCE_POLICY_VERSION = "2026-10-22";
-export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number; min: number; max: number; minCharge: number; adultOnly?: boolean; eligibilityRequired?: boolean; timeOnConfirmation?: boolean; groupPricing?: boolean; privateTeaPricing?: boolean; ticketPrices?: Record<string, { price: string; amount: number }> }> = {
+interface CheckoutProduct {
+  price?: string;
+  amount?: number;
+  min: number;
+  max: number;
+  minCharge: number;
+  adultOnly?: boolean;
+  eligibilityRequired?: boolean;
+  minimumAge?: number;
+  timeOnConfirmation?: boolean;
+  groupPricing?: boolean;
+  privateTeaPricing?: boolean;
+  catalogRates?: Record<number, string>;
+  chargeByGroup?: boolean;
+  ticketPrices?: Record<string, { price: string; amount: number }>;
+}
+
+export const EXPERIENCE_PRODUCTS: Record<string, CheckoutProduct> = {
+  "setagaya-omotesenke-tea-ceremony": {
+    min: 2, max: 6, minCharge: 2, minimumAge: 18,
+    catalogRates: { 25000: "price_1UgDSFDpZ5Y8WoJ2hs8gIZNA" },
+  },
+  "nerima-herbal-bath-private-spa": {
+    min: 1, max: 3, minCharge: 1, minimumAge: 18, chargeByGroup: true,
+    catalogRates: { 24500: "price_1UgDNVDpZ5Y8WoJ2YUkc0MSo", 42000: "price_1UgDPJDpZ5Y8WoJ29AtVqXN9", 60000: "price_1UgDOIDpZ5Y8WoJ2rjcgaDNJ" },
+  },
+  "yotsuya-tea-ceremony": {
+    min: 1, max: 10, minCharge: 1, minimumAge: 19, timeOnConfirmation: true,
+    catalogRates: { 16000: "price_1UgDOZDpZ5Y8WoJ23CGwcOw4", 17500: "price_1UgDO5DpZ5Y8WoJ2jhEdkPBx" },
+  },
+  "nihonbashi-japanese-dance-salon": {
+    min: 1, max: 12, minCharge: 1, minimumAge: 6,
+    catalogRates: { 21500: "price_1UgDOMDpZ5Y8WoJ2D9eVvVav" },
+  },
+  "nihonbashi-english-rakugo-salon": {
+    min: 1, max: 12, minCharge: 1, minimumAge: 6,
+    catalogRates: { 21500: "price_1UgDOXDpZ5Y8WoJ2NhKt8pQk" },
+  },
+  "nihonbashi-shamisen-salon": {
+    min: 1, max: 12, minCharge: 1, minimumAge: 6,
+    catalogRates: { 21500: "price_1UgDNmDpZ5Y8WoJ2EweEsIKm" },
+  },
+  "kyoto-garden-teahouse-tea-ceremony": {
+    min: 1, max: 10, minCharge: 1, minimumAge: 4,
+    catalogRates: { 25000: "price_1UgDO0DpZ5Y8WoJ2SSrYk4BX", 29000: "price_1UgDO4DpZ5Y8WoJ2BMKwjIlt", 37500: "price_1UgDOODpZ5Y8WoJ2W9rPNHk7", 44000: "price_1UgDOJDpZ5Y8WoJ2YMnCh21R" },
+  },
+  "kyoto-higashiyama-shared-tea-ceremony": {
+    min: 1, max: 8, minCharge: 1, minimumAge: 13,
+    catalogRates: { 11500: "price_1UgDPFDpZ5Y8WoJ2qmg9WDBX", 12500: "price_1UgDPJDpZ5Y8WoJ2iC2JlBZw" },
+  },
+  "kyoto-higashiyama-annex-tea-ceremony": {
+    min: 2, max: 5, minCharge: 1, minimumAge: 4,
+    catalogRates: { 19000: "price_1UgDNrDpZ5Y8WoJ2rJ8B6BA5", 21500: "price_1UgDNzDpZ5Y8WoJ2vwv7nkE2" },
+  },
   "arashiyama-ninja-experience": { price: "price_1UgCZvDpZ5Y8WoJ2XYwldRuM", amount: 17500, min: 1, max: 12, minCharge: 1 },
   "arashiyama-japanese-knife-workshop": { price: "price_1UgCZqDpZ5Y8WoJ2ihYXKRqe", amount: 27000, min: 1, max: 19, minCharge: 1, eligibilityRequired: true },
   "arashiyama-shuriken-casting": { price: "price_1UgCr9DpZ5Y8WoJ2LZlJ5yQw", amount: 20000, min: 1, max: 12, minCharge: 1, eligibilityRequired: true },
@@ -28,7 +81,17 @@ export const EXPERIENCE_PRODUCTS: Record<string, { price: string; amount: number
   "kanji-name-calligraphy": { price: "price_1UbZREDpZ5Y8WoJ2yQP9RmS2", amount: 21500, min: 2, max: 4, minCharge: 2 },
 };
 
-export const checkoutProductConfigured = (slug: string) => !!EXPERIENCE_PRODUCTS[slug] && (!EXPERIENCE_PRODUCTS[slug].privateTeaPricing || privateTeaCheckoutConfigured());
+export function checkoutProductConfigured(slug: string) {
+  const product = EXPERIENCE_PRODUCTS[slug];
+  if (!product) return false;
+  if (product.privateTeaPricing) return privateTeaCheckoutConfigured();
+  return !product.catalogRates || Object.values(product.catalogRates).every(price => /^price_[A-Za-z0-9]+$/.test(price));
+}
+
+export function checkoutRequiresEligibility(slug: string) {
+  const product = EXPERIENCE_PRODUCTS[slug];
+  return !!(product?.adultOnly || product?.eligibilityRequired || product?.groupPricing || product?.minimumAge);
+}
 
 const copy = {
   en: {
@@ -123,7 +186,8 @@ const nihonbashiEligibility: Record<Lang, { kendo: string; bushido: string; time
   fr: { kendo: "Tous les participants ont entre 16 et 64 ans. Pour les 6–15 ans ou les 65 ans et plus, demandez un devis avant de payer afin d’appliquer le bon tarif.", bushido: "Tous les participants ont au moins 15 ans.", time: "L’heure sera convenue avec le dojo après le paiement. Indiquez votre préférence dans les notes. Si aucun horaire ne convient, vous serez intégralement remboursé." },
   "zh-tw": { kendo: "所有參加者皆為16至64歲。如有6至15歲或65歲以上參加者，請先取得適用報價再付款。", bushido: "所有參加者皆年滿15歲。", time: "開始時間將於付款後與道場協調。請在備註填寫希望時段。若無法達成合適時間，將全額退款。" },
 };
-export const checkoutTimeCopy = (lang: Lang) => nihonbashiEligibility[lang].time;
+export const checkoutTimeCopy = (lang: Lang, slug: string) =>
+  slug === "yotsuya-tea-ceremony" ? catalogCopy[lang].yotsuyaTime : nihonbashiEligibility[lang].time;
 const privateTeaCopy: Record<Lang, { eligibility: string; standard: string }> = {
   en: { eligibility: "All participants are aged 4 or over. Children pay the same rate as adults.", standard: "This payment covers the private tea ceremony only. Kimono rental and special arrangements require a separate quote before payment." },
   ja: { eligibility: "参加者全員が4歳以上です。お子様も大人と同料金です。", standard: "貸切茶道体験のみの料金です。着物レンタル・特別手配は、決済前に個別見積もりをご依頼ください。" },
@@ -152,12 +216,65 @@ const idolCopy: Record<Lang, { standard: string; cancellation: string }> = {
   fr: { standard: "Le paiement couvre le billet sélectionné. Chaque personne règle la boisson de 700 ¥ à la salle.", cancellation: "Une fois la réservation confirmée, les billets ne peuvent être ni modifiés, ni annulés, ni remboursés. Si l’organisateur annule le spectacle, vous recevez un remboursement intégral." },
   "zh-tw": { standard: "此費用是所選票種的票價。每位參加者須在現場另付700日圓飲品費。", cancellation: "預訂確認後，門票無法變更、取消或退款。主辦方取消演出時將全額退款。" },
 };
+const catalogCopy: Record<Lang, { minimumAge: (age: number) => string; standard: string; tea: string; spa: string; yotsuyaTime: string; salons: string }> = {
+  en: {
+    minimumAge: age => `All participants are aged ${age} or over.`,
+    standard: "This payment covers the standard experience. Request a quote for special arrangements or any separate child or youth rates.",
+    tea: "This payment covers the tea ceremony. Request a quote for kimono rental, applicable child rates or special arrangements.",
+    spa: "This payment covers the private spa experience at the adult group rate. Request a quote if a child is joining.",
+    yotsuyaTime: "The host confirms the start time after payment. Enter your preferred afternoon time in the notes.",
+    salons: "This payment covers the regular shared performance. The organiser confirms whether the day will go ahead once at least three guests are booked across its sessions. Private sessions are quoted separately.",
+  },
+  ja: {
+    minimumAge: age => `参加者全員が${age}歳以上です。`,
+    standard: "通常体験の料金です。子供・青少年料金や特別手配は、個別見積もりをご利用ください。",
+    tea: "茶道体験の料金です。着物レンタル、適用される子供料金、特別手配は個別見積もりをご利用ください。",
+    spa: "大人のグループ向け貸切スパ料金です。お子様が参加する場合は、個別見積もりをご利用ください。",
+    yotsuyaTime: "開始時刻はお支払い後に主催者と調整します。ご希望の午後の時間帯を備考欄にご記入ください。",
+    salons: "通常の相席公演の料金です。主催者は、当日の全公演を合わせて3名以上の予約を条件に開催を判断します。貸切は個別見積もりです。",
+  },
+  es: {
+    minimumAge: age => `Todos los participantes tienen al menos ${age} años.`,
+    standard: "El pago cubre la experiencia estándar. Solicita un presupuesto para tarifas infantiles o juveniles y servicios especiales.",
+    tea: "El pago cubre la ceremonia del té. Solicita un presupuesto para alquilar un kimono, aplicar tarifas infantiles o gestionar peticiones especiales.",
+    spa: "El pago cubre el spa privado con la tarifa de grupo de adultos. Solicita un presupuesto si participa un menor.",
+    yotsuyaTime: "El anfitrión confirma la hora de inicio tras el pago. Indica en las notas qué hora de la tarde prefieres.",
+    salons: "El pago cubre la función compartida. El organizador confirma si se celebra al alcanzar tres reservas en total para las funciones del día. Las funciones privadas se cotizan por separado.",
+  },
+  fr: {
+    minimumAge: age => `Tous les participants sont âgés de ${age} ans ou plus.`,
+    standard: "Le paiement couvre l’expérience standard. Demandez un devis pour les tarifs enfant ou jeune et les prestations particulières.",
+    tea: "Le paiement couvre la cérémonie du thé. Demandez un devis pour la location de kimono, les tarifs enfant applicables ou les prestations particulières.",
+    spa: "Le paiement couvre le spa privatif au tarif de groupe adulte. Demandez un devis si un enfant participe.",
+    yotsuyaTime: "L’hôte confirme l’heure après le paiement. Indiquez votre préférence pour l’après-midi dans les remarques.",
+    salons: "Le paiement couvre la représentation partagée. L’organisateur confirme la séance si trois personnes au moins réservent pour l’ensemble de la journée. Les séances privées font l’objet d’un devis.",
+  },
+  "zh-tw": {
+    minimumAge: age => `所有參加者皆年滿${age}歲。`,
+    standard: "此費用適用於一般體驗。兒童、青少年優惠與特殊安排請另行詢價。",
+    tea: "此費用適用於茶道體驗。和服租借、適用的兒童優惠與特殊安排請另行詢價。",
+    spa: "此費用適用於成人團體的私人水療體驗。如有兒童參與，請另行詢價。",
+    yotsuyaTime: "主辦方將於付款後確認開始時間。請在備註填寫希望的下午時段。",
+    salons: "此費用適用於一般共席演出。當日各場次合計至少有三位觀眾預訂，主辦方才會確認是否演出。包場費用另議。",
+  },
+};
+
 export function checkoutStandardCopy(lang: Lang, slug: string) {
   if (slug === "tokyo-idol-live-night") return idolCopy[lang].standard;
   if (slug === "arashiyama-ninja-experience") return workshopCopy[lang].ninja;
   if (slug === "arashiyama-shuriken-casting") return decorativeCastingCopy[lang];
   if (slug === "arashiyama-japanese-knife-workshop") return workshopCopy[lang].knife;
-  return EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].standard : copy[lang].standard;
+  if (EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing) return privateTeaCopy[lang].standard;
+  if (!EXPERIENCE_PRODUCTS[slug]?.catalogRates) return copy[lang].standard;
+  const c = catalogCopy[lang];
+  if (slug === "nerima-herbal-bath-private-spa") return c.spa;
+  if (slug.startsWith("nihonbashi-")) return c.salons;
+  if (slug === "kyoto-higashiyama-shared-tea-ceremony" || slug === "kyoto-higashiyama-annex-tea-ceremony") return c.tea;
+  return c.standard;
 }
 export const checkoutCancellationCopy = (lang: Lang, slug: string) => slug === "tokyo-idol-live-night" ? idolCopy[lang].cancellation : copy[lang].cancellation;
-export const checkoutAdultCopy = (lang: Lang, slug: string) => (slug === "arashiyama-japanese-knife-workshop" || slug === "arashiyama-shuriken-casting") ? workshopCopy[lang].age : EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
+export function checkoutAdultCopy(lang: Lang, slug: string) {
+  const minimumAge = EXPERIENCE_PRODUCTS[slug]?.minimumAge;
+  if (minimumAge) return catalogCopy[lang].minimumAge(minimumAge);
+  return (slug === "arashiyama-japanese-knife-workshop" || slug === "arashiyama-shuriken-casting") ? workshopCopy[lang].age : EXPERIENCE_PRODUCTS[slug]?.privateTeaPricing ? privateTeaCopy[lang].eligibility : slug === "nihonbashi-kendo-experience" ? nihonbashiEligibility[lang].kendo : slug === "nihonbashi-bushido-experience" ? nihonbashiEligibility[lang].bushido : slug === "evening-with-geiko" ? geikoAdultCopy[lang] : copy[lang].adult;
+}

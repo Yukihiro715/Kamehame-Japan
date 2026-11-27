@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
 
 /** A small calendar that simply does not offer dates the venue cannot take:
- *  anything before `min` and any `closed` date is drawn but not selectable.
+ *  anything outside `min`–`max` and any `closed` date is drawn but not selectable.
  *  The native <input type="date"> on iOS shows every day regardless of `min`
  *  and only complains after the fact, which is what this replaces. The
  *  chosen date sits in a real text input (name, required) so the form's
@@ -15,9 +15,9 @@ import { t, type Lang } from "@/lib/i18n";
  *  inside a label to the label's input as a second click, which re-opened
  *  the calendar right after a day was picked. Label it with `htmlFor`. */
 export function DatePicker({
-  id, name, lang, min, required, closed, defaultOpenMonth, value: controlled, onChange, compact,
+  id, name, lang, min, max, required, closed, defaultOpenMonth, value: controlled, onChange, compact,
 }: {
-  id?: string; name: string; lang: Lang; min?: string; required?: boolean; closed?: (iso: string) => boolean; defaultOpenMonth?: string;
+  id?: string; name: string; lang: Lang; min?: string; max?: string; required?: boolean; closed?: (iso: string) => boolean; defaultOpenMonth?: string;
   /** Controlled value (ISO date or ""); leave undefined to let the picker keep its own. */
   value?: string; onChange?: (iso: string) => void;
   /** Shorter display format for narrow slots (the booking card). */
@@ -68,9 +68,10 @@ export function DatePicker({
   const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
   let lead = first.getUTCDay(); if (mondayFirst) lead = (lead + 6) % 7;
   const iso = (d: number) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-  const disabled = (d: string) => (!!min && d < min) || (closed ? closed(d) : false);
+  const disabled = (d: string) => (!!min && d < min) || (!!max && d > max) || (closed ? closed(d) : false);
   const shift = (n: number) => { const d = new Date(Date.UTC(y, m - 1 + n, 1)); setMonth(d.toISOString().slice(0, 7)); };
   const canGoBack = !min || month > min.slice(0, 7);
+  const canGoForward = !max || month < max.slice(0, 7);
 
   // Picking a day (or clearing) closes the calendar and drops focus, so the
   // next tap on the field is a fresh open rather than a no-op on a focused input.
@@ -98,7 +99,7 @@ export function DatePicker({
           <div className="dp-head">
             <button type="button" aria-label="Previous month" disabled={!canGoBack} onClick={() => shift(-1)}><ChevronLeft size={18} /></button>
             <b>{fmtMonth.format(first)}</b>
-            <button type="button" aria-label="Next month" onClick={() => shift(1)}><ChevronRight size={18} /></button>
+            <button type="button" aria-label="Next month" disabled={!canGoForward} onClick={() => shift(1)}><ChevronRight size={18} /></button>
           </div>
           <div className="dp-grid">
             {weekdays.map((w, i) => <span key={i} className="dp-wd">{w}</span>)}

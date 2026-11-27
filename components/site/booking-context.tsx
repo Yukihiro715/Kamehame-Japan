@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { quote, type PricingView, type Quote, addOnTotal } from "@/lib/pricing";
+import { lastAdvanceBookingDate, scheduleSeason, type ScheduleSeason } from "@/lib/booking-window";
 import { track } from "@/lib/analytics";
 import { readGolfTravelQuery, type GolfTransferChoice } from "@/lib/golf-travel";
 
@@ -36,6 +37,8 @@ export interface BookingExperience {
   cutoffTime: string;
   /** Rolling reservation deadline relative to the selected session start. */
   cutoffHours?: number;
+  maxAdvanceMonths?: number;
+  scheduleSeason?: ScheduleSeason;
   startTimes?: string[];
   /** Pre-selected start time (default: 18:00 if offered, else the first). */
   defaultTime?: string;
@@ -102,6 +105,7 @@ interface Booking extends BookingState {
   pricing?: PricingView;
   /** Earliest selectable date (ISO), known after mount. */
   minDate?: string;
+  maxDate?: string;
   /** Estimate for the current choice, or null when it must be quoted. */
   estimate: Quote | null;
   guestsNumber: number;
@@ -117,18 +121,18 @@ const Ctx = createContext<Booking | null>(null);
 
 /** True when a guest can pick `iso`: an announced date for dated products,
  *  otherwise any day outside the closed windows. */
-export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays" | "cutoffHours" | "startTimes">) {
+export function isBookable(iso: string, x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays" | "cutoffHours" | "startTimes" | "scheduleSeason">) {
   if (x.openFrom && iso < x.openFrom) return false;
   const day = new Date(`${iso}T00:00:00Z`).getUTCDay();
   if (x.weekdaysOnly && [0,6].includes(day)) return false;
   if (x.weekendsOnly && ![0,6].includes(day)) return false;
-  if (x.closedWeekdays?.includes(day)) return false;
+  if (x.closedWeekdays?.includes(day) || scheduleSeason(iso, x.scheduleSeason)?.closedWeekdays?.includes(day)) return false;
   if (x.dates ? !x.dates.some((d) => d.date === iso) : isClosed(iso, x.closed)) return false;
   return !x.cutoffHours || timesFor(x, iso).length > 0;
 }
 
 /** The first selectable date after the cutoff, respecting weekdays and closures. */
-export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays" | "cutoffHours" | "startTimes">, min?: string): string | undefined {
+export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "weekdaysOnly" | "weekendsOnly" | "openFrom" | "closedWeekdays" | "cutoffHours" | "startTimes" | "scheduleSeason">, min?: string): string | undefined {
   if (!min) return undefined;
   if (x.dates) return x.dates.filter(d => d.times.length > 0).map(d => d.date).sort().find(d => d >= min && isBookable(d, x));
   const day = new Date(`${min}T00:00:00Z`);
@@ -142,7 +146,7 @@ export function firstOpenDate(x: Pick<BookingExperience, "dates" | "closed" | "w
 
 /** Start times offered on `iso` (all of them when no date is chosen yet). */
 export function timesFor(x: Pick<BookingExperience, "dates" | "startTimes" | "cutoffHours">, iso?: string): string[] {
-  const offered = x.dates && iso ? x.dates.find((d) => d.date === iso)?.times ?? [] : x.startTimes ?? [];
+  const offered = x.dates && iso ? x.dates.find((d) => d.date === iso)?.times ?? [] : (iso ? scheduleSeason(iso, x.scheduleSeason)?.startTimes : undefined) ?? x.startTimes ?? [];
   if (!x.cutoffHours || !iso) return offered;
   const earliest = Date.now() + x.cutoffHours * 60 * 60 * 1000;
   return offered.filter((time) => {
@@ -188,6 +192,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
   // time": count from today in Japan; once the cutoff hour has passed there,
   // today no longer counts.
   const [minDate, setMinDate] = useState<string>();
+  const maxDate = minDate && experience.maxAdvanceMonths ? lastAdvanceBookingDate(experience.maxAdvanceMonths) : undefined;
   useEffect(() => {
     if (experience.cutoffHours) {
       const earliestJst = new Date(Date.now() + (experience.cutoffHours + 9) * 3600 * 1000);
@@ -259,7 +264,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
           const next = { ...s, ...patch };
           // On dated products a date carries its own start times: keep the chosen
           // time when that date offers it, otherwise move to the date's first slot.
-          if (experience.dates || experience.cutoffHours) {
+          if (experience.dates || experience.cutoffHours || experience.scheduleSeason) {
             if (patch.date !== undefined && patch.date) {
               const ts = timesFor(experience, patch.date);
               if (ts.length && !ts.includes(next.time)) next.time = ts[0];
@@ -274,7 +279,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
         });
       },
       toggleAddOn: (id) => setState((s) => ({ ...s, addOns: s.addOns.includes(id) ? s.addOns.filter((x) => x !== id) : [...s.addOns, id] })),
-      experience, pricing: activePricing, minDate,
+      experience, pricing: activePricing, minDate, maxDate,
       estimate: (() => {
         if (!activePricing || largeParty || customQuote || quoteRequested || experience.consultationOnly) return null;
         const q = quote(activePricing, state.plan, guestsNumber, state.date || undefined);
@@ -284,7 +289,7 @@ export function BookingProvider({ experience, pricing, pricings, lang, children 
       guestsNumber, largeParty, variantView, customQuote,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- pickDefault/variantTime derive from `experience`
-  }, [state, pricing, pricings, experience, minDate, timeTouched]);
+  }, [state, pricing, pricings, experience, minDate, maxDate, timeTouched]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
