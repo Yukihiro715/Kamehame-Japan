@@ -502,7 +502,8 @@ test("partner handover: approved tea pages and unapproved previews preserve term
     const text = html.replace(/<[^>]+>/g, " ");
     assert.ok(text.includes(title), `title on ${path}`);
     for (const s of needs) assert.ok(text.includes(s), `${s} on ${path}`);
-    const published = path.startsWith("/en/kyoto/"); // Camellia pages published in 0c97e4c.
+    const published = path.startsWith("/en/kyoto/") || path.includes("/setagaya-"); // Camellia pages published in 0c97e4c; the Setagaya tearoom went live with its own photos.
+    if (path.includes("/setagaya-")) assert.ok(html.includes("/images/setagaya-tea-host.webp") && !html.includes("craft-hands.jpg") && !text.includes("Placeholder photos"), "tearoom photos on the Setagaya page");
     assert.equal(text.includes(PREVIEW_BANNER), !published, `publication status on ${path}`);
     assert.equal(/name="robots" content="noindex/.test(html), !published, `indexing status on ${path}`);
     // Published Camellia map pins (481265d) and verified access guides (#69,
@@ -511,7 +512,7 @@ test("partner handover: approved tea pages and unapproved previews preserve term
       ? /Jikyuan|自休庵|Toyama|外山|SOBAGIRI|Sobagiri|RAKUJYO|Rakujyo|楽常|Tomonosuke|友之介/i
       : partners;
     assert.doesNotMatch(text, privatePartners, `unpublished operator names stay private on ${path}`);
-    if (published) {
+    if (published && path.startsWith("/en/kyoto/")) {
       const venue = path.includes("/kyoto-garden-") ? "Tea Ceremony Camellia GARDEN" : "Tea Ceremony Camellia FLOWER";
       assert.ok(html.includes(encodeURIComponent(venue)), `verified venue map on ${path}`);
       if (!path.includes("-annex-")) assert.ok(text.includes(venue), `verified access destination on ${path}`);
@@ -749,7 +750,7 @@ test('remaining advertising-inclusive prices render across languages and retain 
   ['kanji-name-calligraphy',['¥21,500','¥43,000'],false],
   ['yotsuya-tea-ceremony',['¥17,500','¥35,000','¥160,000'],false],
   ['nerima-herbal-bath-private-spa',['¥24,500','¥42,000','¥60,000'],false],
-  ['setagaya-omotesenke-tea-ceremony',['¥25,000','¥16,000'],true],
+  ['setagaya-omotesenke-tea-ceremony',['¥25,000','¥16,000'],false],
   ['asakusa-soba-making-class',['¥16,000','¥14,500'],true],
   ['asakusa-ramen-making-class',['¥16,000','¥14,500'],true],
  ]){
