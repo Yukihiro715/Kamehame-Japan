@@ -122,21 +122,61 @@ export const partnerListingDrafts: ListingDraft[] = [
     },
   },
   {
+    // Richard's brief (2026-11-27): about 1.5 hours, meeting in Yotsuya (in
+    // front of the LUUP stand next to the ACN Yotsuya Building, 6 min from
+    // Yotsuya station), English-speaking instructor, easy-to-wear kimono
+    // rental included, first-flush matcha + sweet + welcome drink + utensils,
+    // free cancellation until 24 hours before. Price and trading terms are
+    // still open (the partner's 10% commission offer is not an agreement).
+    // The academy's name stays off the page. Photos from its website.
     slug: "tokyo-matcha-cultural-experience",
     city: "tokyo",
+    gallery: "photo",
+    images: [
+      { src: "/images/partner-listings/tokyo-matcha/whisking.webp", en: "Whisking a bowl of matcha by a window", ja: "窓辺で抹茶を点てる手元", width: 1440, height: 960 },
+      { src: "/images/partner-listings/tokyo-matcha/tea-tools.webp", en: "Tea utensils laid out: kettle, bowl, whisk, scoop and sieve", ja: "並べられた茶道具。釜、茶碗、茶筅、茶杓、茶こし", width: 1440, height: 960 },
+      { src: "/images/partner-listings/tokyo-matcha/tea-room.webp", en: "The tatami tea room with a hanging scroll and a low table", ja: "掛軸と座卓のある畳の茶室", width: 1440, height: 960 },
+    ],
+    mediaNote: { en: "Photos from the academy's website, pending its review.", ja: "写真は主催者の公式サイトのもの。掲載写真は先方確認待ちです。" },
     en: {
-      title: "Matcha Culture Experience in Tokyo", area: "Tokyo",
-      lead: "An introduction to Japanese matcha culture. The exact lesson, setting and inclusions for this proposed experience are being confirmed.",
-      details: [["Theme", "Matcha culture"], ["Venue, duration and language", "To be confirmed"], ["Price", "To be confirmed"]],
-      highlights: ["Discover Japanese matcha culture"],
-      pending: ["Selected lesson and whether kimono is included", "Venue, language, duration and capacity", "Final agreement, selling prices, dates, booking conditions and photos"],
+      title: "Matcha and Tea Ceremony in Kimono, Yotsuya, Tokyo", area: "Tokyo · Yotsuya",
+      lead: "About ninety minutes with an English-speaking instructor in Yotsuya: dress in an easy-to-wear kimono, learn where matcha comes from and how its grades differ, and whisk your own bowl of first-flush matcha, served with a Japanese sweet. The kimono and the tea utensils are included.",
+      details: [
+        ["Duration", "About 1.5 hours"],
+        ["Meeting point", "Yotsuya: in front of the LUUP stand next to the ACN Yotsuya Building, about six minutes on foot from Yotsuya station"],
+        ["Language", "English-speaking instructor"],
+        ["Kimono", "Easy-to-wear kimono rental included"],
+        ["Included", "First-flush matcha, a Japanese sweet and a welcome drink; tea utensils provided"],
+        ["Cancellation", "Free until 24 hours before the start"],
+        ["Price", "To be confirmed"],
+      ],
+      highlights: [
+        "Whisk your own bowl of first-flush matcha",
+        "A short talk on the history of the tea ceremony and how matcha is graded",
+        "Easy-to-wear kimono rental included, with time for photos in the tea room",
+        "Guest etiquette for a tea gathering, condensed to the essentials",
+      ],
+      pending: ["Selling price and trading terms", "Start times, capacity and booking deadline", "Photo approval (current photos from the academy's website)"],
     },
     ja: {
-      title: "東京・抹茶文化体験", area: "東京",
-      lead: "日本の抹茶文化に触れる体験の下書きです。当社で扱う具体的なプランと含まれる内容を確認しています。",
-      details: [["テーマ", "抹茶文化"], ["会場・所要時間・言語", "確認中"], ["料金", "確認中"]],
-      highlights: ["日本の抹茶文化に触れる"],
-      pending: ["対象プラン・着物の有無", "会場・言語・所要時間・人数条件", "取扱条件の最終合意・販売価格・日程・予約条件・写真"],
+      title: "四ツ谷・着物で抹茶と茶道体験(東京)", area: "東京 · 四ツ谷",
+      lead: "四ツ谷で英語インストラクターと過ごす約90分。簡易着物に着替え、抹茶の産地や等級の違いを学び、一番茶の抹茶を自分で点てて和菓子とともにいただきます。着物と茶道具は料金に含まれます。",
+      details: [
+        ["所要時間", "約1.5時間"],
+        ["集合場所", "四ツ谷。ACN四谷ビル隣のLUUPスタンド前(四ツ谷駅から徒歩6分)"],
+        ["対応言語", "英語インストラクター"],
+        ["着物", "簡易着物レンタル込み"],
+        ["含まれるもの", "一番茶の抹茶、和菓子とウェルカムドリンク、茶道具レンタル"],
+        ["キャンセル", "開始24時間前まで無料"],
+        ["料金", "確認中"],
+      ],
+      highlights: [
+        "一番茶の抹茶を自分で点てる",
+        "茶道の歴史と抹茶の等級の見分け方を短い講義で",
+        "簡易着物のレンタル込み。茶室で写真を撮る時間も",
+        "茶会の客の作法を、要点だけ",
+      ],
+      pending: ["販売価格・取引条件", "開始時刻・人数条件・予約締切", "掲載写真の先方承認(現在は公式サイトの写真)"],
     },
   },
   {
