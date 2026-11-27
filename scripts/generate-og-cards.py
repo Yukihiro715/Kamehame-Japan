@@ -6,12 +6,14 @@ Social platforms crop shared images to roughly 1.91:1, so the catalog photos
 one into a correctly-proportioned card with the title and brand mark.
 
 Run after changing a catalog title, price or photo:  python3 scripts/generate-og-cards.py
+Pass --missing-only to render only the cards that do not exist yet (new experiences).
 Output lands in public/og/ and is committed, so the Node-only CI build does
 not need a Python toolchain.
 """
 import math
 import re
 import pathlib
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -85,17 +87,20 @@ def card(photo, title, meta, out):
 catalog = (ROOT / "lib" / "catalog.ts").read_text()
 
 experiences = re.findall(
-    r'slug:\s*"([a-z-]+)",\s*city:\s*"(tokyo|kyoto|osaka|nagoya|okinawa|kanazawa|himeji)",\s*category:.*?\n\s*title:\s*"([^"]+)",'
+    r'slug:\s*"([a-z0-9-]+)",\s*city:\s*"(tokyo|kyoto|osaka|nagoya|okinawa|kanazawa|himeji|matsuyama|yakushima)",\s*category:.*?\n\s*title:\s*"([^"]+)",'
     r'.*?duration:\s*"([^"]+)",\s*price:\s*"([^"]+)".*?img:\s*"([^"]+)"',
     catalog, re.S)
 
 tours = re.findall(
-    r'slug:\s*"([a-z-]+-private-day-tour)",\s*city:\s*"(tokyo|kyoto|osaka|nagoya|okinawa|kanazawa|himeji)".*?title:\s*"([^"]+)",'
+    r'slug:\s*"([a-z-]+-private-day-tour)",\s*city:\s*"(tokyo|kyoto|osaka|nagoya|okinawa|kanazawa|himeji|matsuyama|yakushima)".*?title:\s*"([^"]+)",'
     r'.*?duration:\s*"([^"]+)",\s*price:\s*"([^"]+)".*?img:\s*"([^"]+)"',
     catalog, re.S)
 
+missing_only = "--missing-only" in sys.argv
 made = 0
 for slug, city, title, duration, price, photo in experiences + tours:
+    if missing_only and (OUT / f"{slug}.jpg").exists():
+        continue
     card(photo, title, f"{city.title()}  ·  {duration}  ·  from {price}", f"{slug}.jpg")
     made += 1
 
