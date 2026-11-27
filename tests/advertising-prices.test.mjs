@@ -52,7 +52,8 @@ test('remaining advertising prices keep locale quotes, tiers and checkout consis
   const spa=live.find(x=>x.slug==='nerima-herbal-bath-private-spa');
   for(const [n,total] of [[1,24500],[2,42000],[3,60000]])assert.equal(quote(pricingFor(spa,lang),'',n).total,total);
   const setagaya=live.find(x=>x.slug==='setagaya-omotesenke-tea-ceremony');assert.ok(setagaya);assert.equal(setagaya.status,'live');
-  assert.equal(quote(pricingFor(setagaya,lang),'',2).total,2*25000);assert.equal(EXPERIENCE_PRODUCTS[setagaya.slug],undefined);
+  assert.equal(quote(pricingFor(setagaya,lang),'',2).total,2*25000);
+  assert.match(EXPERIENCE_PRODUCTS[setagaya.slug].catalogRates[25000],/^price_/);
   assert.ok(JSON.stringify(setagaya.faq).includes('¥16,000'));
   for(const [slug,price] of [['asakusa-soba-making-class',16000],['asakusa-ramen-making-class',16000]]){
    const x=preview.find(x=>x.slug===slug);assert.ok(x);assert.equal(x.status,'preview');

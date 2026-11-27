@@ -1,3 +1,4 @@
+import type { ScheduleSeason } from "@/lib/booking-window";
 // Catalog of cities, categories, experiences and guided tours.
 // Prices, durations and operating conditions are placeholders pending
 // confirmation with each partner venue (see CLAUDE_HANDOFF.md). Venue
@@ -305,6 +306,8 @@ export interface Experience {
     cutoffDays: number; cutoffTime: string;
     /** Exact booking cutoff measured in hours before each session. */
     cutoffHours?: number;
+    maxAdvanceMonths?: number;
+    scheduleSeason?: ScheduleSeason;
     /** Pre-selected start time in the booking box (default: 18:00 if offered, else the first). */
     defaultTime?: string;
     closed?: { from: string; to: string }[];
@@ -744,7 +747,7 @@ export const experiences: Experience[] = [
     galleryNote: "The operator's photo of the bath and tea space. More photos of the workshop are to come from the operator.",
     partySize: { min: 1, max: 3, default: 2 },
     pricing: { tiers: [{ party: 1, total: 24500 }, { party: 2, total: 42000 }, { party: 3, total: 60000 }] },
-    availability: { daily: false, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2] },
+    availability: { daily: false, startTimes: ["11:00", "16:30"], defaultTime: "11:00", cutoffDays: 2, cutoffTime: "18:00", closedWeekdays: [2], maxAdvanceMonths: 3 },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions start at 11:00 or 16:30; normally closed on Tuesdays. One group a day, so each date is checked with the spa. Requests close two days before the date; dates up to three months ahead.",
     scheduleNote: "The order is the spa's; the staff set the pace. Please be at the building entrance 5 to 10 minutes before your start time.",
@@ -3389,7 +3392,11 @@ export const experiences: Experience[] = [
         windows: [{ from: "03-01", to: "04-30" }, { from: "10-01", to: "11-30" }, { from: "12-28", to: "01-03" }],
       },
     },
-    availability: { daily: true, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00", cutoffDays: 1, cutoffTime: "00:00", cutoffHours: 24 },
+    availability: {
+      daily: false, startTimes: ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"], defaultTime: "11:00",
+      cutoffDays: 1, cutoffTime: "00:00", cutoffHours: 24,
+      scheduleSeason: { from: "12-01", to: "02-29", startTimes: ["11:00", "13:00", "15:00", "17:00"], closedWeekdays: [0] },
+    },
     timeLabel: "Preferred start time",
     availabilityNote: "Sessions at 11:00, 13:00, 15:00 and 17:00 all year, and also at 10:00, 12:00, 14:00 and 16:00 from March to November. Sundays are not available in winter.",
     scheduleNote: "Timings counted from the start of your session; the session runs about 50 minutes.",
@@ -3783,7 +3790,7 @@ export const experiences: Experience[] = [
     ],
     galleryNote: "Photos from the tearoom.",
     partySize: { min: 2, max: 6, default: 2 },
-    availability: { daily: false, startTimes: ["11:00", "15:00"], defaultTime: "11:00", cutoffDays: 5, cutoffTime: "17:00", weekendsOnly: true, openFrom: "2027-01-16", closed: [{ from: "12-28", to: "01-05" }] },
+    availability: { daily: false, startTimes: ["11:00", "15:00"], defaultTime: "11:00", cutoffDays: 5, cutoffTime: "17:00", weekendsOnly: true, openFrom: "2027-01-16", maxAdvanceMonths: 3, closed: [{ from: "12-28", to: "01-05" }] },
     timeLabel: "Preferred start time",
     availabilityNote: "Saturdays and Sundays, starting at 11:00 or 15:00; the tearoom takes guests from mid-January 2027. Dates can be requested up to three months ahead. Closed over the New Year holidays.",
     scheduleNote: "Timings counted from the start of your session; the session runs about 90 minutes.",

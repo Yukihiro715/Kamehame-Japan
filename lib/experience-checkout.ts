@@ -1,9 +1,10 @@
+import { lastAdvanceBookingDate, scheduleSeason } from "@/lib/booking-window";
 import { sanitizeAttribution, type Attribution } from "@/lib/attribution";
 import { catalogFor } from "@/lib/catalog";
 import { pricingFor, quote } from "@/lib/pricing";
 import { GEIKO_CHECKOUT_PRICES } from "@/lib/geiko-checkout-prices";
 import { isLang, type Lang } from "@/lib/i18n";
-import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy, checkoutProductConfigured } from "@/lib/provisional-booking";
+import { EXPERIENCE_POLICY_VERSION, EXPERIENCE_PRODUCTS, provisionalCopy, checkoutProductConfigured, checkoutRequiresEligibility } from "@/lib/provisional-booking";
 import { PRIVATE_TEA_CHECKOUT_PRICES } from "@/lib/private-tea-checkout-prices";
 
 export interface ExperienceCheckoutEnv {
@@ -168,9 +169,8 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const slug = typeof body.experience === "string" ? body.experience : "";
   const product = EXPERIENCE_PRODUCTS[slug];
   const x = product && catalogFor("en").experiences.find(x => x.slug === slug && x.status === "live");
-  if (!x || x.bookingPaused || x.pricePending || !product || !checkoutProductConfigured(slug) || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
-  if ((product.adultOnly || product.eligibilityRequired) && body.adultOnly !== true) return null;
-  if (product.groupPricing && body.adultOnly !== true) return null;
+  if (!x || x.bookingPaused || x.pricePending || x.consultationOnly || !product || !checkoutProductConfigured(slug) || !isLang(String(body.lang)) || body.consent !== true || body.standard !== true || body.website) return null;
+  if (checkoutRequiresEligibility(slug) && body.adultOnly !== true) return null;
   if (body.addOns !== undefined && (!Array.isArray(body.addOns) || body.addOns.length)) return null;
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
@@ -182,17 +182,22 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
   const d = new Date(`${date}T00:00:00Z`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(d.getTime()) || d.toISOString().slice(0,10) !== date) return null;
   const a = x.availability;
+  if (a?.maxAdvanceMonths && date > lastAdvanceBookingDate(a.maxAdvanceMonths, now)) return null;
   const cutoff = (a?.cutoffTime ?? "17:00").split(":").map(Number);
   const today = new Date(now + 9 * 3600000);
   today.setUTCDate(today.getUTCDate() + (a?.cutoffDays ?? 3) + (today.getUTCHours()*60 + today.getUTCMinutes() >= cutoff[0]*60 + cutoff[1] ? 1 : 0));
   if ((!a?.cutoffHours && date < today.toISOString().slice(0,10)) || d.getTime() > now + 366*86400000) return null;
-  const times = a?.dates ? a.dates.find(v => v.date === date)?.times ?? [] : a?.startTimes ?? ["10:00"];
+  const season = scheduleSeason(date, a?.scheduleSeason);
+  const times = a?.dates ? a.dates.find(v => v.date === date)?.times ?? [] : season?.startTimes ?? a?.startTimes ?? ["10:00"];
   if (product.timeOnConfirmation ? time !== "" : !times.includes(time)) return null;
   if (a?.cutoffHours && Date.parse(`${date}T${time}:00+09:00`) < now + a.cutoffHours * 3600000) return null;
   if (a?.closed?.some(w => w.from <= w.to ? date.slice(5) >= w.from && date.slice(5) <= w.to : date.slice(5) >= w.from || date.slice(5) <= w.to)) return null;
-  if (product.adultOnly && [0,6].includes(d.getUTCDay())) return null;
-  const quantity = product.groupPricing ? 1 : Math.max(product.minCharge, guests);
-  let price = product.price, amount = product.amount * quantity, title = x.title;
+  const weekday = d.getUTCDay();
+  const weekend = weekday === 0 || weekday === 6;
+  if (a?.closedWeekdays?.includes(weekday) || season?.closedWeekdays?.includes(weekday) || (product.adultOnly && weekend) || (a?.weekendsOnly && !weekend) || (a?.openFrom && date < a.openFrom)) return null;
+  const chargeByGroup = product.groupPricing || product.chargeByGroup;
+  const quantity = chargeByGroup ? 1 : Math.max(product.minCharge, guests);
+  let price = product.price, amount = (product.amount ?? 0) * quantity, title = x.title;
   let plan: string | undefined, interpreter: string | undefined;
   if (product.groupPricing) {
     plan = typeof body.plan === "string" ? body.plan : "";
@@ -222,10 +227,15 @@ export function parseExperienceOrder(body: Record<string, unknown>, now = Date.n
       const selected = q && PRIVATE_TEA_CHECKOUT_PRICES[`${q.peak ? "peak" : "regular"}_${guests === 1 ? "solo" : "guest"}`];
       if (!selected || selected.amount * quantity !== q?.total) return null;
       price = selected.price; amount = q.total;
+    } else if (product.catalogRates) {
+      const q = quote(pricingFor(x, "en"), "", guests, date);
+      price = q && Number.isInteger(q.total / quantity) ? product.catalogRates[q.total / quantity] : undefined;
+      amount = q?.total ?? 0;
     }
   }
+  if (!price || amount <= 0) return null;
   return { attribution: sanitizeAttribution(body.attribution, now), requestId: body.request_id.toLowerCase(), slug, title, name, email, message, lang: body.lang as Lang,
-    city: x.city, chargeUnit: product.groupPricing ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
+    city: x.city, chargeUnit: chargeByGroup ? "group" : "guest", ...(plan ? { plan, interpreter } : {}),
     date, time: product.timeOnConfirmation ? "To be confirmed" : time, guests, quantity, price, amount, policyVersion: EXPERIENCE_POLICY_VERSION, consent: true };
 }
 
