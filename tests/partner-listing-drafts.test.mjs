@@ -26,7 +26,7 @@ async function render(path = "/") {
 }
 
 test('partner listing drafts stay unlisted and cannot accept reservations',async()=>{
- const slugs=['tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','sumi-e-ink-painting'];
+ const slugs=['tokyo-ninja-zen-night-walk','mukojima-geisha-evening','japanese-home-cooking-class','tokyo-matcha-cultural-experience','arashiyama-private-terrace-gathering','matsuyama-tobe-pottery-full-course','sumi-e-ink-painting'];
  for(const slug of slugs)for(const lang of ['en','ja']){
   const response=await render(`/previews/partner-listings/${slug}/?lang=${lang}`);
   assert.equal(response.status,200,slug);const html=await response.text();
@@ -147,5 +147,17 @@ test('Sumi-e preview retains reference prices but does not accept enquiries or b
     assert.doesNotMatch(html, /<form\b|#request-form|id="request-form"/);
     assert.doesNotMatch(html, /\/api\/experience-checkout|checkout\.stripe\.com/);
     for (const wholesale of ['11,500', '17,500', '18,500', '23,000']) assert.ok(!html.includes(wholesale));
+  }
+});
+
+test('Matsuyama pottery preview shows the brief without naming the kiln or the potter', async () => {
+  for (const lang of ['en', 'ja']) {
+    const html = await (await render(`/previews/partner-listings/matsuyama-tobe-pottery-full-course/?lang=${lang}`)).text();
+    const text = html.replace(/<[^>]+>/g, ' ');
+    assert.doesNotMatch(text, /玄彩|Gensai|gensaiyo|河野|玄容|Kono|Kōno|089-975|791-0243|平井町|Hirai-cho|jalan|じゃらん|5\.0/i, `${lang} partner identity stays private`);
+    assert.ok(html.includes('/images/partner-listings/matsuyama-pottery/wheel-instruction.webp'), `${lang} photos`);
+    assert.ok(text.includes(lang === 'ja' ? '¥12,500' : '¥12,500'), `${lang} reference price`);
+    assert.ok(text.includes(lang === 'ja' ? '4日前まで無料' : 'Free until 4 days before'), `${lang} cancellation`);
+    assert.ok(text.includes(lang === 'ja' ? '40%引き' : '40% off'), `${lang} perk`);
   }
 });
