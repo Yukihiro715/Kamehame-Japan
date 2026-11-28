@@ -88,6 +88,8 @@ export const categoriesEs: Category[] = [
     lead: "Los bosques de Japón se conocen mejor a pie, con alguien que los conozca. Caminatas guiadas en grupos pequeños, desde media jornada entre rocas cubiertas de musgo hasta un día completo hasta un cedro milenario." },
   { slug: "sea", title: "Mar", tag: "Naturaleza", mark: "海", img: "/images/partner-listings/yakushima-sea/snorkel-turtle-snorkeller.webp",
     lead: "Agua clara, arrecifes y tortugas marinas, con un guía en el agua a tu lado. Esnórquel para principiantes y no nadadores, y bautismos de buceo sin necesidad de licencia." },
+  { slug: "kintsugi", title: "Kintsugi", tag: "Arte y artesanía", mark: "継", img: "/images/partner-listings/tokyo-kintsugi/finished-cup.webp",
+    lead: "El arte de reparar cerámica rota con laca y vestir la grieta de oro. Talleres con artesanos de kintsugi, desde una hora sin laca para familias hasta urushi auténtico y polvo de oro." },
   { slug: "pottery", title: "Cerámica", tag: "Arte y artesanía", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
     lead: "Cada horno de Japón tiene su propia arcilla, su esmalte y su azul. Siéntate al torno junto a un ceramista en activo, modela y pinta a mano, y recibe en casa lo que hiciste, cocido en ese mismo horno." },
 ];

@@ -1487,6 +1487,59 @@
         "en": "Isso",
         "ja": "一湊"
       }
+    },
+    "ebisu": {
+      "destination": {
+        "en": "Ebisu Station, Tokyo",
+        "ja": "恵比寿駅"
+      },
+      "scope": "area",
+      "stations": [
+        {
+          "place": {
+            "en": "Tokyo Station, Tokyo",
+            "ja": "東京駅"
+          },
+          "mode": "transit"
+        },
+        {
+          "place": {
+            "en": "Shinjuku Station, Tokyo",
+            "ja": "新宿駅"
+          },
+          "mode": "transit"
+        }
+      ],
+      "hotels": [
+        {
+          "place": {
+            "en": "Keio Plaza Hotel Tokyo",
+            "ja": "京王プラザホテル"
+          },
+          "mode": "transit",
+          "source": "https://www.keioplaza.co.jp/access/index.html"
+        },
+        {
+          "place": {
+            "en": "Hilton Tokyo",
+            "ja": "ヒルトン東京"
+          },
+          "mode": "transit",
+          "source": "https://www.gotokyo.org/en/spot/1615/index.html"
+        },
+        {
+          "place": {
+            "en": "Mandarin Oriental, Tokyo",
+            "ja": "マンダリン オリエンタル 東京"
+          },
+          "mode": "transit",
+          "source": "https://www.mandarinoriental.com/en/tokyo/nihonbashi/getting-here"
+        }
+      ],
+      "nearby": {
+        "en": "Ebisu",
+        "ja": "恵比寿"
+      }
     }
   },
   "experiences": {
@@ -1536,6 +1589,8 @@
     "yakushima-discover-scuba-extended-dive": "yakushimaIsso",
     "yakushima-discover-scuba-two-dives": "yakushimaIsso",
     "tokyo-ninja-zen-night-walk": "tower",
-    "tokyo-matcha-cultural-experience": "yotsuya"
+    "tokyo-matcha-cultural-experience": "yotsuya",
+    "tokyo-traditional-kintsugi-workshop": "ebisu",
+    "tokyo-kintsugi-style-accessory-workshop": "ebisu"
   }
 }

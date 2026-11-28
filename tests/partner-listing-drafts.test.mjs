@@ -207,3 +207,25 @@ test('Yakushima tours, the night walk and the matcha session are published produ
   const home = await (await render('/en/')).text();
   assert.ok(home.includes('href="/en/yakushima/"'), 'Yakushima is listed');
 });
+
+test('the two kintsugi workshops are product pages in preview with the rule price and no studio identity', async () => {
+  const products = [["tokyo-traditional-kintsugi-workshop","¥34,000"],["tokyo-kintsugi-style-accessory-workshop","¥14,500"]];
+  const studio = /つぐつぐ|Tsugu ?Tsugu|tsugutsugu|kintsugi-girl|shop-kintsugi|俣野|Matano|03-6879|03-5246|075-366|akikito|恵比寿2-21|雷門1-1|小松町572/i;
+  for (const [slug, price] of products) {
+    for (const lang of ['en', 'ja', 'fr']) {
+      const path = `/${lang}/tokyo/${slug}/`;
+      const res = await render(path);
+      assert.equal(res.status, 200, path);
+      const html = await res.text();
+      const text = html.replace(/<[^>]+>/g, ' ');
+      assert.match(html, /name="robots" content="noindex/, `${path} stays unlisted until the studio confirms`);
+      assert.ok(text.includes(price), `${path} price ${price}`);
+      assert.match(html, /class="bk-card" id="booking"/, `${path} booking card`);
+      assert.match(html, /<form[^>]+action="\/api\/contact"/, `${path} request form`);
+      assert.ok(html.includes('id="access"'), `${path} access section`);
+      assert.doesNotMatch(text, studio, `${path} studio identity stays private`);
+    }
+  }
+  const home = await (await render('/en/')).text();
+  assert.ok(!home.includes('href="/en/tokyo/kintsugi/"'), 'kintsugi category hidden until a workshop is live');
+});

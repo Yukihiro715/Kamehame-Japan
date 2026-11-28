@@ -87,6 +87,8 @@ export const categoriesZh: Category[] = [
     lead: "日本的森林最適合與熟悉它的人一起步行認識。小團導覽健行，從半天穿越苔蘚巨石，到一整天走向千年杉木。" },
   { slug: "sea", title: "海洋活動", tag: "自然", mark: "海", img: "/images/partner-listings/yakushima-sea/snorkel-turtle-snorkeller.webp",
     lead: "清澈的海水、礁岩與海龜，嚮導在水中陪伴。適合初學者與不會游泳者的浮潛，以及無需證照的體驗潛水。" },
+  { slug: "kintsugi", title: "金繼", tag: "藝術與工藝", mark: "継", img: "/images/partner-listings/tokyo-kintsugi/finished-cup.webp",
+    lead: "以漆修補破損陶瓷、再以金裝飾接縫的技藝。與金繼職人共度的工作坊，從不使用漆、適合家庭的一小時，到使用真漆與純金粉的正統課程。" },
   { slug: "pottery", title: "陶藝", tag: "藝術與工藝", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
     lead: "日本每座窯元都有自己的土、釉與青。在現役陶藝家身旁坐上轆轤，手捏、彩繪，作品在同一座窯燒成後寄到您手中。" },
 ];
