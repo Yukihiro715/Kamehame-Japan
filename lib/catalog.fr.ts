@@ -87,6 +87,8 @@ export const categoriesFr: Category[] = [
     lead: "Les forêts du Japon se découvrent à pied, avec quelqu'un qui les connaît. Des randonnées guidées en petits groupes, d'une demi-journée parmi les rochers moussus à une journée entière jusqu'à un cèdre millénaire." },
   { slug: "sea", title: "Mer", tag: "Nature", mark: "海", img: "/images/partner-listings/yakushima-sea/snorkel-turtle-snorkeller.webp",
     lead: "Eau claire, récifs et tortues marines, avec un guide dans l'eau à vos côtés. Du snorkeling pour les débutants et les non-nageurs, et des baptêmes de plongée sans brevet." },
+  { slug: "kintsugi", title: "Kintsugi", tag: "Arts et artisanat", mark: "継", img: "/images/partner-listings/tokyo-kintsugi/finished-cup.webp",
+    lead: "L'art de réparer la céramique brisée à la laque et d'habiller la fêlure d'or. Des ateliers avec des artisans du kintsugi, d'une heure sans laque pour les familles au véritable urushi et à la poudre d'or." },
   { slug: "pottery", title: "Poterie", tag: "Arts et artisanat", mark: "陶", img: "/images/partner-listings/matsuyama-pottery/wheel-instruction.webp",
     lead: "Chaque four du Japon a sa terre, son émail et son bleu. Installez-vous au tour aux côtés d'un potier en activité, modelez et peignez à la main, puis recevez vos pièces, cuites dans ce même four." },
 ];
